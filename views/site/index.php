@@ -11,12 +11,7 @@ $this->title = 'Сайт РИАЦе';
         <h1>Техническая документация</h1>
     </div>
 
-    <?php
-//        var_dump($model);
-    ?>
-
     <div class="body-content">
-
 
     </div>
 </div>
