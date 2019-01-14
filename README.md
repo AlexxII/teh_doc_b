@@ -1,25 +1,24 @@
 <p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
-    </a>
-    <h1 align="center">Yii 2 Basic Project Template</h1>
+    <h1 align="center">Приложение информационной поддержки информационно-аналитических подразделений</h1>
     <br>
 </p>
+
+Приложение построенно по технологии MVC (Model-View-Controller)
 
 DIRECTORY STRUCTURE
 -------------------
 
-      assets/             contains assets definition
-      commands/           contains console commands (controllers)
-      config/             contains application configurations
-      controllers/        contains Web controller classes
-      mail/               contains view files for e-mails
-      models/             contains model classes
-      runtime/            contains files generated during runtime
-      tests/              contains various tests for the basic application
-      vendor/             contains dependent 3rd-party packages
-      views/              contains view files for the Web application
-      web/                contains the entry script and Web resources
+      assets/             Файлы для подключения ресурсов приложения
+      config/             куонфигурационные файлы приложения
+      controllers/        Классы контроллеров 
+      models/             Классы поделей
+      modules/            Содержит модули приложения
+          admin/          Содержит файлы админ модуля
+          tehdoc/         Содержит файлы модуля тех.документации
+          vks/            Содержит файлы модуля учета ВКС
+      vendor/             Содержит основные файлы всего приложения и сторонних модулей
+      views/              Содержит файлы видов
+      web/                Содержит фходной скрипт приложения и основные ресурсы
 
 
 
