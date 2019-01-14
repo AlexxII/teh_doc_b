@@ -18,7 +18,9 @@
         "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
-        "bower-asset/fancytree": "^2.30"
+        "bower-asset/fancytree": "^2.30",
+        "wbraganca/yii2-dynamicform": "*",
+        "kartik-v/yii2-widget-fileinput": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -54,7 +56,7 @@
             ]
         },
         "yii\\composer\\Installer::postInstall": {
-            "generateCookieValidationKey": [
+            "generateCookieValida   tionKey": [
                 "config/web.php"
             ]
         }
