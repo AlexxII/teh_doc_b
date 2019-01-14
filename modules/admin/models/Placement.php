@@ -9,25 +9,27 @@ use creocoder\nestedsets\NestedSetsBehavior;
 
 class Placement extends ActiveRecord
 {
-  public function behaviors() {
+  public function behaviors()
+  {
     return [
-        'tree' => [
-            'class' => NestedSetsBehavior::className(),
-            'treeAttribute' => 'root',
-            'leftAttribute' => 'lft',
-            'rightAttribute' => 'rgt',
-            'depthAttribute' => 'lvl',
-        ],
-        'htmlTree'=>[
-            'class' => \wokster\treebehavior\NestedSetsTreeBehavior::className()
-        ]
+      'tree' => [
+        'class' => NestedSetsBehavior::className(),
+        'treeAttribute' => 'root',
+        'leftAttribute' => 'lft',
+        'rightAttribute' => 'rgt',
+        'depthAttribute' => 'lvl',
+      ],
+      'htmlTree' => [
+        'class' => \wokster\treebehavior\NestedSetsTreeBehavior::className(),
+        'depthAttribute' => 'lvl'
+      ]
     ];
   }
 
   public function transactions()
   {
     return [
-        self::SCENARIO_DEFAULT => self::OP_ALL,
+      self::SCENARIO_DEFAULT => self::OP_ALL,
     ];
   }
 

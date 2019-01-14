@@ -18,36 +18,38 @@ use Yii;
  */
 class VksEmployees extends \yii\db\ActiveRecord
 {
-    public function behaviors() {
-        return [
-            'tree' => [
-                'class' => NestedSetsBehavior::className(),
-                'treeAttribute' => 'root',
-                'leftAttribute' => 'lft',
-                'rightAttribute' => 'rgt',
-                'depthAttribute' => 'lvl',
-            ],
-            'htmlTree'=>[
-                'class' => \wokster\treebehavior\NestedSetsTreeBehavior::className()
-            ]
-        ];
-    }
+  public function behaviors()
+  {
+    return [
+      'tree' => [
+        'class' => NestedSetsBehavior::className(),
+        'treeAttribute' => 'root',
+        'leftAttribute' => 'lft',
+        'rightAttribute' => 'rgt',
+        'depthAttribute' => 'lvl',
+      ],
+      'htmlTree' => [
+        'class' => \wokster\treebehavior\NestedSetsTreeBehavior::className(),
+        'depthAttribute' => 'lvl'
+      ]
+    ];
+  }
 
-    public function transactions()
-    {
-        return [
-            self::SCENARIO_DEFAULT => self::OP_ALL,
-        ];
-    }
+  public function transactions()
+  {
+    return [
+      self::SCENARIO_DEFAULT => self::OP_ALL,
+    ];
+  }
 
-    public static function tableName()
-    {
-        return 'vks_employees_tbl';
-    }
+  public static function tableName()
+  {
+    return 'vks_employees_tbl';
+  }
 
-    public static function find()
-    {
-        return new VksQuery(get_called_class());
-    }
+  public static function find()
+  {
+    return new VksQuery(get_called_class());
+  }
 
 }

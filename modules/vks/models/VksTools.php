@@ -16,7 +16,8 @@ use creocoder\nestedsets\NestedSetsBehavior;
  */
 class VksTools extends \yii\db\ActiveRecord
 {
-  public function behaviors() {
+  public function behaviors()
+  {
     return [
       'tree' => [
         'class' => NestedSetsBehavior::className(),
@@ -25,8 +26,9 @@ class VksTools extends \yii\db\ActiveRecord
         'rightAttribute' => 'rgt',
         'depthAttribute' => 'lvl',
       ],
-      'htmlTree'=>[
-        'class' => \wokster\treebehavior\NestedSetsTreeBehavior::className()
+      'htmlTree' => [
+        'class' => \wokster\treebehavior\NestedSetsTreeBehavior::className(),
+        'depthAttribute' => 'lvl'
       ]
     ];
   }

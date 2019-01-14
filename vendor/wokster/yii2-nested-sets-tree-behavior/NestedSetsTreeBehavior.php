@@ -17,7 +17,7 @@ class NestedSetsTreeBehavior extends Behavior
     /**
      * @var string
      */
-    public $depthAttribute = 'lvl';
+    public $depthAttribute = 'depth';
     /**
      * @var string
      */
