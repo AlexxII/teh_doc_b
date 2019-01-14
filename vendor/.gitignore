@@ -1,0 +1,25 @@
+#ignore
+/behat
+/bin
+/bower-asset
+/cebe
+/codeception
+/composer
+/doctrine
+/ezyang
+/fzaninotto
+/guzzlehttp
+/myclabs
+/phar-io
+/phpdocumentor
+/phpspec
+/phpunit
+/psr
+/sebastian
+/swiftmailer
+/symfony
+/theseer
+/webmozart
+/yiisoft
+#Third party modules
+autoload.php
