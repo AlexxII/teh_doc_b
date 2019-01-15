@@ -1,10 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use yii\bootstrap\Modal;
+use app\assets\FancytreeAsset;
 
-\wbraganca\fancytree\FancytreeAsset::register($this);
+FancytreeAsset::register($this);
 
 $this->title = 'Оборудование по местам размещения';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];

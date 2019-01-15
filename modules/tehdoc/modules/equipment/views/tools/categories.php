@@ -5,8 +5,9 @@ use yii\widgets\ActiveForm;
 use yii\bootstrap\Modal;
 use kartik\tree\TreeViewInput;
 use app\modules\admin\models\ClassifierTbl;
+use app\assets\FancytreeAsset;
 
-\wbraganca\fancytree\FancytreeAsset::register($this);
+FancytreeAsset::register($this);
 
 $this->title = 'Оборудование по категориям';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
