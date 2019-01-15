@@ -3,9 +3,8 @@
 namespace app\modules\admin\models;
 
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
-use yii\web\Controller;
 use creocoder\nestedsets\NestedSetsBehavior;
+use app\base\NestedSetsTreeBehavior;
 
 class Placement extends ActiveRecord
 {
@@ -20,7 +19,7 @@ class Placement extends ActiveRecord
         'depthAttribute' => 'lvl',
       ],
       'htmlTree' => [
-        'class' => \wokster\treebehavior\NestedSetsTreeBehavior::className(),
+        'class' => NestedSetsTreeBehavior::className(),
         'depthAttribute' => 'lvl'
       ]
     ];

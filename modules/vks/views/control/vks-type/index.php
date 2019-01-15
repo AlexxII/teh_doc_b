@@ -356,14 +356,14 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 title: data.input.val()
               }
             }).done(function (result) {
-//                           node.setTitle(result.acceptedTitle);
+              // node.setTitle(result.acceptedTitle);
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
             }).always(function () {
               // data.input.removeClass("pending")
             });
           } else {
-            console.log(data);
+            console.log(node);
             $.ajax({
               url: update_url,
               data: {
@@ -371,7 +371,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 title: data.input.val()
               }
             }).done(function (result) {
-//                           node.setTitle(result.acceptedTitle);
+              // node.setTitle(result.acceptedTitle);
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
             }).always(function () {

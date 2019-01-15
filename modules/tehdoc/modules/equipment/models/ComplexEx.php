@@ -3,6 +3,7 @@
 namespace app\modules\tehdoc\modules\equipment\models;
 
 use creocoder\nestedsets\NestedSetsBehavior;
+use app\base\NestedSetsTreeBehavior;
 
 class ComplexEx extends Complex
 {
@@ -22,7 +23,7 @@ class ComplexEx extends Complex
         'depthAttribute' => 'lvl',
       ],
       'htmlTree'=>[
-        'class' => \wokster\treebehavior\NestedSetsTreeBehavior::className()
+        'class' => NestedSetsTreeBehavior::className()
       ]
     ];
   }

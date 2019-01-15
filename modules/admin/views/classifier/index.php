@@ -89,11 +89,12 @@ $del_multi_nodes = 'Удалить классификатор С вложени�
       </div>
     </div>
 
-    <div class="row" style="padding: 0 15px 15px 0;position: relative;">
-      <div class="" style="border-radius:2px;padding-top:40px">
+    <div class="row" style="padding: 0 15px">
+      <div style="border-radius:2px;padding-top:40px">
         <div id="fancyree_w0" class="ui-draggable-handle"></div>
       </div>
     </div>
+
   </div>
 
 

@@ -4,6 +4,7 @@ namespace app\modules\vks\models;
 
 use creocoder\nestedsets\NestedSetsBehavior;
 use Yii;
+use app\base\NestedSetsTreeBehavior;
 
 /**
  * This is the model class for table "vks_order_tbl".
@@ -28,7 +29,7 @@ class VksOrders extends \yii\db\ActiveRecord
         'depthAttribute' => 'lvl',
       ],
       'htmlTree' => [
-        'class' => \wokster\treebehavior\NestedSetsTreeBehavior::className(),
+        'class' => NestedSetsTreeBehavior::className(),
         'depthAttribute' => 'lvl'
       ]
     ];

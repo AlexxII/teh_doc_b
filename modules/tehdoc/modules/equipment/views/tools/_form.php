@@ -18,17 +18,14 @@ use app\modules\tehdoc\asset\TehFormAsset;
     font-size: 15px;
     color: #FF0000;
   }
-
   .nonreq {
     color: #1e6887;
   }
-
   .select-selected {
     padding-left: 40px;
   }
-
   .form-group {
-    margin-bottom: 8px;
+    margin-bottom: 5px;
   }
 </style>
 
@@ -42,131 +39,135 @@ $serial_hint = 'Укажите серийный номер (s/n), на неко�
                   тогда укажите его.';
 $place_hint = 'Обязательное! Укажите точное размещение оборудования.';
 $date_hint = 'Если не известен месяц, выберите январь известного года.';
-$quantity_hint = 'Внимание! Указывайте отличную от 1.php цифру 
+$quantity_hint = 'Внимание! Указывайте отличную от 1 цифру 
 ТОЛЬКО для идентичного оборудования и расходных материалов. Например: офисная бумага, батарейки. 
 Будьте ВНИМАТЕЛЬНЫ, не вводите себя в заблуждение.';
 
 ?>
 
-<div class="col-lg-7 col-md-7" style="border-radius:2px;padding-top:10px">
-  <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
-  <div class="form-group">
-    <div class="form-group col-md-12 col-lg-12">
-      <?php
-      echo $form->field($model, 'category_id', [
-        'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+<div class="row">
+  <div class="col-lg-8 col-md-9">
+    <div class="customer-form">
+      <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <?php
+          echo $form->field($model, 'category_id', [
+            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $cat_hint . '"></sup>{input}{hint}'])
-        ->dropDownList($model->toolCategoryList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
-          'options' => [
-            'value' => 'none',
-            'disabled' => 'true',
-            'selected' => 'true'
-          ]]])->hint('Выберите категорию', ['class' => ' w3-label-under']);
-      ?>
-    </div>
-    <div class="form-group col-md-12 col-lg-12">
-      <?= $form->field($model, 'eq_title', [
-        'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+            ->dropDownList($model->toolCategoryList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
+              'options' => [
+                'value' => 'none',
+                'disabled' => 'true',
+                'selected' => 'true'
+              ]]])->hint('Выберите категорию', ['class' => ' w3-label-under']);
+          ?>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <?= $form->field($model, 'eq_title', [
+            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $title_hint . '"></sup>{input}{hint}'])
-        ->textInput()->hint('Например: Коммутатор с автоопределителем', ['class' => ' w3-label-under']); ?>
-    </div>
-    <div class="form-group">
-      <div class="form-group col-md-6 col-lg-6">
-        <?= $form->field($model, 'eq_manufact')->textInput(['id' => 'manufact'])
-          ->hint('Например: HP, ACER', ['class' => ' w3-label-under']); ?>
+            ->textInput()->hint('Например: Коммутатор с автоопределителем', ['class' => ' w3-label-under']); ?>
+        </div>
       </div>
-      <div class="form-group col-md-6 col-lg-6">
-        <?= $form->field($model, 'eq_model')->textInput(['id' => 'models'])
-          ->hint('Например: LJ 1022', ['class' => ' w3-label-under']); ?>
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <?= $form->field($model, 'eq_manufact')->textInput(['id' => 'manufact'])
+            ->hint('Например: HP, ACER', ['class' => ' w3-label-under']); ?>
+        </div>
+        <div class="col-md-6 col-lg-6">
+          <?= $form->field($model, 'eq_model')->textInput(['id' => 'models'])
+            ->hint('Например: LJ 1022', ['class' => ' w3-label-under']); ?>
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <div class="form-group col-md-6 col-lg-6">
-        <?= $form->field($model, 'eq_serial', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
+          <?= $form->field($model, 'eq_serial', [
+            'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $serial_hint . '"></sup>{input}{hint}'
-        ])->textInput()->hint('Например: HRUEO139UI92', ['class' => ' w3-label-under']); ?>
+          ])->textInput()->hint('Например: HRUEO139UI92', ['class' => ' w3-label-under']); ?>
 
-      </div>
-      <div class="form-group col-md-6 col-lg-6">
-        <?= $form->field($model, 'eq_factdate', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+        </div>
+        <div class="form-group col-md-6 col-lg-6">
+          <?= $form->field($model, 'eq_factdate', [
+            'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $date_hint . '"></sup>{input}{hint}'
-        ])->textInput([
-          'class' => 'fact-date form-control'
-        ])->hint('Выберите дату', ['class' => ' w3-label-under']); ?>
+          ])->textInput([
+            'class' => 'fact-date form-control'
+          ])->hint('Выберите дату', ['class' => ' w3-label-under']); ?>
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <div class="form-group col-md-8">
-        <?php
-        echo $form->field($model, 'place_id', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+      <div class="row">
+        <div class="col-md-8">
+          <?php
+          echo $form->field($model, 'place_id', [
+            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $place_hint . '"></sup>{input}{hint}'
-        ])->dropDownList($model->toolPlacesList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
-          'options' => [
-            'value' => 'none',
-            'disabled' => 'true',
-            'selected' => 'true'
-          ]]])->hint('Выберите место нахождения оборудования', ['class' => ' w3-label-under']);
-        ?>
-      </div>
-      <div class="form-group col-md-4">
-        <?= $form->field($model, 'quantity', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+          ])->dropDownList($model->toolPlacesList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
+            'options' => [
+              'value' => 'none',
+              'disabled' => 'true',
+              'selected' => 'true'
+            ]]])->hint('Выберите место нахождения оборудования', ['class' => ' w3-label-under']);
+          ?>
+        </div>
+        <div class="col-md-4">
+          <?= $form->field($model, 'quantity', [
+            'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $quantity_hint . '"></sup>{input}{hint}'])
-          ->textInput()->hint('Введите количество', ['class' => ' w3-label-under']); ?>
+            ->textInput()->hint('Введите количество', ['class' => ' w3-label-under']); ?>
+        </div>
       </div>
-    </div>
 
-    <?php
-    if (!empty($model->photos)) {
-      foreach ($model->photos as $k => $photo) {
-        $allImages[] = "<img src='" . $photo->getImageUrl() . "' class='file-preview-image' 
+      <?php
+      if (!empty($model->photos)) {
+        foreach ($model->photos as $k => $photo) {
+          $allImages[] = "<img src='" . $photo->getImageUrl() . "' class='file-preview-image' 
                           style='max-width:100%;max-height:100%'>";
-        $previewImagesConfig[] = [
-          'url' => Url::toRoute(ArrayHelper::merge(['/tehdoc/kernel/tools/remove-image'], [
-            'id' => $photo->id,
-            '_csrf' => Html::csrfMetaTags()
-          ])),
-          'key' => $photo->id
-        ];
+          $previewImagesConfig[] = [
+            'url' => Url::toRoute(ArrayHelper::merge(['/tehdoc/kernel/tools/remove-image'], [
+              'id' => $photo->id,
+              '_csrf' => Html::csrfMetaTags()
+            ])),
+            'key' => $photo->id
+          ];
+        }
+      } else {
+        $previewImagesConfig = false;
+        $allImages = false;
       }
-    } else {
-      $previewImagesConfig = false;
-      $allImages = false;
-    }
-    ?>
-    <div class="form-group">
-      <div class="form-group col-md-12 col-lg-12">
-        <?= $form->field($fUpload, "imageFiles[]")->widget(FileInput::class, [
-          'language' => 'ru',
-          'options' => ['multiple' => true],
-          'pluginOptions' => [
-            'previewFileType' => 'any',
-            'initialPreview' => $allImages,
-            'initialPreviewConfig' => $previewImagesConfig,
-            'overwriteInitial' => false,
-            'showUpload' => false
-          ],
-        ]); ?>
+      ?>
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <?= $form->field($fUpload, "imageFiles[]")->widget(FileInput::class, [
+            'language' => 'ru',
+            'options' => ['multiple' => true],
+            'pluginOptions' => [
+              'previewFileType' => 'any',
+              'initialPreview' => $allImages,
+              'initialPreviewConfig' => $previewImagesConfig,
+              'overwriteInitial' => false,
+              'showUpload' => false
+            ],
+          ]); ?>
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <div class="form-group col-md-12 col-lg-12">
-        <?= $form->field($model, 'eq_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '2')) ?>
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <?= $form->field($model, 'eq_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '2')) ?>
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <div class="form-group col-md-12 col-lg-12">
+      <div class="form-group">
+        <div class="form-group col-md-12 col-lg-12">
 
-        <label style="font-size:18px"><input type="checkbox" name="stay" style="width:20px;height:20px">
-          Остаться в форме</label>
+          <label style="font-size:18px"><input type="checkbox" name="stay" style="width:20px;height:20px">
+            Остаться в форме</label>
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => 'btn btn-primary']) ?>
+      <div class="form-group">
+        <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => 'btn btn-primary']) ?>
+      </div>
     </div>
   </div>
 </div>

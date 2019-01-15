@@ -76,7 +76,7 @@ class Complex extends \yii\db\ActiveRecord
   {
     $sql = "SELECT C1.ref, C1.name, C2.name as gr from " . self::CATEGORY_TABLE . " C1 LEFT JOIN "
       . self::CATEGORY_TABLE . " C2 on C1.parent_id = C2.ref WHERE C1.lvl > 1 AND C1.root = 2 ORDER BY C1.lft";
-    return ArrayHelper::map($this->findBySql($sql)->asArray()->all(), 'refs', 'name', 'gr');
+    return ArrayHelper::map($this->findBySql($sql)->asArray()->all(), 'ref', 'name', 'gr');
   }
 
 }

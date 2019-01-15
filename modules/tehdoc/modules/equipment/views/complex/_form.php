@@ -39,9 +39,11 @@ $model_hint = '';
 
 $date_hint = 'Если не известен месяц, выберите январь известного года.';
 $place_hint = 'Обязательное! Укажите точное размещение оборудования.';
-$quantity_hint = 'Внимание! Указывайте отличную от 1.php цифру 
+$quantity_hint = 'Внимание! Указывайте отличную от 1 цифру 
 ТОЛЬКО для идентичного оборудования и расходных материалов. Например: офисная бумага, батарейки.';
 
+$cat_tool_hint = 'Обязательное! Укажите категорию оборудования.';
+$title_tool_hint = 'Обязательное! Укажите наименование оборудования.';
 $eq_cat_hint = 'Обязательное! Необходима для классификации оборудования.';
 $eq_title_hint = 'Обязательное! Необходимо для отображения в таблице.';
 ?>
@@ -179,7 +181,7 @@ $eq_title_hint = 'Обязательное! Необходимо для отоб
                   <div class="col-sm-6">
                     <?= $form->field($model, "[{$index}]category_id", [
                       'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $cat_hint . '"></sup>{input}{hint}'])
+                data-toggle="tooltip" data-placement="top" title="' . $cat_tool_hint . '"></sup>{input}{hint}'])
                       ->dropDownList($model->toolCategoryList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
                         'options' => [
                           'value' => 'none',
@@ -190,7 +192,7 @@ $eq_title_hint = 'Обязательное! Необходимо для отоб
                   <div class="col-sm-6">
                     <?= $form->field($model, "[{$index}]eq_title", [
                       'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $title_hint . '"></sup>{input}{hint}'])
+                data-toggle="tooltip" data-placement="top" title="' . $title_tool_hint . '"></sup>{input}{hint}'])
                       ->textInput()->hint('Например: Коммутатор с автоопределителем', ['class' => ' w3-label-under']); ?>
                   </div>
                 </div>
@@ -294,7 +296,6 @@ $eq_title_hint = 'Обязательное! Необходимо для отоб
       <?php ActiveForm::end(); ?>
     </div>
   </div>
-</div>
 </div>
 <script>
 
