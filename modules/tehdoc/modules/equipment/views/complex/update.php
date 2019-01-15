@@ -9,7 +9,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<div class="complex-create">
+<div class="complex-update">
 
   <div class="col-lg-12 col-md-12" style="border-radius: 2px">
     <h1><?= Html::encode($this->title) ?></h1>

@@ -6,7 +6,6 @@ $this->title = 'Добавить комплект';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
 $this->params['breadcrumbs'][] = ['label' => 'Комплекты', 'url' => ['/tehdoc/equipment/complex']];
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
 
 <div class="complex-create">

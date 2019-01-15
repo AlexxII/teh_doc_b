@@ -22,9 +22,7 @@ use app\modules\tehdoc\asset\TehFormAsset;
   .select-selected {
     padding-left: 40px;
   }
-  .form-group {
-    margin-bottom: 5px;
-  }
+
 </style>
 
 <?php
@@ -50,7 +48,7 @@ $eq_title_hint = 'Обязательное! Необходимо для отоб
 
 
 <div class="row">
-  <div class="col-lg-8 col-md-9">
+  <div class="col-lg-8 col-md-9" style="border-radius:2px;padding-top:10px">
     <div class="customer-form">
       <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'id' => 'dynamic-form']]); ?>
       <div class="row">

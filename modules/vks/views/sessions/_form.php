@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\modules\vks\assets\VksFormAsset;
 use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
+
 ?>
 
 <style>
@@ -42,11 +43,10 @@ $vks_employee_send_hint = 'Обязательное поле! Укажите Ф�
 $vks_employee_hint = 'Обязательное поле! Укажите ';
 ?>
 
-<div>
+<div class="row">
   <div class="col-lg-7 col-md-8" style="border-radius:2px;padding-top:10px">
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
-
-    <div class="form-group">
+    <div class="row">
       <div class="form-group col-md-12 col-lg-9" style="padding: 0px">
         <div class="form-group col-md-6 col-lg-6">
           <?= $form->field($model, 'vks_date', [
@@ -59,7 +59,7 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="row">
       <div class="form-group col-md-12 col-lg-9" style="padding: 0px">
         <div class="form-group col-md-6 col-lg-6">
           <?= $form->field($model, 'vks_teh_time_start')->textInput(['class' => 'time-mask form-control'])
@@ -68,7 +68,7 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="row">
       <div class="form-group col-md-12 col-lg-9" style="padding: 0px">
         <div class="form-group col-md-6 col-lg-6">
           <?= $form->field($model, 'vks_work_time_start')->textInput(['class' => 'time-mask form-control'])
@@ -77,7 +77,7 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="row">
       <div class="form-group col-md-5 col-lg-5">
         <?php
         echo $form->field($model, 'vks_type', [
@@ -136,27 +136,32 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
       </div>
     </div>
 
-    <div class="form-group col-md-12 col-lg-12">
-      <?= $form->field($model, 'vks_order', [
-        'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <?= $form->field($model, 'vks_order', [
+          'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_order_hint . '"></sup>{input}{hint}'
-      ])->dropDownList($model->vksOrdersList, ['data-name' => 'vks_order',
-        'prompt' => ['text' => 'Выберите',
-          'options' => [
-            'value' => 'none',
-            'disabled' => 'true',
-            'selected' => 'true'
-          ]]])->hint('', ['class' => ' w3-label-under']);
-      ?>
-      <input name="VksSessions[vks_order_text]" id="vks_order_text" style="display: none">
+        ])->dropDownList($model->vksOrdersList, ['data-name' => 'vks_order',
+          'prompt' => ['text' => 'Выберите',
+            'options' => [
+              'value' => 'none',
+              'disabled' => 'true',
+              'selected' => 'true'
+            ]]])->hint('', ['class' => ' w3-label-under']);
+        ?>
+        <input name="VksSessions[vks_order_text]" id="vks_order_text" style="display: none">
+      </div>
     </div>
 
-    <div class="form-group col-md-12 col-lg-12">
-      <?= $form->field($model, 'vks_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '3')) ?>
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <?= $form->field($model, 'vks_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '3')) ?>
+      </div>
     </div>
   </div>
+
   <div class="col-lg-5 col-md-4"
-       style="border-radius:4px;padding: 25px 10px 10px 10px ; margin-bottom: 15px;border: dashed 1px;position: relative">
+       style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">
     <span class="text-muted" style="position: absolute;top:5px;right:10px;font-size: 15px">Служебное</span>
     <div class="form-group col-md-12 col-lg-12">
       <?php
@@ -192,9 +197,12 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
   </div>
 
 </div>
-<div class="form-group col-md-12 col-lg-12">
-  <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => 'btn btn-primary']) ?>
+<div class="row">
+  <div class="col-md-12 col-lg-12">
+    <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => 'btn btn-primary']) ?>
+  </div>
 </div>
+
 
 <?php ActiveForm::end(); ?>
 

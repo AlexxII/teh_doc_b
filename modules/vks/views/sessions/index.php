@@ -14,10 +14,12 @@ Yii::$app->cache->flush();
 ?>
 
 <div class="vks-pannel">
-  <h1><?= Html::encode($this->title) ?>
-    <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-  </h1>
+  <div class="row" style="border-radius:2px;padding-left:15px;margin-top: -10px">
+    <h3><?= Html::encode($this->title) ?>
+      <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
+           data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
+    </h3>
+  </div>
 </div>
 
 <style>
@@ -185,20 +187,19 @@ Yii::$app->cache->flush();
       "processing": true,
       "serverSide": true,
       "responsive": true,
-      "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+      "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
         var today = new Date();
         var date = aData[1];
         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-        var dt = new Date(date.replace(pattern,'$3-$2-$1'));
-        if ( moment(today).isAfter(dt, 'day') )
-        {
-          $('td', nRow).css('background-color', '#f2dede' );
+        var dt = new Date(date.replace(pattern, '$3-$2-$1'));
+        if (moment(today).isAfter(dt, 'day')) {
+          $('td', nRow).css('background-color', '#f2dede');
         }
-        else if ( moment(dt).isSame(today, 'day') )
-        {
+        else if (moment(dt).isSame(today, 'day')) {
           $('td', nRow).css('background-color', '#dff0d8');
         }
-        else {}
+        else {
+        }
       },
       "ajax": $.fn.dataTable.pipeline({
         url: '/vks/sessions/server-side',
@@ -218,7 +219,7 @@ Yii::$app->cache->flush();
             "<a href='#' class='fa fa-edit edit' style='padding-right: 5px' title='Обновить' data-placement='top' data-toggle='tooltip'></a>" +
             "<a href='#' class='fa fa-info view' title='Подробности' style='padding-right: 5px'></a>" +
             "<a href='#' class='fa fa-calendar-check-o confirm' title='Подтвердить сеанс' style='padding-right: 5px'></a>"
-            // "<a href='#' class='fa fa-calendar-minus-o abort' title='Отменить сеанс'></a>"
+          // "<a href='#' class='fa fa-calendar-minus-o abort' title='Отменить сеанс'></a>"
         }, {
           "orderable": false,
           "className": 'select-checkbox',

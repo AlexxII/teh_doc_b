@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\modules\vks\assets\VksFormAsset;
 use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
+
 ?>
 
 <style>
@@ -48,58 +49,64 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
 
 ?>
 
-<div class="col-lg-7 col-md-7" style="border-radius:2px;padding-top:10px">
-  <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
+<div class="row">
+  <div class="col-lg-7 col-md-7" style="border-radius:2px;padding-top:10px">
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
 
-  <div class="form-group">
-    <div class="form-group col-md-12 col-lg-9" style="padding: 0px">
-      <div class="form-group col-md-6 col-lg-6">
-        <?= $form->field($model, 'vks_date', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+    <div class="row">
+      <div class="col-md-12 col-lg-9" style="padding: 0px">
+        <div class="col-md-6 col-lg-6">
+          <?= $form->field($model, 'vks_date', [
+            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_date_hint . '"></sup>{input}{hint}'
-        ])->textInput([
-          'class' => 'fact-date form-control'
-        ])->hint('', ['class' => ' w3-label-under']); ?>
+          ])->textInput([
+            'class' => 'fact-date form-control'
+          ])->hint('', ['class' => ' w3-label-under']); ?>
+        </div>
       </div>
     </div>
 
-    <div class="form-group col-md-12 col-lg-9" style="padding: 0px">
-      <div class="form-group">
-        <div class="form-group col-md-6 col-lg-6">
-          <?= $form->field($model, 'vks_teh_time_start')->textInput([
-            'class' => 'time-mask form-control right',
-            'id' => 'teh-start'
-          ])->hint('', ['class' => ' w3-label-under']); ?>
+    <div class="row">
+      <div class="form-group col-md-12 col-lg-9" style="padding: 0px">
+        <div class="form-group">
+          <div class="form-group col-md-6 col-lg-6">
+            <?= $form->field($model, 'vks_teh_time_start')->textInput([
+              'class' => 'time-mask form-control right',
+              'id' => 'teh-start'
+            ])->hint('', ['class' => ' w3-label-under']); ?>
+          </div>
+          <div class="form-group col-md-6 col-lg-6">
+            <?= $form->field($model, 'vks_teh_time_end')->textInput([
+              'class' => 'time-mask form-control',
+              'id' => 'teh-end'
+            ])->hint('', ['class' => ' w3-label-under']); ?>
+          </div>
+          <input name="VksSessions[vks_duration_teh]" id="vks-duration-teh" style="display: none">
         </div>
-        <div class="form-group col-md-6 col-lg-6">
-          <?= $form->field($model, 'vks_teh_time_end')->textInput([
-            'class' => 'time-mask form-control',
-            'id' => 'teh-end'
-          ])->hint('', ['class' => ' w3-label-under']); ?>
-        </div>
-        <input name="VksSessions[vks_duration_teh]" id="vks-duration-teh" style="display: none">
       </div>
     </div>
 
-    <div class="form-group col-md-12 col-lg-9" style="padding: 0px">
-      <div class="form-group">
-        <div class="form-group col-md-6 col-lg-6">
-          <?= $form->field($model, 'vks_work_time_start')->textInput([
-            'class' => 'time-mask form-control right',
-            'id' => 'work-start'
-          ])->hint('', ['class' => ' w3-label-under']); ?>
+    <div class="row">
+      <div class="form-group col-md-12 col-lg-9" style="padding: 0px">
+        <div class="form-group">
+          <div class="form-group col-md-6 col-lg-6">
+            <?= $form->field($model, 'vks_work_time_start')->textInput([
+              'class' => 'time-mask form-control right',
+              'id' => 'work-start'
+            ])->hint('', ['class' => ' w3-label-under']); ?>
+          </div>
+          <div class="form-group col-md-6 col-lg-6">
+            <?= $form->field($model, 'vks_work_time_end')->textInput([
+              'class' => 'time-mask form-control',
+              'id' => 'work-end'
+            ])->hint('', ['class' => ' w3-label-under']); ?>
+          </div>
+          <input name="VksSessions[vks_duration_work]" id="vks-duration-work" style="display: none">
         </div>
-        <div class="form-group col-md-6 col-lg-6">
-          <?= $form->field($model, 'vks_work_time_end')->textInput([
-            'class' => 'time-mask form-control',
-            'id' => 'work-end'
-          ])->hint('', ['class' => ' w3-label-under']); ?>
-        </div>
-        <input name="VksSessions[vks_duration_work]" id="vks-duration-work" style="display: none">
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="row">
       <div class="form-group col-md-5 col-lg-5">
         <?php
         echo $form->field($model, 'vks_type', [
@@ -133,7 +140,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
     </div>
 
     <div class="col-md-12 col-lg-12"
-         style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">
+         style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin: 10px 0px 10px 0px;position: relative">
       <span class="text-muted" style="position: absolute;top:5px;right:10px;font-size: 10px">Старший абонент</span>
       <div class="form-group col-md-5 col-lg-5">
         <?= $form->field($model, 'vks_subscriber_name', [
@@ -158,7 +165,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="row">
       <div class="form-group col-md-5 col-lg-5">
         <?= $form->field($model, 'vks_order', [
           'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
@@ -178,7 +185,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
         <?= $form->field($model, 'vks_employee', [
           'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_employee_hint . '"></sup>{input}{hint}'])
-          ->dropDownList($model->vksEmployees4List, [ 'id' => 'employee', 'data-name' => 'vks_employee',
+          ->dropDownList($model->vksEmployees4List, ['id' => 'employee', 'data-name' => 'vks_employee',
             'prompt' => ['text' => 'Выберите',
               'options' => [
                 'value' => 'none',
@@ -191,7 +198,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
     </div>
 
     <div class="col-md-12 col-lg-12"
-         style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">
+         style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin: 10px 0px 10px 0px;position: relative">
       <span class="text-muted" style="position: absolute;top:5px;right:10px;font-size: 10px">Абонент субъекта</span>
       <div class="form-group col-md-5 col-lg-5">
         <?= $form->field($model, 'vks_subscriber_reg_name', [
@@ -217,38 +224,46 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
       </div>
     </div>
 
-    <div class="form-group col-md-12 col-lg-12">
-      <?= $form->field($model, 'vks_equipment', [
-        'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
+    <div class="row">
+      <div class="form-group col-md-12 col-lg-12">
+        <?= $form->field($model, 'vks_equipment', [
+          'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_tools_hint . '"></sup>{input}{hint}'
-      ])->dropDownList($model->vksToolsList, ['data-name' => 'vks_equipment',
-        'prompt' => ['text' => 'Выберите',
-          'options' => [
-            'value' => 'none',
-            'disabled' => 'true',
-            'selected' => 'true'
-          ]]])->hint('', ['class' => ' w3-label-under']);
-      ?>
-      <input name="VksSessions[vks_equipment_text]" id="vks_equipment_text"
-             style="display: none">
-
+        ])->dropDownList($model->vksToolsList, ['data-name' => 'vks_equipment',
+          'prompt' => ['text' => 'Выберите',
+            'options' => [
+              'value' => 'none',
+              'disabled' => 'true',
+              'selected' => 'true'
+            ]]])->hint('', ['class' => ' w3-label-under']);
+        ?>
+        <input name="VksSessions[vks_equipment_text]" id="vks_equipment_text"
+               style="display: none">
+      </div>
     </div>
 
-    <div class="form-group col-md-12 col-lg-12">
-      <?php
-      $template = [
-        'labelOptions' => ['font-size' => '28px'],
-        'template' => '{label}{input}   ',
-      ];
-      echo $form->field($model, 'vks_remarks', $template)->checkbox(); ?>
+    <div class="row">
+      <div class="form-group col-md-12 col-lg-12">
+        <?php
+        $template = [
+          'labelOptions' => ['font-size' => '28px'],
+          'template' => '{label}{input}   ',
+        ];
+        echo $form->field($model, 'vks_remarks', $template)->checkbox(); ?>
+      </div>
     </div>
 
-    <div class="form-group col-md-12 col-lg-12">
-      <?= $form->field($model, 'vks_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '5')) ?>
+    <div class="row">
+
+      <div class="form-group col-md-12 col-lg-12">
+        <?= $form->field($model, 'vks_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '5')) ?>
+      </div>
     </div>
 
-    <div class="form-group col-md-12 col-lg-12">
-      <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Подтвердить', ['class' => 'btn btn-primary']) ?>
+    <div class="row">
+      <div class="form-group col-md-12 col-lg-12">
+        <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Подтвердить', ['class' => 'btn btn-primary']) ?>
+      </div>
     </div>
   </div>
 </div>
@@ -269,7 +284,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
             $(this).val(val.join(':'));
             $(this).next('.time-mask').focus();
             var attr = $(this).attr('id');
-            if (attr == 'teh-start' || attr == 'teh-end'){
+            if (attr == 'teh-start' || attr == 'teh-end') {
               if ($('#teh-start').val() != '' && $('#teh-end').val() != '') {
                 var tehStart = (moment($('#teh-start').val(), 'HH:mm'));
                 var tehEnd = (moment($('#teh-end').val(), 'HH:mm'));
@@ -285,7 +300,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
                   $('#vks-duration-teh').val('');
                 }
               }
-            } else if (attr == 'work-start' || attr == 'work-end'){
+            } else if (attr == 'work-start' || attr == 'work-end') {
               if ($('#work-start').val() != '' && $('#work-end').val() != '') {
                 var workStart = (moment($('#work-start').val(), 'HH:mm'));
                 var workEnd = (moment($('#work-end').val(), 'HH:mm'));
@@ -338,7 +353,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
       var workStart = (moment($('#work-start').val(), 'HH:mm'));
       var tehStart = (moment($('#teh-start').val(), 'HH:mm'));
       var duration = moment.duration(workStart.diff(tehStart)).asMinutes();
-      if (duration > 0){
+      if (duration > 0) {
         var d = $('#work-start').val();
         $('#teh-end').val(d);
         $('#vks-duration-teh').val(duration);

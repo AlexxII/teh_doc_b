@@ -6,7 +6,6 @@ $this->title = 'Добавить оборудование';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
 $this->params['breadcrumbs'][] = ['label' => 'Перечень оборудования', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
 
 <div class="tool-create">
