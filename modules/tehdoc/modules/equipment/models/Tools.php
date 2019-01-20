@@ -81,7 +81,6 @@ class Tools extends \yii\db\ActiveRecord
     return $this->hasMany(Images::class, ['eq_id' => 'id_eq']);
   }
 
-
   public function getCategory()
   {
     return $this->hasOne(Category::class, ['ref' => 'category_id']);

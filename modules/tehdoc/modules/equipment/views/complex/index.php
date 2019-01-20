@@ -16,9 +16,9 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
 <div class="to-schedule-archive">
 
-  <h1><?= Html::encode($this->title) ?>
+  <h3><?= Html::encode($this->title) ?>
     <sup class="h-title fa fa-info-circle" aria-hidden="true"
-         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup></h1>
+         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup></h3>
 
 </div>
 

@@ -10,13 +10,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="tool-update">
 
-  <div class="col-lg-7 col-md-7" style="border-radius: 2px">
-    <h1><?= Html::encode($this->title) ?></h1>
-  </div>
+  <h3><?= Html::encode($this->title) ?></h3>
 
   <?= $this->render('_form', [
-      'model' => $model,
-      'fUpload' => $fupload,
+    'model' => $model,
+    'fUpload' => $fupload,
   ]) ?>
 
 </div>

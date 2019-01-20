@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tool-view">
 
-  <h1><?= Html::encode($this->title) ?></h1>
+  <h3><?= Html::encode($this->title) ?></h3>
 
   <p>
     <?= Html::a('Изменить', ['update', 'id' => $modelComplex->id], ['class' => 'btn btn-primary btn-sm']) ?>

@@ -10,9 +10,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="tool-create">
 
-  <div class="row" style="border-radius:2px;padding-left:15px;margin-top: -10px">
-    <h3><?= Html::encode($this->title) ?></h3>
-  </div>
+  <h3><?= Html::encode($this->title) ?></h3>
 
   <?= $this->render('_form', [
     'model' => $model,
