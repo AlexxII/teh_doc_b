@@ -13,10 +13,10 @@ $dell_hint = 'Удалить выделенные сеансы';
 ?>
 
 <div class="vks-pannel">
-  <h1><?= Html::encode($this->title) ?>
+  <h3><?= Html::encode($this->title) ?>
     <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
          data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-  </h1>
+  </h3>
 </div>
 
 <style>
