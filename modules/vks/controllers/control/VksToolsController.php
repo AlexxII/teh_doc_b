@@ -35,6 +35,7 @@ class VksToolsController extends Controller
     $newTool->ref = mt_rand();
     $newTool->appendTo($parentTool);
     $data['acceptedTitle'] = $title;
+    $data['acceptedId'] = $newTool->id;
     return json_encode($data);
   }
 
@@ -55,8 +56,11 @@ class VksToolsController extends Controller
   {
     $tool = VksTools::findOne(['id' => $id]);
     $tool->name = $title;
-    $tool->save();
-    return true;
+    if ($tool->save()){
+      $data['acceptedTitle'] = $title;
+      return json_encode($data);
+    }
+    return false;
   }
 
   public function actionMove($item, $action, $second, $parentId)

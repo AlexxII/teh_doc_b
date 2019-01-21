@@ -94,10 +94,11 @@ $del_multi_nodes = 'Удвлить С вложениями';
   </div>
 
   <div class="col-lg-5 col-md-5">
-    <div class="alert alert-warning">
+    <div class="alert alert-warning" style="margin-bottom: 10px">
       <a href="#" class="close" data-dismiss="alert">&times;</a>
       <strong>Внимание!</strong> Будьте внимательны!
     </div>
+    <div class="about-info"></div>
   </div>
 
 </div>
@@ -107,6 +108,24 @@ $del_multi_nodes = 'Удвлить С вложениями';
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
   });
+
+  function goodAlert(text) {
+    var div = '' +
+      '<div id="w3-success-0" class="alert-success alert fade in">' +
+      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+      text +
+      '</div>';
+    return div;
+  }
+
+  function badAlert(text) {
+    var div = '' +
+      '<div id="w3-success-0" class="alert-danger alert fade in">' +
+      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+      text +
+      '</div>';
+    return div;
+  }
 
   $(document).ready(function () {
     $('.add-subcategory').click(function (event) {
@@ -150,6 +169,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       $(".del-root").hide();
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
+      $('.about-info').html('')
     })
   });
 
@@ -356,9 +376,20 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 title: data.input.val()
               }
             }).done(function (result) {
-              // node.setTitle(result.acceptedTitle);
+              if (result) {
+                result = JSON.parse(result);
+                node.data.id = result.acceptedId;
+                node.setTitle(result.acceptedTitle);
+                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
+              } else {
+                node.setTitle(data.orgTitle);
+                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+              }
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
+              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
             }).always(function () {
               // data.input.removeClass("pending")
             });
@@ -371,8 +402,18 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 title: data.input.val()
               }
             }).done(function (result) {
-              // node.setTitle(result.acceptedTitle);
+              if (result) {
+                result = JSON.parse(result);
+                node.setTitle(result.acceptedTitle);
+                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
+              } else {
+                node.setTitle(data.orgTitle);
+                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+              }
             }).fail(function (result) {
+              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               node.setTitle(data.orgTitle);
             }).always(function () {
               // data.input.removeClass("pending")
@@ -388,6 +429,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         }
       },
       activate: function (node, data) {
+        $('.about-info').html('');
         var node = data.node;
         var lvl = node.data.lvl;
         if (node.key == -999) {

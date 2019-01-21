@@ -35,6 +35,7 @@ class VksPlaceController extends Controller
     $newPlace->ref = mt_rand();
     $newPlace->appendTo($parentPlace);
     $data['acceptedTitle'] = $title;
+    $data['acceptedId'] = $newPlace->id;
     return json_encode($data);
   }
 
@@ -55,8 +56,11 @@ class VksPlaceController extends Controller
   {
     $place = VksPlaces::findOne(['id' => $id]);
     $place->name = $title;
-    $place->save();
-    return true;
+    if ($place->save()){
+      $data['acceptedTitle'] = $title;
+      return json_encode($data);
+    }
+    return false;
   }
 
   public function actionMove($item, $action, $second, $parentId)

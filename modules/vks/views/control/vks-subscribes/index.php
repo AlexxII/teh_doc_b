@@ -168,6 +168,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       $(".del-multi-nodes").hide();
       $(".save-btn").prop("disabled", true);
       $("#surnames-control").prop("disabled", true);
+      $('.about-info').html('')
     })
   });
 
@@ -398,9 +399,20 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 title: data.input.val()
               }
             }).done(function (result) {
-//                           node.setTitle(result.acceptedTitle);
+              if (result) {
+                result = JSON.parse(result);
+                node.data.id = result.acceptedId;
+                node.setTitle(result.acceptedTitle);
+                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
+              } else {
+                node.setTitle(data.orgTitle);
+                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+              }
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
+              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
             }).always(function () {
               // data.input.removeClass("pending")
             });
@@ -412,8 +424,18 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 title: data.input.val()
               }
             }).done(function (result) {
-//                           node.setTitle(result.acceptedTitle);
+              if (result) {
+                result = JSON.parse(result);
+                node.setTitle(result.acceptedTitle);
+                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
+              } else {
+                node.setTitle(data.orgTitle);
+                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+              }
             }).fail(function (result) {
+              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               node.setTitle(data.orgTitle);
             }).always(function () {
               // data.input.removeClass("pending")
@@ -429,6 +451,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         }
       },
       activate: function (node, data) {
+        $('.about-info').html('');
         var node = data.node;
         var lvl = node.data.lvl;
         if (node.key == -999) {

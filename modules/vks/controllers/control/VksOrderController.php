@@ -35,6 +35,7 @@ class VksOrderController extends Controller
     $newOrder->ref = mt_rand();
     $newOrder->appendTo($parentOrder);
     $data['acceptedTitle'] = $title;
+    $data['acceptedId'] = $newOrder->id;
     return json_encode($data);
   }
 
@@ -55,8 +56,11 @@ class VksOrderController extends Controller
   {
     $order = VksOrders::findOne(['id' => $id]);
     $order->name = $title;
-    $order->save();
-    return true;
+    if ($order->save()){
+      $data['acceptedTitle'] = $title;
+      return json_encode($data);
+    }
+    return false;
   }
 
   public function actionMove($item, $action, $second, $parentId)

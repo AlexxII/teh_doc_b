@@ -35,6 +35,7 @@ class VksTypeController extends Controller
     $newType->ref = mt_rand();                              // генерация случайного числа
     $newType->appendTo($parentType);
     $data['acceptedTitle'] = $title;
+    $data['acceptedId'] = $newType->id;
     return json_encode($data);
   }
 
@@ -55,8 +56,11 @@ class VksTypeController extends Controller
   {
     $type = VksTypes::findOne(['id' => $id]);
     $type->name = $title;
-    $type->save();
-    return true;
+    if ($type->save()){
+      $data['acceptedTitle'] = $title;
+      return json_encode($data);
+    }
+    return false;
   }
 
   public function actionMove($item, $action, $second, $parentId)

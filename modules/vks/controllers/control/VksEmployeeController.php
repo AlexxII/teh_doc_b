@@ -27,18 +27,6 @@ class VksEmployeeController extends Controller
     return json_encode($roots);
   }
 
-  public function actionVksEmployeeCreate($parentId, $title)
-  {
-    $data = [];
-    $parentEmpl = VksEmployees::findOne($parentId);
-    $newEmpl = new VksEmployees(['name' => $title]);
-    $newEmpl->parent_id = $parentEmpl->ref;
-    $newEmpl->ref = mt_rand();
-    $newEmpl->appendTo($parentEmpl);
-    $data['acceptedTitle'] = $title;
-    return json_encode($data);
-  }
-
   public function actionCreateRoot($title)
   {
     \Yii::$app->db->schema->refresh();
@@ -52,12 +40,29 @@ class VksEmployeeController extends Controller
     }
   }
 
+  public function actionVksEmployeeCreate($parentId, $title)
+  {
+    $data = [];
+    $parentEmpl = VksEmployees::findOne($parentId);
+    $newEmpl = new VksEmployees(['name' => $title]);
+    $newEmpl->parent_id = $parentEmpl->ref;
+    $newEmpl->ref = mt_rand();
+    $newEmpl->appendTo($parentEmpl);
+    $data['acceptedTitle'] = $title;
+    $data['acceptedId'] = $newEmpl->id;
+    return json_encode($data);
+  }
+
   public function actionUpdate($id, $title)
   {
     $empl = VksEmployees::findOne(['id' => $id]);
     $empl->name = $title;
     $empl->save();
-    return true;
+    if ($empl->save()){
+      $data['acceptedTitle'] = $title;
+      return json_encode($data);
+    }
+    return false;
   }
 
   public function actionMove($item, $action, $second, $parentId)

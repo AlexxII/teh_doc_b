@@ -169,7 +169,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
       $(".del-root").hide();
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
-      $('.about-info').hide()
+      $('.about-info').html('')
     })
   });
 
@@ -428,7 +428,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         }
       },
       activate: function (node, data) {
-        $('.about-info').hide();
+        $('.about-info').html('');
         var node = data.node;
         var lvl = node.data.lvl;
         if (node.key == -999) {

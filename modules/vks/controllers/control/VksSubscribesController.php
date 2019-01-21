@@ -35,6 +35,7 @@ class VksSubscribesController extends Controller
     $newSubscr->ref = mt_rand();
     $newSubscr->appendTo($parentSubscr);
     $data['acceptedTitle'] = $title;
+    $data['acceptedId'] = $newSubscr->id;
     return json_encode($data);
   }
 
@@ -55,8 +56,11 @@ class VksSubscribesController extends Controller
   {
     $subscr = VksSubscribes::findOne(['id' => $id]);
     $subscr->name = $title;
-    $subscr->save();
-    return true;
+    if ($subscr->save()){
+      $data['acceptedTitle'] = $title;
+      return json_encode($data);
+    }
+    return false;
   }
 
   public function actionMove($item, $action, $second, $parentId)
