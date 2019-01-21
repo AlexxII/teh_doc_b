@@ -305,7 +305,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
       data: {Data: surnames, _csrf: csrf, id: nodeId},
       success: function (result) {
         if (result) {
-
           $('.about-info').hide().html(goodAlert('Записи добавлены в БД.')).fadeIn('slow');
         } else {
           $('.about-info').hide().html(badAlert('Записи не сохранены в БД. Попробуйте перезагрузить страницу и попробовать' +
@@ -406,7 +405,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
               // data.input.removeClass("pending")
             });
           } else {
-            console.log(data);
             $.ajax({
               url: update_url,
               data: {

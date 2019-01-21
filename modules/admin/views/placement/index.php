@@ -95,10 +95,11 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
 
 
   <div class="col-lg-5 col-md-5">
-    <div class="alert alert-warning">
+    <div class="alert alert-warning" style="margin-bottom: 10px">
       <a href="#" class="close" data-dismiss="alert">&times;</a>
       <strong>Внимание!</strong> Будьте внимательны!
     </div>
+    <div class="about-info"></div>
   </div>
 
 </div>
@@ -108,6 +109,24 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
   });
+
+  function goodAlert(text) {
+    var div = '' +
+      '<div id="w3-success-0" class="alert-success alert fade in">' +
+      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+      text +
+      '</div>';
+    return div;
+  }
+
+  function badAlert(text) {
+    var div = '' +
+      '<div id="w3-success-0" class="alert-danger alert fade in">' +
+      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+      text +
+      '</div>';
+    return div;
+  }
 
   $(document).ready(function () {
     $('.add-subcategory').click(function (event) {
@@ -150,6 +169,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
       $(".del-root").hide();
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
+      $('.about-info').hide()
     })
   });
 
@@ -170,7 +190,6 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         })
           .done(function () {
             node.remove();
-            restoreInputs(false, false);
             $('.about-info').html('');
             $('.del-root').hide();
           })
@@ -187,11 +206,13 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         $.ajax({
           url: "/admin/placement/delete",
           type: "post",
-          data: {id: node.data.id, _csrf: csrf}
+          data: {
+            id: node.data.id,
+            _csrf: csrf
+          }
         })
           .done(function () {
             node.remove();
-            restoreInputs(false, false);
             $('.about-info').html('');
             $('.del-node').hide();
           })
@@ -213,15 +234,16 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         $.ajax({
           url: "/admin/placement/delete-root",
           type: "post",
-          data: {id: node.data.id, _csrf: csrf}
+          data: {
+            id: node.data.id,
+            _csrf: csrf
+          }
         })
           .done(function () {
             node.remove();
-            restoreInputs(false, false);
             $('.about-info').html('');
             $('.del-multi-nodes').hide();
             $('.del-node').hide();
-
           })
           .fail(function () {
             alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
@@ -303,7 +325,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
           return true;
         },
         dragDrop: function (node, data) {
-          if (data.hitMode == 'over'){
+          if (data.hitMode == 'over') {
             var pId = data.node.data.id;
           } else {
             var pId = data.node.parent.data.id;
@@ -354,14 +376,24 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
                 title: data.input.val()
               }
             }).done(function (result) {
-//                           node.setTitle(result.acceptedTitle);
+              if (result) {
+                result = JSON.parse(result);
+                node.data.id = result.acceptedId;
+                node.setTitle(result.acceptedTitle);
+                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
+              } else {
+                node.setTitle(data.orgTitle);
+                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+              }
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
+              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
             }).always(function () {
               // data.input.removeClass("pending")
             });
           } else {
-            console.log(data);
             $.ajax({
               url: update_url,
               data: {
@@ -369,8 +401,18 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
                 title: data.input.val()
               }
             }).done(function (result) {
-//                           node.setTitle(result.acceptedTitle);
+              if (result) {
+                result = JSON.parse(result);
+                node.setTitle(result.acceptedTitle);
+                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
+              } else {
+                node.setTitle(data.orgTitle);
+                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+              }
             }).fail(function (result) {
+              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               node.setTitle(data.orgTitle);
             }).always(function () {
               // data.input.removeClass("pending")
@@ -386,6 +428,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         }
       },
       activate: function (node, data) {
+        $('.about-info').hide();
         var node = data.node;
         var lvl = node.data.lvl;
         if (node.key == -999) {

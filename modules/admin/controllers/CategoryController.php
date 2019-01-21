@@ -79,8 +79,11 @@ class CategoryController extends Controller
   {
     $category = Category::findOne(['id' => $id]);
     $category->name = $title;
-    $category->save();
-    return true;
+    if ($category->save()){
+      $data['acceptedTitle'] = $title;
+      return json_encode($data);
+    }
+    return false;
   }
 
   public function actionDelete()

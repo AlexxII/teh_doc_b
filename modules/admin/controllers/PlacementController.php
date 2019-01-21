@@ -49,6 +49,14 @@ class PlacementController extends Controller
     return false;
   }
 
+  public function actionCreateRoot($title)
+  {
+    $newRoot = new Placement(['name' => $title]);
+    $newRoot->makeRoot();
+    $data['acceptedTitle'] = $title;
+    return json_encode($data);
+  }
+
   public function actionCreate($parentId, $title)
   {
     $data = [];
@@ -58,14 +66,7 @@ class PlacementController extends Controller
     $newSubcat->ref = mt_rand();
     $newSubcat->appendTo($category);
     $data['acceptedTitle'] = $title;
-    return json_encode($data);
-  }
-
-  public function actionCreateRoot($title)
-  {
-    $newRoot = new Placement(['name' => $title]);
-    $newRoot->makeRoot();
-    $data['acceptedTitle'] = $title;
+    $data['acceptedId'] = $newSubcat->id;
     return json_encode($data);
   }
 
@@ -73,8 +74,11 @@ class PlacementController extends Controller
   {
     $category = Placement::findOne(['id' => $id]);
     $category->name = $title;
-    $category->save();
-    return true;
+    if ($category->save()){
+      $data['acceptedTitle'] = $title;
+      return json_encode($data);
+    }
+    return false;
   }
 
   public function actionDelete()
