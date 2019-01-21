@@ -169,7 +169,6 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         })
           .done(function () {
             node.remove();
-            restoreInputs(false, false);
             $('.about-info').html('');
             $('.del-root').hide();
           })
@@ -183,14 +182,17 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         event.preventDefault();
         var csrf = $('meta[name=csrf-token]').attr("content");
         var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+        console.log(node);
         $.ajax({
           url: "/admin/category/delete",
           type: "post",
-          data: {id: node.data.id, _csrf: csrf}
+          data: {
+            id: node.data.id,
+            _csrf: csrf
+          }
         })
           .done(function () {
             node.remove();
-            restoreInputs(false, false);
             $('.about-info').html('');
             $('.del-node').hide();
           })
@@ -212,11 +214,13 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         $.ajax({
           url: "/admin/category/delete-root",
           type: "post",
-          data: {id: node.data.id, _csrf: csrf}
+          data: {
+            id: node.data.id,
+            _csrf: csrf
+          }
         })
           .done(function () {
             node.remove();
-            restoreInputs(false, false);
             $('.about-info').html('');
             $('.del-multi-nodes').hide();
             $('.del-node').hide();
@@ -268,6 +272,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
     tree.clearFilter();
   }).attr("disabled", true);
 
+
   $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
       if ($(this).val() == '') {
@@ -303,7 +308,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
           return true;
         },
         dragDrop: function (node, data) {
-          if (data.hitMode == 'over'){
+          if (data.hitMode == 'over') {
             var pId = data.node.data.id;
           } else {
             var pId = data.node.parent.data.id;
@@ -354,7 +359,9 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
                 title: data.input.val()
               }
             }).done(function (result) {
-//                           node.setTitle(result.acceptedTitle);
+              result = JSON.parse(result);
+              node.data.id = result.acceptedId;
+              node.setTitle(result.acceptedTitle);
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
             }).always(function () {
@@ -369,7 +376,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
                 title: data.input.val()
               }
             }).done(function (result) {
-//                           node.setTitle(result.acceptedTitle);
+              // node.setTitle(result.acceptedTitle);
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
             }).always(function () {

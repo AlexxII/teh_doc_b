@@ -71,6 +71,7 @@ class CategoryController extends Controller
     $newSubcat->ref = mt_rand();
     $newSubcat->appendTo($category);
     $data['acceptedTitle'] = $title;
+    $data['acceptedId'] = $newSubcat->id;
     return json_encode($data);
   }
 
