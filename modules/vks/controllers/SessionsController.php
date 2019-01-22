@@ -7,6 +7,7 @@ use app\modules\vks\models\VksSessions;
 use app\modules\vks\models\VksSubscribes;
 use Yii;
 use yii\web\Controller;
+use app\modules\vks\models\VksLog;
 
 class SessionsController extends Controller
 {
@@ -130,6 +131,8 @@ class SessionsController extends Controller
       $model->vks_record_update = date('Y-m-d H:i:s');
       $model->vks_upcoming_session = 1;
       if ($model->save()) {
+        $userName = Yii::$app->user->identity->username;
+        $this->logVks($model->id,"Пользователь " . $userName . " добавил запись о предстоящем сеансе ВКС");
         Yii::$app->session->setFlash('success', 'Предстоящий сеанс видеосвязи добавлен!');
         return $this->redirect('index');
       } else {
@@ -316,7 +319,14 @@ class SessionsController extends Controller
     throw new NotFoundHttpException('The requested page does not exist.');
   }
 
-
-
+  protected function logVks($sessionId, $text)
+  {
+    $userName = Yii::$app->user->identity->username;
+    $log = new VksLog();
+    $log->session_id = $sessionId;
+    $log->log_text = $text;
+    $log->log_time = date("Y-m-d", time());;
+    $log->save();
+  }
 
 }

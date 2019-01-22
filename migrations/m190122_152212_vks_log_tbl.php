@@ -19,7 +19,7 @@ class m190122_152212_vks_log_tbl extends Migration
       'id' => $this->bigPrimaryKey(),
       'session_id' => $this->integer(),
       'log_text' => $this->string(255),
-      'log_time' => $this->date(),
+      'log_time' => $this->dateTime(),
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
   }
