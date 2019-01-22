@@ -151,7 +151,6 @@ $dell_hint = 'Удалить выделенных пользователей';
             for (var i = 0; i < data.length; i++) {
                 ar[i] = data[i][6];
             }
-//            console.log(ar);
             if (confirm('Вы действительно хотите удалить выделенных пользователей?')) {
                 $.ajax({
                     url: "/admin/user/delete-user",
@@ -167,7 +166,6 @@ $dell_hint = 'Удалить выделенных пользователей';
             }
         })
     });
-
 
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();

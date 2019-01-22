@@ -106,6 +106,18 @@ class UserController extends Controller
 
   }
 
+  public function actionDeleteUser()
+  {
+    if (!empty($_POST['jsonData'])){
+      $userId = $_POST['jsonData'];
+      $user = User::findIdentity($userId);
+      if ($user->delete()){
+        return true;
+      }
+      return false;
+    }
+  }
+
   public function actionProfile()
   {
     return $this->render('profile');
@@ -120,45 +132,5 @@ class UserController extends Controller
   }
 
 
-  public function actionTest()
-  {
-    return \kartik\tree\TreeViewInput::widget([
-      'query' => \app\modules\admin\models\ClassifierTbl::find()->addOrderBy('root, lft'),
-      'id' => 'classifier-test',
-      'name' => 'idse',                  // input name
-      'asDropdown' => true,            // will render the tree input widget as a dropdown.
-      'headingOptions' => ['label' => 'Хрен пока знает как выразить'],
-      'value' => false,
-      'multiple' => false,              // set to false if you do not need multiple selection
-      'fontAwesome' => true,           // render font awesome icons
-      'rootOptions' => [
-        'label' => '<i class="fa fa-tree"></i>',
-      ],
-      'dropdownConfig' => [
-        'input' => [
-          'placeholder' => 'Выберите...'
-        ]
-      ],
-      'options' => [
-        'class' => 'classifier-clll'
-      ]
-    ]);
-  }
-
-  public function actionTest2()
-  {
-    $model = new DynamicModel(['file']);
-    $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]);
-
-    echo $form->field($model, "file")->widget(FileInput::class, [
-      'language' => 'ru',
-      'options' => ['multiple' => true],
-      'pluginOptions' => [
-        'previewFileType' => 'any',
-        'overwriteInitial' => false,
-        'showUpload' => false
-      ],
-    ]);
-  }
 
 }

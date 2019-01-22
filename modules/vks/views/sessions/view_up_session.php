@@ -93,7 +93,17 @@ $this->params['breadcrumbs'][] = $this->title;
   </div>
 
 
-  <div class="fotorama col-lg-6 col-md-6" data-allowfullscreen="native">
+  <div class="vks-log col-lg-6 col-md-6">
+    <?php
+    foreach ($logs as $log) {
+      echo '<div class="alert alert-info" role="alert" style="margin-bottom: 10px">';
+        echo $log->log_text;
+        echo '<br>';
+        echo $log->log_time;
+
+      echo '</div>';
+    }
+    ?>
   </div>
 
 </div>
