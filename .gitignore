@@ -29,6 +29,6 @@ phpunit.phar
 
 #все сторонние модули
 /vendor
-composer.lock
+/composer.lock
 #vagrant - управление виртуальными машинами
 
