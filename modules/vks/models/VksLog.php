@@ -2,6 +2,7 @@
 
 namespace app\modules\vks\models;
 
+use app\modules\admin\models\User;
 use Yii;
 
 /**
@@ -47,5 +48,18 @@ class VksLog extends \yii\db\ActiveRecord
             'log_time' => 'Время',
             'valid' => 'Valid',
         ];
+    }
+
+    public function getUserName()
+    {
+      if($this->user){
+        return $this->user->username;
+      }
+      return '-';
+    }
+
+    public function getUser()
+    {
+      return $this->hasOne(User::class, ['ref' => 'user_id']);
     }
 }

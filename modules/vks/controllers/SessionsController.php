@@ -152,8 +152,7 @@ class SessionsController extends Controller
       $currentTime = new \DateTime();
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       if ($model->save()) {
-        $userName = Yii::$app->user->identity->username;
-        $this->logVks($model->id,"Пользователь " . $userName . " обновил информацию о предстоящем сеансе ВКС");
+        $this->logVks($model->id,"Обновил информацию о предстоящем сеансе ВКС");
         Yii::$app->session->setFlash('success', 'Запись успешно обновлена!');
         return $this->redirect('index');
       } else {
@@ -174,8 +173,7 @@ class SessionsController extends Controller
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
-        $userName = Yii::$app->user->identity->username;
-        $this->logVks($model->id,"Пользователь " . $userName . " подтвердил прошедший сеанс ВКС.");
+        $this->logVks($model->id,"Подтвердил прошедший сеанс ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
         return $this->redirect('archive');
       } else {
@@ -196,8 +194,7 @@ class SessionsController extends Controller
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
-        $userName = Yii::$app->user->identity->username;
-        $this->logVks($model->id,"Пользователь " . $userName . " добавил запись о прошедшем сеансе ВКС.");
+        $this->logVks($model->id,"Добавил запись о прошедшем сеансе ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
         return $this->redirect('archive');
       } else {
@@ -218,8 +215,7 @@ class SessionsController extends Controller
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
-        $userName = Yii::$app->user->identity->username;
-        $this->logVks($model->id,"Пользователь " . $userName . " обновил запись о прошедшем сеансе ВКС.");
+        $this->logVks($model->id,"Обновил запись о прошедшем сеансе ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
         return $this->redirect('archive');
       } else {
@@ -332,10 +328,11 @@ class SessionsController extends Controller
 
   protected function logVks($sessionId, $text)
   {
-    $userName = Yii::$app->user->identity->id;
+    $userId = Yii::$app->user->identity->ref;
     $log = new VksLog();
     $log->session_id = $sessionId;
     $log->log_text = $text;
+    $log->user_id = $userId;
     $log->log_time = date("Y-m-d H:i:s", time());;
     $log->save();
   }
