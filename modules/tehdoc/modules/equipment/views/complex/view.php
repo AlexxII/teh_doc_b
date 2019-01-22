@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 //use yii\widgets\DetailView;
 use yii\widgets\DetailView;
@@ -40,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
       [
         'label' => 'Дата производства:',
         'format' => 'raw',
-        'value' => function($data){
+        'value' => function ($data) {
           if ($data->complex_factdate != null) {
             return date('jS M y', strtotime($data->complex_factdate));
           } else {
@@ -72,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
           [
             'label' => 'Дата производства:',
             'format' => 'raw',
-            'value' => function($data){
+            'value' => function ($data) {
               if ($data->eq_factdate != null) {
                 return date('jS M y', strtotime($data->eq_factdate));
               } else {
@@ -92,15 +93,18 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
       ]);
       echo '</div>';
-      echo '<div class="w3-col m5 l5 container w3-center">';
+
+      echo '<div class="col-lg-6 col-md-6">
+              <div class="fotorama" data-allowful lscreen="true" data-width="100%">';
       if ($photos = $modelTool->photos) {
-        $ph = null;
         foreach ($photos as $photo) {
-          $ph[] = ['img' => $photo->getImageUrl()];
+          echo '<img src=' . $photo->getImageUrl() . '>';
         }
       }
-      echo '<hr>';
       echo '</div>';
+      echo '</div>';
+
+      echo '<hr>';
     }
     echo '</div>';
   }

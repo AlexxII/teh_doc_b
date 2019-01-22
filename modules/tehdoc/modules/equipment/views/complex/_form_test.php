@@ -3,8 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Modal;
+use app\assets\FancytreeAsset;
 
-\wbraganca\fancytree\FancytreeAsset::register($this);
+FancytreeAsset::register($this);
 
 $about = "Панель управления. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $add_hint = 'Добавить новый узел';

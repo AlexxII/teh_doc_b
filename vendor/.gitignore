@@ -21,5 +21,7 @@
 /theseer
 /webmozart
 /yiisoft
+/kartik-v
+/creocoder
 #Third party modules
 autoload.php

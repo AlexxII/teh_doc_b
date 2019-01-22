@@ -288,6 +288,20 @@ $eq_title_hint = 'Обязательное! Необходимо для отоб
         </div>
       </div>
       <?php DynamicFormWidget::end(); ?>
+      <div class="row">
+        <div class="form-group col-md-12 col-lg-12">
+          <?= $form->field($model, 'eq_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '2')) ?>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-md-12 col-lg-12">
+
+          <label style="font-size:18px"><input type="checkbox" name="stay" style="width:20px;height:20px">
+            Остаться в форме</label>
+        </div>
+      </div>
+
       <div class="form-group">
         <?= Html::submitButton($modelComplex->isNewRecord ? 'Добавить' : 'Обновить', ['class' => 'btn btn-primary']) ?>
       </div>
