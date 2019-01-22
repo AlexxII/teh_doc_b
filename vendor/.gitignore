@@ -1,4 +1,5 @@
 #ignore
+*
 /behat
 /bin
 /bower-asset
@@ -7,6 +8,7 @@
 /composer
 /doctrine
 /ezyang
+/facebook
 /fzaninotto
 /guzzlehttp
 /myclabs
@@ -15,13 +17,17 @@
 /phpspec
 /phpunit
 /psr
+/ralouphie
 /sebastian
 /swiftmailer
 /symfony
 /theseer
+/wbraganca
 /webmozart
+/wokster
 /yiisoft
 /kartik-v
 /creocoder
+
 #Third party modules
 autoload.php
