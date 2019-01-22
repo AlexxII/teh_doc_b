@@ -59,7 +59,6 @@ $send_hint = 'Передать выделенные строки в подроб
     padding-top: 25px;
     border-radius: 1px;
   }
-
 </style>
 
 <div class="analytics-pannel">
