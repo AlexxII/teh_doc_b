@@ -77,7 +77,9 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
       </div>
     </div>
 
-    <div class="row">
+    <div class="col-md-12 col-lg-12"
+         style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">
+      <span class="text-muted " style="position: absolute;top:5px;right:10px;font-size: 10px">Студия </span>
       <div class="form-group col-md-5 col-lg-5">
         <?php
         echo $form->field($model, 'vks_type', [

@@ -10,12 +10,11 @@ use yii\web\JsExpression;
 $this->title = 'Панель администрирования';
 $this->params['breadcrumbs'][] = $this->title;
 
-$about = "Панель администрирования test";
+$about = "Панель администрирования";
 
 ?>
-
-
 <style>
+
   .h-title {
     font-size: 18px;
     color: #1e6887;
@@ -27,7 +26,6 @@ $about = "Панель администрирования test";
     <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
          data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
   </h3>
-
 </div>
 
 <script>

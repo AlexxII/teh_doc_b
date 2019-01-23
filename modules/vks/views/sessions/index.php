@@ -26,6 +26,9 @@ Yii::$app->cache->flush();
   /*td {*/
   /*text-align: center;*/
   /*}*/
+  .fa {
+    font-size: 25px;
+  }
   #main-table tbody td {
     font-size: 12px;
   }
@@ -216,10 +219,10 @@ Yii::$app->cache->flush();
           "data": null,
           "width": '70px',
           "defaultContent":
-            "<a href='#' class='fa fa-edit edit' style='padding-right: 5px' title='Обновить' data-placement='top' data-toggle='tooltip'></a>" +
+            "<a href='#' class='fa fa-edit edit' style='padding-right: 5px; font-size: 25px' title='Обновить' data-placement='top' data-toggle='tooltip'></a>" +
             "<a href='#' class='fa fa-info view' title='Подробности' style='padding-right: 5px'></a>" +
             "<a href='#' class='fa fa-calendar-check-o confirm' title='Подтвердить сеанс' style='padding-right: 5px'></a>"
-          // "<a href='#' class='fa fa-calendar-minus-o abort' title='Отменить сеанс'></a>"
+            // "<a href='#' class='fa fa-calendar-minus-o abort' title='Отменить сеанс'></a>"
         }, {
           "orderable": false,
           "className": 'select-checkbox',
