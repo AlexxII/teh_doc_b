@@ -10,9 +10,10 @@ use yii\web\JsExpression;
 $this->title = 'Панель администрирования';
 $this->params['breadcrumbs'][] = $this->title;
 
-$about = "Панель администрирования";
+$about = "Панель администрирования test";
 
 ?>
+
 
 <style>
   .h-title {
@@ -22,7 +23,7 @@ $about = "Панель администрирования";
 </style>
 
 <div class="admin-pannel">
-  <h3><?= Html::encode($this->title) . 'TEST'?>
+  <h3><?= Html::encode($this->title)?>
     <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
          data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
   </h3>

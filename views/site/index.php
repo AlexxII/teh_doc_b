@@ -3,7 +3,7 @@
 /* @var $this yii\web\View */
 
 $this->title = 'Сайт РИАЦе';
-
+Yii::$app->cache->flush();
 ?>
 <div class="site-index">
 

@@ -173,7 +173,7 @@ class User extends ActiveRecord implements IdentityInterface
   static public function getGroupList()
   {
     return [
-        '1.php' => 'Военнослужащие',
+        '1' => 'Военнослужащие',
         '2' => 'Гражданский персонал'
     ];
   }
@@ -181,7 +181,7 @@ class User extends ActiveRecord implements IdentityInterface
   static public function getRoleList()
   {
     return [
-        '1.php' => 'military',
+        '1' => 'military',
         '2' => 'civilian'
     ];
   }

@@ -7,6 +7,7 @@ use app\modules\vks\models\VksSessions;
 use app\modules\vks\models\VksSubscribes;
 use Yii;
 use yii\web\Controller;
+use app\modules\vks\models\VksLog;
 
 class SessionsController extends Controller
 {
@@ -130,6 +131,7 @@ class SessionsController extends Controller
       $model->vks_record_update = date('Y-m-d H:i:s');
       $model->vks_upcoming_session = 1;
       if ($model->save()) {
+        $this->logVks($model->id,"Добавил запись о предстоящем сеансе ВКС");
         Yii::$app->session->setFlash('success', 'Предстоящий сеанс видеосвязи добавлен!');
         return $this->redirect('index');
       } else {
@@ -150,6 +152,7 @@ class SessionsController extends Controller
       $currentTime = new \DateTime();
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       if ($model->save()) {
+        $this->logVks($model->id,"Обновил информацию о предстоящем сеансе ВКС");
         Yii::$app->session->setFlash('success', 'Запись успешно обновлена!');
         return $this->redirect('index');
       } else {
@@ -170,6 +173,7 @@ class SessionsController extends Controller
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
+        $this->logVks($model->id,"Подтвердил прошедший сеанс ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
         return $this->redirect('archive');
       } else {
@@ -190,6 +194,7 @@ class SessionsController extends Controller
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
+        $this->logVks($model->id,"Добавил запись о прошедшем сеансе ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
         return $this->redirect('archive');
       } else {
@@ -210,6 +215,7 @@ class SessionsController extends Controller
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
+        $this->logVks($model->id,"Обновил запись о прошедшем сеансе ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
         return $this->redirect('archive');
       } else {
@@ -261,15 +267,19 @@ class SessionsController extends Controller
 
   public function actionViewUpSession($id)
   {
+    $logs = VksLog::find()->where(['=', 'session_id', $id])->all();
     return $this->render('view_up_session', [
       'model' => $this->findModel($id),
+      'logs' => $logs
     ]);
   }
 
   public function actionViewSession($id)
   {
+    $logs = VksLog::find()->where(['=', 'session_id', $id])->all();
     return $this->render('view_session', [
       'model' => $this->findModel($id),
+      'logs' => $logs
     ]);
   }
 
@@ -316,7 +326,15 @@ class SessionsController extends Controller
     throw new NotFoundHttpException('The requested page does not exist.');
   }
 
-
-
+  protected function logVks($sessionId, $text)
+  {
+    $userId = Yii::$app->user->identity->ref;
+    $log = new VksLog();
+    $log->session_id = $sessionId;
+    $log->log_text = $text;
+    $log->user_id = $userId;
+    $log->log_time = date("Y-m-d H:i:s", time());;
+    $log->save();
+  }
 
 }
