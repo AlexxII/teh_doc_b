@@ -10,9 +10,10 @@ use yii\web\JsExpression;
 $this->title = 'Панель администрирования';
 $this->params['breadcrumbs'][] = $this->title;
 
-$about = "Панель администрирования";
+$about = "Панель администрирования test";
 
 ?>
+
 
 <style>
   .h-title {
