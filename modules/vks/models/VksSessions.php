@@ -40,6 +40,7 @@ class VksSessions extends \yii\db\ActiveRecord
 
   const SCENARIO_CREATE = 'create';
   const SCENARIO_CONFIRM = 'confirm';
+  public $multiple;
 
   /**
    * {@inheritdoc}
@@ -141,6 +142,7 @@ class VksSessions extends \yii\db\ActiveRecord
       'vks_comments' => 'Примечание:',
       'vks_record_create' => 'Запись создана:',
       'vks_record_update' => 'Запись обновлена:',
+      'multiple' =>''
     ];
   }
 

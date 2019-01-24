@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\modules\vks\assets\VksFormAsset;
 use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
+use unclead\multipleinput\MultipleInput;
+
 
 ?>
 
@@ -111,6 +113,37 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
         <input name="VksSessions[vks_place_text]" id="vks_place_text" style="display: none">
       </div>
     </div>
+
+    <div class="col-md-12 col-lg-12">
+      <?= $form->field($model, 'multiple')->widget(MultipleInput::className(), [
+        'max' => 4,
+        'columns' => [
+          [
+            'name'  => 'user_id',
+            'type'  => 'dropDownList',
+            'title' => 'Тип ВКС:',
+            'defaultValue' => 1,
+            'items' => [
+              1 => 'User 1',
+              2 => 'User 2'
+            ]
+          ],
+          [
+            'name'  => 'user_id',
+            'type'  => 'dropDownList',
+            'title' => 'Место проведения ВКС:',
+            'defaultValue' => 1,
+            'items' => [
+              1 => 'User 1',
+              2 => 'User 2'
+            ]
+          ]
+        ]
+      ]);
+      ?>
+    </div>
+
+
 
     <div class="col-md-12 col-lg-12"
          style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">
