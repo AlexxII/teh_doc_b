@@ -36,6 +36,12 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
 <div class="row">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
+      <?= Html::a('<i class="fa fa-tree" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-category',
+        'style' => ['margin-top' => '5px'],
+        'title' => $add_hint,
+        'data-toggle' => 'tooltip',
+        'data-placement' => 'top'
+      ]) ?>
       <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
         'style' => ['margin-top' => '5px'],
         'title' => $add_hint,
@@ -123,7 +129,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       $.ajax({
-        url: "/vks/control/vks-employee/create-root",
+        url: "/tehdoc/equipment/complex/create-root",
         data: {title: 'Новое Ведомство'}
       })
         .done(function () {

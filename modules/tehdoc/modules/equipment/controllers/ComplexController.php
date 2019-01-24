@@ -285,7 +285,6 @@ class ComplexController extends Controller
 
   public function actionCreateRoot($title)
   {
-    \Yii::$app->db->schema->refresh();
     $newRoot = new ComplexEx(['name' => $title]);
     $result = $newRoot->makeRoot();
     if ($result) {
