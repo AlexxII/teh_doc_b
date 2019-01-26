@@ -43,6 +43,7 @@ $vks_recmsg_subscr_hint = 'Обязательное поле! Укажите Ф�
 $vks_recmsg_date_hint = 'Обязательное поле! Укажите дату получения сообщения о предстоящем сеансе ВКС';
 $vks_employee_send_hint = 'Обязательное поле! Укажите ФИО сотрудника, передавшего сообщение о предстоящем сеансе ВКС';
 $vks_employee_hint = 'Обязательное поле! Укажите ';
+$vks_add_combined = "Добавить совмещенный сеанс";
 ?>
 
 <div class="row">
@@ -79,41 +80,57 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
       </div>
     </div>
 
-    <div class="col-md-12 col-lg-12"
-         style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">
-      <span class="text-muted " style="position: absolute;top:5px;right:10px;font-size: 10px">Студия </span>
-      <div class="form-group col-md-5 col-lg-5">
-        <?php
-        echo $form->field($model, 'vks_type', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $vks_type_hint . '"></sup>{input}{hint}'
-        ])->dropDownList($model->vksTypesList, ['data-name' => 'vks_type',
-          'prompt' => ['text' => 'Выберите',
-            'options' => [
-              'value' => 'none',
-              'disabled' => 'true',
-              'selected' => 'true'
-            ]]])->hint('', ['class' => ' w3-label-under']);
-        ?>
-        <input name="VksSessions[vks_type_text]" id="vks_type_text" style="display: none">
-      </div>
+    <!-- ****************************************************************** -->
 
-      <div class="form-group col-md-7 col-lg-7">
-        <?= $form->field($model, 'vks_place', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+    <div class="dynamic-content">
+      <div class="col-md-12 col-lg-12"
+           style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">
+      <span class="text-muted dynamic-control" style="position: absolute;top:5px;right:10px;font-size: 10px">
+        <i class="fa fa-plus-square-o add-combined-session"
+           aria-hidden="true"
+           style="cursor: pointer; font-size: 25px; color: #4eb305"
+           data-toggle="tooltip"
+           data-placement="top"
+           title="Добавить совмещенный сеанс">
+        </i></span>
+        <span class="text-muted dynamic-title" style="position: absolute;top:5px;left:10px;font-size: 10px"></span>
+
+        <div class="dynamic-wrap">
+          <div class="form-group col-md-5 col-lg-5" style="margin-top: 10px">
+            <?php
+            echo $form->field($model, 'vks_type', [
+              'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+                data-toggle="tooltip" data-placement="top" title="' . $vks_type_hint . '"></sup>{input}{hint}'
+            ])->dropDownList($model->vksTypesList, ['data-name' => 'vks_type', 'class' => 'vks-type form-control',
+              'prompt' => ['text' => 'Выберите',
+                'options' => [
+                  'value' => 'none',
+                  'disabled' => 'true',
+                  'selected' => 'true'
+                ]]])->hint('', ['class' => ' w3-label-under']);
+            ?>
+            <input name="VksSessions[vks_type_text]" id="vks_type_text" style="display: none">
+          </div>
+
+          <div class="form-group col-md-7 col-lg-7" style="margin-top: 10px">
+            <?= $form->field($model, 'vks_place', [
+              'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_place_hint . '"></sup>{input}{hint}'
-        ])->dropDownList($model->vksPlacesList, ['data-name' => 'vks_place',
-          'prompt' => ['text' => 'Выберите',
-            'options' => [
-              'value' => 'none',
-              'disabled' => 'true',
-              'selected' => 'true'
-            ]]])->hint('', ['class' => ' w3-label-under']);
-        ?>
-        <input name="VksSessions[vks_place_text]" id="vks_place_text" style="display: none">
+            ])->dropDownList($model->vksPlacesList, ['data-name' => 'vks_place', 'class' => 'vks-place form-control',
+              'prompt' => ['text' => 'Выберите',
+                'options' => [
+                  'value' => 'none',
+                  'disabled' => 'true',
+                  'selected' => 'true'
+                ]]])->hint('', ['class' => ' w3-label-under']);
+            ?>
+            <input name="VksSessions[vks_place_text]" id="vks_place_text" style="display: none">
+          </div>
+        </div>
       </div>
     </div>
 
+<<<<<<< HEAD
     <div class="col-md-12 col-lg-12">
       <?= $form->field($model, 'multiple')->widget(MultipleInput::className(), [
         'max' => 4,
@@ -144,6 +161,10 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
     </div>
 
 
+=======
+
+    <!-- ****************************************************************** -->
+>>>>>>> dynamic
 
     <div class="col-md-12 col-lg-12"
          style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">
@@ -215,6 +236,7 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
       ])->hint('', ['class' => ' w3-label-under']); ?>
     </div>
 
+
     <div class="form-group col-md-12 col-lg-12">
       <?= $form->field($model, 'vks_employee_send_msg', [
         'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
@@ -238,10 +260,81 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
   </div>
 </div>
 
-
 <?php ActiveForm::end(); ?>
 
 <script>
+
+  var mines = '' +
+    '      <span class="text-muted " style="position: absolute;top:5px;right:10px;font-size: 10px">\n' +
+    '        <i class="fa fa-minus-square-o del-combined-session"\n' +
+    '           aria-hidden="true"\n' +
+    '           style="cursor: pointer; font-size: 25px; color: #c72e26"\n' +
+    '           data-toggle="tooltip"\n' +
+    '           data-placement="top"\n' +
+    '           title="Удалить совмещенный сеанс">\n' +
+    '        </i></span>\n';
+
+  var newDiv = '' +
+    '        <div class="form-group col-md-5 col-lg-5  dynamic" style="margin-top: 10px">' +
+    '          <label class="control-label">Тип ВКС:</label>' +
+    '        </div>' +
+    '        <div class="form-group col-md-7 col-lg-7" style="margin-top: 10px">' +
+    '          <label class="place-label">Место проведения ВКС:</label>' +
+    '        </div>';
+
+
+  $('.dynamic-content').on('click', '.del-combined-session', function () {
+    var div = $(this).closest("div");
+    mainCounter--;
+    if (mainCounter == 1) {
+      $(parentSpanTitle).text('');
+    }
+    div.remove();
+  });
+
+  var mainCounter = 1;
+  var parentSpanTitle;
+  var lastInsert;
+  var maxInput = 4;
+  $(document).ready(function () {
+    $('.add-combined-session').on('click', function () {
+      if (mainCounter >= maxInput) {
+        return;
+      }
+      var div = $(this).closest("div");
+      parentSpanTitle = $(div).find('.dynamic-title').text('Студия');
+
+      var insert = $(div).clone();
+      insert.find('.dynamic-wrap').html(newDiv);
+      var spanControl = $(insert).find('.dynamic-title').text('Студия');
+      var spanTitle = $(insert).find('.dynamic-control').replaceWith(mines);
+      // переименовать контейнер
+      $(insert).find('.dynamic').addClass("dynamic-container-" + mainCounter);
+      insert.find('.control-label').attr('for', 'new-type-' + mainCounter);
+      // клонировать selectы, переименовать их id, name  и всавить в клонированный div после label
+      div.find('.vks-type').clone().attr('name', 'test-type[' + mainCounter + ']').attr('id', 'new-type-' + mainCounter).insertAfter(insert.find('.control-label'));
+      div.find('.vks-place').clone().attr('name', 'test-place[' + mainCounter + ']').insertAfter(insert.find('.place-label'));
+
+      $(insert).tooltip();
+      if (mainCounter == 1) {
+        insert.insertAfter(div);
+      } else {
+        insert.insertAfter(lastInsert);
+      }
+      lastInsert = insert;
+      $('#w0').yiiActiveForm('add', {
+        id: 'new-type-' + mainCounter,
+        name: 'test-type[' + mainCounter + ']',
+        container: '.dynamic-container-' + mainCounter,
+        input: '#new-type-' + mainCounter,
+        validate:  function (attribute, value, messages, deferred, $form) {
+          yii.validation.required(value, messages, {message: "Validation Message Here"});
+        }
+      });
+      mainCounter++;
+    })
+  });
+
   $(document).ready(function () {
     $(function () {
       $.mask.definitions['H'] = '[012]';
