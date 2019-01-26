@@ -192,6 +192,10 @@ Yii::$app->cache->flush();
       "responsive": true,
       "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
         var today = new Date();
+        console.log(nRow);
+        console.log(aData);
+        console.log(iDisplayIndex);
+        console.log(iDisplayIndexFull);
         var date = aData[1];
         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
         var dt = new Date(date.replace(pattern, '$3-$2-$1'));
