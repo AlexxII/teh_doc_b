@@ -209,7 +209,7 @@ Yii::$app->cache->flush();
         }
       },
       "ajax": $.fn.dataTable.pipeline({
-        url: '/vks/sessions/server-side',
+        url: '/vks/sessions/server-side?index=0',
         pages: 2 // number of pages to cache
       }),
       orderFixed: [2, 'asc'],

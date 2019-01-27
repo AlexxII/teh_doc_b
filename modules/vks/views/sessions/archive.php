@@ -80,9 +80,6 @@ $dell_hint = 'Удалить выделенные сеансы';
 
 
 <script>
-  // $(document).ready(function () {
-  //     $('[data-toggle="tooltip"]').tooltip();
-  // });
 
   // ************************* Работа таблицы **************************************
 
@@ -185,7 +182,7 @@ $dell_hint = 'Удалить выделенные сеансы';
         }
       },
       "ajax": $.fn.dataTable.pipeline({
-        url: '/vks/sessions/server-side-ex',
+        url: '/vks/sessions/server-side-ex?index=0',
         pages: 2 // number of pages to cache
       }),
       orderFixed: [2, 'asc'],

@@ -170,6 +170,11 @@ class User extends ActiveRecord implements IdentityInterface
     }
   }
 
+  public function getIsAdmin()
+  {
+
+  }
+
   static public function getGroupList()
   {
     return [
