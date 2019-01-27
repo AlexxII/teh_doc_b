@@ -569,7 +569,6 @@ $classif_hint = 'Присвоить выделенному оборудован�
         });
       },
       "dataType": "json"
-
     });
   }
 
@@ -582,7 +581,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
       var table = $('#main-table').DataTable();
       var data = table.rows({selected: true}).data();
       var ar = [];
-      var count = data.length;
+        var count = data.length;
       for (var i = 0; i < count; i++) {
         ar[i] = data[i][5];
       }

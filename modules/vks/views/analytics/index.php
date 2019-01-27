@@ -141,7 +141,9 @@ $send_hint = 'Передать выделенные строки в подроб
       <tr>
         <th></th>
         <th data-priority="1">Дата</th>
-        <th data-priority="5">Тип ВКС</th>
+        <th>Время</th>
+        <th data-priority="5">Прод-ть</th>
+        <th data-priority="4">Тип ВКС</th>
         <th>Место проведения</th>
         <th data-priority="6">Абонент</th>
         <th data-priority="2">Action</th>
@@ -176,8 +178,8 @@ $send_hint = 'Передать выделенные строки в подроб
       onHide: function (dp, animationCompleted) {
         if (animationCompleted) {
           var range = $('#vks-dates').val();
-          var stDate = range.substring(6,10) + '-' + range.substring(3,5) + '-' + range.substring(0,2);
-          var eDate = range.substring(19,24) + '-' + range.substring(16,18) + '-' + range.substring(13,15);
+          var stDate = range.substring(6, 10) + '-' + range.substring(3, 5) + '-' + range.substring(0, 2);
+          var eDate = range.substring(19, 24) + '-' + range.substring(16, 18) + '-' + range.substring(13, 15);
           $(".start-date").val(stDate);
           $(".end-date").val(eDate);
           $("#main-table").DataTable().clearPipeline().draw();
@@ -192,7 +194,7 @@ $send_hint = 'Передать выделенные строки в подроб
       $.getJSON(url, function (result) {
         var optionsValues = '<select class="form-control input-sm" id="vars-control" style="margin-top: 5px">';
         $.each(result, function (index, obj) {
-          optionsValues += '<option value="' + obj.table + '" data-identifier="' + obj.ident + '" data-tree="'+ obj.tree +'">'
+          optionsValues += '<option value="' + obj.table + '" data-identifier="' + obj.ident + '" data-tree="' + obj.tree + '">'
             + obj.title + '</option>';
         });
         optionsValues += '</select>';
@@ -489,7 +491,7 @@ $send_hint = 'Передать выделенные строки в подроб
       "processing": true,
       "serverSide": true,
       "responsive": true,
-      "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+      "lengthMenu": [[25, 50, 100], [25, 50, 100]],
       "ajax": $.fn.dataTable.pipeline({
         url: main_url,
         pages: 2, // number of pages to cache
@@ -501,12 +503,12 @@ $send_hint = 'Передать выделенные строки в подроб
           var ident = $(".ident").val();
           var stDt = $(".start-date").val();
           var eDt = $(".end-date").val();
-          if (stDt != '--'){
+          if (stDt != '--') {
             var startDate = stDt;
           } else {
             var startDate = '1970-01-01';
           }
-          if (eDt != '--'){
+          if (eDt != '--') {
             var endDate = eDt;
           } else {
             var endDate = '2099-12-31';
@@ -517,8 +519,8 @@ $send_hint = 'Передать выделенные строки в подроб
             'root': root,
             'lft': lft,
             'rgt': rgt,
-            'stDate' : startDate,
-            'eDate' : endDate
+            'stDate': startDate,
+            'eDate': endDate
           }
         }
       }),
@@ -537,7 +539,25 @@ $send_hint = 'Передать выделенные строки в подроб
         "targets": 0,
         "data": null,
         "visible": false
-      }],
+      }, {
+        "targets": 2,
+        "render": function (data, type, row) {
+          return row[12] + '-' + row[13] + '/т' + "<br> " + row[14] + '-' + row[15] + '/р';
+        }
+      }, {
+        "targets": 3,
+        "width": '55px',
+        "render": function (data, type, row) {
+          return row[10] + "<br> " + row[11];
+        }
+      }, {
+        "targets": 4,
+        "width": '60px'
+      }, {
+        "targets": 6,
+        "width": '120px'
+      }
+      ],
       select: {
         style: 'os',
         selector: 'td:last-child'

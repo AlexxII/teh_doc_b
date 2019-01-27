@@ -23,10 +23,7 @@ Yii::$app->cache->flush();
 </div>
 
 <style>
-  /*td {*/
-  /*text-align: center;*/
-  /*}*/
-  .fa {
+  td .fa {
     font-size: 25px;
   }
   #main-table tbody td {
@@ -36,7 +33,9 @@ Yii::$app->cache->flush();
     font-size: 18px;
     color: #1e6887;
   }
-
+  .testt {
+    position: relative;
+  }
 </style>
 
 <div class="row">
@@ -192,13 +191,10 @@ Yii::$app->cache->flush();
       "responsive": true,
       "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
         var today = new Date();
-        console.log(nRow);
-        console.log(aData);
-        console.log(iDisplayIndex);
-        console.log(iDisplayIndexFull);
         var date = aData[1];
         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
         var dt = new Date(date.replace(pattern, '$3-$2-$1'));
+        console.log(nRow);
         if (moment(today).isAfter(dt, 'day')) {
           $('td', nRow).css('background-color', '#f2dede');
         }
@@ -206,6 +202,10 @@ Yii::$app->cache->flush();
           $('td', nRow).css('background-color', '#dff0d8');
         }
         else {
+        }
+        if (aData[10] != 0){
+          $(nRow).addClass('testt');
+
         }
       },
       "ajax": $.fn.dataTable.pipeline({

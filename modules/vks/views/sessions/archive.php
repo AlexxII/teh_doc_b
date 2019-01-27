@@ -30,6 +30,10 @@ $dell_hint = 'Удалить выделенные сеансы';
     font-size: 18px;
     color: #1e6887;
   }
+  td .fa {
+    font-size: 22px;
+  }
+
 
 </style>
 

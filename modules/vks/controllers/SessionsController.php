@@ -3,8 +3,10 @@
 namespace app\modules\vks\controllers;
 
 use app\modules\vks\models\SSP;
+use app\modules\vks\models\VksPlaces;
 use app\modules\vks\models\VksSessions;
 use app\modules\vks\models\VksSubscribes;
+use app\modules\vks\models\VksTypes;
 use Yii;
 use yii\web\Controller;
 use app\modules\vks\models\VksLog;
@@ -60,6 +62,7 @@ class SessionsController extends Controller
       array('db' => 'vks_subscriber_office_text', 'dt' => 7),
       array('db' => 'vks_subscriber_name', 'dt' => 8),
       array('db' => 'vks_order_text', 'dt' => 9),
+      array('db' => 'combined', 'dt' => 10)
     );
     $sql_details = \Yii::$app->params['sql_details'];
     $where = 'vks_upcoming_session = 1';
@@ -139,15 +142,23 @@ class SessionsController extends Controller
           $newModel = new VksSessions(['scenario' => VksSessions::SCENARIO_CREATE]);
           $newModel->load(Yii::$app->request->post());
           $newModel->vks_type = $item;
+          $typeModel = VksTypes::findOne(['ref' => $item]);
+          $newModel->vks_type_text = $typeModel->name;
           if (!empty($_POST['test-place'][$key])) {
-            $newModel->vks_place = $_POST['test-place'][$key];
+            $placeId = $_POST['test-place'][$key];
+            $newModel->vks_place = $placeId;
+            $placeModel = VksPlaces::findOne(['ref' => $placeId]);
+            $newModel->vks_place_text = $placeModel->name;
           }
           $newModel->vks_record_create = $date;
           $newModel->vks_record_update = $date;
           $newModel->vks_upcoming_session = 1;
+          $newModel->combined = 1;
           $result = $newModel->save();
           $this->logVks($newModel->id, "Добавил запись о предстоящем сеансе ВКС");
         }
+        $model->combined = 1;
+        $result = $model->save();
       }
       if ($result) {
         Yii::$app->session->setFlash('success', 'Предстоящий сеанс видеосвязи добавлен!');

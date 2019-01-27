@@ -84,7 +84,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
 
     <div class="dynamic-content">
       <div class="col-md-12 col-lg-12"
-           style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">
+           style="border: dashed 1px #0c0c0c; border-radius: 4px; padding: 20px 0px 10px 0px; margin-bottom: 10px; position: relative">
       <span class="text-muted dynamic-control" style="position: absolute;top:5px;right:10px;font-size: 10px">
         <i class="fa fa-plus-square-o add-combined-session"
            aria-hidden="true"
@@ -130,41 +130,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
       </div>
     </div>
 
-<<<<<<< HEAD
-    <div class="col-md-12 col-lg-12">
-      <?= $form->field($model, 'multiple')->widget(MultipleInput::className(), [
-        'max' => 4,
-        'columns' => [
-          [
-            'name'  => 'user_id',
-            'type'  => 'dropDownList',
-            'title' => 'Тип ВКС:',
-            'defaultValue' => 1,
-            'items' => [
-              1 => 'User 1',
-              2 => 'User 2'
-            ]
-          ],
-          [
-            'name'  => 'user_id',
-            'type'  => 'dropDownList',
-            'title' => 'Место проведения ВКС:',
-            'defaultValue' => 1,
-            'items' => [
-              1 => 'User 1',
-              2 => 'User 2'
-            ]
-          ]
-        ]
-      ]);
-      ?>
-    </div>
-
-
-=======
-
     <!-- ****************************************************************** -->
->>>>>>> dynamic
 
     <div class="col-md-12 col-lg-12"
          style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">

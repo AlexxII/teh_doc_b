@@ -40,7 +40,6 @@ class VksSessions extends \yii\db\ActiveRecord
 
   const SCENARIO_CREATE = 'create';
   const SCENARIO_CONFIRM = 'confirm';
-  public $multiple;
 
   /**
    * {@inheritdoc}
@@ -81,6 +80,7 @@ class VksSessions extends \yii\db\ActiveRecord
     ];
     return $scenarios;
   }
+
 
   /**
    * {@inheritdoc}
@@ -141,12 +141,7 @@ class VksSessions extends \yii\db\ActiveRecord
       'vks_employee_send_msg' => 'Передавший сообщение:',
       'vks_comments' => 'Примечание:',
       'vks_record_create' => 'Запись создана:',
-<<<<<<< HEAD
-      'vks_record_update' => 'Запись обновлена:',
-      'multiple' =>''
-=======
       'vks_record_update' => 'Запись обновлена:'
->>>>>>> dynamic
     ];
   }
 
