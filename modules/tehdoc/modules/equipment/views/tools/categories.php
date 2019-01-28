@@ -690,7 +690,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
   })(jQuery);
 
   jQuery(function ($) {
-    var main_url = '/admin/category/categories';
+    var main_url = '/tehdoc/control/category/categories';
 
     $("#fancyree_w0").fancytree({
       source: {

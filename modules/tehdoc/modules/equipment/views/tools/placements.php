@@ -638,7 +638,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
   });
 
   jQuery(function ($) {
-    var main_url = '/admin/placement/placements';
+    var main_url = '/tehdoc/control/placement/placements';
 
     $("#fancyree_w0").fancytree({
       source: {

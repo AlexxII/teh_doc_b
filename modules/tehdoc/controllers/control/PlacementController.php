@@ -1,7 +1,6 @@
 <?php
 
-namespace app\modules\admin\controllers;
-
+namespace app\modules\tehdoc\controllers\control;
 
 use app\modules\admin\models\Placement;
 use yii\web\Controller;

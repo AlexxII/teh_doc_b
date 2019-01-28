@@ -5,9 +5,8 @@ use app\assets\FancytreeAsset;
 
 FancytreeAsset::register($this);
 
-
 $this->title = 'Классификатор';
-$this->params['breadcrumbs'][] = ['label' => 'Админ панель', 'url' => ['/admin']];
+$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель управления классификаторами информации. 
@@ -726,6 +725,7 @@ $del_multi_nodes = 'Удалить классификатор С вложени�
                             }
                         });
         */
+
       }
       var lastIn = $(div).children().last();
       lastIn.find('.input-name-ex').data("id", Date.now());
@@ -739,10 +739,10 @@ $del_multi_nodes = 'Удалить классификатор С вложени�
 
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/admin/classifier/classifiers';
-    var move_url = '/admin/classifier/move';
-    var create_url = '/admin/classifier/create';
-    var update_url = '/admin/classifier/update';
+    var main_url = '/tehdoc/control/classifier/classifiers';
+    var move_url = '/tehdoc/control/classifier/move';
+    var create_url = '/tehdoc/control/classifier/create';
+    var update_url = '/tehdoc/control/classifier/update';
 
     $("#fancyree_w0").fancytree({
       source: {

@@ -8,7 +8,8 @@ use yii\bootstrap\ActiveForm;
 use yii\web\JsExpression;
 
 $this->title = 'Панель управления интерфейсом';
-$this->params['breadcrumbs'][] = ['label' => 'Админ панель', 'url' => ['/admin']];
+$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
+$this->params['breadcrumbs'][] = 'Интерфейс';
 
 $about = "Панель улучшения интерфейса позволяет облегчить 
 ввод данных в форму добавления оборудования";
@@ -99,7 +100,7 @@ $about = "Панель улучшения интерфейса позволяе�
         e.preventDefault();
         var csrf = $('meta[name=csrf-token]').attr("content");
         var id = e.target.id;
-        var url = '/admin/interface/create';
+        var url = '/tehdoc/control/interface/create';
         var mId = $('#'+id+'-id').val();
         var data = $('#'+id).val();
         $.ajax({
