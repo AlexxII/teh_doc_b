@@ -578,7 +578,7 @@ $send_hint = 'Передать выделенные строки в подроб
             });
           var sum = durationWork*1 + durationTeh*1;
           return $('<tr/>')
-            .append('<td colspan="8">Общая: ' +
+            .append('<td colspan="8">ИТОГО: ' +
               'тех. - ' + durationTeh + ' мин. раб. - ' + durationWork + ' мин.' + ' всего: ' +
               sum + ' мин.' + '</td>');
         },
