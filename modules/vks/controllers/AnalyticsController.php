@@ -175,14 +175,15 @@ class AnalyticsController extends Controller
       array('db' => 'vks_type_text', 'dt' => 4),
       array('db' => 'vks_place_text', 'dt' => 5),
       array('db' => 'vks_subscriber_office_text', 'dt' => 6),
+      array('db' => 'vks_upcoming_session', 'dt' => 7),      // для группировки
       array(
         'db' => 'vks_duration_teh',
         'dt' => 10,
         'formatter' => function ($d, $row) {
           if ($d != null) {
-            return ' (' . $d  .') /т.';
+            return $d;
           } else {
-            return ' (' . '-' . ') /т.';
+            return '-';
           }
         }
       ),
@@ -191,9 +192,9 @@ class AnalyticsController extends Controller
         'dt' => 11,
         'formatter' => function ($d, $row) {
           if ($d != null) {
-            return ' (' . $d  .') /р.';
+            return $d;
           } else {
-            return ' (' . '-' . ') /р.';
+            return '-';
           }
         }
       ),
@@ -223,7 +224,7 @@ class AnalyticsController extends Controller
         $root = (int)$_GET['root'];
         $table_ex = (string)$_GET['db_tbl'];
         $identifier = (string)$_GET['identifier'];
-        $whereEx = ' ' . $table . '.vks_upcoming_session = 0 AND Date(vks_date) >= "' . $startDate . '" AND Date(vks_date) <= "' . $endDate . '"';
+        $whereEx = ' ' . $table . '.vks_upcoming_session = 0 AND Date(vks_date) >= "' . $startDate . '" AND Date(vks_date) <= "' . $endDate . '"  AND vks_cancel = 0';
         $where = '' . $identifier . ' in (SELECT ref
     FROM ' . $table_ex . '
       WHERE ' . $table_ex . '.lft >= ' . $lft .
@@ -234,7 +235,7 @@ class AnalyticsController extends Controller
         );
       }
     }
-    $whereEx = ' ' . $table . '.vks_upcoming_session = 0 AND Date(vks_date) >= "' . $startDate . '" AND Date(vks_date) <= "' . $endDate . '"';
+    $whereEx = ' ' . $table . '.vks_upcoming_session = 0 AND Date(vks_date) >= "' . $startDate . '" AND Date(vks_date) <= "' . $endDate . '" AND vks_cancel = 0';
 
     return json_encode(
       SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $whereEx)

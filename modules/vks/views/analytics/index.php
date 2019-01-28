@@ -146,6 +146,7 @@ $send_hint = 'Передать выделенные строки в подроб
         <th data-priority="4">Тип ВКС</th>
         <th>Место проведения</th>
         <th data-priority="6">Абонент</th>
+        <th></th>
         <th data-priority="2">Action</th>
         <th data-priority="3"></th>
       </tr>
@@ -486,7 +487,6 @@ $send_hint = 'Передать выделенные строки в подроб
 
   $(document).ready(function () {
     var main_url = 'server-side';
-    // var main_url = '/tehdoc/equipment/tools/server-side';                     // TODO URL
     var table = $('#main-table').DataTable({
       "processing": true,
       "serverSide": true,
@@ -546,9 +546,10 @@ $send_hint = 'Передать выделенные строки в подроб
         }
       }, {
         "targets": 3,
-        "width": '55px',
         "render": function (data, type, row) {
-          return row[10] + "<br> " + row[11];
+          return row[10] + '/т.' + "<br> " + row[11] + '/р.' +
+            "<br> " +
+            (row[10]*1 + row[11]*1) + '/общ.' ;
         }
       }, {
         "targets": 4,
@@ -556,15 +557,40 @@ $send_hint = 'Передать выделенные строки в подроб
       }, {
         "targets": 6,
         "width": '120px'
-      }
-      ],
+      }, {
+        "targets": 7,
+        "visible": false
+      }],
+      rowGroup: {
+        startRender: null,
+        endRender: function (rows, group) {
+          var durationTeh = rows
+            .data()
+            .pluck(10)
+            .reduce(function (a, b) {
+              return a * 1 + b * 1;
+            });
+          var durationWork = rows
+            .data()
+            .pluck(11)
+            .reduce(function (a, b) {
+              return a * 1 + b * 1;
+            });
+          var sum = durationWork*1 + durationTeh*1;
+          return $('<tr/>')
+            .append('<td colspan="8">Общая: ' +
+              'тех. - ' + durationTeh + ' мин. раб. - ' + durationWork + ' мин.' + ' всего: ' +
+              sum + ' мин.' + '</td>');
+        },
+        dataSrc: 7
+      },
       select: {
         style: 'os',
         selector: 'td:last-child'
       },
       language: {
         url: "/lib/ru.json"
-      }
+      },
     });
     $('#main-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
