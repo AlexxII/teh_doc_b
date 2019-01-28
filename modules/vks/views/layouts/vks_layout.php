@@ -96,12 +96,16 @@ TehdocAsset::register($this);
           ['label' => 'Предстоящие сеансы', 'url' => ['/vks/sessions']],
           ['label' => 'Добавить сеанс', 'url' => ['/vks/sessions/create-up-session']],
           ['label' => 'Добавить прошедший сеанс', 'url' => ['/vks/sessions/create-session']],
-          ['label' => 'Предстоящие сеансы_adv', 'url' => ['/vks/sessions/sessions-ex'], 'visible' => Yii::$app->user->identity->isAdmin],
+          ['label' => 'Предстоящие сеансы (админ)',
+            'url' => ['/vks/sessions/sessions-ex'],
+            'visible' => Yii::$app->user->identity->isAdmin],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Статистика</li>',
           ['label' => 'Архив сеансов ВКС', 'url' => ['/vks/sessions/archive']],
           ['label' => 'Анализ сеансов ВКС', 'url' => ['/vks/analytics/index']],
-          ['label' => 'Архив сеансов ВКС_adv', 'url' => ['/vks/sessions/archive-ex']]
+          ['label' => 'Архив сеансов ВКС (админ)',
+            'url' => ['/vks/sessions/archive-ex'],
+            'visible' => Yii::$app->user->identity->isAdmin]
         ],
       ],
       [
