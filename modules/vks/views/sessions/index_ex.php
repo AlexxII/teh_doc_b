@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 
+// Для администратора системы
+
 $this->title = 'Журнал удаленных сеансов ВКС (предстоящие)';
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
 $this->params['breadcrumbs'][] = "Журнал";
@@ -9,7 +11,6 @@ $this->params['breadcrumbs'][] = "Журнал";
 $about = "Журнал сеансов видеосвязи, которые были удалены из таблицы предстоящих сеансов ВКС";
 $dell_hint = 'Удалить выделенные сеансы';
 
-Yii::$app->cache->flush();
 ?>
 
 <div class="vks-pannel">

@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 
+// Управления для администратора системы
+
 $this->title = 'Архив удаленных сеансов видеосвязи';
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
 $this->params['breadcrumbs'][] = "Архив";
@@ -20,9 +22,6 @@ $dell_hint = 'Удалить выделенные сеансы';
 </div>
 
 <style>
-  /*td {*/
-  /*text-align: center;*/
-  /*}*/
   #main-table tbody td {
     font-size: 12px;
   }
@@ -33,8 +32,6 @@ $dell_hint = 'Удалить выделенные сеансы';
   td .fa {
     font-size: 22px;
   }
-
-
 </style>
 
 <div class="row">
