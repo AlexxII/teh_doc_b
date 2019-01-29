@@ -423,8 +423,7 @@ class SessionsController extends Controller
     foreach ($_POST['jsonData'] as $d) {
       $model = $this->findModel($d);
       $this->logVks($model->id, "danger", "Удалил запись о сеансе ВКС.");
-      $model->vks_cancel = 1;
-      $report = $model->save();
+      $report = $model->delete();
     }
     if ($report) {
       return true;
@@ -435,8 +434,7 @@ class SessionsController extends Controller
   public function actionDeleteSingleCompletely($id)
   {
     $model = $this->findModel($id);
-    $model->vks_cancel = 1;
-    if ($model->save()) {
+    if ($model->delete()) {
       $this->logVks($model->id, "danger", "Удалил запись о сеансе ВКС.");
       Yii::$app->session->setFlash('success', 'Запись удалена');
       return $this->redirect(['index']);

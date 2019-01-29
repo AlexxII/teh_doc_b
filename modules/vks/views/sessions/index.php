@@ -194,17 +194,11 @@ Yii::$app->cache->flush();
         var date = aData[1];
         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
         var dt = new Date(date.replace(pattern, '$3-$2-$1'));
-        if (moment(today).isAfter(dt, 'day')) {
+        if (moment().isAfter(dt, 'day')) {
           $('td', nRow).css('background-color', '#f2dede');
         }
-        else if (moment(dt).isSame(today, 'day')) {
+        else if (moment().isSame(dt, 'day')) {
           $('td', nRow).css('background-color', '#dff0d8');
-        }
-        else {
-        }
-        if (aData[10] != 0){
-          $(nRow).addClass('testt');
-
         }
       },
       "ajax": $.fn.dataTable.pipeline({

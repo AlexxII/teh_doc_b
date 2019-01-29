@@ -548,9 +548,14 @@ $send_hint = 'Передать выделенные строки в подроб
       }, {
         "targets": 3,
         "render": function (data, type, row) {
-          return row[10] + '/т.' + "<br> " + row[11] + '/р.' +
+          // Чтобы не получить NaN
+          var a = row[10] === '-' ? 0 : row[10];
+          var b = row[11] === '-' ? 0 : row[11];
+          return row[10] + '/т.' +
             "<br> " +
-            (row[10]*1 + row[11]*1) + '/общ.' ;
+            row[11] + '/р.' +
+            "<br> " +
+            (a*1  + b*1) + '/общ.';
         }
       }, {
         "targets": 4,
@@ -565,17 +570,21 @@ $send_hint = 'Передать выделенные строки в подроб
       rowGroup: {
         startRender: null,
         endRender: function (rows, group) {
+          var intVal = function (i) {
+            if (isNaN(i)) return 0;
+            return i*1;
+          };
           var durationTeh = rows
             .data()
             .pluck(10)
             .reduce(function (a, b) {
-              return a * 1 + b * 1;
+              return intVal(a) + intVal(b);
             });
           var durationWork = rows
             .data()
             .pluck(11)
             .reduce(function (a, b) {
-              return a * 1 + b * 1;
+              return intVal(a) + intVal(b);
             });
           var sum = durationWork*1 + durationTeh*1;
           return $('<tr/>')
@@ -650,7 +659,7 @@ $send_hint = 'Передать выделенные строки в подроб
       if (confirm('Вы действительно хотите удалить выделенные строки? Выделено ' + data.length)) {
         $(".freeztime").modal("show");
         $.ajax({
-          url: "/tehdoc/equipment/delete",                                        // TODO URL
+          url: "/vks/sessions/delete",                                        // TODO URL
           type: "post",
           dataType: "JSON",
           data: {jsonData: ar, _csrf: csrf},

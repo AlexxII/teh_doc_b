@@ -317,7 +317,6 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
                 }
               }
             }
-            // $(this).next('.time-mask').focus();
           }
         }
       );
@@ -374,6 +373,23 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
     $('#w0').submit(function () {
       var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
       $('.fact-date').val(d);
+      var tehStart = (moment($('#teh-start').val(), 'HH:mm'));
+      var tehEnd = (moment($('#teh-end').val(), 'HH:mm'));
+      var duration = moment.duration(tehEnd.diff(tehStart)).asMinutes();
+      if (duration > 0) {
+        $('#vks-duration-teh').val(duration);
+      } else {
+        $('#vks-duration-teh').val('');
+      }
+      var workStart = (moment($('#work-start').val(), 'HH:mm'));
+      var workEnd = (moment($('#work-end').val(), 'HH:mm'));
+      var duration = moment.duration(workEnd.diff(workStart)).asMinutes();
+      var label = $(this).parent().find('label');
+      if (duration > 0) {
+        $('#vks-duration-work').val(duration);
+      } else {
+        $('#vks-duration-work').val('');
+      }
     });
   });
 

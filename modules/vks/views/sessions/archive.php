@@ -176,9 +176,9 @@ $dell_hint = 'Удалить выделенные сеансы';
       "serverSide": true,
       "responsive": true,
       "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-        if (aData[12] <= 0 || aData[13] <= 0){
-          console.log($(nRow.cells[1]));
-          $('td', nRow).css('background-color', '#fff1ef' );
+        if ((aData[19] <= 0 && aData[15] != '') || (aData[20] <= 0 && aData[17] != '')){
+          $('td', nRow).css('background-color', '#fff1ef');
+          $('td:eq(1)', nRow).append('<br>' + '<strong>Проверьте время</strong>');
         }
       },
       "ajax": $.fn.dataTable.pipeline({
@@ -213,7 +213,7 @@ $dell_hint = 'Удалить выделенные сеансы';
         },
         {
           "targets": 3,
-          "width": '95px',
+          "width": '105px',
           "render": function (data, type, row) {
             return row[15] + ' - ' + row[16] + ' /т' + "<br> " + row[17] + ' - ' + row[18] + ' /р';
           }

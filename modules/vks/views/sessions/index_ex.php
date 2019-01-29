@@ -181,6 +181,18 @@ $dell_hint = 'Удалить выделенные сеансы';
       "processing": true,
       "serverSide": true,
       "responsive": true,
+      "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        var today = new Date();
+        var date = aData[1];
+        var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+        var dt = new Date(date.replace(pattern, '$3-$2-$1'));
+        if (moment().isAfter(dt, 'day')) {
+          $('td', nRow).css('background-color', '#f2dede');
+        }
+        else if (moment().isSame(dt, 'day')) {
+          $('td', nRow).css('background-color', '#dff0d8');
+        }
+      },
       "ajax": $.fn.dataTable.pipeline({
         url: '/vks/sessions/server-side?index=1',
         pages: 2 // number of pages to cache
@@ -293,7 +305,7 @@ $dell_hint = 'Удалить выделенные сеансы';
       if (confirm('Вы действительно хотите удалить выделенные сеансы? Выделено ' + data.length + '!!!  ')) {
         $(".modal").modal("show");
         $.ajax({
-          url: "/vks/sessions/delete",
+          url: "/vks/sessions/delete-completely",
           type: "post",
           dataType: "JSON",
           data: {jsonData: ar, _csrf: csrf},

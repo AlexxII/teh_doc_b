@@ -173,9 +173,10 @@ $dell_hint = 'Удалить выделенные сеансы';
       "serverSide": true,
       "responsive": true,
       "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-        if (aData[12] <= 0 || aData[13] <= 0){
-          console.log($(nRow.cells[1]));
-          $('td', nRow).css('background-color', '#fff1ef' );
+        // некорректное время проведения сеанса
+        if ((aData[19] <= 0 && aData[15] != '') || (aData[20] <= 0 && aData[17] != '')){
+          $('td', nRow).css('background-color', '#fff1ef');
+          $('td:eq(1)', nRow).append('<br>' + '<strong>Проверьте время</strong>');
         }
       },
       "ajax": $.fn.dataTable.pipeline({
@@ -276,7 +277,7 @@ $dell_hint = 'Удалить выделенные сеансы';
       if (confirm('Вы действительно хотите удалить выделенные сеансы? Выделено ' + data.length + '!!!  ')) {
         $(".modal").modal("show");
         $.ajax({
-          url: "/vks/sessions/delete",
+          url: "/vks/sessions/delete-completely",
           type: "post",
           dataType: "JSON",
           data: {jsonData: ar, _csrf: csrf},
