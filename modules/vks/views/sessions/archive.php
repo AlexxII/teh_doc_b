@@ -178,7 +178,7 @@ $dell_hint = 'Удалить выделенные сеансы';
       "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
         if ((aData[19] <= 0 && aData[15] != '') || (aData[20] <= 0 && aData[17] != '')){
           $('td', nRow).css('background-color', '#fff1ef');
-          $('td:eq(1)', nRow).append('<br>' + '<strong>Проверьте время</strong>');
+          $('td:eq(1)', nRow).append('<br>' + '<strong>Проверьте <i class="fa fa-clock-o" aria-hidden="true"></i></strong>');
         }
       },
       "ajax": $.fn.dataTable.pipeline({
