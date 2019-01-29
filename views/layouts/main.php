@@ -136,11 +136,6 @@ $exit_hint = 'Выход ';
   </div>
 </div>
 
-<footer class="footer">
-  <div class="container">
-  </div>
-</footer>
-
 <?php $this->endBody() ?>
 </body>
 </html>
