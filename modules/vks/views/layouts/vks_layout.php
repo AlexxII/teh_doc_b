@@ -10,13 +10,10 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
-use app\modules\tehdoc\asset\TehdocAsset;
-
-?>
-<?php
+use app\assets\TableBaseAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
-TehdocAsset::register($this);
+TableBaseAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>

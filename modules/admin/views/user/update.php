@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\modules\admin\models\User;
 
-
 $this->title = $model->username;
 
 $userUrl = '/admin/user';

@@ -15,12 +15,11 @@ class TehdocAsset extends AssetBundle
   ];
 
   public $js = [
-      'js/moment-with-locales.min.js',
       'js/fotorama.js',
   ];
 
   public $depends = [
-      'app\modules\tehdoc\asset\TableBaseAsset',
+      'app\assets\TableBaseAsset',
   ];
 
 }

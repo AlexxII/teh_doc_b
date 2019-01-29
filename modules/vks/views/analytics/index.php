@@ -2,16 +2,17 @@
 //
 use yii\helpers\Html;
 use app\assets\FancytreeAsset;
+use app\modules\vks\assets\AnalyticsAsset;
+use app\modules\vks\assets\VksFormAsset;
 
 FancytreeAsset::register($this);
-\app\modules\vks\assets\VksFormAsset::register($this);
-\app\modules\vks\assets\AnalyticsAsset::register($this);
+VksFormAsset::register($this);
+AnalyticsAsset::register($this);
 
 $this->title = 'Анализ сеансов ВКС';
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
 $this->params['breadcrumbs'][] = ['label' => 'Журнал', 'url' => ['/vks/sessions']];
 $this->params['breadcrumbs'][] = $this->title;
-
 
 $about = "Панель анализа сеансов ВКС. Выберите в выпадающем списке параметр, а в панеле выбора периода - необходимый период";
 $date_about = "Выберите период для анализа";

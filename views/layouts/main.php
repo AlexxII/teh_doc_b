@@ -29,40 +29,40 @@ $exit_hint = 'Выход ';
 </head>
 
 <style>
-    .fa {
-        font-size: 18px;
-    }
-    .navbar-inverse .navbar-nav > .active > a {
-        background-color: #0000aa;
-    }
-    .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-        background-color: #0000aa;
-        color: white;
-    }
-    .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
-        background-color: #0000aa;
-        color: white;
-    }
-    .navbar-inverse .btn-link:hover, .navbar-inverse .btn-link:focus {
-        text-decoration: none;
-    }
-    .navbar-nav > li > .dropdown-menu {
-        background-color: #014993;
-        color: white;
-    }
-    .dropdown-menu > li > a {
-        color: white;
-    }
-    .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
-        background-color: #05226f;
-        color: white;
-    }
-    .dropdown-header {
-        color: white;
-    }
-    a:hover{
-        text-decoration: none;
-    }
+  .fa {
+    font-size: 18px;
+  }
+  .navbar-inverse .navbar-nav > .active > a {
+    background-color: #0000aa;
+  }
+  .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    background-color: #0000aa;
+    color: white;
+  }
+  .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    background-color: #0000aa;
+    color: white;
+  }
+  .navbar-inverse .btn-link:hover, .navbar-inverse .btn-link:focus {
+    text-decoration: none;
+  }
+  .navbar-nav > li > .dropdown-menu {
+    background-color: #014993;
+    color: white;
+  }
+  .dropdown-menu > li > a {
+    color: white;
+  }
+  .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    background-color: #05226f;
+    color: white;
+  }
+  .dropdown-header {
+    color: white;
+  }
+  a:hover {
+    text-decoration: none;
+  }
 
 </style>
 
@@ -74,53 +74,62 @@ $exit_hint = 'Выход ';
 <div class="wrap">
   <?php
   NavBar::begin([
-      'brandLabel' => '<img src="/images/logo.jpg" style="display:inline ">',
-      'brandUrl' => Yii::$app->homeUrl,
-      'options' => [
-          'class' => 'navbar-inverse navbar-fixed-top',
-      ],
+    'brandLabel' => '<img src="/images/logo.jpg" style="display:inline ">',
+    'brandUrl' => Yii::$app->homeUrl,
+    'options' => [
+      'class' => 'navbar-inverse navbar-fixed-top',
+    ],
   ]);
-  echo Nav::widget([
-      'options' => ['class' => 'navbar-nav navbar-right'],
-      'encodeLabels' => false,
+  $menuItems = [
+    ['label' => 'ТехДок', 'url' => ['/tehdoc']],
+    ['label' => 'ВКС', 'url' => ['/vks']],
+  ];
+
+  if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin) {
+    $menuItems[] = ['label' => 'Админ панель', 'url' => ['/admin']];
+  }
+
+  if (Yii::$app->user->isGuest) {
+    $menuItems[] = ['label' => 'Войти', 'url' => ['/site/login']];
+  } else {
+    $menuItems[] = [
+      'label' => '<i class="fa fa-user" aria-hidden="true" style="font-size: 18px; color: #fff"></i>',
       'items' => [
-          ['label' => 'ТехДок', 'url' => ['/tehdoc']],
-          ['label' => 'ВКС', 'url' => ['/vks']],
-          ['label' => 'Админ панель', 'url' => ['/admin']],
-          Yii::$app->user->isGuest ? (
-          ['label' => 'Войти', 'url' => ['/site/login']]
-          ) : ([
-              'label' => '<i class="fa fa-user" aria-hidden="true" style="font-size: 18px"></i>',
-              'items' => [
-                  '<li class="dropdown-header" style="font-size: 10px">' . Yii::$app->user->identity->username . '</li>',
-                  ['label' => '<i class="fa fa-cogs" aria-hidden="true" style="font-size: 16px"></i> Профиль',
-                      'url' => ['/admin/user/profile']
-                  ],
-                  ['label' => ''
-                      . Html::beginForm(['/site/logout'], 'post')
-                      . Html::submitButton(
-                          '<span style="cursor: default"><i class="fa fa-sign-out" aria-hidden="true"></i> Выход</span>',
-                          [
-                              'class' => 'btn btn-link logout',
-                              'data-toggle' => "tooltip",
-                              'data-placement' => "bottom",
-                              'style' => [
-                                  'padding' => '0px',
-                              ]
-                          ]
-                      )
-                      . Html::endForm()
-                  ]
+        '<li class="dropdown-header" style="font-size: 10px">' . Yii::$app->user->identity->username . '</li>',
+        ['label' => '<i class="fa fa-cogs" aria-hidden="true" style="font-size: 16px; color: #fff"></i> Профиль',
+          'url' => ['/admin/user/profile']
+        ],
+        ['label' => ''
+          . Html::beginForm(['/site/logout'], 'post')
+          . Html::submitButton(
+            '<span style="cursor: default"><i class="fa fa-sign-out" aria-hidden="true" 
+                                        style="font-size: 16px; color: #fff"></i> Выход</span>',
+            [
+              'class' => 'btn btn-link logout',
+              'data-toggle' => "tooltip",
+              'data-placement' => "bottom",
+              'style' => [
+                'padding' => '0px',
               ]
-          ])
-      ],
+            ]
+          )
+          . Html::endForm()
+        ]
+      ]
+    ];
+  }
+
+  echo Nav::widget([
+    'options' => ['class' => 'navbar-nav navbar-right'],
+    'encodeLabels' => false,
+    'items' => $menuItems,
   ]);
   NavBar::end();
   ?>
 
   <div class="container" style="padding-top: 80px">
     <?= Breadcrumbs::widget([
-        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+      'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
     ]) ?>
     <?= Alert::widget() ?>
     <?= $content ?>
@@ -139,7 +148,7 @@ $exit_hint = 'Выход ';
 
 
 <script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
 </script>

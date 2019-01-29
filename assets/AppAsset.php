@@ -20,18 +20,20 @@ class AppAsset extends AssetBundle
   public $basePath = '@webroot';
   public $baseUrl = '@web';
   public $css = [
-      'lib/awesome/css/font-awesome.min.css',
-      'css/site.css'
+    'lib/awesome/css/font-awesome.min.css',
+    'css/site.css'
   ];
 
   public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
 
   public $js = [
-      'js/tether.min.js'
+    'js/tether.min.js',
+    'js/moment-with-locales.min.js',
+
   ];
 
   public $depends = [
-      'yii\web\YiiAsset',
-      'yii\bootstrap\BootstrapAsset',
+    'yii\web\YiiAsset',
+    'yii\bootstrap\BootstrapAsset',
   ];
 }
