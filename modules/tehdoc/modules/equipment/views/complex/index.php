@@ -73,36 +73,34 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
   </div>
 
-  <div id="growContainer">
-    <div class="col-lg-4 col-md-4 grow" style="padding-bottom: 10px;height: 100%">
-      <div style="position: relative">
-        <div class="container-fuid" style="float:left; width: 100%">
-          <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
-        </div>
-        <div style="padding-top: 8px; right: 10px; position: absolute">
-          <a href="" id="btnResetSearch">
-            <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
-          </a>
-        </div>
+  <div class="col-lg-4 col-md-4" style="padding-bottom: 10px;height: 100%">
+    <div style="position: relative">
+      <div class="container-fuid" style="float:left; width: 100%">
+        <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
       </div>
-
-      <div class="row" style="padding: 0 15px">
-        <div style="border-radius:2px;padding-top:40px">
-          <div id="fancyree_w0" class="ui-draggable-handle"></div>
-        </div>
+      <div style="padding-top: 8px; right: 10px; position: absolute">
+        <a href="" id="btnResetSearch">
+          <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
+        </a>
       </div>
     </div>
 
-    <div class="col-lg-8 col-md-8 grow">
-      <ul class="nav nav-tabs" id="myTab">
-        <li class="active"><a href="#home" data-toggle="tab" data-url="main">Главная</a></li>
-        <li><a href="#messages" data-toggle="tab" data-url="files">Файлы</a></li>
-        <li><a href="#profile" data-toggle="tab" data-url="wiki">Wiki</a></li>
-        <li><a href="#messages" data-toggle="tab" data-url="log">Лог</a></li>
-      </ul>
-      <div class="about-content" style="margin-top: 15px">
-
+    <div class="row" style="padding: 0 15px">
+      <div style="border-radius:2px;padding-top:40px">
+        <div id="fancyree_w0" class="ui-draggable-handle"></div>
       </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8 col-md-8">
+    <ul class="nav nav-tabs" id="myTab">
+      <li class="active"><a href="#home" data-toggle="tab" data-url="main">Главная</a></li>
+      <li><a href="#messages" data-toggle="tab" data-url="files">Файлы</a></li>
+      <li><a href="#profile" data-toggle="tab" data-url="wiki">Wiki</a></li>
+      <li><a href="#messages" data-toggle="tab" data-url="log">Лог</a></li>
+    </ul>
+    <div class="about-content" style="margin-top: 15px">
+
     </div>
   </div>
 </div>
@@ -415,7 +413,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
             }).done(function (result) {
               if (result) {
                 result = JSON.parse(result);
-                console.log(result);
                 node.setTitle(result.acceptedTitle);
                 $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
               } else {
@@ -438,6 +435,13 @@ $del_multi_nodes = 'Удвлить С вложениями';
             // Since we started an async request, mark the node as preliminary
             $(data.node.span).addClass("pending")
           }
+          var node = data.node;
+          var $span = $(node.span);
+          $span.find("span.fancytree-title").text(node.title).css({
+            "white-space": "normal",
+            "word-break": "break-all",
+            "margin": "0 30px 0 5px"
+          });
         }
       },
       activate: function (node, data) {
@@ -465,10 +469,20 @@ $del_multi_nodes = 'Удвлить С вложениями';
         }
       },
       renderNode: function (node, data) {
-        if (data.node.key == -999) {
-          $(".add-category").show();
-          $(".add-subcategory").hide();
+        var node = data.node;
+        if (node.data) {
+          var $span = $(node.span);
+          $span.find("span.fancytree-title").text(node.title).css({
+            "white-space": "normal",
+            "word-break": "break-all",
+            "margin": "0 30px 0 5px"
+          });
         }
+        //
+        // if (data.node.key == -999) {
+        //   $(".add-category").show();
+        //   $(".add-subcategory").hide();
+        // }
       }
     });
   })
