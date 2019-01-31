@@ -576,6 +576,21 @@ $send_hint = 'Передать выделенные строки в подроб
       rowGroup: {
         startRender: null,
         endRender: function (rows, group) {
+          var tCount = 0;
+          var wCount = 0;
+          rows.data().pluck(13).each(function (a) {
+            if (a !== ''){
+              tCount++;
+            }
+            return tCount;
+          });
+          rows.data().pluck(15).each(function (a) {
+            if (a !== ''){
+              wCount++;
+            }
+            return wCount;
+          });
+
           var intVal = function (i) {
             if (isNaN(i)) return 0;
             return i*1;
@@ -593,9 +608,10 @@ $send_hint = 'Передать выделенные строки в подроб
               return intVal(a) + intVal(b);
             });
           var sum = durationWork*1 + durationTeh*1;
+
           return $('<tr/>')
             .append('<td colspan="8">ИТОГО: ' +
-              'тех. - ' + durationTeh + ' мин. раб. - ' + durationWork + ' мин.' + ' всего: ' +
+              'тех. - ' + tCount + ' шт. (' + durationTeh + ' мин.) | раб. - ' + wCount + ' шт. (' + durationWork + ' мин.)' + ' | всего: ' +
               sum + ' мин.' + '</td>');
         },
         dataSrc: 7
