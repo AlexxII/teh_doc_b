@@ -494,10 +494,6 @@ $send_hint = 'Передать выделенные строки в подроб
       "responsive": true,
       "lengthMenu": [[25, 50, 100], [25, 50, 100]],
       "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-        console.log(aData[10]);
-        console.log(aData[11]);
-        console.log(aData[12]);
-        console.log(aData[14]);
         if ((aData[10] == '-' && aData[12] != '') || (aData[11] == '-' && aData[14] != '')){
           $('td', nRow).css('background-color', '#fff1ef');
           $('td:eq(1)', nRow).append('<br>' + '<strong>Проверьте <i class="fa fa-clock-o" aria-hidden="true"></i></strong>');
