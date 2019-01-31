@@ -5,9 +5,8 @@ namespace app\modules\tehdoc\modules\equipment\models;
 use creocoder\nestedsets\NestedSetsBehavior;
 use app\base\NestedSetsTreeBehavior;
 
-class ComplexEx extends Complex
+class ComplexEx extends \yii\db\ActiveRecord
 {
-
   public static function tableName()
   {
     return 'teh_complex_test_tbl';
@@ -23,7 +22,8 @@ class ComplexEx extends Complex
         'depthAttribute' => 'lvl',
       ],
       'htmlTree'=>[
-        'class' => NestedSetsTreeBehavior::className()
+        'class' => NestedSetsTreeBehavior::className(),
+        'depthAttribute' => 'lvl'
       ]
     ];
   }
