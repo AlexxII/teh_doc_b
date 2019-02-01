@@ -2,18 +2,19 @@
 //
 use yii\helpers\Html;
 use app\assets\FancytreeAsset;
+use app\modules\vks\assets\AnalyticsAsset;
+use app\modules\vks\assets\VksFormAsset;
 
 FancytreeAsset::register($this);
-\app\modules\vks\assets\VksFormAsset::register($this);
-\app\modules\vks\assets\AnalyticsAsset::register($this);
+VksFormAsset::register($this);
+AnalyticsAsset::register($this);
 
 $this->title = 'Анализ сеансов ВКС';
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
 $this->params['breadcrumbs'][] = ['label' => 'Журнал', 'url' => ['/vks/sessions']];
 $this->params['breadcrumbs'][] = $this->title;
 
-
-$about = "Панель ";
+$about = "Панель анализа сеансов ВКС. Выберите в выпадающем списке параметр, а в панеле выбора периода - необходимый период";
 $date_about = "Выберите период для анализа";
 $refresh_hint = 'Перезапустить форму';
 $dell_hint = 'Удалить выделенные сеансы ВКС. БУДЬТЕ ВНИМАТЕЛЬНЫ, данные будут удалены безвозвратно.';
@@ -141,9 +142,12 @@ $send_hint = 'Передать выделенные строки в подроб
       <tr>
         <th></th>
         <th data-priority="1">Дата</th>
-        <th data-priority="5">Тип ВКС</th>
+        <th>Время</th>
+        <th data-priority="5">Прод-ть</th>
+        <th data-priority="4">Тип ВКС</th>
         <th>Место проведения</th>
         <th data-priority="6">Абонент</th>
+        <th></th>
         <th data-priority="2">Action</th>
         <th data-priority="3"></th>
       </tr>
@@ -176,8 +180,8 @@ $send_hint = 'Передать выделенные строки в подроб
       onHide: function (dp, animationCompleted) {
         if (animationCompleted) {
           var range = $('#vks-dates').val();
-          var stDate = range.substring(6,10) + '-' + range.substring(3,5) + '-' + range.substring(0,2);
-          var eDate = range.substring(19,24) + '-' + range.substring(16,18) + '-' + range.substring(13,15);
+          var stDate = range.substring(6, 10) + '-' + range.substring(3, 5) + '-' + range.substring(0, 2);
+          var eDate = range.substring(19, 24) + '-' + range.substring(16, 18) + '-' + range.substring(13, 15);
           $(".start-date").val(stDate);
           $(".end-date").val(eDate);
           $("#main-table").DataTable().clearPipeline().draw();
@@ -192,7 +196,7 @@ $send_hint = 'Передать выделенные строки в подроб
       $.getJSON(url, function (result) {
         var optionsValues = '<select class="form-control input-sm" id="vars-control" style="margin-top: 5px">';
         $.each(result, function (index, obj) {
-          optionsValues += '<option value="' + obj.table + '" data-identifier="' + obj.ident + '" data-tree="'+ obj.tree +'">'
+          optionsValues += '<option value="' + obj.table + '" data-identifier="' + obj.ident + '" data-tree="' + obj.tree + '">'
             + obj.title + '</option>';
         });
         optionsValues += '</select>';
@@ -484,12 +488,17 @@ $send_hint = 'Передать выделенные строки в подроб
 
   $(document).ready(function () {
     var main_url = 'server-side';
-    // var main_url = '/tehdoc/equipment/tools/server-side';                     // TODO URL
     var table = $('#main-table').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
-      "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+      "lengthMenu": [[25, 50, 100], [25, 50, 100]],
+      "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+        if ((aData[10] == '-' && aData[12] != '') || (aData[11] == '-' && aData[14] != '')){
+          $('td', nRow).css('background-color', '#fff1ef');
+          $('td:eq(1)', nRow).append('<br>' + '<strong>Проверьте <i class="fa fa-clock-o" aria-hidden="true"></i></strong>');
+        }
+      },
       "ajax": $.fn.dataTable.pipeline({
         url: main_url,
         pages: 2, // number of pages to cache
@@ -501,12 +510,12 @@ $send_hint = 'Передать выделенные строки в подроб
           var ident = $(".ident").val();
           var stDt = $(".start-date").val();
           var eDt = $(".end-date").val();
-          if (stDt != '--'){
+          if (stDt != '--') {
             var startDate = stDt;
           } else {
             var startDate = '1970-01-01';
           }
-          if (eDt != '--'){
+          if (eDt != '--') {
             var endDate = eDt;
           } else {
             var endDate = '2099-12-31';
@@ -517,8 +526,8 @@ $send_hint = 'Передать выделенные строки в подроб
             'root': root,
             'lft': lft,
             'rgt': rgt,
-            'stDate' : startDate,
-            'eDate' : endDate
+            'stDate': startDate,
+            'eDate': endDate
           }
         }
       }),
@@ -537,14 +546,83 @@ $send_hint = 'Передать выделенные строки в подроб
         "targets": 0,
         "data": null,
         "visible": false
+      }, {
+        "targets": 2,
+        "render": function (data, type, row) {
+          return row[12] + '-' + row[13] + '/т' + "<br> " + row[14] + '-' + row[15] + '/р';
+        }
+      }, {
+        "targets": 3,
+        "render": function (data, type, row) {
+          // Чтобы не получить NaN
+          var a = row[10] === '-' ? 0 : row[10];
+          var b = row[11] === '-' ? 0 : row[11];
+          return row[10] + '/т.' +
+            "<br> " +
+            row[11] + '/р.' +
+            "<br> " +
+            (a*1  + b*1) + '/общ.';
+        }
+      }, {
+        "targets": 4,
+        "width": '60px'
+      }, {
+        "targets": 6,
+        "width": '120px'
+      }, {
+        "targets": 7,
+        "visible": false
       }],
+      rowGroup: {
+        startRender: null,
+        endRender: function (rows, group) {
+          var tCount = 0;
+          var wCount = 0;
+          rows.data().pluck(13).each(function (a) {
+            if (a !== ''){
+              tCount++;
+            }
+            return tCount;
+          });
+          rows.data().pluck(15).each(function (a) {
+            if (a !== ''){
+              wCount++;
+            }
+            return wCount;
+          });
+
+          var intVal = function (i) {
+            if (isNaN(i)) return 0;
+            return i*1;
+          };
+          var durationTeh = rows
+            .data()
+            .pluck(10)
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            });
+          var durationWork = rows
+            .data()
+            .pluck(11)
+            .reduce(function (a, b) {
+              return intVal(a) + intVal(b);
+            });
+          var sum = durationWork*1 + durationTeh*1;
+
+          return $('<tr/>')
+            .append('<td colspan="8">ИТОГО: ' +
+              'тех. - ' + tCount + ' шт. (' + durationTeh + ' мин.) | раб. - ' + wCount + ' шт. (' + durationWork + ' мин.)' + ' | всего: ' +
+              sum + ' мин.' + '</td>');
+        },
+        dataSrc: 7
+      },
       select: {
         style: 'os',
         selector: 'td:last-child'
       },
       language: {
         url: "/lib/ru.json"
-      }
+      },
     });
     $('#main-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
@@ -603,7 +681,7 @@ $send_hint = 'Передать выделенные строки в подроб
       if (confirm('Вы действительно хотите удалить выделенные строки? Выделено ' + data.length)) {
         $(".freeztime").modal("show");
         $.ajax({
-          url: "/tehdoc/equipment/delete",                                        // TODO URL
+          url: "/vks/sessions/delete",                                        // TODO URL
           type: "post",
           dataType: "JSON",
           data: {jsonData: ar, _csrf: csrf},

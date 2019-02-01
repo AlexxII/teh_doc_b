@@ -5,16 +5,16 @@ use app\assets\FancytreeAsset;
 
 FancytreeAsset::register($this);
 
-$this->title = 'Места размещения';
-$this->params['breadcrumbs'][] = ['label' => 'Админ панель', 'url' => ['/admin']];
+$this->title = 'Категории';
+$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$about = "Панель управления местами размещения оборудвания.";
+$about = "Панель управления категориями. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $add_hint = 'Добавить новый узел';
 $add_tree_hint = 'Добавить дерево';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить выбранную категорию БЕЗ вложений';
-$del_root_hint = 'Удалить дерево с вложениями';
+$del_root_hint = 'Удалить ветку полностью';
 $del_multi_nodes = 'Удвлить выбранную категорию С вложениями';
 
 ?>
@@ -28,14 +28,14 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
     font-size: 15px;
   }
   ul.fancytree-container {
-    font-size: 16px;
+    font-size: 14px;
   }
   input {
     color: black;
   }
 </style>
 
-<div class="admin-placement-pannel">
+<div class="admin-category-pannel">
 
   <h3><?= Html::encode($this->title) ?>
     <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
@@ -74,20 +74,19 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
   </div>
 
   <div class="col-lg-7 col-md-7" style="padding-bottom: 10px">
-    <div class="">
-      <div style="position: relative">
-        <div class="container-fuid" style="float:left; width: 100%">
-          <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
-        </div>
-        <div style="padding-top: 8px; right: 10px; position: absolute">
-          <a href="" id="btnResetSearch"><i class="fa fa-times-circle" aria-hidden="true"
-                                            style="font-size:20px; color: #9d9d9d"></i></a>
-        </div>
+    <div style="position: relative">
+      <div class="container-fuid" style="float:left; width: 100%">
+        <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
+      </div>
+      <div style="padding-top: 8px; right: 10px; position: absolute">
+        <a href="" id="btnResetSearch">
+          <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
+        </a>
       </div>
     </div>
 
     <div class="row" style="padding: 0 15px">
-      <div class="" style="border-radius:2px;padding-top:40px">
+      <div style="border-radius:2px;padding-top:40px">
         <div id="fancyree_w0" class="ui-draggable-handle"></div>
       </div>
     </div>
@@ -149,7 +148,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
     $('.add-category').click(function (event) {
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       $.ajax({
-        url: "/admin/placement/create-root",
+        url: "/admin/category/create-root",
         data: {title: 'Дерево'}
       })
         .done(function () {
@@ -165,7 +164,11 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
     $('.refresh').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
+      var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+      var nodeId = node.data.id;
+      console.log(nodeId);
       tree.reload();
+      node.setActive();
       $(".del-root").hide();
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
@@ -184,7 +187,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
           return;
         }
         $.ajax({
-          url: "/admin/placement/delete-root",
+          url: "/admin/category/delete-root",
           type: "post",
           data: {id: node.data.id, _csrf: csrf}
         })
@@ -204,7 +207,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         var csrf = $('meta[name=csrf-token]').attr("content");
         var node = $(".ui-draggable-handle").fancytree("getActiveNode");
         $.ajax({
-          url: "/admin/placement/delete",
+          url: "/admin/category/delete",
           type: "post",
           data: {
             id: node.data.id,
@@ -232,7 +235,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
           return;
         }
         $.ajax({
-          url: "/admin/placement/delete-root",
+          url: "/admin/category/delete-root",
           type: "post",
           data: {
             id: node.data.id,
@@ -244,6 +247,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
             $('.about-info').html('');
             $('.del-multi-nodes').hide();
             $('.del-node').hide();
+
           })
           .fail(function () {
             alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
@@ -251,6 +255,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
       }
     })
   });
+
 
   $("input[name=search]").keyup(function (e) {
     var n,
@@ -290,6 +295,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
     tree.clearFilter();
   }).attr("disabled", true);
 
+
   $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
       if ($(this).val() == '') {
@@ -299,18 +305,21 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
     })
   });
 
-
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/admin/placement/placements';
-    var move_url = '/admin/placement/move';
-    var create_url = '/admin/placement/create';
-    var update_url = '/admin/placement/update';
+    var main_url = '/tehdoc/control/category/categories';
+    var move_url = '/tehdoc/control/category/move';
+    var create_url = '/tehdoc/control/category/create';
+    var update_url = '/tehdoc/control/category/update';
 
     $("#fancyree_w0").fancytree({
       source: {
         url: main_url,
       },
+      expandParents: true,
+      noAnimation: false,
+      scrollIntoView: true,
+      topNode: null,
       extensions: ['dnd', 'edit', 'filter'],
       quicksearch: true,
       minExpandLevel: 2,
@@ -437,7 +446,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         } else {
           $(".add-subcategory").show();
         }
-        if (lvl > 1) {                                                  // ограничение на вложенность
+        if (lvl > 1) {                            // ограничение на вложенность
           $(".add-subcategory").hide();
         }
         if (lvl == 0) {

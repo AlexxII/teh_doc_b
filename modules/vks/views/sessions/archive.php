@@ -6,7 +6,7 @@ $this->title = 'Архив прошедших сеансов видеосвяз�
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
 $this->params['breadcrumbs'][] = "Архив";
 
-$about = "Журнал предстоящих сеансов видеосвязи";
+$about = "Архив сеансов видеосвязи за все время ведения данного журнала";
 $add_hint = 'Добавить сеанс';
 $dell_hint = 'Удалить выделенные сеансы';
 
@@ -30,6 +30,10 @@ $dell_hint = 'Удалить выделенные сеансы';
     font-size: 18px;
     color: #1e6887;
   }
+  td .fa {
+    font-size: 22px;
+  }
+
 
 </style>
 
@@ -76,9 +80,6 @@ $dell_hint = 'Удалить выделенные сеансы';
 
 
 <script>
-  // $(document).ready(function () {
-  //     $('[data-toggle="tooltip"]').tooltip();
-  // });
 
   // ************************* Работа таблицы **************************************
 
@@ -175,13 +176,13 @@ $dell_hint = 'Удалить выделенные сеансы';
       "serverSide": true,
       "responsive": true,
       "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-        if (aData[12] <= 0 || aData[13] <= 0){
-          console.log($(nRow.cells[1]));
-          $('td', nRow).css('background-color', '#fff1ef' );
+        if ((aData[19] <= 0 && aData[15] != '') || (aData[20] <= 0 && aData[17] != '')){
+          $('td', nRow).css('background-color', '#fff1ef');
+          $('td:eq(1)', nRow).append('<br>' + '<strong>Проверьте <i class="fa fa-clock-o" aria-hidden="true"></i></strong>');
         }
       },
       "ajax": $.fn.dataTable.pipeline({
-        url: '/vks/sessions/server-side-ex',
+        url: '/vks/sessions/server-side-ex?index=0',
         pages: 2 // number of pages to cache
       }),
       orderFixed: [2, 'asc'],
@@ -212,7 +213,7 @@ $dell_hint = 'Удалить выделенные сеансы';
         },
         {
           "targets": 3,
-          "width": '95px',
+          "width": '105px',
           "render": function (data, type, row) {
             return row[15] + ' - ' + row[16] + ' /т' + "<br> " + row[17] + ' - ' + row[18] + ' /р';
           }

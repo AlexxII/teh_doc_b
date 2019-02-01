@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\admin\controllers;
+namespace app\modules\tehdoc\controllers\control;
 
 use app\modules\admin\models\TehInterface;
 use yii\web\Controller;
@@ -67,5 +67,4 @@ class InterfaceController extends Controller
         $modArray = explode('; ', $data->text);
         return json_encode($modArray);
     }
-
 }

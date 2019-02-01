@@ -163,10 +163,20 @@ class User extends ActiveRecord implements IdentityInterface
 
   public function getSocial($d = null)
   {
-    if (Yii::$app->authManager-> getAssignment('military',$this->getId())){
+    if (Yii::$app->authManager->getAssignment('military',$this->getId())){
       return $d ? 1 : 'Военнослужащие';
     } else {
       return $d ? 2 : 'Гражданские';
+    }
+  }
+
+  public function getIsAdmin()
+  {
+    // TODO сделать проверку роли, а не логина
+    if ($this->login == "sAdmin"){
+      return true;
+    } else {
+      return false;
     }
   }
 

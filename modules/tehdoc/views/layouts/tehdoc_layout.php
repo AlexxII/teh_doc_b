@@ -92,6 +92,18 @@ TehdocAsset::register($this);       // регистрация ресурсов �
           ['label' => 'Документация по ТО', 'url' => ['/tehdoc/']],
         ],
       ],
+      [
+        'label' => 'Настройки',
+        'items' => [
+          '<li class="dropdown-header" style="font-size: 10px">Представления</li>',
+          ['label' => 'Категории', 'url' => ['/tehdoc/control/category/index']],
+          ['label' => 'Места размещения', 'url' => ['/tehdoc/control/placement/index']],
+          ['label' => 'Классификаторы', 'url' => ['/tehdoc/control/classifier/index']],
+          '<li class="divider"></li>',
+          '<li class="dropdown-header" style="font-size: 10px">Инфтерфейса</li>',
+          ['label' => 'Производитель/модель', 'url' => ['/tehdoc/control/interface/index']],
+        ],
+      ],
       Yii::$app->user->isGuest ? (
       ['label' => 'Войти', 'url' => ['/site/login']]
       ) : ([

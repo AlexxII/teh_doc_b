@@ -95,13 +95,18 @@ $this->params['breadcrumbs'][] = $this->title;
   <div class="vks-log col-lg-6 col-md-6">
     <?php
     foreach ($logs as $log) {
-      echo '<div class="alert alert-info" role="alert" style="margin-bottom: 10px">';
+      if ($log->status == 'danger') {
+        $info = 'alert-danger';
+      } else {
+        $info = 'alert-info';
+      }
+      echo '<div class="alert ' . $info . '" role="alert" style="margin-bottom: 10px">';
       echo '<div class="clock" style="font-size: 12px">';
       echo '<i class="fa fa-clock-o" aria-hidden="true"></i>';
       echo ' ';
       echo date('d.m.Y', strtotime($log->log_time)) . ' ' . date('H:i.s', strtotime($log->log_time));
       echo '</div>';
-      echo  " Пользователь: " . '<strong>' . $log->userName . '</strong>';
+      echo " Пользователь: " . '<strong>' . $log->userName . '</strong>';
       echo '<br>';
       echo $log->log_text;
       echo '</div>';

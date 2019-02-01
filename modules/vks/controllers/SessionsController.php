@@ -3,20 +3,48 @@
 namespace app\modules\vks\controllers;
 
 use app\modules\vks\models\SSP;
+use app\modules\vks\models\VksPlaces;
 use app\modules\vks\models\VksSessions;
 use app\modules\vks\models\VksSubscribes;
+use app\modules\vks\models\VksTypes;
 use Yii;
 use yii\web\Controller;
 use app\modules\vks\models\VksLog;
+use yii\filters\AccessControl;
+
 
 class SessionsController extends Controller
 {
+  public function behaviors()
+  {
+    return [
+      'access' => [
+        'class' => AccessControl::class,
+        'rules' => [
+          [
+            'allow' => true,
+            'actions' => ['sessions-ex', 'archive-ex', 'delete-completely', 'delete-single-completely'],
+            'roles' => ['superAdmin']      // доступ только с ролью superAdmin
+          ],[
+            'allow' => false,
+            'actions' => ['sessions-ex', 'archive-ex', 'delete-completely', 'delete-single-completely'],
+            'roles' => ['@', "?"]
+          ],
+          [
+            'allow' => true,
+            'roles' => ['@']
+          ]
+        ],
+      ],
+    ];
+  }
+
   public function actionIndex()
   {
     return $this->render('index');
   }
 
-  public function actionServerSide()
+  public function actionServerSide($index)
   {
     $table = 'vks_sessions_tbl';
     $primaryKey = 'id';
@@ -60,17 +88,20 @@ class SessionsController extends Controller
       array('db' => 'vks_subscriber_office_text', 'dt' => 7),
       array('db' => 'vks_subscriber_name', 'dt' => 8),
       array('db' => 'vks_order_text', 'dt' => 9),
+      array('db' => 'combined', 'dt' => 10)
     );
     $sql_details = \Yii::$app->params['sql_details'];
-    $where = 'vks_upcoming_session = 1';
+    if (empty($index)){
+      $index = 0;
+    }
+    $where = 'vks_upcoming_session = 1 AND vks_cancel = ' . $index;
 
-    // TODO : если отсутствует таблица в бд или сама БД, то отправить соответствующее сообщение
     return json_encode(
       SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
     );
   }
 
-  public function actionServerSideEx()
+  public function actionServerSideEx($index)
   {
     $table = 'vks_sessions_tbl';
     $primaryKey = 'id';
@@ -107,7 +138,7 @@ class SessionsController extends Controller
       array('db' => 'vks_order_text', 'dt' => 7),
 
       array('db' => 'vks_subscriber_name', 'dt' => 14),
-      array('db' => 'vks_teh_time_start','dt' => 15),
+      array('db' => 'vks_teh_time_start', 'dt' => 15),
       array('db' => 'vks_teh_time_end', 'dt' => 16),
       array('db' => 'vks_work_time_start', 'dt' => 17),
       array('db' => 'vks_work_time_end', 'dt' => 18),
@@ -115,9 +146,13 @@ class SessionsController extends Controller
       array('db' => 'vks_duration_work', 'dt' => 20)
     );
     $sql_details = \Yii::$app->params['sql_details'];
-    $where = 'vks_upcoming_session = 0';
 
-    // TODO : если отсутствует таблица в бд или сама БД, то отправить соответствующее сообщение
+    if (empty($index)){
+      $index = 0;
+    }
+
+    $where = 'vks_upcoming_session = 0 AND vks_cancel = '. $index;
+
     return json_encode(
       SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
     );
@@ -127,11 +162,37 @@ class SessionsController extends Controller
   {
     $model = new VksSessions(['scenario' => VksSessions::SCENARIO_CREATE]);
     if ($model->load(Yii::$app->request->post())) {
-      $model->vks_record_create = date('Y-m-d H:i:s');
-      $model->vks_record_update = date('Y-m-d H:i:s');
+      $date = date('Y-m-d H:i:s');
+      $result = false;
+      $model->vks_record_create = $date;
+      $model->vks_record_update = $date;
       $model->vks_upcoming_session = 1;
-      if ($model->save()) {
-        $this->logVks($model->id,"Добавил запись о предстоящем сеансе ВКС");
+      $result = $model->save();
+      $this->logVks($model->id, "info", "Добавил запись о предстоящем сеансе ВКС");
+      if (!empty($_POST['test-type'])) {
+        foreach ($_POST['test-type'] as $key => $item) {
+          $newModel = new VksSessions(['scenario' => VksSessions::SCENARIO_CREATE]);
+          $newModel->load(Yii::$app->request->post());
+          $newModel->vks_type = $item;
+          $typeModel = VksTypes::findOne(['ref' => $item]);
+          $newModel->vks_type_text = $typeModel->name;
+          if (!empty($_POST['test-place'][$key])) {
+            $placeId = $_POST['test-place'][$key];
+            $newModel->vks_place = $placeId;
+            $placeModel = VksPlaces::findOne(['ref' => $placeId]);
+            $newModel->vks_place_text = $placeModel->name;
+          }
+          $newModel->vks_record_create = $date;
+          $newModel->vks_record_update = $date;
+          $newModel->vks_upcoming_session = 1;
+          $newModel->combined = 1;
+          $result = $newModel->save();
+          $this->logVks($newModel->id, "info","Добавил запись о предстоящем сеансе ВКС");
+        }
+        $model->combined = 1;
+        $result = $model->save();
+      }
+      if ($result) {
         Yii::$app->session->setFlash('success', 'Предстоящий сеанс видеосвязи добавлен!');
         return $this->redirect('index');
       } else {
@@ -152,7 +213,7 @@ class SessionsController extends Controller
       $currentTime = new \DateTime();
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       if ($model->save()) {
-        $this->logVks($model->id,"Обновил информацию о предстоящем сеансе ВКС");
+        $this->logVks($model->id, "info","Обновил информацию о предстоящем сеансе ВКС");
         Yii::$app->session->setFlash('success', 'Запись успешно обновлена!');
         return $this->redirect('index');
       } else {
@@ -173,7 +234,7 @@ class SessionsController extends Controller
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
-        $this->logVks($model->id,"Подтвердил прошедший сеанс ВКС.");
+        $this->logVks($model->id, "info", "Подтвердил прошедший сеанс ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
         return $this->redirect('archive');
       } else {
@@ -194,7 +255,7 @@ class SessionsController extends Controller
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
-        $this->logVks($model->id,"Добавил запись о прошедшем сеансе ВКС.");
+        $this->logVks($model->id, "info", "Добавил запись о прошедшем сеансе ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
         return $this->redirect('archive');
       } else {
@@ -215,7 +276,7 @@ class SessionsController extends Controller
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
-        $this->logVks($model->id,"Обновил запись о прошедшем сеансе ВКС.");
+        $this->logVks($model->id, "info","Обновил запись о прошедшем сеансе ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
         return $this->redirect('archive');
       } else {
@@ -283,12 +344,15 @@ class SessionsController extends Controller
     ]);
   }
 
+  // на удалении выставляется флаг vks_cancel
   public function actionDelete()
   {
     $report = true;
     foreach ($_POST['jsonData'] as $d) {
       $model = $this->findModel($d);
-      $report = $model->delete();
+      $this->logVks($model->id, "danger", " Удалил запись о сеансе ВКС.");
+      $model->vks_cancel = 1;
+      $report = $model->save();
     }
     if ($report) {
       return true;
@@ -299,7 +363,9 @@ class SessionsController extends Controller
   public function actionDeleteSingle($id)
   {
     $model = $this->findModel($id);
-    if ($model->delete()) {
+    $model->vks_cancel = 1;
+    if ($model->save()) {
+      $this->logVks($model->id, "danger", " Удалил запись о сеансе ВКС.");
       Yii::$app->session->setFlash('success', 'Запись удалена');
       return $this->redirect(['index']);
     }
@@ -326,15 +392,56 @@ class SessionsController extends Controller
     throw new NotFoundHttpException('The requested page does not exist.');
   }
 
-  protected function logVks($sessionId, $text)
+  protected function logVks($sessionId, $status, $text)
   {
     $userId = Yii::$app->user->identity->ref;
+
     $log = new VksLog();
+    $log->status = $status;
     $log->session_id = $sessionId;
     $log->log_text = $text;
     $log->user_id = $userId;
     $log->log_time = date("Y-m-d H:i:s", time());;
     $log->save();
   }
+
+// ============================= admin ===========================================
+
+  public function actionSessionsEx()
+  {
+    return $this->render('index_ex');
+  }
+
+  public function actionArchiveEx()
+  {
+    return $this->render('archive_ex');
+  }
+
+  public function actionDeleteCompletely()
+  {
+    $report = true;
+    foreach ($_POST['jsonData'] as $d) {
+      $model = $this->findModel($d);
+      $this->logVks($model->id, "danger", "Удалил запись о сеансе ВКС.");
+      $report = $model->delete();
+    }
+    if ($report) {
+      return true;
+    }
+    return false;
+  }
+
+  public function actionDeleteSingleCompletely($id)
+  {
+    $model = $this->findModel($id);
+    if ($model->delete()) {
+      $this->logVks($model->id, "danger", "Удалил запись о сеансе ВКС.");
+      Yii::$app->session->setFlash('success', 'Запись удалена');
+      return $this->redirect(['index']);
+    }
+    Yii::$app->session->setFlash('error', 'Удалить запись не удалось');
+    return $this->redirect(['index']);
+  }
+
 
 }

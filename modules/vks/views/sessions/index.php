@@ -23,9 +23,9 @@ Yii::$app->cache->flush();
 </div>
 
 <style>
-  /*td {*/
-  /*text-align: center;*/
-  /*}*/
+  td .fa {
+    font-size: 25px;
+  }
   #main-table tbody td {
     font-size: 12px;
   }
@@ -33,7 +33,9 @@ Yii::$app->cache->flush();
     font-size: 18px;
     color: #1e6887;
   }
-
+  .testt {
+    position: relative;
+  }
 </style>
 
 <div class="row">
@@ -192,17 +194,15 @@ Yii::$app->cache->flush();
         var date = aData[1];
         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
         var dt = new Date(date.replace(pattern, '$3-$2-$1'));
-        if (moment(today).isAfter(dt, 'day')) {
+        if (moment().isAfter(dt, 'day')) {
           $('td', nRow).css('background-color', '#f2dede');
         }
-        else if (moment(dt).isSame(today, 'day')) {
+        else if (moment().isSame(dt, 'day')) {
           $('td', nRow).css('background-color', '#dff0d8');
-        }
-        else {
         }
       },
       "ajax": $.fn.dataTable.pipeline({
-        url: '/vks/sessions/server-side',
+        url: '/vks/sessions/server-side?index=0',
         pages: 2 // number of pages to cache
       }),
       orderFixed: [2, 'asc'],
@@ -219,7 +219,7 @@ Yii::$app->cache->flush();
             "<a href='#' class='fa fa-edit edit' style='padding-right: 5px' title='Обновить' data-placement='top' data-toggle='tooltip'></a>" +
             "<a href='#' class='fa fa-info view' title='Подробности' style='padding-right: 5px'></a>" +
             "<a href='#' class='fa fa-calendar-check-o confirm' title='Подтвердить сеанс' style='padding-right: 5px'></a>"
-          // "<a href='#' class='fa fa-calendar-minus-o abort' title='Отменить сеанс'></a>"
+            // "<a href='#' class='fa fa-calendar-minus-o abort' title='Отменить сеанс'></a>"
         }, {
           "orderable": false,
           "className": 'select-checkbox',

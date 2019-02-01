@@ -81,13 +81,14 @@ class VksSessions extends \yii\db\ActiveRecord
     return $scenarios;
   }
 
+
   /**
    * {@inheritdoc}
    */
   public function rules()
   {
     return [
-      [['vks_date', 'vks_type', 'vks_employee_receive_msg', 'vks_receive_msg_datetime', 'vks_employee_send_msg'], 'required', 'on' => self::SCENARIO_CREATE],
+      [['vks_date', 'vks_type', 'vks_employee_receive_msg', 'vks_receive_msg_datetime', 'vks_employee_send_msg', 'each'], 'required', 'on' => self::SCENARIO_CREATE],
       [[
         'vks_date', 'vks_type',
         'vks_subscriber_office',
@@ -140,7 +141,7 @@ class VksSessions extends \yii\db\ActiveRecord
       'vks_employee_send_msg' => 'Передавший сообщение:',
       'vks_comments' => 'Примечание:',
       'vks_record_create' => 'Запись создана:',
-      'vks_record_update' => 'Запись обновлена:',
+      'vks_record_update' => 'Запись обновлена:'
     ];
   }
 

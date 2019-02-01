@@ -4,7 +4,6 @@ use yii\widgets\ActiveForm;
 use kartik\tree\TreeViewInput;
 use app\modules\admin\models\ClassifierTbl;
 
-
 echo TreeViewInput::widget([
     'query' => ClassifierTbl::find()->addOrderBy('root, lft'),
     'id' => 'classifier',
