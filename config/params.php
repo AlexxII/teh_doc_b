@@ -5,8 +5,8 @@ return [
     'uploadPath' => '/var/www/tehdoc/web/upload/tehdoc/tools/',
     'uploadUrl' => 'http://tehdoc.ru/upload/tehdoc/tools/',
     'sql_details' => [
-        'user' => 'user',
-        'pass' => '16PkjVzk:tk',
+        'user' => 'tehuser',
+        'pass' => '65<tcVeh',
         'db' => 'tehdoc',
         'host' => '127.0.0.1'
     ]
