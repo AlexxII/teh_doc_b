@@ -48,25 +48,11 @@ class ComplexController extends Controller
     return json_encode($data);
   }
 
-  /*
-  public function actionCreateRoot($title)
-    {
-      $newRoot = new ComplexEx(['name' => $title]);
-      $result = $newRoot->makeRoot();
-      if ($result) {
-        $data['acceptedTitle'] = $title;
-        return json_encode($data);
-      } else {
-        return var_dump('0');
-      }
-    }
-  */
-
   public function actionUpdate($id, $title)
   {
     $order = ComplexEx::findOne(['id' => $id]);
     $order->name = $title;
-    if ($order->save()){
+    if ($order->save()) {
       $data['acceptedTitle'] = $title;
       return json_encode($data);
     }
@@ -115,6 +101,17 @@ class ComplexController extends Controller
     $root->deleteWithChildren();
   }
 
+  public function actionInfo()
+  {
+    if (!empty($_POST)) {
+      $id = $_POST['id'];
+      return $this->renderPartial('view', [
+        'model' => $this->findModel($id),
+      ]);
+    }
+    return false;
+  }
+
   public function actionFiles()
   {
     return 'Files';
@@ -130,5 +127,14 @@ class ComplexController extends Controller
     return 'Лог';
   }
 
+  protected function findModel($id)
+  {
+    if (($model = ComplexEx::find()->where(['id' => $id])->limit(1)->all()) !== null) {
+      if (!empty($model)) {
+        return $model[0];
+      }
+    }
+    throw new NotFoundHttpException('The requested page does not exist.');
+  }
 
 }

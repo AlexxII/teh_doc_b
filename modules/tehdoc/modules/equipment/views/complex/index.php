@@ -11,7 +11,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель управления оборудованием. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $add_hint = 'Добавить новый узел';
-$add_tree_hint = 'Добавить дерево';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить БЕЗ вложений';
 $del_root_hint = 'Удалить ветку полностью';
@@ -32,6 +31,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
   }
   input {
     color: black;
+  }
+  .nav-tabs > li > a {
+    font-size: 10px;
   }
 </style>
 
@@ -94,10 +96,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
   <div class="col-lg-8 col-md-8">
     <ul class="nav nav-tabs" id="myTab">
-      <li class="active"><a href="#home" data-toggle="tab" data-url="main">Главная</a></li>
-      <li><a href="#messages" data-toggle="tab" data-url="files">Файлы</a></li>
+      <li class="active"><a href="#info" data-toggle="tab" data-url="info">Info</a></li>
+      <li><a href="#messages" data-toggle="tab" data-url="files">Files</a></li>
       <li><a href="#profile" data-toggle="tab" data-url="wiki">Wiki</a></li>
-      <li><a href="#messages" data-toggle="tab" data-url="log">Лог</a></li>
+      <li><a href="#messages" data-toggle="tab" data-url="log">Log</a></li>
     </ul>
     <div class="about-content" style="margin-top: 15px">
 
@@ -109,6 +111,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
 <script>
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
+    $('.nav-tabs a:last').tab('show')
   });
 
   function goodAlert(text) {
@@ -141,25 +144,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
     })
   });
 
-  /*
-    $(document).ready(function () {
-      $('.add-category').click(function (event) {
-        event.preventDefault();
-        var tree = $(".ui-draggable-handle").fancytree("getTree");
-        $.ajax({
-          url: "/vks/control/vks-order/create-root",
-          data: {title: 'Новое распоряжение'}
-        })
-          .done(function () {
-            tree.reload();
-          })
-          .fail(function () {
-            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-          });
-      });
-    });
-  */
-
   $(document).ready(function () {
     $('.refresh').click(function (event) {
       event.preventDefault();
@@ -173,34 +157,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
   });
 
   $(document).ready(function () {
-    $('.del-root').click(function (event) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      if (confirm('Вы уверены, что хотите удалить выбранный классификатор вместе с вложениями?')) {
-        event.preventDefault();
-        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-        if (!node) {
-          alert('Выберите родительский классификатор');
-          return;
-        }
-        $.ajax({
-          url: "/tehdoc/equipment/complex/delete-root",
-          type: "post",
-          data: {
-            id: node.data.id,
-            _csrf: csrf
-          }
-        })
-          .done(function () {
-            node.remove();
-            restoreInputs(false, false);
-            $('.about-info').html('');
-            $('.del-root').hide();
-          })
-          .fail(function () {
-            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-          });
-      }
-    });
     $('.del-node').click(function (event) {
       if (confirm('Вы уверены, что хотите удалить выбранный классификатор?')) {
         event.preventDefault();
@@ -312,7 +268,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       },
       extensions: ['dnd', 'edit', 'filter'],
       quicksearch: true,
-      minExpandLevel: 3,
+      minExpandLevel: 2,
       hotkeys: {},
       wide: {
         iconWidth: "32px",     // Adjust this if @fancy-icon-width != "16px"
@@ -320,7 +276,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
         labelSpacing: "6px",   // Adjust this if padding between icon and label !=  "3px"
         levelOfs: "32px"     // Adjust this if ul padding != "16px"
       },
-
       dnd: {
         preventVoidMoves: true,
         preventRecursiveMoves: true,
@@ -467,6 +422,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           $(".del-root").hide();
           $(".del-node").show();
         }
+        console.log(node);
       },
       renderNode: function (node, data) {
         var node = data.node;
@@ -478,14 +434,38 @@ $del_multi_nodes = 'Удвлить С вложениями';
             "margin": "0 30px 0 5px"
           });
         }
-        //
-        // if (data.node.key == -999) {
-        //   $(".add-category").show();
-        //   $(".add-subcategory").hide();
-        // }
+      },
+      click: function (event, data) {
+        var node = data.node;
+        console.log("ID: " + node.key);
+      },
+      init: function (event, data, flag) {
+        data.tree.activateKey('_8');
       }
     });
-  })
+  });
+
+  $('#myTab a').click(function (e) {
+    e.preventDefault();
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    var mainUrl = "/tehdoc/equipment/complex/";
+    var u = $(this).data('url');
+    $.ajax({
+      url: mainUrl + u,
+      type: "post",
+      data: {
+        id: 123,
+        _csrf: csrf
+      }
+    })
+      .done(function (result) {
+        $('.about-content').html(result);
+        $(this).tab('show');
+      })
+      .fail(function () {
+        alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
+      });
+  });
 
 
 </script>
