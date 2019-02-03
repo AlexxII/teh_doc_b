@@ -94,12 +94,12 @@ $del_multi_nodes = 'Удвлить С вложениями';
     </div>
   </div>
 
-  <div class="col-lg-8 col-md-8">
-    <ul class="nav nav-tabs" id="myTab">
-      <li class="active"><a href="#info" data-toggle="tab" data-url="info">Info</a></li>
-      <li><a href="#messages" data-toggle="tab" data-url="files">Files</a></li>
-      <li><a href="#profile" data-toggle="tab" data-url="wiki">Wiki</a></li>
-      <li><a href="#messages" data-toggle="tab" data-url="log">Log</a></li>
+  <div id="complex-info" class="col-lg-8 col-md-8">
+    <ul class="nav nav-tabs" id="main-teh-tab">
+      <li class="active"><a href="#info" data-toggle="tab" data-url="complex/info">Info</a></li>
+      <li><a href="#messages" data-toggle="tab" data-url="complex/files">Files</a></li>
+      <li><a href="#profile" data-toggle="tab" data-url="wiki/index">Wiki</a></li>
+      <li><a href="#messages" data-toggle="tab" data-url="complex/log">Log</a></li>
     </ul>
     <div class="about-content" style="margin-top: 15px">
 
@@ -111,7 +111,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
 <script>
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-    $('.nav-tabs a:last').tab('show')
   });
 
   function goodAlert(text) {
@@ -132,6 +131,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
     return div;
   }
 
+
   $(document).ready(function () {
     $('.add-subcategory').click(function (event) {
       event.preventDefault();
@@ -149,7 +149,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       tree.reload();
-      $(".del-root").hide();
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
       $('.about-info').html('')
@@ -190,7 +189,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
         $.ajax({
           url: "/vks/control/vks-order/delete-root",
           type: "post",
-          data: {id: node.data.id, _csrf: csrf}
+          data: {
+            id: getNodeId(),
+            _csrf: csrf}
         })
           .done(function () {
             node.remove();
@@ -344,6 +345,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
               if (result) {
                 result = JSON.parse(result);
                 node.data.id = result.acceptedId;
+                node.data.ref = result.acceptedRef;
                 node.setTitle(result.acceptedTitle);
                 $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
               } else {
@@ -362,7 +364,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
             $.ajax({
               url: update_url,
               data: {
-                id: node.data.id,
+                id: getNodeId(),
                 title: data.input.val()
               }
             }).done(function (result) {
@@ -410,7 +412,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
           $(".add-subcategory").show();
         }
         if (lvl == 0) {
-          $(".del-root").show();
           $(".del-node").hide();
           $(".del-multi-nodes").hide();
         } else {
@@ -419,10 +420,13 @@ $del_multi_nodes = 'Удвлить С вложениями';
           } else {
             $(".del-multi-nodes").hide();
           }
-          $(".del-root").hide();
           $(".del-node").show();
         }
-        console.log(node);
+        if (node.data.lvl == 0){
+          showMeeting();
+        } else {
+          showFirstTab();
+        }
       },
       renderNode: function (node, data) {
         var node = data.node;
@@ -437,35 +441,70 @@ $del_multi_nodes = 'Удвлить С вложениями';
       },
       click: function (event, data) {
         var node = data.node;
-        console.log("ID: " + node.key);
       },
       init: function (event, data, flag) {
-        data.tree.activateKey('_8');
+
+        data.tree.activateKey('33');
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
+          var csrf = $('meta[name=csrf-token]').attr("content");
+          var mainUrl = "/tehdoc/equipment/";
+          var u = $(e.target).data('url');
+          $.ajax({
+            url: mainUrl + u,
+            type: "post",
+            data: {
+              id: getNodeId(),
+              _csrf: csrf
+            }
+          })
+            .done(function (result) {
+              $('.about-content').html(result);
+              // $(this).tab('show');
+            })
+            .fail(function () {
+              alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
+            });
+        });
       }
     });
   });
 
-  $('#myTab a').click(function (e) {
-    e.preventDefault();
+  function getNodeId() {
+    var node = $("#fancyree_w0").fancytree("getActiveNode");
+    if (node) {
+      return node.data.ref;
+    } else {
+      return 1;
+    }
+  }
+
+  function showFirstTab() {
+    $('#main-teh-tab').css("display", "block");
     var csrf = $('meta[name=csrf-token]').attr("content");
-    var mainUrl = "/tehdoc/equipment/complex/";
-    var u = $(this).data('url');
+    var url = "/tehdoc/equipment/complex/info";
     $.ajax({
-      url: mainUrl + u,
+      url: url,
       type: "post",
       data: {
-        id: 123,
+        id: getNodeId(),
         _csrf: csrf
       }
     })
       .done(function (result) {
         $('.about-content').html(result);
-        $(this).tab('show');
+        $('#main-teh-tab a:first').tab('show');
       })
       .fail(function () {
         alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
       });
-  });
+  }
+
+  function showMeeting(){
+    var meetMsg = '<h1>Перечень оборудования</h1>';
+    $('#main-teh-tab').css("display", "none");
+    $('.about-content').html(meetMsg);
+  }
 
 
 </script>

@@ -5,11 +5,11 @@ namespace app\modules\tehdoc\modules\equipment\models;
 use creocoder\nestedsets\NestedSetsBehavior;
 use app\base\NestedSetsTreeBehavior;
 
-class ComplexEx extends \yii\db\ActiveRecord
+class ComplexEx extends Complex
 {
   public static function tableName()
   {
-    return 'teh_complex_test_tbl';
+    return 'teh_c_test_tbl';
   }
 
   public function behaviors() {
