@@ -67,7 +67,7 @@ class ComplexController extends Controller
 
   public function actionUpdate($id, $title)
   {
-    $order = ComplexEx::findOne(['id' => $id]);
+    $order = ComplexEx::findOne(['ref' => $id]);
     $order->name = $title;
     if ($order->save()) {
       $data['acceptedTitle'] = $title;
