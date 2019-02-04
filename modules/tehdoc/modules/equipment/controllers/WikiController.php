@@ -20,20 +20,28 @@ class WikiController extends Controller
       }
       return $this->renderPartial('index', [
         'model' => $indexModel,
+        false,
+        true
       ]);
     }
     return false;
   }
 
-  public function actionUpdate($id)
+  public function actionUpdate()
   {
-
+    if (!empty($_POST)) {
+      $id = $_POST['id'];
+      $model = $this->findModel($id);
+      return $this->renderPartial('update', [
+        'model' => $model, false, true
+      ]);
+    }
   }
-
-
 
   protected function findModel($id)
   {
+    // TODO не ососбо правильный метод поиска
+
     if (($model = Wiki::find()->where(['id' => $id])->limit(1)->all()) !== null) {
       if (!empty($model)) {
         return $model[0];

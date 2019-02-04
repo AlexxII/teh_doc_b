@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use app\assets\FancytreeAsset;
+use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
 
 FancytreeAsset::register($this);
 

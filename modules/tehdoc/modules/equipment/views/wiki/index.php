@@ -25,8 +25,8 @@ $this->title = $model->wiki_title;
     </div>
     <div class="col-lg-3 col-md-6 text-right">
       <p>
-        <?= Html::a('Edit', ['update', 'id' => $model->id], ['class' => 'btn btn-sm btn-primary ']) ?>
-        <?= Html::a('New', ['complex/wiki/create', 'id' => $model->id], ['class' => 'btn btn-sm btn-success ']) ?>
+        <a id="edit-wiki-page" data-wiki="<?php echo $model->id ?>" class="btn btn-sm btn-primary">Edit</a>
+        <a id="new-wiki-page" class="btn btn-sm btn-success">New</a>
       </p>
     </div>
   </div>
@@ -49,5 +49,34 @@ $this->title = $model->wiki_title;
       </div>
     </div>
   </div>
-
 </div>
+
+<script>
+  $(document).ready(function () {
+    $('#edit-wiki-page').on('click', function () {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var url = '/tehdoc/equipment/wiki/update';
+      $.ajax({
+        url: url,
+        type: "post",
+        data: {
+          id: getWikiId(),
+          _csrf: csrf
+        }
+      })
+        .done(function (result) {
+          $('.about-content').html(result);
+        })
+        .fail(function () {
+          alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
+        });
+
+    });
+
+    function getWikiId() {
+      return $('#edit-wiki-page').data('wiki');
+    }
+  })
+</script>
+
+
