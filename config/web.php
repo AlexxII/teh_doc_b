@@ -43,13 +43,6 @@ $config = [
     ],
     'sysi' => [
       'class' => 'app\modules\sysi\SysiModule',
-    ],
-    'wiki'=>[
-      'class'=>'asinfotrack\yii2\wiki\Module',
-      'processContentCallback'=>function($content) {
-        //example if you want to use markdown in your wiki
-        return Parsedown::instance()->parse($content);
-      }
     ]
   ],
   'components' => [

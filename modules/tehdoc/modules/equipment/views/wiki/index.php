@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Markdown;
 
 //$this->title = $model->name;
 $this->title = $model->wiki_title;
@@ -33,7 +34,7 @@ $this->title = $model->wiki_title;
 
   <div class="wiki-content">
     <div id="wiki-body" class="col-lg-9 col-md-9" style="padding-left:0px">
-      <?= $model->wiki_text ?>
+      <?= Markdown::process($model->wiki_text, 'extra') ?>
 
     </div>
     <div id="wiki-rightbar" class="col-lg-3 col-md-3 text-right" style="padding: 0px">
@@ -70,8 +71,23 @@ $this->title = $model->wiki_title;
         .fail(function () {
           alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
         });
-
     });
+
+    $('#new-wiki-page').on('click', function () {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var url = '/tehdoc/equipment/wiki/create';
+      $.ajax({
+        url: url,
+        type: "get",
+      })
+        .done(function (result) {
+          $('.about-content').html(result);
+        })
+        .fail(function () {
+          alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
+        });
+    });
+
 
     function getWikiId() {
       return $('#edit-wiki-page').data('wiki');

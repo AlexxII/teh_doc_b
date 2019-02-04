@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use app\assets\FancytreeAsset;
-use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
 
 FancytreeAsset::register($this);
 
@@ -132,7 +131,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
     return div;
   }
 
-
   $(document).ready(function () {
     $('.add-subcategory').click(function (event) {
       event.preventDefault();
@@ -152,7 +150,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       tree.reload();
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
-      $('.about-info').html('')
+      $('.about-info').html('');
     })
   });
 
@@ -192,7 +190,8 @@ $del_multi_nodes = 'Удвлить С вложениями';
           type: "post",
           data: {
             id: getNodeId(),
-            _csrf: csrf}
+            _csrf: csrf
+          }
         })
           .done(function () {
             node.remove();
@@ -255,7 +254,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
       }
     })
   });
-
 
   // отображение и логика работа дерева
   jQuery(function ($) {
@@ -423,7 +421,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           }
           $(".del-node").show();
         }
-        if (node.data.lvl == 0){
+        if (node.data.lvl == 0) {
           showMeeting();
         } else {
           showFirstTab();
@@ -445,9 +443,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       },
       init: function (event, data, flag) {
 
-        data.tree.activateKey('33');
-
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
           var csrf = $('meta[name=csrf-token]').attr("content");
           var mainUrl = "/tehdoc/equipment/";
           var u = $(e.target).data('url');
@@ -501,11 +497,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
       });
   }
 
-  function showMeeting(){
+  function showMeeting() {
     var meetMsg = '<h1>Перечень оборудования</h1>';
     $('#main-teh-tab').css("display", "none");
     $('.about-content').html(meetMsg);
   }
-
 
 </script>
