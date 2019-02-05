@@ -37,7 +37,7 @@ $placeholder = 'Название страницы';
         if ($model->isNewRecord) {
           echo '<a id="create-wiki" class="btn btn-sm btn-success">Создать</a>';
         } else {
-          echo '<a id="update-wiki" class="btn btn-sm btn-success">Обновить</a>';
+          echo '<a id="update-wiki" data-wiki="'. $model->id . '" class="btn btn-sm btn-success">Обновить</a>';
         }
         ?>
       </div>
@@ -122,6 +122,33 @@ $placeholder = 'Название страницы';
         });
     });
 
+    $('#update-wiki').on('click', function () {
+      var wikiTitle = $('#wiki-title').val();
+      if (wikiTitle == ''){
+        $('#wiki-title').toggleClass('al');
+        return;
+      }
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var url = '/tehdoc/equipment/wiki/update?id=' . getWikiId();
+      var wikiText = simplemde.value();
+      $.ajax({
+        url: url,
+        type: "post",
+        data: {
+          _csrf: csrf,
+          id : getNodeId(),
+          wikiTitle: wikiTitle,
+          wikiText: wikiText
+        }
+      })
+        .done(function (result) {
+          $('.about-content').html(result);
+        })
+        .fail(function () {
+          alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
+        });
+    });
+
     function getNodeId() {
       var node = $("#fancyree_w0").fancytree("getActiveNode");
       if (node) {
@@ -129,6 +156,10 @@ $placeholder = 'Название страницы';
       } else {
         return -1;
       }
+    }
+
+    function getWikiId() {
+      return $('#update-wiki').data('wiki');
     }
 
     // sessionStorage.setItem("previousPage","");

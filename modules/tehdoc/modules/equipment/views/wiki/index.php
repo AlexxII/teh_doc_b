@@ -55,15 +55,10 @@ $this->title = $model->wiki_title;
 <script>
   $(document).ready(function () {
     $('#edit-wiki-page').on('click', function () {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var url = '/tehdoc/equipment/wiki/update';
+      var url = '/tehdoc/equipment/wiki/update?id=';
       $.ajax({
-        url: url,
-        type: "post",
-        data: {
-          id: getWikiId(),
-          _csrf: csrf
-        }
+        url: url + getWikiId(),
+        type: "get",
       })
         .done(function (result) {
           $('.about-content').html(result);

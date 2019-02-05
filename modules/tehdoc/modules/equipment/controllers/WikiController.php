@@ -30,8 +30,8 @@ class WikiController extends Controller
   public function actionCreate()
   {
     $model = new Wiki();
-    if (!empty($_POST)){
-      if ($_POST['wikiTitle']){
+    if (!empty($_POST)) {
+      if ($_POST['wikiTitle']) {
         $date = date('Y-m-d H:i:s');
         $model->eq_ref = $_POST['id'];
         $model->wiki_title = $_POST['wikiTitle'];
@@ -39,7 +39,7 @@ class WikiController extends Controller
         $model->wiki_record_create = $date;
         $model->wiki_record_update = $date;
         $model->wiki_created_user = Yii::$app->user->identity->ref;
-        if ($model->save()){
+        if ($model->save()) {
           return $this->renderPartial('index', [
             'model' => $model,
             false,
@@ -48,22 +48,30 @@ class WikiController extends Controller
         }
       }
     }
-    return $this->renderPartial('_form',[
+    return $this->renderPartial('_form', [
       'model' => $model
     ]);
   }
 
-  public function actionUpdate()
+  public function actionUpdate($id)
   {
-    if (!empty($_POST)) {
-      $id = $_POST['id'];
-      if (!empty($id) || $id != -1) {
-        $model = $this->findModel($id);
-        return $this->renderPartial('update', [
-          'model' => $model, false, true
+    $model = $this->findModel($id);
+    if (!empty($_POST['wikiTitle'])) {
+      $date = date('Y-m-d H:i:s');
+      $model->wiki_title = $_POST['wikiTitle'];
+      $model->wiki_text = $_POST['wikiText'];
+      $model->wiki_record_update = $date;
+      if ($model->save()) {
+        return $this->renderPartial('index', [
+          'model' => $model,
+          false,
+          true
         ]);
       }
-    } return false;
+    }
+    return $this->renderPartial('update', [
+      'model' => $model, false, true
+    ]);
   }
 
   protected function findModel($id)
