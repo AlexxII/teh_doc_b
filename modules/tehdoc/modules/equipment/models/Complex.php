@@ -23,7 +23,7 @@ class Complex extends \yii\db\ActiveRecord
 //      [['category_id', 'complex_title', 'place_id'], 'required'],
       [['category_id', 'place_id', 'quantity', 'valid'], 'integer'],
       [['complex_factdate', 'complex_comments'], 'safe'],
-      [['complex_title', 'complex_serial', 'complex_manufact'], 'string', 'max' => 255],
+      [['complex_title', 'complex_serial', 'complex_manufact', 'complex_model'], 'string', 'max' => 255],
     ];
   }
 

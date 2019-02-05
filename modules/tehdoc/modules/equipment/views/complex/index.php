@@ -75,7 +75,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
   </div>
 
-  <div class="col-lg-4 col-md-4" style="padding-bottom: 10px;height: 100%">
+  <div id="complex-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
     <div style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
@@ -94,12 +94,13 @@ $del_multi_nodes = 'Удвлить С вложениями';
     </div>
   </div>
 
-  <div id="complex-info" class="col-lg-8 col-md-8">
+  <div id="complex-info" class="col-lg-8 col-md-8" style="height: 100%">
     <ul class="nav nav-tabs" id="main-teh-tab">
       <li class="active"><a href="#info" data-toggle="tab" data-url="complex/info">Info</a></li>
       <li><a href="#messages" data-toggle="tab" data-url="complex/files">Files</a></li>
       <li><a href="#profile" data-toggle="tab" data-url="wiki/index">Wiki</a></li>
       <li><a href="#messages" data-toggle="tab" data-url="complex/log">Log</a></li>
+      <li><a href="#setting" data-toggle="tab" data-url="settings/index"><i class="fa fa-cogs" aria-hidden="true"></i></a></li>
     </ul>
     <div class="about-content" style="margin-top: 15px">
 
@@ -146,13 +147,14 @@ $del_multi_nodes = 'Удвлить С вложениями';
   $(document).ready(function () {
     $('.refresh').click(function (event) {
       event.preventDefault();
-      var tree = $(".ui-draggable-handle").fancytree("getTree");
-      tree.reload();
-      $(".del-node").hide();
-      $(".del-multi-nodes").hide();
-      $('.about-info').html('');
-      showMeeting();
-      unbindEvents();
+      reloadTree(true);
+      // var tree = $(".ui-draggable-handle").fancytree("getTree");
+      // tree.reload();
+      // $(".del-node").hide();
+      // $(".del-multi-nodes").hide();
+      // $('.about-info').html('');
+      // showMeeting();
+      // unbindEvents();
     })
   });
 
@@ -426,19 +428,19 @@ $del_multi_nodes = 'Удвлить С вложениями';
         if (node.data.lvl == 0) {
           showMeeting();
         } else {
-          showFirstTab();
+          showTab();
         }
       },
       renderNode: function (node, data) {
         var node = data.node;
-        if (node.data) {
-          var $span = $(node.span);
-          $span.find("span.fancytree-title").text(node.title).css({
-            "white-space": "normal",
-            "word-break": "break-all",
-            "margin": "0 30px 0 5px"
-          });
-        }
+        // if (node.data) {
+        //   var $span = $(node.span);
+        //   $span.find("span.fancytree-title").text(node.title).css({
+        //     "white-space": "normal",
+        //     "word-break": "break-all",
+        //     "margin": "0 30px 0 5px"
+        //   });
+        // }
       },
       init: function (event, data, flag) {
         showMeeting();
@@ -456,7 +458,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
     }
   }
 
-  function showFirstTab() {
+  function showTab() {
     $('#main-teh-tab').css("display", "block");
     var csrf = $('meta[name=csrf-token]').attr("content");
     var url = "/tehdoc/equipment/complex/info";
@@ -508,6 +510,28 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
   function unbindEvents() {
     $('a[data-toggle="tab"]').unbind('shown.bs.tab');
+  }
+
+
+  $(document).ready(function () {
+    $('#complex-tree').mouseover(function () {
+      $('#complex-tree').width('45%');
+      $('#complex-info').width('45%');
+    });
+    $('#complex-info').mouseover(function () {
+      $('#complex-info').width('65%');
+      $('#complex-tree').width('25%');
+      $('#fancyree_w0').css('overflow-x', 'auto');
+    })
+  });
+
+  function reloadTree(activate) {
+    var tree = $("#fancyree_w0").fancytree("getTree");
+    var node = $("#fancyree_w0").fancytree("getActiveNode");
+    var key = node.key;
+    if (activate){
+      tree.reload();
+    }
   }
 
 
