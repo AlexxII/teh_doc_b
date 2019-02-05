@@ -152,6 +152,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       $(".del-multi-nodes").hide();
       $('.about-info').html('');
       showMeeting();
+      unbindEvents();
     })
   });
 
@@ -441,26 +442,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       },
       init: function (event, data, flag) {
         showMeeting();
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-          var csrf = $('meta[name=csrf-token]').attr("content");
-          var mainUrl = "/tehdoc/equipment/";
-          var u = $(e.target).data('url');
-          $.ajax({
-            url: mainUrl + u,
-            type: "post",
-            data: {
-              id: getNodeId(),
-              _csrf: csrf
-            }
-          })
-            .done(function (result) {
-              $('.about-content').html(result);
-              // $(this).tab('show');
-            })
-            .fail(function () {
-              alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-            });
-        });
+        tabEvents();
       }
     });
   });
@@ -495,10 +477,38 @@ $del_multi_nodes = 'Удвлить С вложениями';
       });
   }
 
+  function tabEvents() {
+    $('a[data-toggle="tab"]').bind('shown.bs.tab', function (e) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var mainUrl = "/tehdoc/equipment/";
+      var u = $(e.target).data('url');
+      $.ajax({
+        url: mainUrl + u,
+        type: "post",
+        data: {
+          id: getNodeId(),
+          _csrf: csrf
+        }
+      })
+        .done(function (result) {
+          $('.about-content').html(result);
+          // $(this).tab('show');
+        })
+        .fail(function () {
+          alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
+        });
+    });
+  }
+
   function showMeeting() {
     var meetMsg = '';
     $('#main-teh-tab').css("display", "none");
     $('.about-content').html(meetMsg);
   }
+
+  function unbindEvents() {
+    $('a[data-toggle="tab"]').unbind('shown.bs.tab');
+  }
+
 
 </script>
