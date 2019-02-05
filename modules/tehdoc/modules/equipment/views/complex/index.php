@@ -151,6 +151,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
       $('.about-info').html('');
+      showMeeting();
     })
   });
 
@@ -438,11 +439,8 @@ $del_multi_nodes = 'Удвлить С вложениями';
           });
         }
       },
-      click: function (event, data) {
-        var node = data.node;
-      },
       init: function (event, data, flag) {
-
+        showMeeting();
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
           var csrf = $('meta[name=csrf-token]').attr("content");
           var mainUrl = "/tehdoc/equipment/";
@@ -498,7 +496,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
   }
 
   function showMeeting() {
-    var meetMsg = '<h1>Перечень оборудования</h1>';
+    var meetMsg = '';
     $('#main-teh-tab').css("display", "none");
     $('.about-content').html(meetMsg);
   }
