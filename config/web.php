@@ -71,7 +71,7 @@ $config = [
       'bundles' => [
 //                'yii\web\JqueryAsset' => false,
 //                'yii\web\YiiAsset' => false,
-//                'linkAssets' => true,   // TODO Возможно операционная система сервера не разрешит ссылки!
+//                'linkAssets' => true,             // TODO Возможно операционная система сервера не разрешит ссылки!
       ]
     ],
     'mailer' => [
@@ -93,6 +93,11 @@ $config = [
       'showScriptName' => false,
       'baseUrl' => '',
       'rules' => [
+        [
+          'pattern' => 'tehdoc/equipment/complex/<id:\d+>/<controller>/<action>',
+          'route' => 'tehdoc/equipment/<controller>/<action>',
+          'defaults' => ['id' => 1122334455],
+        ]
       ],
     ],
   ],

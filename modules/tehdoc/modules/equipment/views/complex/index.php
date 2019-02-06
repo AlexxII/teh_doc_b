@@ -148,9 +148,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
       reloadTree(true);
       // var tree = $(".ui-draggable-handle").fancytree("getTree");
       // tree.reload();
-      // $(".del-node").hide();
-      // $(".del-multi-nodes").hide();
-      // $('.about-info').html('');
+      $(".del-node").hide();
+      $(".del-multi-nodes").hide();
+      $('.about-info').html('');
       // showMeeting();
       // unbindEvents();
     })

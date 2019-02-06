@@ -20,6 +20,13 @@ class SettingsController extends Controller
     return false;
   }
 
+  public function actionTest($id)
+  {
+    return $this->render('test', [
+      'model' => $id,
+    ]);
+  }
+
   protected function findModel($id)
   {
     if (($model = ComplexEx::find()->where(['ref' => $id])->limit(1)->all()) !== null) {
