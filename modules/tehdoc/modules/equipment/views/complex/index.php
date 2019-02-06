@@ -99,11 +99,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
       <li class="active"><a href="#info" data-toggle="tab" data-url="complex/info">Info</a></li>
       <li><a href="#messages" data-toggle="tab" data-url="complex/files">Files</a></li>
       <li><a href="#profile" data-toggle="tab" data-url="wiki/index">Wiki</a></li>
-      <li><a href="#messages" data-toggle="tab" data-url="complex/log">Log</a></li>
-      <li><a href="#setting" data-toggle="tab" data-url="settings/index"><i class="fa fa-cogs" aria-hidden="true"></i></a></li>
+      <li><a href="#setting" data-toggle="tab" data-url="settings"><i class="fa fa-cogs" aria-hidden="true"></i></a></li>
     </ul>
     <div class="about-content" style="margin-top: 15px">
-
     </div>
   </div>
 </div>
