@@ -8,9 +8,11 @@ use yii\web\Controller;
 
 class DefaultController extends Controller
 {
-  public function actionIndex()
+  public function actionIndex($id)
   {
-    return $this->render('index');
+    return $this->render('index', [
+      'a' => $id
+    ]);
   }
 
 

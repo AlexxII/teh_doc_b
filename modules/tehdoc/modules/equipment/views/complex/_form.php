@@ -123,6 +123,40 @@ $eq_title_hint = 'Обязательное! Необходимо для отоб
         </div>
       </div>
 
+      <?php
+      if (!empty($modelComplex->photos)) {
+        foreach ($modelComplex->photos as $k => $photo) {
+          $allImages[] = "<img src='" . $photo->getImageUrl() . "' class='file-preview-image' 
+                          style='max-width:100%;max-height:100%'>";
+          $previewImagesConfig[] = [
+            'url' => Url::toRoute(ArrayHelper::merge(['/tehdoc/kernel/tools/remove-image'], [
+              'id' => $photo->id,
+              '_csrf' => Html::csrfMetaTags()
+            ])),
+            'key' => $photo->id
+          ];
+        }
+      } else {
+        $previewImagesConfig = false;
+        $allImages = false;
+      }
+      ?>
+      <div class="row">
+        <div class="form-group col-md-12 col-lg-12">
+          <?= $form->field($fupload, "imageFiles[]")->widget(FileInput::class, [
+            'language' => 'ru',
+            'options' => ['multiple' => true],
+            'pluginOptions' => [
+              'previewFileType' => 'any',
+              'initialPreview' => $allImages,
+              'initialPreviewConfig' => $previewImagesConfig,
+              'overwriteInitial' => false,
+              'showUpload' => false
+            ],
+          ]); ?>
+        </div>
+      </div>
+
       <div class="row">
         <div class="form-group col-md-12 col-lg-12">
           <?= $form->field($modelComplex, 'complex_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '2')) ?>
@@ -204,7 +238,7 @@ $eq_title_hint = 'Обязательное! Необходимо для отоб
   $(document).ready(function () {
     $.ajax({
       type: 'get',
-      url: '/tehdoc/control/interface/model',
+      url: '/tehdoc/control/interface/models',
       autoFocus: true,
       success: function (data) {
         models = $.parseJSON(data);

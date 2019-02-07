@@ -74,6 +74,15 @@ class WikiController extends Controller
     ]);
   }
 
+  public function actionTest()
+  {
+    $id = $_GET['test'];
+//    $id = $_GET['id'];
+    return $this->render('test', [
+      'model' => $id
+    ]);
+  }
+
   protected function findModel($id)
   {
     // TODO не ососбо правильный метод поиска

@@ -76,62 +76,63 @@ class ComplexController extends Controller
     return false;
   }
 
-
   public function actionUpdateC($id)
   {
-    $modelComplex = $this->findModel($id);
-    $fUpLoad = new Images();
-//    $fUpLoad = new DynSamicModel(['imageFiles']);
-    if ($modelComplex->load(Yii::$app->request->post())) {
-      $oldIDs = ArrayHelper::map($modelsTool, 'id', 'id');
-      $modelsTool = Model::createMultiple(Tools::class, $modelsTool);
-      $t = ModelEx::loadMultiple($modelsTool, Yii::$app->request->post());
-      $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsTool, 'id', 'id')));
-      // validate all models
-      $valid = $modelComplex->validate();
-      //TODO id_eq - для новых tools, но не затронуть старые!!!!!!
-      $valid = Model::validateMultiple($modelsTool) && $valid;
-      if ($valid) {
-        $transaction = Yii::$app->db->beginTransaction();
-        try {
-          if ($flag = $modelComplex->save(false)) {
-            if (!empty($deletedIDs)) {
-              Tools::deleteAll(['id' => $deletedIDs]);
-            }
-            foreach ($modelsTool as $index => $modelTool) {
-              $modelTool->parent_id = $modelComplex->id_complex;          //  наследует от родителя
-              if (!($flag = $modelTool->save(false))) {
-                $transaction->rollBack();
-                Yii::$app->session->setFlash('error', 'Оборудование не добавлено');
-                break;
-              }
-              if (!empty(Yii::$app->request->post('Images', []))) {
-                $fUpLoad = new Images();
-                $fUpLoad->imageFiles = UploadedFile::getInstances($fUpLoad, "[{$index}]imageFiles");
-                if ($fUpLoad->uploadImage($modelTool->id_eq)) {
-                  Yii::$app->session->setFlash('succes', 'Оборудование добавлено');
-                } else {
-                  Yii::$app->session->setFlash('error', 'Оборудование добавлено, но не загружены изображения');
-                }
-              } else {
-                Yii::$app->session->setFlash('success', 'Оборудование добавлено');
-              }
-            }
+    $model = $this->findModel($id);
+    $fUpload = new Images();
+
+    if ($model->load(Yii::$app->request->post())) {
+      if ($model->save(false)) {                                    // TODO Разобраться с валидацией, при вкл - не сохраняет
+        if ($fUpload->load(Yii::$app->request->post())) {
+          $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
+          if ($fUpload->uploadImage($model->ref)) {
+            Yii::$app->session->setFlash('success', 'Изменения внесены');
           }
-          if ($flag) {
-            $transaction->commit();
-            return $this->redirect(['view', 'id' => $modelComplex->id]);
-          }
-        } catch (Exception $e) {
-          $transaction->rollBack();
-          Yii::$app->session->setFlash('error', 'Оборудование не добавлено');
+        } else {
+          Yii::$app->session->setFlash('success', 'Изменения внесены!!');
         }
+        return $this->redirect(['view', 'id' => $model->ref]);
+      } else {
+        Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');
       }
-      Yii::$app->session->setFlash('error', 'Валидацияяяяяяяяяяяяяяяяяяяяяяяя');
     }
     return $this->render('update', [
+      'model' => $model,
+      'fupload' => $fUpload,
+    ]);
+  }
+
+  public function actionCreateC($id)
+  {
+    $modelComplex = new ComplexEx();
+    $fUpload = new Images();
+    $modelComplex->quantity = 1;                             // По умолчанию, кол-во оборудования - 1.php
+
+    if ($modelComplex->load(Yii::$app->request->post())) {
+      $modelComplex->ref = mt_rand();
+      $modelComplex->parent_id = 0;
+      if ($modelComplex->save()) {
+        if ($fUpload->load(Yii::$app->request->post())) {
+          $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
+          if ($fUpload->uploadImage($modelComplex->ref)) {
+            Yii::$app->session->setFlash('success', 'Оборудование добавлено');
+          } else {
+            Yii::$app->session->setFlash('success', 'Оборудование добавлено, <strong>НО</strong> не загружены изображения');
+          }
+        } else {
+          Yii::$app->session->setFlash('success', 'Оборудование добавлено');
+        }
+        if (isset($_POST['stay'])) {
+          return $this->redirect(['create']);
+        }
+        return $this->redirect(['view', 'id' => $modelComplex->ref]);
+      } else {
+        Yii::$app->session->setFlash('error', 'Ошибка валидации');
+      }
+    }
+    return $this->render('create', [
       'modelComplex' => $modelComplex,
-      'fUpload' => $fUpLoad,
+      'fupload' => $fUpload
     ]);
   }
 
