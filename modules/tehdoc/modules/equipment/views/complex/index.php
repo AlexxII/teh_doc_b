@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use app\assets\FancytreeAsset;
 
-FancytreeAsset::register($this);
+FancytreeAsset  ::register($this);
 
 $this->title = 'Перечень оборудования';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];

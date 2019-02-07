@@ -9,13 +9,8 @@ $placeholder = 'Название страницы';
 
 ?>
 
-<style>
-  .al {
-    border: #c72e26 solid 1px;
-  }
-</style>
 
-<div class="row">
+<div id="complex-wiki-form" class="row">
   <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <div class="customer-form">
       <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => 'main-wiki-form']]); ?>
@@ -32,14 +27,9 @@ $placeholder = 'Название страницы';
         </div>
       </div>
       <div class="form-group" style="text-align: right">
-        <a id="cancel-wiki-edit" class="btn btn-sm btn-primary">Отмена</a>
-        <?php
-        if ($model->isNewRecord) {
-          echo '<a id="create-wiki" class="btn btn-sm btn-success">Создать</a>';
-        } else {
-          echo '<a id="update-wiki" data-wiki="'. $model->id . '" class="btn btn-sm btn-success">Обновить</a>';
-        }
-        ?>
+        <a onclick="history.back();" class="btn btn-sm btn-primary">Отмена</a>
+        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['class' => 'btn btn-sm btn-success']) ?>
+
       </div>
       <?php ActiveForm::end(); ?>
     </div>
@@ -69,102 +59,5 @@ $placeholder = 'Название страницы';
         title: "Справка",
       }]
     });
-
-    $('#cancel-wiki-edit').on('click', function () {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var url = '/tehdoc/equipment/wiki/index';
-      $.ajax({
-        url: url,
-        type: "post",
-        data: {
-          id : getNodeId(),
-          _csrf: csrf
-        }
-      })
-        .done(function (result) {
-          $('.about-content').html(result);
-        })
-        .fail(function () {
-          alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-        });
-    });
-
-    $('#wiki-title').on('input', function () {
-      if ($(this).val){
-        $('#wiki-title').removeClass('al');
-      }
-    });
-
-    $('#create-wiki').on('click', function () {
-      var wikiTitle = $('#wiki-title').val();
-      if (wikiTitle == ''){
-        $('#wiki-title').toggleClass('al');
-        return;
-      }
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var url = '/tehdoc/equipment/wiki/create';
-      var wikiText = simplemde.value();
-      $.ajax({
-        url: url,
-        type: "post",
-        data: {
-          _csrf: csrf,
-          id : getNodeId(),
-          wikiTitle: wikiTitle,
-          wikiText: wikiText
-        }
-      })
-        .done(function (result) {
-          $('.about-content').html(result);
-        })
-        .fail(function () {
-          alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-        });
-    });
-
-    $('#update-wiki').on('click', function () {
-      var wikiTitle = $('#wiki-title').val();
-      if (wikiTitle == ''){
-        $('#wiki-title').toggleClass('al');
-        return;
-      }
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var url = '/tehdoc/equipment/wiki/update?id=' . getWikiId();
-      var wikiText = simplemde.value();
-      $.ajax({
-        url: url,
-        type: "post",
-        data: {
-          _csrf: csrf,
-          id : getNodeId(),
-          wikiTitle: wikiTitle,
-          wikiText: wikiText
-        }
-      })
-        .done(function (result) {
-          $('.about-content').html(result);
-        })
-        .fail(function () {
-          alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-        });
-    });
-
-    function getNodeId() {
-      var node = $("#fancyree_w0").fancytree("getActiveNode");
-      if (node) {
-        return node.data.ref;
-      } else {
-        return -1;
-      }
-    }
-
-    function getWikiId() {
-      return $('#update-wiki').data('wiki');
-    }
-
-    // sessionStorage.setItem("previousPage","");
-
   })
-
-
 </script>

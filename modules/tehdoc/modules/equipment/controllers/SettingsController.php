@@ -9,16 +9,27 @@ use app\modules\tehdoc\modules\equipment\models\ComplexEx;
 
 class SettingsController extends Controller
 {
+
+  public $defaultAction = 'index';
+
   public function actionIndex()
   {
-    if (!empty($_POST)) {
-      $id = $_POST['id'];
-      return $this->renderPartial('index', [
-        'model' => $this->findModel($id),
-      ]);
-    }
-    return false;
+    $id = $_GET['id'];
+    return $this->render('index', [
+      'model' => $this->findModel($id),
+    ]);
   }
+
+  /*  public function actionIndex()
+    {
+      if (!empty($_POST)) {
+        $id = $_POST['id'];
+        return $this->render('index', [
+          'model' => $this->findModel($id),
+        ]);
+      }
+      return false;
+    }*/
 
   public function actionTest($id)
   {

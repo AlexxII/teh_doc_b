@@ -3,7 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-$this->title = $model->name;
+$this->title = 'Перечень оборудования';
+$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
@@ -59,7 +61,14 @@ $this->title = $model->name;
 </style>
 
 
-<div class="tool-view">
+<ul class="nav nav-tabs" id="main-teh-tab">
+  <li><a href="../info/index">Инфо</a></li>
+  <li><a href="../files/index">Файлы</a></li>
+  <li><a href="../wiki/index">Wiki</a></li>
+  <li class="active"><a href="../settings/index" style="cursor: pointer">Настройки</a></li>
+</ul>
+
+<div class="complex-settings" style="margin-top: 15px">
 
   <div class="settings">
     <div class="head">
@@ -67,7 +76,7 @@ $this->title = $model->name;
     </div>
 
     <div class="row">
-      <div class="col-lg-6 col-md-6">
+      <div class="col-lg-6 col-md-6" style="padding-bottom: 10px">
         <label>Выберите класс:</label>
         <select class="form-control">
           <option value="" disabled selected>Веберите</option>
@@ -91,14 +100,14 @@ $this->title = $model->name;
         <div class="form-checkbox js-complex-option">
           <input id="to_feature" type="checkbox" name="has_to" value="">
           <label for="to_feature" style="font-weight: 500">В графике ТО</label>
-          <p class="note">Отображать данное оборудование в графике ТО.</p>
+          <p class="note">Отображать в графике ТО.</p>
         </div>
       </li>
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
           <input id="finance_feature" type="checkbox" name="has_to" value="">
           <label for="finance_feature" style="font-weight: 500">Инвентаризация</label>
-          <p class="note">Отображаить в таблице бухгалтерского учета.</p>
+          <p class="note">Отображать в таблице бухгалтерского учета.</p>
         </div>
       </li>
     </ul>
@@ -122,14 +131,14 @@ $this->title = $model->name;
 
 
   <div class="subhead">
-    <h3 class="subsetting-header">Удаление</h3>
+    <h3 class="subsetting-header">Danger zone</h3>
   </div>
   <ul class="list-group">
     <li class="list-group-item" style="border-color: #ed1d1a">
       <div class="d-flex flex-items-center">
         <div class="form-checkbox js-complex-option">
-          <label for="to_feature" style="font-weight: 500">Удалить</label>
-          <p class="note pr-6">Удалив данное оборудование востановить его не удастся.</p>
+          <label for="to_feature" style="font-weight: 500">Удаление</label>
+          <p class="note pr-6">После удаления данные восстановить не удастся.</p>
         </div>
         <div style="text-align: right">
           <a class="btn btn-sm btn-danger mr-5">Удалить</a>

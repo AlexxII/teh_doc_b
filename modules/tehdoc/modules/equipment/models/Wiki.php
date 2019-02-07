@@ -24,4 +24,12 @@ class Wiki extends \yii\db\ActiveRecord
       [['wiki_title'], 'string', 'max' => 255],
     ];
   }
+
+  public function attributeLabels()
+  {
+    return [
+      'wiki_title' => 'Название страницы',
+    ];
+  }
+
 }
