@@ -1,11 +1,11 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
 use yii\helpers\Markdown;
 
-//$this->title = $model->name;
-$this->title = $model->wiki_title;
+$this->title = 'Перечень оборудования';
+$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
@@ -18,16 +18,24 @@ $this->title = $model->wiki_title;
   }
 </style>
 
-<div class="info-view">
+
+<ul class="nav nav-tabs" id="main-teh-tab">
+  <li><a href="../info/index">Инфо</a></li>
+  <li><a href="../files/index">Файлы</a></li>
+  <li class="active"><a href="../wiki/index" style="cursor: pointer">Wiki</a></li>
+  <li><a href="../settings/index" >Настройки</a></li>
+</ul>
+
+<div class="complex-wiki" style="margin-top: 15px">
 
   <div class="row">
     <div class="col-lg-9 col-md-6">
-      <h3 style="margin-top: 0px"><?= Html::encode($this->title) ?></h3>
+      <h3 style="margin-top: 0px"><?= Html::encode($model->wiki_title) ?></h3>
     </div>
     <div class="col-lg-3 col-md-6 text-right">
       <p>
-        <a id="edit-wiki-page" data-wiki="<?php echo $model->id ?>" class="btn btn-sm btn-primary">Edit</a>
-        <a id="new-wiki-page" class="btn btn-sm btn-success">New</a>
+        <a href="update?page=<?= $model->id?>" class="btn btn-sm btn-primary">Edit</a>
+        <a href="create" class="btn btn-sm btn-success">New</a>
       </p>
     </div>
   </div>
