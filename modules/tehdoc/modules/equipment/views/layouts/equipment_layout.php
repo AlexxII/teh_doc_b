@@ -427,12 +427,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
         if (target === 'title' || target === 'icon'){
           var node = data.node;
           var prefix = '/tehdoc/equipment/complex/';
-          if (node.key == 1122334455) {
-            var url = prefix;
-          } else {
+          if (node.key != 1122334455) {
             var url = prefix + node.key + '/info/index';
+            window.location.href = url;
           }
-          window.location.href = url;
         }
       },
       init: function (event, data) {
