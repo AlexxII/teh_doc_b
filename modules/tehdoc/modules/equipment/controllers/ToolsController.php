@@ -17,6 +17,9 @@ use yii\base\DynamicModel;
 
 class ToolsController extends Controller
 {
+
+  public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout.php';
+
   public function actionIndex()
   {
     return $this->render('index');

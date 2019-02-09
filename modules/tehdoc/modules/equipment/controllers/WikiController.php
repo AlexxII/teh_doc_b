@@ -10,14 +10,19 @@ use yii\web\NotFoundHttpException;
 
 class WikiController extends Controller
 {
+
+  public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_ex.php';
+
   public function actionIndex()
   {
     $id = $_GET['id'];
-    $model = Wiki::find()->where(['eq_ref' => $id])->orderBy('wiki_record_create')->limit(1)->all();
+    $model = Wiki::find()->where(['eq_ref' => $id])->orderBy('wiki_title')->limit(1)->all();
+    $list = Wiki::find()->where(['eq_ref' => $id])->orderBy('wiki_title')->asArray()->all();
     if (!empty($model)) {
       $indexModel = $model[0];
-      return $this->render('index', [
+      return $this->render('header', [
         'model' => $indexModel,
+        'list' => $list
       ]);
     }
     return $this->render('_index');
@@ -33,8 +38,11 @@ class WikiController extends Controller
       $model->wiki_record_update = $date;
       $model->wiki_created_user = Yii::$app->user->identity->ref;
       if ($model->save()) {
-        return $this->render('index', [
-          'model' => $model
+        $id = $_GET['id'];
+        $list = Wiki::find()->where(['eq_ref' => $id])->orderBy('wiki_title')->asArray()->all();
+        return $this->render('header', [
+          'model' => $model,
+          'list' => $list
         ]);
       }
     }
@@ -50,14 +58,31 @@ class WikiController extends Controller
       $date = date('Y-m-d H:i:s');
       $model->wiki_record_update = $date;
       if ($model->save()) {
-        return $this->render('index', [
-          'model' => $model
+        $id = $_GET['id'];
+        $list = Wiki::find()->where(['eq_ref' => $id])->orderBy('wiki_title')->asArray()->all();
+        return $this->render('header', [
+          'model' => $model,
+          'list' => $list
         ]);
       }
     }
     return $this->render('update', [
       'model' => $model
     ]);
+  }
+
+  public function actionView($page)
+  {
+    if ($page){
+      $id = $_GET['id'];
+      $wikiPage = Wiki::findOne($page);
+      $list = Wiki::find()->where(['eq_ref' => $id])->orderBy('wiki_title')->asArray()->all();
+      return $this->render('header', [
+        'model' => $wikiPage,
+        'list' => $list
+      ]);
+    }
+    return false;
   }
 
   protected function findModel($id)
