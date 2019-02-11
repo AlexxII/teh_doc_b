@@ -84,8 +84,8 @@ TehdocAsset::register($this);       // регистрация ресурсов �
         'label' => 'Оборудование и ТО',
         'items' => [
           '<li class="dropdown-header" style="font-size: 10px">Оборудование</li>',
-          ['label' => 'Комплекты', 'url' => ['/tehdoc/equipment/complex']],
-          ['label' => 'Перечень техники', 'url' => ['/tehdoc/equipment/tools']],
+          ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/complex']],
+          ['label' => 'Сводная таблица', 'url' => ['/tehdoc/equipment/complex/tools/index']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Тех.обслуживание</li>',
           ['label' => 'График ТО', 'url' => ['/tehdoc/']],
@@ -98,7 +98,6 @@ TehdocAsset::register($this);       // регистрация ресурсов �
           '<li class="dropdown-header" style="font-size: 10px">Представления</li>',
           ['label' => 'Категории', 'url' => ['/tehdoc/control/category/index']],
           ['label' => 'Места размещения', 'url' => ['/tehdoc/control/placement/index']],
-          ['label' => 'Классификаторы', 'url' => ['/tehdoc/control/classifier/index']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Инфтерфейса</li>',
           ['label' => 'Производитель/модель', 'url' => ['/tehdoc/control/interface/index']],

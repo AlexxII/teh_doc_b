@@ -48,7 +48,7 @@ $eq_title_hint = 'Обязательное! Необходимо для отоб
 
 
 <div class="row">
-  <div class="col-lg-8 col-md-9" style="border-radius:2px;padding-top:10px">
+  <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <div class="customer-form">
       <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'id' => 'dynamic-form']]); ?>
       <div class="row">

@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
   <li><a href="../info/index">Инфо</a></li>
   <li><a href="../files/index">Файлы</a></li>
   <li><a href="../wiki/index" style="cursor: pointer">Wiki</a></li>
-  <li class="active"><a href="../settings/index">Настройки</a></li>
+  <li class="active"><a href="/index">Настройки</a></li>
 </ul>
 
 <div class="complex-settings-index">

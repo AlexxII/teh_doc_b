@@ -8,16 +8,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
+<style>
+  td {
+    text-align: center;
+  }
+  .h-title {
+    font-size: 18px;
+    color: #1e6887;
+  }
+</style>
+
 <ul class="nav nav-tabs" id="main-teh-tab">
-  <li><a href="../info/index">Инфо</a></li>
+  <li class="active"><a href="/index">Инфо</a></li>
   <li><a href="../files/index">Файлы</a></li>
-  <li class="active"><a href="../wiki/index" style="cursor: pointer">Wiki</a></li>
+  <li><a href="../wiki/index" style="cursor: pointer">Wiki</a></li>
   <li><a href="../settings/index">Настройки</a></li>
 </ul>
 
-<div class="complex-wiki-update">
-  <h3><?= Html::encode('Обновить ' . $model->wiki_title) ?></h3>
-  <?= $this->render('_form', [
+<div class="complex-info-view">
+  <div class="head">
+    <h3><?= Html::encode($model->name) ?></h3>
+  </div>
+
+  <?= $this->render('view', [
     'model' => $model
   ]) ?>
 

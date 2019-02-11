@@ -155,9 +155,8 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         </div>
       </div>
 
-      <div class="form-group">
-        <div class="form-group col-md-12 col-lg-12">
-
+      <div class="row" style="margin-bottom: 15px">
+        <div class="col-md-12 col-lg-12">
           <label style="font-size:18px"><input type="checkbox" name="stay" style="width:20px;height:20px">
             Остаться в форме</label>
         </div>

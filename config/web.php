@@ -94,8 +94,13 @@ $config = [
       'baseUrl' => '',
       'rules' => [
         [
+          'pattern' => 'tehdoc/equipment/complex/<id:\d+>/<controller:(info)>/<action>',
+          'route' => 'tehdoc/equipment/complex/tools/info',
+          'defaults' => ['id' => 1122334455],
+        ],
+        [
           'pattern' => 'tehdoc/equipment/complex/<id:\d+>/<controller>/<action>',
-          'route' => 'tehdoc/equipment/<controller>/<action>',
+          'route' => 'tehdoc/equipment/complex/<controller>/<action>',
           'defaults' => ['id' => 1122334455],
         ]
       ],

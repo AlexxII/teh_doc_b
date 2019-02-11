@@ -98,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <ul class="nav nav-tabs" id="main-teh-tab">
   <li><a href="../info/index">Инфо</a></li>
-  <li class="active"><a href="../files/index">Файлы</a></li>
+  <li class="active"><a href="/index">Файлы</a></li>
   <li><a href="../wiki/index" style="cursor: pointer">Wiki</a></li>
   <li><a href="../settings/index">Настройки</a></li>
 </ul>

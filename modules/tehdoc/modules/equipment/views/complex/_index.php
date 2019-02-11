@@ -1,9 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use app\assets\FancytreeAsset;
-
-FancytreeAsset::register($this);
 
 $this->title = 'Перечень оборудования';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
@@ -17,4 +14,3 @@ $del_root_hint = 'Удалить ветку полностью';
 $del_multi_nodes = 'Удвлить С вложениями';
 
 ?>
-

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\tehdoc\modules\equipment\controllers;
+namespace app\modules\tehdoc\modules\equipment\controllers\complex;
 
 use app\modules\tehdoc\modules\equipment\models\ComplexEx;
 use app\modules\tehdoc\modules\equipment\models\Wiki;

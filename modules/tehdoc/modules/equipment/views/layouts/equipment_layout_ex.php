@@ -100,8 +100,14 @@ $del_multi_nodes = 'Удвлить С вложениями';
       [
         'label' => 'Оборудование',
         'items' => [
-          ['label' => 'Комплекты', 'url' => ['/tehdoc/equipment/complex']],
-          ['label' => 'Все средства', 'url' => ['/tehdoc/equipment/tools']],
+          '<li class="dropdown-header" style="font-size: 10px">Перечень</li>',
+          ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/complex']],
+          ['label' => 'Сводная таблица', 'url' => ['/tehdoc/equipment/complex/tools/index']],
+          '<li class="divider"></li>',
+          '<li class="dropdown-header" style="font-size: 10px">Добавление оборудования</li>',
+          ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/complex/create-ex']],
+          ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/complex/tools/create']],
+          ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/complex/tools/task']],
         ],
       ],
       /*            // В разработке
@@ -121,7 +127,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="dropdown-header" style="font-size: 10px">Весь перечнь</li>',
           ['label' => 'По категориям', 'url' => ['/tehdoc/equipment/tools/categories']],
           ['label' => 'По месту размещения', 'url' => ['/tehdoc/equipment/tools/placement']],
-          ['label' => 'Классификатор', 'url' => ['/tehdoc/equipment/tools/classifiers']],
 //                    '<li class="divider"></li>',
 //                    '<li class="dropdown-header" style="font-size: 10px">Комплекты</li>',
 //                    ['label' => 'По категориям', 'url' => ['/tehdoc/tools/categories']],

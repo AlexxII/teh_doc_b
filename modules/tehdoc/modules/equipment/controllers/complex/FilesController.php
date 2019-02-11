@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\tehdoc\modules\equipment\controllers;
+namespace app\modules\tehdoc\modules\equipment\controllers\complex;
 
 use Yii;
 use yii\web\Controller;

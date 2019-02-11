@@ -57,7 +57,7 @@ class ComplexController extends Controller
     $newWiki->wiki_record_update = $date;
     $newWiki->wiki_created_user = Yii::$app->user->identity->ref;
 
-    if ($newComplex->appendTo($parentOrder)){
+    if ($newComplex->appendTo($parentOrder)) {
       $newWiki->save();
       $data['acceptedTitle'] = $title;
       $data['acceptedId'] = $newComplex->id;
@@ -78,6 +78,16 @@ class ComplexController extends Controller
     }
     return false;
   }
+
+
+  public function actionCreateEx()
+  {
+    $this->layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout.php';
+    return $this->render('index');
+  }
+
+
+  //===========================================================================================
 
   public function actionUpdateC($id)
   {
@@ -105,7 +115,7 @@ class ComplexController extends Controller
     ]);
   }
 
-  public function actionCreateC($id)
+  public function actionCreateC()
   {
     $modelComplex = new ComplexEx();
     $fUpload = new Images();

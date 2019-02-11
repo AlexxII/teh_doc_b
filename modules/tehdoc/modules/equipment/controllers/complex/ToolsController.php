@@ -1,10 +1,11 @@
 <?php
 
-namespace app\modules\tehdoc\modules\equipment\controllers;
+namespace app\modules\tehdoc\modules\equipment\controllers\complex;
 
 use app\modules\admin\models\Category;
 use app\modules\admin\models\Classifier;
 use app\modules\admin\models\Placement;
+use app\modules\tehdoc\modules\equipment\models\ComplexEx;
 use app\modules\tehdoc\modules\equipment\models\Tools;
 use app\modules\tehdoc\modules\equipment\models\SSP;
 use Yii;
@@ -116,11 +117,6 @@ class ToolsController extends Controller
     return $this->render('categories');
   }
 
-  public function actionClassifiers()
-  {
-    return $this->render('classifiers');
-  }
-
   public function actionPlacement()
   {
     return $this->render('placements');
@@ -128,16 +124,16 @@ class ToolsController extends Controller
 
   public function actionServerSide()
   {
-    $table = 'teh_equipment_tbl';
+    $table = 'teh_c_test_tbl';
     $primaryKey = 'id';
     $columns = array(
-      array('db' => 'id_eq', 'dt' => 0),
-      array('db' => 'eq_title', 'dt' => 1),
-      array('db' => 'eq_manufact', 'dt' => 2),
-      array('db' => 'eq_model', 'dt' => 3),
-      array('db' => 'eq_serial', 'dt' => 4),
+      array('db' => 'ref', 'dt' => 0),
+      array('db' => 'complex_title', 'dt' => 1),
+      array('db' => 'complex_manufact', 'dt' => 2),
+      array('db' => 'complex_model', 'dt' => 3),
+      array('db' => 'complex_serial', 'dt' => 4),
       array(
-        'db' => 'eq_factdate',
+        'db' => 'complex_factdate',
         'dt' => 5,
         'formatter' => function ($d, $row) { //TODO разобраться с форматом отображения даты
           if ($d != null) {
@@ -293,17 +289,14 @@ class ToolsController extends Controller
     return $this->redirect(['index']);
   }
 
-
-  public function actionRemoveImage()
+  public function actionInfo()
   {
-    return 1;
-  }
-
-  public function actionExtendedTable()
-  {
-    $model = $_GET;
-    return $this->render('about', [
-      'model' => $model,
+    $this->layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_ex.php';
+    $id = $_GET['id'];
+    $request = ComplexEx::find()->where(['ref' => $id])->limit(1)->all();
+    $model = $request[0];
+    return $this->render('header', [
+      'model' => $model
     ]);
   }
 

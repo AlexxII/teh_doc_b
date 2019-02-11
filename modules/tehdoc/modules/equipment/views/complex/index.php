@@ -1,15 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-use app\assets\FancytreeAsset;
 
-FancytreeAsset  ::register($this);
-
-$this->title = 'Перечень оборудования';
+$this->title = 'Управление оборудованием';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$about = "Панель управления оборудованием. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
+$about = "Панель управления оборудованием. Позволяет создавать, перемещать, переименовывать и удалять оборудование.
+ При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $add_hint = 'Добавить новый узел';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить БЕЗ вложений';
@@ -27,7 +25,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
     font-size: 15px;
   }
   ul.fancytree-container {
-    font-size: 15px;
+    font-size: 18px;
   }
   input {
     color: black;
@@ -72,10 +70,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-placement' => 'top'
       ]) ?>
     </div>
-
   </div>
 
-  <div id="complex-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
+  <div id="complex-tree" class="col-lg-6 col-md-6" style="padding-bottom: 10px">
     <div style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
@@ -94,13 +91,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
     </div>
   </div>
 
-  <div id="complex-info" class="col-lg-8 col-md-8" style="height: 100%">
-    <ul class="nav nav-tabs" id="main-teh-tab">
-      <li class="active"><a href="#info" data-toggle="tab" data-url="complex/info">Info</a></li>
-      <li><a href="#messages" data-toggle="tab" data-url="complex/files">Files</a></li>
-      <li><a href="#profile" data-toggle="tab" data-url="wiki/index">Wiki</a></li>
-      <li><a href="#setting" data-toggle="tab" data-url="settings"><i class="fa fa-cogs" aria-hidden="true"></i></a></li>
-    </ul>
+  <div id="complex-info" class="col-lg-6 col-md-6">
     <div class="about-content" style="margin-top: 15px">
     </div>
   </div>
@@ -135,7 +126,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       event.preventDefault();
       var node = $(".ui-draggable-handle").fancytree("getActiveNode");
       if (!node) {
-        alert("Выберите родительскую категорию");
+        alert("Выберите родителя");
         return;
       }
       node.editCreateNode("child", " ");
@@ -145,9 +136,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
   $(document).ready(function () {
     $('.refresh').click(function (event) {
       event.preventDefault();
-      reloadTree(true);
-      // var tree = $(".ui-draggable-handle").fancytree("getTree");
-      // tree.reload();
+      // reloadTree(true);
+      var tree = $(".ui-draggable-handle").fancytree("getTree");
+      tree.reload();
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
       $('.about-info').html('');
@@ -313,7 +304,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         counter: true,                                      // Show a badge with number of matching child nodes near parent icons
         fuzzy: false,                                       // Match single characters in order, e.g. 'fb' will match 'FooBar'
         hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
-        hideExpanders: true,                                // Hide expanders if all child nodes are hidden by filter
+        hideExpanders: false,                                // Hide expanders if all child nodes are hidden by filter
         highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
         leavesOnly: true,                                   // Match end nodes only
         nodata: true,                                       // Display a 'no data' status node if result is empty
@@ -423,11 +414,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
           }
           $(".del-node").show();
         }
-        if (node.data.lvl == 0) {
-          showMeeting();
-        } else {
-          showTab();
-        }
       },
       renderNode: function (node, data) {
         var node = data.node;
@@ -456,81 +442,13 @@ $del_multi_nodes = 'Удвлить С вложениями';
     }
   }
 
-  function showTab() {
-    $('#main-teh-tab').css("display", "block");
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    var url = "/tehdoc/equipment/complex/info";
-    $.ajax({
-      url: url,
-      type: "post",
-      data: {
-        id: getNodeId(),
-        _csrf: csrf
-      }
-    })
-      .done(function (result) {
-        $('.about-content').html(result);
-        $('#main-teh-tab a:first').tab('show');
-      })
-      .fail(function () {
-        alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-      });
-  }
-
-  function tabEvents() {
-    $('a[data-toggle="tab"]').bind('shown.bs.tab', function (e) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var mainUrl = "/tehdoc/equipment/";
-      var u = $(e.target).data('url');
-      $.ajax({
-        url: mainUrl + u,
-        type: "post",
-        data: {
-          id: getNodeId(),
-          _csrf: csrf
-        }
-      })
-        .done(function (result) {
-          $('.about-content').html(result);
-          // $(this).tab('show');
-        })
-        .fail(function () {
-          alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-        });
-    });
-  }
-
-  function showMeeting() {
-    var meetMsg = '';
-    $('#main-teh-tab').css("display", "none");
-    $('.about-content').html(meetMsg);
-  }
-
-  function unbindEvents() {
-    $('a[data-toggle="tab"]').unbind('shown.bs.tab');
-  }
-
-
-  $(document).ready(function () {
-    $('#complex-tree').mouseover(function () {
-      $('#complex-tree').width('45%');
-      $('#complex-info').width('45%');
-    });
-    $('#complex-info').mouseover(function () {
-      $('#complex-info').width('65%');
-      $('#complex-tree').width('25%');
-      $('#fancyree_w0').css('overflow-x', 'auto');
-    })
-  });
-
   function reloadTree(activate) {
     var tree = $("#fancyree_w0").fancytree("getTree");
     var node = $("#fancyree_w0").fancytree("getActiveNode");
     var key = node.key;
     if (activate){
-      tree.reload();
+
     }
   }
-
 
 </script>

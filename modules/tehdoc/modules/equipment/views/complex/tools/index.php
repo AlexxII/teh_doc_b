@@ -186,7 +186,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
             "serverSide": true,
             "responsive": true,
             "ajax": $.fn.dataTable.pipeline({
-                url: '/tehdoc/equipment/tools/server-side',
+                url: '/tehdoc/equipment/complex/tools/server-side',
                 pages: 2 // number of pages to cache
             }),
             "columnDefs": [{
