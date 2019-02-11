@@ -9,7 +9,6 @@ $placeholder = 'Название страницы';
 
 ?>
 
-
 <div id="complex-wiki-form" class="row">
   <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <div class="customer-form">
@@ -29,7 +28,6 @@ $placeholder = 'Название страницы';
       <div class="form-group" style="text-align: right">
         <a onclick="history.back();" class="btn btn-sm btn-primary">Отмена</a>
         <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['class' => 'btn btn-sm btn-success']) ?>
-
       </div>
       <?php ActiveForm::end(); ?>
     </div>

@@ -11,11 +11,12 @@ class SettingsController extends Controller
 {
 
   public $defaultAction = 'index';
+  public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_ex.php';
 
   public function actionIndex()
   {
     $id = $_GET['id'];
-    return $this->render('index', [
+    return $this->render('header', [
       'model' => $this->findModel($id),
     ]);
   }
@@ -30,13 +31,6 @@ class SettingsController extends Controller
       }
       return false;
     }*/
-
-  public function actionTest($id)
-  {
-    return $this->render('test', [
-      'model' => $id,
-    ]);
-  }
 
   protected function findModel($id)
   {

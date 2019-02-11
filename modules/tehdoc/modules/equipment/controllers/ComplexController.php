@@ -19,6 +19,9 @@ use yii\helpers\ArrayHelper;
 
 class ComplexController extends Controller
 {
+
+  public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_ex.php';
+
   public function actionIndex()
   {
     return $this->render('_index');
@@ -177,50 +180,6 @@ class ComplexController extends Controller
       $root = ComplexEx::findOne(['id' => $id]);
     }
     $root->deleteWithChildren();
-  }
-
-  public function actionInfo()
-  {
-    if (!empty($_POST)) {
-      $id = $_POST['id'];
-      return $this->renderPartial('info/view', [
-        'model' => $this->findModel($id),
-      ]);
-    }
-    return false;
-  }
-
-  public function actionFiles()
-  {
-    if (!empty($_POST)) {
-      $id = $_POST['id'];
-      return $this->renderPartial('files/index', [
-        'model' => $this->findModel($id),
-      ]);
-    }
-    return false;
-  }
-
-  public function actionWiki()
-  {
-    if (!empty($_POST)) {
-      $id = $_POST['id'];
-      return $this->renderPartial('wiki/index', [
-        'model' => $this->findModel($id),
-      ]);
-    }
-    return false;
-  }
-
-  public function actionLog()
-  {
-    if (!empty($_POST)) {
-      $id = $_POST['id'];
-      return $this->renderPartial('log/index', [
-        'model' => $this->findModel($id),
-      ]);
-    }
-    return false;
   }
 
   protected function findModel($id)

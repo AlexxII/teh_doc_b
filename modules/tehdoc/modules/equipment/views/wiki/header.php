@@ -15,10 +15,21 @@ $this->params['breadcrumbs'][] = $this->title;
   <li><a href="../settings/index">Настройки</a></li>
 </ul>
 
-<div class="complex-wiki-create">
-  <h3><?= Html::encode('Создать новую страницу') ?></h3>
-  <?= $this->render('_form', [
-    'model' => $model
+<div class="complex-wiki-update" style="margin-top: 15px">
+  <div class="row">
+    <div class="col-lg-9 col-md-6">
+      <h3 style="margin-top: 0px"><?= Html::encode($model->wiki_title) ?></h3>
+    </div>
+    <div class="col-lg-3 col-md-6 text-right">
+      <p>
+        <a href="update?page=<?= $model->id ?>" class="btn btn-sm btn-primary">Edit</a>
+        <a href="create" class="btn btn-sm btn-success">New</a>
+      </p>
+    </div>
+  </div>
+  <?= $this->render('index', [
+    'model' => $model,
+    'list' => $list
   ]) ?>
 
 </div>

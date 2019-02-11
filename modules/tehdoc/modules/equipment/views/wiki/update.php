@@ -4,7 +4,6 @@ use yii\helpers\Html;
 
 $this->title = 'Перечень оборудования';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'Перечень оборудования', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
