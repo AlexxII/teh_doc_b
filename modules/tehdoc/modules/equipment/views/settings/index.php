@@ -90,7 +90,7 @@
           <div class="d-blue border">
             <div class="form-checkbox js-complex-option">
               <label style="font-weight: 500">Наименование в таблице</label>
-              <p class="note pr-6">При отличии наименования в таблице инфентаризации от истинного наименования оборудования,
+              <p class="note pr-6">При отличии наименования в таблице инвентаризации от истинного наименования оборудования,
                 укажите необходимое наименование.</p>
             </div>
             <div class="form-checkbox">
