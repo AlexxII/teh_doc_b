@@ -162,6 +162,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
     $('#tools-eq_title').on('input', function (e) {
       var node = $("#fancyree_w0").fancytree("getActiveNode");
       node.setTitle($(this).val());
+      node.render();
     })
 
   });

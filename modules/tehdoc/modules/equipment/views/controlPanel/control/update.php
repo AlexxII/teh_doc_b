@@ -13,8 +13,12 @@ $this->params['breadcrumbs'][] = $this->title;
 </ul>
 
 <div class="tool-update">
-
-  <h3><?= Html::encode($model->eq_title) ?></h3>
+  <div class="head col-lg-9">
+    <h3><?= Html::encode($model->eq_title) ?></h3>
+  </div>
+  <div class="col-lg-2">
+    <a type="button" href="/tehdoc/equipment/tool/<?= $model->ref?>/info/index" class="btn-primary btn-sm">НАЗАД</a>
+  </div>
 
   <?= $this->render('_form', [
     'model' => $model

@@ -109,7 +109,7 @@ class ToolsController extends Controller
         if (isset($_POST['stay'])) {
           return $this->redirect(['create']);
         }
-        return $this->redirect(['view', 'id' => $model->ref]);
+        return $this->redirect(['info']);
       } else {
         return var_dump($model->getErrors());
         Yii::$app->session->setFlash('error', 'Ошибка валидации');

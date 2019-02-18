@@ -78,6 +78,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="complex-settings-index">
 
+  <h3><?= Html::encode($model->eq_title) ?></h3>
+
   <?= $this->render('index', [
     'model' => $model
   ]) ?>

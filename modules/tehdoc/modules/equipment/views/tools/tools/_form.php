@@ -16,6 +16,8 @@ use app\modules\tehdoc\asset\TehFormAsset;
 <style>
   .fa {
     font-size: 15px;
+  }
+  .nonreq {
     color: #1e6887;
   }
   .select-selected {
@@ -47,7 +49,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         <div class="col-md-6 col-lg-6">
           <?php
           echo $form->field($model, 'category_id', [
-            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+            'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $cat_hint . '"></sup>{input}{hint}'])
             ->dropDownList($model->toolCategoryList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
               'options' => [
@@ -59,7 +61,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         </div>
         <div class="col-md-6 col-lg-6">
           <?= $form->field($model, 'eq_title', [
-            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+            'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $title_hint . '"></sup>{input}{hint}'])
             ->textInput()->hint('Например: Коммутатор с автоопределителем', ['class' => ' w3-label-under']); ?>
         </div>
@@ -95,7 +97,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         <div class="col-md-8">
           <?php
           echo $form->field($model, 'place_id', [
-            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+            'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $place_hint . '"></sup>{input}{hint}'
           ])->dropDownList($model->toolPlacesList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
             'options' => [

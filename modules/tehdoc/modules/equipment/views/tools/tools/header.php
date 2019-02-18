@@ -25,8 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
 </ul>
 
 <div class="complex-info-view">
-  <div class="head">
+  <div class="head col-lg-9">
     <h3><?= Html::encode($model->name) ?></h3>
+  </div>
+  <div class="col-lg-2">
+    <a type="button" href="/tehdoc/equipment/control-panel/<?= $model->ref?>/info/index" class="btn-success btn-sm">EDIT</a>
   </div>
 
   <?= $this->render('view', [

@@ -546,7 +546,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       },
       click: function(event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-        if (target === 'title' || target === 'icon'){
+        if (target === 'icon'){
           var node = data.node;
           var prefix = '/tehdoc/equipment/control-panel/';
           if (node.key != 1122334455 && node.key != 5544332211) {
