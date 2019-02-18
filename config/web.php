@@ -94,15 +94,38 @@ $config = [
       'baseUrl' => '',
       'rules' => [
         [
-          'pattern' => 'tehdoc/equipment/complex/<id:\d+>/<controller:(info)>/<action>',
-          'route' => 'tehdoc/equipment/complex/tools/info',
+          'pattern' => 'tehdoc/equipment/tool/<id:\d+>/<controller:(info)>/<action>',
+          'route' => 'tehdoc/equipment/tools/tools/info',
           'defaults' => ['id' => 1122334455],
         ],
         [
-          'pattern' => 'tehdoc/equipment/complex/<id:\d+>/<controller>/<action>',
-          'route' => 'tehdoc/equipment/complex/<controller>/<action>',
+          'pattern' => 'tehdoc/equipment/tools',
+          'route' => 'tehdoc/equipment/tools/tools/index',
+        ],
+        [
+          'pattern' => 'tehdoc/equipment/tool/<id:\d+>/<controller>/<action>',
+          'route' => 'tehdoc/equipment/tools/<controller>/<action>',
           'defaults' => ['id' => 1122334455],
-        ]
+        ],
+        [
+          'pattern' => 'tehdoc/equipment/control-panel',
+          'route' => 'tehdoc/equipment/controlPanel/control/index',
+        ],
+        [
+          'pattern' => 'tehdoc/equipment/control-panel/<id:\d+>/<controller:(info)>/<action:(index)>',
+          'route' => 'tehdoc/equipment/controlPanel/control/update',
+          'defaults' => ['id' => 1122334455],
+        ],
+        [
+          'pattern' => 'tehdoc/equipment/control-panel/<id:\d+>/<controller:(info)>/<action:(create|update|delete)>',
+          'route' => 'tehdoc/equipment/controlPanel/control/<action>',
+          'defaults' => ['id' => 1122334455],
+        ],
+        [
+          'pattern' => 'tehdoc/equipment/control-panel/<id:\d+>/<controller>/<action>',
+          'route' => 'tehdoc/equipment/controlPanel/<controller>/<action>',
+          'defaults' => ['id' => 1122334455],
+        ],
       ],
     ],
   ],

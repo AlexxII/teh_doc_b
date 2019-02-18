@@ -7,6 +7,9 @@ use app\modules\admin\models\Placement;
 use app\modules\tehdoc\models\Images;
 use app\modules\admin\models\Category;
 use yii\helpers\ArrayHelper;
+use app\base\NestedSetsTreeBehavior;
+use creocoder\nestedsets\NestedSetsBehavior;
+
 
 
 /**
@@ -29,9 +32,44 @@ class Tools extends \yii\db\ActiveRecord
   const PLACEMENT_TABLE = '{{%teh_placement_tbl}}';
   const CATEGORY_TABLE = '{{%teh_category_tbl}}';
 
+  const SCENARIO_CREATE = 'create';
+  const SCENARIO_UPDATE = 'update';
+
+  public $eq_operating_time;
+  public $invent_number;
+
   public static function tableName()
   {
     return 'teh_equipment_tbl';
+  }
+
+  public function behaviors()
+  {
+    return [
+      'tree' => [
+        'class' => NestedSetsBehavior::className(),
+        'treeAttribute' => 'root',
+        'leftAttribute' => 'lft',
+        'rightAttribute' => 'rgt',
+        'depthAttribute' => 'lvl',
+      ],
+      'htmlTree' => [
+        'class' => NestedSetsTreeBehavior::className(),
+        'depthAttribute' => 'lvl'
+      ]
+    ];
+  }
+
+  public function scenarios()
+  {
+    $scenarios = parent::scenarios();
+    $scenarios[self::SCENARIO_UPDATE] = [
+      'category_id', 'eq_title', 'place_id', 'quantity', 'eq_manufact', 'eq_model', 'eq_serial', 'eq_factdate'
+    ];
+    $scenarios[self::SCENARIO_CREATE] = [
+      'category_id', 'eq_title', 'place_id', 'quantity', 'eq_manufact', 'eq_model', 'eq_serial', 'eq_factdate'
+    ];
+    return $scenarios;
   }
 
   /**
@@ -40,11 +78,11 @@ class Tools extends \yii\db\ActiveRecord
   public function rules()
   {
     return [
-      [['id_eq', 'category_id', 'eq_title', 'place_id', 'quantity'], 'required'],
-      [['id_eq', 'category_id', 'place_id', 'quantity'], 'integer'],
+      [['category_id', 'eq_title', 'place_id', 'quantity'], 'required', 'on' => self::SCENARIO_UPDATE],
+      [['category_id', 'eq_title', 'place_id', 'quantity'], 'required', 'on' => self::SCENARIO_CREATE],
+      [['category_id', 'place_id', 'quantity'], 'integer'],
       [['eq_factdate', 'eq_comments'], 'safe'],
       [['eq_title', 'eq_manufact', 'eq_model', 'eq_serial'], 'string', 'max' => 250],
-      [['id_eq'], 'unique'],
     ];
   }
 
@@ -55,7 +93,6 @@ class Tools extends \yii\db\ActiveRecord
   {
     return [
       'id' => 'ID',
-      'id_eq' => '',
       'category_id' => 'Категория оборудования:',
       'eq_title' => 'Наименование:',
       'eq_manufact' => 'Производитель:',
@@ -64,7 +101,10 @@ class Tools extends \yii\db\ActiveRecord
       'eq_factdate' => 'Дата производства:',
       'place_id' => 'Место нахождения:',
       'quantity' => 'Количество:',
-      'eq_comments' => 'Примечание:'
+      'eq_comments' => 'Примечание:',
+      'eq_class' => 'Класс оборудования:',
+      'invent_number' => 'Инвентарный номер:',
+      'eq_operating_time' => 'Наработка'
 //        'valid' => 'Valid',
     ];
   }
@@ -78,7 +118,7 @@ class Tools extends \yii\db\ActiveRecord
 
   public function getPhotos()
   {
-    return $this->hasMany(Images::class, ['eq_id' => 'id_eq']);
+    return $this->hasMany(Images::class, ['eq_id' => 'ref']);
   }
 
   public function getCategory()
@@ -132,11 +172,6 @@ class Tools extends \yii\db\ActiveRecord
   public function getId()
   {
     return $this->id;
-  }
-
-  public function getClsf($table)
-  {
-    return $this->hasMany(Classifier::class, ['eq_id' => 'id_eq']);
   }
 
   public function getEqTitle()

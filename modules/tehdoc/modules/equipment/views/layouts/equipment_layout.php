@@ -98,13 +98,13 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'label' => 'Оборудование',
         'items' => [
           '<li class="dropdown-header" style="font-size: 10px">Перечень</li>',
-          ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/complex']],
-          ['label' => 'Все средства', 'url' => ['/tehdoc/equipment/complex/tools/index']],
+          ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']],
+          ['label' => 'Все средства', 'url' => ['/tehdoc/equipment/tools/tools/index']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Управление оборудованием</li>',
-          ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/complex/create-ex']],
-          ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/complex/tools/create']],
-          ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/complex/tools/task']],
+          ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/control-panel']],
+          ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/tools/tools/create']],
+          ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/tools/tools/task']],
         ],
       ],
       /*            // В разработке
@@ -122,8 +122,8 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'label' => 'Представления',
         'items' => [
           '<li class="dropdown-header" style="font-size: 10px">Весь перечнь</li>',
-          ['label' => 'По категориям', 'url' => ['/tehdoc/equipment/complex/tools/categories']],
-          ['label' => 'По месту размещения', 'url' => ['/tehdoc/equipment/complex/tools/placement']],
+          ['label' => 'По категориям', 'url' => ['/tehdoc/equipment/tools/tools/categories']],
+          ['label' => 'По месту размещения', 'url' => ['/tehdoc/equipment/tools/tools/placement']],
 //                    '<li class="divider"></li>',
 //                    '<li class="dropdown-header" style="font-size: 10px">Комплекты</li>',
 //                    ['label' => 'По категориям', 'url' => ['/tehdoc/tools/categories']],
@@ -171,52 +171,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
       'tag' => 'ol',
     ]) ?>
     <?= Alert::widget() ?>
-    <div class="modal fade freeztime" id="Modal" tabindex="-1" role="dialog"
-         data-backdrop="static" data-keyboard="false" aria-labelledby="ModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="ModalLabel">Ожидание ответа от сервера.</h5>
-          </div>
-          <div class="modal-body">
-            Подождите пожалуйста. Ваш запрос обрабатывается.
-          </div>
-          <div class="modal-footer">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="classifier-modal" tabindex="-1" role="dialog"
-         data-backdrop="static" data-keyboard="false" aria-labelledby="ModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="form">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 class="modal-title" id="ModalLabel">Присвоение классификатора.</h5>
-            <div class="modal-header-select-place">
-              <hr>
-
-            </div>
-          </div>
-          <div id="modal-form">
-            <form action="assign-classifier" id="form-classifier" method="POST"
-                  enctype="multipart/form-data">
-              <div class="modal-body" id="classifier-body">
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                <button type="submit" class="btn btn-primary" id="assign-classifier-btn" disabled>
-                  Просвоить
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div><?= $content ?></div>
+
   </div>
 </div>
 
