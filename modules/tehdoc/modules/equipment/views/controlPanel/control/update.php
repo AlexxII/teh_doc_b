@@ -34,14 +34,15 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="tool-update">
 
   <div class="row d-flex flex-items-center">
-    <div class="col-lg-11">
+    <div class="col-lg-11 col-md-11 col-xs-11">
       <h3><?= Html::encode($model->name) ?></h3>
     </div>
-    <div style="padding: 7px 15px 0 0">
+    <div class="text-right" style="padding: 7px 15px 0 0">
       <a type="button" href="/tehdoc/equipment/tool/<?= $model->ref?>/info/index"
          class="btn-primary btn-sm">НАЗАД</a>
     </div>
   </div>
+
 
   <?= $this->render('_form', [
     'model' => $model

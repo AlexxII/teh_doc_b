@@ -16,12 +16,45 @@ $this->params['breadcrumbs'][] = $this->title;
   .d-block {
     text-decoration: #0b3e6f;
   }
+  .Counter {
+    background-color: rgba(27, 31, 35, .08);
+    border-radius: 20px;
+    color: #586069;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 2px 5px;
+    font-family: BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+
 </style>
 
 <ul class="nav nav-tabs" id="main-teh-tab">
-  <li><a href="../info/index">Инфо</a></li>
-  <li><a href="../files/index">Файлы</a></li>
-  <li class="active"><a href="/index" style="cursor: pointer">Wiki</a></li>
+  <li>
+    <a href="../info/index">
+      Инфо
+    </a>
+  </li>
+  <li>
+    <a href="../docs/index">
+      Docs
+      <span class="Counter"><?= $wiki ?></span>
+    </a>
+  </li>
+  <li>
+    <a href="../foto/index">
+      Foto
+      <span class="Counter"><?= $wiki ?></span>
+    </a>
+  </li>
+  <li class="active">
+    <a href="../wiki/index" style="cursor: pointer">
+      Wiki
+      <span class="Counter"><?= $wiki ?></span>
+    </a>
+  </li>
 </ul>
 
 <div class="complex-wiki-default" style="margin-top: 15px">

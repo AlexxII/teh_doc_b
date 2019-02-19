@@ -167,6 +167,20 @@ class Tools extends \yii\db\ActiveRecord
     }
   }
 
+  public function getWiki()
+  {
+    return $this->hasOne(Wiki::class, ['eq_ref' => 'ref']);
+  }
+
+  public function getCountWikiPages()
+  {
+    return $this->hasOne(Wiki::class, ['eq_ref' => 'ref'])->count();
+  }
+
+  public function getCountFiles()
+  {
+    return $this->hasOne(Images::class, ['eq_id' => 'ref'])->count();
+  }
 
   // Доступ к свойствам объекта
   public function getId()

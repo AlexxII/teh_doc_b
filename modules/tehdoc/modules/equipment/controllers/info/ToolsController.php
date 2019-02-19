@@ -22,6 +22,21 @@ class ToolsController extends Controller
 
   public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_ex.php';
 
+  public function actionInfo()
+  {
+    $id = $_GET['id'];
+    $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
+    $model = $request[0];
+    $wiki = $model->countWikiPages;
+    $files = $model->countFiles;
+    return $this->render('header', [
+      'model' => $model,
+      'files' => $files,
+      'wiki' => $wiki,
+
+    ]);
+  }
+
   public function actionIndex()
   {
     return $this->render('meeting');
@@ -69,7 +84,7 @@ class ToolsController extends Controller
         if (isset($_POST['stay'])) {
           return $this->redirect(['create']);
         }
-        return $this->redirect(['info']);
+        return $this->redirect(['info', 'id' => $model->ref]);
       } else {
         return var_dump($model->getErrors());
         Yii::$app->session->setFlash('error', 'Ошибка валидации');
@@ -215,17 +230,6 @@ class ToolsController extends Controller
     }
     Yii::$app->session->setFlash('error', 'Удалить оборудование не удалось');
     return $this->redirect(['index']);
-  }
-
-  public function actionInfo()
-  {
-    $this->layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_ex.php';
-    $id = $_GET['id'];
-    $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
-    $model = $request[0];
-    return $this->render('header', [
-      'model' => $model
-    ]);
   }
 
 }

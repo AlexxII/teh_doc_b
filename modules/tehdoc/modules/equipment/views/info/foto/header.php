@@ -7,10 +7,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
+
 <style>
-  .fa {
-    font-size: 18px;
-  }
   .Counter {
     background-color: rgba(27, 31, 35, .08);
     border-radius: 20px;
@@ -35,16 +33,16 @@ $this->params['breadcrumbs'][] = $this->title;
   <li>
     <a href="../docs/index">
       Docs
-      <span class="Counter"><?= $files ?></span>
-    </a>
-  </li>
-  <li>
-    <a href="../foto/index">
-      Foto
-      <span class="Counter"><?= $files ?></span>
+      <span class="Counter"><?= $wiki ?></span>
     </a>
   </li>
   <li class="active">
+    <a href="../foto/index">
+      Foto
+      <span class="Counter"><?= $wiki ?></span>
+    </a>
+  </li>
+  <li>
     <a href="../wiki/index" style="cursor: pointer">
       Wiki
       <span class="Counter"><?= $wiki ?></span>
@@ -52,12 +50,10 @@ $this->params['breadcrumbs'][] = $this->title;
   </li>
 </ul>
 
-<div class="complex-wiki-update">
-  <h3><?= Html::encode('Обновить ' . $model->wiki_title) ?></h3>
-  <?= $this->render('_form', [
-    'model' => $model,
-    'files' => $files,
-    'wiki' => $wiki
+
+
+<div class="complex-wiki-create">
+  <?= $this->render('index', [
   ]) ?>
 
 </div>

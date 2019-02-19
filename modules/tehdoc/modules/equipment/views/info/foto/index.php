@@ -23,9 +23,9 @@
 
 <div id="complex-docs">
   <div class="">
-    <h3>Документы</h3>
+    <h3 style="padding-bottom: 15px">Изображения</h3>
     <div class="calendar">
-      <ul class="list-inline">
+      <ul class="list-inline" style="border-top: 1px solid #cbcbcb;">
         <li><a href="#">2017</a></li>
         <li><a href="#">2018</a></li>
         <li><a href="#">2019</a></li>

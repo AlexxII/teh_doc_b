@@ -117,8 +117,8 @@ $config = [
           'defaults' => ['id' => 1122334455],
         ],
         [
-          'pattern' => 'tehdoc/equipment/control-panel/<id:\d+>/<controller:(info)>/<action:(create|update|delete)>',
-          'route' => 'tehdoc/equipment/controlPanel/control/<action>',
+          'pattern' => 'tehdoc/equipment/control-panel/<id:\d+>/<controller:(foto)>/<action:(index-ex)>',
+          'route' => 'tehdoc/equipment/info/foto/index-ex',
           'defaults' => ['id' => 1122334455],
         ],
         [
