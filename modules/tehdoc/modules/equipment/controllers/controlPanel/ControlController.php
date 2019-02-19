@@ -147,26 +147,4 @@ class ControlController extends Controller
     $root->deleteWithChildren();
   }
 
-  public function actionCategoryList()
-  {
-    $id = $_POST['classId'];
-    $sql = 'SELECT * FROM ' . self::CATEGORY_TABLE . 'WHERE ref = ' . $id;
-    $root = Yii::$app->db->createCommand($sql)->queryAll();
-
-    $sql = "SELECT C1.ref, C1.name, C2.name as gr from " . self::CATEGORY_TABLE . " C1 LEFT JOIN "
-      . self::CATEGORY_TABLE . " C2 on C1.parent_id = C2.ref WHERE C1.lft > " . $root[0]['lft'] .
-      " AND C1.rgt < " . $root[0]['rgt'] . " AND C1.root = " . $root[0]['root'] . " ORDER BY C1.lft";
-
-    $categories = Yii::$app->db->createCommand($sql)->queryAll();
-    $cats = ArrayHelper::map($categories, 'ref', 'name', 'gr');
-    $answer = '<select>';
-    foreach ($cats as $key => $category){
-      $answer .= '<optgroup label="' . $key . '">';
-      foreach ($category as $k => $p){
-        $answer .= '<option value="'. $k .'">'. $p .'</option>';
-      }
-      $answer .= '</optgroup>';
-    }
-    return $answer;
-  }
 }

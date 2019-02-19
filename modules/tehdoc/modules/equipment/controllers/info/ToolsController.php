@@ -27,6 +27,7 @@ class ToolsController extends Controller
     return $this->render('meeting');
   }
 
+  // обработка запроса по ajax tehdoc/equipment/control-panel/control/
   public function actionAllTools()
   {
     $id = Tools::find()->select('id')->all();
@@ -39,48 +40,7 @@ class ToolsController extends Controller
     return json_encode($roots);
   }
 
-
-  //=================================== tree =================================================
-  public function actionCreateNode($parentId, $title)
-  {
-    $data = [];
-    $date = date('Y-m-d H:i:s');
-    $parentOrder = Tools::findOne($parentId);
-    $newComplex = new Tools(['name' => $title]);
-    $newComplex->parent_id = $parentOrder->ref;
-    $newComplex->ref = mt_rand();
-    $newComplex->eq_title = $title;
-
-//    $newWiki = new Wiki();
-//    $newWiki->eq_ref = $newComplex->ref;
-//    $newWiki->wiki_title = 'Home';
-//    $newWiki->wiki_record_create = $date;
-//    $newWiki->wiki_record_update = $date;
-//    $newWiki->wiki_created_user = Yii::$app->user->identity->ref;
-
-    if ($newComplex->appendTo($parentOrder)) {
-//      $newWiki->save();
-      $data['acceptedTitle'] = $title;
-      $data['acceptedId'] = $newComplex->id;
-      $data['acceptedRef'] = $newComplex->ref;
-      return json_encode($data);
-    }
-    $data = $newComplex->getErrors();
-    return json_encode($data);
-  }
-
-  public function actionUpdateNode($id, $title)
-  {
-    $order = ComplexEx::findOne(['ref' => $id]);
-    $order->name = $title;
-    if ($order->save()) {
-      $data['acceptedTitle'] = $title;
-      return json_encode($data);
-    }
-    return false;
-  }
-
-
+  // добавление оборудования tehdoc/equipment/info/tools/create
   public function actionCreate()
   {
     $this->layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout.php';
@@ -122,6 +82,7 @@ class ToolsController extends Controller
     ]);
   }
 
+  // пока не используется!!!!!!
   public function actionUpdate($id)
   {
     $model = $this->findModel($id);
@@ -146,20 +107,6 @@ class ToolsController extends Controller
     return $this->render('update', [
       'model' => $model,
       'fupload' => $fUpload,
-    ]);
-  }
-
-  public function actionAbout($id)
-  {
-    return $this->renderPartial('about', [
-      'model' => $this->findModel($id),
-    ]);
-  }
-
-  public function actionView($id)
-  {
-    return $this->render('view', [
-      'model' => $this->findModel($id),
     ]);
   }
 
@@ -234,86 +181,6 @@ class ToolsController extends Controller
     }
     return json_encode(
       SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
-    );
-  }
-
-//=============== Серверная часть работы с классификатором ==============================================================
-
-  public function actionDisplayColumns($id)
-  {
-    $clsf = Classifier::findOne($id);
-    $tableScheme = json_decode($clsf->clsf_table_scheme);
-    if (empty($tableScheme->columns)) {
-      $columns = ['id', 'Наименование', 'Производитель/Модель', 'Модель', 's/n', '', 'Action', ''];
-    } else {
-      foreach ($tableScheme->columns as $column) {
-        $columns[] = $column->label;
-      }
-      array_unshift($columns, 'id', 'Наименование', 'Производитель/Модель', 'Модель', 's/n', '');
-      array_push($columns, 'Action', '');
-    }
-    $data = array();
-    $data = [
-      "columns" => $columns,
-    ];
-    if (!empty($tableScheme)) {
-      $data = [
-        "columns" => $columns,
-        "tableName" => $tableScheme->tableName,
-        "group" => 5
-      ];
-    }
-    return json_encode($data);
-  }
-
-  // отработка запроса на отображение оборудования по классификатору
-  public function actionServerSideEx($id)
-  {
-    $sql_details = \Yii::$app->params['sql_details'];
-    $table = 'teh_equipment_tbl';                                 // основная таблица с оборудованием
-    $primaryKey = 'id_eq';
-    $clsf = Classifier::findOne($id);
-    $tableScheme = json_decode($clsf->clsf_table_scheme);
-    if (!$tableScheme) {
-      $sql = "SELECT COUNT(`{$primaryKey}`)
-			 FROM `$table`";
-      $db = SSP::sql_connect($sql_details);
-      $stmt = $db->prepare($sql);
-      $stmt->execute();
-      $data = $stmt->fetchAll(PDO::FETCH_BOTH);
-
-      return json_encode(array(                             // возврат "Записи отсутствуют, если нет таблицы в БД
-        'draw' => 1,
-        'recordsTotal' => $data[0][0],
-        'recordsFiltered' => 0,
-        'data' => []
-      ));
-    }
-
-    // TODO: в зависимости от типа записи -> применять форматирование для данных для checkbox -> "ВКЛ."
-    // TODO: Вставить функцию обработки ДАТЫ, если в таблице дата (необходимо поле - тип данных)
-
-    $tableTwo = $tableScheme->tableName;
-    $columns = array(                                         // колонки из основной таблицы оборудования
-      array('db' => 'id_eq', 'dt' => 0),
-      array('db' => 'eq_title', 'dt' => 1),
-      array('db' => 'eq_manufact', 'dt' => 2),
-      array('db' => 'eq_model', 'dt' => 3),
-      array('db' => 'eq_serial', 'dt' => 4),
-      array('db' => 'name', 'dt' => 5),
-    );
-    if (!empty($tableScheme)) {                           // формируется запрос, если классификатор сложный
-      $i = 7;                                             // простой классификатор просто хранит перечень техники
-      $columns[] = array('db' => 'clsf_id', 'dt' => 6);
-      foreach ($tableScheme->columns as $column) {
-        $temp = array();
-        $temp['db'] = $column->name;
-        $temp['dt'] = $i++;
-        $columns[] = $temp;
-      }
-    }
-    return json_encode(
-      SSP::simpleEx($_GET, $sql_details, $table, $primaryKey, $columns, $tableTwo)
     );
   }
 
