@@ -126,6 +126,11 @@ $config = [
           'route' => 'tehdoc/equipment/controlPanel/<controller>/<action>',
           'defaults' => ['id' => 1122334455],
         ],
+        [
+          'pattern' => 'tehdoc/equipment/control-panel/<id:\d+>/<controller:(files)>/<action>',
+          'route' => 'tehdoc/equipment/info/files/<action>',
+          'defaults' => ['id' => 1122334455],
+        ],
       ],
     ],
   ],
