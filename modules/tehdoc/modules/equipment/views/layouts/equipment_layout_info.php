@@ -275,7 +275,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/tehdoc/equipment/info/tools/all-tools';
+    var main_url = '/tehdoc/equipment/infoPanel/info/all-tools';
     $("#fancyree_w0").fancytree({
       source: {
         url: main_url,

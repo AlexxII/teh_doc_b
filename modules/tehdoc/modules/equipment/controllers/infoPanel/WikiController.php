@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\tehdoc\modules\equipment\controllers\info;
+namespace app\modules\tehdoc\modules\equipment\controllers\infoPanel;
 
 use app\modules\tehdoc\modules\equipment\models\ComplexEx;
 use app\modules\tehdoc\modules\equipment\models\Tools;
@@ -12,7 +12,7 @@ use yii\web\NotFoundHttpException;
 class WikiController extends Controller
 {
 
-  public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_ex.php';
+  public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_info.php';
 
   public function actionIndex()
   {

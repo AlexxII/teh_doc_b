@@ -1,31 +1,9 @@
-<style>
-  .calendar ul {
-    border-bottom: 1px solid #cbcbcb;
-    display: block;
-    margin: 0 !important;
-    overflow: hidden;
-    padding: 10px 0;
-  }
-  .calendar li {
-    float: left;
-    overflow: hidden;
-    padding: 3px 4px;
-    font-size: 15px;
-  }
-  .calendar li {
-    border: 2px solid transparent;
-    cursor: pointer;
-  }
-  .calendar li:hover {
-    border: 2px solid #d1c8a6;;
-  }
-</style>
 
 <div id="complex-docs">
   <div class="">
-    <h3>Документы</h3>
+    <h3 style="padding-bottom: 15px">Документы</h3>
     <div class="calendar">
-      <ul class="list-inline">
+      <ul class="list-inline" style="border-top: 1px solid #cbcbcb;">
         <li><a href="#">2017</a></li>
         <li><a href="#">2018</a></li>
         <li><a href="#">2019</a></li>

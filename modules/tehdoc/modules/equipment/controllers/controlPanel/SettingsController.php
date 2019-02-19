@@ -17,8 +17,13 @@ class SettingsController extends Controller
   public function actionIndex()
   {
     $id = $_GET['id'];
+    $model = $this->findModel($id);
+    $wiki = $model->countWikiPages;
+    $files = $model->countFiles;
     return $this->render('header', [
       'model' => $this->findModel($id),
+      'wiki' => $wiki,
+      'files' => $files
     ]);
   }
 

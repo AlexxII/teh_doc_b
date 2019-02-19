@@ -69,12 +69,44 @@ $this->params['breadcrumbs'][] = $this->title;
   .mr-10 {
     margin-right: 64px !important;
   }
+  .Counter {
+    background-color: rgba(27, 31, 35, .08);
+    border-radius: 20px;
+    color: #586069;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 2px 5px;
+    font-family: BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  }
+
 </style>
 
 <ul class="nav nav-tabs" id="main-teh-tab">
-  <li><a href="../info/index">Инфо</a></li>
-  <li ><a href="../files/index">Файлы</a></li>
-  <li class="active"><a href="../settings/index">Настройки</a></li>
+  <li >
+    <a href="../info/update">
+      Инфо
+    </a>
+  </li>
+  <li>
+    <a href="../docs/index">
+      Docs
+      <span class="Counter"><?= $wiki ?></span>
+    </a>
+  </li>
+  <li>
+    <a href="../foto/index">
+      Foto
+      <span class="Counter"><?= $wiki ?></span>
+    </a>
+  </li>
+  <li  class="active">
+    <a href="../settings/index" style="cursor: pointer">
+      Настройки
+    </a>
+  </li>
 </ul>
 
 <div class="complex-settings-index">

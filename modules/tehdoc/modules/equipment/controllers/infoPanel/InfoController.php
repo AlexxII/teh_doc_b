@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\tehdoc\modules\equipment\controllers\info;
+namespace app\modules\tehdoc\modules\equipment\controllers\infoPanel;
 
 use app\modules\admin\models\Category;
 use app\modules\admin\models\Classifier;
@@ -17,10 +17,10 @@ use yii\web\UploadedFile;
 use yii\db\mssql\PDO;
 use yii\base\DynamicModel;
 
-class ToolsController extends Controller
+class InfoController extends Controller
 {
 
-  public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_ex.php';
+  public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_info.php';
 
   public function actionInfo()
   {

@@ -10,7 +10,7 @@ use yii\web\UploadedFile;
 use yii\helpers\ArrayHelper;
 
 
-class ControlController extends Controller
+class InfoController extends Controller
 {
 
   const CATEGORY_TABLE = '{{%teh_category_tbl}}';
@@ -31,16 +31,24 @@ class ControlController extends Controller
       return $this->render('meeting_waiting');
     }
     $model = $this->findModel($id);
+    $wiki = $model->countWikiPages;
+    $files = $model->countFiles;
     $model->scenario = Tools::SCENARIO_UPDATE;
     if ($model->load(Yii::$app->request->post())) {
       if ($model->save()) {
-        return $this->redirect(['update', 'id' => $model->ref]);
+        return $this->redirect(['update',
+          'id' => $model->ref,
+          'wiki' => $wiki,
+          'files' => $files
+        ]);
       } else {
         Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');
       }
     }
     return $this->render('update', [
-      'model' => $model
+      'model' => $model,
+      'wiki' => $wiki,
+      'files' => $files
     ]);
   }
 

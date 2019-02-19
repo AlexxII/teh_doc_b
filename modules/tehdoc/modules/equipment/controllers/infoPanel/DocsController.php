@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\tehdoc\modules\equipment\controllers\info;
+namespace app\modules\tehdoc\modules\equipment\controllers\infoPanel;
 
 use app\modules\tehdoc\modules\equipment\models\Tools;
 use Yii;
@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 class DocsController extends Controller
 {
   public $defaultAction = 'index';
-  public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_ex.php';
+  public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_info.php';
 
   public function actionIndex()
   {

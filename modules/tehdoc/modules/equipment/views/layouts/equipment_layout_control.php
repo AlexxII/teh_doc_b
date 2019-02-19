@@ -380,10 +380,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/tehdoc/equipment/control-panel/control/all-tools';
-    var move_url = "/tehdoc/equipment/control-panel/control/move-node";
-    var create_url = '/tehdoc/equipment/control-panel/control/create-node';
-    var update_url = '/tehdoc/equipment/control-panel/control/update-node';
+    var main_url = '/tehdoc/equipment/control-panel/info/all-tools';
+    var move_url = "/tehdoc/equipment/control-panel/info/move-node";
+    var create_url = '/tehdoc/equipment/control-panel/info/create-node';
+    var update_url = '/tehdoc/equipment/control-panel/info/update-node';
 
     $("#fancyree_w0").fancytree({
       source: {
@@ -550,7 +550,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           var node = data.node;
           var prefix = '/tehdoc/equipment/control-panel/';
           if (node.key != 1122334455 && node.key != 5544332211) {
-            var url = prefix + node.key + '/info/index';
+            var url = prefix + node.key + '/info/update';
             window.location.href = url;
           }
         }
@@ -559,7 +559,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         var node = data.node;
         var prefix = '/tehdoc/equipment/control-panel/';
         if (node.key != 1122334455 || node.key != 5544332211) {
-          var url = prefix + node.key + '/info/index';
+          var url = prefix + node.key + '/info/update';
           window.location.href = url;
         }
       },
