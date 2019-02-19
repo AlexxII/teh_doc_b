@@ -105,7 +105,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Управление оборудованием</li>',
           ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/control-panel']],
-          ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/tools/tools/create']],
+          ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/info/tools/create']],
           ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/tools/tools/task']],
         ],
       ],
@@ -275,7 +275,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/tehdoc/equipment/tools/tools/all-tools';
+    var main_url = '/tehdoc/equipment/info/tools/all-tools';
     $("#fancyree_w0").fancytree({
       source: {
         url: main_url,
@@ -283,7 +283,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
       extensions: ['filter'],
       quicksearch: true,
       minExpandLevel: 2,
-      hotkeys: {},
       wide: {
         iconWidth: "32px",     // Adjust this if @fancy-icon-width != "16px"
         iconSpacing: "6px", // Adjust this if @fancy-icon-spacing != "3px"
@@ -302,9 +301,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
         nodata: true,                                       // Display a 'no data' status node if result is empty
         mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
       },
-      click: function(event, data) {
+      click: function (event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-        if (target === 'title' || target === 'icon'){
+        if (target === 'title' || target === 'icon') {
           var node = data.node;
           var prefix = '/tehdoc/equipment/tool/';
           if (node.key != 1122334455 && node.key != 5544332211) {
@@ -321,7 +320,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         }
         data.tree.activateKey(key[1]);
       },
-      keypress: function(event, data) {
+      keypress: function (event, data) {
         console.log(event);
       },
       dblclick: function (event, data) {

@@ -95,16 +95,16 @@ $config = [
       'rules' => [
         [
           'pattern' => 'tehdoc/equipment/tool/<id:\d+>/<controller:(info)>/<action>',
-          'route' => 'tehdoc/equipment/tools/tools/info',
+          'route' => 'tehdoc/equipment/info/tools/info',
           'defaults' => ['id' => 1122334455],
         ],
         [
           'pattern' => 'tehdoc/equipment/tools',
-          'route' => 'tehdoc/equipment/tools/tools/index',
+          'route' => 'tehdoc/equipment/info/tools/index',
         ],
         [
           'pattern' => 'tehdoc/equipment/tool/<id:\d+>/<controller>/<action>',
-          'route' => 'tehdoc/equipment/tools/<controller>/<action>',
+          'route' => 'tehdoc/equipment/info/<controller>/<action>',
           'defaults' => ['id' => 1122334455],
         ],
         [

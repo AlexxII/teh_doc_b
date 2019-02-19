@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\tehdoc\modules\equipment\controllers\tools;
+namespace app\modules\tehdoc\modules\equipment\controllers\info;
 
 use app\modules\admin\models\Category;
 use app\modules\admin\models\Classifier;
