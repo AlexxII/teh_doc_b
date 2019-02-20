@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="text-right" style="padding: 7px 15px 0 0">
       <a type="button" href="/tehdoc/equipment/tool/<?= $model->ref?>/info/index"
-         class="btn-primary btn-sm">НАЗАД</a>
+         class="btn-primary btn-sm">View</a>
     </div>
   </div>
 
