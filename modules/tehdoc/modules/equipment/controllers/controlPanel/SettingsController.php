@@ -27,17 +27,6 @@ class SettingsController extends Controller
     ]);
   }
 
-  /*  public function actionIndex()
-    {
-      if (!empty($_POST)) {
-        $id = $_POST['id'];
-        return $this->render('index', [
-          'model' => $this->findModel($id),
-        ]);
-      }
-      return false;
-    }*/
-
   protected function findModel($id)
   {
     if (($model = Tools::find()->where(['ref' => $id])->limit(1)->all()) !== null) {

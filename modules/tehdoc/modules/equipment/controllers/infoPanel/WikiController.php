@@ -124,7 +124,6 @@ class WikiController extends Controller
   protected function findModel($id)
   {
     // TODO не ососбо правильный метод поиска
-
     if (($model = Wiki::find()->where(['id' => $id])->limit(1)->all()) !== null) {
       if (!empty($model)) {
         return $model[0];

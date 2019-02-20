@@ -27,19 +27,4 @@ class FotoController extends Controller
     }
   }
 
-  public function actionIndexEx()
-  {
-    $this->layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_control.php';
-    $id = $_GET['id'];
-    if ($id != 1122334455) {
-      $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
-      $model = $request[0];
-      $wiki = $model->countWikiPages;
-      $files = $model->countFiles;
-      return $this->render('header', [
-        'wiki' => $wiki,
-        'files' => $files
-      ]);
-    }
-  }
 }

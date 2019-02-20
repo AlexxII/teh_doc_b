@@ -104,11 +104,11 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'items' => [
           '<li class="dropdown-header" style="font-size: 10px">Перечень</li>',
           ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']],
-          ['label' => 'Сводная таблица', 'url' => ['/tehdoc/equipment/tools/tools/index']],
+          ['label' => 'Сводная таблица', 'url' => ['/tehdoc/equipment/tools/index']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Управление оборудованием</li>',
           ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/control-panel']],
-          ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/info/tools/create']],
+          ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/tools/create']],
           ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/tools/tools/task']],
         ],
       ],
@@ -380,7 +380,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/tehdoc/equipment/control-panel/info/all-tools';
+    var main_url = '/tehdoc/equipment/tools/all-tools';
     var move_url = "/tehdoc/equipment/control-panel/info/move-node";
     var create_url = '/tehdoc/equipment/control-panel/info/create-node';
     var update_url = '/tehdoc/equipment/control-panel/info/update-node';

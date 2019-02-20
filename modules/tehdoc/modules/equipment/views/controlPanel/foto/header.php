@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <ul class="nav nav-tabs" id="main-teh-tab">
   <li >
-    <a href="../info/index">
+    <a href="../info/update">
       Инфо
     </a>
   </li>

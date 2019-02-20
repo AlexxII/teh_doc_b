@@ -95,31 +95,21 @@ $config = [
       'rules' => [
         [
           'pattern' => 'tehdoc/equipment/tool/<id:\d+>/<controller:(info)>/<action>',
-          'route' => 'tehdoc/equipment/info/tools/info',
+          'route' => 'tehdoc/equipment/infoPanel/info/info',
           'defaults' => ['id' => 1122334455],
         ],
         [
           'pattern' => 'tehdoc/equipment/tools',
-          'route' => 'tehdoc/equipment/info/tools/index',
+          'route' => 'tehdoc/equipment/infoPanel/info/index',
         ],
         [
           'pattern' => 'tehdoc/equipment/tool/<id:\d+>/<controller>/<action>',
-          'route' => 'tehdoc/equipment/info/<controller>/<action>',
+          'route' => 'tehdoc/equipment/infoPanel/<controller>/<action>',
           'defaults' => ['id' => 1122334455],
         ],
         [
           'pattern' => 'tehdoc/equipment/control-panel',
-          'route' => 'tehdoc/equipment/controlPanel/control/index',
-        ],
-        [
-          'pattern' => 'tehdoc/equipment/control-panel/<id:\d+>/<controller:(info)>/<action:(index)>',
-          'route' => 'tehdoc/equipment/controlPanel/control/update',
-          'defaults' => ['id' => 1122334455],
-        ],
-        [
-          'pattern' => 'tehdoc/equipment/control-panel/<id:\d+>/<controller:(foto)>/<action:(index-ex)>',
-          'route' => 'tehdoc/equipment/info/foto/index-ex',
-          'defaults' => ['id' => 1122334455],
+          'route' => 'tehdoc/equipment/controlPanel/info/index',
         ],
         [
           'pattern' => 'tehdoc/equipment/control-panel/<id:\d+>/<controller>/<action>',

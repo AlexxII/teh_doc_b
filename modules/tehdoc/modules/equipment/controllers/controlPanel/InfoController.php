@@ -4,7 +4,6 @@ namespace app\modules\tehdoc\modules\equipment\controllers\controlPanel;
 
 use yii\web\Controller;
 use app\modules\tehdoc\modules\equipment\models\Tools;
-use app\modules\tehdoc\models\Images;
 use Yii;
 use yii\web\UploadedFile;
 use yii\helpers\ArrayHelper;
@@ -52,13 +51,6 @@ class InfoController extends Controller
     ]);
   }
 
-  public function actionView($id)
-  {
-    return $this->render('view', [
-      'model' => $this->findModel($id),
-    ]);
-  }
-
   protected function findModel($id)
   {
     if (($model = Tools::find()->where(['ref' => $id])->limit(1)->all()) !== null) {
@@ -70,18 +62,6 @@ class InfoController extends Controller
   }
 
   //=============================================== working with tree =================================================
-
-  public function actionAllTools()
-  {
-    $id = Tools::find()->select('id')->all();
-    if (!$id) {
-      $data = array();
-      $data = [['title' => 'База данных пуста', 'key' => -999]];
-      return json_encode($data);
-    }
-    $roots = Tools::findOne($id)->tree();
-    return json_encode($roots);
-  }
 
   public function actionCreateNode($parentId, $title)
   {
