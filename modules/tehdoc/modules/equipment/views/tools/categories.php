@@ -11,7 +11,7 @@ FancytreeAsset::register($this);
 
 $this->title = 'Оборудование по категориям';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'Перечень оборудования', 'url' => ['/tehdoc']];
+$this->params['breadcrumbs'][] = ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель отображения оборудования по категориям. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
@@ -690,7 +690,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
   })(jQuery);
 
   jQuery(function ($) {
-    var main_url = '/tehdoc/control/category/categories';
+    var main_url = '/tehdoc/settings/category/categories';
 
     $("#fancyree_w0").fancytree({
       source: {

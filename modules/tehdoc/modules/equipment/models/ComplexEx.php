@@ -2,6 +2,7 @@
 
 namespace app\modules\tehdoc\modules\equipment\models;
 
+use app\base\NestedSetsTreeBehaviorEx;
 use creocoder\nestedsets\NestedSetsBehavior;
 use app\base\NestedSetsTreeBehavior;
 
@@ -22,7 +23,7 @@ class ComplexEx extends Complex
         'depthAttribute' => 'lvl',
       ],
       'htmlTree'=>[
-        'class' => NestedSetsTreeBehavior::className(),
+        'class' => NestedSetsTreeBehaviorEx::className(),
         'depthAttribute' => 'lvl'
       ]
     ];
@@ -33,6 +34,11 @@ class ComplexEx extends Complex
     return [
       self::SCENARIO_DEFAULT => self::OP_ALL,
     ];
+  }
+
+  public function getPhotos()
+  {
+    return 0;
   }
 
 //  public static function find()

@@ -94,8 +94,26 @@ $config = [
       'baseUrl' => '',
       'rules' => [
         [
-          'pattern' => 'tehdoc/equipment/complex/<id:\d+>/<controller>/<action>',
-          'route' => 'tehdoc/equipment/<controller>/<action>',
+          'pattern' => 'tehdoc/equipment/tool/<id:\d+>/<controller:(info)>/<action>',
+          'route' => 'tehdoc/equipment/infoPanel/info/info',
+          'defaults' => ['id' => 1122334455],
+        ],
+        [
+          'pattern' => 'tehdoc/equipment/tools',
+          'route' => 'tehdoc/equipment/infoPanel/info/index',
+        ],
+        [
+          'pattern' => 'tehdoc/equipment/tool/<id:\d+>/<controller>/<action>',
+          'route' => 'tehdoc/equipment/infoPanel/<controller>/<action>',
+          'defaults' => ['id' => 1122334455],
+        ],
+        [
+          'pattern' => 'tehdoc/equipment/control-panel',
+          'route' => 'tehdoc/equipment/controlPanel/info/index',
+        ],
+        [
+          'pattern' => 'tehdoc/equipment/control-panel/<id:\d+>/<controller>/<action>',
+          'route' => 'tehdoc/equipment/controlPanel/<controller>/<action>',
           'defaults' => ['id' => 1122334455],
         ]
       ],

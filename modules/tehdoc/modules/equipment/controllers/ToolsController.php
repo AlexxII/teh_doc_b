@@ -2,23 +2,28 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers;
 
-use app\modules\admin\models\Category;
-use app\modules\admin\models\Classifier;
-use app\modules\admin\models\Placement;
-use app\modules\tehdoc\modules\equipment\models\Tools;
-use app\modules\tehdoc\modules\equipment\models\SSP;
 use Yii;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
+use app\modules\tehdoc\modules\equipment\models\Tools;
 use app\modules\tehdoc\models\Images;
-use yii\web\UploadedFile;
-use yii\db\mssql\PDO;
-use yii\base\DynamicModel;
+use app\modules\tehdoc\modules\equipment\models\SSP;
 
 class ToolsController extends Controller
 {
 
   public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout.php';
+
+  public function actionAllTools()
+  {
+    $id = Tools::find()->select('id')->all();
+    if (!$id) {
+      $data = array();
+      $data = [['title' => 'База данных пуста', 'key' => -999]];
+      return json_encode($data);
+    }
+    $roots = Tools::findOne($id)->tree();
+    return json_encode($roots);
+  }
 
   public function actionIndex()
   {
@@ -28,16 +33,20 @@ class ToolsController extends Controller
   public function actionCreate()
   {
     $model = new Tools();
+    $model->scenario = Tools::SCENARIO_CREATE;
     $fUpload = new Images();
-    $model->quantity = 1;                             // По умолчанию, кол-во оборудования - 1.php
+    $model->quantity = 1;                             // По умолчанию, кол-во оборудования - 1
 
     if ($model->load(Yii::$app->request->post())) {
-      $model->id_eq = mt_rand();
+      $model->ref = mt_rand();
       $model->parent_id = 0;
+      $model->name = $model->eq_title;
+      $parentOrder = Tools::findOne(2);
+      $model->appendTo($parentOrder);
       if ($model->save()) {
         if ($fUpload->load(Yii::$app->request->post())) {
           $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
-          if ($fUpload->uploadImage($model->id_eq)) {
+          if ($fUpload->uploadImage($model->ref)) {
             Yii::$app->session->setFlash('success', 'Оборудование добавлено');
           } else {
             Yii::$app->session->setFlash('success', 'Оборудование добавлено, <strong>НО</strong> не загружены изображения');
@@ -48,8 +57,9 @@ class ToolsController extends Controller
         if (isset($_POST['stay'])) {
           return $this->redirect(['create']);
         }
-        return $this->redirect(['view', 'id' => $model->id_eq]);
+        return $this->redirect(['info', 'id' => $model->ref]);
       } else {
+        return var_dump($model->getErrors());
         Yii::$app->session->setFlash('error', 'Ошибка валидации');
       }
     }
@@ -87,23 +97,9 @@ class ToolsController extends Controller
     ]);
   }
 
-  public function actionAbout($id)
-  {
-    return $this->renderPartial('about', [
-      'model' => $this->findModel($id),
-    ]);
-  }
-
-  public function actionView($id)
-  {
-    return $this->render('view', [
-      'model' => $this->findModel($id),
-    ]);
-  }
-
   protected function findModel($id)
   {
-    if (($model = Tools::find()->where(['id_eq' => $id])->limit(1)->all()) !== null) {
+    if (($model = Tools::find()->where(['ref' => $id])->limit(1)->all()) !== null) {
       if (!empty($model)) {
         return $model[0];
       }
@@ -116,11 +112,6 @@ class ToolsController extends Controller
     return $this->render('categories');
   }
 
-  public function actionClassifiers()
-  {
-    return $this->render('classifiers');
-  }
-
   public function actionPlacement()
   {
     return $this->render('placements');
@@ -131,7 +122,7 @@ class ToolsController extends Controller
     $table = 'teh_equipment_tbl';
     $primaryKey = 'id';
     $columns = array(
-      array('db' => 'id_eq', 'dt' => 0),
+      array('db' => 'ref', 'dt' => 0),
       array('db' => 'eq_title', 'dt' => 1),
       array('db' => 'eq_manufact', 'dt' => 2),
       array('db' => 'eq_model', 'dt' => 3),
@@ -180,86 +171,6 @@ class ToolsController extends Controller
     );
   }
 
-//=============== Серверная часть работы с классификатором ==============================================================
-
-  public function actionDisplayColumns($id)
-  {
-    $clsf = Classifier::findOne($id);
-    $tableScheme = json_decode($clsf->clsf_table_scheme);
-    if (empty($tableScheme->columns)) {
-      $columns = ['id', 'Наименование', 'Производитель/Модель', 'Модель', 's/n', '', 'Action', ''];
-    } else {
-      foreach ($tableScheme->columns as $column) {
-        $columns[] = $column->label;
-      }
-      array_unshift($columns, 'id', 'Наименование', 'Производитель/Модель', 'Модель', 's/n', '');
-      array_push($columns, 'Action', '');
-    }
-    $data = array();
-    $data = [
-      "columns" => $columns,
-    ];
-    if (!empty($tableScheme)) {
-      $data = [
-        "columns" => $columns,
-        "tableName" => $tableScheme->tableName,
-        "group" => 5
-      ];
-    }
-    return json_encode($data);
-  }
-
-  // отработка запроса на отображение оборудования по классификатору
-  public function actionServerSideEx($id)
-  {
-    $sql_details = \Yii::$app->params['sql_details'];
-    $table = 'teh_equipment_tbl';                                 // основная таблица с оборудованием
-    $primaryKey = 'id_eq';
-    $clsf = Classifier::findOne($id);
-    $tableScheme = json_decode($clsf->clsf_table_scheme);
-    if (!$tableScheme) {
-      $sql = "SELECT COUNT(`{$primaryKey}`)
-			 FROM `$table`";
-      $db = SSP::sql_connect($sql_details);
-      $stmt = $db->prepare($sql);
-      $stmt->execute();
-      $data = $stmt->fetchAll(PDO::FETCH_BOTH);
-
-      return json_encode(array(                             // возврат "Записи отсутствуют, если нет таблицы в БД
-        'draw' => 1,
-        'recordsTotal' => $data[0][0],
-        'recordsFiltered' => 0,
-        'data' => []
-      ));
-    }
-
-    // TODO: в зависимости от типа записи -> применять форматирование для данных для checkbox -> "ВКЛ."
-    // TODO: Вставить функцию обработки ДАТЫ, если в таблице дата (необходимо поле - тип данных)
-
-    $tableTwo = $tableScheme->tableName;
-    $columns = array(                                         // колонки из основной таблицы оборудования
-      array('db' => 'id_eq', 'dt' => 0),
-      array('db' => 'eq_title', 'dt' => 1),
-      array('db' => 'eq_manufact', 'dt' => 2),
-      array('db' => 'eq_model', 'dt' => 3),
-      array('db' => 'eq_serial', 'dt' => 4),
-      array('db' => 'name', 'dt' => 5),
-    );
-    if (!empty($tableScheme)) {                           // формируется запрос, если классификатор сложный
-      $i = 7;                                             // простой классификатор просто хранит перечень техники
-      $columns[] = array('db' => 'clsf_id', 'dt' => 6);
-      foreach ($tableScheme->columns as $column) {
-        $temp = array();
-        $temp['db'] = $column->name;
-        $temp['dt'] = $i++;
-        $columns[] = $temp;
-      }
-    }
-    return json_encode(
-      SSP::simpleEx($_GET, $sql_details, $table, $primaryKey, $columns, $tableTwo)
-    );
-  }
-
   public function actionDelete()
   {
     $report = true;
@@ -293,18 +204,5 @@ class ToolsController extends Controller
     return $this->redirect(['index']);
   }
 
-
-  public function actionRemoveImage()
-  {
-    return 1;
-  }
-
-  public function actionExtendedTable()
-  {
-    $model = $_GET;
-    return $this->render('about', [
-      'model' => $model,
-    ]);
-  }
 
 }

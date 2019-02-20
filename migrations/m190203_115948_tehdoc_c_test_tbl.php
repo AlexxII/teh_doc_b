@@ -38,7 +38,7 @@ class m190203_115948_tehdoc_c_test_tbl extends Migration
     ], $tableOptions);
 
     $rand = '1122334455';
-    $sql = 'INSERT INTO' . self::TABLE_NAME . '(id, ref, key, root, lft, rgt, lvl, name, parent_id, quantity, complex_comments, valid) 
+    $sql = 'INSERT INTO' . self::TABLE_NAME . '(id, ref, ""key, root, lft, rgt, lvl, name, parent_id, quantity, complex_comments, valid) 
                 VALUES (1, ' . $rand . ', ' . $rand . ', 1, 1, 2, 0, "Оборудование",' . $rand . ', 1, null, 1)';
     \Yii::$app->db->createCommand($sql)->execute();
   }

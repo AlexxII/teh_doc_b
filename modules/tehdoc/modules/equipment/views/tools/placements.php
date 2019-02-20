@@ -7,7 +7,7 @@ FancytreeAsset::register($this);
 
 $this->title = 'Оборудование по местам размещения';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'Перечень оборудования', 'url' => ['/tehdoc']];
+$this->params['breadcrumbs'][] = ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель отображения оборудования по местам размещения. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
@@ -638,7 +638,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
   });
 
   jQuery(function ($) {
-    var main_url = '/tehdoc/control/placement/placements';
+    var main_url = '/tehdoc/settings/placement/placements';
 
     $("#fancyree_w0").fancytree({
       source: {
