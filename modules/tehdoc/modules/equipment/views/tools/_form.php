@@ -14,11 +14,8 @@ use app\modules\tehdoc\asset\TehFormAsset;
 
 
 <style>
-  .fa {
-    font-size: 15px;
-    color: #FF0000;
-  }
   .nonreq {
+    font-size: 15px;
     color: #1e6887;
   }
   .select-selected {
@@ -34,6 +31,8 @@ $cat_hint = 'Обязательное! Необходима для класси�
 $title_hint = 'Обязательное! Необходимо для отображения в таблице.';
 $serial_hint = 'Укажите серийный номер (s/n), на некоторых моделях оборудования указывается только производственный номер (p/n), 
                   тогда укажите его.';
+$invent_hint = 'Укажите инвентарный номер.';
+$oTime_hint = 'Если известно, укажите наработку в часах на день занесения.';
 $place_hint = 'Обязательное! Укажите точное размещение оборудования.';
 $date_hint = 'Если не известен месяц, выберите январь известного года.';
 $quantity_hint = 'Внимание! Указывайте отличную от 1 цифру 
@@ -50,7 +49,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         <div class="col-md-6 col-lg-6">
           <?php
           echo $form->field($model, 'category_id', [
-            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+            'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $cat_hint . '"></sup>{input}{hint}'])
             ->dropDownList($model->toolCategoryList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
               'options' => [
@@ -62,7 +61,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         </div>
         <div class="col-md-6 col-lg-6">
           <?= $form->field($model, 'eq_title', [
-            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+            'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $title_hint . '"></sup>{input}{hint}'])
             ->textInput()->hint('Например: Коммутатор с автоопределителем', ['class' => ' w3-label-under']); ?>
         </div>
@@ -83,22 +82,35 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
             'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $serial_hint . '"></sup>{input}{hint}'
           ])->textInput()->hint('Например: HRUEO139UI92', ['class' => ' w3-label-under']); ?>
-
         </div>
-        <div class="form-group col-md-6 col-lg-6">
+        <div class="col-md-6 col-lg-6">
+          <?= $form->field($model, 'invent_number', [
+            'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+                data-toggle="tooltip" data-placement="top" title="' . $invent_hint . '"></sup>{input}{hint}'
+          ])->textInput()->hint('Например: 20205147', ['class' => ' w3-label-under']); ?>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-lg-6">
           <?= $form->field($model, 'eq_factdate', [
             'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $date_hint . '"></sup>{input}{hint}'
           ])->textInput([
             'class' => 'fact-date form-control'
-          ])->hint('Выберите дату', ['class' => ' w3-label-under']); ?>
+          ])->hint('Введите или выберите дату', ['class' => ' w3-label-under']); ?>
+        </div>
+        <div class="form-group col-md-6 col-lg-6">
+          <?= $form->field($model, 'eq_operating_time', [
+            'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+                data-toggle="tooltip" data-placement="top" title="' . $oTime_hint . '"></sup>{input}{hint}'
+          ])->textInput()->hint('Например: 124948', ['class' => ' w3-label-under']); ?>
         </div>
       </div>
       <div class="row">
         <div class="col-md-8">
           <?php
           echo $form->field($model, 'place_id', [
-            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+            'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $place_hint . '"></sup>{input}{hint}'
           ])->dropDownList($model->toolPlacesList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
             'options' => [
@@ -155,9 +167,8 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="row">
         <div class="form-group col-md-12 col-lg-12">
-
           <label style="font-size:18px"><input type="checkbox" name="stay" style="width:20px;height:20px">
             Остаться в форме</label>
         </div>
