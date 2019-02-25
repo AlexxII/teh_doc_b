@@ -30,15 +30,17 @@ class InfoController extends Controller
       return $this->render('meeting_waiting');
     }
     $model = $this->findModel($id);
-    $wiki = $model->countWikiPages;
-    $files = $model->countFiles;
+    $wikiCount = $model->countWikiPages;
+    $imagesCount = $model->countImages;
+    $docsCount = $model->countDocs;
     $model->scenario = Tools::SCENARIO_UPDATE;
     if ($model->load(Yii::$app->request->post())) {
       if ($model->save()) {
         return $this->redirect(['update',
           'id' => $model->ref,
-          'wiki' => $wiki,
-          'files' => $files
+          'docsCount' => $docsCount,
+          'imagesCount' => $imagesCount,
+          'wikiCount' => $wikiCount,
         ]);
       } else {
         Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');
@@ -46,8 +48,9 @@ class InfoController extends Controller
     }
     return $this->render('update', [
       'model' => $model,
-      'wiki' => $wiki,
-      'files' => $files
+      'docsCount' => $docsCount,
+      'imagesCount' => $imagesCount,
+      'wikiCount' => $wikiCount,
     ]);
   }
 

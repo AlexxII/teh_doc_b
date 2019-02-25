@@ -18,14 +18,30 @@ class SettingsController extends Controller
   {
     $id = $_GET['id'];
     $model = $this->findModel($id);
-    $wiki = $model->countWikiPages;
-    $files = $model->countFiles;
+    $wikiCount = $model->countWikiPages;
+    $imagesCount = $model->countImages;
+    $docsCount = $model->countDocs;
     return $this->render('header', [
       'model' => $this->findModel($id),
-      'wiki' => $wiki,
-      'files' => $files
+      'docsCount' => $docsCount,
+      'imagesCount' => $imagesCount,
+      'wikiCount' => $wikiCount,
     ]);
   }
+
+
+  public function actionConsolidate()
+  {
+    sleep(2);
+    return true;
+  }
+
+  public function actionOth()
+  {
+    sleep(2);
+    return true;
+  }
+
 
   protected function findModel($id)
   {

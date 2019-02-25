@@ -9,11 +9,14 @@ use app\assets\AppAsset;
 use app\modules\tehdoc\asset\TehdocAsset;
 use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
 use app\assets\FancytreeAsset;
+use app\assets\PhotoswipeAsset;
+use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
 
+PhotoswipeAsset::register($this);
 FancytreeAsset::register($this);
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 TehdocAsset::register($this);       // регистрация ресурсов модуля
-\app\modules\tehdoc\modules\equipment\asset\EquipmentAsset::register($this);
+EquipmentAsset::register($this);
 MdeAsset::register($this);
 
 $about = "Панель управления оборудованием";

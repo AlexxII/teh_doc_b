@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <ul class="nav nav-tabs" id="main-teh-tab">
-  <li >
+  <li>
     <a href="../info/index">
       Инфо
     </a>
@@ -33,19 +33,19 @@ $this->params['breadcrumbs'][] = $this->title;
   <li>
     <a href="../docs/index">
       Docs
-      <span class="Counter"><?= $files ?></span>
+      <span class="Counter"><?= $docsCount ?></span>
     </a>
   </li>
   <li>
     <a href="../foto/index">
       Foto
-      <span class="Counter"><?= $files ?></span>
+      <span class="Counter"><?= $imagesCount ?></span>
     </a>
   </li>
   <li class="active">
     <a href="../wiki/index" style="cursor: pointer">
       Wiki
-      <span class="Counter"><?= $wiki ?></span>
+      <span class="Counter"><?= $wikiCount ?></span>
     </a>
   </li>
 </ul>

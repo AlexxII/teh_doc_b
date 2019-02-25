@@ -18,13 +18,8 @@ use yii\widgets\DetailView;
         'eq_serial',
         [
           'label' => 'Место размещения:',
-          'value' => '1'//$model->placementTitle,
+          'value' => $model->placementTitle,
         ],
-        [
-          'label' => 'Изображения:',
-          'format' => 'raw',
-          'value' => $model->photos ? '<a href="#" style="color: #3f51b5">' . count($model->photos) . ' штук(и)' . '</a>' : 'отсутствуют',
-        ]
       ],
     ]) ?>
 </div>

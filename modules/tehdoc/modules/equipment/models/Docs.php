@@ -7,12 +7,11 @@ use yii\helpers\ArrayHelper;
 
 class Docs extends \yii\db\ActiveRecord
 {
-  const PLACEMENT_TABLE = '{{%teh_placement_tbl}}';
-  const CATEGORY_TABLE = '{{%teh_category_tbl}}';
+  public $docFiles;
 
   public static function tableName()
   {
-    return 'teh_files_tbl';
+    return 'teh_docs_tbl';
   }
 
 }

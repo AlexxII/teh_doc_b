@@ -12,7 +12,6 @@ use app\modules\tehdoc\asset\TehFormAsset;
 
 ?>
 
-
 <style>
   .nonreq {
     font-size: 15px;
@@ -152,11 +151,17 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
             'language' => 'ru',
             'options' => ['multiple' => true],
             'pluginOptions' => [
+              'maxFileCount' => 15,
+              'uploadUrl' => Url::to(['file-upload']),
+              'uploadExtraData' => [
+                'album_id' => 20,
+                'cat_id' => 'Nature'
+              ],
+              'showUpload' => false,
               'previewFileType' => 'any',
               'initialPreview' => $allImages,
               'initialPreviewConfig' => $previewImagesConfig,
               'overwriteInitial' => false,
-              'showUpload' => false
             ],
           ]); ?>
         </div>
@@ -236,7 +241,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
   $(document).ready(function () {
     $.ajax({
       type: 'get',
-      url: '/tehdoc/control/interface/manufact',
+      url: '/tehdoc/settings/interface/manufact',
       autoFocus: true,
       success: function (data) {
         var manufact = $.parseJSON(data);
@@ -255,7 +260,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
   $(document).ready(function () {
     $.ajax({
       type: 'get',
-      url: '/tehdoc/control/interface/models',
+      url: '/tehdoc/settings/interface/models',
       autoFocus: true,
       success: function (data) {
         var models = $.parseJSON(data);

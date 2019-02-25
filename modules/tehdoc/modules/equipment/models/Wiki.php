@@ -19,7 +19,7 @@ class Wiki extends \yii\db\ActiveRecord
   {
     return [
       [['wiki_title'], 'required'],
-      [['id', 'eq_ref', 'wiki_created_user', 'valid'], 'integer'],
+      [['id', 'eq_id', 'wiki_created_user', 'valid'], 'integer'],
       [['wiki_text', 'wiki_record_create', 'wiki_record_update'], 'safe'],
       [['wiki_title'], 'string', 'max' => 255],
     ];

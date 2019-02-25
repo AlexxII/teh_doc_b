@@ -33,13 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
   <li>
     <a href="../docs/index">
       Docs
-      <span class="Counter"><?= $wiki ?></span>
+      <span class="Counter"><?= $docsCount ?></span>
     </a>
   </li>
   <li class="active">
     <a href="../foto/index">
       Foto
-      <span class="Counter"><?= $wiki ?></span>
+      <span class="Counter"><?= $imagesCount ?></span>
     </a>
   </li>
   <li>

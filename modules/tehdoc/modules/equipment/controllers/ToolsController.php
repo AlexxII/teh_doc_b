@@ -5,13 +5,16 @@ namespace app\modules\tehdoc\modules\equipment\controllers;
 use Yii;
 use yii\web\Controller;
 use app\modules\tehdoc\modules\equipment\models\Tools;
-use app\modules\tehdoc\models\Images;
 use app\modules\tehdoc\modules\equipment\models\SSP;
+use app\modules\tehdoc\modules\equipment\models\Images;
+use yii\web\UploadedFile;
 
 class ToolsController extends Controller
 {
 
   public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout.php';
+
+  private $tempId;
 
   public function actionAllTools()
   {
@@ -36,13 +39,15 @@ class ToolsController extends Controller
     $model->scenario = Tools::SCENARIO_CREATE;
     $fUpload = new Images();
     $model->quantity = 1;                             // По умолчанию, кол-во оборудования - 1
+    $this->tempId = mt_rand();
 
     if ($model->load(Yii::$app->request->post())) {
-      $model->ref = mt_rand();
+//      $model->ref = mt_rand();
+      $model->ref = $this->tempId;
       $model->parent_id = 0;
       $model->name = $model->eq_title;
-      $parentOrder = Tools::findOne(2);
-      $model->appendTo($parentOrder);
+      $parentNode = Tools::findOne(2);
+      $model->appendTo($parentNode);
       if ($model->save()) {
         if ($fUpload->load(Yii::$app->request->post())) {
           $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
@@ -57,7 +62,7 @@ class ToolsController extends Controller
         if (isset($_POST['stay'])) {
           return $this->redirect(['create']);
         }
-        return $this->redirect(['info', 'id' => $model->ref]);
+        return $this->redirect(['tool/' . $model->ref . '/info/index']);
       } else {
         return var_dump($model->getErrors());
         Yii::$app->session->setFlash('error', 'Ошибка валидации');
@@ -97,6 +102,20 @@ class ToolsController extends Controller
     ]);
   }
 
+  public function actionFileUpload()
+  {
+//    return true;
+    $fUpload = new Images();
+    if (Yii::$app->request->post()){
+      $fUpload->imageFiles = UploadedFile::getInstance($fUpload, 'imageFiles');
+//      return var_dump($fUpload);
+      if ($fUpload->uploadImage($this->tempId)){
+        return true;
+      }
+    }
+    return false;
+  }
+
   protected function findModel($id)
   {
     if (($model = Tools::find()->where(['ref' => $id])->limit(1)->all()) !== null) {
@@ -119,7 +138,7 @@ class ToolsController extends Controller
 
   public function actionServerSide()
   {
-    $table = 'teh_equipment_tbl';
+    $table =   'teh_equipment_tbl';
     $primaryKey = 'id';
     $columns = array(
       array('db' => 'ref', 'dt' => 0),
@@ -127,9 +146,10 @@ class ToolsController extends Controller
       array('db' => 'eq_manufact', 'dt' => 2),
       array('db' => 'eq_model', 'dt' => 3),
       array('db' => 'eq_serial', 'dt' => 4),
+      array('db' => 'eq_serial', 'dt' => 5),
       array(
         'db' => 'eq_factdate',
-        'dt' => 5,
+        'dt' => 6,
         'formatter' => function ($d, $row) { //TODO разобраться с форматом отображения даты
           if ($d != null) {
             return date('jS M y', strtotime($d));
@@ -140,7 +160,7 @@ class ToolsController extends Controller
       ),
       array(
         'db' => 'quantity',
-        'dt' => 6,
+        'dt' => 7,
         'formatter' => function ($d, $row) { //TODO
           return $d . ' шт.';
         }

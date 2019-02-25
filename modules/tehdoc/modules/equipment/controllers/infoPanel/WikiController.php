@@ -17,24 +17,27 @@ class WikiController extends Controller
   public function actionIndex()
   {
     $id = $_GET['id'];
-    $model = Wiki::find()->where(['eq_ref' => $id])->orderBy('wiki_title')->limit(1)->all();
-    $list = Wiki::find()->where(['eq_ref' => $id])->orderBy('wiki_title')->asArray()->all();
+    $model = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->limit(1)->all();
+    $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
     $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
-    $tool = $request[0];
-    $wiki = $tool->countWikiPages;
-    $files = $tool->countFiles;
+    $toolModel = $request[0];
+    $wikiCount = $toolModel->countWikiPages;
+    $imagesCount = $toolModel->countImages;
+    $docsCount = $toolModel->countDocs;
     if (!empty($model)) {
       $indexModel = $model[0];
       return $this->render('header', [
         'model' => $indexModel,
         'list' => $list,
-        'files' => $files,
-        'wiki' => $wiki
+        'docsCount' => $docsCount,
+        'imagesCount' => $imagesCount,
+        'wikiCount' => $wikiCount,
       ]);
     }
     return $this->render('_index', [
-      'files' => $files,
-      'wiki' => $wiki
+      'docsCount' => $docsCount,
+      'imagesCount' => $imagesCount,
+      'wikiCount' => $wikiCount,
     ]);
   }
 
@@ -43,31 +46,34 @@ class WikiController extends Controller
     $model = new Wiki();
     $id = $_GET['id'];
     $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
-    $tool = $request[0];
-    $wiki = $tool->countWikiPages;
-    $files = $tool->countFiles;
+    $toolModel = $request[0];
+    $wikiCount = $toolModel->countWikiPages;
+    $imagesCount = $toolModel->countImages;
+    $docsCount = $toolModel->countDocs;
 
     if ($model->load(Yii::$app->request->post())) {
       $date = date('Y-m-d H:i:s');
-      $model->eq_ref = $_GET['id'];
+      $model->eq_id = $_GET['id'];
       $model->wiki_record_create = $date;
       $model->wiki_record_update = $date;
       $model->wiki_created_user = Yii::$app->user->identity->ref;
       if ($model->save()) {
         $id = $_GET['id'];
-        $list = Wiki::find()->where(['eq_ref' => $id])->orderBy('wiki_title')->asArray()->all();
+        $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
         return $this->render('header', [
           'model' => $model,
           'list' => $list,
-          'files' => $files,
-          'wiki' => $wiki
+          'docsCount' => $docsCount,
+          'imagesCount' => $imagesCount,
+          'wikiCount' => $wikiCount,
         ]);
       }
     }
     return $this->render('create', [
       'model' => $model,
-      'files' => $files,
-      'wiki' => $wiki
+      'docsCount' => $docsCount,
+      'imagesCount' => $imagesCount,
+      'wikiCount' => $wikiCount,
     ]);
   }
 
@@ -76,28 +82,31 @@ class WikiController extends Controller
     $model = $this->findModel($page);
     $id = $_GET['id'];
     $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
-    $tool = $request[0];
-    $wiki = $tool->countWikiPages;
-    $files = $tool->countFiles;
+    $toolModel = $request[0];
+    $wikiCount = $toolModel->countWikiPages;
+    $imagesCount = $toolModel->countImages;
+    $docsCount = $toolModel->countDocs;
 
     if ($model->load(Yii::$app->request->post())) {
       $date = date('Y-m-d H:i:s');
       $model->wiki_record_update = $date;
       if ($model->save()) {
         $id = $_GET['id'];
-        $list = Wiki::find()->where(['eq_ref' => $id])->orderBy('wiki_title')->asArray()->all();
+        $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
         return $this->render('header', [
           'model' => $model,
           'list' => $list,
-          'files' => $files,
-          'wiki' => $wiki
+          'docsCount' => $docsCount,
+          'imagesCount' => $imagesCount,
+          'wikiCount' => $wikiCount,
         ]);
       }
     }
     return $this->render('update', [
       'model' => $model,
-      'files' => $files,
-      'wiki' => $wiki
+      'docsCount' => $docsCount,
+      'imagesCount' => $imagesCount,
+      'wikiCount' => $wikiCount,
     ]);
   }
 
@@ -106,16 +115,18 @@ class WikiController extends Controller
     if ($page){
       $id = $_GET['id'];
       $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
-      $tool = $request[0];
-      $wiki = $tool->countWikiPages;
-      $files = $tool->countFiles;
+      $toolModel = $request[0];
+      $wikiCount = $toolModel->countWikiPages;
+      $imagesCount = $toolModel->countImages;
+      $docsCount = $toolModel->countDocs;
       $wikiPage = Wiki::findOne($page);
-      $list = Wiki::find()->where(['eq_ref' => $id])->orderBy('wiki_title')->asArray()->all();
+      $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
       return $this->render('header', [
         'model' => $wikiPage,
         'list' => $list,
-        'files' => $files,
-        'wiki' => $wiki
+        'docsCount' => $docsCount,
+        'imagesCount' => $imagesCount,
+        'wikiCount' => $wikiCount,
       ]);
     }
     return false;

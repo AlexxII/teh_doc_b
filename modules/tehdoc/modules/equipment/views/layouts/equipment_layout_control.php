@@ -281,7 +281,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         var csrf = $('meta[name=csrf-token]').attr("content");
         var node = $(".ui-draggable-handle").fancytree("getActiveNode");
         $.ajax({
-          url: "/tehdoc/equipment/control-panel/control/delete-node",
+          url: "/tehdoc/equipment/control-panel/info/delete-node",
           type: "post",
           data: {
             id: node.data.ref,

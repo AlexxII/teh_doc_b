@@ -3,7 +3,7 @@
 return [
     'adminEmail' => 'admin@example.com',
     'uploadPath' => '/var/www/develop.tehdoc/web/upload/tehdoc/tools/',
-    'uploadUrl' => 'http://dev.tehdoc.ru/upload/tehdoc/tools/',
+    'uploadUrl' => 'http://dev.tehdoc.su/upload/tehdoc/tools/',
     'sql_details' => [
         'user' => 'user',
         'pass' => '16PkjVzk:tk',

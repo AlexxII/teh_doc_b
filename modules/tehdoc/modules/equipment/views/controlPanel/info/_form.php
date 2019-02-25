@@ -13,6 +13,7 @@ use app\modules\tehdoc\asset\TehFormAsset;
 <style>
   .nonreq {
     color: #1e6887;
+    font-size: 14px;
   }
   .select-selected {
     padding-left: 40px;
