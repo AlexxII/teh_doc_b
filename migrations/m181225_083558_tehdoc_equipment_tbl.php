@@ -33,7 +33,8 @@ class m181225_083558_tehdoc_equipment_tbl extends Migration
       'eq_factdate' => $this->date(),
       'quantity' => $this->smallInteger()->notNull()->defaultValue(1),
       'eq_comments' => $this->text(),
-      'valid' => $this->boolean()->defaultValue(1)
+      'valid' => $this->boolean()->defaultValue(1),
+      'eq_task' => $this->boolean()
     ], $tableOptions);
 
     $rand = '1122334455';

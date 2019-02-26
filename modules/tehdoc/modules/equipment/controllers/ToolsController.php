@@ -14,8 +14,6 @@ class ToolsController extends Controller
 
   public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout.php';
 
-  private $tempId;
-
   public function actionAllTools()
   {
     $id = Tools::find()->select('id')->all();
@@ -39,11 +37,14 @@ class ToolsController extends Controller
     $model->scenario = Tools::SCENARIO_CREATE;
     $fUpload = new Images();
     $model->quantity = 1;                             // По умолчанию, кол-во оборудования - 1
-    $this->tempId = mt_rand();
+    $model->tempId = mt_rand();
 
     if ($model->load(Yii::$app->request->post())) {
-//      $model->ref = mt_rand();
-      $model->ref = $this->tempId;
+      if (isset($_POST['eqId'])) {
+        $model->ref = $_POST['eqId'];
+      } else {
+        $model->ref = $model->tempId;
+      }
       $model->parent_id = 0;
       $model->name = $model->eq_title;
       $parentNode = Tools::findOne(2);
@@ -95,7 +96,6 @@ class ToolsController extends Controller
         Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');
       }
     }
-
     return $this->render('update', [
       'model' => $model,
       'fupload' => $fUpload,
@@ -106,12 +106,43 @@ class ToolsController extends Controller
   {
 //    return true;
     $fUpload = new Images();
-    if (Yii::$app->request->post()){
-      $fUpload->imageFiles = UploadedFile::getInstance($fUpload, 'imageFiles');
-//      return var_dump($fUpload);
-      if ($fUpload->uploadImage($this->tempId)){
+    if (Yii::$app->request->post()) {
+      $eqId = Yii::$app->request->post('eqId');
+      $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
+      if ($fUpload->uploadImage($eqId)) {
         return true;
       }
+    }
+    return false;
+  }
+
+  public function actionTask()
+  {
+    $models = Tools::find()->where(['eq_task' => 1])->asarray()->all();
+    return $this->render('task', [
+      'models' => $models
+    ]);
+  }
+
+  public function actionTaskSet()
+  {
+    if (isset($_POST['toolId'])){
+      $toolId = $_POST['toolId'];
+      $model = $this->findModel($toolId);
+      if (isset($_POST['bool'])){
+        $r = $_POST['bool'];
+        if ($r === 'true'){
+          $model->eq_task = 1;
+        } else {
+          $model->eq_task = 0;
+        }
+      } else {
+        return false;
+      }
+      if ($model->save()){
+        return true;
+      }
+      return false;
     }
     return false;
   }
@@ -138,7 +169,7 @@ class ToolsController extends Controller
 
   public function actionServerSide()
   {
-    $table =   'teh_equipment_tbl';
+    $table = 'teh_equipment_tbl';
     $primaryKey = 'id';
     $columns = array(
       array('db' => 'ref', 'dt' => 0),

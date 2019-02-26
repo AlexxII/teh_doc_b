@@ -16,7 +16,8 @@ TehdocAsset::register($this);       // регистрация ресурсов �
 \app\modules\tehdoc\modules\equipment\asset\EquipmentAsset::register($this);
 MdeAsset::register($this);
 
-$about = "Панель управления оборудованием";
+$about = "Панель управления оборудованием. Предназначена для добавления, изменения и удаления оборудования.
+";
 $add_hint = 'Добавить новый узел';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить БЕЗ вложений';
@@ -109,7 +110,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="dropdown-header" style="font-size: 10px">Управление оборудованием</li>',
           ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/control-panel']],
           ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/tools/create']],
-          ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/tools/tools/task']],
+          ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/tools/task']],
         ],
       ],
       /*            // В разработке
@@ -543,6 +544,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           }
           $(".del-node").show();
         }
+
       },
       click: function(event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);

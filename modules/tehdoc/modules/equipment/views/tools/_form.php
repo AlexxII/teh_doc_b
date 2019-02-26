@@ -44,6 +44,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
   <div class="col-lg-8 col-md-9" style="border-radius:2px;padding-top:10px">
     <div class="customer-form">
       <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
+      <?= Html::hiddenInput('eqId', $model->tempId); ?>
       <div class="row">
         <div class="col-md-6 col-lg-6">
           <?php
@@ -127,24 +128,6 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         </div>
       </div>
 
-      <?php
-      if (!empty($model->photos)) {
-        foreach ($model->photos as $k => $photo) {
-          $allImages[] = "<img src='" . $photo->getImageUrl() . "' class='file-preview-image' 
-                          style='max-width:100%;max-height:100%'>";
-          $previewImagesConfig[] = [
-            'url' => Url::toRoute(ArrayHelper::merge(['/tehdoc/kernel/tools/remove-image'], [
-              'id' => $photo->id,
-              '_csrf' => Html::csrfMetaTags()
-            ])),
-            'key' => $photo->id
-          ];
-        }
-      } else {
-        $previewImagesConfig = false;
-        $allImages = false;
-      }
-      ?>
       <div class="row">
         <div class="col-md-12 col-lg-12">
           <?= $form->field($fUpload, "imageFiles[]")->widget(FileInput::class, [
@@ -154,14 +137,10 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
               'maxFileCount' => 15,
               'uploadUrl' => Url::to(['file-upload']),
               'uploadExtraData' => [
-                'album_id' => 20,
-                'cat_id' => 'Nature'
+                'eqId' => $model->tempId,
               ],
               'showUpload' => false,
               'previewFileType' => 'any',
-              'initialPreview' => $allImages,
-              'initialPreviewConfig' => $previewImagesConfig,
-              'overwriteInitial' => false,
             ],
           ]); ?>
         </div>

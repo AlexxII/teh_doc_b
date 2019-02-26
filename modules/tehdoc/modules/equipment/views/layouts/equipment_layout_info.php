@@ -109,7 +109,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="dropdown-header" style="font-size: 10px">Управление оборудованием</li>',
           ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/control-panel']],
           ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/tools/create']],
-          ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/tools/tools/task']],
+          ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/tools/task']],
         ],
       ],
       /*            // В разработке

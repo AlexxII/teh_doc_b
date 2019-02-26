@@ -37,7 +37,7 @@ class Tools extends \yii\db\ActiveRecord
 
   public $eq_operating_time;
   public $invent_number;
-//  public $tempId;
+  public $tempId;
 
   public static function tableName()
   {

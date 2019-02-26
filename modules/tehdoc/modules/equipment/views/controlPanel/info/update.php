@@ -16,8 +16,28 @@ $this->params['breadcrumbs'][] = $this->title;
     font-size: 18px;
     color: #1e6887;
   }
+  label {
+    font-weight: 600;
+  }
+  .note {
+    color: #586069;
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    margin: 0;
+  }
+  .form-checkbox {
+    margin: 15px 0px;
+    padding-left: 20px;
+    vertical-align: middle;
+  }
   .d-flex {
     display: flex !important;
+  }
+  .form-checkbox input[type="checkbox"], .form-checkbox input[type="radio"] {
+    float: left;
+    margin: 5px 0 0 -20px;
+    vertical-align: middle;
   }
   .flex-items-center {
     align-items: center !important;
