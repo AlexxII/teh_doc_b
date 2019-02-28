@@ -51,9 +51,9 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         <div class="form-checkbox js-complex-option">
           <input class="ch" id="consolidated-feature" type="checkbox" data-check='consolidated-check'
                  data-id="<?= $model->ref ?>" <?php if ($model->eq_task) echo 'checked' ?> >
-          <label for="consolidated-feature" style="font-weight: 500">В задание на добавление</label>
+          <label for="consolidated-feature" style="font-weight: 500">В задание на обновление</label>
           <span class="status-indicator" id="consolidated-check"></span>
-          <p class="note" style="margin-bottom: 10px">Добавить данное оборудование в задание на добавление.</p>
+          <p class="note" style="margin-bottom: 10px">Добавить данное оборудование в задание на обновление данных.</p>
         </div>
       </li>
       <div class="row">

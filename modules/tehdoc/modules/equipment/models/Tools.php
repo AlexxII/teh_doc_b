@@ -138,10 +138,9 @@ class Tools extends \yii\db\ActiveRecord
     return $this->hasOne(Placement::class, ['ref' => 'place_id']);
   }
 
-  public function getPlacementTitle()
+  public function getPlacementTitle($depth = 1)
   {
     // TODO: Возможно необходимо сделать переменную $depth настраиваемой
-    $depth = 1; // сколько уровней
     if ($this->placement) {
       $full = $this->placement;
       $parentCount = $full->parents()->count();
@@ -154,6 +153,17 @@ class Tools extends \yii\db\ActiveRecord
     } else {
       return '-';
     }
+  }
+
+  public function toolParents($depth = 1)
+  {
+    $parentCount = $this->parents()->count();
+    $parent = $this->parents($parentCount - $depth)->all();
+    $fullname = '';
+    foreach ($parent as $p) {
+      $fullname .= $p->name . ' / ';
+    }
+    return $fullname;
   }
 
   // Wiki

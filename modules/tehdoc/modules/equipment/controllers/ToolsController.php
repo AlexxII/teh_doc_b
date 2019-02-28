@@ -118,20 +118,20 @@ class ToolsController extends Controller
 
   public function actionTask()
   {
-    $models = Tools::find()->where(['eq_task' => 1])->asarray()->all();
+    $models = Tools::find()->where(['eq_task' => 1])->all();
     return $this->render('task', [
       'models' => $models
     ]);
   }
-
+// серверная часть установки флажка "В задании на обновление"
   public function actionTaskSet()
   {
-    if (isset($_POST['toolId'])){
+    if (isset($_POST['toolId'])) {
       $toolId = $_POST['toolId'];
       $model = $this->findModel($toolId);
-      if (isset($_POST['bool'])){
+      if (isset($_POST['bool'])) {
         $r = $_POST['bool'];
-        if ($r === 'true'){
+        if ($r === 'true') {
           $model->eq_task = 1;
         } else {
           $model->eq_task = 0;
@@ -139,13 +139,85 @@ class ToolsController extends Controller
       } else {
         return false;
       }
-      if ($model->save()){
+      if ($model->save()) {
         return true;
       }
       return false;
     }
     return false;
   }
+
+  public function actionUpdateEx($id)
+  {
+    $model = $this->findModel($id);
+    $fUpload = new Images();
+
+    if ($model->load(Yii::$app->request->post())) {
+      if ($model->save(false)) { // TODO Разобраться с валидацией, при вкл - не сохраняет
+        if ($fUpload->load(Yii::$app->request->post())) {
+          $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
+          if ($fUpload->uploadImage($model->ref)) {
+            Yii::$app->session->setFlash('success', 'Изменения внесены.');
+          }
+        } else {
+          Yii::$app->session->setFlash('success', 'Изменения внесены.');
+        }
+        return $this->redirect(['tool/' . $model->ref . '/info/index']);
+      } else {
+        Yii::$app->session->setFlash('error', 'Изменения НЕ внесены.');
+      }
+    }
+    return $this->render('update', [
+      'model' => $model,
+      'fupload' => $fUpload,
+    ]);
+  }
+
+  /*
+    public function actionCreateEx($id)
+    {
+      $model = $this->findModel($id);
+      $model->scenario = Tools::SCENARIO_UPDATE;
+      $fUpload = new Images();
+      $model->quantity = 1;                             // По умолчанию, кол-во оборудования - 1
+      $model->tempId = mt_rand();
+
+      if ($model->load(Yii::$app->request->post())) {
+        if (isset($_POST['eqId'])) {
+          $model->ref = $_POST['eqId'];
+        } else {
+          $model->ref = $model->tempId;
+        }
+        $model->parent_id = 0;
+        $model->name = $model->eq_title;
+        $model->appendTo($parentNode);
+        if ($model->save()) {
+          if ($fUpload->load(Yii::$app->request->post())) {
+            $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
+            if ($fUpload->uploadImage($model->ref)) {
+              Yii::$app->session->setFlash('success', 'Оборудование добавлено');
+            } else {
+              Yii::$app->session->setFlash('success', 'Оборудование добавлено, <strong>НО</strong> не загружены изображения');
+            }
+          } else {
+            Yii::$app->session->setFlash('success', 'Оборудование добавлено');
+          }
+          if (isset($_POST['stay'])) {
+            return $this->redirect(['create']);
+          }
+          return $this->redirect(['tool/' . $model->ref . '/info/index']);
+        } else {
+          return var_dump($model->getErrors());
+          Yii::$app->session->setFlash('error', 'Ошибка валидации');
+        }
+      }
+      return $this->render('create', [
+        'model' => $model,
+        'fupload' => $fUpload
+
+      ]);
+    }
+  */
 
   protected function findModel($id)
   {

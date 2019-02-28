@@ -80,6 +80,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
   input {
     color: black;
   }
+  .fancytree-custom-icon {
+    color: #1e6887;
+    font-size: 18px;
+  }
 </style>
 
 
@@ -110,7 +114,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="dropdown-header" style="font-size: 10px">Управление оборудованием</li>',
           ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/control-panel']],
           ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/tools/create']],
-          ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/tools/task']],
+          ['label' => 'Задание на обновление', 'url' => ['/tehdoc/equipment/tools/task']],
         ],
       ],
       /*            // В разработке
@@ -548,7 +552,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       },
       click: function(event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-        if (target === 'icon'){
+        if (target === 'title' || target === 'icon'){
           var node = data.node;
           var prefix = '/tehdoc/equipment/control-panel/';
           if (node.key != 1122334455 && node.key != 5544332211) {
@@ -564,6 +568,18 @@ $del_multi_nodes = 'Удвлить С вложениями';
           var url = prefix + node.key + '/info/update';
           window.location.href = url;
         }
+      },
+      icon: function(event, data) {
+        if (data.node.key == 1122334455){
+          return "fa fa-sitemap";
+        } else if (data.node.key == 5544332211){
+          return "fa fa-question-circle";
+        } else {
+          return false;
+        }
+        // if (data.node.isFolder()) {
+        //   return "fa fa-eye";
+        // }
       },
       renderNode: function (node, data) {
       },

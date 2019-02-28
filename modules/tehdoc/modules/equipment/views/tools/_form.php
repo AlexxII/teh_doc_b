@@ -128,6 +128,24 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         </div>
       </div>
 
+      <?php
+      if (!empty($model->images)) {
+        foreach ($model->images as $k => $photo) {
+          $allImages[] = "<img src='" . $photo->getImageUrl() . "' class='file-preview-image'
+                          style='max-width:100%;max-height:100%'>";
+          $previewImagesConfig[] = [
+            'url' => Url::toRoute(ArrayHelper::merge(['/tehdoc/kernel/tools/remove-image'], [
+              'id' => $photo->id,
+              '_csrf' => Html::csrfMetaTags()
+            ])),
+            'key' => $photo->id
+          ];
+        }
+      } else {
+        $previewImagesConfig = false;
+        $allImages = false;
+      }
+      ?>
       <div class="row">
         <div class="col-md-12 col-lg-12">
           <?= $form->field($fUpload, "imageFiles[]")->widget(FileInput::class, [
@@ -141,6 +159,9 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
               ],
               'showUpload' => false,
               'previewFileType' => 'any',
+              'initialPreview' => $allImages,
+              'initialPreviewConfig' => $previewImagesConfig,
+              'overwriteInitial' => false,
             ],
           ]); ?>
         </div>
@@ -152,10 +173,23 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
       </div>
 
       <div class="row">
-        <div class="form-group col-md-12 col-lg-12">
+        <div class="form-group col-md-4 col-lg-4">
           <label style="font-size:18px"><input type="checkbox" name="stay" style="width:20px;height:20px">
             Остаться в форме</label>
         </div>
+        <?php if (!$model->isNewRecord) : ?>
+        <div class="form-group col-md-8 col-lg-8">
+          <li class="list-group-item" style="margin-bottom: 15px">
+            <div class="form-checkbox js-complex-option">
+              <input class="ch" id="consolidated-feature" type="checkbox" data-check='consolidated-check'
+                     data-id="<?= $model->ref ?>" <?php if ($model->eq_task) echo 'checked' ?> >
+              <label for="consolidated-feature" style="font-weight: 500">В задании на обновление</label>
+              <span class="status-indicator" id="consolidated-check"></span>
+            </div>
+          </li>
+        </div>
+        <?php endif; ?>
+
       </div>
       <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => 'btn btn-primary']) ?>
@@ -254,6 +288,37 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
       }
     });
   });
+
+  $(document).ready(function () {
+    var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
+    var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
+    var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
+    $('.ch').change(function (e) {
+      var checkId = $(this).data('check');
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      $('#' + checkId).html(waiting);
+      var url = '/tehdoc/equipment/tools/task-set';
+      var nodeId = $(this).data('id');
+      var result = $(this).is(':checked');
+      console.log(result);
+      $.ajax({
+        url: url,
+        type: "post",
+        data: {
+          toolId: nodeId,
+          _csrf: csrf,
+          bool: result
+        },
+        success: function (data) {
+          $('#' + checkId).html(successCheck);
+        },
+        error: function (data) {
+          $('#' + checkId).html(warningCheck);
+        }
+      });
+    })
+  })
+
 
 </script>
 

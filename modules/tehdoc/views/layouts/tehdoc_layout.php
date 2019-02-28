@@ -85,7 +85,7 @@ TehdocAsset::register($this);       // регистрация ресурсов �
         'items' => [
           '<li class="dropdown-header" style="font-size: 10px">Оборудование</li>',
           ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']],
-          ['label' => 'Сводная таблица', 'url' => ['/tehdoc/equipment/tools/tools/index']],
+          ['label' => 'Сводная таблица', 'url' => ['/tehdoc/equipment/tools/index']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Тех.обслуживание</li>',
           ['label' => 'График ТО', 'url' => ['/tehdoc/']],
