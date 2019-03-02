@@ -130,8 +130,7 @@ class ToolsController extends Controller
       $toolId = $_POST['toolId'];
       $model = $this->findModel($toolId);
       if (isset($_POST['bool'])) {
-        $r = $_POST['bool'];
-        if ($r === 'true') {
+        if ($_POST['bool'] === 'true') {
           $model->eq_task = 1;
         } else {
           $model->eq_task = 0;
@@ -143,6 +142,27 @@ class ToolsController extends Controller
         return true;
       }
       return false;
+    }
+    return false;
+  }
+
+// серверная часть установки флажка "В задании на обновление"
+  public function actionTaskSetPackage()
+  {
+    if (isset($_POST['jsonData']) && isset($_POST['bool'])) {
+      if ($_POST['bool'] === 'true') {
+        $bool = 1;
+      } else {
+        $bool = 0;
+      }
+      foreach ($_POST['jsonData'] as $toolId) {
+        $model = $this->findModel($toolId);
+        $model->eq_task = $bool;
+        if ($model->save()) {
+          return true;
+        }
+        return false;
+      }
     }
     return false;
   }

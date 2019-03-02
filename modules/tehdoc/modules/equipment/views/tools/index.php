@@ -60,15 +60,15 @@ $task_hint = 'Добавить выделенные элементы в зада
           <thead>
             <tr>
               <th></th>
-              <th >Наименование</th>
+              <th data-priority="1">Наименование</th>
               <th >Производитель</th>
               <th >Модель</th>
               <th >s/n</th>
               <th >Инв.№</th>
-              <th >Дата производства</th>
-              <th >Количество</th>
-              <th data-priority="3">Action</th>
-              <th></th>
+              <th >Дата изготовл.</th>
+              <th >Кол.</th>
+              <th data-priority="2">Action</th>
+              <th data-priority="3"></th>
             </tr>
           </thead>
         </table>';
@@ -252,6 +252,9 @@ $task_hint = 'Добавить выделенные элементы в зада
   $(document).ready(function () {
     $('.tasking').click(function (event) {
       event.preventDefault();
+      if($(this).attr('disabled')){
+        return;
+      }
       var csrf = $('meta[name=csrf-token]').attr("content");
       var table = $('#main-table').DataTable();
       var data = table.rows({selected: true}).data();
@@ -261,20 +264,25 @@ $task_hint = 'Добавить выделенные элементы в зада
         ar[i] = data[i][0];
       }
       if (confirm('Вы действительно хотите удалить выделенные сеансы? Выделено ' + data.length + '!!!  ')) {
-        $(".modal").modal("show");
+        // $(".modal").modal("show");
         $.ajax({
-          url: "delete",
+          url: "task-set-package",
           type: "post",
           dataType: "JSON",
-          data: {jsonData: ar, _csrf: csrf},
+          data: {
+            jsonData: ar,
+            _csrf: csrf,
+            bool: true
+          },
           success: function (result) {
-            $("#main-table").DataTable().clearPipeline().draw();
-            $(".modal").modal('hide');
-            $('.tasking').hide();
+            table.rows({ page: 'current' }).deselect();
+            // $("#main-table").DataTable().clearPipeline().draw();
+            // $(".modal").modal('hide');
+            $('.tasking').attr('disabled', true);
           },
           error: function () {
             alert('Ошибка! Обратитесь к разработчику.');
-            $(".modal").modal('hide');
+            // $(".modal").modal('hide');
           }
         });
       }
