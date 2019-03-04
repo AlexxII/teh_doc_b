@@ -5,7 +5,7 @@ return [
     'uploadPath' => '/var/www/develop.tehdoc/upload/tehdoc/tools/',
     'uploadUrl' => 'http://tehdoc.ru/upload/tehdoc/tools/',
     'uploadPath' => '/var/www/develop.tehdoc/web/upload/tehdoc/tools/',
-    'uploadUrl' => 'http://dev.tehdoc.ru/upload/tehdoc/tools/',
+    'uploadUrl' => 'http://dev.tehdoc.su/upload/tehdoc/tools/',
     'sql_details' => [
         'user' => 'tehuser',
         'pass' => '65<tcVeh',

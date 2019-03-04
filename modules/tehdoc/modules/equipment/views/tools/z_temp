@@ -1,0 +1,38 @@
+      <?php
+      if (!empty($model->photos)) {
+        foreach ($model->photos as $k => $photo) {
+          $allImages[] = "<img src='" . $photo->getImageUrl() . "' class='file-preview-image'
+                          style='max-width:100%;max-height:100%'>";
+          $previewImagesConfig[] = [
+            'url' => Url::toRoute(ArrayHelper::merge(['/tehdoc/kernel/tools/remove-image'], [
+              'id' => $photo->id,
+              '_csrf' => Html::csrfMetaTags()
+            ])),
+            'key' => $photo->id
+          ];
+        }
+      } else {
+        $previewImagesConfig = false;
+        $allImages = false;
+      }
+      ?>
+      <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <?= $form->field($fUpload, "imageFiles[]")->widget(FileInput::class, [
+            'language' => 'ru',
+            'options' => ['multiple' => true],
+            'pluginOptions' => [
+              'maxFileCount' => 15,
+              'uploadUrl' => Url::to(['file-upload']),
+              'uploadExtraData' => [
+                'eqId' => $model->tempId,
+              ],
+              'showUpload' => false,
+              'previewFileType' => 'any',
+              'initialPreview' => $allImages,
+              'initialPreviewConfig' => $previewImagesConfig,
+              'overwriteInitial' => false,
+            ],
+          ]); ?>
+        </div>
+      </div>

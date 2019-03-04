@@ -16,8 +16,28 @@ $this->params['breadcrumbs'][] = $this->title;
     font-size: 18px;
     color: #1e6887;
   }
+  label {
+    font-weight: 600;
+  }
+  .note {
+    color: #586069;
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    margin: 0;
+  }
+  .form-checkbox {
+    margin: 15px 0px;
+    padding-left: 20px;
+    vertical-align: middle;
+  }
   .d-flex {
     display: flex !important;
+  }
+  .form-checkbox input[type="checkbox"], .form-checkbox input[type="radio"] {
+    float: left;
+    margin: 5px 0 0 -20px;
+    vertical-align: middle;
   }
   .flex-items-center {
     align-items: center !important;
@@ -39,20 +59,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <ul class="nav nav-tabs" id="main-teh-tab">
   <li class="active">
-    <a href="../info/index">
+    <a href="../info/update">
       Инфо
     </a>
   </li>
   <li>
     <a href="../docs/index">
       Docs
-      <span class="Counter"><?= $wiki ?></span>
+      <span class="Counter"><?= $docsCount ?></span>
     </a>
   </li>
   <li>
     <a href="../foto/index">
       Foto
-      <span class="Counter"><?= $wiki ?></span>
+      <span class="Counter"><?= $imagesCount ?></span>
     </a>
   </li>
   <li>
@@ -69,9 +89,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-lg-11 col-md-11 col-xs-11">
       <h3><?= Html::encode($model->name) ?></h3>
     </div>
-    <div class="text-right" style="padding: 7px 15px 0 0">
+    <div class="text-right" style="padding: 7px 15px 0 5px">
       <a type="button" href="/tehdoc/equipment/tool/<?= $model->ref?>/info/index"
-         class="btn-primary btn-sm">View</a>
+         class="btn-primary btn-sm">Info</a>
     </div>
   </div>
 

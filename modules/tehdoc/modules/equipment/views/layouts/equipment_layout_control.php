@@ -16,7 +16,8 @@ TehdocAsset::register($this);       // регистрация ресурсов �
 \app\modules\tehdoc\modules\equipment\asset\EquipmentAsset::register($this);
 MdeAsset::register($this);
 
-$about = "Панель управления оборудованием";
+$about = "Панель управления оборудованием. Предназначена для добавления, изменения и удаления оборудования.
+";
 $add_hint = 'Добавить новый узел';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить БЕЗ вложений';
@@ -79,6 +80,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
   input {
     color: black;
   }
+  .fancytree-custom-icon {
+    color: #1e6887;
+    font-size: 18px;
+  }
 </style>
 
 
@@ -109,7 +114,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="dropdown-header" style="font-size: 10px">Управление оборудованием</li>',
           ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/control-panel']],
           ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/tools/create']],
-          ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/tools/tools/task']],
+          ['label' => 'Задание на обновление', 'url' => ['/tehdoc/equipment/tools/task']],
         ],
       ],
       /*            // В разработке
@@ -281,7 +286,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         var csrf = $('meta[name=csrf-token]').attr("content");
         var node = $(".ui-draggable-handle").fancytree("getActiveNode");
         $.ajax({
-          url: "/tehdoc/equipment/control-panel/control/delete-node",
+          url: "/tehdoc/equipment/control-panel/info/delete-node",
           type: "post",
           data: {
             id: node.data.ref,
@@ -543,10 +548,11 @@ $del_multi_nodes = 'Удвлить С вложениями';
           }
           $(".del-node").show();
         }
+
       },
       click: function(event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-        if (target === 'icon'){
+        if (target === 'title' || target === 'icon'){
           var node = data.node;
           var prefix = '/tehdoc/equipment/control-panel/';
           if (node.key != 1122334455 && node.key != 5544332211) {
@@ -562,6 +568,18 @@ $del_multi_nodes = 'Удвлить С вложениями';
           var url = prefix + node.key + '/info/update';
           window.location.href = url;
         }
+      },
+      icon: function(event, data) {
+        if (data.node.key == 1122334455){
+          return "fa fa-sitemap";
+        } else if (data.node.key == 5544332211){
+          return "fa fa-question-circle";
+        } else {
+          return false;
+        }
+        // if (data.node.isFolder()) {
+        //   return "fa fa-eye";
+        // }
       },
       renderNode: function (node, data) {
       },

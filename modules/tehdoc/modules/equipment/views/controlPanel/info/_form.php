@@ -13,6 +13,7 @@ use app\modules\tehdoc\asset\TehFormAsset;
 <style>
   .nonreq {
     color: #1e6887;
+    font-size: 14px;
   }
   .select-selected {
     padding-left: 40px;
@@ -46,6 +47,15 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
           'enctype' => 'multipart/form-data'],
         'action' => 'update'
       ]); ?>
+      <li class="list-group-item" style="margin-bottom: 15px">
+        <div class="form-checkbox js-complex-option">
+          <input class="ch" id="consolidated-feature" type="checkbox" data-check='consolidated-check'
+                 data-id="<?= $model->ref ?>" <?php if ($model->eq_task) echo 'checked' ?> >
+          <label for="consolidated-feature" style="font-weight: 500">В задание на обновление</label>
+          <span class="status-indicator" id="consolidated-check"></span>
+          <p class="note" style="margin-bottom: 10px">Добавить данное оборудование в задание на обновление данных.</p>
+        </div>
+      </li>
       <div class="row">
         <div class="col-md-6 col-lg-6">
           <?php
@@ -152,12 +162,12 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
 
     // $('#tools-category_id').attr('disabled', 'disabled');
 
-/*
-    $('#tools-category_id').on('change', function (e) {
-      var text = $("#tools-category_id option:selected").text();
-      $('#tools-eq_title').val(text);
-    });
-*/
+    /*
+        $('#tools-category_id').on('change', function (e) {
+          var text = $("#tools-category_id option:selected").text();
+          $('#tools-eq_title').val(text);
+        });
+    */
 
     $('#tools-eq_title').on('input', function (e) {
       var node = $("#fancyree_w0").fancytree("getActiveNode");
@@ -166,7 +176,6 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
     })
 
   });
-
 
   $(document).ready(function () {
     $('.fact-date').datepicker({
@@ -244,27 +253,57 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
     });
   });
 
-
-/*
-  $('#tools-eq_class').on('change',function(){
-    var classId = $(this).val();
-    if(classId){
+  $(document).ready(function () {
+    var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
+    var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
+    var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
+    $('.ch').change(function (e) {
+      var checkId = $(this).data('check');
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      $('#' + checkId).html(waiting);
+      var url = '/tehdoc/equipment/tools/task-set';
+      var nodeId = $(this).data('id');
+      var result = $(this).is(':checked');
+      console.log(result);
       $.ajax({
-        type:'POST',
-        url:'../control/category-list',
-        data:'classId='+classId,
-        success:function(html){
-          $('#tools-category_id').html(html);
-          $('#tools-category_id').removeAttr('disabled');
-          // $('#city').html('<option value="">Select state first</option>');
+        url: url,
+        type: "post",
+        data: {
+          toolId: nodeId,
+          _csrf: csrf,
+          bool: result
+        },
+        success: function (data) {
+          $('#' + checkId).html(successCheck);
+        },
+        error: function (data) {
+          $('#' + checkId).html(warningCheck);
         }
       });
-    }else{
-      $('#state').html('<option value="">Select country first</option>');
-      $('#city').html('<option value="">Select state first</option>');
-    }
-  });
-*/
+    })
+  })
+
+
+  /*
+    $('#tools-eq_class').on('change',function(){
+      var classId = $(this).val();
+      if(classId){
+        $.ajax({
+          type:'POST',
+          url:'../control/category-list',
+          data:'classId='+classId,
+          success:function(html){
+            $('#tools-category_id').html(html);
+            $('#tools-category_id').removeAttr('disabled');
+            // $('#city').html('<option value="">Select state first</option>');
+          }
+        });
+      }else{
+        $('#state').html('<option value="">Select country first</option>');
+        $('#city').html('<option value="">Select state first</option>');
+      }
+    });
+  */
 
 
   /*

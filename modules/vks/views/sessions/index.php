@@ -206,6 +206,7 @@ Yii::$app->cache->flush();
         pages: 2 // number of pages to cache
       }),
       orderFixed: [2, 'asc'],
+      order: [ 3, 'asc' ],
       rowGroup: {
         dataSrc: 2
       },

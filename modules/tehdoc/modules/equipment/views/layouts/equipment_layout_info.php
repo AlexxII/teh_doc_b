@@ -9,11 +9,14 @@ use app\assets\AppAsset;
 use app\modules\tehdoc\asset\TehdocAsset;
 use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
 use app\assets\FancytreeAsset;
+use app\assets\PhotoswipeAsset;
+use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
 
+PhotoswipeAsset::register($this);
 FancytreeAsset::register($this);
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 TehdocAsset::register($this);       // регистрация ресурсов модуля
-\app\modules\tehdoc\modules\equipment\asset\EquipmentAsset::register($this);
+EquipmentAsset::register($this);
 MdeAsset::register($this);
 
 $about = "Панель управления оборудованием";
@@ -76,6 +79,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
   .ui-fancytree {
     overflow: auto;
   }
+  .fancytree-custom-icon {
+    color: #1e6887;
+    font-size: 18px;
+  }
 </style>
 
 
@@ -106,7 +113,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="dropdown-header" style="font-size: 10px">Управление оборудованием</li>',
           ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/control-panel']],
           ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/tools/create']],
-          ['label' => 'Задание на добавление', 'url' => ['/tehdoc/equipment/tools/tools/task']],
+          ['label' => 'Задание на обновление', 'url' => ['/tehdoc/equipment/tools/task']],
         ],
       ],
       /*            // В разработке
@@ -311,6 +318,18 @@ $del_multi_nodes = 'Удвлить С вложениями';
             window.location.href = url;
           }
         }
+      },
+      icon: function(event, data) {
+        if (data.node.key == 1122334455){
+          return "fa fa-sitemap";
+        } else if (data.node.key == 5544332211){
+          return "fa fa-question-circle";
+        } else {
+          return false;
+        }
+        // if (data.node.isFolder()) {
+        //   return "fa fa-eye";
+        // }
       },
       init: function (event, data) {
         var uri = window.location.href;

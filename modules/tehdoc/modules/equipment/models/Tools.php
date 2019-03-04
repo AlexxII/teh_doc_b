@@ -4,8 +4,8 @@ namespace app\modules\tehdoc\modules\equipment\models;
 
 use app\modules\admin\models\Classifier;
 use app\modules\admin\models\Placement;
-use app\modules\tehdoc\models\Images;
 use app\modules\admin\models\Category;
+use app\modules\tehdoc\modules\equipment\models\Images;
 use yii\helpers\ArrayHelper;
 use app\base\NestedSetsTreeBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
@@ -37,6 +37,7 @@ class Tools extends \yii\db\ActiveRecord
 
   public $eq_operating_time;
   public $invent_number;
+  public $tempId;
 
   public static function tableName()
   {
@@ -109,18 +110,6 @@ class Tools extends \yii\db\ActiveRecord
     ];
   }
 
-  public function fields()
-  {
-    return [
-
-    ];
-  }
-
-  public function getPhotos()
-  {
-    return $this->hasMany(Images::class, ['eq_id' => 'ref']);
-  }
-
   public function getCategory()
   {
     return $this->hasOne(Category::class, ['ref' => 'category_id']);
@@ -149,10 +138,9 @@ class Tools extends \yii\db\ActiveRecord
     return $this->hasOne(Placement::class, ['ref' => 'place_id']);
   }
 
-  public function getPlacementTitle()
+  public function getPlacementTitle($depth = 1)
   {
     // TODO: Возможно необходимо сделать переменную $depth настраиваемой
-    $depth = 1; // сколько уровней
     if ($this->placement) {
       $full = $this->placement;
       $parentCount = $full->parents()->count();
@@ -167,19 +155,48 @@ class Tools extends \yii\db\ActiveRecord
     }
   }
 
+  public function toolParents($depth = 1)
+  {
+    $parentCount = $this->parents()->count();
+    $parent = $this->parents($parentCount - $depth)->all();
+    $fullname = '';
+    foreach ($parent as $p) {
+      $fullname .= $p->name . ' / ';
+    }
+    return $fullname;
+  }
+
+  // Wiki
   public function getWiki()
   {
-    return $this->hasOne(Wiki::class, ['eq_ref' => 'ref']);
+    return $this->hasMany(Wiki::class, ['eq_id' => 'ref']);
   }
 
   public function getCountWikiPages()
   {
-    return $this->hasOne(Wiki::class, ['eq_ref' => 'ref'])->count();
+    return $this->hasMany(Wiki::class, ['eq_id' => 'ref'])->count();
   }
 
-  public function getCountFiles()
+  // Документы
+  public function getDocs()
   {
-    return $this->hasOne(Images::class, ['eq_id' => 'ref'])->count();
+    return $this->hasMany(Docs::class, ['eq_id' => 'ref']);
+  }
+
+  public function getCountDocs()
+  {
+    return $this->hasMany(Docs::class, ['eq_id' => 'ref'])->count();
+  }
+
+  // Изображения
+  public function getImages()
+  {
+    return $this->hasMany(Images::class, ['eq_id' => 'ref']);
+  }
+
+  public function getCountImages()
+  {
+    return $this->hasMany(Images::class, ['eq_id' => 'ref'])->count();
   }
 
   // Доступ к свойствам объекта

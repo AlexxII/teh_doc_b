@@ -6,9 +6,8 @@ $this->title = 'Таблица с оборудованием';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$about = "Перечень всего оборудования, зарегистрированного в системе и отмеченного для доступа в панеле управления. 
-Предназначен для поиска оборудования по указанным данным.";
-$task_hint = 'Добавить выделенные элементы в задание на обновление данных.';
+$about = "Перечень всего оборудования, зарегистрированного в системе и отмеченного для доступа в панеле управления.";
+$dell_hint = 'Удалить выделенные строки.';
 
 ?>
 
@@ -40,13 +39,13 @@ $task_hint = 'Добавить выделенные элементы в зада
 <div class="row">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 20px">
-      <?= Html::a('В задание',
+      <?= Html::a('Удалить',
         [''], [
-          'class' => 'btn btn-success btn-sm tasking',
+          'class' => 'btn btn-danger btn-sm delete',
           'style' => ['margin-top' => '5px'],
           'data-toggle' => "tooltip",
           'data-placement' => "top",
-          'title' => $task_hint,
+          'title' => $dell_hint,
           'disabled' => true
         ]) ?>
     </div>
@@ -60,15 +59,15 @@ $task_hint = 'Добавить выделенные элементы в зада
           <thead>
             <tr>
               <th></th>
-              <th data-priority="1">Наименование</th>
+              <th >Наименование</th>
               <th >Производитель</th>
               <th >Модель</th>
               <th >s/n</th>
               <th >Инв.№</th>
-              <th >Дата изготовл.</th>
-              <th >Кол.</th>
-              <th data-priority="2">Action</th>
-              <th data-priority="3"></th>
+              <th >Дата производства</th>
+              <th >Количество</th>
+              <th data-priority="3">Action</th>
+              <th></th>
             </tr>
           </thead>
         </table>';
@@ -235,26 +234,21 @@ $task_hint = 'Добавить выделенные элементы в зада
     var table = $('#main-table').DataTable();
     table.on('select', function (e, dt, type, indexes) {
       if (type === 'row') {
-        $('.tasking').removeAttr('disabled');
+        $('.delete').prop('disabled', false);
       }
     });
     table.on('deselect', function (e, dt, type, indexes) {
       if (type === 'row') {
-        console.log();
-        if (table.rows( { selected: true } ).count() > 0) return;
-        $('.tasking').attr('disabled', true);
+        $('.delete').prop('disabled', true);
       }
     });
   });
 
-  //********************** В задание на обновление данных ***********************************
+  //********************** Удаление записей ***********************************
 
   $(document).ready(function () {
-    $('.tasking').click(function (event) {
+    $('.delete').click(function (event) {
       event.preventDefault();
-      if($(this).attr('disabled')){
-        return;
-      }
       var csrf = $('meta[name=csrf-token]').attr("content");
       var table = $('#main-table').DataTable();
       var data = table.rows({selected: true}).data();
@@ -263,26 +257,21 @@ $task_hint = 'Добавить выделенные элементы в зада
       for (var i = 0; i < count; i++) {
         ar[i] = data[i][0];
       }
-      if (confirm('Вы хотите добавить выделенные объекты в задание на обновление? Выделено ' + data.length + '!!!  ')) {
-        // $(".modal").modal("show");
+      if (confirm('Вы действительно хотите удалить выделенные сеансы? Выделено ' + data.length + '!!!  ')) {
+        $(".modal").modal("show");
         $.ajax({
-          url: "task-set-package",
+          url: "delete",
           type: "post",
           dataType: "JSON",
-          data: {
-            jsonData: ar,
-            _csrf: csrf,
-            bool: true
-          },
+          data: {jsonData: ar, _csrf: csrf},
           success: function (result) {
-            table.rows({ page: 'current' }).deselect();
-            // $("#main-table").DataTable().clearPipeline().draw();
-            // $(".modal").modal('hide');
-            $('.tasking').attr('disabled', true);
+            $("#main-table").DataTable().clearPipeline().draw();
+            $(".modal").modal('hide');
+            $('.delete').hide();
           },
           error: function () {
             alert('Ошибка! Обратитесь к разработчику.');
-            // $(".modal").modal('hide');
+            $(".modal").modal('hide');
           }
         });
       }

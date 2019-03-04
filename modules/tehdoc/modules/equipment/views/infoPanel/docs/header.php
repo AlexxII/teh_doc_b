@@ -118,19 +118,19 @@ $this->params['breadcrumbs'][] = $this->title;
   <li class="active">
     <a href="../docs/index">
       Docs
-      <span class="Counter"><?= $wiki ?></span>
+      <span class="Counter"><?= $docsCount ?></span>
     </a>
   </li>
   <li>
     <a href="../foto/index">
       Foto
-      <span class="Counter"><?= $wiki ?></span>
+      <span class="Counter"><?= $imagesCount ?></span>
     </a>
   </li>
   <li>
     <a href="../wiki/index" style="cursor: pointer">
       Wiki
-      <span class="Counter"><?= $wiki ?></span>
+      <span class="Counter"><?= $wikiCount ?></span>
     </a>
   </li>
 </ul>

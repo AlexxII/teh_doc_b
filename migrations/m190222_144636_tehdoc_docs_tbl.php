@@ -3,11 +3,11 @@
 use yii\db\Migration;
 
 /**
- * Class m181225_083610_tehdoc_image_tbl
+ * Class m190222_144636_tehdoc_docs_tbl
  */
-class m181225_083610_tehdoc_image_tbl extends Migration
+class m190222_144636_tehdoc_docs_tbl extends Migration
 {
-  const TABLE_NAME = '{{%teh_image_tbl}}';
+  const TABLE_NAME = '{{%teh_docs_tbl}}';
 
   public function up()
   {
@@ -18,8 +18,9 @@ class m181225_083610_tehdoc_image_tbl extends Migration
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->primaryKey(),
       'eq_id' => $this->integer()->notNull(),
-      'image_path' => $this->string(255)->notNull()->unique(),
-      'image_extention' => $this->string(),
+      'doc_title' => $this->string(255),
+      'doc_path' => $this->string(255)->notNull()->unique(),
+      'doc_extention' => $this->string(),
       'upload_time' => $this->datetime(),
       'upload_user' => $this->integer(),
       'valid' => $this->boolean()->notNull()->defaultValue(1),
