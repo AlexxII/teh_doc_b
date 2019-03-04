@@ -76,31 +76,31 @@ class ToolsController extends Controller
     ]);
   }
 
-  public function actionUpdate($id)
-  {
-    $model = $this->findModel($id);
-    $fUpload = new Images();
+  /*  public function actionUpdate($id)
+    {
+      $model = $this->findModel($id);
+      $fUpload = new Images();
 
-    if ($model->load(Yii::$app->request->post())) {
-      if ($model->save(false)) { // TODO Разобраться с валидацией, при вкл - не сохраняет
-        if ($fUpload->load(Yii::$app->request->post())) {
-          $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
-          if ($fUpload->uploadImage($model->id_eq)) {
-            Yii::$app->session->setFlash('success', 'Изменения внесены');
+      if ($model->load(Yii::$app->request->post())) {
+        if ($model->save(false)) { // TODO Разобраться с валидацией, при вкл - не сохраняет
+          if ($fUpload->load(Yii::$app->request->post())) {
+            $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
+            if ($fUpload->uploadImage($model->id_eq)) {
+              Yii::$app->session->setFlash('success', 'Изменения внесены');
+            }
+          } else {
+            Yii::$app->session->setFlash('success', 'Изменения внесены!!');
           }
+          return $this->redirect(['view', 'id' => $model->id_eq]);
         } else {
-          Yii::$app->session->setFlash('success', 'Изменения внесены!!');
+          Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');
         }
-        return $this->redirect(['view', 'id' => $model->id_eq]);
-      } else {
-        Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');
       }
-    }
-    return $this->render('update', [
-      'model' => $model,
-      'fupload' => $fUpload,
-    ]);
-  }
+      return $this->render('update', [
+        'model' => $model,
+        'fupload' => $fUpload,
+      ]);
+    }*/
 
   public function actionFileUpload()
   {
@@ -123,6 +123,7 @@ class ToolsController extends Controller
       'models' => $models
     ]);
   }
+
 // серверная часть установки флажка "В задании на обновление"
   public function actionTaskSet()
   {
@@ -155,14 +156,13 @@ class ToolsController extends Controller
       } else {
         $bool = 0;
       }
+      $result = false;
       foreach ($_POST['jsonData'] as $toolId) {
         $model = $this->findModel($toolId);
         $model->eq_task = $bool;
-        if ($model->save()) {
-          return true;
-        }
-        return false;
+        $result = $model->save();
       }
+      return $result;
     }
     return false;
   }
@@ -171,6 +171,7 @@ class ToolsController extends Controller
   {
     $model = $this->findModel($id);
     $fUpload = new Images();
+    $model->tempId = $model->ref;
 
     if ($model->load(Yii::$app->request->post())) {
       if ($model->save(false)) { // TODO Разобраться с валидацией, при вкл - не сохраняет
@@ -287,7 +288,7 @@ class ToolsController extends Controller
         'formatter' => function ($d, $row) { //TODO
           return $d . ' шт.';
         }
-      )
+      ),
     );
 
     $sql_details = \Yii::$app->params['sql_details'];
@@ -312,6 +313,9 @@ class ToolsController extends Controller
     return json_encode(
       SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
     );
+//    return var_dump(
+//      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
+//    );
   }
 
   public function actionDelete()

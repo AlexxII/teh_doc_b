@@ -209,6 +209,10 @@ class SSP
     $where = self::filter($request, $columns, $bindings);
     // Main query to actually get the data
 
+//    $sql = "SET @@sql_mode = ''";
+//    $stmt = $db->prepare($sql);
+//    $stmt->execute();
+
     $data = self::sql_exec($db, $bindings,
       "SELECT `" . implode("`, `", self::pluck($columns, 'db')) . "`
 			 FROM `$table`
