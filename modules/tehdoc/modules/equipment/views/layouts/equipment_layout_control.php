@@ -134,6 +134,12 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="dropdown-header" style="font-size: 10px">Весь перечнь</li>',
           ['label' => 'По категориям', 'url' => ['/tehdoc/equipment/tools/categories']],
           ['label' => 'По месту размещения', 'url' => ['/tehdoc/equipment/tools/placement']],
+          '<li class="divider"></li>',
+          '<li class="dropdown-header" style="font-size: 10px">Таблицы</li>',
+          ['label' => 'Таблица ОТХ', 'url' => ['/tehdoc/equipment/tools/oth']],
+          ['label' => 'Таблица драг.металлов', 'url' => ['/tehdoc/equipment/tools/categories']],
+          ['label' => 'Таблица инвентаризации', 'url' => ['/tehdoc/equipment/tools/categories']],
+
 //                    '<li class="divider"></li>',
 //                    '<li class="dropdown-header" style="font-size: 10px">Комплекты</li>',
 //                    ['label' => 'По категориям', 'url' => ['/tehdoc/tools/categories']],
@@ -550,9 +556,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
         }
 
       },
-      click: function(event, data) {
+      click: function (event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-        if (target === 'title' || target === 'icon'){
+        if (target === 'title' || target === 'icon') {
           var node = data.node;
           var prefix = '/tehdoc/equipment/control-panel/';
           if (node.key != 1122334455 && node.key != 5544332211) {
@@ -569,10 +575,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
           window.location.href = url;
         }
       },
-      icon: function(event, data) {
-        if (data.node.key == 1122334455){
+      icon: function (event, data) {
+        if (data.node.key == 1122334455) {
           return "fa fa-sitemap";
-        } else if (data.node.key == 5544332211){
+        } else if (data.node.key == 5544332211) {
           return "fa fa-question-circle";
         } else {
           return false;

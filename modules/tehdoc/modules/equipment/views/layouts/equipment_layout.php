@@ -124,6 +124,12 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="dropdown-header" style="font-size: 10px">Весь перечнь</li>',
           ['label' => 'По категориям', 'url' => ['/tehdoc/equipment/tools/categories']],
           ['label' => 'По месту размещения', 'url' => ['/tehdoc/equipment/tools/placement']],
+          '<li class="divider"></li>',
+          '<li class="dropdown-header" style="font-size: 10px">Таблицы</li>',
+          ['label' => 'Таблица ОТХ', 'url' => ['/tehdoc/equipment/tools/oth']],
+          ['label' => 'Таблица драг.металлов', 'url' => ['/tehdoc/equipment/tools/categories']],
+          ['label' => 'Таблица инвентаризации', 'url' => ['/tehdoc/equipment/tools/categories']],
+
 //                    '<li class="divider"></li>',
 //                    '<li class="dropdown-header" style="font-size: 10px">Комплекты</li>',
 //                    ['label' => 'По категориям', 'url' => ['/tehdoc/tools/categories']],

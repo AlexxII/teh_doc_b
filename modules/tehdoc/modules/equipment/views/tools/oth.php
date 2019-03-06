@@ -2,12 +2,11 @@
 
 use yii\helpers\Html;
 
-$this->title = 'Таблица с оборудованием';
+$this->title = 'Таблица ОТХ';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$about = "Перечень всего оборудования, зарегистрированного в системе и отмеченного для доступа в панеле управления. 
-Предназначен для поиска оборудования по указанным данным.";
+$about = "Перечень всего оборудования для ОТХ, зарегистрированного в системе и отмеченного для доступа в панеле управления.";
 $task_hint = 'Добавить выделенные элементы в задание на обновление данных.';
 
 ?>
@@ -172,7 +171,7 @@ $task_hint = 'Добавить выделенные элементы в зада
   });
 
   $(document).ready(function () {
-    var settings = 'eq_general';
+    var settings = 'eq_oth';
     var table = $('#main-table').DataTable({
       "processing": true,
       "serverSide": true,
@@ -264,7 +263,7 @@ $task_hint = 'Добавить выделенные элементы в зада
       var data = table.rows({selected: true}).data();
       var ar = [];
       var count = data.length;
-      var url = '/tehdoc/equipment/control-panel/settings/task-set-pckg';
+      var url = '/tehdoc/equipment/control-panel/settings/task-set-package';
       for (var i = 0; i < count; i++) {
         ar[i] = data[i][0];
       }

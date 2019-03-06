@@ -3,6 +3,7 @@
 namespace app\modules\tehdoc\modules\equipment\controllers\controlPanel;
 
 use app\modules\tehdoc\modules\equipment\models\Tools;
+use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -17,12 +18,14 @@ class SettingsController extends Controller
   public function actionIndex()
   {
     $id = $_GET['id'];
-    $model = $this->findModel($id);
-    $wikiCount = $model->countWikiPages;
-    $imagesCount = $model->countImages;
-    $docsCount = $model->countDocs;
+    $tool = $this->findTool($id);
+    $toolSettings = $this->findSettings($id);
+    $wikiCount = $tool->countWikiPages;
+    $imagesCount = $tool->countImages;
+    $docsCount = $tool->countDocs;
     return $this->render('header', [
-      'model' => $this->findModel($id),
+      'tool' => $this->findTool($id),
+      'toolSettings' => $toolSettings,
       'docsCount' => $docsCount,
       'imagesCount' => $imagesCount,
       'wikiCount' => $wikiCount,
@@ -30,20 +33,116 @@ class SettingsController extends Controller
   }
 
 
-  public function actionConsolidate()
+  public function actionGeneralTable()
   {
-    sleep(2);
-    return true;
+    if (isset($_POST['toolId'])) {
+      $toolId = $_POST['toolId'];
+      $model = $this->findSettings($toolId);
+      if (isset($_POST['bool'])) {
+        if ($_POST['bool'] === 'true') {
+          $model->eq_general = 1;
+        } else {
+          $model->eq_general = 0;
+        }
+      } else {
+        return false;
+      }
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  public function actionGeneralTablePckg()
+  {
+    return false;
   }
 
   public function actionOth()
   {
-    sleep(2);
-    return true;
+    if (isset($_POST['toolId'])) {
+      $toolId = $_POST['toolId'];
+      $model = $this->findSettings($toolId);
+      if (isset($_POST['bool'])) {
+        if ($_POST['bool'] === 'true') {
+          $model->eq_oth = 1;
+        } else {
+          $model->eq_oth = 0;
+        }
+      } else {
+        return false;
+      }
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  public function actionOthPckg()
+  {
+    return false;
   }
 
 
-  protected function findModel($id)
+    // серверная часть установки флажка "В задании на обновление"
+  public function actionTaskSet()
+  {
+    if (isset($_POST['toolId'])) {
+      $toolId = $_POST['toolId'];
+      $model = $this->findSettings($toolId);
+      if (isset($_POST['bool'])) {
+        if ($_POST['bool'] === 'true') {
+          $model->eq_task = 1;
+        } else {
+          $model->eq_task = 0;
+        }
+      } else {
+        return false;
+      }
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+// серверная часть установки флажка "В задании на обновление" - пакетная обработка
+  public function actionTaskSetPckg()
+  {
+    if (isset($_POST['jsonData']) && isset($_POST['bool'])) {
+      if ($_POST['bool'] === 'true') {
+        $bool = 1;
+      } else {
+        $bool = 0;
+      }
+      $result = false;
+      foreach ($_POST['jsonData'] as $toolId) {
+        $model = $this->findSettings($toolId);
+        $model->eq_task = $bool;
+        $result = $model->save();
+      }
+      return $result;
+    }
+    return false;
+  }
+
+
+  protected function findSettings($id)
+  {
+    if (($model = ToolSettings::find()->where(['eq_id' => $id])->limit(1)->all()) !== null) {
+      if (!empty($model)) {
+        return $model[0];
+      }
+    }
+    throw new NotFoundHttpException('The requested page does not exist.');
+  }
+
+  protected function findTool($id)
   {
     if (($model = Tools::find()->where(['ref' => $id])->limit(1)->all()) !== null) {
       if (!empty($model)) {

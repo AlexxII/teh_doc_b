@@ -166,6 +166,15 @@ class Tools extends \yii\db\ActiveRecord
     return $fullname;
   }
 
+
+  // Tool Settings
+  public function getSettings()
+  {
+    return $this->hasOne(ToolSettings::class, ['eq_id' => 'ref']);
+  }
+
+
+
   // Wiki
   public function getWiki()
   {

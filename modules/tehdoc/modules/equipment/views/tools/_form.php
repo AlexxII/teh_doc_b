@@ -182,7 +182,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
           <li class="list-group-item" style="margin-bottom: 15px">
             <div class="form-checkbox js-complex-option">
               <input class="ch" id="consolidated-feature" type="checkbox" data-check='consolidated-check'
-                     data-id="<?= $model->ref ?>" <?php if ($model->eq_task) echo 'checked' ?> >
+                     data-id="<?= $model->ref ?>" <?php if ($model->settings->eq_task) echo 'checked' ?> >
               <label for="consolidated-feature" style="font-weight: 500">В задании на обновление</label>
               <span class="status-indicator" id="consolidated-check"></span>
             </div>
@@ -297,7 +297,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
       var checkId = $(this).data('check');
       var csrf = $('meta[name=csrf-token]').attr("content");
       $('#' + checkId).html(waiting);
-      var url = '/tehdoc/equipment/tools/task-set';
+      var url = '/tehdoc/equipment/control-panel/settings/task-set';
       var nodeId = $(this).data('id');
       var result = $(this).is(':checked');
       console.log(result);

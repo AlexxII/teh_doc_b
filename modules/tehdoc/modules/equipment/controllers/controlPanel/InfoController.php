@@ -2,6 +2,7 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers\controlPanel;
 
+use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 use yii\web\Controller;
 use app\modules\tehdoc\modules\equipment\models\Tools;
 use Yii;
@@ -29,15 +30,15 @@ class InfoController extends Controller
     } else if ($id == 5544332211) {
       return $this->render('meeting_waiting');
     }
-    $model = $this->findModel($id);
-    $wikiCount = $model->countWikiPages;
-    $imagesCount = $model->countImages;
-    $docsCount = $model->countDocs;
-    $model->scenario = Tools::SCENARIO_UPDATE;
-    if ($model->load(Yii::$app->request->post())) {
-      if ($model->save()) {
+    $tool = $this->findTool($id);
+    $wikiCount = $tool->countWikiPages;
+    $imagesCount = $tool->countImages;
+    $docsCount = $tool->countDocs;
+    $tool->scenario = Tools::SCENARIO_UPDATE;
+    if ($tool->load(Yii::$app->request->post())) {
+      if ($tool->save()) {
         return $this->redirect(['update',
-          'id' => $model->ref,
+          'id' => $tool->ref,
           'docsCount' => $docsCount,
           'imagesCount' => $imagesCount,
           'wikiCount' => $wikiCount,
@@ -47,14 +48,14 @@ class InfoController extends Controller
       }
     }
     return $this->render('update', [
-      'model' => $model,
+      'model' => $tool,
       'docsCount' => $docsCount,
       'imagesCount' => $imagesCount,
       'wikiCount' => $wikiCount,
     ]);
   }
 
-  protected function findModel($id)
+  protected function findTool($id)
   {
     if (($model = Tools::find()->where(['ref' => $id])->limit(1)->all()) !== null) {
       if (!empty($model)) {
@@ -72,10 +73,13 @@ class InfoController extends Controller
     $date = date('Y-m-d H:i:s');
     $parentOrder = Tools::findOne($parentId);
     $newTool = new Tools(['name' => $title]);
+    $toolSettings = new ToolSettings();
     $newTool->parent_id = $parentOrder->ref;
     $newTool->ref = mt_rand();
     $newTool->eq_title = $title;
     if ($newTool->appendTo($parentOrder)) {
+      $toolSettings->eq_id = $newTool->ref;
+      $toolSettings->save();
       $data['acceptedTitle'] = $title;
       $data['acceptedId'] = $newTool->id;
       $data['acceptedRef'] = $newTool->ref;
