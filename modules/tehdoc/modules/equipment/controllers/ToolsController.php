@@ -2,6 +2,7 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers;
 
+use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 use Yii;
 use yii\web\Controller;
 use app\modules\tehdoc\modules\equipment\models\Tools;
@@ -34,6 +35,7 @@ class ToolsController extends Controller
   public function actionCreate()
   {
     $model = new Tools();
+    $toolSettings = new ToolSettings();
     $model->scenario = Tools::SCENARIO_CREATE;
     $fUpload = new Images();
     $model->quantity = 1;                             // По умолчанию, кол-во оборудования - 1
@@ -45,11 +47,13 @@ class ToolsController extends Controller
       } else {
         $model->ref = $model->tempId;
       }
+      $toolSettings->eq_id = $model->ref;
       $model->parent_id = 0;
       $model->name = $model->eq_title;
       $parentNode = Tools::findOne(2);
       $model->appendTo($parentNode);
       if ($model->save()) {
+        $toolSettings->save();
         if ($fUpload->load(Yii::$app->request->post())) {
           $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
           if ($fUpload->uploadImage($model->ref)) {
