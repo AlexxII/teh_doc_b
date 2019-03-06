@@ -135,7 +135,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           ['label' => 'По месту размещения', 'url' => ['/tehdoc/equipment/tools/placement']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Таблицы</li>',
-          ['label' => 'Таблица ОТХ', 'url' => ['/tehdoc/equipment/tools/categories']],
+          ['label' => 'Таблица ОТХ', 'url' => ['/tehdoc/equipment/tools/oth']],
           ['label' => 'Таблица драг.металлов', 'url' => ['/tehdoc/equipment/tools/categories']],
           ['label' => 'Таблица инвентаризации', 'url' => ['/tehdoc/equipment/tools/categories']],
 
@@ -319,10 +319,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
           }
         }
       },
-      icon: function(event, data) {
-        if (data.node.key == 1122334455){
+      icon: function (event, data) {
+        if (data.node.key == 1122334455) {
           return "fa fa-sitemap";
-        } else if (data.node.key == 5544332211){
+        } else if (data.node.key == 5544332211) {
           return "fa fa-question-circle";
         } else {
           return false;

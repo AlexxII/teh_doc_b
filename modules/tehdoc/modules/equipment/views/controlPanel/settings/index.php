@@ -7,15 +7,18 @@
     <ul class="list-group">
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" id="consolidated-feature" type="checkbox" data-check='consolidated-check' data-url='consolidate'>
-          <label for="consolidated-feature" style="font-weight: 500">В сводной таблице</label>
-          <span class="status-indicator" id="consolidated-check"></span>
+          <input class="ch" id="general-feature" type="checkbox" data-id="<?= $model->ref ?>"
+                 data-check='general-check'
+                 data-url='general-table' <?php if ($model->settings->eq_general) echo 'checked' ?>>
+          <label for="general-feature" style="font-weight: 500">В сводной таблице</label>
+          <span class="status-indicator" id="general-check"></span>
           <p class="note" style="margin-bottom: 10px">Отображать данный узел в сводной таблице.</p>
         </div>
       </li>
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" id="oth-feature" type="checkbox" data-check='oth-check' data-url='oth'>
+          <input class="ch" id="oth-feature" type="checkbox" data-id="<?= $model->ref ?>"
+                 data-check='oth-check' data-url='oth' <?php if ($model->settings->eq_oth) echo 'checked' ?>>
           <label for="oth-feature" style="font-weight: 500">В перечне ОТХ</label>
           <span class="status-indicator" id="oth-check"></span>
           <p class="note" style="margin-bottom: 10px">Отображать в таблице ОТХ.</p>
@@ -60,7 +63,8 @@
       </li>
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" id="special_works_feature" type="checkbox" data-check='special-check' data-url='special-works'>
+          <input class="ch" id="special_works_feature" type="checkbox" data-check='special-check'
+                 data-url='special-works'>
           <label for="special_works_feature" style="font-weight: 500">Таблицы СпецПроверки</label>
           <span class="status-indicator" id="special-check"></span>
           <p class="note" style="margin-bottom: 10px">Отображать в таблице спецпроверки, если над данным оборудованием
@@ -90,7 +94,8 @@
     <ul class="list-group">
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" id="maintenance-feature" type="checkbox" data-check='maintenance-check' data-url='maintenance'>
+          <input class="ch" id="maintenance-feature" type="checkbox" data-check='maintenance-check'
+                 data-url='maintenance'>
           <label for="maintenance-feature" style="font-weight: 500">В графике ТО</label>
           <span class="status-indicator" id="maintenance-check"></span>
           <p class="note" style="margin-bottom: 10px">Отображать в графике ТО.</p>
@@ -113,7 +118,8 @@
       </li>
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" id="maintenance-work-feature" type="checkbox" data-check='work-count-check' data-url='work-count'>
+          <input class="ch" id="maintenance-work-feature" type="checkbox" data-check='work-count-check'
+                 data-url='work-count'>
           <label for="maintenance-work-feature" style="font-weight: 500">Наработка</label>
           <span class="status-indicator" id="work-count-check"></span>
           <p class="note" style="margin-bottom: 10px">Вести учет наработанного времени.</p>
@@ -223,15 +229,25 @@
     var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
     $('.ch').change(function (e) {
       var checkId = $(this).data('check');
-      $('#'+checkId).html(waiting);
+      $('#' + checkId).html(waiting);
       var url = $(this).data('url');
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var nodeId = $(this).data('id');
+      var result = $(this).is(':checked');
       $.ajax({
         url: url,
+        type: "post",
+        dataType: "JSON",
+        data: {
+          _csrf: csrf,
+          toolId: nodeId,
+          bool: result
+        },
         success: function (data) {
-          $('#'+checkId).html(successCheck);
+          $('#' + checkId).html(successCheck);
         },
         error: function (data) {
-          $('#'+checkId).html(warningCheck);
+          $('#' + checkId).html(warningCheck);
         }
       });
     })

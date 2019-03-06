@@ -49,7 +49,7 @@ $about = "Данный раздел позволяет планировать р
               <div class="form-checkbox js-complex-option">
                 <label style="font-weight: 500">
                   <input class="ch" id="consolidated-feature" type="checkbox" data-check='consolidated-check'
-                         data-id="<?= $model->ref ?>" <?php if ($model->eq_task) echo 'checked' ?> > В задании на
+                         data-id="<?= $model->ref ?>" <?php if ($model->settings->eq_task) echo 'checked' ?> > В задании на
                   обновление
                 </label>
                 <span class="status-indicator"></span>
@@ -81,7 +81,7 @@ $about = "Данный раздел позволяет планировать р
       var nodeId = $(this).data('id');
       var result = $(this).is(':checked');
       var parentDiv = $(this).closest('.task-wrap');
-      var url = '/tehdoc/equipment/tools/task-set';
+      var url = '/tehdoc/equipment/control-panel/settings/task-set';
       var checkId = parentDiv.find('.status-indicator');
       checkId.html(waiting);
       $.ajax({

@@ -118,53 +118,10 @@ class ToolsController extends Controller
 
   public function actionTask()
   {
-    $models = Tools::find()->where(['eq_task' => 1])->all();
+    $models = Tools::find()->where(['s.eq_task' => 1])->joinWith('settings s')->all();
     return $this->render('task', [
       'models' => $models
     ]);
-  }
-
-// серверная часть установки флажка "В задании на обновление"
-  public function actionTaskSet()
-  {
-    if (isset($_POST['toolId'])) {
-      $toolId = $_POST['toolId'];
-      $model = $this->findModel($toolId);
-      if (isset($_POST['bool'])) {
-        if ($_POST['bool'] === 'true') {
-          $model->eq_task = 1;
-        } else {
-          $model->eq_task = 0;
-        }
-      } else {
-        return false;
-      }
-      if ($model->save()) {
-        return true;
-      }
-      return false;
-    }
-    return false;
-  }
-
-// серверная часть установки флажка "В задании на обновление"
-  public function actionTaskSetPackage()
-  {
-    if (isset($_POST['jsonData']) && isset($_POST['bool'])) {
-      if ($_POST['bool'] === 'true') {
-        $bool = 1;
-      } else {
-        $bool = 0;
-      }
-      $result = false;
-      foreach ($_POST['jsonData'] as $toolId) {
-        $model = $this->findModel($toolId);
-        $model->eq_task = $bool;
-        $result = $model->save();
-      }
-      return $result;
-    }
-    return false;
   }
 
   public function actionUpdateEx($id)
@@ -260,6 +217,11 @@ class ToolsController extends Controller
     return $this->render('placements');
   }
 
+  public function actionOth()
+  {
+    return $this->render('oth');
+  }
+
   public function actionServerSide()
   {
     $table = 'teh_equipment_tbl';
@@ -305,14 +267,30 @@ class ToolsController extends Controller
       WHERE ' . $table_ex . '.lft >= ' . $lft .
           ' AND ' . $table_ex . '.rgt <= ' . $rgt .
           ' AND ' . $table_ex . '.root = ' . $root . ')';
+
         return json_encode(
           SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
         );
       }
     }
-    return json_encode(
-      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
-    );
+    if (isset($_GET['index'])) {
+      $index = $_GET['index'];
+      $where = ' ref in (SELECT eq_id FROM teh_settings_tbl WHERE '. $index . '= 1)';
+    } else {
+      $where = '';
+    }
+//    $result = json_encode(
+//      SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
+//    );
+    $result = SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where);
+    foreach ($result['data'] as &$nar){
+      $nar[10] = 'test';
+    }
+    return json_encode($result);
+
+//    return json_encode(
+//      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
+//    );
 //    return var_dump(
 //      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
 //    );
