@@ -165,8 +165,6 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-      var nodeId = node.data.id;
-      console.log(nodeId);
       tree.reload();
       node.setActive();
       $(".del-root").hide();
