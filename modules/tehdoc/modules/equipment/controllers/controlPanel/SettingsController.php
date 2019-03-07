@@ -79,6 +79,7 @@ class SettingsController extends Controller
           $oth->eq_id = $model->ref;
         } else {
           $settings->eq_oth = 0;
+          $oth->eq_id = $model->ref;
           $oth->valid = 0;
         }
       } else {
