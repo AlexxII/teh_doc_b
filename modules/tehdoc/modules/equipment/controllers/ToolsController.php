@@ -2,6 +2,7 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers;
 
+use app\modules\tehdoc\modules\equipment\models\SSPEx;
 use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 use Yii;
 use yii\web\Controller;
@@ -279,17 +280,13 @@ class ToolsController extends Controller
     }
     if (isset($_GET['index'])) {
       $index = $_GET['index'];
-      $where = ' ref in (SELECT eq_id FROM teh_settings_tbl WHERE '. $index . '= 1)';
+      $where = ' ref in (SELECT eq_id FROM teh_settings_tbl WHERE ' . $index . '= 1)';
     } else {
       $where = '';
     }
-//    $result = json_encode(
-//      SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
-//    );
+
     $result = SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where);
-    foreach ($result['data'] as &$nar){
-      $nar[10] = 'test';
-    }
+
     return json_encode($result);
 
 //    return json_encode(
@@ -299,6 +296,75 @@ class ToolsController extends Controller
 //      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
 //    );
   }
+
+
+  public function actionServerSideOth()
+  {
+    $table = 'teh_equipment_tbl';
+    $primaryKey = 'id';
+    $columns = array(
+      array('db' => 'ref', 'dt' => 0),
+      array('db' => 'eq_title', 'dt' => 1),
+      array('db' => 'eq_manufact', 'dt' => 2),
+      array('db' => 'eq_model', 'dt' => 3),
+      array('db' => 'eq_serial', 'dt' => 4),
+      array('db' => 'eq_serial', 'dt' => 5),
+      array(
+        'db' => 'eq_factdate',
+        'dt' => 6,
+        'formatter' => function ($d, $row) { //TODO разобраться с форматом отображения даты
+          if ($d != null) {
+            return date('jS M y', strtotime($d));
+          } else {
+            return '-';
+          }
+        }
+      ),
+      array(
+        'db' => 'quantity',
+        'dt' => 7,
+        'formatter' => function ($d, $row) { //TODO
+          return $d . ' шт.';
+        }
+      ),
+    );
+
+    $sql_details = \Yii::$app->params['sql_details'];
+
+    if (isset($_GET['index'])) {
+      $index = $_GET['index'];
+      $where = ' ref in (SELECT eq_id FROM teh_settings_tbl WHERE ' . $index . '= 1)';
+    } else {
+      $where = '';
+    }
+
+    $oth = ToolSettings::find()->select('eq_id, eq_oth_title_on, eq_oth_title')
+      ->where(['eq_oth' => 1])
+//      ->andWhere(['eq_oth' => 1])
+      ->asarray()
+      ->all();
+
+//    return var_dump($oth);
+
+//    $result = json_encode(
+//      SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
+//    );
+    $result = SSPEx::simple($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where);
+    foreach ($result['data'] as $key => &$nar) {
+      if ($oth[$key]['eq_oth_title_on'])
+        $nar[1] = $oth[$key]['eq_oth_title'];
+    }
+//    return var_dump($result);
+    return json_encode($result);
+
+//    return json_encode(
+//      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
+//    );
+//    return var_dump(
+//      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
+//    );
+  }
+
 
   public function actionDelete()
   {

@@ -88,7 +88,31 @@ class SettingsController extends Controller
   }
 
 
-    // серверная часть установки флажка "В задании на обновление"
+  public function actionOthTitle()
+  {
+    if (isset($_POST['toolId'])) {
+      $toolId = $_POST['toolId'];
+      $model = $this->findSettings($toolId);
+      if (isset($_POST['bool'])) {
+        if ($_POST['bool'] === 'true') {
+          $model->eq_oth_title_on = 1;
+          $model->eq_oth_title = $_POST['title'];
+        } else {
+          $model->eq_oth_title_on = 0;
+        }
+      } else {
+        return false;
+      }
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+
+  // серверная часть установки флажка "В задании на обновление"
   public function actionTaskSet()
   {
     if (isset($_POST['toolId'])) {
