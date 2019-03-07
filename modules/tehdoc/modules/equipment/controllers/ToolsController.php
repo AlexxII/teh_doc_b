@@ -2,6 +2,7 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers;
 
+use app\modules\tehdoc\modules\equipment\models\SSPEx;
 use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 use Yii;
 use yii\web\Controller;
@@ -279,17 +280,13 @@ class ToolsController extends Controller
     }
     if (isset($_GET['index'])) {
       $index = $_GET['index'];
-      $where = ' ref in (SELECT eq_id FROM teh_settings_tbl WHERE '. $index . '= 1)';
+      $where = ' ref in (SELECT eq_id FROM teh_settings_tbl WHERE ' . $index . '= 1)';
     } else {
       $where = '';
     }
-//    $result = json_encode(
-//      SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
-//    );
+
     $result = SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where);
-    foreach ($result['data'] as &$nar){
-      $nar[10] = 'test';
-    }
+
     return json_encode($result);
 
 //    return json_encode(
@@ -299,6 +296,63 @@ class ToolsController extends Controller
 //      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
 //    );
   }
+
+
+  public function actionServerSideOth()
+  {
+    $table = 'teh_equipment_tbl';
+    $settingsTable = 'teh_settings_tbl';
+    $primaryKey = 'id';
+    $columns = array(
+      array('db' => '`c`.`ref`', 'dt' => 0),
+      array('db' => '`c`.`eq_title`', 'dt' => 1),
+      array('db' => '`c`.`eq_manufact`', 'dt' => 2),
+      array('db' => '`c`.`eq_model`', 'dt' => 3),
+      array('db' => '`c`.`eq_serial`', 'dt' => 4),
+      array('db' => '`c`.`eq_serial`', 'dt' => 5),
+      array(
+        'db' => '`c`.`eq_factdate`',
+        'dt' => 6,
+        'formatter' => function ($d, $row) { //TODO разобраться с форматом отображения даты
+          if ($d != null) {
+            return date('jS M y', strtotime($d));
+          } else {
+            return '-';
+          }
+        }
+      ),
+      array(
+        'db' => '`c`.`quantity`',
+        'dt' => 7,
+        'formatter' => function ($d, $row) { //TODO
+          return $d . ' шт.';
+        }
+      ),
+      array(
+        'db' => '`cn`.`eq_oth_title`',
+        'dt' => 8
+      ),
+    );
+
+    $sql_details = \Yii::$app->params['sql_details'];
+
+    $ID = 1;
+    $joinQuery = "FROM `{$table}` AS `c` LEFT JOIN `{$settingsTable}` AS `cn` ON (`cn`.`eq_id` = `c`.`ref`)";
+    $extraCondition = "`eq_oth`=".$ID;
+
+//    if (isset($_GET['index'])) {
+//      $index = $_GET['index'];
+//      $where = ' ref in (SELECT eq_id FROM teh_settings_tbl WHERE ' . $index . '= 1)';
+//    } else {
+//      $where = '';
+//    }
+
+    $result = SSPEx::simple($_GET, $sql_details, $table, $primaryKey, $columns, $joinQuery, $extraCondition);
+
+    return json_encode($result);
+
+  }
+
 
   public function actionDelete()
   {

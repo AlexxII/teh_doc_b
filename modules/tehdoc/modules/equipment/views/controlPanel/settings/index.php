@@ -31,9 +31,18 @@
             <div class="form-checkbox">
               <div class="input-group" style="padding-right: 20px">
                   <span class="input-group-addon">
-                    <input type="checkbox" aria-label="..." style="margin: 0">
+                    <input class="input-check" type="checkbox" style="margin: 0"
+                           id="oth-checkbox" data-input="oth-title" data-result="oth-result"
+                           data-id="<?= $model->ref ?>" <?php if ($model->settings->eq_oth_title_on) echo 'checked' ?>>
                   </span>
-                <input type="text" class="form-control" aria-label="...">
+                <div style="position: relative">
+                  <input class="form-control title-input" type="text"
+                         id="oth-title" data-check="oth-checkbox" data-result="oth-result"
+                         value="<?= $model->settings->eq_oth_title ?>">
+                  <span style="position: absolute; top:7px; right:10px;z-index: 900"
+                        id="oth-result">
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -226,12 +235,14 @@
   $(document).ready(function () {
     var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
     var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
+    var infoCheck = '<i class="fa fa-exclamation" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
     var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
+    var csrf = $('meta[name=csrf-token]').attr("content");
+
     $('.ch').change(function (e) {
       var checkId = $(this).data('check');
       $('#' + checkId).html(waiting);
       var url = $(this).data('url');
-      var csrf = $('meta[name=csrf-token]').attr("content");
       var nodeId = $(this).data('id');
       var result = $(this).is(':checked');
       $.ajax({
@@ -250,6 +261,49 @@
           $('#' + checkId).html(warningCheck);
         }
       });
+    });
+
+    var url = 'oth-title';
+
+    $('.title-input').on('input', function (e) {
+      var checkId = $(this).data('check');
+      var resultH = $(this).data('result');
+      $('#' + checkId).prop('checked', false);
+      $('#' + resultH).html('');
+    });
+
+    $('.input-check').change(function (e) {
+      var bool = $(this).is(':checked');
+      var inputHId = $(this).data('input');
+      var input = $('#' + inputHId);
+      var title = input.val();
+      var resultH = $(this).data('result');
+      var nodeId = $(this).data('id');
+      if (title != '') {
+        $('#' + resultH).html(waiting);
+        $.ajax({
+          url: url,
+          type: "post",
+          dataType: "JSON",
+          data: {
+            _csrf: csrf,
+            toolId: nodeId,
+            title: title,
+            bool: bool,
+          },
+          success: function (data) {
+            $('#' + resultH).html(successCheck);
+          },
+          error: function (data) {
+            $('#' + resultH).html(warningCheck);
+          }
+        });
+      } else {
+        $(this).prop('checked', false);
+        $('#' + resultH).html(infoCheck);
+      }
     })
+
+
   })
 </script>

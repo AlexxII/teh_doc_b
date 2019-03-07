@@ -74,8 +74,9 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
   </div>
 
-  <?= $this->render('view', [
-    'model' => $model
+  <?= $this->render('view_2', [
+    'model' => $model,
+    'children' => $children
   ]) ?>
 
 </div>

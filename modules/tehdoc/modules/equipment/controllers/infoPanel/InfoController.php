@@ -23,11 +23,13 @@ class InfoController extends Controller
     $id = $_GET['id'];
     $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
     $model = $request[0];
+    $children = $model->children(1)->all();
     $wikiCount = $model->countWikiPages;
     $imagesCount = $model->countImages;
     $docsCount = $model->countDocs;
     return $this->render('header', [
       'model' => $model,
+      'children' => $children,
       'docsCount' => $docsCount,
       'imagesCount' => $imagesCount,
       'wikiCount' => $wikiCount,

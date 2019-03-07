@@ -183,7 +183,8 @@ $task_hint = 'Добавить выделенные элементы в зада
         }
       },
       "ajax": $.fn.dataTable.pipeline({
-        url: 'server-side',
+        url: 'server-side-oth',
+        type: "post",                                     ///////!!!!!!!!!!!!!!!!!!!!!!!!!
         data: {
           index: settings
         },
