@@ -253,7 +253,10 @@ class SSPEx {
 			 $limit";
     }
 
+    return var_dump($query);
+
     $data = SSP::sql_exec( $db, $bindings,$query);
+
 
     // Data set length after filtering
     $resFilterLength = SSP::sql_exec( $db,

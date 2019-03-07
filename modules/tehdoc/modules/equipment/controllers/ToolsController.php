@@ -301,16 +301,17 @@ class ToolsController extends Controller
   public function actionServerSideOth()
   {
     $table = 'teh_equipment_tbl';
+    $settingsTable = 'teh_settings_tbl';
     $primaryKey = 'id';
     $columns = array(
-      array('db' => 'ref', 'dt' => 0),
-      array('db' => 'eq_title', 'dt' => 1),
-      array('db' => 'eq_manufact', 'dt' => 2),
-      array('db' => 'eq_model', 'dt' => 3),
-      array('db' => 'eq_serial', 'dt' => 4),
-      array('db' => 'eq_serial', 'dt' => 5),
+      array('db' => '`c`.`ref`', 'dt' => 0),
+      array('db' => '`c`.`eq_title`', 'dt' => 1),
+      array('db' => '`c`.`eq_manufact`', 'dt' => 2),
+      array('db' => '`c`.`eq_model`', 'dt' => 3),
+      array('db' => '`c`.`eq_serial`', 'dt' => 4),
+      array('db' => '`c`.`eq_serial`', 'dt' => 5),
       array(
-        'db' => 'eq_factdate',
+        'db' => '`c`.`eq_factdate`',
         'dt' => 6,
         'formatter' => function ($d, $row) { //TODO разобраться с форматом отображения даты
           if ($d != null) {
@@ -321,48 +322,35 @@ class ToolsController extends Controller
         }
       ),
       array(
-        'db' => 'quantity',
+        'db' => '`c`.`quantity`',
         'dt' => 7,
         'formatter' => function ($d, $row) { //TODO
           return $d . ' шт.';
         }
       ),
+      array(
+        'db' => '`cn`.`eq_oth_title`',
+        'dt' => 8
+      ),
     );
 
     $sql_details = \Yii::$app->params['sql_details'];
 
-    if (isset($_GET['index'])) {
-      $index = $_GET['index'];
-      $where = ' ref in (SELECT eq_id FROM teh_settings_tbl WHERE ' . $index . '= 1)';
-    } else {
-      $where = '';
-    }
+    $ID = 1;
+    $joinQuery = "FROM `{$table}` AS `c` LEFT JOIN `{$settingsTable}` AS `cn` ON (`cn`.`eq_id` = `c`.`ref`)";
+    $extraCondition = "`eq_oth`=".$ID;
 
-    $oth = ToolSettings::find()->select('eq_id, eq_oth_title_on, eq_oth_title')
-      ->where(['eq_oth' => 1])
-//      ->andWhere(['eq_oth' => 1])
-      ->asarray()
-      ->all();
+//    if (isset($_GET['index'])) {
+//      $index = $_GET['index'];
+//      $where = ' ref in (SELECT eq_id FROM teh_settings_tbl WHERE ' . $index . '= 1)';
+//    } else {
+//      $where = '';
+//    }
 
-//    return var_dump($oth);
+    $result = SSPEx::simple($_GET, $sql_details, $table, $primaryKey, $columns, $joinQuery, $extraCondition);
 
-//    $result = json_encode(
-//      SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
-//    );
-    $result = SSPEx::simple($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where);
-    foreach ($result['data'] as $key => &$nar) {
-      if ($oth[$key]['eq_oth_title_on'])
-        $nar[1] = $oth[$key]['eq_oth_title'];
-    }
-//    return var_dump($result);
     return json_encode($result);
 
-//    return json_encode(
-//      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
-//    );
-//    return var_dump(
-//      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
-//    );
   }
 
 
