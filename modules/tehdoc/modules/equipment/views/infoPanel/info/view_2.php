@@ -43,8 +43,8 @@ foreach ($children as $child) {
       ],
     ],
   ]);
+  echo '<hr>';
 }
-
 ?>
 
 <br>
