@@ -9,7 +9,7 @@ use app\modules\tehdoc\modules\equipment\models\Images;
 use yii\helpers\ArrayHelper;
 use app\base\NestedSetsTreeBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
-
+use Yii;
 
 
 /**
@@ -174,6 +174,13 @@ class Tools extends \yii\db\ActiveRecord
   }
 
 
+  //Oth table
+
+  public function getOth()
+  {
+    return $this->hasOne(Oth::class, ['eq_id' => 'ref']);
+  }
+
 
   // Wiki
   public function getWiki()
@@ -252,6 +259,8 @@ class Tools extends \yii\db\ActiveRecord
     }
     return $ar;
   }
+
+
 //======================================================================================================================
 
   // DropDown lists

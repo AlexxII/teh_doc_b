@@ -22,7 +22,7 @@ use yii\widgets\DetailView;
   ]) ?>
 </div>
 <hr>
-<span>В составе:</span>
+<span>В составе: </span>
 
 <?php
 foreach ($children as $child) {
@@ -32,14 +32,14 @@ foreach ($children as $child) {
     'attributes' => [
       [
         'label' => 'Категория:',
-        'value' => $model->categoryTitle,
+        'value' => $child->categoryTitle,
       ],
       'eq_manufact',
       'eq_model',
       'eq_serial',
       [
         'label' => 'Место размещения:',
-        'value' => $model->placementTitle,
+        'value' => $child->placementTitle,
       ],
     ],
   ]);

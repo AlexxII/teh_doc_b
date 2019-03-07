@@ -2,6 +2,7 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers\controlPanel;
 
+use app\modules\tehdoc\modules\equipment\models\Oth;
 use app\modules\tehdoc\modules\equipment\models\Tools;
 use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 use Yii;
@@ -24,11 +25,11 @@ class SettingsController extends Controller
     $imagesCount = $tool->countImages;
     $docsCount = $tool->countDocs;
     return $this->render('header', [
-      'tool' => $this->findTool($id),
-      'toolSettings' => $toolSettings,
-      'docsCount' => $docsCount,
-      'imagesCount' => $imagesCount,
-      'wikiCount' => $wikiCount,
+        'tool' => $this->findTool($id),
+        'toolSettings' => $toolSettings,
+        'docsCount' => $docsCount,
+        'imagesCount' => $imagesCount,
+        'wikiCount' => $wikiCount,
     ]);
   }
 
@@ -64,18 +65,30 @@ class SettingsController extends Controller
   {
     if (isset($_POST['toolId'])) {
       $toolId = $_POST['toolId'];
-      $model = $this->findSettings($toolId);
+      $settings = $this->findSettings($toolId);
+      $req = Tools::find()->where(['ref' => $toolId])->limit(1)->all();
+      $model = $req[0];
+      if ($model->oth) {
+        $oth = $model->oth;
+      } else {
+        $oth = new Oth();
+      }
       if (isset($_POST['bool'])) {
         if ($_POST['bool'] === 'true') {
-          $model->eq_oth = 1;
+          $settings->eq_oth = 1;
+          $oth->eq_id = $model->ref;
         } else {
-          $model->eq_oth = 0;
+          $settings->eq_oth = 0;
+          $oth->valid = 0;
         }
       } else {
         return false;
       }
-      if ($model->save()) {
-        return true;
+      if ($settings->save()) {
+        if ($oth->save()){
+          return true;
+        }
+        return false;
       }
       return false;
     }
