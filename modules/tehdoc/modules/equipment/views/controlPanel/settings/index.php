@@ -15,12 +15,20 @@
           <p class="note" style="margin-bottom: 10px">Отображать данный узел в сводной таблице.</p>
         </div>
       </li>
+
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" id="oth-feature" type="checkbox" data-id="<?= $model->ref ?>"
-                 data-check='oth-check' data-url='oth' <?php if ($model->settings->eq_oth) echo 'checked' ?>>
-          <label for="oth-feature" style="font-weight: 500">В перечне ОТХ</label>
-          <span class="status-indicator" id="oth-check"></span>
+          <input class="ch" type="checkbox"
+                 id="oth-feature"
+                 data-id="<?= $model->ref ?>"
+                 data-check='oth-check' data-url='oth' <?php if ($model->othStatus) echo 'checked' ?>>
+          <label
+                  for="oth-feature"
+                  style="font-weight: 500">В перечне ОТХ
+          </label>
+          <span class="status-indicator"
+                id="oth-check">
+          </span>
           <p class="note" style="margin-bottom: 10px">Отображать в таблице ОТХ.</p>
           <div class="d-blue border">
             <div class="form-checkbox js-complex-option">
@@ -33,12 +41,12 @@
                   <span class="input-group-addon">
                     <input class="input-check" type="checkbox" style="margin: 0"
                            id="oth-checkbox" data-input="oth-title" data-result="oth-result"
-                           data-id="<?= $model->ref ?>" <?php if ($model->settings->eq_oth_title_on) echo 'checked' ?>>
+                           data-id="<?= $model->ref ?>" <?php if ($model->othTitleCheck) echo 'checked' ?>>
                   </span>
                 <div style="position: relative">
                   <input class="form-control title-input" type="text"
                          id="oth-title" data-check="oth-checkbox" data-result="oth-result"
-                         value="<?= $model->settings->eq_oth_title ?>">
+                         value="<?= $model->othTitle ?>">
                   <span style="position: absolute; top:7px; right:10px;z-index: 900"
                         id="oth-result">
                   </span>
@@ -48,33 +56,23 @@
           </div>
         </div>
       </li>
+
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" id="complex_feature" type="checkbox" data-check='complex-check' data-url='complex'>
+          <input class="ch" type="checkbox"
+                 id="complex_feature"
+                 data-id="<?= $model->ref ?>"
+                 data-check='complex-check' data-url='complex' <?php if ($model->complex) echo 'checked' ?>>
           <label for="complex_feature" style="font-weight: 500">Комплект</label>
           <span class="status-indicator" id="complex-check"></span>
           <p class="note" style="margin-bottom: 10px">Отображать как комплект.</p>
-          <div class="d-blue border">
-            <div class="form-checkbox js-complex-option">
-              <label style="font-weight: 500">Наименование комплекта</label>
-              <p class="note pr-6">При отличии..., вы сами знаете что сделать.</p>
-            </div>
-            <div class="form-checkbox">
-              <div class="input-group" style="padding-right: 20px">
-                  <span class="input-group-addon">
-                    <input type="checkbox" aria-label="..." style="margin: 0">
-                  </span>
-                <input type="text" class="form-control" aria-label="...">
-              </div>
-            </div>
-          </div>
         </div>
       </li>
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
           <input class="ch" id="special_works_feature" type="checkbox" data-check='special-check'
                  data-url='special-works'>
-          <label for="special_works_feature" style="font-weight: 500">Таблицы СпецПроверки</label>
+          <label for="special_works_feature" style="font-weight: 500">Таблица Специальных Работ</label>
           <span class="status-indicator" id="special-check"></span>
           <p class="note" style="margin-bottom: 10px">Отображать в таблице спецпроверки, если над данным оборудованием
             были проведены специальные работы.</p>

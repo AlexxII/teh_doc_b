@@ -27,8 +27,14 @@ class InfoController extends Controller
     $wikiCount = $model->countWikiPages;
     $imagesCount = $model->countImages;
     $docsCount = $model->countDocs;
+    if ($model->complex){
+      $view = 'view_complex';
+    } else {
+      $view = 'view_single';
+    }
     return $this->render('header', [
       'model' => $model,
+      'view' => $view,
       'children' => $children,
       'docsCount' => $docsCount,
       'imagesCount' => $imagesCount,

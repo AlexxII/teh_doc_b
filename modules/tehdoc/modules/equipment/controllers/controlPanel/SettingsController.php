@@ -25,11 +25,11 @@ class SettingsController extends Controller
     $imagesCount = $tool->countImages;
     $docsCount = $tool->countDocs;
     return $this->render('header', [
-        'tool' => $this->findTool($id),
-        'toolSettings' => $toolSettings,
-        'docsCount' => $docsCount,
-        'imagesCount' => $imagesCount,
-        'wikiCount' => $wikiCount,
+      'tool' => $this->findTool($id),
+      'toolSettings' => $toolSettings,
+      'docsCount' => $docsCount,
+      'imagesCount' => $imagesCount,
+      'wikiCount' => $wikiCount,
     ]);
   }
 
@@ -72,11 +72,12 @@ class SettingsController extends Controller
         $oth = $model->oth;
       } else {
         $oth = new Oth();
+        $oth->eq_id = $model->ref;
       }
       if (isset($_POST['bool'])) {
         if ($_POST['bool'] === 'true') {
           $settings->eq_oth = 1;
-          $oth->eq_id = $model->ref;
+          $oth->valid = 1;
         } else {
           $settings->eq_oth = 0;
           $oth->valid = 0;
@@ -85,7 +86,7 @@ class SettingsController extends Controller
         return false;
       }
       if ($settings->save()) {
-        if ($oth->save()){
+        if ($oth->save()) {
           return true;
         }
         return false;
@@ -100,18 +101,49 @@ class SettingsController extends Controller
     return false;
   }
 
-
   public function actionOthTitle()
+  {
+    if (isset($_POST['toolId'])) {
+      $toolId = $_POST['toolId'];
+      $req = Tools::find()->where(['ref' => $toolId])->limit(1)->all();
+      $model = $req[0];
+      if ($model->oth) {
+        $oth = $model->oth;
+      } else {
+        return false;
+      }
+      if (isset($_POST['bool'])) {
+        if ($_POST['bool'] === 'true') {
+          $oth->eq_oth_title = $_POST['title'];
+          $oth->eq_oth_title_on = 1;
+        } else {
+          $oth->eq_oth_title_on = 0;
+        }
+      } else {
+        return false;
+      }
+      if ($model->save()) {
+        if ($oth->save()) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    }
+    return false;
+  }
+
+
+  public function actionComplex()
   {
     if (isset($_POST['toolId'])) {
       $toolId = $_POST['toolId'];
       $model = $this->findSettings($toolId);
       if (isset($_POST['bool'])) {
         if ($_POST['bool'] === 'true') {
-          $model->eq_oth_title_on = 1;
-          $model->eq_oth_title = $_POST['title'];
+          $model->eq_complex = 1;
         } else {
-          $model->eq_oth_title_on = 0;
+          $model->eq_complex = 0;
         }
       } else {
         return false;
