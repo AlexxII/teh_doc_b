@@ -21,6 +21,7 @@ class m190222_144636_tehdoc_docs_tbl extends Migration
       'doc_title' => $this->string(255),
       'doc_path' => $this->string(255)->notNull()->unique(),
       'doc_extention' => $this->string(),
+      'doc_date' => $this->datetime(),
       'upload_time' => $this->datetime(),
       'upload_user' => $this->integer(),
       'valid' => $this->boolean()->defaultValue(1),

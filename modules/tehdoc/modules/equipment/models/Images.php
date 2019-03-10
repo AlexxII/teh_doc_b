@@ -18,7 +18,6 @@ class Images extends ActiveRecord        // модель для добавлен
     return 'teh_image_tbl';
   }
 
-
   public function attributeLabels()
   {
     return [
@@ -27,7 +26,6 @@ class Images extends ActiveRecord        // модель для добавлен
       'image_path' => 'Изображения:',
     ];
   }
-
 
   public function rules()
   {
@@ -40,7 +38,6 @@ class Images extends ActiveRecord        // модель для добавлен
       ]
     ];
   }
-
 
   public function uploadImage($id)
   {
