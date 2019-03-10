@@ -39,17 +39,17 @@ class SettingsController extends Controller
   {
     if (isset($_POST['toolId'])) {
       $toolId = $_POST['toolId'];
-      $model = $this->findSettings($toolId);
+      $settings = $this->findSettings($toolId);
       if (isset($_POST['bool'])) {
         if ($_POST['bool'] === 'true') {
-          $model->eq_general = 1;
+          $settings->eq_general = 1;
         } else {
-          $model->eq_general = 0;
+          $settings->eq_general = 0;
         }
       } else {
         return false;
       }
-      if ($model->save()) {
+      if ($settings->save()) {
         return true;
       }
       return false;
@@ -125,11 +125,8 @@ class SettingsController extends Controller
       } else {
         return false;
       }
-      if ($model->save()) {
-        if ($oth->save()) {
-          return true;
-        }
-        return false;
+      if ($oth->save()) {
+        return true;
       }
       return false;
     }
@@ -140,17 +137,17 @@ class SettingsController extends Controller
   {
     if (isset($_POST['toolId'])) {
       $toolId = $_POST['toolId'];
-      $model = $this->findSettings($toolId);
+      $settings = $this->findSettings($toolId);
       if (isset($_POST['bool'])) {
         if ($_POST['bool'] === 'true') {
-          $model->eq_complex = 1;
+          $settings->eq_complex = 1;
         } else {
-          $model->eq_complex = 0;
+          $settings->eq_complex = 0;
         }
       } else {
         return false;
       }
-      if ($model->save()) {
+      if ($settings->save()) {
         return true;
       }
       return false;
@@ -187,6 +184,30 @@ class SettingsController extends Controller
           return true;
         }
         return false;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  public function actionSpecialStickerNumber()
+  {
+    if (isset($_POST['toolId'])) {
+      $toolId = $_POST['toolId'];
+      $req = Tools::find()->where(['ref' => $toolId])->limit(1)->all();
+      $model = $req[0];
+      if ($model->special) {
+        $special = $model->special;
+      } else {
+        return false;
+      }
+      if (isset($_POST['title'])) {
+        $special->sticker_number = $_POST['title'];
+      } else {
+        return false;
+      }
+      if ($special->save()) {
+        return true;
       }
       return false;
     }

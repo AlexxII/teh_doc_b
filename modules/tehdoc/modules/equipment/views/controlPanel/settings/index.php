@@ -40,6 +40,7 @@
                   <span class="input-group-addon">
                     <input class="input-check" type="checkbox" style="margin: 0"
                            id="oth-checkbox" data-input="oth-title" data-result="oth-result"
+                           data-url="oth-title"
                            data-id="<?= $model->ref ?>" <?php if ($model->othTitleCheck) echo 'checked' ?>>
                   </span>
                 <div style="position: relative">
@@ -89,14 +90,16 @@
             <div class="form-checkbox">
               <div class="input-group" style="padding-right: 20px">
                 <span class="input-group-btn">
-                  <button class="btn btn-default" type="button" data-id="<?= $model->ref ?>">Save</button>
+                  <button class="btn btn-default save" type="button"
+                          data-url="special-sticker-number"
+                          data-id="<?= $model->ref ?>" data-input="special-sticker" data-result="special-result">Save</button>
                 </span>
                 <div style="position: relative">
                   <input class="form-control title-input" type="text"
-                         id="special-sticker" data-check="special-checkbox" data-result="oth-result"
+                         id="special-sticker" data-check="special-checkbox"
                          value="<?= $model->specialStickerNumber ?>">
                   <span style="position: absolute; top:7px; right:10px;z-index: 900"
-                        id="oth-result">
+                        id="special-result">
                   </span>
                 </div>
               </div>
@@ -272,13 +275,43 @@
       });
     });
 
-    var url = 'oth-title';
 
     $('.title-input').on('input', function (e) {
       var checkId = $(this).data('check');
       var resultH = $(this).data('result');
       $('#' + checkId).prop('checked', false);
       $('#' + resultH).html('');
+    });
+
+
+    $('.save').on('click', function () {
+      var nodeId = $(this).data('id');
+      var inputHId = $(this).data('input');
+      var input = $('#' + inputHId);
+      var title = input.val();
+      var resultH = $(this).data('result');
+      var url = $(this).data('url');
+      if (title != '') {
+        $('#' + resultH).html(waiting);
+        $.ajax({
+          url: url,
+          type: "post",
+          dataType: "JSON",
+          data: {
+            _csrf: csrf,
+            toolId: nodeId,
+            title: title
+          },
+          success: function (data) {
+            $('#' + resultH).html(successCheck);
+          },
+          error: function (data) {
+            $('#' + resultH).html(warningCheck);
+          }
+        });
+      } else {
+        $('#' + resultH).html(infoCheck);
+      }
     });
 
     $('.input-check').change(function (e) {
@@ -288,6 +321,7 @@
       var title = input.val();
       var resultH = $(this).data('result');
       var nodeId = $(this).data('id');
+      var url = $(this).data('url');
       if (title != '') {
         $('#' + resultH).html(waiting);
         $.ajax({
