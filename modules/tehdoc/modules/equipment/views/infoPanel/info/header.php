@@ -72,9 +72,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
   <div class="row d-flex flex-items-center">
     <div class="col-lg-11 col-md-11 col-xs-11">
-      <h2><?= Html::encode($model->name) ?>
-        <i class="fa fa-shield" aria-hidden="true" style="padding: "
-           title="Проведены Специальные работы" data-toggle="tooltip" data-placement="top"></i>
+      <h2>
+        <span style="position: relative">
+        <?= Html::encode($model->name);
+        if ($model->special) {
+          echo '
+          <i class="fa fa-shield" aria-hidden="true" style="position: absolute;top:-5px;right:-10px"
+             title="Проведены Специальные работы" data-toggle="tooltip" data-placement="top"></i>';
+        }
+        ?>
+        </span>
       </h2>
     </div>
     <div class="text-right" style="padding: 7px 15px 0 0">

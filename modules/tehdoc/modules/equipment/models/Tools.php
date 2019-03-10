@@ -182,6 +182,12 @@ class Tools extends \yii\db\ActiveRecord
     return 0;
   }
 
+  //Tool spec
+  public function getSpecial()
+  {
+    return true;
+  }
+
   // Tool OTH
   public function getOth()
   {
