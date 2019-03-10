@@ -7,10 +7,12 @@
     <ul class="list-group">
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" id="general-feature" type="checkbox" data-id="<?= $model->ref ?>"
-                 data-check='general-check'
-                 data-url='general-table' <?php if ($model->settings->eq_general) echo 'checked' ?>>
-          <label for="general-feature" style="font-weight: 500">В сводной таблице</label>
+          <label style="font-weight: 500">
+            <input class="ch" id="general-feature" type="checkbox" data-id="<?= $model->ref ?>"
+                   data-check='general-check'
+                   data-url='general-table' <?php if ($model->settings->eq_general) echo 'checked' ?>>
+            В сводной таблице
+          </label>
           <span class="status-indicator" id="general-check"></span>
           <p class="note" style="margin-bottom: 10px">Отображать данный узел в сводной таблице.</p>
         </div>
@@ -18,17 +20,14 @@
 
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" type="checkbox"
-                 id="oth-feature"
-                 data-id="<?= $model->ref ?>"
-                 data-check='oth-check' data-url='oth' <?php if ($model->othStatus) echo 'checked' ?>>
-          <label
-                  for="oth-feature"
-                  style="font-weight: 500">В перечне ОТХ
+          <label style="font-weight: 500">
+            <input class="ch" type="checkbox"
+                   id="oth-feature"
+                   data-id="<?= $model->ref ?>"
+                   data-check='oth-check' data-url='oth' <?php if ($model->othStatus) echo 'checked' ?>>
+            В перечне ОТХ
           </label>
-          <span class="status-indicator"
-                id="oth-check">
-          </span>
+          <span class="status-indicator" id="oth-check"></span>
           <p class="note" style="margin-bottom: 10px">Отображать в таблице ОТХ.</p>
           <div class="d-blue border">
             <div class="form-checkbox js-complex-option">
@@ -59,41 +58,53 @@
 
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" type="checkbox"
-                 id="complex_feature"
-                 data-id="<?= $model->ref ?>"
-                 data-check='complex-check' data-url='complex' <?php if ($model->complex) echo 'checked' ?>>
-          <label for="complex_feature" style="font-weight: 500">Комплект</label>
+          <label for="complex_feature" style="font-weight: 500">
+            <input class="ch" type="checkbox"
+                   id="complex_feature"
+                   data-id="<?= $model->ref ?>"
+                   data-check='complex-check' data-url='complex' <?php if ($model->complex) echo 'checked' ?>>
+            Комплект
+          </label>
           <span class="status-indicator" id="complex-check"></span>
           <p class="note" style="margin-bottom: 10px">Отображать как комплект.</p>
         </div>
       </li>
+
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" id="special_works_feature" type="checkbox" data-check='special-check'
-                 data-url='special-works'>
-          <label for="special_works_feature" style="font-weight: 500">Таблица Специальных Работ</label>
+          <label style="font-weight: 500">
+            <input class="ch" type="checkbox" id="special_works_feature"
+                   data-id="<?= $model->ref ?>"
+                   data-check='special-check'
+                   data-url='special-works' <?php if ($model->specialStatus) echo 'checked' ?>>
+            Проведены Специальные работы</label>
           <span class="status-indicator" id="special-check"></span>
-          <p class="note" style="margin-bottom: 10px">Отображать в таблице спецпроверки, если над данным оборудованием
-            были проведены специальные работы.</p>
+          <p class="note" style="margin-bottom: 10px">Над данным оборудованием были проведены специальные работы.</p>
           <div class="d-blue border">
             <div class="form-checkbox js-complex-option">
               <label style="font-weight: 500">Номера наклеек</label>
-              <p class="note pr-6">Укажите номера галограмм.</p>
+              <p class="note pr-6">Укажите номера галограмм. Например: Л 727 7806339 или только партию 727 (если указана
+                только она)</p>
             </div>
             <div class="form-checkbox">
               <div class="input-group" style="padding-right: 20px">
-                  <span class="input-group-addon">
-                    <input type="checkbox" aria-label="..." style="margin: 0">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" data-id="<?= $model->ref ?>">Save</button>
+                </span>
+                <div style="position: relative">
+                  <input class="form-control title-input" type="text"
+                         id="special-sticker" data-check="special-checkbox" data-result="oth-result"
+                         value="<?= $model->specialStickerNumber ?>">
+                  <span style="position: absolute; top:7px; right:10px;z-index: 900"
+                        id="oth-result">
                   </span>
-                <input type="text" class="form-control" aria-label="...">
+                </div>
               </div>
             </div>
           </div>
         </div>
       </li>
     </ul>
-
 
     <div class="subhead">
       <h3 class="setting-header">Техническое обслуживание</h3>

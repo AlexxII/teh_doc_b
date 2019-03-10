@@ -3,6 +3,7 @@
 namespace app\modules\tehdoc\modules\equipment\controllers\controlPanel;
 
 use app\modules\tehdoc\modules\equipment\models\Oth;
+use app\modules\tehdoc\modules\equipment\models\Special;
 use app\modules\tehdoc\modules\equipment\models\Tools;
 use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 use Yii;
@@ -56,6 +57,7 @@ class SettingsController extends Controller
     return false;
   }
 
+  // Пакетная обработка - в разработке
   public function actionGeneralTablePckg()
   {
     return false;
@@ -96,6 +98,7 @@ class SettingsController extends Controller
     return false;
   }
 
+  // Пакетная обработка - в разработке
   public function actionOthPckg()
   {
     return false;
@@ -133,7 +136,6 @@ class SettingsController extends Controller
     return false;
   }
 
-
   public function actionComplex()
   {
     if (isset($_POST['toolId'])) {
@@ -156,6 +158,40 @@ class SettingsController extends Controller
     return false;
   }
 
+  public function actionSpecialWorks()
+  {
+    if (isset($_POST['toolId'])) {
+      $toolId = $_POST['toolId'];
+      $settings = $this->findSettings($toolId);
+      $req = Tools::find()->where(['ref' => $toolId])->limit(1)->all();
+      $model = $req[0];
+      if ($model->special) {
+        $special = $model->special;
+      } else {
+        $special = new Special();
+        $special->eq_id = $model->ref;
+      }
+      if (isset($_POST['bool'])) {
+        if ($_POST['bool'] === 'true') {
+          $settings->eq_special = 1;
+          $special->valid = 1;
+        } else {
+          $settings->eq_special = 0;
+          $special->valid = 0;
+        }
+      } else {
+        return false;
+      }
+      if ($settings->save()) {
+        if ($special->save()) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    }
+    return false;
+  }
 
   // серверная часть установки флажка "В задании на обновление"
   public function actionTaskSet()

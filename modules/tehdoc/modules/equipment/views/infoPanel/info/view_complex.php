@@ -28,14 +28,23 @@ use yii\widgets\DetailView;
       ],
     ];
 
-    if (false) {
+    if ($child->specialStatus) {
       $attr[] = [
-        'label' => 'Место размещения:',
-        'value' => $child->placementTitle,
+        'label' => 'Спецпроверка:',
+        'value' => $child->specialStickerNumber,
       ];
     }
 
-    echo '<h3>' . $child->name . '</h3>';
+    echo '<h3>
+        <span style="position: relative">';
+    echo Html::encode($child->name);
+    if ($child->special) {
+      echo '<i class="fa fa-shield" aria-hidden="true" style="font-size: 14px; position: absolute;top:-5px;right:-15px"
+             title="Проведены Специальные работы"></i>';
+    }
+    echo '</span>';
+    echo '</h3>';
+
     echo DetailView::widget([
       'model' => $child,
       'attributes' => $attr

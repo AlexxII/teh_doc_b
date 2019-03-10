@@ -77,8 +77,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::encode($model->name);
         if ($model->special) {
           echo '
-          <i class="fa fa-shield" aria-hidden="true" style="position: absolute;top:-5px;right:-10px"
-             title="Проведены Специальные работы" data-toggle="tooltip" data-placement="top"></i>';
+          <i class="fa fa-shield" aria-hidden="true" style="font-size: 14px;position: absolute;top:-5px;right:-10px"
+             title="Проведены Специальные работы"></i>';
         }
         ?>
         </span>

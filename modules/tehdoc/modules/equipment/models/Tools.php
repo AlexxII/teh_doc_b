@@ -185,7 +185,23 @@ class Tools extends \yii\db\ActiveRecord
   //Tool spec
   public function getSpecial()
   {
-    return true;
+    return $this->hasOne(Special::class, ['eq_id' => 'ref']);
+  }
+
+  public function getSpecialStatus()
+  {
+    if($this->special){
+      return $this->special->valid;
+    }
+    return false;
+  }
+
+  public function getSpecialStickerNumber()
+  {
+    if($this->special){
+      return $this->special->sticker_number;
+    }
+    return false;
   }
 
   // Tool OTH

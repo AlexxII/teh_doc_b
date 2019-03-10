@@ -12,7 +12,7 @@ class m190306_142653_alter_tehdoc_settings_tbl extends Migration
 
   public function safeUp()
   {
-    $this->addColumn(self::TABLE_NAME, 'eq_complex', $this->boolean()->defaultValue(0));
+    $this->addColumn(self::TABLE_NAME, 'eq_special', $this->boolean()->defaultValue(0));
   }
 
 }
