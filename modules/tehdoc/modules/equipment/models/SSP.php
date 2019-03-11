@@ -247,7 +247,7 @@ class SSP
     );
   }
 
-  static function simpleEx($request, $conn, $table, $primaryKey, $columns, $tableTwo)
+  static function oth($request, $conn, $table, $primaryKey, $columns, $tableTwo, $wh)
   {
     $bindings = array();
     $db = self::db($conn);
@@ -255,19 +255,27 @@ class SSP
     $limit = self::limit($request, $columns);
     $order = self::order($request, $columns);
     $where = self::filter($request, $columns, $bindings);
+    $wh = self::_flatten($wh);
+    if ($wh) {
+      $where = $where ?
+        $where . ' AND ' . $wh :
+        'WHERE ' . $wh;
+    }
+
     // Main query to actually get the data
+//    $data = self::sql_exec
+//    return var_dump
     $data = self::sql_exec($db, $bindings,
       "SELECT `" . implode("`, `", self::pluck($columns, 'db')) . "`
-			 FROM $table RIGHT JOIN $tableTwo ON $table.id_eq = $tableTwo.eq_id 
-			 INNER JOIN teh_category_tbl ON $table.category_id = teh_category_tbl.id  
+			 FROM $table LEFT JOIN $tableTwo ON $table.eq_id = $tableTwo.ref 
 			 $where
 			 $order
 			 $limit"
     );
     // Data set length after filtering
     $resFilterLength = self::sql_exec($db, $bindings,
-      "SELECT COUNT(`{$primaryKey}`)
-			 FROM   `$table` RIGHT JOIN $tableTwo ON $table.id_eq = $tableTwo.eq_id 
+      "SELECT COUNT(eq_id)
+			 FROM   `$table` LEFT JOIN $tableTwo ON $table.eq_id = $tableTwo.ref
 			 $where"
     );
     $recordsFiltered = $resFilterLength[0][0];

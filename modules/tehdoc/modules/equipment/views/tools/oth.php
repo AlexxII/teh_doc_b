@@ -65,7 +65,6 @@ $task_hint = 'Добавить выделенные элементы в зада
               <th >s/n</th>
               <th >Инв.№</th>
               <th >Дата изготовл.</th>
-              <th >Кол.</th>
               <th data-priority="2">Action</th>
               <th data-priority="3"></th>
             </tr>

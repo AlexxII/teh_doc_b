@@ -36,3 +36,50 @@
           ]); ?>
         </div>
       </div>
+
+
+
+
+  static function simpleEx($request, $conn, $table, $primaryKey, $columns, $tableTwo)
+  {
+    $bindings = array();
+    $db = self::db($conn);
+    // Build the SQL query string from the request
+    $limit = self::limit($request, $columns);
+    $order = self::order($request, $columns);
+    $where = self::filter($request, $columns, $bindings);
+    // Main query to actually get the data
+    $data = self::sql_exec($db, $bindings,
+      "SELECT `" . implode("`, `", self::pluck($columns, 'db')) . "`
+			 FROM $table RIGHT JOIN $tableTwo ON $table.id_eq = $tableTwo.eq_id
+			 INNER JOIN teh_category_tbl ON $table.category_id = teh_category_tbl.id
+			 $where
+			 $order
+			 $limit"
+    );
+    // Data set length after filtering
+    $resFilterLength = self::sql_exec($db, $bindings,
+      "SELECT COUNT(`{$primaryKey}`)
+			 FROM   `$table` RIGHT JOIN $tableTwo ON $table.id_eq = $tableTwo.eq_id
+			 $where"
+    );
+    $recordsFiltered = $resFilterLength[0][0];
+    // Total data set length
+    $resTotalLength = self::sql_exec($db,
+      "SELECT COUNT(`{$primaryKey}`)
+			 FROM   `$table`"
+    );
+    $recordsTotal = $resTotalLength[0][0];
+    /*
+     * Output
+     */
+    return array(
+      "draw" => isset ($request['draw']) ?
+        intval($request['draw']) :
+        0,
+      "recordsTotal" => intval($recordsTotal),
+      "recordsFiltered" => intval($recordsFiltered),
+      "data" => self::data_output($columns, $data)
+    );
+  }
+

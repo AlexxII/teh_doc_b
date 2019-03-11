@@ -3,11 +3,12 @@
 use yii\db\Migration;
 
 /**
- * Class m190222_144636_tehdoc_docs_tbl
+ * Class m190310_084359_teh_special_works_tbl
  */
-class m190222_144636_tehdoc_docs_tbl extends Migration
+class m190310_084359_tehdoc_special_works_tbl extends Migration
 {
-  const TABLE_NAME = '{{%teh_docs_tbl}}';
+
+  const TABLE_NAME = '{{%teh_special_works_tbl}}';
 
   public function up()
   {
@@ -18,12 +19,7 @@ class m190222_144636_tehdoc_docs_tbl extends Migration
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->primaryKey(),
       'eq_id' => $this->integer()->notNull(),
-      'doc_title' => $this->string(255),
-      'doc_path' => $this->string(255)->notNull()->unique(),
-      'doc_extention' => $this->string(),
-      'doc_date' => $this->datetime(),
-      'upload_time' => $this->datetime(),
-      'upload_user' => $this->integer(),
+      'sticker_number' => $this->string(255),
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
   }
@@ -33,4 +29,5 @@ class m190222_144636_tehdoc_docs_tbl extends Migration
     $this->dropTable(self::TABLE_NAME);
     return false;
   }
+
 }

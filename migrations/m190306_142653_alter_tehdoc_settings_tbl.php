@@ -12,8 +12,7 @@ class m190306_142653_alter_tehdoc_settings_tbl extends Migration
 
   public function safeUp()
   {
-    $this->addColumn(self::TABLE_NAME, 'eq_oth_title_on', $this->boolean());
-    $this->addColumn(self::TABLE_NAME, 'eq_oth_title', $this->string(255));
+    $this->addColumn(self::TABLE_NAME, 'eq_special', $this->boolean()->defaultValue(0));
   }
 
 }

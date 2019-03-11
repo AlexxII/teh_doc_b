@@ -9,7 +9,7 @@ use app\modules\tehdoc\modules\equipment\models\Images;
 use yii\helpers\ArrayHelper;
 use app\base\NestedSetsTreeBehavior;
 use creocoder\nestedsets\NestedSetsBehavior;
-use Yii;
+
 
 
 /**
@@ -173,13 +173,67 @@ class Tools extends \yii\db\ActiveRecord
     return $this->hasOne(ToolSettings::class, ['eq_id' => 'ref']);
   }
 
+  //Tool complex
+  public function getComplex()
+  {
+    if ($this->settings){
+      return $this->settings->eq_complex;
+    }
+    return 0;
+  }
 
-  //Oth table
+  //Tool spec
+  public function getSpecial()
+  {
+    return $this->hasOne(Special::class, ['eq_id' => 'ref']);
+  }
 
+  public function getSpecialStatus()
+  {
+    if($this->special){
+      return $this->special->valid;
+    }
+    return false;
+  }
+
+  public function getSpecialStickerNumber()
+  {
+    if($this->special){
+      return $this->special->sticker_number;
+    }
+    return false;
+  }
+
+  // Tool OTH
   public function getOth()
   {
     return $this->hasOne(Oth::class, ['eq_id' => 'ref']);
   }
+
+  public function getOthStatus()
+  {
+    if ($this->oth){
+      return $this->oth->valid;
+    }
+    return false;
+  }
+
+  public function getOthTitleCheck()
+  {
+    if ($this->oth){
+      return $this->oth->eq_oth_title_on;
+    }
+    return false;
+  }
+
+  public function getOthTitle()
+  {
+    if ($this->oth){
+      return $this->oth->eq_oth_title;
+    }
+    return '';
+  }
+
 
 
   // Wiki
@@ -259,8 +313,6 @@ class Tools extends \yii\db\ActiveRecord
     }
     return $ar;
   }
-
-
 //======================================================================================================================
 
   // DropDown lists

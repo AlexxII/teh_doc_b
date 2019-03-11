@@ -224,13 +224,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
     })
   });
 
-  $(document).ready(function () {
-    if ($('.fact-date').val()) {
-      var date = new Date($('.fact-date').val());
-      moment.locale('ru');
-      $('.fact-date').datepicker('update', moment(date).format('MMMM YYYY'))
-    }
-  });
+c
 
   //преобразование дат перед отправкой
   $(document).ready(function () {

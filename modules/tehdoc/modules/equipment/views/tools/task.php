@@ -35,7 +35,7 @@ $about = "Данный раздел позволяет планировать р
   </h3>
   <div class="row">
     <?php foreach ($models as $model): ?>
-      <div class="col-sm-6 col-md-4 task-wrap">
+      <div class="col-sm-6 col-md-4 col-lg-3 task-wrap">
         <div class="thumbnail">
           <div class="caption">
             <span><small><?= $model->toolParents(0) ?></small></span>

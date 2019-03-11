@@ -160,15 +160,6 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-    // $('#tools-category_id').attr('disabled', 'disabled');
-
-    /*
-        $('#tools-category_id').on('change', function (e) {
-          var text = $("#tools-category_id option:selected").text();
-          $('#tools-eq_title').val(text);
-        });
-    */
-
     $('#tools-eq_title').on('input', function (e) {
       var node = $("#fancyree_w0").fancytree("getActiveNode");
       node.setTitle($(this).val());
@@ -282,66 +273,6 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
       });
     })
   })
-
-
-  /*
-    $('#tools-eq_class').on('change',function(){
-      var classId = $(this).val();
-      if(classId){
-        $.ajax({
-          type:'POST',
-          url:'../control/category-list',
-          data:'classId='+classId,
-          success:function(html){
-            $('#tools-category_id').html(html);
-            $('#tools-category_id').removeAttr('disabled');
-            // $('#city').html('<option value="">Select state first</option>');
-          }
-        });
-      }else{
-        $('#state').html('<option value="">Select country first</option>');
-        $('#city').html('<option value="">Select state first</option>');
-      }
-    });
-  */
-
-
-  /*
-    $(document).ready(function () {
-      var variable = [];
-      var cats, leaves, del = [];
-      $.ajax("/admin/category/get-leaves")
-        .done(function (data) {
-          data = jQuery.parseJSON(data);
-          cats = data.cat;
-          leaves = data.leaves;
-          for (var i = 0; i < cats.length; i++) {
-            variable[i] = cats[i].id;
-          }
-          for (var i = 0; i < leaves.length; i++) {
-            del[i] = leaves[i].id;
-          }
-          variable.forEach(function (t) {
-            if (contains(del, t)) {
-              return;
-            }
-            var element = $("select option[value='" + t + "']");
-            $("select option[value='" + t + "']").attr('disabled', true);
-            $("select option[value='" + t + "']").css({
-              "background-color": '#e8e8e8',
-              "font-weight": 700
-            });
-          });
-        })
-        .fail(function () {
-          alert("Произошла ошибка в выводе категорий.");
-        })
-        .always(function () {
-          alert("complete");
-        });
-
-    });
-  */
 
 </script>
 

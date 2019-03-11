@@ -297,60 +297,51 @@ class ToolsController extends Controller
 //    );
   }
 
-
   public function actionServerSideOth()
   {
-    $table = 'teh_equipment_tbl';
-    $settingsTable = 'teh_settings_tbl';
+    $table = 'teh_oth_tbl';
+    $tableTwo = 'teh_equipment_tbl';
+
     $primaryKey = 'id';
     $columns = array(
-      array('db' => '`c`.`ref`', 'dt' => 0),
-      array('db' => '`c`.`eq_title`', 'dt' => 1),
-      array('db' => '`c`.`eq_manufact`', 'dt' => 2),
-      array('db' => '`c`.`eq_model`', 'dt' => 3),
-      array('db' => '`c`.`eq_serial`', 'dt' => 4),
-      array('db' => '`c`.`eq_serial`', 'dt' => 5),
+      array('db' => 'eq_id', 'dt' => 0),
       array(
-        'db' => '`c`.`eq_factdate`',
+        'db' => 'eq_oth_title',
+        'dt' => 1,
+        'formatter' => function ($d, $row) { //TODO разобраться с форматом отображения даты
+          if ($row[8] == 1) {
+            return $d;
+          } else {
+            return $row[7];
+          }
+        }
+      ),
+      array('db' => 'eq_manufact', 'dt' => 2),
+      array('db' => 'eq_model', 'dt' => 3),
+      array('db' => 'eq_serial', 'dt' => 4),
+      array('db' => 'eq_serial', 'dt' => 5),
+      array(
+        'db' => 'eq_factdate',
         'dt' => 6,
         'formatter' => function ($d, $row) { //TODO разобраться с форматом отображения даты
           if ($d != null) {
-            return date('jS M y', strtotime($d));
+            return date('Y', strtotime($d));
           } else {
             return '-';
           }
         }
       ),
-      array(
-        'db' => '`c`.`quantity`',
-        'dt' => 7,
-        'formatter' => function ($d, $row) { //TODO
-          return $d . ' шт.';
-        }
-      ),
-      array(
-        'db' => '`cn`.`eq_oth_title`',
-        'dt' => 8
-      ),
+      array('db' => 'eq_title', 'dt' => 10),
+      array('db' => 'eq_oth_title_on', 'dt' => 11),
     );
 
+//    $where = '';
+    $where = ' ' . $table . '.valid = 1';
+
     $sql_details = \Yii::$app->params['sql_details'];
-
-    $ID = 1;
-    $joinQuery = "FROM `{$table}` AS `c` LEFT JOIN `{$settingsTable}` AS `cn` ON (`cn`.`eq_id` = `c`.`ref`)";
-    $extraCondition = "`eq_oth`=".$ID;
-
-//    if (isset($_GET['index'])) {
-//      $index = $_GET['index'];
-//      $where = ' ref in (SELECT eq_id FROM teh_settings_tbl WHERE ' . $index . '= 1)';
-//    } else {
-//      $where = '';
-//    }
-
-    $result = SSPEx::simple($_GET, $sql_details, $table, $primaryKey, $columns, $joinQuery, $extraCondition);
-
+    $result = SSP::oth($_GET, $sql_details, $table, $primaryKey, $columns, $tableTwo, $where);
+//    return var_dump($result);
     return json_encode($result);
-
   }
 
 

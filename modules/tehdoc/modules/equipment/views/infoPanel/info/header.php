@@ -34,6 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
     font-family: BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
     Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   }
+  table.detail-view th {
+    width: 25%;
+  }
+  table.detail-view td {
+    width: 75%;
+  }
 </style>
 
 <ul class="nav nav-tabs" id="main-teh-tab">
@@ -66,7 +72,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
   <div class="row d-flex flex-items-center">
     <div class="col-lg-11 col-md-11 col-xs-11">
-      <h3><?= Html::encode($model->name) ?></h3>
+      <h2>
+        <span style="position: relative">
+        <?= Html::encode($model->name);
+        if ($model->special) {
+          echo '
+          <i class="fa fa-shield" aria-hidden="true" style="font-size: 14px;position: absolute;top:-5px;right:-10px"
+             title="Проведены Специальные работы"></i>';
+        }
+        ?>
+        </span>
+      </h2>
     </div>
     <div class="text-right" style="padding: 7px 15px 0 0">
       <a type="button" href="/tehdoc/equipment/control-panel/<?= $model->ref ?>/info/update"
@@ -74,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
   </div>
 
-  <?= $this->render('view_2', [
+  <?= $this->render($view, [
     'model' => $model,
     'children' => $children
   ]) ?>

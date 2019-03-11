@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 
-$this->title = 'Перечень оборудования';
+$this->title = 'Панель управления';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <ul class="nav nav-tabs" id="main-teh-tab">
-  <li >
+  <li>
     <a href="../info/update">
       Инфо
     </a>
@@ -72,6 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="complex-docs-control">
   <?= $this->render('index', [
+    'model' => $docModel
   ]) ?>
 
 </div>
