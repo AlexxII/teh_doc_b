@@ -82,6 +82,7 @@ class SettingsController extends Controller
           $oth->valid = 1;
         } else {
           $settings->eq_oth = 0;
+          $oth->eq_id = $model->ref;
           $oth->valid = 0;
         }
       } else {
@@ -143,6 +144,28 @@ class SettingsController extends Controller
           $settings->eq_complex = 1;
         } else {
           $settings->eq_complex = 0;
+        }
+      } else {
+        return false;
+      }
+      if ($settings->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  public function actionWrap()
+  {
+    if (isset($_POST['toolId'])) {
+      $toolId = $_POST['toolId'];
+      $settings = $this->findSettings($toolId);
+      if (isset($_POST['bool'])) {
+        if ($_POST['bool'] === 'true') {
+          $settings->eq_wrap = 1;
+        } else {
+          $settings->eq_wrap = 0;
         }
       } else {
         return false;

@@ -53,17 +53,20 @@ class Images extends ActiveRecord        // модель для добавлен
       $image_path = \Yii::$app->security->generateRandomString() . ".{$ext}";   // для сохранения в БД
       $path = \Yii::$app->params['uploadImg'] . $image_path;
       if ($image->saveAs($path, false)) {
-        $model = new Images();
-        $model->eq_id = $id;
-        $model->image_path = $image_path;
-        $model->image_extention = $ext;
-        $model->upload_time = $date;
-        $model->upload_user = $userId;
-        $model->save();
-        $flag = true;
+        $result = $image->saveAs($path, false);
+        if ($result) {
+          $model = new Images();
+          $model->eq_id = $id;
+          $model->image_path = $image_path;
+          $model->image_extention = $ext;
+          $model->upload_time = $date;
+          $model->upload_user = $userId;
+          $model->save();
+          $flag = true;
+        }
       }
+      return $flag;
     }
-    return $flag;
   }
 
   public function getImageFile()

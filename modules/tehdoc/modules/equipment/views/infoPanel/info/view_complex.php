@@ -3,35 +3,49 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
+
+$attributes = [
+
+];
+
 ?>
 
 <div id="complex-info" style="padding-top: 10px">
+  <?php
+  if (!empty($attributes)) {
+    echo DetailView::widget([
+        'model' => $model,
+        'attributes' => $attributes
+    ]);
+  }
+  ?>
   <span>В составе:</span>
 
   <?php
+
 
   $attr = [];
 
   foreach ($children as $child) {
 
     $attr = [
-      [
-        'label' => 'Категория:',
-        'value' => $child->categoryTitle,
-      ],
-      'eq_manufact',
-      'eq_model',
-      'eq_serial',
-      [
-        'label' => 'Место размещения:',
-        'value' => $child->placementTitle,
-      ],
+        [
+            'label' => 'Категория:',
+            'value' => $child->categoryTitle,
+        ],
+        'eq_manufact',
+        'eq_model',
+        'eq_serial',
+        [
+            'label' => 'Место размещения:',
+            'value' => $child->placementTitle,
+        ],
     ];
 
     if ($child->specialStatus) {
       $attr[] = [
-        'label' => 'Спецпроверка:',
-        'value' => $child->specialStickerNumber,
+          'label' => 'Спецпроверка:',
+          'value' => $child->specialStickerNumber,
       ];
     }
 
@@ -46,8 +60,8 @@ use yii\widgets\DetailView;
     echo '</h3>';
 
     echo DetailView::widget([
-      'model' => $child,
-      'attributes' => $attr
+        'model' => $child,
+        'attributes' => $attr
     ]);
   }
 
@@ -55,9 +69,9 @@ use yii\widgets\DetailView;
 </div>
 
 <script>
-  $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-  });
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>
 
 

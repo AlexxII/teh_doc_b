@@ -52,7 +52,7 @@ class Docs extends \yii\db\ActiveRecord
       $ext = $doc->extension;
 
       $doc_path = \Yii::$app->security->generateRandomString() . ".{$ext}";   // для сохранения в БД
-      $path = \Yii::$app->params['uploadPath'] . $doc_path;
+      $path = \Yii::$app->params['uploadDocs'] . $doc_path;
       if ($doc->saveAs($path, false)) {
         $model = new Images();
         $model->eq_id = $id;
@@ -70,13 +70,13 @@ class Docs extends \yii\db\ActiveRecord
 
   public function getDocFile()
   {
-    return isset($this->doc_path) ? \Yii::$app->params['uploadPath'] . $this->doc_path : null;
+    return isset($this->doc_path) ? \Yii::$app->params['uploadDocs'] . $this->doc_path : null;
   }
 
   public function getDocUrl()
   {
     $doc_path = isset($this->doc_path) ? $this->doc_path : 'default_photo.jpg';
-    return \Yii::$app->params['uploadUrl'] . $doc_path;
+    return \Yii::$app->params['uploadUrlDocs'] . $doc_path;
   }
 
 }

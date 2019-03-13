@@ -42,9 +42,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
 </head>
 
 <style>
-  .fa {
-    font-size: 18px;
-  }
   .navbar-inverse .navbar-nav > .active > a {
     background-color: #0000aa;
   }
@@ -83,6 +80,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
     color: #1e6887;
     font-size: 18px;
   }
+  .t {
+    font-size: 14px;
+  }
+
 </style>
 
 
@@ -285,7 +286,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
     var main_url = '/tehdoc/equipment/tools/all-tools';
     $("#fancyree_w0").fancytree({
       source: {
-        url: main_url,
+        url: main_url
       },
       extensions: ['filter'],
       quicksearch: true,
@@ -313,7 +314,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         if (target === 'title' || target === 'icon') {
           var node = data.node;
           var prefix = '/tehdoc/equipment/tool/';
-          if (node.key != 1122334455 && node.key != 5544332211) {
+          if (node.key != 1122334455 && node.key != 5544332211 && node.data.eq_wrap != 1) {
             var url = prefix + node.key + '/info/index';
             window.location.href = url;
           }
@@ -324,8 +325,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
           return "fa fa-sitemap";
         } else if (data.node.key == 5544332211) {
           return "fa fa-question-circle";
+        } else if (data.node.data.eq_wrap == 1) {
+          return "t fa fa-clone";
         } else {
-          return false;
+          return "t fa fa-file-o";
         }
         // if (data.node.isFolder()) {
         //   return "fa fa-eye";
@@ -345,7 +348,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       dblclick: function (event, data) {
         var node = data.node;
         var prefix = '/tehdoc/equipment/tool/';
-        if (node.key != 1122334455 && node.key != 5544332211) {
+        if (node.key != 1122334455 && node.key != 5544332211 && node.data.eq_wrap != 1) {
           var url = prefix + node.key + '/info/index';
           window.location.href = url;
         }

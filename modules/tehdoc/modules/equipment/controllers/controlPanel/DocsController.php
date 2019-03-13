@@ -38,8 +38,14 @@ class DocsController extends Controller
   {
     $docModel = new Docs();
 
+    $toolId = $_GET['id'];
     if ($docModel->load(Yii::$app->request->post())) {
       $docModel->docFiles = UploadedFile::getInstances($docModel, 'docFiles');
+      if ($docModel->uploadDocs($toolId)) {
+        Yii::$app->session->setFlash('success', 'Документ добавлен');
+      } else {
+        Yii::$app->session->setFlash('error', 'Документ не добавлен');
+      }
       $docModel->save();
       return true;
     }
