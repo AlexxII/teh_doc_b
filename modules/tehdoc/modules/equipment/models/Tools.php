@@ -173,6 +173,16 @@ class Tools extends \yii\db\ActiveRecord
     return $this->hasOne(ToolSettings::class, ['eq_id' => 'ref']);
   }
 
+  //Tool general table
+  public function getGeneralTable()
+  {
+    if ($this->settings){
+      return $this->settings->eq_general;
+    }
+    return 0;
+  }
+
+
   //Tool complex
   public function getComplex()
   {
@@ -187,6 +197,15 @@ class Tools extends \yii\db\ActiveRecord
   {
     if ($this->settings){
       return $this->settings->eq_wrap;
+    }
+    return 0;
+  }
+
+  //Tool task
+  public function getTask()
+  {
+    if ($this->settings){
+      return $this->settings->eq_task;
     }
     return 0;
   }
