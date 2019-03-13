@@ -23,6 +23,7 @@ class m190306_043308_tehdoc_settings_tbl extends Migration
       'eq_oth' => $this->boolean()->defaultValue(0),
       'eq_special' => $this->boolean()->defaultValue(0),
       'eq_complex' => $this->boolean()->defaultValue(0),
+      'eq_wrap' => $this->boolean()->defaultValue(0),
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
 

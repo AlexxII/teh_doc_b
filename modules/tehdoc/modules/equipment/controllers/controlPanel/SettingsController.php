@@ -156,6 +156,28 @@ class SettingsController extends Controller
     return false;
   }
 
+  public function actionWrap()
+  {
+    if (isset($_POST['toolId'])) {
+      $toolId = $_POST['toolId'];
+      $settings = $this->findSettings($toolId);
+      if (isset($_POST['bool'])) {
+        if ($_POST['bool'] === 'true') {
+          $settings->eq_wrap = 1;
+        } else {
+          $settings->eq_wrap = 0;
+        }
+      } else {
+        return false;
+      }
+      if ($settings->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
   public function actionSpecialWorks()
   {
     if (isset($_POST['toolId'])) {

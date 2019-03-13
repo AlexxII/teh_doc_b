@@ -57,10 +57,12 @@ class ToolsController extends Controller
         $toolSettings->save();
         if ($fUpload->load(Yii::$app->request->post())) {
           $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
-          if ($fUpload->uploadImage($model->ref)) {
+          $result = $fUpload->uploadImage($model->ref);
+          if ($result) {
             Yii::$app->session->setFlash('success', 'Оборудование добавлено');
           } else {
             Yii::$app->session->setFlash('success', 'Оборудование добавлено, <strong>НО</strong> не загружены изображения');
+            return var_dump($result);
           }
         } else {
           Yii::$app->session->setFlash('success', 'Оборудование добавлено');

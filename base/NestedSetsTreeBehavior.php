@@ -59,7 +59,13 @@ class NestedSetsTreeBehavior extends Behavior
 
     // Trees mapped
     $trees = array();
-    $collection = $this->owner->find()->select('id, ref, lft, rgt, root, lvl, name')->where(['=', 'valid', 1])->orderBy('root, lft')->asArray()->all();
+    $collection = $this->owner->find()
+        ->select('teh_equipment_tbl.id, ref, lft, rgt, root, lvl, name, teh_settings_tbl.eq_wrap')
+        ->leftJoin('teh_settings_tbl', 'teh_settings_tbl.eq_id = teh_equipment_tbl.ref')
+        ->where(['=', 'teh_equipment_tbl.valid', 1])
+        ->orderBy('root, lft')
+        ->asArray()
+        ->all();
 
     if (count($collection) > 0) {
       foreach ($collection as &$col)

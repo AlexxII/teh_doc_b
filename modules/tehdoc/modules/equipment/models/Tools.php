@@ -182,6 +182,15 @@ class Tools extends \yii\db\ActiveRecord
     return 0;
   }
 
+  //Tool wrap
+  public function getWrap()
+  {
+    if ($this->settings){
+      return $this->settings->eq_wrap;
+    }
+    return 0;
+  }
+
   //Tool spec
   public function getSpecial()
   {

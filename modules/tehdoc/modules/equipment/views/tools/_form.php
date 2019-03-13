@@ -224,8 +224,6 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
     })
   });
 
-c
-
   //преобразование дат перед отправкой
   $(document).ready(function () {
     $('#w0').submit(function () {
@@ -254,7 +252,7 @@ c
         var manufact = $.parseJSON(data);
         $(function () {
           $("#manufact").autocomplete({
-            source: manufact,
+            source: manufact
           });
         });
       },
