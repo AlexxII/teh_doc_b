@@ -45,41 +45,52 @@ $del_multi_nodes = 'Удвлить С вложениями';
   .navbar-inverse .navbar-nav > .active > a {
     background-color: #0000aa;
   }
+
   .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
     background-color: #0000aa;
     color: white;
   }
+
   .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
     background-color: #0000aa;
     color: white;
   }
+
   .navbar-inverse .btn-link:hover, .navbar-inverse .btn-link:focus {
     text-decoration: none;
   }
+
   .navbar-nav > li > .dropdown-menu {
     background-color: #014993;
     color: white;
   }
+
   .dropdown-menu > li > a {
     color: white;
   }
+
   .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
     background-color: #05226f;
     color: white;
   }
+
   .dropdown-header {
     color: white;
   }
+
   a:hover {
     text-decoration: none;
   }
+
   .ui-fancytree {
     overflow: auto;
   }
+
   .fancytree-custom-icon {
     color: #1e6887;
     font-size: 18px;
   }
+
   .t {
     font-size: 14px;
   }
@@ -230,139 +241,139 @@ $del_multi_nodes = 'Удвлить С вложениями';
 <?php $this->endPage() ?>
 
 <script>
-  $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-  });
-
-  $("input[name=search]").keyup(function (e) {
-    var n,
-      tree = $.ui.fancytree.getTree(),
-      args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-      opts = {},
-      filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-      match = $(this).val();
-
-    $.each(args, function (i, o) {
-      opts[o] = $("#" + o).is(":checked");
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
     });
-    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
 
-    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-      $("button#btnResetSearch").click();
-      return;
-    }
-    if ($("#regex").is(":checked")) {
-      // Pass function to perform match
-      n = filterFunc.call(tree, function (node) {
-        return new RegExp(match, "i").test(node.title);
-      }, opts);
-    } else {
-      // Pass a string to perform case insensitive matching
-      n = filterFunc.call(tree, match, opts);
-    }
-    $("#btnResetSearch").attr("disabled", false);
-  }).focus();
-
-
-  $("#btnResetSearch").click(function (e) {
-    e.preventDefault();
-    $("input[name=search]").val("");
-    $("span#matches").text("");
-    var tree = $(".ui-draggable-handle").fancytree("getTree");
-    tree.clearFilter();
-  }).attr("disabled", true);
-
-  $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
-      if ($(this).val() == '') {
+        var n,
+            tree = $.ui.fancytree.getTree(),
+            args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+            opts = {},
+            filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+            match = $(this).val();
+
+        $.each(args, function (i, o) {
+            opts[o] = $("#" + o).is(":checked");
+        });
+        opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
+
+        if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+            $("button#btnResetSearch").click();
+            return;
+        }
+        if ($("#regex").is(":checked")) {
+            // Pass function to perform match
+            n = filterFunc.call(tree, function (node) {
+                return new RegExp(match, "i").test(node.title);
+            }, opts);
+        } else {
+            // Pass a string to perform case insensitive matching
+            n = filterFunc.call(tree, match, opts);
+        }
+        $("#btnResetSearch").attr("disabled", false);
+    }).focus();
+
+
+    $("#btnResetSearch").click(function (e) {
+        e.preventDefault();
+        $("input[name=search]").val("");
+        $("span#matches").text("");
         var tree = $(".ui-draggable-handle").fancytree("getTree");
         tree.clearFilter();
-      }
-    })
-  });
+    }).attr("disabled", true);
 
-  // отображение и логика работа дерева
-  jQuery(function ($) {
-    var main_url = '/tehdoc/equipment/tools/all-tools';
-    $("#fancyree_w0").fancytree({
-      source: {
-        url: main_url
-      },
-      extensions: ['filter'],
-      quicksearch: true,
-      minExpandLevel: 2,
-      wide: {
-        iconWidth: "32px",     // Adjust this if @fancy-icon-width != "16px"
-        iconSpacing: "6px", // Adjust this if @fancy-icon-spacing != "3px"
-        labelSpacing: "6px",   // Adjust this if padding between icon and label !=  "3px"
-        levelOfs: "32px"     // Adjust this if ul padding != "16px"
-      },
-      filter: {
-        autoApply: true,                                    // Re-apply last filter if lazy data is loaded
-        autoExpand: true,                                   // Expand all branches that contain matches while filtered
-        counter: true,                                      // Show a badge with number of matching child nodes near parent icons
-        fuzzy: false,                                       // Match single characters in order, e.g. 'fb' will match 'FooBar'
-        hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
-        hideExpanders: true,                                // Hide expanders if all child nodes are hidden by filter
-        highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
-        leavesOnly: true,                                   // Match end nodes only
-        nodata: true,                                       // Display a 'no data' status node if result is empty
-        mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
-      },
-      click: function (event, data) {
-        var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-        if (target === 'title' || target === 'icon') {
-          var node = data.node;
-          var prefix = '/tehdoc/equipment/tool/';
-          if (node.key != 1122334455 && node.key != 5544332211 && node.data.eq_wrap != 1) {
-            var url = prefix + node.key + '/info/index';
-            window.location.href = url;
-          }
-        }
-      },
-      icon: function (event, data) {
-        if (data.node.key == 1122334455) {
-          return "fa fa-sitemap";
-        } else if (data.node.key == 5544332211) {
-          return "fa fa-question-circle";
-        } else if (data.node.data.eq_wrap == 1) {
-          return "t fa fa-clone";
-        } else {
-          return "t fa fa-file-o";
-        }
-        // if (data.node.isFolder()) {
-        //   return "fa fa-eye";
-        // }
-      },
-      init: function (event, data) {
-        var uri = window.location.href;
-        var key = uri.match('\\/tool\\/(\\d+)\\/\\w+\\/');
-        if (!key) {
-          return;
-        }
-        data.tree.activateKey(key[1]);
-      },
-      keypress: function (event, data) {
-        console.log(event);
-      },
-      dblclick: function (event, data) {
-        var node = data.node;
-        var prefix = '/tehdoc/equipment/tool/';
-        if (node.key != 1122334455 && node.key != 5544332211 && node.data.eq_wrap != 1) {
-          var url = prefix + node.key + '/info/index';
-          window.location.href = url;
-        }
-      }
+    $(document).ready(function () {
+        $("input[name=search]").keyup(function (e) {
+            if ($(this).val() == '') {
+                var tree = $(".ui-draggable-handle").fancytree("getTree");
+                tree.clearFilter();
+            }
+        })
     });
-  });
 
-  function getNodeId() {
-    var node = $("#fancyree_w0").fancytree("getActiveNode");
-    if (node) {
-      return node.data.ref;
-    } else {
-      return 1;
+    // отображение и логика работа дерева
+    jQuery(function ($) {
+        var main_url = '/tehdoc/equipment/tools/all-tools';
+        $("#fancyree_w0").fancytree({
+            source: {
+                url: main_url
+            },
+            extensions: ['filter'],
+            quicksearch: true,
+            minExpandLevel: 2,
+            wide: {
+                iconWidth: "32px",     // Adjust this if @fancy-icon-width != "16px"
+                iconSpacing: "6px", // Adjust this if @fancy-icon-spacing != "3px"
+                labelSpacing: "6px",   // Adjust this if padding between icon and label !=  "3px"
+                levelOfs: "32px"     // Adjust this if ul padding != "16px"
+            },
+            filter: {
+                autoApply: true,                                    // Re-apply last filter if lazy data is loaded
+                autoExpand: true,                                   // Expand all branches that contain matches while filtered
+                counter: true,                                      // Show a badge with number of matching child nodes near parent icons
+                fuzzy: false,                                       // Match single characters in order, e.g. 'fb' will match 'FooBar'
+                hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
+                hideExpanders: true,                                // Hide expanders if all child nodes are hidden by filter
+                highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
+                leavesOnly: true,                                   // Match end nodes only
+                nodata: true,                                       // Display a 'no data' status node if result is empty
+                mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
+            },
+            click: function (event, data) {
+                var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
+                if (target === 'title' || target === 'icon') {
+                    var node = data.node;
+                    var prefix = '/tehdoc/equipment/tool/';
+                    if (node.key != 1122334455 && node.key != 5544332211 && node.data.eq_wrap != 1) {
+                        var url = prefix + node.key + '/info/index';
+                        window.location.href = url;
+                    }
+                }
+            },
+            icon: function (event, data) {
+                if (data.node.key == 1122334455) {
+                    return "fa fa-sitemap";
+                } else if (data.node.key == 5544332211) {
+                    return "fa fa-question-circle";
+                } else if (data.node.data.eq_wrap == 1) {
+                    return "t fa fa-clone";
+                } else {
+                    return "t fa fa-file-o";
+                }
+                // if (data.node.isFolder()) {
+                //   return "fa fa-eye";
+                // }
+            },
+            init: function (event, data) {
+                var uri = window.location.href;
+                var key = uri.match('\\/tool\\/(\\d+)\\/\\w+\\/');
+                if (!key) {
+                    return;
+                }
+                data.tree.activateKey(key[1]);
+            },
+            keypress: function (event, data) {
+                console.log(event);
+            },
+            dblclick: function (event, data) {
+                var node = data.node;
+                var prefix = '/tehdoc/equipment/tool/';
+                if (node.key != 1122334455 && node.key != 5544332211 && node.data.eq_wrap != 1) {
+                    var url = prefix + node.key + '/info/index';
+                    window.location.href = url;
+                }
+            }
+        });
+    });
+
+    function getNodeId() {
+        var node = $("#fancyree_w0").fancytree("getActiveNode");
+        if (node) {
+            return node.data.ref;
+        } else {
+            return 1;
+        }
     }
-  }
 
 </script>
