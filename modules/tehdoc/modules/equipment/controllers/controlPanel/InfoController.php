@@ -8,6 +8,8 @@ use app\modules\tehdoc\modules\equipment\models\Tools;
 use Yii;
 use yii\web\UploadedFile;
 use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
+
 
 
 class InfoController extends Controller

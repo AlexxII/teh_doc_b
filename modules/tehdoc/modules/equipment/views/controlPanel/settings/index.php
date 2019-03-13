@@ -10,7 +10,7 @@
           <label style="font-weight: 500">
             <input class="ch" id="general-feature" type="checkbox" data-id="<?= $model->ref ?>"
                    data-check='general-check'
-                   data-url='general-table' <?php if ($model->settings->eq_general) echo 'checked' ?>>
+                   data-url='general-table' <?php if ($model->generalTable) echo 'checked' ?>>
             В сводной таблице
           </label>
           <span class="status-indicator" id="general-check"></span>
