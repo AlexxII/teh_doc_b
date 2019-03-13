@@ -51,7 +51,7 @@ class Images extends ActiveRecord        // модель для добавлен
       $userId = Yii::$app->user->identity->ref;
       $ext = $image->extension;
       $image_path = \Yii::$app->security->generateRandomString() . ".{$ext}";   // для сохранения в БД
-      $path = \Yii::$app->params['uploadPath'] . $image_path;
+      $path = \Yii::$app->params['uploadImg'] . $image_path;
       if ($image->saveAs($path, false)) {
         $model = new Images();
         $model->eq_id = $id;
@@ -68,18 +68,18 @@ class Images extends ActiveRecord        // модель для добавлен
 
   public function getImageFile()
   {
-    return isset($this->image_path) ? \Yii::$app->params['uploadPath'] . $this->image_path : null;
+    return isset($this->image_path) ? \Yii::$app->params['uploadImg'] . $this->image_path : null;
   }
 
   public function getImageUrl()
   {
     $image_path = isset($this->image_path) ? $this->image_path : 'default_photo.jpg';
-    return \Yii::$app->params['uploadUrl'] . $image_path;
+    return \Yii::$app->params['uploadUrlImg'] . $image_path;
   }
 
   public static function getDefaultPhotoUrl()
   {
-    return \Yii::$app->params['uploadUrl'] . '/' . 'image_not_found.jpg';
+    return \Yii::$app->params['uploadUrlImg'] . '/' . 'image_not_found.jpg';
   }
 
 }

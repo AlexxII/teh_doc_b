@@ -87,10 +87,10 @@
 
 <script>
   $(document).ready(function () {
+/*
     var pswpElement = document.querySelectorAll('.pswp')[0];
 
     // build items array
-    /*
         var items = [
           {
             src: 'https://placekitten.com/600/400',
@@ -103,7 +103,6 @@
             h: 900
           }
         ];
-    */
     var items = [];
     // define options (if needed)
     var options = {
@@ -114,6 +113,7 @@
 
     // Initializes and opens PhotoSwipe
     var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
-    // gallery.init();
+    gallery.init();
+*/
   })
 </script>
