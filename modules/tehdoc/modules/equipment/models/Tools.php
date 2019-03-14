@@ -7,7 +7,7 @@ use app\modules\admin\models\Placement;
 use app\modules\admin\models\Category;
 use app\modules\tehdoc\modules\equipment\models\Images;
 use yii\helpers\ArrayHelper;
-use app\base\NestedSetsTreeBehavior;
+use app\base\NestedSetsTreeBehaviorEx;
 use creocoder\nestedsets\NestedSetsBehavior;
 
 
@@ -15,7 +15,7 @@ use creocoder\nestedsets\NestedSetsBehavior;
 /**
  * This is the model class for table "equipment_tbl".
  *
- * @property int $id
+ * @property int $ide
  * @property int $id_eq
  * @property int $category_id
  * @property string $eq_title
@@ -55,7 +55,7 @@ class Tools extends \yii\db\ActiveRecord
         'depthAttribute' => 'lvl',
       ],
       'htmlTree' => [
-        'class' => NestedSetsTreeBehavior::className(),
+        'class' => NestedSetsTreeBehaviorEx::className(),
         'depthAttribute' => 'lvl'
       ]
     ];
@@ -167,13 +167,14 @@ class Tools extends \yii\db\ActiveRecord
   }
 
 
+
   // Tool Settings
   public function getSettings()
   {
     return $this->hasOne(ToolSettings::class, ['eq_id' => 'ref']);
   }
 
-  //Tool general table
+  //Tool generalTable
   public function getGeneralTable()
   {
     if ($this->settings){
@@ -181,7 +182,6 @@ class Tools extends \yii\db\ActiveRecord
     }
     return 0;
   }
-
 
   //Tool complex
   public function getComplex()
@@ -201,7 +201,6 @@ class Tools extends \yii\db\ActiveRecord
     return 0;
   }
 
-  //Tool task
   public function getTask()
   {
     if ($this->settings){
@@ -261,8 +260,6 @@ class Tools extends \yii\db\ActiveRecord
     }
     return '';
   }
-
-
 
   // Wiki
   public function getWiki()
