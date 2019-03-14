@@ -35,6 +35,17 @@ class SettingsController extends Controller
   }
 
 
+  public function actionWrapConfig()
+  {
+    $id = $_GET['id'];
+    $toolSettings = $this->findSettings($id);
+    return $this->render('wrap_view', [
+      'tool' => $this->findTool($id),
+      'toolSettings' => $toolSettings,
+    ]);
+  }
+
+
   public function actionGeneralTable()
   {
     if (isset($_POST['toolId'])) {

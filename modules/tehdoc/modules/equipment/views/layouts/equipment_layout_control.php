@@ -43,60 +43,47 @@ $del_multi_nodes = 'Удвлить С вложениями';
   .fa {
     font-size: 15px;
   }
-
   .navbar-inverse .navbar-nav > .active > a {
     background-color: #0000aa;
   }
-
   .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
     background-color: #0000aa;
     color: white;
   }
-
   .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
     background-color: #0000aa;
     color: white;
   }
-
   .navbar-inverse .btn-link:hover, .navbar-inverse .btn-link:focus {
     text-decoration: none;
   }
-
   .navbar-nav > li > .dropdown-menu {
     background-color: #014993;
     color: white;
   }
-
   .dropdown-menu > li > a {
     color: white;
   }
-
   .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
     background-color: #05226f;
     color: white;
   }
-
   .dropdown-header {
     color: white;
   }
-
   a:hover {
     text-decoration: none;
   }
-
   .ui-fancytree {
     overflow: auto;
   }
-
   input {
     color: black;
   }
-
   .fancytree-custom-icon {
     color: #1e6887;
     font-size: 18px;
-  }
-
+    }
   .t {
     font-size: 14px;
   }
@@ -110,97 +97,97 @@ $del_multi_nodes = 'Удвлить С вложениями';
 <div class="wrap">
   <?php
   NavBar::begin([
-      'brandLabel' => '<img src="/images/logo.jpg" style="display:inline">',
-      'brandUrl' => Yii::$app->homeUrl,
-      'options' => [
-          'class' => 'navbar-inverse',
-      ],
+    'brandLabel' => '<img src="/images/logo.jpg" style="display:inline">',
+    'brandUrl' => Yii::$app->homeUrl,
+    'options' => [
+      'class' => 'navbar-inverse',
+    ],
   ]);
   echo Nav::widget([
-      'options' => ['class' => 'navbar-nav navbar-right'],
-      'encodeLabels' => false,
-      'items' => [
-          [
-              'label' => 'Оборудование',
-              'items' => [
-                  '<li class="dropdown-header" style="font-size: 10px">Перечень</li>',
-                  ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']],
-                  ['label' => 'Сводная таблица', 'url' => ['/tehdoc/equipment/tools/index']],
-                  '<li class="divider"></li>',
-                  '<li class="dropdown-header" style="font-size: 10px">Управление оборудованием</li>',
-                  ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/control-panel']],
-                  ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/tools/create']],
-                  ['label' => 'Задание на обновление', 'url' => ['/tehdoc/equipment/tools/task']],
-              ],
-          ],
-        /*            // В разработке
-                   [
-                        'label' => 'Движение',
-                        'items' => [
-                            '<li class="dropdown-header" style="font-size: 10px">Движение оборудования</li>',
-                            ['label' => 'Приемка', 'url' => ['/tehdoc/']],
-                            ['label' => 'Ввод в экспл-цию', 'url' => ['/tehdoc/']],
-                            ['label' => 'Списание', 'url' => ['/tehdoc/']],
-                        ],
-                    ],
-        */
-          [
-              'label' => 'Представления',
-              'items' => [
-                  '<li class="dropdown-header" style="font-size: 10px">Весь перечнь</li>',
-                  ['label' => 'По категориям', 'url' => ['/tehdoc/equipment/tools/categories']],
-                  ['label' => 'По месту размещения', 'url' => ['/tehdoc/equipment/tools/placement']],
-                  '<li class="divider"></li>',
-                  '<li class="dropdown-header" style="font-size: 10px">Таблицы</li>',
-                  ['label' => 'Таблица ОТХ', 'url' => ['/tehdoc/equipment/tools/oth']],
-                  ['label' => 'Таблица драг.металлов', 'url' => ['/tehdoc/equipment/tools/categories']],
-                  ['label' => 'Таблица инвентаризации', 'url' => ['/tehdoc/equipment/tools/categories']],
+    'options' => ['class' => 'navbar-nav navbar-right'],
+    'encodeLabels' => false,
+    'items' => [
+      [
+        'label' => 'Оборудование',
+        'items' => [
+          '<li class="dropdown-header" style="font-size: 10px">Перечень</li>',
+          ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']],
+          ['label' => 'Сводная таблица', 'url' => ['/tehdoc/equipment/tools/index']],
+          '<li class="divider"></li>',
+          '<li class="dropdown-header" style="font-size: 10px">Управление оборудованием</li>',
+          ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/control-panel']],
+          ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/tools/create']],
+          ['label' => 'Задание на обновление', 'url' => ['/tehdoc/equipment/tools/task']],
+        ],
+      ],
+      /*            // В разработке
+                 [
+                      'label' => 'Движение',
+                      'items' => [
+                          '<li class="dropdown-header" style="font-size: 10px">Движение оборудования</li>',
+                          ['label' => 'Приемка', 'url' => ['/tehdoc/']],
+                          ['label' => 'Ввод в экспл-цию', 'url' => ['/tehdoc/']],
+                          ['label' => 'Списание', 'url' => ['/tehdoc/']],
+                      ],
+                  ],
+      */
+      [
+        'label' => 'Представления',
+        'items' => [
+          '<li class="dropdown-header" style="font-size: 10px">Весь перечнь</li>',
+          ['label' => 'По категориям', 'url' => ['/tehdoc/equipment/tools/categories']],
+          ['label' => 'По месту размещения', 'url' => ['/tehdoc/equipment/tools/placement']],
+          '<li class="divider"></li>',
+          '<li class="dropdown-header" style="font-size: 10px">Таблицы</li>',
+          ['label' => 'Таблица ОТХ', 'url' => ['/tehdoc/equipment/tools/oth']],
+          ['label' => 'Таблица драг.металлов', 'url' => ['/tehdoc/equipment/tools/categories']],
+          ['label' => 'Таблица инвентаризации', 'url' => ['/tehdoc/equipment/tools/categories']],
 
 //                    '<li class="divider"></li>',
 //                    '<li class="dropdown-header" style="font-size: 10px">Комплекты</li>',
 //                    ['label' => 'По категориям', 'url' => ['/tehdoc/tools/categories']],
 //                    ['label' => 'По месту размещения', 'url' => ['/tehdoc/tools/placement']],
 //                    ['label' => 'Классификатор', 'url' => ['/tehdoc/tools/classifiers']],
-              ],
-          ],
-          Yii::$app->user->isGuest ? (
-          ['label' => 'Войти', 'url' => ['/site/login']]
-          ) : ([
-              'label' => '<i class="fa fa-user" aria-hidden="true" style="font-size: 18px"></i>',
-              'items' => [
-                  '<li class="dropdown-header" style="font-size: 10px">' . Yii::$app->user->identity->username . '</li>',
-                  ['label' => '<i class="fa fa-cogs" aria-hidden="true" style="font-size: 16px"></i> Профиль',
-                      'url' => ['/admin/user/profile']
-                  ],
-                  ['label' => ''
-                      . Html::beginForm(['/site/logout'], 'post')
-                      . Html::submitButton(
-                          '<span style="cursor: default"><i class="fa fa-sign-out" aria-hidden="true"></i> Выход</span>',
-                          [
-                              'class' => 'btn btn-link logout',
-                              'data-toggle' => "tooltip",
-                              'data-placement' => "bottom",
-                              'style' => [
-                                  'padding' => '0px',
-                              ]
-                          ]
-                      )
-                      . Html::endForm()
-                  ]
-              ]
-          ])
+        ],
       ],
+      Yii::$app->user->isGuest ? (
+      ['label' => 'Войти', 'url' => ['/site/login']]
+      ) : ([
+        'label' => '<i class="fa fa-user" aria-hidden="true" style="font-size: 18px"></i>',
+        'items' => [
+          '<li class="dropdown-header" style="font-size: 10px">' . Yii::$app->user->identity->username . '</li>',
+          ['label' => '<i class="fa fa-cogs" aria-hidden="true" style="font-size: 16px"></i> Профиль',
+            'url' => ['/admin/user/profile']
+          ],
+          ['label' => ''
+            . Html::beginForm(['/site/logout'], 'post')
+            . Html::submitButton(
+              '<span style="cursor: default"><i class="fa fa-sign-out" aria-hidden="true"></i> Выход</span>',
+              [
+                'class' => 'btn btn-link logout',
+                'data-toggle' => "tooltip",
+                'data-placement' => "bottom",
+                'style' => [
+                  'padding' => '0px',
+                ]
+              ]
+            )
+            . Html::endForm()
+          ]
+        ]
+      ])
+    ],
   ]);
   NavBar::end();
   ?>
 
   <div class="container">
     <?= Breadcrumbs::widget([
-        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        'options' => [
-            'class' => 'breadcrumb'
-        ],
-        'tag' => 'ol',
+      'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+      'options' => [
+        'class' => 'breadcrumb'
+      ],
+      'tag' => 'ol',
     ]) ?>
     <?= Alert::widget() ?>
 
@@ -215,22 +202,22 @@ $del_multi_nodes = 'Удвлить С вложениями';
       <div class="">
         <div class="container-fluid" style="margin-bottom: 10px">
           <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
-              'style' => ['margin-top' => '5px'],
-              'title' => $add_hint,
-              'data-toggle' => 'tooltip',
-              'data-placement' => 'top'
+            'style' => ['margin-top' => '5px'],
+            'title' => $add_hint,
+            'data-toggle' => 'tooltip',
+            'data-placement' => 'top'
           ]) ?>
           <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
-              'style' => ['margin-top' => '5px', 'display' => 'none'],
-              'title' => $del_hint,
-              'data-toggle' => 'tooltip',
-              'data-placement' => 'top'
+            'style' => ['margin-top' => '5px', 'display' => 'none'],
+            'title' => $del_hint,
+            'data-toggle' => 'tooltip',
+            'data-placement' => 'top'
           ]) ?>
           <?= Html::a('<i class="fa fa-object-group" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-multi-nodes',
-              'style' => ['margin-top' => '5px', 'display' => 'none'],
-              'title' => $del_multi_nodes,
-              'data-toggle' => 'tooltip',
-              'data-placement' => 'top'
+            'style' => ['margin-top' => '5px', 'display' => 'none'],
+            'title' => $del_multi_nodes,
+            'data-toggle' => 'tooltip',
+            'data-placement' => 'top'
           ]) ?>
         </div>
       </div>
@@ -267,365 +254,368 @@ $del_multi_nodes = 'Удвлить С вложениями';
 <?php $this->endPage() ?>
 
 <script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
 
-    function goodAlert(text) {
-        var div = '' +
-            '<div id="w3-success-0" class="alert-success alert fade in">' +
-            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-            text +
-            '</div>';
-        return div;
-    }
+  function goodAlert(text) {
+    var div = '' +
+      '<div id="w3-success-0" class="alert-success alert fade in">' +
+      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+      text +
+      '</div>';
+    return div;
+  }
 
-    function badAlert(text) {
-        var div = '' +
-            '<div id="w3-success-0" class="alert-danger alert fade in">' +
-            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-            text +
-            '</div>';
-        return div;
-    }
+  function badAlert(text) {
+    var div = '' +
+      '<div id="w3-success-0" class="alert-danger alert fade in">' +
+      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+      text +
+      '</div>';
+    return div;
+  }
 
-    $(document).ready(function () {
-        $('.add-subcategory').click(function (event) {
-            event.preventDefault();
-            var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-            if (!node) {
-                alert("Выберите родительскую категорию");
-                return;
-            }
-            node.editCreateNode("child", " ");
+  $(document).ready(function () {
+    $('.add-subcategory').click(function (event) {
+      event.preventDefault();
+      var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+      if (!node) {
+        alert("Выберите родительскую категорию");
+        return;
+      }
+      node.editCreateNode("child", " ");
+    })
+  });
+
+  $(document).ready(function () {
+    $('.del-node').click(function (event) {
+      if (confirm('Вы уверены, что хотите удалить выбранный классификатор?')) {
+        event.preventDefault();
+        var csrf = $('meta[name=csrf-token]').attr("content");
+        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+        $.ajax({
+          url: "/tehdoc/equipment/control-panel/info/delete-node",
+          type: "post",
+          data: {
+            id: node.data.ref,
+            _csrf: csrf
+          }
         })
+          .done(function () {
+            node.remove();
+            $('.about-info').html('');
+            $('.del-node').hide();
+          })
+          .fail(function () {
+            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
+          });
+      }
     });
 
-    $(document).ready(function () {
-        $('.del-node').click(function (event) {
-            if (confirm('Вы уверены, что хотите удалить выбранный классификатор?')) {
-                event.preventDefault();
-                var csrf = $('meta[name=csrf-token]').attr("content");
-                var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-                $.ajax({
-                    url: "/tehdoc/equipment/control-panel/info/delete-node",
-                    type: "post",
-                    data: {
-                        id: node.data.ref,
-                        _csrf: csrf
-                    }
-                })
-                    .done(function () {
-                        node.remove();
-                        $('.about-info').html('');
-                        $('.del-node').hide();
-                    })
-                    .fail(function () {
-                        alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-                    });
-            }
-        });
-
-        $('.del-multi-nodes').click(function (event) {
-            if (confirm('Вы уверены, что хотите удалить выбранный классификатор вместе с вложениями?')) {
-                event.preventDefault();
-                var csrf = $('meta[name=csrf-token]').attr("content");
-                var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-                if (!node) {
-                    alert('Выберите узел');
-                    return;
-                }
-                $.ajax({
-                    url: "/tehdoc/equipment/control-panel/control/delete-root",
-                    type: "post",
-                    data: {
-                        id: getNodeId(),
-                        _csrf: csrf
-                    }
-                })
-                    .done(function () {
-                        node.remove();
-                        $('.about-info').html('');
-                        $('.del-multi-nodes').hide();
-                        $('.del-node').hide();
-
-                    })
-                    .fail(function () {
-                        alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-                    });
-            }
+    $('.del-multi-nodes').click(function (event) {
+      if (confirm('Вы уверены, что хотите удалить выбранный классификатор вместе с вложениями?')) {
+        event.preventDefault();
+        var csrf = $('meta[name=csrf-token]').attr("content");
+        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+        if (!node) {
+          alert('Выберите узел');
+          return;
+        }
+        $.ajax({
+          url: "/tehdoc/equipment/control-panel/control/delete-root",
+          type: "post",
+          data: {
+            id: getNodeId(),
+            _csrf: csrf
+          }
         })
+          .done(function () {
+            node.remove();
+            $('.about-info').html('');
+            $('.del-multi-nodes').hide();
+            $('.del-node').hide();
+
+          })
+          .fail(function () {
+            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
+          });
+      }
+    })
+  });
+
+
+  $("input[name=search]").keyup(function (e) {
+    var n,
+      tree = $.ui.fancytree.getTree(),
+      args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+      opts = {},
+      filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+      match = $(this).val();
+
+    $.each(args, function (i, o) {
+      opts[o] = $("#" + o).is(":checked");
     });
+    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
+
+    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+      $("button#btnResetSearch").click();
+      return;
+    }
+    if ($("#regex").is(":checked")) {
+      // Pass function to perform match
+      n = filterFunc.call(tree, function (node) {
+        return new RegExp(match, "i").test(node.title);
+      }, opts);
+    } else {
+      // Pass a string to perform case insensitive matching
+      n = filterFunc.call(tree, match, opts);
+    }
+    $("#btnResetSearch").attr("disabled", false);
+  }).focus();
 
 
+  $("#btnResetSearch").click(function (e) {
+    e.preventDefault();
+    $("input[name=search]").val("");
+    $("span#matches").text("");
+    var tree = $(".ui-draggable-handle").fancytree("getTree");
+    tree.clearFilter();
+  }).attr("disabled", true);
+
+  $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
-        var n,
-            tree = $.ui.fancytree.getTree(),
-            args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-            opts = {},
-            filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-            match = $(this).val();
-
-        $.each(args, function (i, o) {
-            opts[o] = $("#" + o).is(":checked");
-        });
-        opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
-
-        if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-            $("button#btnResetSearch").click();
-            return;
-        }
-        if ($("#regex").is(":checked")) {
-            // Pass function to perform match
-            n = filterFunc.call(tree, function (node) {
-                return new RegExp(match, "i").test(node.title);
-            }, opts);
-        } else {
-            // Pass a string to perform case insensitive matching
-            n = filterFunc.call(tree, match, opts);
-        }
-        $("#btnResetSearch").attr("disabled", false);
-    }).focus();
-
-
-    $("#btnResetSearch").click(function (e) {
-        e.preventDefault();
-        $("input[name=search]").val("");
-        $("span#matches").text("");
+      if ($(this).val() == '') {
         var tree = $(".ui-draggable-handle").fancytree("getTree");
         tree.clearFilter();
-    }).attr("disabled", true);
+      }
+    })
+  });
 
-    $(document).ready(function () {
-        $("input[name=search]").keyup(function (e) {
-            if ($(this).val() == '') {
-                var tree = $(".ui-draggable-handle").fancytree("getTree");
-                tree.clearFilter();
-            }
-        })
-    });
+  // отображение и логика работа дерева
+  jQuery(function ($) {
+    var main_url = '/tehdoc/equipment/tools/all-tools';
+    var move_url = "/tehdoc/equipment/control-panel/info/move-node";
+    var create_url = '/tehdoc/equipment/control-panel/info/create-node';
+    var update_url = '/tehdoc/equipment/control-panel/info/update-node';
 
-    // отображение и логика работа дерева
-    jQuery(function ($) {
-        var main_url = '/tehdoc/equipment/tools/all-tools';
-        var move_url = "/tehdoc/equipment/control-panel/info/move-node";
-        var create_url = '/tehdoc/equipment/control-panel/info/create-node';
-        var update_url = '/tehdoc/equipment/control-panel/info/update-node';
+    $("#fancyree_w0").fancytree({
+      source: {
+        url: main_url,
+      },
+      extensions: ['dnd', 'edit', 'filter'],
+      quicksearch: true,
+      minExpandLevel: 2,
+      hotkeys: {},
+      // wide: {
+      //   iconWidth: "32px",     // Adjust this if @fancy-icon-width != "16px"
+      //   iconSpacing: "6px", // Adjust this if @fancy-icon-spacing != "3px"
+      //   labelSpacing: "6px",   // Adjust this if padding between icon and label !=  "3px"
+      //   levelOfs: "32px"     // Adjust this if ul padding != "16px"
+      // },
+      dnd: {
+        preventVoidMoves: true,
+        preventRecursiveMoves: true,
+        autoCollapse: true,
+        dragStart: function (node, data) {
 
-        $("#fancyree_w0").fancytree({
-            source: {
-                url: main_url,
-            },
-            extensions: ['dnd', 'edit', 'filter'],
-            quicksearch: true,
-            minExpandLevel: 2,
-            hotkeys: {},
-            // wide: {
-            //   iconWidth: "32px",     // Adjust this if @fancy-icon-width != "16px"
-            //   iconSpacing: "6px", // Adjust this if @fancy-icon-spacing != "3px"
-            //   labelSpacing: "6px",   // Adjust this if padding between icon and label !=  "3px"
-            //   levelOfs: "32px"     // Adjust this if ul padding != "16px"
-            // },
-            dnd: {
-                preventVoidMoves: true,
-                preventRecursiveMoves: true,
-                autoCollapse: true,
-                dragStart: function (node, data) {
+          return true;
+        },
+        dragEnter: function (node, data) {
+          return true;
+        },
+        dragDrop: function (node, data) {
+          if (data.hitMode == 'over') {
+            var pId = data.node.data.id;
+          } else {
+            var pId = data.node.parent.data.id;
+          }
+          $.get(move_url, {
+            item: data.otherNode.data.id,
+            action: data.hitMode,
+            second: node.data.id,
+            parentId: pId
+          }, function () {
+            data.otherNode.moveTo(node, data.hitMode);
 
-                    return true;
-                },
-                dragEnter: function (node, data) {
-                    return true;
-                },
-                dragDrop: function (node, data) {
-                    if (data.hitMode == 'over') {
-                        var pId = data.node.data.id;
-                    } else {
-                        var pId = data.node.parent.data.id;
-                    }
-                    $.get(move_url, {
-                        item: data.otherNode.data.id,
-                        action: data.hitMode,
-                        second: node.data.id,
-                        parentId: pId
-                    }, function () {
-                        data.otherNode.moveTo(node, data.hitMode);
-
-                    })
-                }
-            },
-            filter: {
-                autoApply: true,                                    // Re-apply last filter if lazy data is loaded
-                autoExpand: true,                                   // Expand all branches that contain matches while filtered
-                counter: true,                                      // Show a badge with number of matching child nodes near parent icons
-                fuzzy: false,                                       // Match single characters in order, e.g. 'fb' will match 'FooBar'
-                hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
-                hideExpanders: false,                                // Hide expanders if all child nodes are hidden by filter
-                highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
-                leavesOnly: true,                                   // Match end nodes only
-                nodata: true,                                       // Display a 'no data' status node if result is empty
-                mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
-            },
-            edit: {
-                inputCss: {
-                    minWidth: '10em'
-                },
-                triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
-                beforeEdit: function (event, data) {
-                    var node = data.node;
-                    if (node.key == 1122334455 || node.key == 5544332211) {
-                        return false;
-                    }
-                    return true;
-                },
-                edit: function (event, data) {
-                    return true;
-                },
-                beforeClose: function (event, data) {
-                    data.save
-                },
-                save: function (event, data) {
-                    var node = data.node;
-                    if (data.isNew) {
-                        $.ajax({
-                            url: create_url,
-                            data: {
-                                parentId: node.parent.data.id,
-                                title: data.input.val()
-                            }
-                        }).done(function (result) {
-                            if (result) {
-                                var parent = node.parent;
-                                parent.folder = true;
-                                result = JSON.parse(result);
-                                node.data.id = result.acceptedId;
-                                node.data.ref = result.acceptedRef;
-                                node.key = result.acceptedRef;
-                                node.setTitle(result.acceptedTitle);
-                                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
-                            } else {
-                                node.setTitle(data.orgTitle);
-                                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                                    ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-                            }
-                        }).fail(function (result) {
-                            node.setTitle(data.orgTitle);
-                            $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-                        }).always(function () {
-                            // data.input.removeClass("pending")
-                        });
-                    } else {
-                        $.ajax({
-                            url: update_url,
-                            data: {
-                                ref: getNodeId(),
-                                title: data.input.val()
-                            }
-                        }).done(function (result) {
-                            if (result) {
-                                result = JSON.parse(result);
-                                node.setTitle(result.acceptedTitle);
-                                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
-                            } else {
-                                node.setTitle(data.orgTitle);
-                                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                                    ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-                            }
-                        }).fail(function (result) {
-                            $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-                            node.setTitle(data.orgTitle);
-                        }).always(function () {
-                            // data.input.removeClass("pending")
-                        });
-                    }
-                    return true;
-                },
-                close: function (event, data) {
-                    if (data.save) {
-                        // Since we started an async request, mark the node as preliminary
-                        $(data.node.span).addClass("pending")
-                    }
-                }
-            },
-            activate: function (node, data) {
-                $('.about-info').html('');
-                var node = data.node;
-                var lvl = node.data.lvl;
-                if (node.key == -999) {
-                    $(".add-subcategory").hide();
-                    return;
-                } else {
-                    $(".add-subcategory").show();
-                }
-                if (lvl == 0) {
-                    $(".del-node").hide();
-                    $(".del-multi-nodes").hide();
-                } else {
-                    if (node.hasChildren()) {
-                        $(".del-multi-nodes").show();
-                    } else {
-                        $(".del-multi-nodes").hide();
-                    }
-                    $(".del-node").show();
-                }
-
-            },
-            click: function (event, data) {
-                var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-                if (target === 'title' || target === 'icon') {
-                    var node = data.node;
-                    var prefix = '/tehdoc/equipment/control-panel/';
-                    if (node.key != 1122334455 && node.key != 5544332211) {
-                        var url = prefix + node.key + '/info/update';
-                        window.location.href = url;
-                    }
-                }
-            },
-            dblclick: function (event, data) {
-                var node = data.node;
-                var prefix = '/tehdoc/equipment/control-panel/';
-                if (node.key != 1122334455 || node.key != 5544332211) {
-                    var url = prefix + node.key + '/info/update';
-                    window.location.href = url;
-                }
-            },
-            icon: function (event, data) {
-                if (data.node.key == 1122334455) {
-                    return "fa fa-sitemap";
-                } else if (data.node.key == 5544332211) {
-                    return "fa fa-question-circle";
-                } else if (data.node.data.eq_wrap == 1) {
-                    return "t fa fa-clone";
-                } else {
-                    return "t fa fa-file-o";
-                }
-                // if (data.node.isFolder()) {
-                //   return "fa fa-eye";
-                // }
-            },
-            renderNode: function (node, data) {
-            },
-            init: function (event, data) {
-                var uri = window.location.href;
-                var key = uri.match('\\/control-panel\\/(\\d+)\\/\\w+\\/');
-                if (!key) {
-                    return;
-                }
-                data.tree.activateKey(key[1]);
-            },
-        });
-    });
-
-
-    function getNodeId() {
-        var node = $("#fancyree_w0").fancytree("getActiveNode");
-        if (node) {
-            return node.data.ref;
-        } else {
-            return 1;
+          })
         }
+      },
+      filter: {
+        autoApply: true,                                    // Re-apply last filter if lazy data is loaded
+        autoExpand: true,                                   // Expand all branches that contain matches while filtered
+        counter: true,                                      // Show a badge with number of matching child nodes near parent icons
+        fuzzy: false,                                       // Match single characters in order, e.g. 'fb' will match 'FooBar'
+        hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
+        hideExpanders: false,                                // Hide expanders if all child nodes are hidden by filter
+        highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
+        leavesOnly: true,                                   // Match end nodes only
+        nodata: true,                                       // Display a 'no data' status node if result is empty
+        mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
+      },
+      edit: {
+        inputCss: {
+          minWidth: '10em'
+        },
+        triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
+        beforeEdit: function (event, data) {
+          var node = data.node;
+          if (node.key == 1122334455 || node.key == 5544332211) {
+            return false;
+          }
+          return true;
+        },
+        edit: function (event, data) {
+          return true;
+        },
+        beforeClose: function (event, data) {
+          data.save
+        },
+        save: function (event, data) {
+          var node = data.node;
+          if (data.isNew) {
+            $.ajax({
+              url: create_url,
+              data: {
+                parentId: node.parent.data.id,
+                title: data.input.val()
+              }
+            }).done(function (result) {
+              if (result) {
+                var parent = node.parent;
+                parent.folder = true;
+                result = JSON.parse(result);
+                node.data.id = result.acceptedId;
+                node.data.ref = result.acceptedRef;
+                node.key = result.acceptedRef;
+                node.setTitle(result.acceptedTitle);
+                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
+              } else {
+                node.setTitle(data.orgTitle);
+                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+              }
+            }).fail(function (result) {
+              node.setTitle(data.orgTitle);
+              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+            }).always(function () {
+              // data.input.removeClass("pending")
+            });
+          } else {
+            $.ajax({
+              url: update_url,
+              data: {
+                ref: getNodeId(),
+                title: data.input.val()
+              }
+            }).done(function (result) {
+              if (result) {
+                result = JSON.parse(result);
+                node.setTitle(result.acceptedTitle);
+                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
+              } else {
+                node.setTitle(data.orgTitle);
+                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+              }
+            }).fail(function (result) {
+              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+              node.setTitle(data.orgTitle);
+            }).always(function () {
+              // data.input.removeClass("pending")
+            });
+          }
+          return true;
+        },
+        close: function (event, data) {
+          if (data.save) {
+            // Since we started an async request, mark the node as preliminary
+            $(data.node.span).addClass("pending")
+          }
+        }
+      },
+      activate: function (node, data) {
+        $('.about-info').html('');
+        var node = data.node;
+        var lvl = node.data.lvl;
+        if (node.key == -999) {
+          $(".add-subcategory").hide();
+          return;
+        } else {
+          $(".add-subcategory").show();
+        }
+        if (lvl == 0) {
+          $(".del-node").hide();
+          $(".del-multi-nodes").hide();
+        } else {
+          if (node.hasChildren()) {
+            $(".del-multi-nodes").show();
+          } else {
+            $(".del-multi-nodes").hide();
+          }
+          $(".del-node").show();
+        }
+
+      },
+      click: function (event, data) {
+        var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
+        if (target === 'title' || target === 'icon') {
+          var node = data.node;
+          var prefix = '/tehdoc/equipment/control-panel/';
+          if (node.data.eq_wrap == 1) {
+            var url = prefix + node.key + '/settings/wrap-config';
+            window.location.href = url;
+          } else if (node.key != 1122334455 && node.key != 5544332211){
+            var url = prefix + node.key + '/info/update';
+            window.location.href = url;
+          }
+        }
+      },
+      dblclick: function (event, data) {
+        var node = data.node;
+        var prefix = '/tehdoc/equipment/control-panel/';
+        if (node.key != 1122334455 && node.key != 5544332211) {
+          var url = prefix + node.key + '/info/update';
+          window.location.href = url;
+        }
+      },
+      icon: function (event, data) {
+        if (data.node.key == 1122334455) {
+          return "fa fa-sitemap";
+        } else if (data.node.key == 5544332211) {
+          return "fa fa-question-circle";
+        } else if (data.node.data.eq_wrap == 1) {
+          return "t fa fa-clone";
+        } else {
+          return "t fa fa-file-o";
+        }
+        // if (data.node.isFolder()) {
+        //   return "fa fa-eye";
+        // }
+      },
+      renderNode: function (node, data) {
+      },
+      init: function (event, data) {
+        var uri = window.location.href;
+        var key = uri.match('\\/control-panel\\/(\\d+)\\/\\w+\\/');
+        if (!key) {
+          return;
+        }
+        data.tree.activateKey(key[1]);
+      },
+    });
+  });
+
+
+  function getNodeId() {
+    var node = $("#fancyree_w0").fancytree("getActiveNode");
+    if (node) {
+      return node.data.ref;
+    } else {
+      return 1;
     }
+  }
 
 </script>
