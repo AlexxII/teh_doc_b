@@ -5,16 +5,18 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
+
 use app\assets\AppAsset;
+use app\assets\FancytreeAsset;
 use app\modules\tehdoc\asset\TehdocAsset;
 use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
-use app\assets\FancytreeAsset;
+use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
 
-FancytreeAsset::register($this);
 AppAsset::register($this);    // регистрация ресурсов всего приложения
+FancytreeAsset::register($this);
 TehdocAsset::register($this);       // регистрация ресурсов модуля
-\app\modules\tehdoc\modules\equipment\asset\EquipmentAsset::register($this);
 MdeAsset::register($this);
+EquipmentAsset::register($this);
 
 $about = "Панель управления оборудованием";
 $add_hint = 'Добавить новый узел';
