@@ -29,7 +29,7 @@ Yii::$app->cache->flush();
   #main-table tbody td {
     font-size: 12px;
   }
-  .h-title {
+.h-title {
     font-size: 18px;
     color: #1e6887;
   }

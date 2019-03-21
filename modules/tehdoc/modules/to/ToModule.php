@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\tehdoc\modules\equipment;
+namespace app\modules\tehdoc\modules\to;
 
 use yii\filters\AccessControl;
 

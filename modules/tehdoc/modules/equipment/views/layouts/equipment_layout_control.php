@@ -83,7 +83,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
   .fancytree-custom-icon {
     color: #1e6887;
     font-size: 18px;
-    }
+  }
   .t {
     font-size: 14px;
   }
@@ -392,6 +392,8 @@ $del_multi_nodes = 'Удвлить С вложениями';
     })
   });
 
+
+  var match =
   // отображение и логика работа дерева
   jQuery(function ($) {
     var main_url = '/tehdoc/equipment/tools/all-tools';
@@ -557,18 +559,20 @@ $del_multi_nodes = 'Удвлить С вложениями';
           }
           $(".del-node").show();
         }
-
       },
       click: function (event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
         if (target === 'title' || target === 'icon') {
           var node = data.node;
           var prefix = '/tehdoc/equipment/control-panel/';
+          if (!match) {
+            var url = prefix + node.key + '/info/index';
+          }
+          var url = prefix + node.key + '/' + match[2] + '/index';
           if (node.data.eq_wrap == 1) {
             var url = prefix + node.key + '/settings/wrap-config';
             window.location.href = url;
-          } else if (node.key != 1122334455 && node.key != 5544332211){
-            var url = prefix + node.key + '/info/update';
+          } else if (node.key != 1122334455 && node.key != 5544332211) {
             window.location.href = url;
           }
         }
@@ -599,15 +603,14 @@ $del_multi_nodes = 'Удвлить С вложениями';
       },
       init: function (event, data) {
         var uri = window.location.href;
-        var key = uri.match('\\/control-panel\\/(\\d+)\\/\\w+\\/');
-        if (!key) {
+        match = uri.match('\\/control-panel\\/(\\d+)\\/(\\w+)\\/');
+        if (!match) {
           return;
         }
-        data.tree.activateKey(key[1]);
+        data.tree.activateKey(match[1]);
       },
     });
   });
-
 
   function getNodeId() {
     var node = $("#fancyree_w0").fancytree("getActiveNode");

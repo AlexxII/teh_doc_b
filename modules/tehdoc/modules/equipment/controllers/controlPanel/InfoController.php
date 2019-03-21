@@ -8,8 +8,6 @@ use app\modules\tehdoc\modules\equipment\models\Tools;
 use Yii;
 use yii\web\UploadedFile;
 use yii\helpers\ArrayHelper;
-use yii\web\NotFoundHttpException;
-
 
 
 class InfoController extends Controller
@@ -20,11 +18,6 @@ class InfoController extends Controller
   public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_control.php';
 
   public function actionIndex()
-  {
-    return $this->render('meeting');
-  }
-
-  public function actionUpdate()
   {
     $id = $_GET['id'];
     if ($id == 1122334455){
@@ -39,17 +32,17 @@ class InfoController extends Controller
     $tool->scenario = Tools::SCENARIO_UPDATE;
     if ($tool->load(Yii::$app->request->post())) {
       if ($tool->save()) {
-        return $this->redirect(['update',
+        return $this->redirect(['index',
           'id' => $tool->ref,
           'docsCount' => $docsCount,
           'imagesCount' => $imagesCount,
-          'wikiCount' => $wikiCount,
+          'wikiCount' => $wikiCount
         ]);
       } else {
         Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');
       }
     }
-    return $this->render('update', [
+    return $this->render('index', [
       'model' => $tool,
       'docsCount' => $docsCount,
       'imagesCount' => $imagesCount,

@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
       </h2>
     </div>
     <div class="text-right" style="padding: 7px 15px 0 0">
-      <a type="button" href="/tehdoc/equipment/control-panel/<?= $model->ref ?>/info/update"
+      <a type="button" href="/tehdoc/equipment/control-panel/<?= $model->ref ?>/info/index"
          class="btn-success btn-sm">Control</a>
     </div>
   </div>

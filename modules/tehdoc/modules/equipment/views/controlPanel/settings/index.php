@@ -10,7 +10,7 @@
           <label style="font-weight: 500">
             <input class="ch" id="general-feature" type="checkbox" data-id="<?= $model->ref ?>"
                    data-check='general-check'
-                   data-url='general-table' <?php if ($model->generalTable) echo 'checked' ?>>
+                   data-url='general-table' <?php if ($model->settings->eq_general) echo 'checked' ?>>
             В сводной таблице
           </label>
           <span class="status-indicator" id="general-check"></span>
@@ -88,7 +88,7 @@
     <div class="subhead">
       <h3 class="setting-header">Специальные работы
         <i class="fa fa-shield" aria-hidden="true" style="font-size: 20px;
-           title="Проведены Специальные работы"></i>
+           title=" Проведены Специальные работы"></i>
       </h3>
     </div>
     <ul class="list-group">
@@ -137,9 +137,11 @@
     <ul class="list-group">
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
-          <input class="ch" id="maintenance-feature" type="checkbox" data-check='maintenance-check'
-                 data-url='maintenance'>
-          <label for="maintenance-feature" style="font-weight: 500">В графике ТО</label>
+          <label style="font-weight: 500">
+            <input class="ch" type="checkbox" data-check='maintenance-check'
+                   data-id="<?= $model->ref ?>"
+                   data-url='maintenance' <?php if ($model->toStatus) echo 'checked' ?>>
+            В графике ТО</label>
           <span class="status-indicator" id="maintenance-check"></span>
           <p class="note" style="margin-bottom: 10px">Отображать в графике ТО.</p>
           <div class="d-blue border">
@@ -266,109 +268,109 @@
 
 <script>
 
-    $(document).ready(function () {
-        var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
-        var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
-        var infoCheck = '<i class="fa fa-exclamation" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
-        var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
-        var csrf = $('meta[name=csrf-token]').attr("content");
+  $(document).ready(function () {
+    var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
+    var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
+    var infoCheck = '<i class="fa fa-exclamation" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
+    var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
+    var csrf = $('meta[name=csrf-token]').attr("content");
 
-        $('.ch').change(function (e) {
-            var checkId = $(this).data('check');
-            $('#' + checkId).html(waiting);
-            var url = $(this).data('url');
-            var nodeId = $(this).data('id');
-            var result = $(this).is(':checked');
-            $.ajax({
-                url: url,
-                type: "post",
-                dataType: "JSON",
-                data: {
-                    _csrf: csrf,
-                    toolId: nodeId,
-                    bool: result
-                },
-                success: function (data) {
-                    $('#' + checkId).html(successCheck);
-                },
-                error: function (data) {
-                    $('#' + checkId).html(warningCheck);
-                }
-            });
+    $('.ch').change(function (e) {
+      var checkId = $(this).data('check');
+      $('#' + checkId).html(waiting);
+      var url = $(this).data('url');
+      var nodeId = $(this).data('id');
+      var result = $(this).is(':checked');
+      $.ajax({
+        url: url,
+        type: "post",
+        dataType: "JSON",
+        data: {
+          _csrf: csrf,
+          toolId: nodeId,
+          bool: result
+        },
+        success: function (data) {
+          $('#' + checkId).html(successCheck);
+        },
+        error: function (data) {
+          $('#' + checkId).html(warningCheck);
+        }
+      });
+    });
+
+
+    $('.title-input').on('input', function (e) {
+      var checkId = $(this).data('check');
+      var resultH = $(this).data('result');
+      $('#' + checkId).prop('checked', false);
+      $('#' + resultH).html('');
+    });
+
+
+    $('.save').on('click', function () {
+      var nodeId = $(this).data('id');
+      var inputHId = $(this).data('input');
+      var input = $('#' + inputHId);
+      var title = input.val();
+      var resultH = $(this).data('result');
+      var url = $(this).data('url');
+      if (title != '') {
+        $('#' + resultH).html(waiting);
+        $.ajax({
+          url: url,
+          type: "post",
+          dataType: "JSON",
+          data: {
+            _csrf: csrf,
+            toolId: nodeId,
+            title: title
+          },
+          success: function (data) {
+            $('#' + resultH).html(successCheck);
+          },
+          error: function (data) {
+            $('#' + resultH).html(warningCheck);
+          }
         });
+      } else {
+        $('#' + resultH).html(infoCheck);
+      }
+    });
 
-
-        $('.title-input').on('input', function (e) {
-            var checkId = $(this).data('check');
-            var resultH = $(this).data('result');
-            $('#' + checkId).prop('checked', false);
-            $('#' + resultH).html('');
+    $('.input-check').change(function (e) {
+      var bool = $(this).is(':checked');
+      var inputHId = $(this).data('input');
+      var input = $('#' + inputHId);
+      var title = input.val();
+      var resultH = $(this).data('result');
+      var nodeId = $(this).data('id');
+      var url = $(this).data('url');
+      if (title != '') {
+        $('#' + resultH).html(waiting);
+        $.ajax({
+          url: url,
+          type: "post",
+          dataType: "JSON",
+          data: {
+            _csrf: csrf,
+            toolId: nodeId,
+            title: title,
+            bool: bool,
+          },
+          success: function (data) {
+            $('#' + resultH).html(successCheck);
+          },
+          error: function (data) {
+            $('#' + resultH).html(warningCheck);
+          }
         });
-
-
-        $('.save').on('click', function () {
-            var nodeId = $(this).data('id');
-            var inputHId = $(this).data('input');
-            var input = $('#' + inputHId);
-            var title = input.val();
-            var resultH = $(this).data('result');
-            var url = $(this).data('url');
-            if (title != '') {
-                $('#' + resultH).html(waiting);
-                $.ajax({
-                    url: url,
-                    type: "post",
-                    dataType: "JSON",
-                    data: {
-                        _csrf: csrf,
-                        toolId: nodeId,
-                        title: title
-                    },
-                    success: function (data) {
-                        $('#' + resultH).html(successCheck);
-                    },
-                    error: function (data) {
-                        $('#' + resultH).html(warningCheck);
-                    }
-                });
-            } else {
-                $('#' + resultH).html(infoCheck);
-            }
-        });
-
-        $('.input-check').change(function (e) {
-            var bool = $(this).is(':checked');
-            var inputHId = $(this).data('input');
-            var input = $('#' + inputHId);
-            var title = input.val();
-            var resultH = $(this).data('result');
-            var nodeId = $(this).data('id');
-            var url = $(this).data('url');
-            if (title != '') {
-                $('#' + resultH).html(waiting);
-                $.ajax({
-                    url: url,
-                    type: "post",
-                    dataType: "JSON",
-                    data: {
-                        _csrf: csrf,
-                        toolId: nodeId,
-                        title: title,
-                        bool: bool,
-                    },
-                    success: function (data) {
-                        $('#' + resultH).html(successCheck);
-                    },
-                    error: function (data) {
-                        $('#' + resultH).html(warningCheck);
-                    }
-                });
-            } else {
-                $(this).prop('checked', false);
-                $('#' + resultH).html(infoCheck);
-            }
-        })
-
-
+      } else {
+        $(this).prop('checked', false);
+        $('#' + resultH).html(infoCheck);
+      }
     })
+
+
+  })
 </script>

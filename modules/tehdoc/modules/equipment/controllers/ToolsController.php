@@ -51,7 +51,7 @@ class ToolsController extends Controller
       $toolSettings->eq_id = $model->ref;
       $model->parent_id = 0;
       $model->name = $model->eq_title;
-      $parentNode = Tools::findOne(2);
+      $parentNode = Tools::findOne(2);            // TODO !!!!!!! очень вероятна ошибка
       $model->appendTo($parentNode);
       if ($model->save()) {
         $toolSettings->save();

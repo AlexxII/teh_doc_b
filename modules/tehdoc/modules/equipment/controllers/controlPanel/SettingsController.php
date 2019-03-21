@@ -6,6 +6,7 @@ use app\modules\tehdoc\modules\equipment\models\Oth;
 use app\modules\tehdoc\modules\equipment\models\Special;
 use app\modules\tehdoc\modules\equipment\models\Tools;
 use app\modules\tehdoc\modules\equipment\models\ToolSettings;
+use app\modules\tehdoc\modules\to\models\ToEquipment;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -287,6 +288,47 @@ class SettingsController extends Controller
         $result = $model->save();
       }
       return $result;
+    }
+    return false;
+  }
+
+  // ТО
+  public function actionMaintenance()
+  {
+    if (isset($_POST['toolId'])) {
+      $toolId = $_POST['toolId'];
+      $settings = $this->findSettings($toolId);
+      $req = Tools::find()->where(['ref' => $toolId])->limit(1)->all();
+      $model = $req[0];
+      if ($model->to) {
+        $to = $model->to;
+      } else {
+        $to = new ToEquipment();
+        $to->eq_id = $model->ref;
+        $to->name = $model->eq_title;
+        $to->ref = $model->ref;
+        $parent = ToEquipment::findOne(1);            // TODO !!есть вероятность ошибки
+        $to->parent_id = $parent->ref;
+        $to->appendTo($parent);
+      }
+      if (isset($_POST['bool'])) {
+        if ($_POST['bool'] === 'true') {
+          $settings->eq_to = 1;
+          $to->valid = 1;
+        } else {
+          $settings->eq_to = 0;
+          $to->valid = 0;
+        }
+      } else {
+        return false;
+      }
+      if ($settings->save()) {
+        if ($to->save()) {
+          return true;
+        }
+        return false;
+      }
+      return false;
     }
     return false;
   }

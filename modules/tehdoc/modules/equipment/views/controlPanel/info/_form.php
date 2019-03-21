@@ -45,7 +45,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
       <?php $form = ActiveForm::begin([
         'options' => [
           'enctype' => 'multipart/form-data'],
-        'action' => 'update'
+        'action' => 'index'
       ]); ?>
       <li class="list-group-item" style="margin-bottom: 15px">
         <div class="form-checkbox js-complex-option">

@@ -46,8 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="text-muted" style="font-size: 20px">Перечень документов</div>
   </div>
 
-  <div class="col-lg-3 col-md-4 col-sm-6 placeholder about" style="cursor: pointer"
-       data-toggle="tooltip" title="Раздел находится в разработке">
+  <div class="col-lg-3 col-md-4 col-sm-6 placeholder about" style="cursor: pointer" data-url="tehdoc/to/schedule/index">
   <h2>ТО</h2>
     <i class="fa fa-recycle" aria-hidden="true" style="font-size: 120px;"></i>
     <div class="text-muted" style="font-size: 20px">Техническое обслуживание</div>

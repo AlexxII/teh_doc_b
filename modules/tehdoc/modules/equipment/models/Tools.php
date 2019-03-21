@@ -6,6 +6,7 @@ use app\modules\admin\models\Classifier;
 use app\modules\admin\models\Placement;
 use app\modules\admin\models\Category;
 use app\modules\tehdoc\modules\equipment\models\Images;
+use app\modules\tehdoc\modules\to\models\ToEquipment;
 use yii\helpers\ArrayHelper;
 use app\base\NestedSetsTreeBehaviorEx;
 use creocoder\nestedsets\NestedSetsBehavior;
@@ -201,6 +202,21 @@ class Tools extends \yii\db\ActiveRecord
     return 0;
   }
 
+  //Tool TO
+  public function getTo()
+  {
+    return $this->hasOne(ToEquipment::class, ['eq_id' => 'ref']);
+  }
+
+  public function getToStatus()
+  {
+    if($this->to){
+      return $this->to->valid;
+    }
+    return false;
+  }
+  
+  //Tool task
   public function getTask()
   {
     if ($this->settings){

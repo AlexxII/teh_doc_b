@@ -9,7 +9,7 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\assets\FancytreeAsset;
 use app\modules\tehdoc\asset\TehdocAsset;
-use app\modules\tehdoc\modules\equipment\asset\ToAsset;
+use app\modules\tehdoc\modules\to\assets\ToAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 FancytreeAsset::register($this);
@@ -94,46 +94,26 @@ $del_multi_nodes = 'Удвлить С вложениями';
     'encodeLabels' => false,
     'items' => [
       [
-        'label' => 'Оборудование',
+        'label' => 'Графики',
         'items' => [
-          '<li class="dropdown-header" style="font-size: 10px">Перечень</li>',
-          ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']],
-          ['label' => 'Все средства', 'url' => ['/tehdoc/equipment/tools/index']],
+          '<li class="dropdown-header" style="font-size: 10px">Ежемесячные</li>',
+          ['label' => 'Графики ТО', 'url' => ['/tehdoc/to/schedule']],
+          ['label' => 'Составить график', 'url' => ['/tehdoc/to/schedule/create']],
           '<li class="divider"></li>',
-          '<li class="dropdown-header" style="font-size: 10px">Управление оборудованием</li>',
-          ['label' => 'Панель управления', 'url' => ['/tehdoc/equipment/control-panel']],
-          ['label' => 'Добавить', 'url' => ['/tehdoc/equipment/tools/create']],
-          ['label' => 'Задание на обновление', 'url' => ['/tehdoc/equipment/tools/task']],
+          '<li class="dropdown-header" style="font-size: 10px">Годовые</li>',
+          ['label' => 'Графики ТО', 'url' => ['/tehdoc/to/schedule']],
+          ['label' => 'Составить график', 'url' => ['/tehdoc/to/schedule']],
         ],
       ],
-      /*            // В разработке
-                 [
-                      'label' => 'Движение',
-                      'items' => [
-                          '<li class="dropdown-header" style="font-size: 10px">Движение оборудования</li>',
-                          ['label' => 'Приемка', 'url' => ['/tehdoc/']],
-                          ['label' => 'Ввод в экспл-цию', 'url' => ['/tehdoc/']],
-                          ['label' => 'Списание', 'url' => ['/tehdoc/']],
-                      ],
-                  ],
-      */
       [
-        'label' => 'Представления',
+        'label' => 'Настройки',
         'items' => [
-          '<li class="dropdown-header" style="font-size: 10px">Весь перечнь</li>',
-          ['label' => 'По категориям', 'url' => ['/tehdoc/equipment/tools/categories']],
-          ['label' => 'По месту размещения', 'url' => ['/tehdoc/equipment/tools/placement']],
+          '<li class="dropdown-header" style="font-size: 10px">Системные</li>',
+          ['label' => 'Оборудование в графике', 'url' => ['/tehdoc/to/control/to-equipment']],
+          ['label' => 'Виды Тех.обслуживания', 'url' => ['/tehdoc/to/control/to-type']],
           '<li class="divider"></li>',
-          '<li class="dropdown-header" style="font-size: 10px">Таблицы</li>',
-          ['label' => 'Таблица ОТХ', 'url' => ['/tehdoc/equipment/tools/oth']],
-          ['label' => 'Таблица драг.металлов', 'url' => ['/tehdoc/equipment/tools/categories']],
-          ['label' => 'Таблица инвентаризации', 'url' => ['/tehdoc/equipment/tools/categories']],
-
-//                    '<li class="divider"></li>',
-//                    '<li class="dropdown-header" style="font-size: 10px">Комплекты</li>',
-//                    ['label' => 'По категориям', 'url' => ['/tehdoc/tools/categories']],
-//                    ['label' => 'По месту размещения', 'url' => ['/tehdoc/tools/placement']],
-//                    ['label' => 'Классификатор', 'url' => ['/tehdoc/tools/classifiers']],
+          '<li class="dropdown-header" style="font-size: 10px">Пользовательские</li>',
+          ['label' => 'Какие-то настройки', 'url' => ['/tehdoc/to/control/to-type']],
         ],
       ],
       Yii::$app->user->isGuest ? (
