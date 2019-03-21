@@ -41,10 +41,6 @@ use kartik\widgets\DatePicker;
     background-position: right 20px center;
     background-repeat: no-repeat;
   }
-  #main-table thead tr td{
-    transform: rotate(-45deg);
-    transform-origin: top left;
-  }
 </style>
 
 <?php
