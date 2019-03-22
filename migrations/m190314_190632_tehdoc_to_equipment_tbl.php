@@ -25,6 +25,7 @@ class m190314_190632_tehdoc_to_equipment_tbl extends Migration
       'rgt' => $this->integer()->notNull(),
       'lvl' => $this->smallInteger(5)->notNull(),
       'name' => $this->string(120)->notNull(),
+      'eq_serial' => $this->string(255),
       'parent_id' => $this->bigInteger(),
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
