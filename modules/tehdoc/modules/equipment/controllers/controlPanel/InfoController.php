@@ -17,6 +17,11 @@ class InfoController extends Controller
 
   public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_control.php';
 
+  public function actionMeeting()
+  {
+    return $this->render('meeting');
+  }
+
   public function actionIndex()
   {
     $id = $_GET['id'];
@@ -33,10 +38,7 @@ class InfoController extends Controller
     if ($tool->load(Yii::$app->request->post())) {
       if ($tool->save()) {
         return $this->redirect(['index',
-          'id' => $tool->ref,
-          'docsCount' => $docsCount,
-          'imagesCount' => $imagesCount,
-          'wikiCount' => $wikiCount
+          'id' => $tool->ref
         ]);
       } else {
         Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');

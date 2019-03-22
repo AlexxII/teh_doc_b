@@ -567,8 +567,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
           var prefix = '/tehdoc/equipment/control-panel/';
           if (!match) {
             var url = prefix + node.key + '/info/index';
+          } else {
+            var url = prefix + node.key + '/' + match[2] + '/index';
           }
-          var url = prefix + node.key + '/' + match[2] + '/index';
           if (node.data.eq_wrap == 1) {
             var url = prefix + node.key + '/settings/wrap-config';
             window.location.href = url;
@@ -581,7 +582,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         var node = data.node;
         var prefix = '/tehdoc/equipment/control-panel/';
         if (node.key != 1122334455 && node.key != 5544332211) {
-          var url = prefix + node.key + '/info/update';
+          var url = prefix + node.key + '/info/index';
           window.location.href = url;
         }
       },
