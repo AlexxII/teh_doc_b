@@ -71,6 +71,7 @@ $form = ActiveForm::begin([
         style: 'os',
         selector: 'td:last-child'
       },
+      paging: false,
       rowGroup: {
         dataSrc: 3
       },
@@ -188,32 +189,39 @@ $form = ActiveForm::begin([
 <?php ActiveForm::end(); ?>
 
 <script>
-  function copySelect(e) {
-    var i = $(this).closest('td').index();
+  // обработка выбора ответственного за проведение ТО
+  $('.admin-list').on('change', function (e) {
     var val = e.target.value;
-    $('#main-table > tbody > tr').each(function () {
-      if ($(this).hasClass('selected')) {
-        $(this).find('td').eq(i).find(e.target.nodeName).val(val);
-      }
-    });
-  }
+    if ($(this).closest('tr').hasClass('selected')) {
+      $('.selected').each(function () {
+        $(this).find('.admin-list').val(val);
+      });
+    }
+  });
 
-  $('.multi').on('change', copySelect);
+  // обработка выбора ответственного за контроль ТО
+  $('.audit-list').on('change', function (e) {
+    var val = e.target.value;
+    if ($(this).closest('tr').hasClass('selected')) {
+      $('.selected').each(function () {
+        $(this).find('.audit-list').val(val);
+      });
+    }
+  });
 
   function copySl(e) {
-    var i = $(this).closest('td').index();
-    var val = e.target.value;
-    var dt = $(this).data('datepicker').getFormattedDate('dd-mm-yyyy');
-    if (dt != '') {
-      $('#main-table > tbody > tr').each(function () {
-        if ($(this).hasClass('selected')) {
-          $('.m-date').off('change', copySl);           // чтобы не сработала рекурсия события 'change'
-          $('.m-date').datepicker('update', dt);
-        }
+    if ($(this).closest('tr').hasClass('selected')) {
+      var dt = $(this).data('datepicker').getFormattedDate('dd-mm-yyyy');
+      $('.selected').each(function () {
+        var toDate = $(this).find('.to-date');
+        toDate.off('change', copySl);           // чтобы не сработала рекурсия события 'change'
+        if (!toDate.prop('disabled'))
+          toDate.datepicker('update', dt);
+        toDate.on('change', copySl);           //
       });
-      $('.m-date').on('change', copySl);                    // снова включаем обработчик события 'change'
     }
   }
+
 
   $(document).ready(function () {
     $('#to-month').datepicker({
@@ -253,7 +261,7 @@ $form = ActiveForm::begin([
       });
   });
 
-  // установка значений календаря при редактировании графика
+  // установка формата календаря при редактировании графика
   $(document).ready(function () {
     $('.m-date').off('change', copySl);           // чтобы не сработала рекурсия события 'change'
     $('.m-date').each(function () {
@@ -307,6 +315,8 @@ $form = ActiveForm::begin([
       })
     });
   });
+
+
 
 
 </script>

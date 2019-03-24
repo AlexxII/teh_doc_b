@@ -144,21 +144,6 @@
             В графике ТО</label>
           <span class="status-indicator" id="maintenance-check"></span>
           <p class="note" style="margin-bottom: 10px">Отображать в графике ТО.</p>
-          <div class="d-blue border">
-            <div class="form-checkbox js-complex-option">
-              <label style="font-weight: 500">Наименование в графике</label>
-              <p class="note pr-6">При отличии наименования в графике ТО от истинного наименования оборудования,
-                укажите необходимое наименование.</p>
-            </div>
-            <div class="form-checkbox">
-              <div class="input-group" style="padding-right: 20px">
-                  <span class="input-group-addon">
-                    <input type="checkbox" aria-label="..." style="margin: 0">
-                  </span>
-                <input type="text" class="form-control" aria-label="...">
-              </div>
-            </div>
-          </div>
         </div>
       </li>
       <li class="list-group-item">
@@ -170,7 +155,7 @@
           <p class="note" style="margin-bottom: 10px">Вести учет наработанного времени.</p>
           <div class="d-blue border">
             <div class="form-checkbox js-complex-option">
-              <label style="font-weight: 500">Шаблон подсчета времени</label>
+              <label style="font-weight: 500">Шаблон учета времени</label>
               <p class="note pr-6">Учет наработанного времени будет вычислятся по указанному шаблону (по умолчанию - 8ми
                 часовой рабочий день).</p>
             </div>

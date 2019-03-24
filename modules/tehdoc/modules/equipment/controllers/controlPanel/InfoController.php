@@ -37,9 +37,7 @@ class InfoController extends Controller
     $tool->scenario = Tools::SCENARIO_UPDATE;
     if ($tool->load(Yii::$app->request->post())) {
       if ($tool->save()) {
-        return $this->redirect(['index',
-          'id' => $tool->ref
-        ]);
+        return $this->redirect(['control-panel/' . $tool->ref . '/info/index']);
       } else {
         Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');
       }

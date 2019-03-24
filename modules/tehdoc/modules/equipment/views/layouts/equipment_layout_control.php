@@ -9,16 +9,20 @@ use app\assets\AppAsset;
 use app\modules\tehdoc\asset\TehdocAsset;
 use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
 use app\assets\FancytreeAsset;
+use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
+use app\modules\tehdoc\modules\equipment\asset\JConfirmAsset;
 
 FancytreeAsset::register($this);
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 TehdocAsset::register($this);       // регистрация ресурсов модуля
-\app\modules\tehdoc\modules\equipment\asset\EquipmentAsset::register($this);
+EquipmentAsset::register($this);
 MdeAsset::register($this);
+JConfirmAsset::register($this);
+
 
 $about = "Панель управления оборудованием. 
               Предназначена для добавления, изменения, управления и удаления оборудования.";
-$add_hint = 'Добавить новый узел';
+$add_hint = 'Добавить новый узел или оборудование';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить БЕЗ вложений';
 $del_root_hint = 'Удалить ветку полностью';
@@ -393,7 +397,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
   });
 
 
-  var match =
+  var uri, match;
   // отображение и логика работа дерева
   jQuery(function ($) {
     var main_url = '/tehdoc/equipment/tools/all-tools';
@@ -581,8 +585,15 @@ $del_multi_nodes = 'Удвлить С вложениями';
       dblclick: function (event, data) {
         var node = data.node;
         var prefix = '/tehdoc/equipment/control-panel/';
-        if (node.key != 1122334455 && node.key != 5544332211) {
+        if (!match) {
           var url = prefix + node.key + '/info/index';
+        } else {
+          var url = prefix + node.key + '/' + match[2] + '/index';
+        }
+        if (node.data.eq_wrap == 1) {
+          var url = prefix + node.key + '/settings/wrap-config';
+          window.location.href = url;
+        } else if (node.key != 1122334455 && node.key != 5544332211) {
           window.location.href = url;
         }
       },
@@ -596,14 +607,11 @@ $del_multi_nodes = 'Удвлить С вложениями';
         } else {
           return "t fa fa-file-o";
         }
-        // if (data.node.isFolder()) {
-        //   return "fa fa-eye";
-        // }
       },
       renderNode: function (node, data) {
       },
       init: function (event, data) {
-        var uri = window.location.href;
+        uri = window.location.href;
         match = uri.match('\\/control-panel\\/(\\d+)\\/(\\w+)\\/');
         if (!match) {
           return;

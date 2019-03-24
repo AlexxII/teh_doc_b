@@ -109,7 +109,7 @@ $config = [
         ],
         [
           'pattern' => 'tehdoc/equipment/control-panel',
-          'route' => 'tehdoc/equipment/controlPanel/info/index',
+          'route' => 'tehdoc/equipment/controlPanel/info/meeting',
         ],
         [
           'pattern' => 'tehdoc/equipment/control-panel/<id:\d+>/<controller>/<action>',

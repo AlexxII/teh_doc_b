@@ -139,7 +139,7 @@ require 'to_array.php';
         {"visible": false, "targets": 4},
       ],
       orderFixed: [[4, 'desc']],
-      order: [[1, 'asc']],
+      order: [[1, 'desc']],
       rowGroup: {
         dataSrc: 4
       },

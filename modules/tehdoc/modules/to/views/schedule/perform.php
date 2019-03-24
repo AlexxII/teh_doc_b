@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
   <div class="to-create">
 
-    <?= $this->render('_per_form', [
+    <?= $this->render('_per_form_ex', [
       'tos' => $tos,
       'header' => 'Отметить выполнение графика ТО на ',
       'month' => $month,
