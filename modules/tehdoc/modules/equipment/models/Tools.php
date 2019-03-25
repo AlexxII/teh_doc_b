@@ -289,7 +289,7 @@ class Tools extends \yii\db\ActiveRecord
   // Документы
   public function getDocs()
   {
-    return $this->hasMany(Docs::class, ['eq_id' => 'ref']);
+    return $this->hasMany(Docs::class, ['eq_id' => 'ref'])->orderBy(['doc_date' => SORT_ASC]);
   }
 
   public function getCountDocs()
@@ -338,7 +338,7 @@ class Tools extends \yii\db\ActiveRecord
       ->all();
     $result = array();
     foreach ($months as $month){
-      $str = ltrim($month['month'], '0');
+      $str = ltrim($month['month']-1, '0');
       $result[] = $montArray[$str];
     }
     return $result;
