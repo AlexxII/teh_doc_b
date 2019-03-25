@@ -35,9 +35,10 @@ class DocsController extends Controller
         'months' => $monthArray,
         'docsCount' => $docsCount,
         'imagesCount' => $imagesCount,
-        'wikiCount' => $wikiCount,
+        'wikiCount' => $wikiCount
       ]);
     }
+    return false;
   }
 
   public function actionCreate()
@@ -67,7 +68,7 @@ class DocsController extends Controller
       'model' => $docModel,
       'docsCount' => $docsCount,
       'imagesCount' => $imagesCount,
-      'wikiCount' => $wikiCount,
+      'wikiCount' => $wikiCount
     ]);
   }
 
