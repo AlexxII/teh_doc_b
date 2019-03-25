@@ -490,33 +490,26 @@ $classif_hint = 'Присвоить выделенному оборудован�
         url: "/lib/ru.json"
       }
     });
+
     $('#main-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
+      var href = "/tehdoc/equipment/control-panel/" + data[0] + "/info/index";
       if (e.ctrlKey) {
-        var href = "/tehdoc/kernel/equipment/update?id=" + data[0];
         window.open(href);
       } else {
-        location.href = "/tehdoc/kernel/equipment/update?id=" + data[0];
+        location.href = href;
       }
-
     });
     $('#main-table tbody').on('click', '.view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
-      var id = data['0'];
-      $.ajax({
-        url: "/tehdoc/kernel/equipment/about?id=" + id,
-        type: "GET",
-        success: function (result) {
-          $(".modal-body").html(result);
-          $("#exampleModalCenter").modal("show");
-        },
-        error: function () {
-          alert('Ошибка! Обратитесь к разработчику.');
-        }
-      });
-
+      var href = "/tehdoc/equipment/tool/" + data[0] + "/info/index";
+      if (e.ctrlKey) {
+        window.open(href);
+      } else {
+        location.href = href;
+      }
     });
   });
 

@@ -82,7 +82,6 @@ require "to_array.php";
         <th>Ответственный за проведение</th>
         <th>Ответственный за контроль</th>
         <th>Отметка о проведении</th>
-        <th data-priority="3">Action</th>
       </tr>
       </thead>
       <tbody>
@@ -153,10 +152,6 @@ require "to_array.php";
                 }
               } ?>
             </td>
-            <td>
-              <?= Html::a('', ["/teh/to/update?id=" . $to['id']], ['class' => 'fa fa-pencil']); ?>
-              <?= Html::a('', ["/teh/to/delete?id=" . $to['id']], ['class' => 'fa fa-trash']); ?>
-            </td>
           </tr>
         <?php endforeach; ?>
       <?php endif; ?>
@@ -188,6 +183,7 @@ require "to_array.php";
         },
         dataSrc: 4
       },
+      iDisplayLength: 50,
       select: false,
       responsive: true,
       fixedHeader: {

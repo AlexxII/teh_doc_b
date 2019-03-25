@@ -13,6 +13,9 @@ use kartik\widgets\DatePicker;
   #main-table tbody td {
     font-size: 12px;
   }
+  #main-table tbody tr select {
+    font-size: 12px;
+  }
   #main-table tr {
     font-size: 12px;
   }
@@ -223,41 +226,14 @@ $form = ActiveForm::begin([
 <script>
 
   var freeDays = new Array();
+  var start_day, end_day; // глобальные переменных хранения дат
+  var busyDays = new Array(); // глобальный массив хранения
 
-  $('.admin-list').on('change', function (e) {
-    var val = e.target.value;
-    $(this).closest('tr').find('.to-date').prop('disabled', false);
-    if ($(this).closest('tr').hasClass('selected')) {
-      $('.selected').each(function () {
-        $(this).find('.admin-list').val(val);
-        $(this).find('.to-date').prop('disabled', false);
-      });
-    }
-  });
-
-  // копирование селектов в выделенные ячейки
-  $('.m-select').on('change', function (e) {
-    var i = $(this).closest('td').index();
-    var val = e.target.value;
-    if ($(this).closest('tr').hasClass('selected')) {
-      $('.selected').each(function () {
-        $(this).find('td').eq(i).find(e.target.nodeName).val(val);
-      });
-    }
-  });
-
-  $('.m-select').on('input', function (e) {
-    var i = $(this).closest('td').index();
-    var val = e.target.value;
-    if ($(this).closest('tr').hasClass('selected')) {
-      $('.selected').each(function () {
-        $(this).find('td').eq(i).find(e.target.nodeName).val(val);
-      });
-    }
-  });
-
+  // формат для всех календарей!!!!!!!!!!!!
   $(document).ready(function () {
-    $('.m-select').on('change', copySl());
+    $.fn.datepicker.defaults.format = "dd.dd.yyyy";
+    $.fn.datepicker.defaults.language = "ru";
+    $.fn.datepicker.defaults.daysOfWeekDisabled = "0,6";
   });
 
   // инициализация календаря месяца проведения ТО
@@ -293,9 +269,6 @@ $form = ActiveForm::begin([
     }
   });
 
-  var start_day, end_day; // глобальные переменных хранения дат
-  var busyDays = new Array(); // глобальный массив хранения
-
   // формирует ajax запрос на получение выxодных дней в зависимоти от месяца
   function getFreeDays(fullDate) {
     var month = fullDate.getMonth();
@@ -327,11 +300,27 @@ $form = ActiveForm::begin([
     });
   }
 
-  // формат для всех календарей!!!!!!!!!!!!
-  $(document).ready(function () {
-    $.fn.datepicker.defaults.format = "dd.dd.yyyy";
-    $.fn.datepicker.defaults.language = "ru";
-    $.fn.datepicker.defaults.daysOfWeekDisabled = "0,6";
+  // обработка выбора ответственного за проведение ТО
+  $('.admin-list').on('change', function (e) {
+    var val = e.target.value;
+    $(this).closest('tr').find('.to-date').prop('disabled', false);
+    if ($(this).closest('tr').hasClass('selected')) {
+      $('.selected').each(function () {
+        $(this).find('.admin-list').val(val);
+        $(this).find('.to-date').prop('disabled', false);
+      });
+    }
+  });
+
+  // копирование селектов в выделенные ячейки
+  $('.m-select').on('change', function (e) {
+    var i = $(this).closest('td').index();
+    var val = e.target.value;
+    if ($(this).closest('tr').hasClass('selected')) {
+      $('.selected').each(function () {
+        $(this).find('td').eq(i).find(e.target.nodeName).val(val);
+      });
+    }
   });
 
 
@@ -406,7 +395,8 @@ $form = ActiveForm::begin([
     });
   });
 
-  // Обработка подсказки ("Необходимо ввести месяц")==== 76859
+
+  // ======================= Обработка подсказки ("Необходимо ввести месяц")==== ===================
 
   $(document).ready(function () {
     $('.to-month').mouseover(function () {

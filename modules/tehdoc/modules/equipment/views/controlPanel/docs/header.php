@@ -70,9 +70,28 @@ $this->params['breadcrumbs'][] = $this->title;
   </li>
 </ul>
 
-<div class="complex-docs-control">
+
+<div class="complex-wiki-update" style="margin-top: 15px">
+  <div class="row">
+    <div class="col-lg-9 col-md-6">
+      <h3 style="margin-top: 0px"><?= Html::encode('Документы') ?></h3>
+    </div>
+    <div class="col-lg-3 col-md-6 text-right">
+      <p>
+        <a href="create" class="btn btn-sm btn-success">Добавить</a>
+      </p>
+    </div>
+  </div>
+
   <?= $this->render('index', [
-    'model' => $docModel
+    'docModels' => $docModels,
+    'years' => $years,
+    'months' => $months
   ]) ?>
+
+</div>
+
+
+<div class="complex-docs-control">
 
 </div>

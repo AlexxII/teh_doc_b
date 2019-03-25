@@ -468,7 +468,8 @@ $classif_hint = 'Присвоить выделенному оборудован�
       "columnDefs": [{
         "targets": -2,
         "data": null,
-        "defaultContent": "<a href='#' class='fa fa-edit edit' style='padding-right: 5px'></a>" +
+        "defaultContent":
+          "<a href='#' class='fa fa-edit edit' style='padding-right: 5px'></a>" +
           "<a href='#' class='fa fa-eye view'></a>",
         "orderable": false
       }, {
@@ -501,21 +502,21 @@ $classif_hint = 'Присвоить выделенному оборудован�
     $('#main-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
+      var href = "/tehdoc/equipment/control-panel/" + data[0] + "/info/index";
       if (e.ctrlKey) {
-        var href = "/tehdoc/equipment/update?id=" + data[0];
         window.open(href);
       } else {
-        location.href = "/tehdoc/equipment/update?id=" + data[0];
+        location.href = href;
       }
     });
     $('#main-table tbody').on('click', '.view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
+      var href = "/tehdoc/equipment/tool/" + data[0] + "/info/index";
       if (e.ctrlKey) {
-        var href = "/tehdoc/equipment/view?id=" + data[0];
         window.open(href);
       } else {
-        location.href = "/tehdoc/equipment/view?id=" + data[0];
+        location.href = href;
       }
     });
   });

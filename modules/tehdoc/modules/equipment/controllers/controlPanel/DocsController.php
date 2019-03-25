@@ -21,12 +21,18 @@ class DocsController extends Controller
     if ($id != 1122334455) {
       $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
       $model = $request[0];
-      $docModel = new Docs();
+      $docModels = $model->docs;
+
+      $yearArray = $model->yearArrayDocs;
+      $monthArray = $model->monthsArrayDocs;
+
       $wikiCount = $model->countWikiPages;
       $imagesCount = $model->countImages;
       $docsCount = $model->countDocs;
       return $this->render('header', [
-        'docModel' => $docModel,
+        'docModels' => $docModels,
+        'years' => $yearArray,
+        'months' => $monthArray,
         'docsCount' => $docsCount,
         'imagesCount' => $imagesCount,
         'wikiCount' => $wikiCount,
@@ -34,21 +40,35 @@ class DocsController extends Controller
     }
   }
 
-  public function actionAddNew()
+  public function actionCreate()
   {
-    $docModel = new Docs();
-
     $toolId = $_GET['id'];
+    $docModel = new Docs();
+    $request = Tools::find()->where(['ref' => $toolId])->limit(1)->all();
+    $model = $request[0];
+    $docModel = new Docs();
+    $wikiCount = $model->countWikiPages;
+    $imagesCount = $model->countImages;
+    $docsCount = $model->countDocs;
     if ($docModel->load(Yii::$app->request->post())) {
       $docModel->docFiles = UploadedFile::getInstances($docModel, 'docFiles');
-      if ($docModel->uploadDocs($toolId)) {
+      $model = $docModel->uploadDoc($docModel, $toolId);
+      $model->doc_date = $docModel->doc_date;
+      $model->save();
+      if ($model) {
         Yii::$app->session->setFlash('success', 'Документ добавлен');
       } else {
         Yii::$app->session->setFlash('error', 'Документ не добавлен');
       }
-      $docModel->save();
-      return true;
+      $docModel = new Docs();
+      return $this->redirect(['control-panel/' . $toolId . '/docs/index']);
     }
-    return false;
+    return $this->render('create', [
+      'model' => $docModel,
+      'docsCount' => $docsCount,
+      'imagesCount' => $imagesCount,
+      'wikiCount' => $wikiCount,
+    ]);
   }
+
 }

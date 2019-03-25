@@ -81,6 +81,9 @@ $this->params['breadcrumbs'][] = $this->title;
     font-family: BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
     Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   }
+  li.active > a:hover {
+    cursor: pointer;
+  }
 
 </style>
 
@@ -102,8 +105,8 @@ $this->params['breadcrumbs'][] = $this->title;
       <span class="Counter"><?= $imagesCount ?></span>
     </a>
   </li>
-  <li  class="active">
-    <a href="../settings/index" style="cursor: pointer">
+  <li class="active">
+    <a href="../settings/index">
       Настройки
     </a>
   </li>

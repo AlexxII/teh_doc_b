@@ -12,7 +12,6 @@ use app\base\NestedSetsTreeBehaviorEx;
 use creocoder\nestedsets\NestedSetsBehavior;
 
 
-
 /**
  * This is the model class for table "equipment_tbl".
  *
@@ -168,7 +167,6 @@ class Tools extends \yii\db\ActiveRecord
   }
 
 
-
   // Tool Settings
   public function getSettings()
   {
@@ -178,7 +176,7 @@ class Tools extends \yii\db\ActiveRecord
   //Tool generalTable
   public function getGeneralTable()
   {
-    if ($this->settings){
+    if ($this->settings) {
       return $this->settings->eq_general;
     }
     return 0;
@@ -187,7 +185,7 @@ class Tools extends \yii\db\ActiveRecord
   //Tool complex
   public function getComplex()
   {
-    if ($this->settings){
+    if ($this->settings) {
       return $this->settings->eq_complex;
     }
     return 0;
@@ -196,7 +194,7 @@ class Tools extends \yii\db\ActiveRecord
   //Tool wrap
   public function getWrap()
   {
-    if ($this->settings){
+    if ($this->settings) {
       return $this->settings->eq_wrap;
     }
     return 0;
@@ -210,16 +208,16 @@ class Tools extends \yii\db\ActiveRecord
 
   public function getToStatus()
   {
-    if($this->to){
+    if ($this->to) {
       return $this->to->valid;
     }
     return false;
   }
-  
+
   //Tool task
   public function getTask()
   {
-    if ($this->settings){
+    if ($this->settings) {
       return $this->settings->eq_task;
     }
     return 0;
@@ -233,7 +231,7 @@ class Tools extends \yii\db\ActiveRecord
 
   public function getSpecialStatus()
   {
-    if($this->special){
+    if ($this->special) {
       return $this->special->valid;
     }
     return false;
@@ -241,7 +239,7 @@ class Tools extends \yii\db\ActiveRecord
 
   public function getSpecialStickerNumber()
   {
-    if($this->special){
+    if ($this->special) {
       return $this->special->sticker_number;
     }
     return false;
@@ -255,7 +253,7 @@ class Tools extends \yii\db\ActiveRecord
 
   public function getOthStatus()
   {
-    if ($this->oth){
+    if ($this->oth) {
       return $this->oth->valid;
     }
     return false;
@@ -263,7 +261,7 @@ class Tools extends \yii\db\ActiveRecord
 
   public function getOthTitleCheck()
   {
-    if ($this->oth){
+    if ($this->oth) {
       return $this->oth->eq_oth_title_on;
     }
     return false;
@@ -271,7 +269,7 @@ class Tools extends \yii\db\ActiveRecord
 
   public function getOthTitle()
   {
-    if ($this->oth){
+    if ($this->oth) {
       return $this->oth->eq_oth_title;
     }
     return '';
@@ -308,6 +306,42 @@ class Tools extends \yii\db\ActiveRecord
   public function getCountImages()
   {
     return $this->hasMany(Images::class, ['eq_id' => 'ref'])->count();
+  }
+
+
+  public function getYearArrayDocs()
+  {
+    $years = $this->getDocs()
+      ->select([
+        'DATE_FORMAT(doc_date, "%Y") as year'
+      ])
+      ->orderBy('year Asc')
+      ->asArray()
+      ->all();
+    $result = array();
+    foreach ($years as $year){
+      $result[] = $year['year'];
+    }
+    return $result;
+  }
+
+  public function getMonthsArrayDocs()
+  {
+    $montArray = ['Январь', 'Февраль', 'Март', 'Апрель',
+      'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+    $months = $this->getDocs()
+      ->select([
+        'DATE_FORMAT(doc_date, "%m") as month'
+      ])
+      ->orderBy('month Asc')
+      ->asArray()
+      ->all();
+    $result = array();
+    foreach ($months as $month){
+      $str = ltrim($month['month'], '0');
+      $result[] = $montArray[$str];
+    }
+    return $result;
   }
 
   // Доступ к свойствам объекта
