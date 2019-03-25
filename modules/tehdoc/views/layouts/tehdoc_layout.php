@@ -89,7 +89,7 @@ TehdocAsset::register($this);       // регистрация ресурсов �
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Тех.обслуживание</li>',
           ['label' => 'График ТО', 'url' => ['/tehdoc/']],
-          ['label' => 'Документация по ТО', 'url' => ['/tehdoc/']],
+          ['label' => 'Учет наработки', 'url' => ['/tehdoc/']],
         ],
       ],
       [
