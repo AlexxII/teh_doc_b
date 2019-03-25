@@ -22,11 +22,17 @@ class DocsController extends Controller
       $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
       $model = $request[0];
       $docModels = $model->docs;
+
+      $yearArray = $model->yearArrayDocs;
+      $monthArray = $model->monthsArrayDocs;
+
       $wikiCount = $model->countWikiPages;
       $imagesCount = $model->countImages;
       $docsCount = $model->countDocs;
       return $this->render('header', [
         'docModels' => $docModels,
+        'years' => $yearArray,
+        'months' => $monthArray,
         'docsCount' => $docsCount,
         'imagesCount' => $imagesCount,
         'wikiCount' => $wikiCount,
@@ -34,52 +40,35 @@ class DocsController extends Controller
     }
   }
 
-  public function actionAddNew()
+  public function actionCreate()
   {
-    $docModel = new Docs();
     $toolId = $_GET['id'];
+    $docModel = new Docs();
+    $request = Tools::find()->where(['ref' => $toolId])->limit(1)->all();
+    $model = $request[0];
+    $docModel = new Docs();
+    $wikiCount = $model->countWikiPages;
+    $imagesCount = $model->countImages;
+    $docsCount = $model->countDocs;
     if ($docModel->load(Yii::$app->request->post())) {
       $docModel->docFiles = UploadedFile::getInstances($docModel, 'docFiles');
       $model = $docModel->uploadDoc($docModel, $toolId);
-      $model->doc_date = '2012-02-04';
+      $model->doc_date = $docModel->doc_date;
       $model->save();
       if ($model) {
         Yii::$app->session->setFlash('success', 'Документ добавлен');
       } else {
         Yii::$app->session->setFlash('error', 'Документ не добавлен');
       }
-      return true;
-    }
-    return false;
-  }
-
-
-  public function actionCreate()
-  {
-    $id = $_GET['id'];
-    if ($id != 1122334455) {
-      $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
-      $model = $request[0];
       $docModel = new Docs();
-      $wikiCount = $model->countWikiPages;
-      $imagesCount = $model->countImages;
-      $docsCount = $model->countDocs;
-      return $this->render('create', [
-        'model' => $docModel,
-        'docsCount' => $docsCount,
-        'imagesCount' => $imagesCount,
-        'wikiCount' => $wikiCount,
-      ]);
+      return $this->redirect(['control-panel/' . $toolId . '/docs/index']);
     }
-  }
-
-
-  public function actionNewForm()
-  {
-    $docModel = new Docs();
-    return $this->renderPartial('_form', [
-      'model' => $docModel
-    ], false, true);
+    return $this->render('create', [
+      'model' => $docModel,
+      'docsCount' => $docsCount,
+      'imagesCount' => $imagesCount,
+      'wikiCount' => $wikiCount,
+    ]);
   }
 
 }

@@ -63,49 +63,43 @@ $date_hint = 'Дата документа.';
 
 
 <div id="complex-docs">
-  <div class="">
-    <div class="calendar">
-      <ul class="list-inline" style="border-top: 1px solid #cbcbcb;">
-        <li><a href="#">2017</a></li>
-        <li><a href="#">2018</a></li>
-        <li><a href="#">2019</a></li>
-      </ul>
-      <ul class="calendar-month list-inline" style="display: block;">
-        <li><a href="#">Январь</a></li>
-        <li><a href="#">Февраль</a></li>
-        <li><a href="#">Март</a></li>
-        <li><a href="#">Апрель</a></li>
-        <li><a href="#">Май</a></li>
-        <li><a href="#">Июнь</a></li>
-        <li><a href="#">Июль</a></li>
-        <li><a href="#">Август</a></li>
-        <li><a href="#">Сентябрь</a></li>
-        <li><a href="#">Ноябрь</a></li>
-        <li><a href="#">Декабрь</a></li>
-      </ul>
+  <?php if ($years): ?>
+    <div class="">
+      <div class="calendar">
+        <ul class="list-inline" style="border-top: 1px solid #cbcbcb;">
+          <?php foreach ($years as $year): ?>
+            <li><a href="#"><?= $year?></a></li>
+          <?php endforeach; ?>
+        </ul>
+        <ul class="calendar-month list-inline" style="display: block;">
+          <?php foreach ($months as $month): ?>
+            <li><a href="#"><?= $month?></a></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
     </div>
-  </div>
+  <?php endif; ?>
 
   <?php foreach ($docModels as $docModel): ?>
-  <div class="news-item">
-    <a href="#" style="text-align: justify">
-      <div>
-        <div class="news-info__name">
-          <?= $docModel->doc_title ?>
-        </div>
-        <span class="info-file">
+    <div class="news-item">
+      <a href="<?= $docModel->docUrl ?>" style="text-align: justify">
+        <div>
+          <div class="news-info__name">
+            <?= $docModel->doc_title ?>
+          </div>
+          <span class="info-file">
           <span class="format-file doc-format">
             <?= $docModel->doc_extention ?>
             <i class="fa fa-download down" aria-hidden="true"></i>
           </span>
           <span class="weight-file"></span>
         </span>
-      </div>
-    <div>
-      <span class="date"><?= $docModel->uploadDate. ' (' . $docModel->docDate . ')'?> </span>
+        </div>
+        <div>
+          <span class="date"><?= $docModel->uploadDate . ' (' . $docModel->docDate . ')' ?> </span>
+        </div>
+      </a>
     </div>
-    </a>
-  </div>
   <?php endforeach; ?>
 </div>
 
@@ -129,6 +123,7 @@ $date_hint = 'Дата документа.';
       $('.fact-date').datepicker('update', moment(date).format('MMMM YYYY'))
     }
 
+
     $('a.twitter').confirm({
       icon: 'fa fa-cog fa-spin',
       title: 'Подождите!',
@@ -140,7 +135,7 @@ $date_hint = 'Дата документа.';
           method: 'get'
         }).done(function (response) {
           self.setContent(response);
-        }).fail(function(){
+        }).fail(function () {
           self.setContent('Что-то пошло не так.');
         });
       },
@@ -157,7 +152,7 @@ $date_hint = 'Дата документа.';
               }
             }).done(function (response) {
               self.setContent(response);
-            }).fail(function(){
+            }).fail(function () {
               self.setContent('Что-то пошло не так.');
             });
             // var name = this.$content.find('.name').val();

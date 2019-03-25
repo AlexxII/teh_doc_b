@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </a>
   </li>
   <li class="active">
-    <a href="../docs/index">
+    <a href="../docs/index" style="cursor: pointer">
       Docs
       <span class="Counter"><?= $docsCount ?></span>
     </a>
@@ -43,9 +43,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </a>
   </li>
   <li>
-    <a href="../wiki/index" style="cursor: pointer">
-      Wiki
-      <span class="Counter"><?= $wikiCount ?></span>
+    <a href="../settings/index">
+      Настройки
     </a>
   </li>
 </ul>

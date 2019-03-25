@@ -16,7 +16,7 @@ $date_hint = 'Дата документа';
     <?php $form = ActiveForm::begin([
       'options' => [
         'enctype' => 'multipart/form-data'],
-      'action' => 'add-new'
+      'action' => 'create'
     ]); ?>
     <div class="row">
       <div class="col-md-12 col-lg-12">
@@ -32,7 +32,7 @@ $date_hint = 'Дата документа';
           'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $date_hint . '"></sup>{input}{hint}'
         ])->textInput([
-          'class' => 'fact-date form-control'
+          'class' => 'doc-date form-control'
         ])->hint('Веберите или введите дату документа (формат: дд.мм.гггг)', ['class' => ' w3-label-under']); ?>
       </div>
       <div class="col-md-6 col-lg-6">
@@ -64,17 +64,24 @@ $date_hint = 'Дата документа';
 
   $(document).ready(function () {
 
-    $('.fact-date').datepicker({
+    $('.doc-date').datepicker({
       format: 'dd MM yyyy г.',
       autoclose: true,
       language: "ru",
       clearBtn: true
     });
 
-    if ($('.fact-date').val()) {
-      var date = new Date($('.fact-date').val());
+    $(document).ready(function () {
+      $('#w0').submit(function () {
+        var d = $('.doc-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+        $('.doc-date').val(d);
+      });
+    });
+
+    if ($('.doc-date').val()) {
+      var date = new Date($('.doc-date').val());
       moment.locale('ru');
-      $('.fact-date').datepicker('update', moment(date).format('MMMM YYYY'))
+      $('.doc-date').datepicker('update', moment(date).format('MMMM YYYY'))
     }
 
   });
