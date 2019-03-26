@@ -21,18 +21,19 @@ class DocsController extends Controller
     if ($id != 1122334455) {
       $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
       $model = $request[0];
-      $docModels = $model->docs;
-
+      if (!empty($_GET['year'])){
+        $year = $_GET['year'];
+        $docModels = $model->docsYearFilter($year);
+      } else {
+        $docModels = $model->docs;
+      }
       $yearArray = $model->yearArrayDocs;
-      $monthArray = $model->monthsArrayDocs;
-
       $wikiCount = $model->countWikiPages;
       $imagesCount = $model->countImages;
       $docsCount = $model->countDocs;
       return $this->render('header', [
         'docModels' => $docModels,
         'years' => $yearArray,
-        'months' => $monthArray,
         'docsCount' => $docsCount,
         'imagesCount' => $imagesCount,
         'wikiCount' => $wikiCount
@@ -54,6 +55,8 @@ class DocsController extends Controller
     if ($docModel->load(Yii::$app->request->post())) {
       $docModel->docFiles = UploadedFile::getInstances($docModel, 'docFiles');
       $model = $docModel->uploadDoc($docModel, $toolId);
+      $year = strftime("%G", strtotime($docModel->doc_date));
+      $model->year = $year;
       $model->doc_date = $docModel->doc_date;
       $model->save();
       if ($model) {

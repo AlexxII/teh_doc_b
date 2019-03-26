@@ -297,6 +297,57 @@ class Tools extends \yii\db\ActiveRecord
     return $this->hasMany(Docs::class, ['eq_id' => 'ref'])->count();
   }
 
+  public function getDocsOrder()
+  {
+    return $this->getDocs()
+      ->orderBy(['year' => SORT_ASC])
+      ->all();
+  }
+
+  public function DocsYearFilter($year)
+  {
+    return $this->getDocs()
+      ->where(['year' => $year])
+      ->all();
+  }
+
+  public function getYearArrayDocs()
+  {
+    $years = $this->getDocs()
+      ->select([
+        'DATE_FORMAT(doc_date, "%Y") as year'
+      ])
+      ->orderBy('year Asc')
+      ->distinct()
+      ->asArray()
+      ->all();
+    $result = array();
+    foreach ($years as $year){
+      $result[] = $year['year'];
+    }
+    return $result;
+  }
+
+  public function getMonthsArrayDocs()
+  {
+    $monthArray = ['Январь', 'Февраль', 'Март', 'Апрель',
+      'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+    $months = $this->getDocs()
+      ->select([
+        'DATE_FORMAT(doc_date, "%m") as month'
+      ])
+      ->orderBy('month Asc')
+      ->asArray()
+      ->all();
+    $result = array();
+    foreach ($months as $month){
+      $str = ltrim($month['month'], '0');
+      $result[] = $monthArray[$str];
+    }
+    return $result;
+  }
+
+
   // Изображения
   public function getImages()
   {
@@ -309,40 +360,7 @@ class Tools extends \yii\db\ActiveRecord
   }
 
 
-  public function getYearArrayDocs()
-  {
-    $years = $this->getDocs()
-      ->select([
-        'DATE_FORMAT(doc_date, "%Y") as year'
-      ])
-      ->orderBy('year Asc')
-      ->asArray()
-      ->all();
-    $result = array();
-    foreach ($years as $year){
-      $result[] = $year['year'];
-    }
-    return $result;
-  }
 
-  public function getMonthsArrayDocs()
-  {
-    $montArray = ['Январь', 'Февраль', 'Март', 'Апрель',
-      'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-    $months = $this->getDocs()
-      ->select([
-        'DATE_FORMAT(doc_date, "%m") as month'
-      ])
-      ->orderBy('month Asc')
-      ->asArray()
-      ->all();
-    $result = array();
-    foreach ($months as $month){
-      $str = ltrim($month['month'], '0');
-      $result[] = $montArray[$str];
-    }
-    return $result;
-  }
 
   // Доступ к свойствам объекта
   public function getId()

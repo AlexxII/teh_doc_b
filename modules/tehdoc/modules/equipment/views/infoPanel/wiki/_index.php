@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
   </li>
   <li>
     <a href="../foto/index">
-      Foto
+      Photo
       <span class="Counter"><?= $imagesCount ?></span>
     </a>
   </li>

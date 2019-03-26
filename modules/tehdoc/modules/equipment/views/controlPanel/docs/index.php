@@ -68,12 +68,7 @@ $date_hint = 'Дата документа.';
       <div class="calendar">
         <ul class="list-inline" style="border-top: 1px solid #cbcbcb;">
           <?php foreach ($years as $year): ?>
-            <li><a href="#"><?= $year?></a></li>
-          <?php endforeach; ?>
-        </ul>
-        <ul class="calendar-month list-inline" style="display: block;">
-          <?php foreach ($months as $month): ?>
-            <li><a href="#"><?= $month?></a></li>
+            <li><a href="?year=<?= $year?>"><?= $year?></a></li>
           <?php endforeach; ?>
         </ul>
       </div>

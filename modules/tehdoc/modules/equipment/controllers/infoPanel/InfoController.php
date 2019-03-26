@@ -35,7 +35,7 @@ class InfoController extends Controller
     return $this->render('header', [
       'model' => $model,
       'view' => $view,
-      'children' => $children,
+       'children' => $children,
       'docsCount' => $docsCount,
       'imagesCount' => $imagesCount,
       'wikiCount' => $wikiCount,
