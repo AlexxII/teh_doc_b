@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </ul>
 
 <div class="complex-wiki-create">
-  <h3><?= Html::encode('Добавить документ') ?></h3>
+  <h3><?= Html::encode('Добавить изображение') ?></h3>
   <?= $this->render('_form', [
     'model' => $model
   ]) ?>
