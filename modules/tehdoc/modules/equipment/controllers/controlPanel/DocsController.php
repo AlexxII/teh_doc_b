@@ -38,6 +38,7 @@ class DocsController extends Controller
         'wikiCount' => $wikiCount,
       ]);
     }
+    return false;
   }
 
   public function actionCreate()
@@ -70,7 +71,5 @@ class DocsController extends Controller
       'wikiCount' => $wikiCount,
     ]);
   }
-
-
 
 }
