@@ -48,8 +48,8 @@ class FotoController extends Controller
     $docsCount = $toolModel->countDocs;
 
     if ($imageModel->load(Yii::$app->request->post())) {
-      $imageModel->imageFiles = UploadedFile::getInstances($imageModel, 'docFiles');
-      $model = $imageModel->uploadImage($imageModel, $toolId);
+      $imageModel->imageFiles = UploadedFile::getInstances($imageModel, 'imageFiles');
+      $model = $imageModel->uploadImage($toolId);
       if ($model) {
         Yii::$app->session->setFlash('success', 'Изображение добавлено');
       } else {
