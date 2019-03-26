@@ -76,7 +76,6 @@ class DocsController extends Controller
 
   public function actionDeleteDocs()
   {
-    sleep(1);
     if (!empty($_POST['docsArray'])){
       $counter = 0;
       foreach ($_POST['docsArray'] as $docId){
