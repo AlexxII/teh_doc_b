@@ -275,6 +275,7 @@ class SettingsController extends Controller
 // серверная часть установки флажка "В задании на обновление" - пакетная обработка
   public function actionTaskSetPckg()
   {
+    sleep(1);
     if (isset($_POST['jsonData']) && isset($_POST['bool'])) {
       if ($_POST['bool'] === 'true') {
         $bool = 1;

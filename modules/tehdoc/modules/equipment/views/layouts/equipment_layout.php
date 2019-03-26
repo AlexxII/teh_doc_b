@@ -11,19 +11,21 @@ use app\assets\FancytreeAsset;
 use app\modules\tehdoc\asset\TehdocAsset;
 use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
 use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
+use app\modules\tehdoc\modules\equipment\asset\JConfirmAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 FancytreeAsset::register($this);
 TehdocAsset::register($this);       // регистрация ресурсов модуля
 MdeAsset::register($this);
 EquipmentAsset::register($this);
+JConfirmAsset::register($this);
 
 $about = "Панель управления оборудованием";
 $add_hint = 'Добавить новый узел';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить БЕЗ вложений';
 $del_root_hint = 'Удалить ветку полностью';
-$del_multi_nodes = 'Удвлить С вложениями';
+$del_multi_nodes = 'Удалить С вложениями';
 
 
 ?>
