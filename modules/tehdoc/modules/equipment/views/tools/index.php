@@ -244,7 +244,6 @@ $task_hint = 'Добавить выделенные элементы в зада
     });
     table.on('deselect', function (e, dt, type, indexes) {
       if (type === 'row') {
-        console.log();
         if (table.rows( { selected: true } ).count() > 0) return;
         $('.tasking').attr('disabled', true);
       }

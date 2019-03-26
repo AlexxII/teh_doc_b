@@ -51,7 +51,22 @@ $this->params['breadcrumbs'][] = $this->title;
 </ul>
 
 
-<div class="complex-wiki-create">
+<div class="complex-fotos" style="margin-top: 15px">
+
+  <div class="row">
+    <div class="col-lg-9 col-md-6">
+      <h3 style="margin-top: 0px">
+        <?= Html::encode('Изображения') ?>
+      </h3>
+    </div>
+    <div class="col-lg-3 col-md-6 text-right">
+      <p>
+        <a href="#" class="btn btn-sm btn-danger" id="delete-doc" disabled="true">Удалить</a>
+        <a href="create" class="btn btn-sm btn-success">Добавить</a>
+      </p>
+    </div>
+  </div>
+
   <?= $this->render('index', [
     'photos' => $photos
   ]) ?>

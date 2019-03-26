@@ -2,10 +2,13 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers\infoPanel;
 
+use app\modules\tehdoc\modules\equipment\models\Images;
 use app\modules\tehdoc\modules\equipment\models\Tools;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
+
 
 class FotoController extends Controller
 {
@@ -19,9 +22,11 @@ class FotoController extends Controller
       $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
       $model = $request[0];
       $photos = $model->images;
+
       $wikiCount = $model->countWikiPages;
       $imagesCount = $model->countImages;
       $docsCount = $model->countDocs;
+
       return $this->render('header', [
         'photos' => $photos,
         'docsCount' => $docsCount,
@@ -30,5 +35,36 @@ class FotoController extends Controller
       ]);
     }
   }
+
+  public function actionCreate()
+  {
+    $toolId = $_GET['id'];
+    $imageModel = new Images();
+    $request = Tools::find()->where(['ref' => $toolId])->limit(1)->all();
+    $toolModel = $request[0];
+
+    $wikiCount = $toolModel->countWikiPages;
+    $imagesCount = $toolModel->countImages;
+    $docsCount = $toolModel->countDocs;
+
+    if ($imageModel->load(Yii::$app->request->post())) {
+      $imageModel->imageFiles = UploadedFile::getInstances($imageModel, 'docFiles');
+      $model = $imageModel->uploadImage($imageModel, $toolId);
+      if ($model) {
+        Yii::$app->session->setFlash('success', 'Изображение добавлено');
+      } else {
+        Yii::$app->session->setFlash('error', 'Изображение не добавлено');
+      }
+      $imageModel = new Images();
+      return $this->redirect(['tool/' . $toolId . '/foto/index']);
+    }
+    return $this->render('create', [
+      'model' => $imageModel,
+      'docsCount' => $docsCount,
+      'imagesCount' => $imagesCount,
+      'wikiCount' => $wikiCount
+    ]);
+  }
+
 
 }

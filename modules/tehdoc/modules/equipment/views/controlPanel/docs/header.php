@@ -85,8 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
   <?= $this->render('index', [
     'docModels' => $docModels,
-    'years' => $years,
-    'months' => $months
+    'years' => $years
   ]) ?>
 
 </div>
