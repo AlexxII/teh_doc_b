@@ -93,18 +93,6 @@ $this->params['breadcrumbs'][] = $this->title;
       Инфо
     </a>
   </li>
-  <li>
-    <a href="../docs/index">
-      Docs
-      <span class="Counter"><?= $docsCount ?></span>
-    </a>
-  </li>
-  <li>
-    <a href="../foto/index">
-      Foto
-      <span class="Counter"><?= $imagesCount ?></span>
-    </a>
-  </li>
   <li class="active">
     <a href="../settings/index">
       Настройки

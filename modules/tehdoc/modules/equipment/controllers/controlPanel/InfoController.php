@@ -19,7 +19,7 @@ class InfoController extends Controller
 
   public function actionMeeting()
   {
-    return $this->render('meeting');
+    return $this->render('meeting_main');
   }
 
   public function actionIndex()
