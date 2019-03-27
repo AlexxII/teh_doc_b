@@ -1,3 +1,11 @@
+<?php
+
+use app\modules\tehdoc\modules\equipment\asset\MasonryAsset;
+
+MasonryAsset::register($this);
+
+?>
+
 <style>
   .date {
     color: #8f8f8f;
@@ -6,19 +14,18 @@
 </style>
 
 <div>
-  <div class="row">
+  <div class="row dw" style="margin-top: 10px">
     <?php foreach ($photoModels as $photoModel): ?>
-      <div class="col-sm-6 col-md-4" style="margin-top: 10px;position: relative">
-        <div class="thumbnail">
+      <div class="dw-panel">
+        <div class="thumbnail dw-panel__content">
           <div>
-            <input class="doc-select" type="checkbox" style="float: left; margin: 7px 0px 0px -25px"
-                   data-docid="<?= $photoModel->id ?>">
+            <input class="doc-select" type="checkbox" data-docid="<?= $photoModel->id ?>">
           </div>
           <a href="<?= $photoModel->imageUrl ?>">
             <img src="<?= $photoModel->imageUrl ?>">
           </a>
+          <span class="date">Добавлено: <?= $photoModel->uploadDate ?> </span>
         </div>
-        <span class="date" style="position: absolute;bottom: 0px; right: 15px">Добавлено: <?= $photoModel->uploadDate ?> </span>
       </div>
     <?php endforeach; ?>
   </div>

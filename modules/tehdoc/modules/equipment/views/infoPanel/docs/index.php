@@ -62,19 +62,22 @@ $date_hint = 'Дата документа.';
   .hide {
     display: none
   }
+  .calendar ul li.active {
+    background-color: #f9edc1;
+  }
 </style>
 
 
 <div id="complex-docs">
   <?php if ($years): ?>
-    <div class="">
-      <div class="calendar">
-        <ul class="list-inline" style="border-top: 1px solid #cbcbcb;">
-          <?php foreach ($years as $year): ?>
-            <li><a href="?year=<?= $year ?>"><?= $year ?></a></li>
-          <?php endforeach; ?>
-        </ul>
-      </div>
+    <div class="calendar">
+      <ul class="list-inline" style="border-top: 1px solid #cbcbcb;">
+        <?php foreach ($years as $year): ?>
+          <li class="<?php if ($year == $selectYear)echo 'active' ?>">
+            <a href="?year=<?= $year ?>"><?= $year ?></a>
+          </li>
+        <?php endforeach; ?>
+      </ul>
     </div>
   <?php endif; ?>
 
