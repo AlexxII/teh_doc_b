@@ -26,7 +26,7 @@ $placeholder = 'Название страницы';
         </div>
       </div>
       <div class="form-group" style="text-align: right">
-        <a id="delete-page" data-id="<?= $model->id ?>" class="btn btn-sm btn-danger">Удалить</a>
+        <a id="delete-page" data-id="<?= $model->id ?>" <?php if($model->isNewRecord) echo 'disabled' ?> class="btn btn-sm btn-danger">Удалить</a>
         <a onclick="history.back();" class="btn btn-sm btn-primary">Отмена</a>
         <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['class' => 'btn btn-sm btn-success']) ?>
       </div>
@@ -61,6 +61,9 @@ $placeholder = 'Название страницы';
 
     $('#delete-page').on('click', function (e) {
       e.preventDefault();
+      if ($(this).attr('disabled')) {
+        return;
+      }
       jc = $.confirm({
         icon: 'fa fa-question',
         title: 'Вы уверены?',
@@ -74,7 +77,7 @@ $placeholder = 'Название страницы';
             action: function () {
               var wikiId = $('#delete-page').data('id');
               jc.close();
-              window.location.href = 'delete-page?id=' + wikiId;
+              window.location.href = 'delete-page?page=' + wikiId;
             }
           },
           cancel: {

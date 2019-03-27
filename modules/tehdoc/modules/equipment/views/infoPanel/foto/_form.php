@@ -23,7 +23,6 @@ use kartik\file\FileInput;
           'options' => ['multiple' => true],
           'pluginOptions' => [
             'maxFileCount' => 15,
-            'uploadUrl' => Url::to(['file-upload']),
             'showUpload' => false,
             'previewFileType' => 'any',
             'overwriteInitial' => false

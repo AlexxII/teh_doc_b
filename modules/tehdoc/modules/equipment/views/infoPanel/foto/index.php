@@ -14,7 +14,7 @@ MasonryAsset::register($this);
 </style>
 
 <div>
-  <div class="row dw" style="margin-top: 10px">
+  <div class="dw" style="margin-top: 10px">
     <?php foreach ($photoModels as $photoModel): ?>
       <div class="dw-panel">
         <div class="thumbnail dw-panel__content">
