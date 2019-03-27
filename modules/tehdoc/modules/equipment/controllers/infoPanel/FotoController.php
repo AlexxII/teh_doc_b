@@ -21,14 +21,14 @@ class FotoController extends Controller
     if ($id != 1122334455) {
       $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
       $model = $request[0];
-      $photos = $model->images;
+      $photoModels = $model->images;
 
       $wikiCount = $model->countWikiPages;
       $imagesCount = $model->countImages;
       $docsCount = $model->countDocs;
 
       return $this->render('header', [
-        'photos' => $photos,
+        'photoModels' => $photoModels,
         'docsCount' => $docsCount,
         'imagesCount' => $imagesCount,
         'wikiCount' => $wikiCount,
@@ -64,6 +64,30 @@ class FotoController extends Controller
       'imagesCount' => $imagesCount,
       'wikiCount' => $wikiCount
     ]);
+  }
+
+  public function actionDeletePhotos()
+  {
+    if (!empty($_POST['photosArray'])){
+      $counter = 0;
+      foreach ($_POST['photosArray'] as $photoId){
+        $photo = $this->findModel($photoId);
+        if (unlink(\Yii::$app->params['uploadImg'] . $photo->image_path)){
+          $photo->delete();
+          $counter++ ;
+        }
+      }
+      return $counter;
+    }
+    return false;
+  }
+
+  protected function findModel($id)
+  {
+    if (($model = Images::findOne($id)) !== null) {
+      return $model;
+    }
+    throw new NotFoundHttpException('The requested page does not exist.');
   }
 
 

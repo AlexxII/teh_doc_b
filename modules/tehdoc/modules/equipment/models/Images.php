@@ -83,6 +83,13 @@ class Images extends ActiveRecord        // модель для добавлен
     return \Yii::$app->params['uploadUrlImg'] . '/' . 'image_not_found.jpg';
   }
 
+  public function getUploadDate()
+  {
+    if ($this->upload_time){
+      return strftime("%e %b %G", strtotime($this->upload_time));
+    }
+  }
+
 }
 
 
