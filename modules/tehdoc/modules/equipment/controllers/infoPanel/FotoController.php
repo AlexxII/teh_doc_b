@@ -49,8 +49,7 @@ class FotoController extends Controller
 
     if ($imageModel->load(Yii::$app->request->post())) {
       $imageModel->imageFiles = UploadedFile::getInstances($imageModel, 'imageFiles');
-      $model = $imageModel->uploadImage($toolId);
-      if ($model) {
+      if ($imageModel->uploadImage($toolId)) {
         Yii::$app->session->setFlash('success', 'Изображение добавлено');
       } else {
         Yii::$app->session->setFlash('error', 'Изображение не добавлено');
