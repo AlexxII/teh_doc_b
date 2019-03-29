@@ -248,17 +248,22 @@ $form = ActiveForm::begin([
     })
   });
 
+  $(document).ready(function () {
+    $.get('/lib/free_days.js', function (data) {});
+  });
+
   // обработчик события - выбрать месяц проведения ТО
   // и формирование массива выходных дней
   $('.to-month').on('change', function (e) {
     if (e.target.value != '') {
-      var fullDate = $('.to-month').datepicker('getDate');
+      var toMonth = $('.to-month').datepicker('getDate');
       $('.admin-list').prop('disabled', true);
       $('.admin-list').addClass('loading-ex');
       $('.to-date').val('');
       $('.admin-list').val('none');
       $('.to-date').prop('disabled', true);
-      getFreeDays(fullDate);
+      // getFreeDays(toMonth);
+      setMonth();
       $('.admin-list').prop('disabled', false);
       $('.admin-list').removeClass('loading-ex');
     } else {
@@ -270,9 +275,9 @@ $form = ActiveForm::begin([
   });
 
   // формирует ajax запрос на получение выxодных дней в зависимоти от месяца
-  function getFreeDays(fullDate) {
-    var month = fullDate.getMonth();
-    var year = fullDate.getFullYear();
+  function getFreeDays(toMonth) {
+    var month = toMonth.getMonth();
+    var year = toMonth.getFullYear();
     var mDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     var nMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
     var start_date = year + '-' + nMonth[month] + '-01';
@@ -363,8 +368,25 @@ $form = ActiveForm::begin([
       $(this).datepicker('show');
       $(this).on('change', copySl);                           // обработчик изменения сосотяния input -> копирование
       $(this).on('input', copySl);                           // обработчик изменения сосотяния input -> копирование
+      $('.to-date').datepicker('setDatesDisabled', arr);
     })
   });
+
+
+  function setMonth(){
+    var m = $('.to-month');
+    if (m.val() != '') {
+      var fullDate = new Date(m.val());
+      var year = fullDate.getFullYear();
+      var month = fullDate.getMonth();
+      var nMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+      $('.m-date').prop('disabled', false);
+      $('.m-date').datepicker('setStartDate', '01-' + nMonth[month] + '-' + year);
+      $('.m-date').datepicker('update');
+      $('.m-date').on('change', copySl);                    // обработчик события 'change'
+    }
+    return;
+  }
 
 
   // функция копирования дат проведения ТО

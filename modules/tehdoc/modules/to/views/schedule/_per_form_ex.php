@@ -230,6 +230,7 @@ $form = ActiveForm::begin([
     })
   });
 
+
   $(document).ready(function () {
     $('.m-date').datepicker({
       format: 'dd.mm.yyyy',
@@ -241,11 +242,13 @@ $form = ActiveForm::begin([
     })
   });
 
+
   $(document).ready(function () {
     $.get('/lib/free_days.js', function (data) {
       $('.m-date').datepicker('setDatesDisabled', arr);
     });
   });
+
 
   // обработка событий удаления дат
   $(document).ready(function () {
@@ -260,6 +263,7 @@ $form = ActiveForm::begin([
         $('.to-date').on('change', copySl);                    // снова включаем обработчик события 'change'
       });
   });
+
 
   // установка формата календаря при редактировании графика
   $(document).ready(function () {

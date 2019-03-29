@@ -56,12 +56,14 @@ class ScheduleController extends Controller
   // создание нового графика ТО на основе оборудования в таблице toequip_tbl;
   public function actionCreate()
   {
-    $toEq = ToEquipment::find()->where(['valid' => 1])->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
+    $toEq = ToEquipment::find()
+      ->where(['valid' => 1])
+      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
     if (empty($toEq)) {
       Yii::$app->session->setFlash('error', "Не добавлено ни одного оборудования в график ТО.");
       return $this->render('create', [
         'tos' => $toEq,
-      ]); // redirect to your next desired page
+      ]);
     }
     $scheduleRand = rand();
     foreach ($toEq as $i => $eq) {
@@ -94,13 +96,14 @@ class ScheduleController extends Controller
 
   public function actionView($id)
   {
-    $model = ToSchedule::find()->where(['schedule_id' => $id]);
+    $model = ToSchedule::find()
+      ->with(['admin', 'auditor', 'toType', 'toEq'])
+      ->where(['schedule_id' => $id]);
     $month = $model->max('plan_date');
     setlocale(LC_ALL, 'ru_RU');
     $month = strftime("%B %Y", strtotime($month));
-    $tos = $model->all();
     return $this->render('view', [
-      'tos' => $tos,
+      'tos' => $model->all(),
       'month' => $month,
       'id' => $id
     ]);
@@ -109,11 +112,14 @@ class ScheduleController extends Controller
   // Отметка о выполнении графика ТО на выбранный месяц
   public function actionPerform($id)
   {
-    $models = $this->findModel($id)->all();
-    $month = $models[0]->to_month;
-    if (ToSchedule::loadMultiple($models, Yii::$app->request->post())) {
-      if (ToSchedule::validateMultiple($models)) {
-        foreach ($models as $t) {
+    $models = ToSchedule::find()
+      ->with(['admin', 'auditor', 'toType', 'toEq'])
+      ->where(['schedule_id' => $id]);
+    $month = $models->max('plan_date');
+    $to = $models->all();
+    if (ToSchedule::loadMultiple($to, Yii::$app->request->post())) {
+      if (ToSchedule::validateMultiple($to)) {
+        foreach ($to as $t) {
           if ($t->fact_date != null) {
             $t->checkmark = '1';
           } else {
@@ -124,7 +130,7 @@ class ScheduleController extends Controller
       } else {
         Yii::$app->session->setFlash('error', "Ошибка валидации данных");
         return $this->render('perform', [
-          'tos' => $models,
+          'tos' => $to,
           'month' => $month,
         ]);
       }
@@ -132,7 +138,7 @@ class ScheduleController extends Controller
       return $this->redirect('index');
     }
     return $this->render('perform', [
-      'tos' => $models,
+      'tos' => $models->all(),
       'month' => $month,
     ]);
   }
@@ -164,12 +170,22 @@ class ScheduleController extends Controller
     }
   }
 
-  protected function findModel($id)
+
+  public function actionFreeDays($start_date, $end_date)
   {
-    if (($model = ToSchedule::find()->where(['schedule_id' => $id])) !== null) {
-      return $model;
-    }
-    throw new NotFoundHttpException('Запрошенная страница не существует.');
+    return false;
+    $sql = 'SELECT people_labor_status.people_id, people_labor_status.free_date as free_dates,
+              people_labor_status.comment,
+              people_labor_title.title as labor_title
+            from people_labor_status
+              LEFT JOIN people_labor_title on people_labor_status.labor_title = people_labor_title.id
+            WHERE free_date >= :start_date
+            and free_date <= :end_date ORDER BY people_id, free_date';
+    $ar = Yii::$app->db->createCommand($sql)
+      ->bindValue(':start_date', $start_date)
+      ->bindValue(':end_date', $end_date)
+      ->queryAll();
+    return json_encode($ar);
   }
 
   public function actionDelete($id)
@@ -181,5 +197,15 @@ class ScheduleController extends Controller
     Yii::$app->session->setFlash('success', 'График успешно удален');
     return $this->redirect(['index']);
   }
+
+
+  protected function findModel($id)
+  {
+    if (($model = ToSchedule::find()->where(['schedule_id' => $id])) !== null) {
+      return $model;
+    }
+    throw new NotFoundHttpException('Запрошенная страница не существует.');
+  }
+
 
 }
