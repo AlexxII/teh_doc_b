@@ -11,6 +11,7 @@ $this->params['breadcrumbs'][] = "Журнал";
 $about = "Журнал сеансов видеосвязи, которые были удалены из таблицы предстоящих сеансов ВКС";
 $dell_hint = 'Удалить выделенные сеансы окончательно';
 $return_hint = 'Восстановить удаленные сеансы';
+
 ?>
 
 <div class="vks-pannel">
@@ -315,7 +316,10 @@ $return_hint = 'Восстановить удаленные сеансы';
             btnClass: 'btn-danger',
             action: function () {
               jc.close();
-              deleteProcess(url);
+              if (remoteProcess(url)) {
+                $('#return').attr('disabled', true);
+                $('#delete').attr('disabled', true);
+              }
             }
           },
           cancel: {
@@ -345,7 +349,10 @@ $return_hint = 'Восстановить удаленные сеансы';
             btnClass: 'btn-info',
             action: function () {
               jc.close();
-              remoteProcess(url);
+              if (remoteProcess(url)) {
+                $('#return').attr('disabled', true);
+                $('#delete').attr('disabled', true);
+              }
             }
           },
           cancel: {
@@ -397,7 +404,7 @@ $return_hint = 'Восстановить удаленные сеансы';
                 btnClass: 'btn-success',
                 action: function () {
                   $("#main-table").DataTable().clearPipeline().draw();
-                  $('.hiddendel').hide();
+                  return true;
                 }
               }
             }
