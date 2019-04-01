@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\tehdoc\modules\equipment\asset;
+namespace app\assets;
 
 use yii\web\AssetBundle;
 

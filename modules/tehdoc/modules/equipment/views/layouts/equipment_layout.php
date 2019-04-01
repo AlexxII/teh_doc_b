@@ -11,7 +11,7 @@ use app\assets\FancytreeAsset;
 use app\modules\tehdoc\asset\TehdocAsset;
 use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
 use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
-use app\modules\tehdoc\modules\equipment\asset\JConfirmAsset;
+use app\assets\JConfirmAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 FancytreeAsset::register($this);

@@ -417,6 +417,22 @@ class SessionsController extends Controller
     return $this->render('archive_ex');
   }
 
+  public function actionRestore()
+  {
+    $report = true;
+    foreach ($_POST['jsonData'] as $d) {
+      $model = $this->findModel($d);
+      $this->logVks($model->id, "info","Восстановил сеансе ВКС из перечня удаленных.");
+      $model->vks_cancel = 0;
+      $report = $model->save();
+    }
+    if ($report) {
+      return true;
+    }
+    return false;
+  }
+
+
   public function actionDeleteCompletely()
   {
     $report = true;

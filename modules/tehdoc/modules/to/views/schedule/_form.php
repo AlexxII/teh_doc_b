@@ -368,7 +368,7 @@ $form = ActiveForm::begin([
       $(this).datepicker('show');
       $(this).on('change', copySl);                           // обработчик изменения сосотяния input -> копирование
       $(this).on('input', copySl);                           // обработчик изменения сосотяния input -> копирование
-      $('.to-date').datepicker('setDatesDisabled', arr);
+         $('.to-date').datepicker('setDatesDisabled', arr);
     })
   });
 

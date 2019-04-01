@@ -11,7 +11,7 @@ use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
 use app\assets\FancytreeAsset;
 use app\assets\PhotoswipeAsset;
 use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
-use app\modules\tehdoc\modules\equipment\asset\JConfirmAsset;
+use app\assets\JConfirmAsset;
 
 PhotoswipeAsset::register($this);
 FancytreeAsset::register($this);
