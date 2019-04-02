@@ -2,11 +2,9 @@
 
 use yii\helpers\Html;
 
-
-$this->title = 'График';
+$this->title = 'График TО';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
 $this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to']];
-$this->params['breadcrumbs'][] = ['label' => 'Графики ТО', 'url' => ['/tehdoc/to/schedule/archive']];
 $this->params['breadcrumbs'][] = $this->title;
 require "to_array.php";
 

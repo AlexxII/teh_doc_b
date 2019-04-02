@@ -55,7 +55,7 @@ $about = "ВКС";
     <i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 150px"></i>
   </div>
   <div class="row" id="footer">
-    <h4>Добавить график ТО на год</h4>
+    <h4>Добавить годовой график ТО</h4>
   </div>
 </div>
 
@@ -67,7 +67,7 @@ $about = "ВКС";
     <i class="fa fa-calendar" aria-hidden="true" style="font-size: 150px"></i>
   </div>
   <div class="row" id="footer">
-    <h4>Архив графиков ТО на год</h4>
+    <h4>Архив годовых графиков ТО</h4>
   </div>
 </div>
 
