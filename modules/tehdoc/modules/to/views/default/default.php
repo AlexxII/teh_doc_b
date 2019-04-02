@@ -34,7 +34,7 @@ $about = "ВКС";
 </div>
 
 
-<div class="col-lg-4 col-md-6 about" data-url="/vks/sessions/create-session" style="text-align: center; cursor: pointer">
+<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/schedule/archive" style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Архив графиков</h2>
   </div>
@@ -47,7 +47,7 @@ $about = "ВКС";
 </div>
 
 
-<div class="col-lg-4 col-md-6 about" data-url="/vks/sessions/archive" style="text-align: center; cursor: pointer">
+<div class="col-lg-4 col-md-6 about" data-url="#" style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Добавить на год</h2>
   </div>
@@ -59,7 +59,7 @@ $about = "ВКС";
   </div>
 </div>
 
-<div class="col-lg-4 col-md-6 about" data-url="/vks/sessions/archive" style="text-align: center; cursor: pointer">
+<div class="col-lg-4 col-md-6 about" data-url="#" style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Архив графиков</h2>
   </div>
@@ -72,7 +72,7 @@ $about = "ВКС";
 </div>
 
 
-<div class="col-lg-4 col-md-6 about" data-url="/vks/analytics/index" style="text-align: center; cursor: pointer">
+<div class="col-lg-4 col-md-6 about" data-url="#" style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Наработка</h2>
   </div>

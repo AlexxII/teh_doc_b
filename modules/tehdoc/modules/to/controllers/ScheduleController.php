@@ -15,7 +15,28 @@ class ScheduleController extends Controller
   const USERS_TABLE = 'user';
   const TOTYPE_TABLE = 'teh_to_type_tbl';
 
+
   public function actionIndex()
+  {
+    $lastMont = ToSchedule::find()->max('to_month');
+    $id = ToSchedule::find()->select(['schedule_id'])->where(['to_month' => $lastMont])->all();
+    return var_dump($id);
+    $model = ToSchedule::find()
+      ->with(['admin', 'auditor', 'toType', 'toEq'])
+      ->where(['schedule_id' => $id]);
+    $month = $model->max('plan_date');
+    setlocale(LC_ALL, 'ru_RU');
+    $month = strftime("%B %Y", strtotime($month));
+    return $this->render('view', [
+      'tos' => $model->all(),
+      'month' => $month,
+      'id' => $id
+    ]);
+  }
+
+
+
+  public function actionArchive()
   {
     $schTable = self::TO_TABLE;
     $usersTable = self::USERS_TABLE;
@@ -30,7 +51,7 @@ class ScheduleController extends Controller
               LEFT JOIN {$usersTable} as t2 on {$schTable}.auditor_id = t2.ref
               LEFT JOIN {$toTable} as t3 on {$schTable}.to_type = t3.ref
             GROUP BY schedule_id";
-    return $this->render('index', [
+    return $this->render('archive', [
       'tos' => ToSchedule::findBySql($sql)->asArray()->all(),
       'month' => 1
     ]);
