@@ -221,7 +221,7 @@ class ScheduleController extends Controller
       $m->delete();
     }
     Yii::$app->session->setFlash('success', 'График успешно удален');
-    return $this->redirect(['index']);
+    return $this->redirect(['archive']);
   }
 
 
