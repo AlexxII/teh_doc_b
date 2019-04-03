@@ -552,6 +552,11 @@ $send_hint = 'Передать выделенные строки в подроб
           return row[12] + '-' + row[13] + '/т' + "<br> " + row[14] + '-' + row[15] + '/р';
         }
       }, {
+        "targets": 6,
+        "render": function (data, type, row) {
+          return row[6] + "<br> " + row[16];
+        }
+      }, {
         "targets": 3,
         "render": function (data, type, row) {
           // Чтобы не получить NaN
@@ -668,8 +673,39 @@ $send_hint = 'Передать выделенные строки в подроб
   //********************** Удаление записей ***********************************
 
   $(document).ready(function () {
+
     $('.hiddendel').click(function (event) {
       event.preventDefault();
+      var url = "/vks/sessions/delete";
+      if ($(this).attr('disabled')) {
+        return;
+      }
+      jc = $.confirm({
+        icon: 'fa fa-question',
+        title: 'Вы уверены?',
+        content: 'Вы действительно хотите удалить выделенное?',
+        type: 'red',
+        closeIcon: false,
+        autoClose: 'cancel|9000',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+              jc.close();
+              deleteProcess(url);
+            }
+          },
+          cancel: {
+            action: function () {
+              return;
+            }
+          }
+        }
+      });
+    });
+
+
+    function deleteProcess(url) {
       var csrf = $('meta[name=csrf-token]').attr("content");
       var table = $('#main-table').DataTable();
       var data = table.rows({selected: true}).data();
@@ -678,26 +714,82 @@ $send_hint = 'Передать выделенные строки в подроб
       for (var i = 0; i < count; i++) {
         ar[i] = data[i][0];
       }
-      if (confirm('Вы действительно хотите удалить выделенные строки? Выделено ' + data.length)) {
-        $(".freeztime").modal("show");
-        $.ajax({
-          url: "/vks/sessions/delete",                                        // TODO URL
-          type: "post",
-          dataType: "JSON",
-          data: {jsonData: ar, _csrf: csrf},
-          success: function (result) {
-            $("#main-table").DataTable().clearPipeline().draw();
-            $(".freeztime").modal('hide');
-            $('.hiddendel').hide();
-            $('.classif').hide();
-          },
-          error: function () {
-            alert('Ошибка! Обратитесь к разработчику.');
-            $(".freeztime").modal('hide');
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Ваш запрос выполняется!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
+      $.ajax({
+        url: url,
+        method: 'post',
+        dataType: "JSON",
+        data: {jsonData: ar, _csrf: csrf},
+      }).done(function (response) {
+        if (response != false) {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-thumbs-up',
+            title: 'Успех!',
+            content: 'Ваш запрос выполнен.',
+            type: 'green',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-success',
+                action: function () {
+                  $("#main-table").DataTable().clearPipeline().draw();
+                  $('.hiddendel').hide();
+                }
+              }
+            }
+          });
+        } else {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-exclamation-triangle',
+            title: 'Неудача!',
+            content: 'Запрос не выполнен. Что-то пошло не так.',
+            type: 'red',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-danger',
+                action: function () {
+                }
+              }
+            }
+          });
+        }
+      }).fail(function () {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|4000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
           }
         });
-      }
-    })
+      });
+    }
   });
 
   (function ($) {
