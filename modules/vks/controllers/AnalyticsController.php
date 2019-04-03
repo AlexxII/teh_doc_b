@@ -202,6 +202,7 @@ class AnalyticsController extends Controller
       array('db' => 'vks_teh_time_end', 'dt' => 13),
       array('db' => 'vks_work_time_start', 'dt' => 14),
       array('db' => 'vks_work_time_end', 'dt' => 15),
+      array('db' => 'vks_subscriber_name', 'dt' => 16),
     );
 
     $sql_details = \Yii::$app->params['sql_details'];
