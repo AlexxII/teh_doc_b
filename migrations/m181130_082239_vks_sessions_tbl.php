@@ -60,6 +60,7 @@ class m181130_082239_vks_sessions_tbl extends Migration
 
             'vks_upcoming_session' => $this->boolean(),                                  // предстоящий сеанс ВКС
 
+            'important' => $this->boolean()->defaultValue(0),                                            // важный сеанс
             'vks_cancel' => $this->boolean()->defaultValue(0),                                            // отмена сеанса
             'vks_cancel_reason' => $this->string(255)
         ], $tableOptions);

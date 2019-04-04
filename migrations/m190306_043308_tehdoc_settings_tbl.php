@@ -24,7 +24,8 @@ class m190306_043308_tehdoc_settings_tbl extends Migration
       'eq_special' => $this->boolean()->defaultValue(0),
       'eq_complex' => $this->boolean()->defaultValue(0),
       'eq_wrap' => $this->boolean()->defaultValue(0),
-      'valid' => $this->boolean()->defaultValue(1),
+      'eq_to' => $this->boolean()->defaultValue(0),
+      'valid' => $this->boolean()->defaultValue(1)
     ], $tableOptions);
 
     $sql = 'insert into teh_settings_tbl(eq_id)

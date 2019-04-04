@@ -6,7 +6,7 @@ use app\modules\tehdoc\modules\to\models\ToType;
 use Yii;
 use yii\web\Controller;
 
-class ToTypeController extends Controller
+class ToAdminsController extends Controller
 {
   public function actionAllTypes()
   {
