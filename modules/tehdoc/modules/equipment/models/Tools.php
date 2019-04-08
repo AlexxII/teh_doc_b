@@ -112,7 +112,7 @@ class Tools extends \yii\db\ActiveRecord
 
   public function getCategory()
   {
-    return $this->hasOne(Category::class, ['ref' => 'category_id']);
+    return $this->hasOne(Category::class, ['id' => 'category_id']);
   }
 
   public function getCategoryTitle()
@@ -135,7 +135,7 @@ class Tools extends \yii\db\ActiveRecord
 
   public function getPlacement()
   {
-    return $this->hasOne(Placement::class, ['ref' => 'place_id']);
+    return $this->hasOne(Placement::class, ['id' => 'place_id']);
   }
 
   public function getPlacementTitle($depth = 1)
@@ -170,7 +170,7 @@ class Tools extends \yii\db\ActiveRecord
   // Tool Settings
   public function getSettings()
   {
-    return $this->hasOne(ToolSettings::class, ['eq_id' => 'ref']);
+    return $this->hasOne(ToolSettings::class, ['eq_id' => 'id']);
   }
 
   //Tool generalTable
@@ -203,7 +203,7 @@ class Tools extends \yii\db\ActiveRecord
   //Tool TO
   public function getTo()
   {
-    return $this->hasOne(ToEquipment::class, ['eq_id' => 'ref']);
+    return $this->hasOne(ToEquipment::class, ['eq_id' => 'id']);
   }
 
   public function getToStatus()
@@ -226,7 +226,7 @@ class Tools extends \yii\db\ActiveRecord
   //Tool spec
   public function getSpecial()
   {
-    return $this->hasOne(Special::class, ['eq_id' => 'ref']);
+    return $this->hasOne(Special::class, ['eq_id' => 'id']);
   }
 
   public function getSpecialStatus()
@@ -248,7 +248,7 @@ class Tools extends \yii\db\ActiveRecord
   // Tool OTH
   public function getOth()
   {
-    return $this->hasOne(Oth::class, ['eq_id' => 'ref']);
+    return $this->hasOne(Oth::class, ['eq_id' => 'id']);
   }
 
   public function getOthStatus()
@@ -278,23 +278,23 @@ class Tools extends \yii\db\ActiveRecord
   // Wiki
   public function getWiki()
   {
-    return $this->hasMany(Wiki::class, ['eq_id' => 'ref']);
+    return $this->hasMany(Wiki::class, ['eq_id' => 'id']);
   }
 
   public function getCountWikiPages()
   {
-    return $this->hasMany(Wiki::class, ['eq_id' => 'ref'])->count();
+    return $this->hasMany(Wiki::class, ['eq_id' => 'id'])->count();
   }
 
   // Документы
   public function getDocs()
   {
-    return $this->hasMany(Docs::class, ['eq_id' => 'ref'])->orderBy(['doc_date' => SORT_ASC]);
+    return $this->hasMany(Docs::class, ['eq_id' => 'id'])->orderBy(['doc_date' => SORT_ASC]);
   }
 
   public function getCountDocs()
   {
-    return $this->hasMany(Docs::class, ['eq_id' => 'ref'])->count();
+    return $this->hasMany(Docs::class, ['eq_id' => 'id'])->count();
   }
 
   public function getDocsOrder()
@@ -353,12 +353,12 @@ class Tools extends \yii\db\ActiveRecord
   // Изображения
   public function getImages()
   {
-    return $this->hasMany(Images::class, ['eq_id' => 'ref']);
+    return $this->hasMany(Images::class, ['eq_id' => 'id']);
   }
 
   public function getCountImages()
   {
-    return $this->hasMany(Images::class, ['eq_id' => 'ref'])->count();
+    return $this->hasMany(Images::class, ['eq_id' => 'id'])->count();
   }
 
 
@@ -399,6 +399,16 @@ class Tools extends \yii\db\ActiveRecord
     }
   }
 
+  public static function findModel($id)
+  {
+    if (($model = Tools::findOne($id)) !== null) {
+      if (!empty($model)) {
+        return $model;
+      }
+    }
+    throw new NotFoundHttpException('The requested page does not exist.');
+  }
+
   public function getQuantity()
   {
     $ar = array();
@@ -413,16 +423,16 @@ class Tools extends \yii\db\ActiveRecord
   // DropDown lists
   public function getToolPlacesList()
   {
-    $sql = "SELECT C1.ref, C1.name, C2.name as gr from " . self::PLACEMENT_TABLE . " C1 LEFT JOIN "
-      . self::PLACEMENT_TABLE . " C2 on C1.parent_id = C2.ref WHERE C1.lvl > 1 ORDER BY C1.lft";
-    return ArrayHelper::map($this->findBySql($sql)->asArray()->all(), 'ref', 'name', 'gr');
+    $sql = "SELECT C1.id, C1.name, C2.name as gr from " . self::PLACEMENT_TABLE . " C1 LEFT JOIN "
+      . self::PLACEMENT_TABLE . " C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 ORDER BY C1.lft";
+    return ArrayHelper::map($this->findBySql($sql)->asArray()->all(), 'id', 'name', 'gr');
   }
 
   public function getToolCategoryList()
   {
-    $sql = "SELECT C1.ref, C1.name, C2.name as gr from " . self::CATEGORY_TABLE . " C1 LEFT JOIN "
-      . self::CATEGORY_TABLE . " C2 on C1.parent_id = C2.ref WHERE C1.lvl > 1 AND C1.root = 1 ORDER BY C1.lft";
-    return ArrayHelper::map($this->findBySql($sql)->asArray()->all(), 'ref', 'name', 'gr');
+    $sql = "SELECT C1.id, C1.name, C2.name as gr from " . self::CATEGORY_TABLE . " C1 LEFT JOIN "
+      . self::CATEGORY_TABLE . " C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 AND C1.root = 1 ORDER BY C1.lft";
+    return ArrayHelper::map($this->findBySql($sql)->asArray()->all(), 'id', 'name', 'gr');
   }
 
 //======================================================================================================================

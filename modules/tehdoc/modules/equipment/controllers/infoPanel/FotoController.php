@@ -17,10 +17,9 @@ class FotoController extends Controller
 
   public function actionIndex()
   {
-    $id = $_GET['id'];
-    if ($id != 1122334455) {
-      $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
-      $model = $request[0];
+    $toolId = $_GET['id'];
+    if ($toolId != 1122334455) {
+      $model = Tools::findModel($toolId);
       $photoModels = $model->images;
 
       $wikiCount = $model->countWikiPages;
@@ -40,12 +39,11 @@ class FotoController extends Controller
   {
     $toolId = $_GET['id'];
     $imageModel = new Images();
-    $request = Tools::find()->where(['ref' => $toolId])->limit(1)->all();
-    $toolModel = $request[0];
+    $model = Tools::findModel($toolId);
 
-    $wikiCount = $toolModel->countWikiPages;
-    $imagesCount = $toolModel->countImages;
-    $docsCount = $toolModel->countDocs;
+    $wikiCount = $model->countWikiPages;
+    $imagesCount = $model->countImages;
+    $docsCount = $model->countDocs;
 
     if ($imageModel->load(Yii::$app->request->post())) {
       $imageModel->imageFiles = UploadedFile::getInstances($imageModel, 'imageFiles');

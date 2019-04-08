@@ -48,7 +48,7 @@ class Images extends ActiveRecord        // модель для добавлен
     // store the source file name
     foreach ($this->imageFiles as $image) {
       $date = date('Y-m-d H:i:s');
-      $userId = Yii::$app->user->identity->ref;
+      $userId = Yii::$app->user->identity->id;
       $ext = $image->extension;
       $image_path = \Yii::$app->security->generateRandomString() . ".{$ext}";   // для сохранения в БД
       $path = \Yii::$app->params['uploadImg'] . $image_path;

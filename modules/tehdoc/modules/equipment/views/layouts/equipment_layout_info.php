@@ -364,7 +364,7 @@ $del_multi_nodes = 'Удалить С вложениями';
   function getNodeId() {
     var node = $("#fancyree_w0").fancytree("getActiveNode");
     if (node) {
-      return node.data.ref;
+      return node.data.id;
     } else {
       return 1;
     }

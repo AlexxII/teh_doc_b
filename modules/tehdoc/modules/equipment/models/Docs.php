@@ -47,7 +47,7 @@ class Docs extends \yii\db\ActiveRecord
     }
     $flag = false;
     $date = date('Y-m-d H:i:s');
-    $userId = Yii::$app->user->identity->ref;
+    $userId = Yii::$app->user->identity->id;
     $doc = $this->docFiles[0];
     $ext = $doc->extension;
 
@@ -72,7 +72,7 @@ class Docs extends \yii\db\ActiveRecord
     // store the source file name
     foreach ($this->docFiles as $doc) {
       $date = date('Y-m-d H:i:s');
-      $userId = Yii::$app->user->identity->ref;
+      $userId = Yii::$app->user->identity->id;
       $ext = $doc->extension;
 
       $doc_path = \Yii::$app->security->generateRandomString() . ".{$ext}";   // для сохранения в БД
