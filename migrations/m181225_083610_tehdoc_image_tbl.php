@@ -17,7 +17,7 @@ class m181225_083610_tehdoc_image_tbl extends Migration
     }
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->primaryKey(),
-      'eq_id' => $this->integer()->notNull(),
+      'eq_id' => $this->bigInteger()->notNull(),
       'image_path' => $this->string(255)->notNull()->unique(),
       'image_extention' => $this->string(),
       'upload_time' => $this->datetime(),

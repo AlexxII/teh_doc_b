@@ -18,8 +18,7 @@ class m190314_190632_tehdoc_to_equipment_tbl extends Migration
     }
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->primaryKey(),
-      'ref' => $this->bigInteger(),
-      'eq_id' => $this->integer()->notNull(),
+      'eq_id' => $this->bigInteger()->notNull(),
       'root' => $this->integer(),
       'lft' => $this->integer()->notNull(),
       'rgt' => $this->integer()->notNull(),
@@ -30,9 +29,9 @@ class m190314_190632_tehdoc_to_equipment_tbl extends Migration
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
 
-    $rand = '1122334455';
-    $sql = 'INSERT INTO' . self::TABLE_NAME . '(id, ref, eq_id, root, lft, rgt, lvl, name, parent_id) 
-                VALUES (1, ' . $rand . ', 0, 1, 1, 2, 0, "Оборудование",' . $rand . ')';
+    $defaultId = '1122334455';
+    $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, eq_id, root, lft, rgt, lvl, name, parent_id) 
+                VALUES (' . $defaultId . ',  0, ' . $defaultId . ', 1, 2, 0, "Оборудование",' . $defaultId . ')';
     \Yii::$app->db->createCommand($sql)->execute();
 
   }

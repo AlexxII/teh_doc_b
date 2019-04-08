@@ -17,7 +17,7 @@ class m190222_144636_tehdoc_docs_tbl extends Migration
     }
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->primaryKey(),
-      'eq_id' => $this->integer()->notNull(),
+      'eq_id' => $this->bigInteger()->notNull(),
       'doc_title' => $this->string(255),
       'doc_path' => $this->string(255)->notNull()->unique(),
       'doc_extention' => $this->string(),

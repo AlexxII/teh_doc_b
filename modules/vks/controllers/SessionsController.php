@@ -88,7 +88,7 @@ class SessionsController extends Controller
       array('db' => 'vks_subscriber_office_text', 'dt' => 7),
       array('db' => 'vks_subscriber_name', 'dt' => 8),
       array('db' => 'vks_order_text', 'dt' => 9),
-      array('db' => 'combined', 'dt' => 10)
+      array('db' => 'important', 'dt' => 10)
     );
     $sql_details = \Yii::$app->params['sql_details'];
     if (empty($index)){
@@ -199,11 +199,11 @@ class SessionsController extends Controller
           $newModel->vks_record_create = $date;
           $newModel->vks_record_update = $date;
           $newModel->vks_upcoming_session = 1;
-          $newModel->combined = 1;
+          $newModel->important = 1;
           $result = $newModel->save();
           $this->logVks($newModel->id, "info","Добавил запись о предстоящем сеансе ВКС");
         }
-        $model->combined = 1;
+        $model->important = 1;
         $result = $model->save();
       }
       if ($result) {

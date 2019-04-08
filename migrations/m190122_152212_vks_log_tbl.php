@@ -17,7 +17,7 @@ class m190122_152212_vks_log_tbl extends Migration
     }
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->bigPrimaryKey(),
-      'session_id' => $this->integer(),
+      'session_id' => $this->bigInteger(),
       'user_id' => $this->integer(),
       'log_text' => $this->string(255),
       'log_time' => $this->dateTime(),

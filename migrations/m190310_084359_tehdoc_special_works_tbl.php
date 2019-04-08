@@ -18,7 +18,7 @@ class m190310_084359_tehdoc_special_works_tbl extends Migration
     }
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->primaryKey(),
-      'eq_id' => $this->integer()->notNull(),
+      'eq_id' => $this->bigInteger()->notNull(),
       'sticker_number' => $this->string(255),
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);

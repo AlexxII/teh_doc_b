@@ -17,9 +17,9 @@ class m190316_201504_teh_to_schedule_tbl extends Migration
     }
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->primaryKey(),
-      'schedule_id' => $this->integer()->notNull(),
-      'eq_id' => $this->integer()->notNull(),
-      'to_type' => $this->integer()->notNull(),
+      'schedule_id' => $this->bigInteger()->notNull(),
+      'eq_id' => $this->bigInteger()->notNull(),
+      'to_type' => $this->bigInteger()->notNull(),
       'plan_date' => $this->date()->notNull(),
       'fact_date' => $this->date(),
       'checkmark' => $this->boolean()->defaultValue(0),

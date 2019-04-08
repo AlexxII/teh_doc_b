@@ -17,7 +17,7 @@ class m190317_162413_teh_to_type_tbl extends Migration
       $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
     }
     $this->createTable(self::TABLE_NAME, [
-      'id' => $this->primaryKey(),
+      'id' => $this->bigInteger()->notNull(),
       'ref' => $this->bigInteger()->notNull(),
       'root' => $this->integer(),
       'lft' => $this->integer()->notNull(),
@@ -27,9 +27,11 @@ class m190317_162413_teh_to_type_tbl extends Migration
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
 
-    $rand = '1122334455';
+    $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
+
+    $defaultId = '1122334455';
     $sql = 'INSERT INTO' . self::TABLE_NAME . '(id, ref, root, lft, rgt, lvl, name) 
-                VALUES (1, ' . $rand . ', 1, 1, 2, 0, "Виды ТО")';
+                VALUES (1, ' . $defaultId . ', 1, 1, 2, 0, "Виды ТО")';
     \Yii::$app->db->createCommand($sql)->execute();
 
   }

@@ -26,6 +26,8 @@ class m190404_101323_teh_to_admins_tbl extends Migration
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
 
+    $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
+
     $defaultId = '1122334455';
     $sql = 'INSERT INTO' . self::TABLE_NAME . '(id, root, lft, rgt, lvl, name) 
                 VALUES (' . $defaultId . ', 1, 1, 2, 0, "Сотрудники участвующие в ТО")';

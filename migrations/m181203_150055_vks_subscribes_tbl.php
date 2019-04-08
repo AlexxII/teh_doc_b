@@ -13,9 +13,8 @@ class m181203_150055_vks_subscribes_tbl extends Migration
       $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
     }
     $this->createTable(self::TABLE_NAME, [
-      'id' => $this->bigPrimaryKey(),
-      'ref' => $this->integer(),
-      'root' => $this->integer(),
+      'id' => $this->bigInteger()->notNull(),
+      'root' => $this->bigInteger(),
       'lft' => $this->integer()->notNull(),
       'rgt' => $this->integer()->notNull(),
       'lvl' => $this->smallInteger(5)->notNull(),
@@ -26,11 +25,13 @@ class m181203_150055_vks_subscribes_tbl extends Migration
       'del_reason' => $this->string(255)
     ], $tableOptions);
 
-    $rand = mt_rand();
-    $ranD = mt_rand();
-    $sql = 'INSERT INTO' . self::TABLE_NAME . '(id, ref, root, lft, rgt, lvl, name, parent_id) 
-                VALUES (1, ' . $rand . ', 1, 1, 2, 0, "Старшие абоненты", ' . $rand . '), 
-                (2, ' . $ranD . ', 2, 3, 4, 0, "Абоненты в субъекте", ' . $ranD . ')';
+    $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
+
+    $defaultId_1 = '1122334455';
+    $defaultId_2 = '5544332211';
+    $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (id, root, lft, rgt, lvl, name, parent_id) 
+                VALUES (' . $defaultId_1 . ', ' . $defaultId_1 . ', 1, 2, 0, "Старшие абоненты", ' . $defaultId_1 . '), 
+                (' . $defaultId_2 . ', ' . $defaultId_2 . ', 3, 4, 0, "Абоненты в субъекте", ' . $defaultId_2 . ')';
     \Yii::$app->db->createCommand($sql)->execute();
   }
 
