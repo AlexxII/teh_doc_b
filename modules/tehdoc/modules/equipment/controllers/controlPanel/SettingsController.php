@@ -80,13 +80,13 @@ class SettingsController extends Controller
     if (isset($_POST['toolId'])) {
       $toolId = $_POST['toolId'];
       $settings = $this->findSettings($toolId);
-      $req = Tools::find()->where(['ref' => $toolId])->limit(1)->all();
+      $req = Tools::find()->where(['id' => $toolId])->limit(1)->all();
       $model = $req[0];
       if ($model->oth) {
         $oth = $model->oth;
       } else {
         $oth = new Oth();
-        $oth->eq_id = $model->ref;
+        $oth->eq_id = $model->id;
       }
       if (isset($_POST['bool'])) {
         if ($_POST['bool'] === 'true') {
@@ -94,7 +94,7 @@ class SettingsController extends Controller
           $oth->valid = 1;
         } else {
           $settings->eq_oth = 0;
-          $oth->eq_id = $model->ref;
+          $oth->eq_id = $model->id;
           $oth->valid = 0;
         }
       } else {
@@ -347,10 +347,8 @@ class SettingsController extends Controller
 
   protected function findTool($id)
   {
-    if (($model = Tools::find()->where(['ref' => $id])->limit(1)->all()) !== null) {
-      if (!empty($model)) {
-        return $model[0];
-      }
+    if (($model = Tools::findOne($id)) !== null) {
+        return $model;
     }
     throw new NotFoundHttpException('The requested page does not exist.');
   }

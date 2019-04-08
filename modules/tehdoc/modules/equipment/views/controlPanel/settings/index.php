@@ -341,7 +341,7 @@
             _csrf: csrf,
             toolId: nodeId,
             title: title,
-            bool: bool,
+            bool: bool
           },
           success: function (data) {
             $('#' + resultH).html(successCheck);

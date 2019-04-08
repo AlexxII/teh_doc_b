@@ -17,8 +17,8 @@ class m190307_114035_tehdoc_oth_tbl extends Migration
       $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
     }
     $this->createTable(self::TABLE_NAME, [
-      'id' => $this->primaryKey(),
-      'eq_id' => $this->bigInteger()->notNull(),
+      'id' => $this->binary(16)->notNull(),
+      'eq_id' => $this->integer()->notNull(),
       'eq_oth_title_on' => $this->boolean()->defaultValue(0),
       'eq_oth_title' => $this->string(255),
       'valid' => $this->boolean()->defaultValue(1),

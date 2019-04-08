@@ -2,7 +2,6 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers;
 
-use app\modules\tehdoc\modules\equipment\models\SSPEx;
 use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 use Yii;
 use yii\web\Controller;
@@ -234,7 +233,6 @@ class ToolsController extends Controller
     $table = 'teh_equipment_tbl';
     $primaryKey = 'id';
     $columns = array(
-      array('db' => 'ref', 'dt' => 0),
       array('db' => 'eq_title', 'dt' => 1),
       array('db' => 'eq_manufact', 'dt' => 2),
       array('db' => 'eq_model', 'dt' => 3),
@@ -282,7 +280,7 @@ class ToolsController extends Controller
     }
     if (isset($_GET['index'])) {
       $index = $_GET['index'];
-      $where = ' ref in (SELECT eq_id FROM teh_settings_tbl WHERE ' . $index . '= 1)';
+      $where = ' id in (SELECT eq_id FROM teh_settings_tbl WHERE ' . $index . '= 1)';
     } else {
       $where = '';
     }

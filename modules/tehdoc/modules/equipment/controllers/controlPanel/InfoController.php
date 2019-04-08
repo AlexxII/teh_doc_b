@@ -52,10 +52,8 @@ class InfoController extends Controller
 
   protected function findTool($id)
   {
-    if (($model = Tools::find()->where(['ref' => $id])->limit(1)->all()) !== null) {
-      if (!empty($model)) {
-        return $model[0];
-      }
+    if (($model = Tools::findOne($id)) !== null) {
+        return $model;
     }
     throw new NotFoundHttpException('The requested page does not exist.');
   }
@@ -132,7 +130,7 @@ class InfoController extends Controller
   {
     if (!empty($_POST)) {
       $id = $_POST['id'];
-      $root = Tools::findOne(['ref' => $id]);
+      $root = Tools::findOne(['id' => $id]);
     }
     $root->deleteWithChildren();
   }

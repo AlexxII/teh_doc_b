@@ -322,7 +322,7 @@ class Tools extends \yii\db\ActiveRecord
       ->asArray()
       ->all();
     $result = array();
-    foreach ($years as $year){
+    foreach ($years as $year) {
       $result[] = $year['year'];
     }
     return $result;
@@ -340,10 +340,10 @@ class Tools extends \yii\db\ActiveRecord
       ->asArray()
       ->all();
     $result = array();
-    foreach ($months as $month){
+    foreach ($months as $month) {
       $str = ltrim($month['month'], '0');
       $result[] = $monthArray[$str];
-      $str = ltrim($month['month']-1, '0');
+      $str = ltrim($month['month'] - 1, '0');
       $result[] = $monthArray[$str];
     }
     return $result;
@@ -360,8 +360,6 @@ class Tools extends \yii\db\ActiveRecord
   {
     return $this->hasMany(Images::class, ['eq_id' => 'id'])->count();
   }
-
-
 
 
   // Доступ к свойствам объекта
@@ -402,9 +400,7 @@ class Tools extends \yii\db\ActiveRecord
   public static function findModel($id)
   {
     if (($model = Tools::findOne($id)) !== null) {
-      if (!empty($model)) {
-        return $model;
-      }
+      return $model;
     }
     throw new NotFoundHttpException('The requested page does not exist.');
   }
