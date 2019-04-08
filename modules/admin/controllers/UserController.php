@@ -26,19 +26,20 @@ class UserController extends Controller
       'access' => [
         'class' => AccessControl::class,
         'rules' => [
+//          [
+//            'allow' => true,
+//            'roles' => ['superAdmin']      // доступ только с ролью superAdmin
+//          ],
           [
             'allow' => true,
-            'roles' => ['superAdmin']      // доступ только с ролью superAdmin
-          ],
-          [
-            'allow' => true,
-            'actions' => ['profile'],
+//            'actions' => ['profile'],
             'roles' => ['@']
           ]
         ],
       ],
     ];
   }
+
 
 
   public function actionIndex()

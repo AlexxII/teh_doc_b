@@ -302,7 +302,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           url: "/tehdoc/equipment/control-panel/info/delete-node",
           type: "post",
           data: {
-            id: node.data.ref,
+            id: node.data.id,
             _csrf: csrf
           }
         })

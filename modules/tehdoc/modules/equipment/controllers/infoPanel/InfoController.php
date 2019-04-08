@@ -21,8 +21,8 @@ class InfoController extends Controller
   public function actionInfo()
   {
     $id = $_GET['id'];
-    $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
-    $model = $request[0];
+    $request = Tools::findModel($id);
+    $model = $request;
     $children = $model->children(1)->all();
     $wikiCount = $model->countWikiPages;
     $imagesCount = $model->countImages;
@@ -40,16 +40,6 @@ class InfoController extends Controller
       'imagesCount' => $imagesCount,
       'wikiCount' => $wikiCount,
     ]);
-  }
-
-  protected function findModel($id)
-  {
-    if (($model = Tools::find()->where(['ref' => $id])->limit(1)->all()) !== null) {
-      if (!empty($model)) {
-        return $model[0];
-      }
-    }
-    throw new NotFoundHttpException('The requested page does not exist.');
   }
 
 }

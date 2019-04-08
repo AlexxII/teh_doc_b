@@ -8,7 +8,7 @@
       <li class="list-group-item">
         <div class="form-checkbox js-complex-option">
           <label style="font-weight: 500">
-            <input class="ch" id="general-feature" type="checkbox" data-id="<?= $model->ref ?>"
+            <input class="ch" id="general-feature" type="checkbox" data-id="<?= $model->id ?>"
                    data-check='general-check'
                    data-url='general-table' <?php if ($model->settings->eq_general) echo 'checked' ?>>
             В сводной таблице
@@ -23,7 +23,7 @@
           <label style="font-weight: 500">
             <input class="ch" type="checkbox"
                    id="oth-feature"
-                   data-id="<?= $model->ref ?>"
+                   data-id="<?= $model->id ?>"
                    data-check='oth-check' data-url='oth' <?php if ($model->othStatus) echo 'checked' ?>>
             В перечне ОТХ
           </label>
@@ -41,7 +41,7 @@
                     <input class="input-check" type="checkbox" style="margin: 0"
                            id="oth-checkbox" data-input="oth-title" data-result="oth-result"
                            data-url="oth-title"
-                           data-id="<?= $model->ref ?>" <?php if ($model->othTitleCheck) echo 'checked' ?>>
+                           data-id="<?= $model->id ?>" <?php if ($model->othTitleCheck) echo 'checked' ?>>
                   </span>
                 <div style="position: relative">
                   <input class="form-control title-input" type="text"
@@ -61,7 +61,7 @@
         <div class="form-checkbox js-complex-option">
           <label style="font-weight: 500">
             <input class="ch" type="checkbox"
-                   data-id="<?= $model->ref ?>"
+                   data-id="<?= $model->id ?>"
                    data-check='complex-check' data-url='complex' <?php if ($model->complex) echo 'checked' ?>>
             Комплект
           </label>
@@ -74,7 +74,7 @@
         <div class="form-checkbox js-complex-option">
           <label style="font-weight: 500">
             <input class="ch" type="checkbox"
-                   data-id="<?= $model->ref ?>"
+                   data-id="<?= $model->id ?>"
                    data-check='wrap-check' data-url='wrap' <?php if ($model->wrap) echo 'checked' ?>>
             Обертка
           </label>
@@ -96,7 +96,7 @@
         <div class="form-checkbox js-complex-option">
           <label style="font-weight: 500">
             <input class="ch" type="checkbox" id="special_works_feature"
-                   data-id="<?= $model->ref ?>"
+                   data-id="<?= $model->id ?>"
                    data-check='special-check'
                    data-url='special-works' <?php if ($model->specialStatus) echo 'checked' ?>>
             Проведены Специальные работы</label>
@@ -113,7 +113,7 @@
                 <span class="input-group-btn">
                   <button class="btn btn-default save" type="button"
                           data-url="special-sticker-number"
-                          data-id="<?= $model->ref ?>" data-input="special-sticker"
+                          data-id="<?= $model->id ?>" data-input="special-sticker"
                           data-result="special-result">Save</button>
                 </span>
                 <div style="position: relative">
@@ -139,7 +139,7 @@
         <div class="form-checkbox js-complex-option">
           <label style="font-weight: 500">
             <input class="ch" type="checkbox" data-check='maintenance-check'
-                   data-id="<?= $model->ref ?>"
+                   data-id="<?= $model->id ?>"
                    data-url='maintenance' <?php if ($model->toStatus) echo 'checked' ?>>
             В графике ТО</label>
           <span class="status-indicator" id="maintenance-check"></span>

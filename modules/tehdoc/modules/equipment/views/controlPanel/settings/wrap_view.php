@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <div class="form-checkbox js-complex-option">
         <label style="font-weight: 500">
           <input class="ch" type="checkbox"
-                 data-id="<?= $tool->ref ?>"
+                 data-id="<?= $tool->id ?>"
                  data-check='wrap-check' data-url='wrap' <?php if ($tool->wrap) echo 'checked' ?>>
           Обертка
         </label>

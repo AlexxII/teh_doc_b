@@ -19,8 +19,7 @@ class DocsController extends Controller
   {
     $id = $_GET['id'];
     if ($id != 1122334455) {
-      $request = Tools::find()->where(['ref' => $id])->limit(1)->all();
-      $model = $request[0];
+      $model = Tools::findOne($id);
       $selectYear = 0;
       if (!empty($_GET['year'])){
         $year = $_GET['year'];
@@ -48,8 +47,7 @@ class DocsController extends Controller
   public function actionCreate()
   {
     $toolId = $_GET['id'];
-    $request = Tools::find()->where(['ref' => $toolId])->limit(1)->all();
-    $model = $request[0];
+    $model = Tools::findOne($toolId);
     $docModel = new Docs();
     $wikiCount = $model->countWikiPages;
     $imagesCount = $model->countImages;
