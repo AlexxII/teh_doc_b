@@ -2,12 +2,13 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers\infoPanel;
 
-use app\modules\tehdoc\modules\equipment\models\ComplexEx;
-use app\modules\tehdoc\modules\equipment\models\Tools;
-use app\modules\tehdoc\modules\equipment\models\Wiki;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+
+use app\modules\tehdoc\modules\equipment\models\Tools;
+use app\modules\tehdoc\modules\equipment\models\Wiki;
+
 
 class WikiController extends Controller
 {
@@ -133,8 +134,8 @@ class WikiController extends Controller
   {
     $toolId = $_GET['id'];
     if ($page) {
-      $model = $this->findModel($page);
-      if ($model->delete()) {
+      $wiki = Wiki::findModel($page);
+      if ($wiki->delete()) {
         Yii::$app->session->setFlash('success', 'Страница удалена');
         return $this->redirect(['tool/' . $toolId . '/wiki/index']);
       }
@@ -146,12 +147,5 @@ class WikiController extends Controller
   }
 
 
-  protected function findModel($id)
-  {
-    if (($model = Wiki::findOne($id)) !== null) {
-      return $model;
-    }
-    throw new NotFoundHttpException('К сожалению страница не найдена.');
-  }
 
 }

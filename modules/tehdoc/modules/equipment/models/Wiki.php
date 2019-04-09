@@ -32,4 +32,13 @@ class Wiki extends \yii\db\ActiveRecord
     ];
   }
 
+  public static function findModel($id)
+  {
+    if (($model = Wiki::findOne($id)) !== null) {
+      return $model;
+    }
+    throw new NotFoundHttpException('Запрашиваемая страница не найдена.');
+  }
+
+
 }

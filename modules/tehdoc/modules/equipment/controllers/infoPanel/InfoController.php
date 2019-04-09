@@ -2,11 +2,13 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers\infoPanel;
 
-use app\modules\tehdoc\modules\equipment\models\Tools;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
+
+use app\modules\tehdoc\modules\equipment\models\Tools;
+
 
 class InfoController extends Controller
 {

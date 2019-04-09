@@ -2,8 +2,8 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers\controlPanel;
 
-use yii\web\Controller;
 use Yii;
+use yii\web\Controller;
 use yii\web\UploadedFile;
 use yii\helpers\ArrayHelper;
 
@@ -31,7 +31,7 @@ class InfoController extends Controller
     } else if ($id == 5544332211) {
       return $this->render('meeting_waiting');
     }
-    $tool = $this->findTool($id);
+    $tool = Tools::findModel($id);
     $wikiCount = $tool->countWikiPages;
     $imagesCount = $tool->countImages;
     $docsCount = $tool->countDocs;
@@ -51,21 +51,13 @@ class InfoController extends Controller
     ]);
   }
 
-  protected function findTool($id)
-  {
-    if (($model = Tools::findOne($id)) !== null) {
-        return $model;
-    }
-    throw new NotFoundHttpException('The requested page does not exist.');
-  }
-
   //=============================================== working with tree =================================================
 
   public function actionCreateNode($parentId, $title)
   {
     $data = [];
     $date = date('Y-m-d H:i:s');
-    $parentOrder = Tools::findOne($parentId);
+    $parentOrder = Tools::findModel($parentId);
     $newTool = new Tools(['name' => $title]);
     $toolSettings = new ToolSettings();
     $newTool->parent_id = $parentOrder->ref;
@@ -85,7 +77,7 @@ class InfoController extends Controller
 
   public function actionUpdateNode($ref, $title)
   {
-    $tool = Tools::findOne(['ref' => $ref]);
+    $tool = Tools::findModel($ref);
     $tool->name = $title;
     if ($tool->save()) {
       $data['acceptedTitle'] = $title;
@@ -96,8 +88,8 @@ class InfoController extends Controller
 
   public function actionMoveNode($item, $action, $second, $parentId)
   {
-    $item_model = Tools::findOne($item);
-    $second_model = Tools::findOne($second);
+    $item_model = Tools::findModel($item);
+    $second_model = Tools::findModel($second);
     switch ($action) {
       case 'after':
         $item_model->insertAfter($second_model);
@@ -109,7 +101,7 @@ class InfoController extends Controller
         $item_model->appendTo($second_model);
         break;
     }
-    $parent = Tools::findOne($parentId);
+    $parent = Tools::findModel($parentId);
     $item_model->parent_id = $parent->ref;
     if ($item_model->save()) {
       return true;
@@ -122,7 +114,7 @@ class InfoController extends Controller
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $category = Tools::findOne(['ref' => $id]);
+      $category = Tools::findModel($id);
       $category->delete();
     }
   }
@@ -131,7 +123,7 @@ class InfoController extends Controller
   {
     if (!empty($_POST)) {
       $id = $_POST['id'];
-      $root = Tools::findOne(['id' => $id]);
+      $root = Tools::findModel($id);
     }
     $root->deleteWithChildren();
   }

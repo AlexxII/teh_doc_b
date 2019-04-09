@@ -2,12 +2,13 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers\infoPanel;
 
-use app\modules\tehdoc\modules\equipment\models\Images;
-use app\modules\tehdoc\modules\equipment\models\Tools;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
+
+use app\modules\tehdoc\modules\equipment\models\Tools;
+use app\modules\tehdoc\modules\equipment\models\Images;
 
 
 class FotoController extends Controller
@@ -65,27 +66,18 @@ class FotoController extends Controller
 
   public function actionDeletePhotos()
   {
-    if (!empty($_POST['photosArray'])){
+    if (!empty($_POST['photosArray'])) {
       $counter = 0;
-      foreach ($_POST['photosArray'] as $photoId){
-        $photo = $this->findModel($photoId);
-        if (unlink(\Yii::$app->params['uploadImg'] . $photo->image_path)){
+      foreach ($_POST['photosArray'] as $photoId) {
+        $photo = Images::findModel($photoId);
+        if (unlink(\Yii::$app->params['uploadImg'] . $photo->image_path)) {
           $photo->delete();
-          $counter++ ;
+          $counter++;
         }
       }
       return $counter;
     }
     return false;
   }
-
-  protected function findModel($id)
-  {
-    if (($model = Images::findOne($id)) !== null) {
-      return $model;
-    }
-    throw new NotFoundHttpException('The requested page does not exist.');
-  }
-
 
 }

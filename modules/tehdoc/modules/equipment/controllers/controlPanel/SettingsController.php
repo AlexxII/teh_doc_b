@@ -2,15 +2,15 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers\controlPanel;
 
+use Yii;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+
+use app\modules\tehdoc\modules\to\models\ToEquipment;
 use app\modules\tehdoc\modules\equipment\models\Oth;
 use app\modules\tehdoc\modules\equipment\models\Special;
 use app\modules\tehdoc\modules\equipment\models\Tools;
 use app\modules\tehdoc\modules\equipment\models\ToolSettings;
-use app\modules\tehdoc\modules\to\models\ToEquipment;
-use Yii;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use app\modules\tehdoc\modules\equipment\models\ComplexEx;
 
 class SettingsController extends Controller
 {

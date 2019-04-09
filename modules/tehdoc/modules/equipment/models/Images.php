@@ -3,10 +3,11 @@
 
 namespace app\modules\tehdoc\modules\equipment\models;
 
+use \Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
-use \Yii;
+
 
 class Images extends ActiveRecord        // модель для добавления загрузки изображений
   // и добавления путей в БД с привязкой к id оборудования
@@ -87,6 +88,14 @@ class Images extends ActiveRecord        // модель для добавлен
     if ($this->upload_time){
       return strftime("%e %b %G", strtotime($this->upload_time));
     }
+  }
+  
+  public static function findModel($id)
+  {
+    if (($model = Images::findOne($id)) !== null) {
+      return $model;
+    }
+    throw new NotFoundHttpException('Запрошенная страница не найдена.');
   }
 
 }

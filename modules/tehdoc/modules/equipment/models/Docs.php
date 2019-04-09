@@ -116,6 +116,14 @@ class Docs extends \yii\db\ActiveRecord
     }
   }
 
+  public static function findModel($id)
+  {
+    if (($model = Docs::findOne($id)) !== null) {
+      return $model;
+    }
+    throw new NotFoundHttpException('Запрошенная страница не найдена.');
+  }
+
 
 
 }
