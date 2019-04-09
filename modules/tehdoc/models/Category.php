@@ -6,9 +6,15 @@ use yii\db\ActiveRecord;
 use creocoder\nestedsets\NestedSetsBehavior;
 
 use app\base\NestedSetsTreeBehavior;
+use app\base\MHelper;
 
 class Category extends ActiveRecord
 {
+
+  public static function tableName()
+  {
+    return 'teh_category_tbl';
+  }
 
   public function behaviors()
   {
@@ -34,9 +40,15 @@ class Category extends ActiveRecord
     ];
   }
 
-  public static function tableName()
+  public function __construct()
   {
-    return 'teh_category_tbl';
+    $this->id = MHelper::generateId();
+  }
+
+
+  public function getId()
+  {
+    return $this->id;
   }
 
   public static function findModel($id)
@@ -44,7 +56,7 @@ class Category extends ActiveRecord
     if (($model = Category::findOne($id)) !== null) {
       return $model;
     }
-    throw new NotFoundHttpException('Запрошенная страница не существует.');
+    throw new NotFoundHttpException('Запрашиваемая страница не существует.');
   }
 
   public static function find()
@@ -52,11 +64,16 @@ class Category extends ActiveRecord
     return new CategoryQuery(get_called_class());
   }
 
+
+
+
+
+
   public static function testTree()
   {
     $models = Category::find()->select('id, name, lvl')->orderBy('lft')->where(['>', 'lvl', 0])->asArray()->all();
     if (!$models) {
-      return ['1.php' => 'Добавьте категории в панели администрирования'];
+      return ['1' => 'Добавьте категории в панели администрирования'];
     }
     $array = array();
     foreach ($models as $model) {

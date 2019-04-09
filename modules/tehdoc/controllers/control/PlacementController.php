@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\tehdoc\controllers\settings;
+namespace app\modules\tehdoc\controllers\control;
 
 use yii\web\Controller;
 
@@ -43,31 +43,24 @@ class PlacementController extends Controller
         break;
     }
     $parent = Placement::findModel($parentId);
-    $item_model->parent_id = $parent->ref;
+    $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
       return true;
     }
     return false;
   }
 
-  public function actionCreateRoot($title)
-  {
-    $newRoot = new Placement(['name' => $title]);
-    $newRoot->makeRoot();
-    $data['acceptedTitle'] = $title;
-    return json_encode($data);
-  }
-
   public function actionCreate($parentId, $title)
   {
     $data = [];
     $category = Placement::findModel($parentId);
-    $newSubcat = new Placement(['name' => $title]);
-    $newSubcat->parent_id = $category->ref;
-    $newSubcat->ref = mt_rand();
+    $newSubcat = new Placement();
+    $newSubcat->name = $title;
+    $newSubcat->parent_id = $category->id;
     $newSubcat->appendTo($category);
     $data['acceptedTitle'] = $title;
     $data['acceptedId'] = $newSubcat->id;
+    $data['lvl'] = $newSubcat->lvl;
     return json_encode($data);
   }
 
@@ -75,7 +68,7 @@ class PlacementController extends Controller
   {
     $category = Placement::findModel($id);
     $category->name = $title;
-    if ($category->save()){
+    if ($category->save()) {
       $data['acceptedTitle'] = $title;
       return json_encode($data);
     }
@@ -88,8 +81,12 @@ class PlacementController extends Controller
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
       $category = Placement::findModel($id);
-      $category->delete();
+      if ($category->delete()) {
+        return true;
+      }
+      return false;
     }
+    return false;
   }
 
   public function actionDeleteRoot()
@@ -97,8 +94,12 @@ class PlacementController extends Controller
     if (!empty($_POST)) {
       $id = $_POST['id'];
       $root = Placement::findModel($id);
+      if ($root->deleteWithChildren()) {
+        return true;
+      }
+      return false;
     }
-    $root->deleteWithChildren();
+    return false;
   }
 
   public function actionGetLeaves()

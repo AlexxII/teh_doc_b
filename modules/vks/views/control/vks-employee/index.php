@@ -430,6 +430,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           }
         }
       },
+
       activate: function (node, data) {
         $('.about-info').html('');
         var node = data.node;

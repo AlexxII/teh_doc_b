@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\tehdoc\controllers\settings;
+namespace app\modules\tehdoc\controllers\control;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

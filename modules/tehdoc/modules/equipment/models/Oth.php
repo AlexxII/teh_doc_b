@@ -4,15 +4,15 @@ namespace app\modules\tehdoc\modules\equipment\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use Ramsey\Uuid\Uuid;
+
+use app\base\MHelper;
 
 class Oth extends \yii\db\ActiveRecord
 {
 
   public function __construct()
   {
-//    $this->id = Uuid::uuid4();
-    $this->id = '2222134afafafa2';
+    $this->id = MHelper::generateId();
   }
 
   public static function tableName()

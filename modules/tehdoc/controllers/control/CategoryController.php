@@ -1,10 +1,11 @@
 <?php
 
-namespace app\modules\tehdoc\controllers\settings;
+namespace app\modules\tehdoc\controllers\control;
 
 use yii\web\Controller;
 
 use app\modules\tehdoc\models\Category;
+
 
 class CategoryController extends Controller
 {
@@ -42,36 +43,24 @@ class CategoryController extends Controller
         break;
     }
     $parent = Category::findModel($parentId);
-    $item_model->parent_id = $parent->ref;
+    $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
       return true;
     }
     return false;
   }
 
-  public function actionCreateRoot($title)
-  {
-    \Yii::$app->db->schema->refresh();                  // TODO Зачем ОНО тут!!!!
-    $newRoot = new Category(['name' => $title]);
-    $result = $newRoot->makeRoot();
-    if ($result) {
-      $data['acceptedTitle'] = $title;
-      return json_encode($data);
-    } else {
-      return var_dump('0');
-    }
-  }
-
   public function actionCreate($parentId, $title)
   {
     $data = [];
     $category = Category::findModel($parentId);
-    $newSubcat = new Category(['name' => $title]);
-    $newSubcat->parent_id = $category->ref;
-    $newSubcat->ref = mt_rand();
+    $newSubcat = new Category();
+    $newSubcat->name = $title;
+    $newSubcat->parent_id = $category->id;
     $newSubcat->appendTo($category);
     $data['acceptedTitle'] = $title;
     $data['acceptedId'] = $newSubcat->id;
+    $data['lvl'] = $newSubcat->lvl;
     return json_encode($data);
   }
 
@@ -92,8 +81,12 @@ class CategoryController extends Controller
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
       $category = Category::findModel($id);
-      $category->delete();
+      if ($category->delete()){
+        return true;
+      }
+      return false;
     }
+    return false;
   }
 
   public function actionDeleteRoot()
@@ -101,9 +94,14 @@ class CategoryController extends Controller
     if (!empty($_POST)) {
       $id = $_POST['id'];
       $root = Category::findModel($id);
+      if ($root->deleteWithChildren()) {
+        return true;
+      }
+      return false;
     }
-    $root->deleteWithChildren();
+    return false;
   }
+
 
   public function actionGetLeaves()
   {

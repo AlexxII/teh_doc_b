@@ -6,9 +6,15 @@ use yii\db\ActiveRecord;
 use creocoder\nestedsets\NestedSetsBehavior;
 
 use app\base\NestedSetsTreeBehavior;
+use app\base\MHelper;
 
 class Placement extends ActiveRecord
 {
+
+  public static function tableName()
+  {
+    return 'teh_placement_tbl';
+  }
 
   public function behaviors()
   {
@@ -34,9 +40,9 @@ class Placement extends ActiveRecord
     ];
   }
 
-  public static function tableName()
+  public function __construct()
   {
-    return 'teh_placement_tbl';
+    $this->id = MHelper::generateId();
   }
 
   public static function find()

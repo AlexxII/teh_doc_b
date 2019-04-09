@@ -404,7 +404,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
             }).done(function (result) {
               if (result) {
                 result = JSON.parse(result);
-                console.log(result);
                 node.setTitle(result.acceptedTitle);
                 $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
               } else {
