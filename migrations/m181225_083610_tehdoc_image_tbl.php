@@ -16,7 +16,7 @@ class m181225_083610_tehdoc_image_tbl extends Migration
       $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
     }
     $this->createTable(self::TABLE_NAME, [
-      'id' => $this->primaryKey(),
+      'id' => $this->bigInteger()->notNull(),
       'eq_id' => $this->bigInteger()->notNull(),
       'image_path' => $this->string(255)->notNull()->unique(),
       'image_extention' => $this->string(),
@@ -24,6 +24,9 @@ class m181225_083610_tehdoc_image_tbl extends Migration
       'upload_user' => $this->integer(),
       'valid' => $this->boolean()->notNull()->defaultValue(1),
     ], $tableOptions);
+
+    $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
+
   }
 
   public function down()

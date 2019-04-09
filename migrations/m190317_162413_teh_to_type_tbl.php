@@ -18,8 +18,7 @@ class m190317_162413_teh_to_type_tbl extends Migration
     }
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->bigInteger()->notNull(),
-      'ref' => $this->bigInteger()->notNull(),
-      'root' => $this->integer(),
+      'root' => $this->bigInteger(),
       'lft' => $this->integer()->notNull(),
       'rgt' => $this->integer()->notNull(),
       'lvl' => $this->smallInteger(5)->notNull(),
@@ -29,9 +28,9 @@ class m190317_162413_teh_to_type_tbl extends Migration
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
-    $defaultId = '1122334455';
-    $sql = 'INSERT INTO' . self::TABLE_NAME . '(id, ref, root, lft, rgt, lvl, name) 
-                VALUES (1, ' . $defaultId . ', 1, 1, 2, 0, "Виды ТО")';
+    $defaultId = 1122334455;
+    $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, root, lft, rgt, lvl, name) 
+                VALUES (' . $defaultId . ', ' . $defaultId . ', 1, 2, 0, "Виды ТО")';
     \Yii::$app->db->createCommand($sql)->execute();
 
   }

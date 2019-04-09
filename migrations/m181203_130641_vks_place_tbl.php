@@ -26,7 +26,7 @@ class m181203_130641_vks_place_tbl extends Migration
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
-    $defaultId = '1122334455';
+    $defaultId = 1122334455;
     $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (id, root, lft, rgt, lvl, name, parent_id) 
                 VALUES (' . $defaultId . ', ' . $defaultId . ', 1, 2, 0, "Студии проведения ВКС", ' . $defaultId . ')';
     \Yii::$app->db->createCommand($sql)->execute();

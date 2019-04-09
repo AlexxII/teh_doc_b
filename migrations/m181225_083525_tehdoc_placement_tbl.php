@@ -29,7 +29,7 @@ class m181225_083525_tehdoc_placement_tbl extends Migration
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
-    $defaultId = '1122334455';
+    $defaultId = 1122334455;
     $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, root, lft, rgt, lvl, name, parent_id) 
                 VALUES (' . $defaultId . ', ' . $defaultId . ', 1, 2, 0, "Места размещения оборудования",' . $defaultId . ')';
     \Yii::$app->db->createCommand($sql)->execute();

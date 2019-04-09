@@ -17,7 +17,7 @@ class m190314_190632_tehdoc_to_equipment_tbl extends Migration
       $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
     }
     $this->createTable(self::TABLE_NAME, [
-      'id' => $this->primaryKey(),
+      'id' => $this->bigInteger()->notNull(),
       'eq_id' => $this->bigInteger()->notNull(),
       'root' => $this->integer(),
       'lft' => $this->integer()->notNull(),
@@ -28,6 +28,8 @@ class m190314_190632_tehdoc_to_equipment_tbl extends Migration
       'parent_id' => $this->bigInteger(),
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
+
+    $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
     $defaultId = '1122334455';
     $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, eq_id, root, lft, rgt, lvl, name, parent_id) 

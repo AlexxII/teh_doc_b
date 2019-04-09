@@ -16,7 +16,7 @@ class m190122_152212_vks_log_tbl extends Migration
       $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
     }
     $this->createTable(self::TABLE_NAME, [
-      'id' => $this->bigPrimaryKey(),
+      'id' => $this->bigInteger()->notNull(),
       'session_id' => $this->bigInteger(),
       'user_id' => $this->integer(),
       'log_text' => $this->string(255),
@@ -24,6 +24,9 @@ class m190122_152212_vks_log_tbl extends Migration
       'valid' => $this->boolean()->defaultValue(1),
       'status' => $this->string(50)
     ], $tableOptions);
+
+    $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
+
   }
 
   public function down()
