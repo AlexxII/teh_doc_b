@@ -4,6 +4,7 @@ namespace app\modules\tehdoc\models;
 
 use yii\db\ActiveRecord;
 use creocoder\nestedsets\NestedSetsBehavior;
+
 use app\base\NestedSetsTreeBehavior;
 
 class Category extends ActiveRecord
@@ -36,6 +37,14 @@ class Category extends ActiveRecord
   public static function tableName()
   {
     return 'teh_category_tbl';
+  }
+
+  public static function findModel($id)
+  {
+    if (($model = Category::findOne($id)) !== null) {
+      return $model;
+    }
+    throw new NotFoundHttpException('Запрошенная страница не существует.');
   }
 
   public static function find()

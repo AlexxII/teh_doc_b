@@ -2,8 +2,10 @@
 
 namespace app\modules\tehdoc\controllers\settings;
 
-use app\modules\admin\models\Placement;
 use yii\web\Controller;
+
+use app\modules\tehdoc\models\Placement;
+
 
 class PlacementController extends Controller
 {
@@ -15,20 +17,20 @@ class PlacementController extends Controller
 
   public function actionPlacements()
   {
-    $id = Placement::find()->select('id, lft, rgt, root')->where(['=', 'lvl', 0])->all();
+    $id = Placement::find()->select('id')->where(['=', 'lvl', 0])->all();
     if (!$id) {
       $data = array();
       $data = [['title' => 'База данных пуста', 'key' => -999]];
       return json_encode($data);
     }
-    $roots = Placement::findOne($id)->tree();
+    $roots = Placement::findModel($id)->tree();
     return json_encode($roots);
   }
 
   public function actionMove($item, $action, $second, $parentId)
   {
-    $item_model = Placement::findOne($item);
-    $second_model = Placement::findOne($second);
+    $item_model = Placement::findModel($item);
+    $second_model = Placement::findModel($second);
     switch ($action) {
       case 'after':
         $item_model->insertAfter($second_model);
@@ -40,7 +42,7 @@ class PlacementController extends Controller
         $item_model->appendTo($second_model);
         break;
     }
-    $parent = Placement::findOne($parentId);
+    $parent = Placement::findModel($parentId);
     $item_model->parent_id = $parent->ref;
     if ($item_model->save()) {
       return true;
@@ -59,7 +61,7 @@ class PlacementController extends Controller
   public function actionCreate($parentId, $title)
   {
     $data = [];
-    $category = Placement::findOne($parentId);
+    $category = Placement::findModel($parentId);
     $newSubcat = new Placement(['name' => $title]);
     $newSubcat->parent_id = $category->ref;
     $newSubcat->ref = mt_rand();
@@ -71,7 +73,7 @@ class PlacementController extends Controller
 
   public function actionUpdate($id, $title)
   {
-    $category = Placement::findOne(['id' => $id]);
+    $category = Placement::findModel($id);
     $category->name = $title;
     if ($category->save()){
       $data['acceptedTitle'] = $title;
@@ -85,7 +87,7 @@ class PlacementController extends Controller
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $category = Placement::findOne(['id' => $id]);
+      $category = Placement::findModel($id);
       $category->delete();
     }
   }
@@ -94,7 +96,7 @@ class PlacementController extends Controller
   {
     if (!empty($_POST)) {
       $id = $_POST['id'];
-      $root = Placement::findOne(['id' => $id]);
+      $root = Placement::findModel($id);
     }
     $root->deleteWithChildren();
   }

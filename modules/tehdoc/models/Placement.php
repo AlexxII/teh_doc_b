@@ -4,6 +4,7 @@ namespace app\modules\tehdoc\models;
 
 use yii\db\ActiveRecord;
 use creocoder\nestedsets\NestedSetsBehavior;
+
 use app\base\NestedSetsTreeBehavior;
 
 class Placement extends ActiveRecord
@@ -43,5 +44,12 @@ class Placement extends ActiveRecord
     return new CategoryQuery(get_called_class());
   }
 
+  public static function findModel($id)
+  {
+    if (($model = Placement::findOne($id)) !== null) {
+      return $model;
+    }
+    throw new NotFoundHttpException('Запрошенная страница не существует.');
+  }
 
 }

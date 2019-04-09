@@ -2,8 +2,9 @@
 
 namespace app\modules\tehdoc\controllers\settings;
 
-use app\modules\admin\models\Category;
 use yii\web\Controller;
+
+use app\modules\tehdoc\models\Category;
 
 class CategoryController extends Controller
 {
@@ -15,20 +16,20 @@ class CategoryController extends Controller
 
   public function actionCategories()
   {
-    $id = Category::find()->select('id, rgt, lft, root')->where(['=', 'lvl', 0])->all();
+    $id = Category::find()->select('id')->where(['=', 'lvl', 0])->all();
     if (!$id) {
       $data = array();
       $data = [['title' => 'База данных пуста', 'key' => -999]];
       return json_encode($data);
     }
-    $roots = Category::findOne($id)->tree();
+    $roots = Category::findModel($id)->tree();
     return json_encode($roots);
   }
 
   public function actionMove($item, $action, $second, $parentId)
   {
-    $item_model = Category::findOne($item);
-    $second_model = Category::findOne($second);
+    $item_model = Category::findModel($item);
+    $second_model = Category::findModel($second);
     switch ($action) {
       case 'after':
         $item_model->insertAfter($second_model);
@@ -40,7 +41,7 @@ class CategoryController extends Controller
         $item_model->appendTo($second_model);
         break;
     }
-    $parent = Category::findOne($parentId);
+    $parent = Category::findModel($parentId);
     $item_model->parent_id = $parent->ref;
     if ($item_model->save()) {
       return true;
@@ -50,7 +51,7 @@ class CategoryController extends Controller
 
   public function actionCreateRoot($title)
   {
-    \Yii::$app->db->schema->refresh();
+    \Yii::$app->db->schema->refresh();                  // TODO Зачем ОНО тут!!!!
     $newRoot = new Category(['name' => $title]);
     $result = $newRoot->makeRoot();
     if ($result) {
@@ -64,7 +65,7 @@ class CategoryController extends Controller
   public function actionCreate($parentId, $title)
   {
     $data = [];
-    $category = Category::findOne($parentId);
+    $category = Category::findModel($parentId);
     $newSubcat = new Category(['name' => $title]);
     $newSubcat->parent_id = $category->ref;
     $newSubcat->ref = mt_rand();
@@ -76,7 +77,7 @@ class CategoryController extends Controller
 
   public function actionUpdate($id, $title)
   {
-    $category = Category::findOne(['id' => $id]);
+    $category = Category::findModel($id);
     $category->name = $title;
     if ($category->save()){
       $data['acceptedTitle'] = $title;
@@ -90,7 +91,7 @@ class CategoryController extends Controller
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $category = Category::findOne(['id' => $id]);
+      $category = Category::findModel($id);
       $category->delete();
     }
   }
@@ -99,7 +100,7 @@ class CategoryController extends Controller
   {
     if (!empty($_POST)) {
       $id = $_POST['id'];
-      $root = Category::findOne(['id' => $id]);
+      $root = Category::findModel($id);
     }
     $root->deleteWithChildren();
   }

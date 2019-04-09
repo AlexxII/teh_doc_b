@@ -2,13 +2,14 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers;
 
-use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 use Yii;
 use yii\web\Controller;
-use app\modules\tehdoc\modules\equipment\models\Tools;
+use yii\web\UploadedFile;
+
 use app\modules\tehdoc\modules\equipment\models\SSP;
 use app\modules\tehdoc\modules\equipment\models\Images;
-use yii\web\UploadedFile;
+use app\modules\tehdoc\modules\equipment\models\Tools;
+use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 
 class ToolsController extends Controller
 {
@@ -23,7 +24,7 @@ class ToolsController extends Controller
       $data = [['title' => 'База данных пуста', 'key' => -999]];
       return json_encode($data);
     }
-    $roots = Tools::findOne($id)->tree();
+    $roots = Tools::findModel($id)->tree();
     return json_encode($roots);
   }
 
@@ -50,7 +51,7 @@ class ToolsController extends Controller
       $toolSettings->eq_id = $model->ref;
       $model->parent_id = 0;
       $model->name = $model->eq_title;
-      $parentNode = Tools::findOne(2);            // TODO !!!!!!! очень вероятна ошибка
+      $parentNode = Tools::findModel(2);            // TODO !!!!!!! очень вероятна ошибка
       $model->appendTo($parentNode);
       if ($model->save()) {
         $toolSettings->save();
@@ -124,7 +125,7 @@ class ToolsController extends Controller
 
   public function actionTask()
   {
-    $models = Tools::find()->where(['s.eq_task' => 1])->joinWith('settings s')->all();
+    $models = Tools::find()->where(['settings_table.eq_task' => 1])->joinWith('settings settings_table')->all();
     return $this->render('task', [
       'models' => $models
     ]);
@@ -132,12 +133,12 @@ class ToolsController extends Controller
 
   public function actionUpdateEx($id)
   {
-    $model = $this->findModel($id);
+    $model = Tools::findModel($id);
     $fUpload = new Images();
     $model->tempId = $model->ref;
 
     if ($model->load(Yii::$app->request->post())) {
-      if ($model->save(false)) { // TODO Разобраться с валидацией, при вкл - не сохраняет
+      if ($model->save(false)) {                                          // TODO Разобраться с валидацией, при вкл - не сохраняет
         if ($fUpload->load(Yii::$app->request->post())) {
           $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
           if ($fUpload->uploadImage($model->ref)) {
@@ -202,16 +203,6 @@ class ToolsController extends Controller
       ]);
     }
   */
-
-  protected function findModel($id)
-  {
-    if (($model = Tools::find()->where(['ref' => $id])->limit(1)->all()) !== null) {
-      if (!empty($model)) {
-        return $model[0];
-      }
-    }
-    throw new NotFoundHttpException('The requested page does not exist.');
-  }
 
   public function actionCategories()
   {
@@ -377,6 +368,5 @@ class ToolsController extends Controller
     Yii::$app->session->setFlash('error', 'Удалить оборудование не удалось');
     return $this->redirect(['index']);
   }
-
 
 }

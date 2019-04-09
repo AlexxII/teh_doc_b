@@ -2,15 +2,14 @@
 
 namespace app\modules\tehdoc\modules\equipment\models;
 
-use app\modules\admin\models\Classifier;
-use app\modules\admin\models\Placement;
-use app\modules\admin\models\Category;
 use app\modules\tehdoc\modules\equipment\models\Images;
-use app\modules\tehdoc\modules\to\models\ToEquipment;
 use yii\helpers\ArrayHelper;
-use app\base\NestedSetsTreeBehaviorEx;
 use creocoder\nestedsets\NestedSetsBehavior;
 
+use app\base\NestedSetsTreeBehaviorEx;
+use app\modules\tehdoc\models\Placement;
+use app\modules\tehdoc\models\Category;
+use app\modules\tehdoc\modules\to\models\ToEquipment;
 
 /**
  * This is the model class for table "equipment_tbl".
@@ -402,7 +401,7 @@ class Tools extends \yii\db\ActiveRecord
     if (($model = Tools::findOne($id)) !== null) {
       return $model;
     }
-    throw new NotFoundHttpException('The requested page does not exist.');
+    throw new NotFoundHttpException('Запрошенная страница не существует.');
   }
 
   public function getQuantity()

@@ -2,15 +2,16 @@
 
 namespace app\modules\tehdoc\controllers\settings;
 
-use app\base\MHelper;
-use app\modules\admin\models\Classifier;
-use app\modules\admin\models\ClassifierTbl;
 use yii\base\DynamicModel;
 use yii\db\mssql\PDO;
 use yii\web\Controller;
-use app\modules\tehdoc\modules\equipment\models\SSP;
 use Yii;
 use yii\widgets\ActiveForm;
+
+use app\base\MHelper;
+use app\modules\admin\models\Classifier;
+use app\modules\admin\models\ClassifierTbl;
+use app\modules\tehdoc\modules\equipment\models\SSP;
 use kartik\tree\TreeViewInput;
 
 class ClassifierController extends Controller

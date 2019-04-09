@@ -2,12 +2,13 @@
 
 namespace app\modules\tehdoc\modules\equipment\controllers\controlPanel;
 
-use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 use yii\web\Controller;
-use app\modules\tehdoc\modules\equipment\models\Tools;
 use Yii;
 use yii\web\UploadedFile;
 use yii\helpers\ArrayHelper;
+
+use app\modules\tehdoc\modules\equipment\models\Tools;
+use app\modules\tehdoc\modules\equipment\models\ToolSettings;
 
 
 class InfoController extends Controller

@@ -4,6 +4,7 @@ namespace app\modules\admin\models;
 
 use Yii;
 use yii\base\Model;
+
 use app\modules\admin\models\User;
 
 class SignupForm extends Model
