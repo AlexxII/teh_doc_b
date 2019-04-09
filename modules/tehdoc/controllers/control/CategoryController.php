@@ -77,6 +77,7 @@ class CategoryController extends Controller
 
   public function actionDelete()
   {
+    usleep(400*1000);
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
@@ -91,6 +92,7 @@ class CategoryController extends Controller
 
   public function actionDeleteRoot()
   {
+    usleep(400*1000);
     if (!empty($_POST)) {
       $id = $_POST['id'];
       $root = Category::findModel($id);
