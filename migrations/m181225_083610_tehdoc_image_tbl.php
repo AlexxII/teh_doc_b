@@ -21,7 +21,7 @@ class m181225_083610_tehdoc_image_tbl extends Migration
       'image_path' => $this->string(255)->notNull()->unique(),
       'image_extention' => $this->string(),
       'upload_time' => $this->datetime(),
-      'upload_user' => $this->integer(),
+      'upload_user' => $this->bigInteger(),
       'valid' => $this->boolean()->notNull()->defaultValue(1),
     ], $tableOptions);
 

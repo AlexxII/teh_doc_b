@@ -23,6 +23,7 @@ class m190317_162413_teh_to_type_tbl extends Migration
       'rgt' => $this->integer()->notNull(),
       'lvl' => $this->smallInteger(5)->notNull(),
       'name' => $this->string(120)->notNull(),
+      'parent_id' => $this->bigInteger(),
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
 

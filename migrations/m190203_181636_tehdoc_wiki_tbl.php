@@ -22,7 +22,7 @@ class m190203_181636_tehdoc_wiki_tbl extends Migration
       'wiki_text' => $this->text(),
       'wiki_record_create' => $this->dateTime(),
       'wiki_record_update' => $this->dateTime(),
-      'wiki_created_user' => $this->integer(),
+      'wiki_created_user' => $this->bigInteger(),
       'valid' => $this->boolean()->defaultValue(1)
     ], $tableOptions);
 

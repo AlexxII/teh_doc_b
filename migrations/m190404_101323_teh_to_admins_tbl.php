@@ -23,6 +23,7 @@ class m190404_101323_teh_to_admins_tbl extends Migration
       'rgt' => $this->integer()->notNull(),
       'lvl' => $this->smallInteger(5)->notNull(),
       'name' => $this->string(120)->notNull(),
+      'parent_id' => $this->bigInteger(),
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
 

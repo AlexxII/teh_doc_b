@@ -22,8 +22,8 @@ class m190103_192828_vks_tools_tbl extends Migration
       'rgt' => $this->integer()->notNull(),
       'lvl' => $this->smallInteger(5)->notNull(),
       'name' => $this->string(120)->notNull(),
-      'parent_id' => $this->integer(),
-      'complex_id' => $this->integer(),
+      'parent_id' => $this->bigInteger(),
+      'complex_id' => $this->bigInteger(),
       'service_time' => $this->float(),
       'valid' => $this->boolean()->defaultValue(1),
       'del_reason' => $this->string(255)

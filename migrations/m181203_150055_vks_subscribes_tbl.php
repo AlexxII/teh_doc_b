@@ -19,7 +19,7 @@ class m181203_150055_vks_subscribes_tbl extends Migration
       'rgt' => $this->integer()->notNull(),
       'lvl' => $this->smallInteger(5)->notNull(),
       'name' => $this->string(120)->notNull(),
-      'parent_id' => $this->integer(),
+      'parent_id' => $this->bigInteger(),
       'surnames' => $this->text(),
       'valid' => $this->boolean()->defaultValue(1),
       'del_reason' => $this->string(255)

@@ -24,7 +24,7 @@ class m190222_144636_tehdoc_docs_tbl extends Migration
       'doc_date' => $this->datetime(),
       'year' => $this->integer(),
       'upload_time' => $this->datetime(),
-      'upload_user' => $this->integer(),
+      'upload_user' => $this->bigInteger(),
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
 
