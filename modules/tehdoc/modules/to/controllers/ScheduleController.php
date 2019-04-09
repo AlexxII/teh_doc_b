@@ -2,11 +2,13 @@
 
 namespace app\modules\tehdoc\modules\to\controllers;
 
-use app\modules\tehdoc\modules\to\models\ToEquipment;
-use app\modules\tehdoc\modules\to\models\ToSchedule;
 use Yii;
 use yii\web\Controller;
+
 use app\base\Model;
+use app\modules\tehdoc\modules\to\models\ToEquipment;
+use app\modules\tehdoc\modules\to\models\ToSchedule;
+
 
 class ScheduleController extends Controller
 {
@@ -172,7 +174,7 @@ class ScheduleController extends Controller
 
   public function actionUpdate($id)
   {
-    $models = $this->findModel($id)->all();
+    $models = ToSchedule::findModel($id)->all();
     if (Model::loadMultiple($models, Yii::$app->request->post())) {
       if (\yii\base\Model::validateMultiple($models)) {
         $count = 0;
@@ -222,15 +224,6 @@ class ScheduleController extends Controller
     }
     Yii::$app->session->setFlash('success', 'График успешно удален');
     return $this->redirect(['archive']);
-  }
-
-
-  protected function findModel($id)
-  {
-    if (($model = ToSchedule::find()->where(['schedule_id' => $id])) !== null) {
-      return $model;
-    }
-    throw new NotFoundHttpException('Запрошенная страница не существует.');
   }
 
 

@@ -39,4 +39,12 @@ class ToEquipment extends \yii\db\ActiveRecord
     return '';
   }
 
+  public static function findModel($id)
+  {
+    if (($model = ToEquipment::findOne($id)) !== null) {
+      return $model;
+    }
+    throw new NotFoundHttpException('Запрошенная страница не существует.');
+  }
+
 }
