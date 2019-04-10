@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
+use app\base\MHelper;
 
 class ToolSettings extends \yii\db\ActiveRecord
 {
@@ -23,5 +24,11 @@ class ToolSettings extends \yii\db\ActiveRecord
     }
     throw new NotFoundHttpException('The requested page does not exist.');
   }
+
+  public function __construct()
+  {
+    $this->id = MHelper::generateId();
+  }
+
 
 }

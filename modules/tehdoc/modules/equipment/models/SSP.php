@@ -267,7 +267,7 @@ class SSP
 //    return var_dump
     $data = self::sql_exec($db, $bindings,
       "SELECT `" . implode("`, `", self::pluck($columns, 'db')) . "`
-			 FROM $table LEFT JOIN $tableTwo ON $table.eq_id = $tableTwo. 
+			 FROM $table LEFT JOIN $tableTwo ON $table.eq_id = $tableTwo.id 
 			 $where
 			 $order
 			 $limit"

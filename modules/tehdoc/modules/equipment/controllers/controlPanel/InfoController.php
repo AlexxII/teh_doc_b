@@ -58,26 +58,25 @@ class InfoController extends Controller
     $data = [];
     $date = date('Y-m-d H:i:s');
     $parentOrder = Tools::findModel($parentId);
-    $newTool = new Tools(['name' => $title]);
+    $newTool = new Tools();
+    $newTool->name = $title;
     $toolSettings = new ToolSettings();
-    $newTool->parent_id = $parentOrder->ref;
-    $newTool->ref = mt_rand();
+    $newTool->parent_id = $parentOrder->id;
     $newTool->eq_title = $title;
     if ($newTool->appendTo($parentOrder)) {
-      $toolSettings->eq_id = $newTool->ref;
+      $toolSettings->eq_id = $newTool->id;
       $toolSettings->save();
       $data['acceptedTitle'] = $title;
       $data['acceptedId'] = $newTool->id;
-      $data['acceptedRef'] = $newTool->ref;
       return json_encode($data);
     }
     $data = $newTool->getErrors();
     return json_encode($data);
   }
 
-  public function actionUpdateNode($ref, $title)
+  public function actionUpdateNode($toolId, $title)
   {
-    $tool = Tools::findModel($ref);
+    $tool = Tools::findModel($toolId);
     $tool->name = $title;
     if ($tool->save()) {
       $data['acceptedTitle'] = $title;
@@ -111,21 +110,31 @@ class InfoController extends Controller
 
   public function actionDeleteNode()
   {
+    usleep(400*1000);
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
-      $id = $_POST['id'];
+      $id = $_POST['toolId'];
       $category = Tools::findModel($id);
-      $category->delete();
+      if ($category->delete()) {
+        return true;
+      }
+      return false;
     }
+    return false;
   }
 
   public function actionDeleteRoot()
   {
+    usleep(400*1000);
     if (!empty($_POST)) {
-      $id = $_POST['id'];
+      $id = $_POST['toolId'];
       $root = Tools::findModel($id);
+      if ($root->deleteWithChildren()) {
+        return true;
+      }
+      return false;
     }
-    $root->deleteWithChildren();
+    return false;
   }
 
 }

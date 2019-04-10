@@ -5,7 +5,9 @@ namespace app\modules\tehdoc\modules\equipment\models;
 use app\modules\tehdoc\modules\equipment\models\Images;
 use yii\helpers\ArrayHelper;
 use creocoder\nestedsets\NestedSetsBehavior;
+use yii\web\NotFoundHttpException;
 
+use app\base\MHelper;
 use app\base\NestedSetsTreeBehaviorEx;
 use app\modules\tehdoc\models\Placement;
 use app\modules\tehdoc\models\Category;
@@ -38,6 +40,8 @@ class Tools extends \yii\db\ActiveRecord
   public $invent_number;
   public $tempId;
 
+  public $primaryKey = 'id';
+
   public static function tableName()
   {
     return 'teh_equipment_tbl';
@@ -58,6 +62,11 @@ class Tools extends \yii\db\ActiveRecord
         'depthAttribute' => 'lvl'
       ]
     ];
+  }
+
+  public function __construct()
+  {
+    $this->id = MHelper::generateId();
   }
 
   public function scenarios()
@@ -401,7 +410,7 @@ class Tools extends \yii\db\ActiveRecord
     if (($model = Tools::findOne($id)) !== null) {
       return $model;
     }
-    throw new NotFoundHttpException('Запрошенная страница не существует.');
+    throw new NotFoundHttpException('Запрошенная модель не существует.');
   }
 
   public function getQuantity()
@@ -426,7 +435,7 @@ class Tools extends \yii\db\ActiveRecord
   public function getToolCategoryList()
   {
     $sql = "SELECT C1.id, C1.name, C2.name as gr from " . self::CATEGORY_TABLE . " C1 LEFT JOIN "
-      . self::CATEGORY_TABLE . " C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 AND C1.root = 1 ORDER BY C1.lft";
+      . self::CATEGORY_TABLE . " C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 ORDER BY C1.lft";
     return ArrayHelper::map($this->findBySql($sql)->asArray()->all(), 'id', 'name', 'gr');
   }
 

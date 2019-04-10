@@ -47,47 +47,60 @@ $del_multi_nodes = 'Удвлить С вложениями';
   .fa {
     font-size: 15px;
   }
+
   .navbar-inverse .navbar-nav > .active > a {
     background-color: #0000aa;
   }
+
   .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
     background-color: #0000aa;
     color: white;
   }
+
   .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
     background-color: #0000aa;
     color: white;
   }
+
   .navbar-inverse .btn-link:hover, .navbar-inverse .btn-link:focus {
     text-decoration: none;
   }
+
   .navbar-nav > li > .dropdown-menu {
     background-color: #014993;
     color: white;
   }
+
   .dropdown-menu > li > a {
     color: white;
   }
+
   .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
     background-color: #05226f;
     color: white;
   }
+
   .dropdown-header {
     color: white;
   }
+
   a:hover {
     text-decoration: none;
   }
+
   .ui-fancytree {
     overflow: auto;
   }
+
   input {
     color: black;
   }
+
   .fancytree-custom-icon {
     color: #1e6887;
     font-size: 18px;
   }
+
   .t {
     font-size: 14px;
   }
@@ -258,376 +271,465 @@ $del_multi_nodes = 'Удвлить С вложениями';
 <?php $this->endPage() ?>
 
 <script>
-  $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-  });
-
-  function goodAlert(text) {
-    var div = '' +
-      '<div id="w3-success-0" class="alert-success alert fade in">' +
-      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-      text +
-      '</div>';
-    return div;
-  }
-
-  function badAlert(text) {
-    var div = '' +
-      '<div id="w3-success-0" class="alert-danger alert fade in">' +
-      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-      text +
-      '</div>';
-    return div;
-  }
-
-  $(document).ready(function () {
-    $('.add-subcategory').click(function (event) {
-      event.preventDefault();
-      var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-      if (!node) {
-        alert("Выберите родительскую категорию");
-        return;
-      }
-      node.editCreateNode("child", " ");
-    })
-  });
-
-  $(document).ready(function () {
-    $('.del-node').click(function (event) {
-      if (confirm('Вы уверены, что хотите удалить выбранный классификатор?')) {
-        event.preventDefault();
-        var csrf = $('meta[name=csrf-token]').attr("content");
-        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-        $.ajax({
-          url: "/tehdoc/equipment/control-panel/info/delete-node",
-          type: "post",
-          data: {
-            id: node.data.id,
-            _csrf: csrf
-          }
-        })
-          .done(function () {
-            node.remove();
-            $('.about-info').html('');
-            $('.del-node').hide();
-          })
-          .fail(function () {
-            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-          });
-      }
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
     });
 
-    $('.del-multi-nodes').click(function (event) {
-      if (confirm('Вы уверены, что хотите удалить выбранный классификатор вместе с вложениями?')) {
-        event.preventDefault();
-        var csrf = $('meta[name=csrf-token]').attr("content");
-        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-        if (!node) {
-          alert('Выберите узел');
-          return;
+    function goodAlert(text) {
+        var div = '' +
+            '<div id="w3-success-0" class="alert-success alert fade in">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            text +
+            '</div>';
+        return div;
+    }
+
+    function badAlert(text) {
+        var div = '' +
+            '<div id="w3-success-0" class="alert-danger alert fade in">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            text +
+            '</div>';
+        return div;
+    }
+
+    $(document).ready(function () {
+        $('.add-subcategory').click(function (event) {
+            event.preventDefault();
+            var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+            if (!node) {
+                alert("Выберите родительскую категорию");
+                return;
+            }
+            node.editCreateNode("child", " ");
+        })
+    });
+
+
+    $(document).ready(function () {
+        $('.del-node').click(function (event) {
+            var url = '/tehdoc/equipment/control-panel/info/delete-node';
+            event.preventDefault();
+            jc = $.confirm({
+                icon: 'fa fa-question',
+                title: 'Вы уверены?',
+                content: 'Вы действительно хотите удалить выделенное?',
+                type: 'red',
+                closeIcon: false,
+                autoClose: 'cancel|9000',
+                buttons: {
+                    ok: {
+                        btnClass: 'btn-danger',
+                        action: function () {
+                            var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+                            jc.close();
+                            deleteProcess(url, node);
+                        }
+                    },
+                    cancel: {
+                        action: function () {
+                            return;
+                        }
+                    }
+                }
+            });
+        });
+
+        $('.del-multi-nodes').click(function (event) {
+            if (confirm('Вы уверены, что хотите удалить выбранный классификатор вместе с вложениями?')) {
+                event.preventDefault();
+                var csrf = $('meta[name=csrf-token]').attr("content");
+                var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+                if (!node) {
+                    alert('Выберите узел');
+                    return;
+                }
+                $.ajax({
+                    url: "/tehdoc/equipment/control-panel/control/delete-root",
+                    type: "post",
+                    data: {
+                        id: getNodeId(),
+                        _csrf: csrf
+                    }
+                })
+                    .done(function () {
+                        node.remove();
+                        $('.about-info').html('');
+                        $('.del-multi-nodes').hide();
+                        $('.del-node').hide();
+
+                    })
+                    .fail(function () {
+                        alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
+                    });
+            }
+        });
+
+
+        function deleteProcess(url, node) {
+            var csrf = $('meta[name=csrf-token]').attr("content");
+            jc = $.confirm({
+                icon: 'fa fa-cog fa-spin',
+                title: 'Подождите!',
+                content: 'Ваш запрос выполняется!',
+                buttons: false,
+                closeIcon: false,
+                confirmButtonClass: 'hide'
+            });
+            $.ajax({
+                url: url,
+                type: "post",
+                data: {toolId: node.data.id, _csrf: csrf}
+            }).done(function (response) {
+                if (response != false) {
+                    jc.close();
+                    jc = $.confirm({
+                        icon: 'fa fa-thumbs-up',
+                        title: 'Успех!',
+                        content: 'Ваш запрос выполнен.',
+                        type: 'green',
+                        buttons: false,
+                        closeIcon: false,
+                        autoClose: 'ok|8000',
+                        confirmButtonClass: 'hide',
+                        buttons: {
+                            ok: {
+                                btnClass: 'btn-success',
+                                action: function () {
+                                    node.remove();
+                                    $('.about-info').html('');
+                                    $('.del-node').hide();
+                                    $(".del-multi-nodes").hide();
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    jc.close();
+                    jc = $.confirm({
+                        icon: 'fa fa-exclamation-triangle',
+                        title: 'Неудача!',
+                        content: 'Запрос не выполнен. Что-то пошло не так.',
+                        type: 'red',
+                        buttons: false,
+                        closeIcon: false,
+                        autoClose: 'ok|8000',
+                        confirmButtonClass: 'hide',
+                        buttons: {
+                            ok: {
+                                btnClass: 'btn-danger',
+                                action: function () {
+                                }
+                            }
+                        }
+                    });
+                }
+            }).fail(function () {
+                jc.close();
+                jc = $.confirm({
+                    icon: 'fa fa-exclamation-triangle',
+                    title: 'Неудача!',
+                    content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
+                    type: 'red',
+                    buttons: false,
+                    closeIcon: false,
+                    autoClose: 'ok|4000',
+                    confirmButtonClass: 'hide',
+                    buttons: {
+                        ok: {
+                            btnClass: 'btn-danger',
+                            action: function () {
+                            }
+                        }
+                    }
+                });
+            });
         }
-        $.ajax({
-          url: "/tehdoc/equipment/control-panel/control/delete-root",
-          type: "post",
-          data: {
-            id: getNodeId(),
-            _csrf: csrf
-          }
-        })
-          .done(function () {
-            node.remove();
-            $('.about-info').html('');
-            $('.del-multi-nodes').hide();
-            $('.del-node').hide();
-
-          })
-          .fail(function () {
-            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-          });
-      }
-    })
-  });
 
 
-  $("input[name=search]").keyup(function (e) {
-    var n,
-      tree = $.ui.fancytree.getTree(),
-      args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-      opts = {},
-      filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-      match = $(this).val();
 
-    $.each(args, function (i, o) {
-      opts[o] = $("#" + o).is(":checked");
+
     });
-    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
-
-    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-      $("button#btnResetSearch").click();
-      return;
-    }
-    if ($("#regex").is(":checked")) {
-      // Pass function to perform match
-      n = filterFunc.call(tree, function (node) {
-        return new RegExp(match, "i").test(node.title);
-      }, opts);
-    } else {
-      // Pass a string to perform case insensitive matching
-      n = filterFunc.call(tree, match, opts);
-    }
-    $("#btnResetSearch").attr("disabled", false);
-  }).focus();
 
 
-  $("#btnResetSearch").click(function (e) {
-    e.preventDefault();
-    $("input[name=search]").val("");
-    $("span#matches").text("");
-    var tree = $(".ui-draggable-handle").fancytree("getTree");
-    tree.clearFilter();
-  }).attr("disabled", true);
-
-  $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
-      if ($(this).val() == '') {
+        var n,
+            tree = $.ui.fancytree.getTree(),
+            args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+            opts = {},
+            filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+            match = $(this).val();
+
+        $.each(args, function (i, o) {
+            opts[o] = $("#" + o).is(":checked");
+        });
+        opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
+
+        if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+            $("button#btnResetSearch").click();
+            return;
+        }
+        if ($("#regex").is(":checked")) {
+            // Pass function to perform match
+            n = filterFunc.call(tree, function (node) {
+                return new RegExp(match, "i").test(node.title);
+            }, opts);
+        } else {
+            // Pass a string to perform case insensitive matching
+            n = filterFunc.call(tree, match, opts);
+        }
+        $("#btnResetSearch").attr("disabled", false);
+    }).focus();
+
+
+    $("#btnResetSearch").click(function (e) {
+        e.preventDefault();
+        $("input[name=search]").val("");
+        $("span#matches").text("");
         var tree = $(".ui-draggable-handle").fancytree("getTree");
         tree.clearFilter();
-      }
-    })
-  });
+    }).attr("disabled", true);
 
-
-  var uri, match;
-  // отображение и логика работа дерева
-  jQuery(function ($) {
-    var main_url = '/tehdoc/equipment/tools/all-tools';
-    var move_url = "/tehdoc/equipment/control-panel/info/move-node";
-    var create_url = '/tehdoc/equipment/control-panel/info/create-node';
-    var update_url = '/tehdoc/equipment/control-panel/info/update-node';
-
-    $("#fancyree_w0").fancytree({
-      source: {
-        url: main_url,
-      },
-      extensions: ['dnd', 'edit', 'filter'],
-      quicksearch: true,
-      minExpandLevel: 2,
-      hotkeys: {},
-      // wide: {
-      //   iconWidth: "32px",     // Adjust this if @fancy-icon-width != "16px"
-      //   iconSpacing: "6px", // Adjust this if @fancy-icon-spacing != "3px"
-      //   labelSpacing: "6px",   // Adjust this if padding between icon and label !=  "3px"
-      //   levelOfs: "32px"     // Adjust this if ul padding != "16px"
-      // },
-      dnd: {
-        preventVoidMoves: true,
-        preventRecursiveMoves: true,
-        autoCollapse: true,
-        dragStart: function (node, data) {
-
-          return true;
-        },
-        dragEnter: function (node, data) {
-          return true;
-        },
-        dragDrop: function (node, data) {
-          if (data.hitMode == 'over') {
-            var pId = data.node.data.id;
-          } else {
-            var pId = data.node.parent.data.id;
-          }
-          $.get(move_url, {
-            item: data.otherNode.data.id,
-            action: data.hitMode,
-            second: node.data.id,
-            parentId: pId
-          }, function () {
-            data.otherNode.moveTo(node, data.hitMode);
-
-          })
-        }
-      },
-      filter: {
-        autoApply: true,                                    // Re-apply last filter if lazy data is loaded
-        autoExpand: true,                                   // Expand all branches that contain matches while filtered
-        counter: true,                                      // Show a badge with number of matching child nodes near parent icons
-        fuzzy: false,                                       // Match single characters in order, e.g. 'fb' will match 'FooBar'
-        hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
-        hideExpanders: false,                                // Hide expanders if all child nodes are hidden by filter
-        highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
-        leavesOnly: true,                                   // Match end nodes only
-        nodata: true,                                       // Display a 'no data' status node if result is empty
-        mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
-      },
-      edit: {
-        inputCss: {
-          minWidth: '10em'
-        },
-        triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
-        beforeEdit: function (event, data) {
-          var node = data.node;
-          if (node.key == 1122334455 || node.key == 5544332211) {
-            return false;
-          }
-          return true;
-        },
-        edit: function (event, data) {
-          return true;
-        },
-        beforeClose: function (event, data) {
-          data.save
-        },
-        save: function (event, data) {
-          var node = data.node;
-          if (data.isNew) {
-            $.ajax({
-              url: create_url,
-              data: {
-                parentId: node.parent.data.id,
-                title: data.input.val()
-              }
-            }).done(function (result) {
-              if (result) {
-                var parent = node.parent;
-                parent.folder = true;
-                result = JSON.parse(result);
-                node.data.id = result.acceptedId;
-                node.data.ref = result.acceptedRef;
-                node.key = result.acceptedRef;
-                node.setTitle(result.acceptedTitle);
-                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
-              } else {
-                node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-              }
-            }).fail(function (result) {
-              node.setTitle(data.orgTitle);
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-            }).always(function () {
-              // data.input.removeClass("pending")
-            });
-          } else {
-            $.ajax({
-              url: update_url,
-              data: {
-                ref: getNodeId(),
-                title: data.input.val()
-              }
-            }).done(function (result) {
-              if (result) {
-                result = JSON.parse(result);
-                node.setTitle(result.acceptedTitle);
-                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
-              } else {
-                node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-              }
-            }).fail(function (result) {
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-              node.setTitle(data.orgTitle);
-            }).always(function () {
-              // data.input.removeClass("pending")
-            });
-          }
-          return true;
-        },
-        close: function (event, data) {
-          if (data.save) {
-            // Since we started an async request, mark the node as preliminary
-            $(data.node.span).addClass("pending")
-          }
-        }
-      },
-      activate: function (node, data) {
-        $('.about-info').html('');
-        var node = data.node;
-        var lvl = node.data.lvl;
-        if (node.key == -999) {
-          $(".add-subcategory").hide();
-          return;
-        } else {
-          $(".add-subcategory").show();
-        }
-        if (lvl == 0) {
-          $(".del-node").hide();
-          $(".del-multi-nodes").hide();
-        } else {
-          if (node.hasChildren()) {
-            $(".del-multi-nodes").show();
-          } else {
-            $(".del-multi-nodes").hide();
-          }
-          $(".del-node").show();
-        }
-      },
-      click: function (event, data) {
-        var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-        if (target === 'title' || target === 'icon') {
-          var node = data.node;
-          var prefix = '/tehdoc/equipment/control-panel/';
-          if (!match) {
-            var url = prefix + node.key + '/info/index';
-          } else {
-            var url = prefix + node.key + '/' + match[2] + '/index';
-          }
-          if (node.data.eq_wrap == 1) {
-            var url = prefix + node.key + '/settings/wrap-config';
-            window.location.href = url;
-          } else if (node.key != 1122334455 && node.key != 5544332211) {
-            window.location.href = url;
-          }
-        }
-      },
-      dblclick: function (event, data) {
-        var node = data.node;
-        var prefix = '/tehdoc/equipment/control-panel/';
-        if (!match) {
-          var url = prefix + node.key + '/info/index';
-        } else {
-          var url = prefix + node.key + '/' + match[2] + '/index';
-        }
-        if (node.data.eq_wrap == 1) {
-          var url = prefix + node.key + '/settings/wrap-config';
-          window.location.href = url;
-        } else if (node.key != 1122334455 && node.key != 5544332211) {
-          window.location.href = url;
-        }
-      },
-      icon: function (event, data) {
-        if (data.node.key == 1122334455) {
-          return "fa fa-sitemap";
-        } else if (data.node.key == 5544332211) {
-          return "fa fa-question-circle";
-        } else if (data.node.data.eq_wrap == 1) {
-          return "t fa fa-clone";
-        } else {
-          return "t fa fa-file-o";
-        }
-      },
-      renderNode: function (node, data) {
-      },
-      init: function (event, data) {
-        uri = window.location.href;
-        match = uri.match('\\/control-panel\\/(\\d+)\\/(\\w+)\\/');
-        if (!match) {
-          return;
-        }
-        data.tree.activateKey(match[1]);
-      },
+    $(document).ready(function () {
+        $("input[name=search]").keyup(function (e) {
+            if ($(this).val() == '') {
+                var tree = $(".ui-draggable-handle").fancytree("getTree");
+                tree.clearFilter();
+            }
+        })
     });
-  });
 
-  function getNodeId() {
-    var node = $("#fancyree_w0").fancytree("getActiveNode");
-    if (node) {
-      return node.data.ref;
-    } else {
-      return 1;
+
+    var uri, match;
+    // отображение и логика работа дерева
+    jQuery(function ($) {
+        var main_url = '/tehdoc/equipment/tools/all-tools';
+        var move_url = "/tehdoc/equipment/control-panel/info/move-node";
+        var create_url = '/tehdoc/equipment/control-panel/info/create-node';
+        var update_url = '/tehdoc/equipment/control-panel/info/update-node';
+
+        $("#fancyree_w0").fancytree({
+            source: {
+                url: main_url,
+            },
+            extensions: ['dnd', 'edit', 'filter'],
+            quicksearch: true,
+            minExpandLevel: 2,
+            hotkeys: {},
+            // wide: {
+            //   iconWidth: "32px",     // Adjust this if @fancy-icon-width != "16px"
+            //   iconSpacing: "6px", // Adjust this if @fancy-icon-spacing != "3px"
+            //   labelSpacing: "6px",   // Adjust this if padding between icon and label !=  "3px"
+            //   levelOfs: "32px"     // Adjust this if ul padding != "16px"
+            // },
+            dnd: {
+                preventVoidMoves: true,
+                preventRecursiveMoves: true,
+                autoCollapse: true,
+                dragStart: function (node, data) {
+
+                    return true;
+                },
+                dragEnter: function (node, data) {
+                    return true;
+                },
+                dragDrop: function (node, data) {
+                    if (data.hitMode == 'over') {
+                        var pId = data.node.data.id;
+                    } else {
+                        var pId = data.node.parent.data.id;
+                    }
+                    $.get(move_url, {
+                        item: data.otherNode.data.id,
+                        action: data.hitMode,
+                        second: node.data.id,
+                        parentId: pId
+                    }, function () {
+                        data.otherNode.moveTo(node, data.hitMode);
+
+                    })
+                }
+            },
+            filter: {
+                autoApply: true,                                    // Re-apply last filter if lazy data is loaded
+                autoExpand: true,                                   // Expand all branches that contain matches while filtered
+                counter: true,                                      // Show a badge with number of matching child nodes near parent icons
+                fuzzy: false,                                       // Match single characters in order, e.g. 'fb' will match 'FooBar'
+                hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
+                hideExpanders: false,                                // Hide expanders if all child nodes are hidden by filter
+                highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
+                leavesOnly: true,                                   // Match end nodes only
+                nodata: true,                                       // Display a 'no data' status node if result is empty
+                mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
+            },
+            edit: {
+                inputCss: {
+                    minWidth: '10em'
+                },
+                triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
+                beforeEdit: function (event, data) {
+                    var node = data.node;
+                    if (node.key == 1122334455 || node.key == 5544332211) {
+                        return false;
+                    }
+                    return true;
+                },
+                edit: function (event, data) {
+                    return true;
+                },
+                beforeClose: function (event, data) {
+                    data.save
+                },
+                save: function (event, data) {
+                    var node = data.node;
+                    if (data.isNew) {
+                        $.ajax({
+                            url: create_url,
+                            data: {
+                                parentId: node.parent.data.id,
+                                title: data.input.val()
+                            }
+                        }).done(function (result) {
+                            if (result) {
+                                var parent = node.parent;
+                                parent.folder = true;
+                                result = JSON.parse(result);
+                                node.data.id = result.acceptedId;
+                                node.key = result.acceptedRef;
+                                node.setTitle(result.acceptedTitle);
+                                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
+                            } else {
+                                node.setTitle(data.orgTitle);
+                                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                                    ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+                            }
+                        }).fail(function (result) {
+                            node.setTitle(data.orgTitle);
+                            $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+                        }).always(function () {
+                            // data.input.removeClass("pending")
+                        });
+                    } else {
+                        $.ajax({
+                            url: update_url,
+                            data: {
+                                toolId: getNodeId(),
+                                title: data.input.val()
+                            }
+                        }).done(function (result) {
+                            if (result) {
+                                result = JSON.parse(result);
+                                node.setTitle(result.acceptedTitle);
+                                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
+                            } else {
+                                node.setTitle(data.orgTitle);
+                                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                                    ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+                            }
+                        }).fail(function (result) {
+                            $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+                            node.setTitle(data.orgTitle);
+                        }).always(function () {
+                            // data.input.removeClass("pending")
+                        });
+                    }
+                    return true;
+                },
+                close: function (event, data) {
+                    if (data.save) {
+                        // Since we started an async request, mark the node as preliminary
+                        $(data.node.span).addClass("pending")
+                    }
+                }
+            },
+            activate: function (node, data) {
+                $('.about-info').html('');
+                var node = data.node;
+                var lvl = node.data.lvl;
+                if (node.key == -999) {
+                    $(".add-subcategory").hide();
+                    return;
+                } else {
+                    $(".add-subcategory").show();
+                }
+                if (lvl == 0) {
+                    $(".del-node").hide();
+                    $(".del-multi-nodes").hide();
+                } else {
+                    if (node.hasChildren()) {
+                        $(".del-multi-nodes").show();
+                    } else {
+                        $(".del-multi-nodes").hide();
+                    }
+                    $(".del-node").show();
+                }
+            },
+            click: function (event, data) {
+                var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
+                if (target === 'title' || target === 'icon') {
+                    var node = data.node;
+                    var prefix = '/tehdoc/equipment/control-panel/';
+                    if (!match) {
+                        var url = prefix + node.key + '/info/index';
+                    } else {
+                        var url = prefix + node.key + '/' + match[2] + '/index';
+                    }
+                    if (node.data.eq_wrap == 1) {
+                        var url = prefix + node.key + '/settings/wrap-config';
+                        window.location.href = url;
+                    } else if (node.key != 1122334455 && node.key != 5544332211) {
+                        window.location.href = url;
+                    }
+                }
+            },
+            dblclick: function (event, data) {
+                var node = data.node;
+                var prefix = '/tehdoc/equipment/control-panel/';
+                if (!match) {
+                    var url = prefix + node.key + '/info/index';
+                } else {
+                    var url = prefix + node.key + '/' + match[2] + '/index';
+                }
+                if (node.data.eq_wrap == 1) {
+                    var url = prefix + node.key + '/settings/wrap-config';
+                    window.location.href = url;
+                } else if (node.key != 1122334455 && node.key != 5544332211) {
+                    window.location.href = url;
+                }
+            },
+            icon: function (event, data) {
+                if (data.node.key == 1122334455) {
+                    return "fa fa-sitemap";
+                } else if (data.node.key == 5544332211) {
+                    return "fa fa-question-circle";
+                } else if (data.node.data.eq_wrap == 1) {
+                    return "t fa fa-clone";
+                } else {
+                    return "t fa fa-file-o";
+                }
+            },
+            renderNode: function (node, data) {
+            },
+            init: function (event, data) {
+                uri = window.location.href;
+                match = uri.match('\\/control-panel\\/(\\d+)\\/(\\w+)\\/');
+                if (!match) {
+                    return;
+                }
+                data.tree.activateKey(match[1]);
+            }
+        });
+    });
+
+    function getNodeId() {
+        var node = $("#fancyree_w0").fancytree("getActiveNode");
+        if (node) {
+            return node.data.id;
+        } else {
+            return 1;
+        }
     }
-  }
 
 </script>

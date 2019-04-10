@@ -27,7 +27,7 @@ class SettingsController extends Controller
     $imagesCount = $tool->countImages;
     $docsCount = $tool->countDocs;
     return $this->render('header', [
-      'tool' => $this->findTool($id),
+      'tool' => Tools::findModel($id),
       'toolSettings' => $toolSettings,
       'docsCount' => $docsCount,
       'imagesCount' => $imagesCount,
@@ -41,7 +41,7 @@ class SettingsController extends Controller
     $id = $_GET['id'];
     $toolSettings = ToolSettings::findModel($id);
     return $this->render('wrap_view', [
-      'tool' => $this->findTool($id),
+      'tool' => Tools::findModel($id),
       'toolSettings' => $toolSettings,
     ]);
   }
@@ -198,7 +198,7 @@ class SettingsController extends Controller
         $special = $model->special;
       } else {
         $special = new Special();
-        $special->eq_id = $model->ref;
+        $special->eq_id = $model->id;
       }
       if (isset($_POST['bool'])) {
         if ($_POST['bool'] === 'true') {
@@ -301,11 +301,10 @@ class SettingsController extends Controller
         $to = $model->to;
       } else {
         $to = new ToEquipment();
-        $to->eq_id = $model->ref;
+        $to->eq_id = $model->id;
         $to->name = $model->eq_title;
-        $to->ref = $model->ref;
-        $parent = ToEquipment::findOne(1);            // TODO !!есть вероятность ошибки
-        $to->parent_id = $parent->ref;
+        $parent = ToEquipment::findOne(['lvl' => 0]);            // TODO !!есть вероятность ошибки
+        $to->parent_id = $parent->id;
         $to->appendTo($parent);
       }
       if (isset($_POST['bool'])) {

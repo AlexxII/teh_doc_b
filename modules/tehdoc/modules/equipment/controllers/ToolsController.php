@@ -299,7 +299,7 @@ class ToolsController extends Controller
       array(
         'db' => 'eq_oth_title',
         'dt' => 1,
-        'formatter' => function ($d, $row) { //TODO разобраться с форматом отображения даты
+        'formatter' => function ($d, $row) {                      //TODO разобраться с форматом отображения даты
           if ($row[8] == 1) {
             return $d;
           } else {
@@ -314,7 +314,7 @@ class ToolsController extends Controller
       array(
         'db' => 'eq_factdate',
         'dt' => 6,
-        'formatter' => function ($d, $row) { //TODO разобраться с форматом отображения даты
+        'formatter' => function ($d, $row) {                            //TODO разобраться с форматом отображения даты
           if ($d != null) {
             return date('Y', strtotime($d));
           } else {
@@ -327,7 +327,7 @@ class ToolsController extends Controller
     );
 
 //    $where = '';
-    $where = ' ' . $table . '.valid = 1';
+    $where = '' . $table . '.valid = 1';
 
     $sql_details = \Yii::$app->params['sql_details'];
     $result = SSP::oth($_GET, $sql_details, $table, $primaryKey, $columns, $tableTwo, $where);

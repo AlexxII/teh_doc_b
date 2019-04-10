@@ -101,7 +101,7 @@ $about = "Панель улучшения интерфейса. Заполнит
         e.preventDefault();
         var csrf = $('meta[name=csrf-token]').attr("content");
         var id = e.target.id;
-        var url = '/tehdoc/settings/interface/create';
+        var url = '/tehdoc/control/interface/create';
         var mId = $('#'+id+'-id').val();
         var data = $('#'+id).val();
         $.ajax({
