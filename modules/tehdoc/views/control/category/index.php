@@ -368,7 +368,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
 
         $("#fancyree_w0").fancytree({
             source: {
-                url: main_url,
+                url: main_url
             },
             expandParents: true,
             noAnimation: false,
@@ -541,7 +541,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
             },
             icon: function (event, data) {
                 if (data.node.data.lvl == 0) {
-                    return "fa fa-map-signs";
+                    return "fa fa-list-alt";
                 } else if (data.node.isFolder()) {
                     return "fa fa-files-o";
                 } else {
