@@ -38,8 +38,6 @@ class UserController extends Controller
     ];
   }
 
-
-
   public function actionIndex()
   {
     $model = User::find()->where(['!=', 'login', 'sAdmin'])->all();

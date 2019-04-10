@@ -1,7 +1,7 @@
 <?php
 
 use yii\db\Migration;
-
+use app\base\MHelper;
 
 class m181213_235419_teh_interface_tbl extends Migration
 {
@@ -21,8 +21,8 @@ class m181213_235419_teh_interface_tbl extends Migration
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
-    $defaultId_1 = mt_rand();
-    $defaultId_2 = mt_rand();
+    $defaultId_1 = MHelper::genDefaultId();
+    $defaultId_2 = MHelper::genDefaultId();
     $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, name, text) 
                 VALUES (' . $defaultId_1 . ', "Производители", NULL), (' . $defaultId_2 . ', "Модели", NULL)';
     \Yii::$app->db->createCommand($sql)->execute();

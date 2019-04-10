@@ -1,6 +1,7 @@
 <?php
 
 use yii\db\Migration;
+use app\base\MHelper;
 
 /**
  * Class m190404_101323_teh_to_admins_tbl
@@ -29,7 +30,7 @@ class m190404_101323_teh_to_admins_tbl extends Migration
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
-    $defaultId = '1122334455';
+    $defaultId = MHelper::genDefaultId();
     $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, root, lft, rgt, lvl, name) 
                 VALUES (' . $defaultId . ', ' . $defaultId . ', 1, 2, 0, "Сотрудники участвующие в ТО")';
     \Yii::$app->db->createCommand($sql)->execute();

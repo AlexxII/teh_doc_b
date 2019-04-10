@@ -18,4 +18,8 @@ class MHelper
     return mt_rand();
   }
 
+  public static function genDefaultId()
+  {
+    return mt_rand();
+  }
 }

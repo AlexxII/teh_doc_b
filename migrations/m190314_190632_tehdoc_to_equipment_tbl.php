@@ -1,6 +1,7 @@
 <?php
 
 use yii\db\Migration;
+use app\base\MHelper;
 
 /**
  * Class m190314_190632_tehdoc_to_equipment_tbl
@@ -31,7 +32,7 @@ class m190314_190632_tehdoc_to_equipment_tbl extends Migration
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
-    $defaultId = '1122334455';
+    $defaultId = MHelper::genDefaultId();
     $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, eq_id, root, lft, rgt, lvl, name, parent_id) 
                 VALUES (' . $defaultId . ',  0, ' . $defaultId . ', 1, 2, 0, "Оборудование",' . $defaultId . ')';
     \Yii::$app->db->createCommand($sql)->execute();

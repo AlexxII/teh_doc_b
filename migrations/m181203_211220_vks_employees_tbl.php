@@ -1,6 +1,8 @@
 <?php
 
 use yii\db\Migration;
+use app\base\MHelper;
+
 
 class m181203_211220_vks_employees_tbl extends Migration
 {
@@ -26,8 +28,8 @@ class m181203_211220_vks_employees_tbl extends Migration
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
-    $defaultId_1 = 1122334455;
-    $defaultId_2 = 5544332211;
+    $defaultId_1 = MHelper::genDefaultId();
+    $defaultId_2 = MHelper::genDefaultId();
     $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (id, root, lft, rgt, lvl, name, parent_id) 
                 VALUES (' . $defaultId_1 . ', ' . $defaultId_1 . ', 1, 2, 0, "Сотрудники, обеспечивающие ВКС", ' . $defaultId_1 . '), 
                 (' . $defaultId_2 . ', ' . $defaultId_2 . ', 3, 4, 0, "Сотрудники, передающие сообщ-ия", ' . $defaultId_2 . ')';
