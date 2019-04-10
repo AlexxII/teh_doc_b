@@ -87,21 +87,17 @@ $del_multi_nodes = 'Удвлить С вложениями';
   a:hover {
     text-decoration: none;
   }
-
   .ui-fancytree {
     overflow: auto;
   }
-
   input {
     color: black;
   }
-
   .fancytree-custom-icon {
     color: #1e6887;
     font-size: 18px;
-    cursor: default;
+    cursor: pointer;
   }
-
   .t {
     font-size: 14px;
   }
@@ -665,10 +661,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
             },
             click: function (event, data) {
                 var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-                if (target === 'icon') {
+                if (target === 'title') {
                     $('#complex-info').html('');
                 }
-                if (target === 'title') {
+                if (target === 'icon') {
                     var node = data.node;
                     var prefix = '/tehdoc/equipment/control-panel/';
                     if (!match) {
