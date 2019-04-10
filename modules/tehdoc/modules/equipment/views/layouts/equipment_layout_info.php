@@ -341,7 +341,7 @@ $del_multi_nodes = 'Удалить С вложениями';
       },
       init: function (event, data) {
         var uri = window.location.href;
-        var key = uri.match('\\/tool\\/(\\d+)\\/\\w+\\/');
+        var key = uri.match('\\/tool\\/([0-9-]+)\\/\\w+\\/');
         if (!key) {
           return;
         }

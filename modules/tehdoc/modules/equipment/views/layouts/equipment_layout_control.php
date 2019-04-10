@@ -90,7 +90,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
     cursor: pointer;
   }
   .t {
-    font-size: 14px;
+  font-size: 14px;
+  }
+  span.fancytree-title {
+    cursor: default;
   }
 </style>
 
@@ -555,7 +558,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
         beforeEdit: function (event, data) {
           var node = data.node;
-          if (node.key == 1122334455 || node.key == 5544332211) {
+          if (node.data.lvl == 0) {
             return false;
           }
           return true;
@@ -668,7 +671,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           if (node.data.eq_wrap == 1) {
             var url = prefix + node.key + '/settings/wrap-config';
             window.location.href = url;
-          } else if (node.key != 1122334455 && node.key != 5544332211) {
+          } else if (node.data.lvl != 0) {
             window.location.href = url;
           }
         }
