@@ -101,7 +101,7 @@ class InfoController extends Controller
         break;
     }
     $parent = Tools::findModel($parentId);
-    $item_model->parent_id = $parent->ref;
+    $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
       return true;
     }

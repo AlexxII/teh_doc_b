@@ -319,7 +319,7 @@ $del_multi_nodes = 'Удалить С вложениями';
         if (target === 'title' || target === 'icon') {
           var node = data.node;
           var prefix = '/tehdoc/equipment/tool/';
-          if (node.key != 1122334455 && node.key != 5544332211 && node.data.eq_wrap != 1) {
+          if (node.data.lvl != 0 && node.data.eq_wrap != 1) {
             var url = prefix + node.key + '/info/index';
             window.location.href = url;
           }
