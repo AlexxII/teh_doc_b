@@ -336,33 +336,31 @@ $del_multi_nodes = 'Удвлить С вложениями';
         });
 
         $('.del-multi-nodes').click(function (event) {
-            if (confirm('Вы уверены, что хотите удалить выбранный классификатор вместе с вложениями?')) {
-                event.preventDefault();
-                var csrf = $('meta[name=csrf-token]').attr("content");
-                var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-                if (!node) {
-                    alert('Выберите узел');
-                    return;
-                }
-                $.ajax({
-                    url: "/tehdoc/equipment/control-panel/control/delete-root",
-                    type: "post",
-                    data: {
-                        id: getNodeId(),
-                        _csrf: csrf
+            event.preventDefault();
+            var url = "/tehdoc/equipment/control-panel/info/delete-root";
+            jc = $.confirm({
+                icon: 'fa fa-question',
+                title: 'Вы уверены?',
+                content: 'Вы действительно хотите удалить выделенное С вложениями?',
+                type: 'red',
+                closeIcon: false,
+                autoClose: 'cancel|9000',
+                buttons: {
+                    ok: {
+                        btnClass: 'btn-danger',
+                        action: function () {
+                            var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+                            jc.close();
+                            deleteProcess(url, node);
+                        }
+                    },
+                    cancel: {
+                        action: function () {
+                            return;
+                        }
                     }
-                })
-                    .done(function () {
-                        node.remove();
-                        $('.about-info').html('');
-                        $('.del-multi-nodes').hide();
-                        $('.del-node').hide();
-
-                    })
-                    .fail(function () {
-                        alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-                    });
-            }
+                }
+            });
         });
 
 
@@ -379,7 +377,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
             $.ajax({
                 url: url,
                 type: "post",
-                data: {toolId: node.data.id, _csrf: csrf}
+                data: {nodeId: getNodeId(), _csrf: csrf}
             }).done(function (response) {
                 if (response != false) {
                     jc.close();
@@ -445,8 +443,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 });
             });
         }
-
-
 
 
     });
@@ -614,7 +610,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
                         $.ajax({
                             url: update_url,
                             data: {
-                                toolId: getNodeId(),
+                                nodeId: getNodeId(),
                                 title: data.input.val()
                             }
                         }).done(function (result) {
@@ -668,7 +664,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
             },
             click: function (event, data) {
                 var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-                if (target === 'title' || target === 'icon') {
+                if (target === 'icon') {
+                    $('#complex-info').html('');
+                }
+                if (target === 'title') {
                     var node = data.node;
                     var prefix = '/tehdoc/equipment/control-panel/';
                     if (!match) {
@@ -685,18 +684,24 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 }
             },
             dblclick: function (event, data) {
-                var node = data.node;
-                var prefix = '/tehdoc/equipment/control-panel/';
-                if (!match) {
-                    var url = prefix + node.key + '/info/index';
-                } else {
-                    var url = prefix + node.key + '/' + match[2] + '/index';
+                var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
+                if (target === 'icon') {
+                    $('#complex-info').html('');
                 }
-                if (node.data.eq_wrap == 1) {
-                    var url = prefix + node.key + '/settings/wrap-config';
-                    window.location.href = url;
-                } else if (node.key != 1122334455 && node.key != 5544332211) {
-                    window.location.href = url;
+                if (target === 'title') {
+                    var node = data.node;
+                    var prefix = '/tehdoc/equipment/control-panel/';
+                    if (!match) {
+                        var url = prefix + node.key + '/info/index';
+                    } else {
+                        var url = prefix + node.key + '/' + match[2] + '/index';
+                    }
+                    if (node.data.eq_wrap == 1) {
+                        var url = prefix + node.key + '/settings/wrap-config';
+                        window.location.href = url;
+                    } else if (node.key != 1122334455 && node.key != 5544332211) {
+                        window.location.href = url;
+                    }
                 }
             },
             icon: function (event, data) {

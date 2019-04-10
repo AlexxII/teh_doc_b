@@ -74,9 +74,9 @@ class InfoController extends Controller
     return json_encode($data);
   }
 
-  public function actionUpdateNode($toolId, $title)
+  public function actionUpdateNode($nodeId, $title)
   {
-    $tool = Tools::findModel($toolId);
+    $tool = Tools::findModel($nodeId);
     $tool->name = $title;
     if ($tool->save()) {
       $data['acceptedTitle'] = $title;
@@ -113,7 +113,7 @@ class InfoController extends Controller
     usleep(400*1000);
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
-      $id = $_POST['toolId'];
+      $id = $_POST['nodeId'];
       $category = Tools::findModel($id);
       if ($category->delete()) {
         return true;
@@ -127,7 +127,7 @@ class InfoController extends Controller
   {
     usleep(400*1000);
     if (!empty($_POST)) {
-      $id = $_POST['toolId'];
+      $id = $_POST['nodeId'];
       $root = Tools::findModel($id);
       if ($root->deleteWithChildren()) {
         return true;
