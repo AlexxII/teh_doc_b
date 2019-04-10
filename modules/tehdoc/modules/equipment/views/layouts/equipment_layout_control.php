@@ -99,6 +99,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
   .fancytree-custom-icon {
     color: #1e6887;
     font-size: 18px;
+    cursor: default;
   }
 
   .t {
@@ -705,10 +706,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 }
             },
             icon: function (event, data) {
-                if (data.node.key == 1122334455) {
-                    return "fa fa-sitemap";
-                } else if (data.node.key == 5544332211) {
+                if (data.node.data.id == 1111111111) {
                     return "fa fa-question-circle";
+                } else if (data.node.data.lvl == 0) {
+                    return "fa fa-sitemap";
                 } else if (data.node.data.eq_wrap == 1) {
                     return "t fa fa-clone";
                 } else {

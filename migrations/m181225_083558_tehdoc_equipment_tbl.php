@@ -40,7 +40,7 @@ class m181225_083558_tehdoc_equipment_tbl extends Migration
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
     $defaultId_1 = MHelper::genDefaultId();
-    $defaultId_2 = MHelper::genDefaultId();
+    $defaultId_2 = 1111111111;
     $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, root, lft, rgt, lvl, name, parent_id, quantity, eq_comments, valid) 
                 VALUES (' . $defaultId_1 . ', ' . $defaultId_1 . ', 1, 2, 0, "Оборудование",' . $defaultId_1 . ', 1, null, 1), 
                 (' . $defaultId_2 . ', ' . $defaultId_2 . ', 3, 4, 0, "Необработанное",' . $defaultId_2 . ', 1, null, 1)';

@@ -60,7 +60,25 @@ $this->params['breadcrumbs'][] = $this->title;
           bool: result
         },
         success: function (data) {
-          $('#' + checkId).html(successCheck);
+            $('#' + checkId).html(successCheck);
+            jc = $.confirm({
+                icon: 'fa fa-thumbs-up',
+                title: 'Успех!',
+                content: 'C данного узела снята пометка - обертка. Страница перезагрузится!',
+                type: 'green',
+                buttons: false,
+                closeIcon: false,
+                autoClose: 'ok|8000',
+                confirmButtonClass: 'hide',
+                buttons: {
+                    ok: {
+                        btnClass: 'btn-success',
+                        action: function () {
+                            window.location.href = 'index';
+                        }
+                    }
+                }
+            });
         },
         error: function (data) {
           $('#' + checkId).html(warningCheck);
