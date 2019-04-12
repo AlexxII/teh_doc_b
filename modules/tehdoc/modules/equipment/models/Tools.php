@@ -254,8 +254,9 @@ class Tools extends \yii\db\ActiveRecord
         if ($child->specialStatus){
           return true;
         }
-        return false;
+        continue;
       }
+      return false;
     }
     return false;
   }

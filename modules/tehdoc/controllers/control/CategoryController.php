@@ -66,7 +66,7 @@ class CategoryController extends Controller
 
   public function actionUpdate($id, $title)
   {
-    $category = Category::findModel($id);
+    $category = Category::findModel($id);                       // TODO опасно!!!!
     $category->name = $title;
     if ($category->save()){
       $data['acceptedTitle'] = $title;

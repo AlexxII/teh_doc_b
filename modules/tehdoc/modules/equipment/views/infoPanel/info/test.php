@@ -1,5 +1,4 @@
 
-
 <pre>
   <?php
       foreach ($ar as $a) {

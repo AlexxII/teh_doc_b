@@ -17,39 +17,27 @@ class VksEmployeeController extends Controller
 
   public function actionEmployees()
   {
-    $id = VksEmployees::find()->select('id, rgt, lft, root')->where(['=', 'lvl', 0])->all();
+    $id = VksEmployees::find()->select('id')->where(['=', 'lvl', 0])->all();
     if (!$id) {
       $data = array();
       $data = [['title' => 'База данных пуста', 'key' => -999]];
       return json_encode($data);
     }
-    $roots = VksEmployees::findOne($id)->tree();
+    $roots = VksEmployees::findModel($id)->tree();
     return json_encode($roots);
-  }
-
-  public function actionCreateRoot($title)
-  {
-    \Yii::$app->db->schema->refresh();
-    $newRoot = new VksEmployees(['name' => $title]);
-    $result = $newRoot->makeRoot();
-    if ($result) {
-      $data['acceptedTitle'] = $title;
-      return json_encode($data);
-    } else {
-      return var_dump('0');
-    }
   }
 
   public function actionVksEmployeeCreate($parentId, $title)
   {
     $data = [];
     $parentEmpl = VksEmployees::findOne($parentId);
-    $newEmpl = new VksEmployees(['name' => $title]);
-    $newEmpl->parent_id = $parentEmpl->ref;
-    $newEmpl->ref = mt_rand();
+    $newEmpl = new VksEmployees();
+    $newEmpl->name = $title;
+    $newEmpl->parent_id = $parentEmpl->id;
     $newEmpl->appendTo($parentEmpl);
     $data['acceptedTitle'] = $title;
     $data['acceptedId'] = $newEmpl->id;
+    $data['lvl'] = $newEmpl->lvl;
     return json_encode($data);
   }
 
@@ -57,8 +45,7 @@ class VksEmployeeController extends Controller
   {
     $empl = VksEmployees::findOne(['id' => $id]);
     $empl->name = $title;
-    $empl->save();
-    if ($empl->save()){
+    if ($empl->save()) {
       $data['acceptedTitle'] = $title;
       return json_encode($data);
     }
@@ -93,18 +80,27 @@ class VksEmployeeController extends Controller
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $empl = VksEmployees::findOne(['id' => $id]);
-      $empl->delete();
+      $empl = VksEmployees::findModel($id);
+      if ($empl->delete()) {
+        return true;
+      }
+      return false;
     }
+    return false;
   }
 
   public function actionDeleteRoot()
   {
     if (!empty($_POST)) {
       $id = $_POST['id'];
-      $root = VksEmployees::findOne(['id' => $id]);
+      $root = VksEmployees::findModel($id);
+      if ($root->deleteWithChildren()) {
+        return true;
+      }
+      return false;
     }
-    $root->deleteWithChildren();
+    return false;
+
   }
 
 
