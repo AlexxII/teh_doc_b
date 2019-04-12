@@ -343,9 +343,6 @@ $del_multi_nodes = 'Удалить С вложениями';
         }
         data.tree.activateKey(key[1]);
       },
-      keypress: function (event, data) {
-        console.log(event);
-      },
       dblclick: function (event, data) {
         var node = data.node;
         var prefix = '/tehdoc/equipment/tool/';

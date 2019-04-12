@@ -8,13 +8,27 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
+<style>
+  .d-flex {
+    display: flex !important;
+  }
+  .flex-items-center {
+    align-items: center !important;
+  }
+</style>
+
 <div class="wrap-settings">
 
-  <h3><?= Html::encode($tool->eq_title) ?></h3>
-
-  <div class="subhead" style="padding-top: 0px">
-    <h3 class="setting-header" style="padding-top: 0px">Отображение</h3>
+  <div class="row d-flex flex-items-center">
+    <div class="col-lg-11 col-md-11 col-xs-11">
+      <h3 style="margin-top: 0px"><?= Html::encode($tool->eq_title) ?></h3>
+    </div>
+    <div class="text-right" style="padding: 0 15px 0 5px">
+      <a type="button" href="/tehdoc/equipment/tool/<?= $tool->id?>/info/wrap2123"
+         class="btn-primary btn-sm">Info</a>
+    </div>
   </div>
+
   <ul class="list-group">
 
     <li class="list-group-item">

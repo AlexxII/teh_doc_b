@@ -40,6 +40,7 @@ class SettingsController extends Controller
   {
     $id = $_GET['id'];
     $toolSettings = ToolSettings::findModel($id);
+
     return $this->render('wrap_view', [
       'tool' => Tools::findModel($id),
       'toolSettings' => $toolSettings,

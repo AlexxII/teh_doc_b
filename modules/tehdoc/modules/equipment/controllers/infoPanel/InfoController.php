@@ -15,6 +15,13 @@ class InfoController extends Controller
 
   public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_info.php';
 
+
+  public function actionWrap()
+  {
+    return '111111';
+    return $this->render('meeting');
+  }
+
   public function actionIndex()
   {
     return $this->render('meeting');
@@ -43,5 +50,7 @@ class InfoController extends Controller
       'wikiCount' => $wikiCount,
     ]);
   }
+
+
 
 }
