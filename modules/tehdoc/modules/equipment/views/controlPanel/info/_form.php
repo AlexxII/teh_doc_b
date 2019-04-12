@@ -209,13 +209,13 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
   $(document).ready(function () {
     $.ajax({
       type: 'get',
-      url: '/tehdoc/settings/interface/manufact',
+      url: '/tehdoc/control/interface/manufact',
       autoFocus: true,
       success: function (data) {
         var manufact = $.parseJSON(data);
         $(function () {
           $("#manufact").autocomplete({
-            source: manufact,
+            source: manufact
           });
         });
       },
@@ -228,13 +228,13 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
   $(document).ready(function () {
     $.ajax({
       type: 'get',
-      url: '/tehdoc/settings/interface/models',
+      url: '/tehdoc/control/interface/models',
       autoFocus: true,
       success: function (data) {
         var models = $.parseJSON(data);
         $(function () {
           $("#models").autocomplete({
-            source: models,
+            source: models
           });
         });
       },

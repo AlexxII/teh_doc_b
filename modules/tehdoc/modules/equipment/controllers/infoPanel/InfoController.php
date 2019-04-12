@@ -26,9 +26,8 @@ class InfoController extends Controller
 
   public function actionInfo()
   {
-    $id = $_GET['id'];
-    $request = Tools::findModel($id);
-    $model = $request;
+    $id = $_GET['id'];                                // TODO справить возможную ошибку
+    $model = Tools::findModel($id);
     $children = $model->children(1)->all();
     $wikiCount = $model->countWikiPages;
     $imagesCount = $model->countImages;
@@ -45,6 +44,15 @@ class InfoController extends Controller
       'docsCount' => $docsCount,
       'imagesCount' => $imagesCount,
       'wikiCount' => $wikiCount,
+    ]);
+  }
+
+  public function actionTest()
+  {
+    $id = $_GET['id'];                              // TODO исправить возможную ошибку
+    $model = Tools::findModel($id);
+    return $this->render('test', [
+      'ar' => $model->children()->all()
     ]);
   }
 

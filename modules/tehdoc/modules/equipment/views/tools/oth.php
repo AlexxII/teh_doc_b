@@ -275,33 +275,90 @@ $task_hint = 'Добавить выделенные элементы в зада
             var data = table.rows({selected: true}).data();
             var ar = [];
             var count = data.length;
-            var url = '/tehdoc/equipment/control-panel/settings/task-set-package';
+            var url = '/tehdoc/equipment/control-panel/settings/task-set-pckg';
             for (var i = 0; i < count; i++) {
                 ar[i] = data[i][0];
             }
-            if (confirm('Вы хотите добавить выделенные объекты в задание на обновление? Выделено ' + data.length + '!!!  ')) {
-                // $(".modal").modal("show");
-                $.ajax({
-                    url: url,
-                    type: "post",
-                    dataType: "JSON",
-                    data: {
-                        jsonData: ar,
-                        _csrf: csrf,
-                        bool: true
+            jc = $.confirm({
+                icon: 'fa fa-thumb-tack',
+                title: 'Вы уверены?',
+                content: 'Вы действительно хотите добавить выделенное оборудование в задание на обновление?',
+                type: 'blue',
+                closeIcon: false,
+                autoClose: 'cancel|9000',
+                buttons: {
+                    ok: {
+                        btnClass: 'btn-info',
+                        action: function () {
+                            jc = $.confirm({
+                                icon: 'fa fa-cog fa-spin',
+                                title: 'Подождите!',
+                                content: 'Ваш запрос выполняется!',
+                                buttons: false,
+                                closeIcon: false,
+                                confirmButtonClass: 'hide'
+                            });
+                            $.ajax({
+                                url: url,
+                                type: "post",
+                                dataType: "JSON",
+                                data: {
+                                    jsonData: ar,
+                                    _csrf: csrf,
+                                    bool: true
+                                },
+                                success: function (result) {
+                                    jc.close();
+                                    table.rows({page: 'current'}).deselect();
+                                    $('.tasking').attr('disabled', true);
+                                    jc = $.confirm({
+                                        icon: 'fa fa-thumbs-up',
+                                        title: 'Успех!',
+                                        content: 'Ваш запрос выполнен.',
+                                        type: 'green',
+                                        buttons: false,
+                                        closeIcon: false,
+                                        autoClose: 'ok|8000',
+                                        confirmButtonClass: 'hide',
+                                        buttons: {
+                                            ok: {
+                                                btnClass: 'btn-success',
+                                                action: function () {
+                                                }
+                                            }
+                                        }
+                                    });
+                                },
+                                error: function () {
+                                    jc.close();
+                                    jc = $.confirm({
+                                        icon: 'fa fa-exclamation-triangle',
+                                        title: 'Неудача!',
+                                        content: 'Запрос не выполнен. Что-то пошло не так.',
+                                        type: 'red',
+                                        buttons: false,
+                                        closeIcon: false,
+                                        autoClose: 'ok|4000',
+                                        confirmButtonClass: 'hide',
+                                        buttons: {
+                                            ok: {
+                                                btnClass: 'btn-danger',
+                                                action: function () {
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     },
-                    success: function (result) {
-                        table.rows({page: 'current'}).deselect();
-                        // $("#main-table").DataTable().clearPipeline().draw();
-                        // $(".modal").modal('hide');
-                        $('.tasking').attr('disabled', true);
-                    },
-                    error: function () {
-                        alert('Ошибка! Обратитесь к разработчику.');
-                        // $(".modal").modal('hide');
+                    cancel: {
+                        action: function () {
+                            return;
+                        }
                     }
-                });
-            }
+                }
+            });
         })
     });
 
