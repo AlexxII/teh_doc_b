@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <h3 style="margin-top: 0px"><?= Html::encode($tool->eq_title) ?></h3>
     </div>
     <div class="text-right" style="padding: 0 15px 0 5px">
-      <a type="button" href="/tehdoc/equipment/tool/<?= $tool->id?>/info/wrap2123"
+      <a type="button" href="/tehdoc/equipment/tool/<?= $tool->id?>/info/wrap"
          class="btn-primary btn-sm">Info</a>
     </div>
   </div>
@@ -40,7 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
           Обертка
         </label>
         <span class="status-indicator" id="wrap-check"></span>
-        <p class="note" style="margin-bottom: 10px">Отображать данный объект как обертку вокруг других объектов.</p>
+        <p class="note" style="margin-bottom: 10px">Отображать данный объект как обертку вокруг других объектов.
+          Добавлять информацию в данный объект нальзя.</p>
       </div>
     </li>
   </ul>

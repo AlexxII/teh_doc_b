@@ -9,16 +9,13 @@ use yii\web\UploadedFile;
 
 use app\modules\tehdoc\modules\equipment\models\Tools;
 
-
 class InfoController extends Controller
 {
 
   public $layout = '@app/modules/tehdoc/modules/equipment/views/layouts/equipment_layout_info.php';
 
-
   public function actionWrap()
   {
-    return '111111';
     return $this->render('meeting');
   }
 
@@ -36,7 +33,7 @@ class InfoController extends Controller
     $wikiCount = $model->countWikiPages;
     $imagesCount = $model->countImages;
     $docsCount = $model->countDocs;
-    if ($model->complex){
+    if ($model->complex) {
       $view = 'view_complex';
     } else {
       $view = 'view_single';
@@ -44,13 +41,11 @@ class InfoController extends Controller
     return $this->render('header', [
       'model' => $model,
       'view' => $view,
-       'children' => $children,
+      'children' => $children,
       'docsCount' => $docsCount,
       'imagesCount' => $imagesCount,
       'wikiCount' => $wikiCount,
     ]);
   }
-
-
 
 }
