@@ -4,6 +4,7 @@ namespace app\modules\tehdoc\models;
 
 use yii\db\ActiveRecord;
 use creocoder\nestedsets\NestedSetsBehavior;
+use yii\web\NotFoundHttpException;
 
 use app\base\NestedSetsTreeBehavior;
 use app\base\MHelper;

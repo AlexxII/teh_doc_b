@@ -364,7 +364,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
 
     $("#fancyree_w0").fancytree({
       source: {
-        url: main_url,
+        url: main_url
       },
       expandParents: true,
       noAnimation: false,

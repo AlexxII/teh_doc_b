@@ -54,8 +54,8 @@ class VksEmployeeController extends Controller
 
   public function actionMove($item, $action, $second, $parentId)
   {
-    $item_model = VksEmployees::findOne($item);
-    $second_model = VksEmployees::findOne($second);
+    $item_model = VksEmployees::findModel($item);
+    $second_model = VksEmployees::findModel($second);
     switch ($action) {
       case 'after':
         $item_model->insertAfter($second_model);
@@ -67,10 +67,10 @@ class VksEmployeeController extends Controller
         $item_model->appendTo($second_model);
         break;
     }
-    $parent = VksEmployees::findOne($parentId);
-    $item_model->parent_id = $parent->ref;
+    $parent = VksEmployees::findModel($parentId);
+    $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
-      return false;
+      return true;
     }
     return false;
   }

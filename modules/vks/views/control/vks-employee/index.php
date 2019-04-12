@@ -207,84 +207,103 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 }
             });
         });
-    });
 
-    $('.del-multi-nodes').click(function (event) {
-        var url = "/vks/control/vks-employee/delete-root";
-        event.preventDefault();
-        jc = $.confirm({
-            icon: 'fa fa-question',
-            title: 'Вы уверены?',
-            content: 'Вы действительно хотите удалить выделенное С вложениями?',
-            type: 'red',
-            closeIcon: false,
-            autoClose: 'cancel|9000',
-            buttons: {
-                ok: {
-                    btnClass: 'btn-danger',
-                    action: function () {
-                        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-                        jc.close();
-                        deleteProcess(url, node);
-                    }
-                },
-                cancel: {
-                    action: function () {
-                        return;
-                    }
-                }
-            }
-        });
-    });
-
-    function deleteProcess(url, node) {
-        var csrf = $('meta[name=csrf-token]').attr("content");
-        jc = $.confirm({
-            icon: 'fa fa-cog fa-spin',
-            title: 'Подождите!',
-            content: 'Ваш запрос выполняется!',
-            buttons: false,
-            closeIcon: false,
-            confirmButtonClass: 'hide'
-        });
-        $.ajax({
-            url: url,
-            type: "post",
-            data: {id: node.data.id, _csrf: csrf}
-        }).done(function (response) {
-            if (response != false) {
-                jc.close();
-                jc = $.confirm({
-                    icon: 'fa fa-thumbs-up',
-                    title: 'Успех!',
-                    content: 'Ваш запрос выполнен.',
-                    type: 'green',
-                    buttons: false,
-                    closeIcon: false,
-                    autoClose: 'ok|8000',
-                    confirmButtonClass: 'hide',
-                    buttons: {
-                        ok: {
-                            btnClass: 'btn-success',
-                            action: function () {
-                                node.remove();
-                                $('.about-info').html('');
-                                $('.del-node').hide();
-                                $(".del-multi-nodes").hide();
-                            }
+        $('.del-multi-nodes').click(function (event) {
+            var url = "/vks/control/vks-employee/delete-root";
+            event.preventDefault();
+            jc = $.confirm({
+                icon: 'fa fa-question',
+                title: 'Вы уверены?',
+                content: 'Вы действительно хотите удалить выделенное С вложениями?',
+                type: 'red',
+                closeIcon: false,
+                autoClose: 'cancel|9000',
+                buttons: {
+                    ok: {
+                        btnClass: 'btn-danger',
+                        action: function () {
+                            var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+                            jc.close();
+                            deleteProcess(url, node);
+                        }
+                    },
+                    cancel: {
+                        action: function () {
+                            return;
                         }
                     }
-                });
-            } else {
+                }
+            });
+        });
+
+        function deleteProcess(url, node) {
+            var csrf = $('meta[name=csrf-token]').attr("content");
+            jc = $.confirm({
+                icon: 'fa fa-cog fa-spin',
+                title: 'Подождите!',
+                content: 'Ваш запрос выполняется!',
+                buttons: false,
+                closeIcon: false,
+                confirmButtonClass: 'hide'
+            });
+            $.ajax({
+                url: url,
+                type: "post",
+                data: {id: node.data.id, _csrf: csrf}
+            }).done(function (response) {
+                if (response != false) {
+                    jc.close();
+                    jc = $.confirm({
+                        icon: 'fa fa-thumbs-up',
+                        title: 'Успех!',
+                        content: 'Ваш запрос выполнен.',
+                        type: 'green',
+                        buttons: false,
+                        closeIcon: false,
+                        autoClose: 'ok|8000',
+                        confirmButtonClass: 'hide',
+                        buttons: {
+                            ok: {
+                                btnClass: 'btn-success',
+                                action: function () {
+                                    node.remove();
+                                    $('.about-info').html('');
+                                    $('.del-node').hide();
+                                    $(".del-multi-nodes").hide();
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    jc.close();
+                    jc = $.confirm({
+                        icon: 'fa fa-exclamation-triangle',
+                        title: 'Неудача!',
+                        content: 'Запрос не выполнен. Что-то пошло не так.',
+                        type: 'red',
+                        buttons: false,
+                        closeIcon: false,
+                        autoClose: 'ok|8000',
+                        confirmButtonClass: 'hide',
+                        buttons: {
+                            ok: {
+                                btnClass: 'btn-danger',
+                                action: function () {
+                                }
+                            }
+                        }
+                    });
+                }
+            }).fail(function () {
                 jc.close();
                 jc = $.confirm({
                     icon: 'fa fa-exclamation-triangle',
                     title: 'Неудача!',
-                    content: 'Запрос не выполнен. Что-то пошло не так.',
+                    content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
                     type: 'red',
                     buttons: false,
                     closeIcon: false,
-                    autoClose: 'ok|8000',
+                    autoClose: 'ok|4000',
                     confirmButtonClass: 'hide',
                     buttons: {
                         ok: {
@@ -294,28 +313,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
                         }
                     }
                 });
-            }
-        }).fail(function () {
-            jc.close();
-            jc = $.confirm({
-                icon: 'fa fa-exclamation-triangle',
-                title: 'Неудача!',
-                content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
-                type: 'red',
-                buttons: false,
-                closeIcon: false,
-                autoClose: 'ok|4000',
-                confirmButtonClass: 'hide',
-                buttons: {
-                    ok: {
-                        btnClass: 'btn-danger',
-                        action: function () {
-                        }
-                    }
-                }
             });
-        });
-    }
+        }
+    });
 
 
     $("input[name=search]").keyup(function (e) {
@@ -375,8 +375,12 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
         $("#fancyree_w0").fancytree({
             source: {
-                url: main_url,
+                url: main_url
             },
+            expandParents: true,
+            noAnimation: false,
+            scrollIntoView: true,
+            topNode: null,
             extensions: ['dnd', 'edit', 'filter'],
             quicksearch: true,
             minExpandLevel: 2,
@@ -392,7 +396,24 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 },
                 dragDrop: function (node, data) {
                     if (data.hitMode == 'over') {
-                        if (data.node.data.lvl == 2) {             // Ограничение на вложенность
+                        if (data.node.data.lvl >= 2 || data.otherNode.isFolder()) {             // Ограничение на вложенность
+                            jc = $.confirm({
+                                icon: 'fa fa-exclamation-triangle',
+                                title: 'Запрещено!',
+                                content: 'Суммарная глубина вложенности данного дерева не должна превышать 3х уровней!',
+                                type: 'red',
+                                buttons: false,
+                                closeIcon: false,
+                                autoClose: 'ok|4000',
+                                confirmButtonClass: 'hide',
+                                buttons: {
+                                    ok: {
+                                        btnClass: 'btn-danger',
+                                        action: function () {
+                                        }
+                                    }
+                                }
+                            });
                             return false;
                         }
                         var pId = data.node.data.id;
@@ -485,7 +506,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
                                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
                             node.setTitle(data.orgTitle);
                         }).always(function () {
-//                data.input.removeClass("pending")
                         });
                     }
                     return true;

@@ -4,6 +4,7 @@ namespace app\modules\vks\models;
 
 use Yii;
 use creocoder\nestedsets\NestedSetsBehavior;
+use yii\web\NotFoundHttpException;
 
 use app\base\MHelper;
 use app\base\NestedSetsTreeBehavior;
