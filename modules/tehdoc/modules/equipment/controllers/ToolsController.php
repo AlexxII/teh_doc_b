@@ -224,6 +224,7 @@ class ToolsController extends Controller
     $table = 'teh_equipment_tbl';
     $primaryKey = 'id';
     $columns = array(
+      array('db' => 'id', 'dt' => 0),
       array('db' => 'eq_title', 'dt' => 1),
       array('db' => 'eq_manufact', 'dt' => 2),
       array('db' => 'eq_model', 'dt' => 3),
@@ -273,7 +274,7 @@ class ToolsController extends Controller
       $index = $_GET['index'];
       $where = ' id in (SELECT eq_id FROM teh_settings_tbl WHERE ' . $index . '= 1)';
     } else {
-      $where = '';
+      $where = ' lvl != 0';
     }
 
     $result = SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where);

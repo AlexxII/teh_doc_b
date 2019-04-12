@@ -246,6 +246,20 @@ class Tools extends \yii\db\ActiveRecord
     return false;
   }
 
+  public  function  getSpecialChildrenStatus()
+  {
+    $children = $this->children()->all();
+    if ($children) {
+      foreach ($children as $child) {
+        if ($child->specialStatus){
+          return true;
+        }
+        return false;
+      }
+    }
+    return false;
+  }
+
   public function getSpecialStickerNumber()
   {
     if ($this->special) {

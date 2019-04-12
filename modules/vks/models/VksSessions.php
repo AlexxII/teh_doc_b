@@ -76,7 +76,7 @@ class VksSessions extends \yii\db\ActiveRecord
       'vks_employee',
       'vks_employee_receive_msg', 'vks_receive_msg_datetime', 'vks_employee_send_msg_text',
       'vks_subscriber_reg_office', 'vks_subscriber_reg_office_text',
-      'vks_record_create', 'vks_record_update', 'important'
+      'vks_record_create', 'vks_record_update'
     ];
     return $scenarios;
   }

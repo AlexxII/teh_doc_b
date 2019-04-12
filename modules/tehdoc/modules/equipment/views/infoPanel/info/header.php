@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <h2>
         <span style="position: relative">
         <?= Html::encode($model->name);
-        if ($model->special) {
+        if ($model->specialStatus) {
           echo '
           <i class="fa fa-shield" aria-hidden="true" style="font-size: 14px;position: absolute;top:-5px;right:-10px"
              title="Проведены Специальные работы"></i>';

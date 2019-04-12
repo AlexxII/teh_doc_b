@@ -78,7 +78,7 @@ class WikiController extends Controller
 
   public function actionUpdate($page)
   {
-    $model = $this->findModel($page);
+    $model = Wiki::findModel($page);
     $id = $_GET['id'];
     $toolModel = Tools::findModel($id);
     $wikiCount = $toolModel->countWikiPages;
