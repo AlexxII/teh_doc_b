@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 
+use app\base\MHelper;
 
 class Images extends ActiveRecord        // модель для добавления загрузки изображений
   // и добавления путей в БД с привязкой к id оборудования
@@ -18,6 +19,12 @@ class Images extends ActiveRecord        // модель для добавлен
   {
     return 'teh_image_tbl';
   }
+
+  public function __construct()
+  {
+    $this->id = MHelper::generateId();
+  }
+
 
   public function attributeLabels()
   {

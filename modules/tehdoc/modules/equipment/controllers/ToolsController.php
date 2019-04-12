@@ -44,20 +44,20 @@ class ToolsController extends Controller
 
     if ($model->load(Yii::$app->request->post())) {
       if (isset($_POST['eqId'])) {
-        $model->ref = $_POST['eqId'];
+        $model->id = $_POST['eqId'];
       } else {
-        $model->ref = $model->tempId;
+        $model->id = $model->tempId;
       }
-      $toolSettings->eq_id = $model->ref;
+      $toolSettings->eq_id = $model->id;
       $model->parent_id = 0;
       $model->name = $model->eq_title;
-      $parentNode = Tools::findModel(2);            // TODO !!!!!!! очень вероятна ошибка
+      $parentNode = Tools::findModel(['name' => 'Необработанное']);
       $model->appendTo($parentNode);
       if ($model->save()) {
         $toolSettings->save();
         if ($fUpload->load(Yii::$app->request->post())) {
           $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
-          $result = $fUpload->uploadImage($model->ref);
+          $result = $fUpload->uploadImage($model->id);
           if ($result) {
             Yii::$app->session->setFlash('success', 'Оборудование добавлено');
           } else {
@@ -70,7 +70,7 @@ class ToolsController extends Controller
         if (isset($_POST['stay'])) {
           return $this->redirect(['create']);
         }
-        return $this->redirect(['tool/' . $model->ref . '/info/index']);
+        return $this->redirect(['tool/' . $model->id . '/info/index']);
       } else {
         return var_dump($model->getErrors());
         Yii::$app->session->setFlash('error', 'Ошибка валидации');
@@ -135,19 +135,19 @@ class ToolsController extends Controller
   {
     $model = Tools::findModel($id);
     $fUpload = new Images();
-    $model->tempId = $model->ref;
+    $model->tempId = $model->id;
 
     if ($model->load(Yii::$app->request->post())) {
       if ($model->save(false)) {                                          // TODO Разобраться с валидацией, при вкл - не сохраняет
         if ($fUpload->load(Yii::$app->request->post())) {
           $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
-          if ($fUpload->uploadImage($model->ref)) {
+          if ($fUpload->uploadImage($model->id)) {
             Yii::$app->session->setFlash('success', 'Изменения внесены.');
           }
         } else {
           Yii::$app->session->setFlash('success', 'Изменения внесены.');
         }
-        return $this->redirect(['tool/' . $model->ref . '/info/index']);
+        return $this->redirect(['tool/' . $model->id . '/info/index']);
       } else {
         Yii::$app->session->setFlash('error', 'Изменения НЕ внесены.');
       }
@@ -258,7 +258,7 @@ class ToolsController extends Controller
         $root = (int)$_GET['root'];
         $table_ex = (string)$_GET['db_tbl'];
         $identifier = (string)$_GET['identifier'];
-        $where = ' ' . $identifier . ' in (SELECT ref
+        $where = ' ' . $identifier . ' in (SELECT id
     FROM ' . $table_ex . '
       WHERE ' . $table_ex . '.lft >= ' . $lft .
           ' AND ' . $table_ex . '.rgt <= ' . $rgt .

@@ -171,16 +171,19 @@ class SettingsController extends Controller
     if (isset($_POST['toolId'])) {
       $toolId = $_POST['toolId'];
       $toolSettings = ToolSettings::findModel($toolId);
+      $toolModel = Tools::findModel($toolId);
       if (isset($_POST['bool'])) {
         if ($_POST['bool'] === 'true') {
           $toolSettings->eq_wrap = 1;
+          $toolModel->icon = 't fa fa-clone';
         } else {
           $toolSettings->eq_wrap = 0;
+          $toolModel->icon = 't fa fa-file-o';
         }
       } else {
         return false;
       }
-      if ($toolSettings->save()) {
+      if ($toolSettings->save() && $toolModel->save()) {
         return true;
       }
       return false;
@@ -294,7 +297,6 @@ class SettingsController extends Controller
   {
     if (isset($_POST['toolId'])) {
       $toolId = $_POST['toolId'];
-      $settings = $this->findSettings($toolId);
       $toolSettings = ToolSettings::findModel($toolId);
       $model = Tools::findModel($toolId);
       if ($model->to) {
@@ -309,16 +311,16 @@ class SettingsController extends Controller
       }
       if (isset($_POST['bool'])) {
         if ($_POST['bool'] === 'true') {
-          $settings->eq_to = 1;
+          $toolSettings->eq_to = 1;
           $to->valid = 1;
         } else {
-          $settings->eq_to = 0;
+          $toolSettings->eq_to = 0;
           $to->valid = 0;
         }
       } else {
         return false;
       }
-      if ($settings->save()) {
+      if ($toolSettings->save()) {
         if ($to->save()) {
           return true;
         }

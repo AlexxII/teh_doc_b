@@ -326,15 +326,11 @@ $del_multi_nodes = 'Удалить С вложениями';
         }
       },
       icon: function (event, data) {
-        if (data.node.key == 1122334455) {
-          return "fa fa-sitemap";
-        } else if (data.node.key == 5544332211) {
-          return "fa fa-question-circle";
-        } else if (data.node.data.eq_wrap == 1) {
-          return "t fa fa-clone";
-        } else {
-          return "t fa fa-file-o";
+        var icon = data.node.data.icon;
+        if (icon) {
+          return icon;
         }
+        // t fa fa-clone
         // if (data.node.isFolder()) {
         //   return "fa fa-eye";
         // }
@@ -353,7 +349,7 @@ $del_multi_nodes = 'Удалить С вложениями';
       dblclick: function (event, data) {
         var node = data.node;
         var prefix = '/tehdoc/equipment/tool/';
-        if (node.key != 1122334455 && node.key != 5544332211 && node.data.eq_wrap != 1) {
+        if (node.data.lvl != 0 && node.data.eq_wrap != 1) {
           var url = prefix + node.key + '/info/index';
           window.location.href = url;
         }

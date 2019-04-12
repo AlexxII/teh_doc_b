@@ -3,6 +3,8 @@
 namespace app\modules\tehdoc\modules\to\models;
 
 use creocoder\nestedsets\NestedSetsBehavior;
+
+use app\base\MHelper;
 use app\modules\tehdoc\modules\to\base\NestedSetsTreeBehaviorExX;
 
 class ToEquipment extends \yii\db\ActiveRecord
@@ -28,6 +30,11 @@ class ToEquipment extends \yii\db\ActiveRecord
         'depthAttribute' => 'lvl'
       ]
     ];
+  }
+
+  public function __construct()
+  {
+    $this->id = MHelper::generateId();
   }
 
   public function getGroupName()

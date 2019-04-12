@@ -5,6 +5,8 @@ namespace app\modules\tehdoc\modules\equipment\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 
+use app\base\MHelper;
+
 class Wiki extends \yii\db\ActiveRecord
 {
   const PLACEMENT_TABLE = '{{%teh_placement_tbl}}';
@@ -13,6 +15,11 @@ class Wiki extends \yii\db\ActiveRecord
   public static function tableName()
   {
     return 'teh_wiki_tbl';
+  }
+
+  public function __construct()
+  {
+    $this->id = MHelper::generateId();
   }
 
   public function rules()

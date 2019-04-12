@@ -90,7 +90,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
     cursor: pointer;
   }
   .t {
-  font-size: 14px;
+    font-size: 14px;
   }
   span.fancytree-title {
     cursor: default;
@@ -248,9 +248,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
           </div>
         </div>
       </div>
-
       <div id="complex-info" class="col-lg-8 col-md-8" style="height: 100%">
-        <?= $content ?>
+        <div id="status-info"></div>
+        <div id="content-info"><?= $content ?></div>
       </div>
     </div>
   </div>
@@ -268,7 +268,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
   function goodAlert(text) {
     var div = '' +
-      '<div id="w3-success-0" class="alert-success alert fade in">' +
+      '<div id="w3-success-0" class="alert-success alert fade in" style="margin-bottom: 10px">' +
       '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
       text +
       '</div>';
@@ -386,7 +386,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 btnClass: 'btn-success',
                 action: function () {
                   node.remove();
-                  $('.about-info').html('');
+                  $('#status-info').html('');
                   $('.del-node').hide();
                   $(".del-multi-nodes").hide();
                 }
@@ -418,7 +418,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         jc = $.confirm({
           icon: 'fa fa-exclamation-triangle',
           title: 'Неудача!',
-          content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
           type: 'red',
           buttons: false,
           closeIcon: false,
@@ -561,6 +561,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           if (node.data.lvl == 0) {
             return false;
           }
+          node.icon = 't fa fa-file-o';
           return true;
         },
         edit: function (event, data) {
@@ -584,17 +585,17 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 parent.folder = true;
                 result = JSON.parse(result);
                 node.data.id = result.acceptedId;
-                node.key = result.acceptedRef;
+                node.key = result.acceptedId;
                 node.setTitle(result.acceptedTitle);
-                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
+                $('#status-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                $('#status-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                   ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+              $('#status-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
             }).always(function () {
               // data.input.removeClass("pending")
@@ -610,14 +611,14 @@ $del_multi_nodes = 'Удвлить С вложениями';
               if (result) {
                 result = JSON.parse(result);
                 node.setTitle(result.acceptedTitle);
-                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
+                $('#status-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                $('#status-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                   ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+              $('#status-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               node.setTitle(data.orgTitle);
             }).always(function () {
@@ -634,7 +635,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         }
       },
       activate: function (node, data) {
-        $('.about-info').html('');
+        $('#status-info').html('');
         var node = data.node;
         var lvl = node.data.lvl;
         if (node.key == -999) {
@@ -658,7 +659,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       click: function (event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
         if (target === 'title') {
-          $('#complex-info').html('');
+          $('#content-info').html('');
         }
         if (target === 'icon') {
           var node = data.node;
@@ -679,7 +680,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
       dblclick: function (event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
         if (target === 'icon') {
-          $('#complex-info').html('');
+          $('#content-info').html('');
         }
         if (target === 'title') {
           var node = data.node;
@@ -692,20 +693,15 @@ $del_multi_nodes = 'Удвлить С вложениями';
           if (node.data.eq_wrap == 1) {
             var url = prefix + node.key + '/settings/wrap-config';
             window.location.href = url;
-          } else if (node.key != 1122334455 && node.key != 5544332211) {
+          } else if (node.data.lvl != 0) {
             window.location.href = url;
           }
         }
       },
       icon: function (event, data) {
-        if (data.node.data.id == 1111111111) {
-          return "fa fa-question-circle";
-        } else if (data.node.data.lvl == 0) {
-          return "fa fa-sitemap";
-        } else if (data.node.data.eq_wrap == 1) {
-          return "t fa fa-clone";
-        } else {
-          return "t fa fa-file-o";
+        var icon = data.node.data.icon;
+        if (icon) {
+          return icon;
         }
       },
       renderNode: function (node, data) {

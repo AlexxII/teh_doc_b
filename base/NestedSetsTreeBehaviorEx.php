@@ -60,7 +60,7 @@ class NestedSetsTreeBehaviorEx extends Behavior
     // Trees mapped
     $trees = array();
     $collection = $this->owner->find()
-      ->select('teh_equipment_tbl.id, lft, rgt, root, lvl, name, teh_settings_tbl.eq_wrap')
+      ->select('teh_equipment_tbl.id, lft, rgt, root, lvl, name, icon, teh_settings_tbl.eq_wrap')
       ->leftJoin('teh_settings_tbl', 'teh_settings_tbl.eq_id = teh_equipment_tbl.id')
       ->where(['=', 'teh_equipment_tbl.valid', 1])
       ->orderBy('root, lft')

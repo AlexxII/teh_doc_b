@@ -34,16 +34,19 @@ class m181225_083558_tehdoc_equipment_tbl extends Migration
       'quantity' => $this->smallInteger()->notNull()->defaultValue(1),
       'eq_comments' => $this->text(),
       'valid' => $this->boolean()->defaultValue(1),
-      'eq_task' => $this->boolean()
+      'eq_task' => $this->boolean(),
+      'icon' => $this->string(50)
     ], $tableOptions);
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
     $defaultId_1 = MHelper::genDefaultId();
-    $defaultId_2 = 1111111111;
-    $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, root, lft, rgt, lvl, name, parent_id, quantity, eq_comments, valid) 
-                VALUES (' . $defaultId_1 . ', ' . $defaultId_1 . ', 1, 2, 0, "Оборудование",' . $defaultId_1 . ', 1, null, 1), 
-                (' . $defaultId_2 . ', ' . $defaultId_2 . ', 3, 4, 0, "Необработанное",' . $defaultId_2 . ', 1, null, 1)';
+    $defaultId_2 = MHelper::genDefaultId();
+    $icon_1 = 'fa fa-sitemap';
+    $icon_2 = 'fa fa-question-circle-o';
+    $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, root, lft, rgt, lvl, name, parent_id, quantity, eq_comments, valid, icon) 
+                VALUES (' . $defaultId_1 . ', ' . $defaultId_1 . ', 1, 2, 0, "Оборудование",' . $defaultId_1 . ', 1, null, 1, "' . $icon_1 . '"), 
+                (' . $defaultId_2 . ', ' . $defaultId_2 . ', 3, 4, 0, "Необработанное",' . $defaultId_2 . ', 1, null, 1, "' . $icon_2 .'")';
     \Yii::$app->db->createCommand($sql)->execute();
   }
 

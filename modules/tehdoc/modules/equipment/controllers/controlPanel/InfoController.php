@@ -37,8 +37,9 @@ class InfoController extends Controller
     $docsCount = $tool->countDocs;
     $tool->scenario = Tools::SCENARIO_UPDATE;
     if ($tool->load(Yii::$app->request->post())) {
+
       if ($tool->save()) {
-        return $this->redirect(['control-panel/' . $tool->ref . '/info/index']);
+        return $this->redirect(['control-panel/' . $tool->id . '/info/index']);
       } else {
         Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');
       }
@@ -78,6 +79,7 @@ class InfoController extends Controller
   {
     $tool = Tools::findModel($nodeId);
     $tool->name = $title;
+    $tool->eq_title = $tool->name;
     if ($tool->save()) {
       $data['acceptedTitle'] = $title;
       return json_encode($data);

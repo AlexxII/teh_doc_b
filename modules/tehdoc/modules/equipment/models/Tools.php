@@ -67,6 +67,7 @@ class Tools extends \yii\db\ActiveRecord
   public function __construct()
   {
     $this->id = MHelper::generateId();
+    $this->icon = 't fa fa-file-o';                     // иконка
   }
 
   public function scenarios()
