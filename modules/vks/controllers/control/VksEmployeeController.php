@@ -3,7 +3,6 @@
 namespace app\modules\vks\controllers\control;
 
 use app\modules\vks\models\VksEmployees;
-use app\modules\vks\models\VksSessions;
 use yii\web\Controller;
 
 class VksEmployeeController extends Controller
@@ -30,7 +29,7 @@ class VksEmployeeController extends Controller
   public function actionVksEmployeeCreate($parentId, $title)
   {
     $data = [];
-    $parentEmpl = VksEmployees::findOne($parentId);
+    $parentEmpl = VksEmployees::findModel($parentId);
     $newEmpl = new VksEmployees();
     $newEmpl->name = $title;
     $newEmpl->parent_id = $parentEmpl->id;
@@ -43,7 +42,7 @@ class VksEmployeeController extends Controller
 
   public function actionUpdate($id, $title)
   {
-    $empl = VksEmployees::findOne(['id' => $id]);
+    $empl = VksEmployees::findModel($id);
     $empl->name = $title;
     if ($empl->save()) {
       $data['acceptedTitle'] = $title;

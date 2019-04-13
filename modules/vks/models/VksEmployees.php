@@ -2,7 +2,6 @@
 
 namespace app\modules\vks\models;
 
-use Yii;
 use creocoder\nestedsets\NestedSetsBehavior;
 use yii\web\NotFoundHttpException;
 

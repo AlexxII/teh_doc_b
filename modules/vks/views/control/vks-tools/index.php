@@ -426,6 +426,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 result = JSON.parse(result);
                 node.data.id = result.acceptedId;
                 node.setTitle(result.acceptedTitle);
+                node.data.lvl = result.lvl;
                 $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);
