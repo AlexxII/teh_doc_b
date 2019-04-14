@@ -42,7 +42,7 @@ class VksTypeController extends Controller
 
   public function actionUpdate($id, $title)
   {
-    $type = VksTypes::findModel(['id' => $id]);
+    $type = VksTypes::findModel($id);
     $type->name = $title;
     if ($type->save()){
       $data['acceptedTitle'] = $title;

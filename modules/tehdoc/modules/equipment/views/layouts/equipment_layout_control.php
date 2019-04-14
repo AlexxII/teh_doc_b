@@ -389,6 +389,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
                   $('#status-info').html('');
                   $('.del-node').hide();
                   $(".del-multi-nodes").hide();
+                  $('#content-info').html('');
                 }
               }
             }
@@ -434,8 +435,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
         });
       });
     }
-
-
   });
 
 
@@ -679,10 +678,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
       },
       dblclick: function (event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-        if (target === 'icon') {
+        if (target === 'title') {
           $('#content-info').html('');
         }
-        if (target === 'title') {
+        if (target === 'icon') {
           var node = data.node;
           var prefix = '/tehdoc/equipment/control-panel/';
           if (!match) {

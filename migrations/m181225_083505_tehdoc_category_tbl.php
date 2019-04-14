@@ -25,14 +25,16 @@ class m181225_083505_tehdoc_category_tbl extends Migration
       'name' => $this->string(120)->notNull(),
       'parent_id' => $this->bigInteger(),
       'valid' => $this->boolean()->defaultValue(1),
-      'del_reason' => $this->string(255)
+      'del_reason' => $this->string(255),
+      'icon' => $this->string(50)
     ], $tableOptions);
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
     $defaultId = MHelper::genDefaultId();
-    $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (id, root, lft, rgt, lvl, name, parent_id) 
-                VALUES (' . $defaultId . ', ' . $defaultId . ', 1, 2, 0, "Категории", ' . $defaultId . ')';
+    $icon = '';
+    $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (id, root, lft, rgt, lvl, name, parent_id, icon) 
+                VALUES (' . $defaultId . ', ' . $defaultId . ', 1, 2, 0, "Категории", ' . $defaultId . ', "' . $icon . '")';
     \Yii::$app->db->createCommand($sql)->execute();
   }
 

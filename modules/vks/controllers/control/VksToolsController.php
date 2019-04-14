@@ -42,7 +42,7 @@ class VksToolsController extends Controller
 
   public function actionUpdate($id, $title)
   {
-    $tool = VksTools::findModel(['id' => $id]);
+    $tool = VksTools::findModel($id);
     $tool->name = $title;
     if ($tool->save()) {
       $data['acceptedTitle'] = $title;
@@ -79,7 +79,7 @@ class VksToolsController extends Controller
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $tool = VksTools::findModel(['id' => $id]);
+      $tool = VksTools::findModel($id);
       if ($tool->delete()) {
         return true;
       }
@@ -92,7 +92,7 @@ class VksToolsController extends Controller
   {
     if (!empty($_POST)) {
       $id = $_POST['id'];
-      $root = VksTools::findModel(['id' => $id]);
+      $root = VksTools::findModel($id);
       if ($root->deleteWithChildren()) {
         return true;
       }
@@ -103,7 +103,7 @@ class VksToolsController extends Controller
 
   public function actionSurnames($id)
   {
-    $model = VksTools::findModel(['id' => $id]);
+    $model = VksTools::findModel($id);
     return json_encode($model->surnames);
   }
 
@@ -111,7 +111,7 @@ class VksToolsController extends Controller
   {
     if (!empty($_POST)) {
       $id = $_POST['id'];
-      $model = VksTools::findModel(['id' => $id]);
+      $model = VksTools::findModel($id);
       $model->surnames = $_POST['Data'];
       if ($model->save()) {
         return true;

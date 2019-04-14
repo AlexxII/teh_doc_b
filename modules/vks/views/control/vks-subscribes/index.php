@@ -5,7 +5,7 @@ use app\assets\FancytreeAsset;
 
 FancytreeAsset::register($this);
 
-$this->title = 'Абоненты ВКС2';
+$this->title = 'Абоненты ВКС';
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
 $this->params['breadcrumbs'][] = ['label' => 'Журнал', 'url' => ['/vks/sessions']];
 $this->params['breadcrumbs'][] = $this->title;

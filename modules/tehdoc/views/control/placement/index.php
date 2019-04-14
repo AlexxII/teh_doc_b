@@ -525,12 +525,9 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         }
       },
       icon: function (event, data) {
-        if (data.node.data.lvl == 0) {
-          return "fa fa-map-signs";
-        } else if (data.node.isFolder()) {
-          return "fa fa-files-o";
-        } else {
-          return 'fa fa-file-o';
+        var icon = data.node.data.icon;
+        if (icon) {
+          return icon;
         }
       },
       renderNode: function (node, data) {

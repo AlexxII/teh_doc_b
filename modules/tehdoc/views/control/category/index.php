@@ -437,6 +437,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         },
         triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
         beforeEdit: function (event, data) {
+          node.icon = 'fa fa-file-o';
           return true;
         },
         edit: function (event, data) {
@@ -536,12 +537,9 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         }
       },
       icon: function (event, data) {
-        if (data.node.data.lvl == 0) {
-          return "fa fa-list-alt";
-        } else if (data.node.isFolder()) {
-          return "fa fa-files-o";
-        } else {
-          return 'fa fa-file-o';
+        var icon = data.node.data.icon;
+        if (icon) {
+          return icon;
         }
       },
       renderNode: function (node, data) {

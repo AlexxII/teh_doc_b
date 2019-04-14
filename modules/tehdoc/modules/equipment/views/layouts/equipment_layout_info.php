@@ -141,12 +141,6 @@ $del_multi_nodes = 'Удалить С вложениями';
           ['label' => 'Таблица ОТХ', 'url' => ['/tehdoc/equipment/tools/oth']],
           ['label' => 'Таблица драг.металлов', 'url' => ['/tehdoc/equipment/tools/categories']],
           ['label' => 'Таблица инвентаризации', 'url' => ['/tehdoc/equipment/tools/categories']],
-
-//                    '<li class="divider"></li>',
-//                    '<li class="dropdown-header" style="font-size: 10px">Комплекты</li>',
-//                    ['label' => 'По категориям', 'url' => ['/tehdoc/tools/categories']],
-//                    ['label' => 'По месту размещения', 'url' => ['/tehdoc/tools/placement']],
-//                    ['label' => 'Классификатор', 'url' => ['/tehdoc/tools/classifiers']],
         ],
       ],
       Yii::$app->user->isGuest ? (
@@ -286,6 +280,7 @@ $del_multi_nodes = 'Удалить С вложениями';
     })
   });
 
+  var uri, match;
   // отображение и логика работа дерева
   jQuery(function ($) {
     var main_url = '/tehdoc/equipment/tools/all-tools';
@@ -320,9 +315,25 @@ $del_multi_nodes = 'Удалить С вложениями';
           var node = data.node;
           var prefix = '/tehdoc/equipment/tool/';
           if (node.data.lvl != 0 && node.data.eq_wrap != 1) {
-            var url = prefix + node.key + '/info/index';
+            if (!match) {
+              var url = prefix + node.key + '/info/index';
+            } else {
+              var url = prefix + node.key + '/' + match[2] + '/index';
+            }
             window.location.href = url;
           }
+        }
+      },
+      dblclick: function (event, data) {
+        var node = data.node;
+        var prefix = '/tehdoc/equipment/tool/';
+        if (node.data.lvl != 0 && node.data.eq_wrap != 1) {
+          if (!match) {
+            var url = prefix + node.key + '/info/index';
+          } else {
+            var url = prefix + node.key + '/' + match[2] + '/index';
+          }
+          window.location.href = url;
         }
       },
       icon: function (event, data) {
@@ -330,26 +341,14 @@ $del_multi_nodes = 'Удалить С вложениями';
         if (icon) {
           return icon;
         }
-        // t fa fa-clone
-        // if (data.node.isFolder()) {
-        //   return "fa fa-eye";
-        // }
       },
       init: function (event, data) {
-        var uri = window.location.href;
-        var key = uri.match('\\/tool\\/([0-9-]+)\\/\\w+\\/');
-        if (!key) {
+        uri = window.location.href;
+        match = uri.match('\\/tool\\/([0-9-]+)\\/(\\w+)\\/');
+        if (!match) {
           return;
         }
-        data.tree.activateKey(key[1]);
-      },
-      dblclick: function (event, data) {
-        var node = data.node;
-        var prefix = '/tehdoc/equipment/tool/';
-        if (node.data.lvl != 0 && node.data.eq_wrap != 1) {
-          var url = prefix + node.key + '/info/index';
-          window.location.href = url;
-        }
+        data.tree.activateKey(match[1]);
       }
     });
   });

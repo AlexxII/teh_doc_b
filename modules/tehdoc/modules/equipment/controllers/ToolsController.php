@@ -54,7 +54,7 @@ class ToolsController extends Controller
       $parentNode = Tools::findModel(['name' => 'Необработанное']);
       $model->appendTo($parentNode);
       if ($model->save()) {
-        $toolSettings->save();
+        $toolSettings->save();                                                            // TODO необходима проверка!!!
         if ($fUpload->load(Yii::$app->request->post())) {
           $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
           $result = $fUpload->uploadImage($model->id);
@@ -72,7 +72,6 @@ class ToolsController extends Controller
         }
         return $this->redirect(['tool/' . $model->id . '/info/index']);
       } else {
-        return var_dump($model->getErrors());
         Yii::$app->session->setFlash('error', 'Ошибка валидации');
       }
     }
@@ -83,35 +82,8 @@ class ToolsController extends Controller
     ]);
   }
 
-  /*  public function actionUpdate($id)
-    {
-      $model = $this->findModel($id);
-      $fUpload = new Images();
-
-      if ($model->load(Yii::$app->request->post())) {
-        if ($model->save(false)) { // TODO Разобраться с валидацией, при вкл - не сохраняет
-          if ($fUpload->load(Yii::$app->request->post())) {
-            $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
-            if ($fUpload->uploadImage($model->id_eq)) {
-              Yii::$app->session->setFlash('success', 'Изменения внесены');
-            }
-          } else {
-            Yii::$app->session->setFlash('success', 'Изменения внесены!!');
-          }
-          return $this->redirect(['view', 'id' => $model->id_eq]);
-        } else {
-          Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');
-        }
-      }
-      return $this->render('update', [
-        'model' => $model,
-        'fupload' => $fUpload,
-      ]);
-    }*/
-
   public function actionFileUpload()
   {
-//    return true;
     $fUpload = new Images();
     if (Yii::$app->request->post()) {
       $eqId = Yii::$app->request->post('eqId');
@@ -125,7 +97,11 @@ class ToolsController extends Controller
 
   public function actionTask()
   {
-    $models = Tools::find()->where(['settings_table.eq_task' => 1])->joinWith('settings settings_table')->all();
+    $models = Tools::find()
+      ->where(['settings_table.eq_task' => 1])
+      ->joinWith('settings settings_table')
+      ->orderBy('lft')
+      ->all();
     return $this->render('task', [
       'models' => $models
     ]);
@@ -147,6 +123,9 @@ class ToolsController extends Controller
         } else {
           Yii::$app->session->setFlash('success', 'Изменения внесены.');
         }
+        if (isset($_POST['stay'])) {
+          return $this->redirect(['task']);
+        }
         return $this->redirect(['tool/' . $model->id . '/info/index']);
       } else {
         Yii::$app->session->setFlash('error', 'Изменения НЕ внесены.');
@@ -157,52 +136,6 @@ class ToolsController extends Controller
       'fupload' => $fUpload,
     ]);
   }
-
-  /*
-    public function actionCreateEx($id)
-    {
-      $model = $this->findModel($id);
-      $model->scenario = Tools::SCENARIO_UPDATE;
-      $fUpload = new Images();
-      $model->quantity = 1;                             // По умолчанию, кол-во оборудования - 1
-      $model->tempId = mt_rand();
-
-      if ($model->load(Yii::$app->request->post())) {
-        if (isset($_POST['eqId'])) {
-          $model->ref = $_POST['eqId'];
-        } else {
-          $model->ref = $model->tempId;
-        }
-        $model->parent_id = 0;
-        $model->name = $model->eq_title;
-        $model->appendTo($parentNode);
-        if ($model->save()) {
-          if ($fUpload->load(Yii::$app->request->post())) {
-            $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
-            if ($fUpload->uploadImage($model->ref)) {
-              Yii::$app->session->setFlash('success', 'Оборудование добавлено');
-            } else {
-              Yii::$app->session->setFlash('success', 'Оборудование добавлено, <strong>НО</strong> не загружены изображения');
-            }
-          } else {
-            Yii::$app->session->setFlash('success', 'Оборудование добавлено');
-          }
-          if (isset($_POST['stay'])) {
-            return $this->redirect(['create']);
-          }
-          return $this->redirect(['tool/' . $model->ref . '/info/index']);
-        } else {
-          return var_dump($model->getErrors());
-          Yii::$app->session->setFlash('error', 'Ошибка валидации');
-        }
-      }
-      return $this->render('create', [
-        'model' => $model,
-        'fupload' => $fUpload
-
-      ]);
-    }
-  */
 
   public function actionCategories()
   {
@@ -280,13 +213,6 @@ class ToolsController extends Controller
     $result = SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where);
 
     return json_encode($result);
-
-//    return json_encode(
-//      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
-//    );
-//    return var_dump(
-//      SSP::simple($_GET, $sql_details, $table, $primaryKey, $columns)
-//    );
   }
 
   public function actionServerSideOth()
