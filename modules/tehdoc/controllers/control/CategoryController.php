@@ -43,8 +43,10 @@ class CategoryController extends Controller
         break;
     }
     $parent = Category::findModel($parentId);
+    $parent->icon = 't fa fa-folder-o';
     $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
+      $parent->save();
       return true;
     }
     return false;

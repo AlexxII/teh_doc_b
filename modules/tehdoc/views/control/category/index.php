@@ -437,6 +437,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         },
         triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
         beforeEdit: function (event, data) {
+          var node = data.node;
           node.icon = 'fa fa-file-o';
           return true;
         },
@@ -461,7 +462,6 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
                 node.data.id = result.acceptedId;
                 node.setTitle(result.acceptedTitle);
                 node.data.lvl = result.lvl;
-                node.parent.folder = true;
                 $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);

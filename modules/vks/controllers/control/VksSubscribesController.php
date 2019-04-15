@@ -33,6 +33,7 @@ class VksSubscribesController extends Controller
     $newSubscr = new VksSubscribes();
     $newSubscr->name = $title;
     $newSubscr->parent_id = $parentSubscr->id;
+    $newSubscr->flag = $parentSubscr->flag;
     $newSubscr->appendTo($parentSubscr);
     $data['acceptedTitle'] = $title;
     $data['acceptedId'] = $newSubscr->id;

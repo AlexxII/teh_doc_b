@@ -188,12 +188,12 @@ class SessionsController extends Controller
           $newModel = new VksSessions(['scenario' => VksSessions::SCENARIO_CREATE]);
           $newModel->load(Yii::$app->request->post());
           $newModel->vks_type = $item;
-          $typeModel = VksTypes::findOne(['ref' => $item]);
+          $typeModel = VksTypes::findModel($item);
           $newModel->vks_type_text = $typeModel->name;
           if (!empty($_POST['test-place'][$key])) {
             $placeId = $_POST['test-place'][$key];
             $newModel->vks_place = $placeId;
-            $placeModel = VksPlaces::findOne(['ref' => $placeId]);
+            $placeModel = VksPlaces::findModel($placeId);
             $newModel->vks_place_text = $placeModel->name;
           }
           $newModel->vks_record_create = $date;
@@ -304,7 +304,8 @@ class SessionsController extends Controller
 
   public function actionSubscribersMsk()
   {
-    $sql = "SELECT ref as value, surnames as label FROM vks_subscribes_tbl where surnames IS NOT NULL and surnames != '' AND root = 1";
+    $sql = "SELECT id as value, surnames as label 
+              FROM vks_subscribes_tbl where surnames IS NOT NULL and surnames != '' AND flag = 1";
     $arrayOfNames = VksSubscribes::findBySql($sql)->asArray()->all();
     $newArrayOfNames = [];
     $tempArrayOfNames = [];
@@ -323,7 +324,8 @@ class SessionsController extends Controller
 
   public function actionSubscribersRegion()
   {
-    $sql = "SELECT ref as value, surnames as label FROM vks_subscribes_tbl where surnames IS NOT NULL and surnames != '' AND root = 2";
+    $sql = "SELECT id as value, surnames as label 
+              FROM vks_subscribes_tbl where surnames IS NOT NULL and surnames != '' AND flag = 2";
     $arrayOfNames = VksSubscribes::findBySql($sql)->asArray()->all();
     $newArrayOfNames = [];
     $tempArrayOfNames = [];
@@ -408,8 +410,7 @@ class SessionsController extends Controller
 
   protected function logVks($sessionId, $status, $text)
   {
-    $userId = Yii::$app->user->identity->ref;
-
+    $userId = Yii::$app->user->identity->id;
     $log = new VksLog();
     $log->status = $status;
     $log->session_id = $sessionId;
