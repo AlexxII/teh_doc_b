@@ -32,7 +32,7 @@ class m181225_083505_tehdoc_category_tbl extends Migration
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
     $defaultId = MHelper::genDefaultId();
-    $icon = '';
+    $icon = 'fa fa-list-alt';
     $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (id, root, lft, rgt, lvl, name, parent_id, icon) 
                 VALUES (' . $defaultId . ', ' . $defaultId . ', 1, 2, 0, "Категории", ' . $defaultId . ', "' . $icon . '")';
     \Yii::$app->db->createCommand($sql)->execute();

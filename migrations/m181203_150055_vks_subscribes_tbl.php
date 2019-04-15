@@ -23,7 +23,8 @@ class m181203_150055_vks_subscribes_tbl extends Migration
       'parent_id' => $this->bigInteger(),
       'surnames' => $this->text(),
       'valid' => $this->boolean()->defaultValue(1),
-      'del_reason' => $this->string(255)
+      'del_reason' => $this->string(255),
+      'icon' => $this->string(50)
     ], $tableOptions);
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');

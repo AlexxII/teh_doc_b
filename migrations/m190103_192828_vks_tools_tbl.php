@@ -27,7 +27,8 @@ class m190103_192828_vks_tools_tbl extends Migration
       'complex_id' => $this->bigInteger(),
       'service_time' => $this->float(),
       'valid' => $this->boolean()->defaultValue(1),
-      'del_reason' => $this->string(255)
+      'del_reason' => $this->string(255),
+      'icon' => $this->string(50)
     ], $tableOptions);
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');

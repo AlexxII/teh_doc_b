@@ -22,6 +22,8 @@ class m181203_151821_vks_order_tbl extends Migration
       'name' => $this->string(120)->notNull(),
       'parent_id' => $this->bigInteger(),
       'valid' => $this->boolean()->defaultValue(1),
+      'del_reason' => $this->string(255),
+      'icon' => $this->string(50)
     ], $tableOptions);
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');

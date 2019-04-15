@@ -33,7 +33,7 @@ class m181225_083525_tehdoc_placement_tbl extends Migration
 
     $defaultId = MHelper::genDefaultId();
     $icon = 'fa fa-map-signs';
-    $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, root, lft, rgt, lvl, name, parent_id) 
+    $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, root, lft, rgt, lvl, name, parent_id, icon) 
                 VALUES (' . $defaultId . ', ' . $defaultId . ', 1, 2, 0, "Места размещения оборудования",' . $defaultId . ', "' . $icon . '")';
     \Yii::$app->db->createCommand($sql)->execute();
   }
