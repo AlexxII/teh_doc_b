@@ -33,6 +33,7 @@ class VksEmployeeController extends Controller
     $newEmpl = new VksEmployees();
     $newEmpl->name = $title;
     $newEmpl->parent_id = $parentEmpl->id;
+    $newEmpl->list = $parentEmpl->list;
     $newEmpl->appendTo($parentEmpl);
     $data['acceptedTitle'] = $title;
     $data['acceptedId'] = $newEmpl->id;
@@ -68,6 +69,7 @@ class VksEmployeeController extends Controller
     }
     $parent = VksEmployees::findModel($parentId);
     $item_model->parent_id = $parent->id;
+    $item_model->list = $parent->list;
     if ($item_model->save()) {
       return true;
     }

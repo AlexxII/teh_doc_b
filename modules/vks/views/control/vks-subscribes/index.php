@@ -411,6 +411,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
         preventRecursiveMoves: true,
         autoCollapse: true,
         dragStart: function (node, data) {
+          if (data.node.data.lvl == 0) {
+            return false;
+          }
           return true;
         },
         dragEnter: function (node, data) {
