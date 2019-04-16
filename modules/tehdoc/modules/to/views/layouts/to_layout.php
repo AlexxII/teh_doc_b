@@ -1,12 +1,14 @@
 <?php
 
-use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 
+use app\widgets\Alert;
+
 use app\assets\AppAsset;
+use app\assets\JConfirmAsset;
 use app\assets\FancytreeAsset;
 use app\modules\tehdoc\asset\TehdocAsset;
 use app\modules\tehdoc\modules\to\assets\ToAsset;
@@ -15,6 +17,8 @@ AppAsset::register($this);    // регистрация ресурсов все�
 FancytreeAsset::register($this);
 TehdocAsset::register($this);       // регистрация ресурсов модуля
 ToAsset::register($this);
+JConfirmAsset::register($this);
+
 
 $about = "Панель управления оборудованием";
 $add_hint = 'Добавить новый узел';

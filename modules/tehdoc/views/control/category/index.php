@@ -288,7 +288,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         jc = $.confirm({
           icon: 'fa fa-exclamation-triangle',
           title: 'Неудача!',
-          content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
           type: 'red',
           buttons: false,
           closeIcon: false,

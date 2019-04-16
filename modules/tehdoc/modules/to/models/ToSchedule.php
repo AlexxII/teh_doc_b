@@ -2,9 +2,10 @@
 
 namespace app\modules\tehdoc\modules\to\models;
 
+use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
 
 use app\modules\admin\models\User;
-use yii\helpers\ArrayHelper;
 
 
 class ToSchedule extends \yii\db\ActiveRecord

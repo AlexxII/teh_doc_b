@@ -208,7 +208,7 @@ $del_multi_nodes = 'Удалить С вложениями';
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       $.ajax({
-        url: "/tehdoc/to/control/to-equipment/create-root",
+        url: "/tehdoc/to/control/to-equipment/create-node",
         data: {title: 'Новая группа'}
       })
         .done(function () {
@@ -226,7 +226,6 @@ $del_multi_nodes = 'Удалить С вложениями';
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       tree.reload();
-      $(".del-root").hide();
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
       $('.about-info').html('')
@@ -235,56 +234,140 @@ $del_multi_nodes = 'Удалить С вложениями';
 
   $(document).ready(function () {
     $('.del-node').click(function (event) {
-      return;
-      if (confirm('Вы уверены, что хотите удалить выбранный классификатор?')) {
-        event.preventDefault();
-        var csrf = $('meta[name=csrf-token]').attr("content");
-        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-        $.ajax({
-          url: "/tehdoc/to/control/to-equipment/delete-node",
-          type: "post",
-          data: {id: node.data.id, _csrf: csrf}
-        })
-          .done(function () {
-            node.remove();
-            $('.about-info').html('');
-            $('.del-node').hide();
-          })
-          .fail(function () {
-            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-          });
-      }
+      var url = 'delete';
+      event.preventDefault();
+      jc = $.confirm({
+        icon: 'fa fa-question',
+        title: 'Вы уверены?',
+        content: 'Вы действительно хотите удалить выделенное?',
+        type: 'red',
+        closeIcon: false,
+        autoClose: 'cancel|9000',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+              var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+              jc.close();
+              deleteProcess(url, node);
+            }
+          },
+          cancel: {
+            action: function () {
+              return;
+            }
+          }
+        }
+      });
     });
 
     $('.del-multi-nodes').click(function (event) {
-      if (confirm('Вы уверены, что хотите удалить выбранный классификатор вместе с вложениями?')) {
-        event.preventDefault();
-        var csrf = $('meta[name=csrf-token]').attr("content");
-        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-        if (!node) {
-          alert('Выберите узел');
-          return;
-        }
-        $.ajax({
-          url: "/tehdoc/to/control/to-equipment/delete-root",
-          type: "post",
-          data: {
-            id: node.data.id,
-            _csrf: csrf
+      var url = 'delete-root';
+      event.preventDefault();
+      jc = $.confirm({
+        icon: 'fa fa-question',
+        title: 'Вы уверены?',
+        content: 'Вы действительно хотите удалить выделенное С вложениями?',
+        type: 'red',
+        closeIcon: false,
+        autoClose: 'cancel|9000',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+              var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+              jc.close();
+              deleteProcess(url, node);
+            }
+          },
+          cancel: {
+            action: function () {
+              return;
+            }
           }
-        })
-          .done(function () {
-            node.remove();
-            $('.about-info').html('');
-            $('.del-multi-nodes').hide();
-            $('.del-node').hide();
+        }
+      });
+    });
 
-          })
-          .fail(function () {
-            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
+    function deleteProcess(url, node) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Ваш запрос выполняется!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
+      $.ajax({
+        url: url,
+        type: "post",
+        data: {id: node.data.id, _csrf: csrf}
+      }).done(function (response) {
+        if (response != false) {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-thumbs-up',
+            title: 'Успех!',
+            content: 'Ваш запрос выполнен.',
+            type: 'green',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-success',
+                action: function () {
+                  node.remove();
+                  $('.about-info').html('');
+                  $('.del-node').hide();
+                  $(".del-multi-nodes").hide();
+                }
+              }
+            }
           });
-      }
-    })
+        } else {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-exclamation-triangle',
+            title: 'Неудача!',
+            content: 'Запрос не выполнен. Что-то пошло не так.',
+            type: 'red',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-danger',
+                action: function () {
+                }
+              }
+            }
+          });
+        }
+      }).fail(function () {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|4000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
+      });
+    }
   });
 
 
@@ -468,17 +551,6 @@ $del_multi_nodes = 'Удалить С вложениями';
           }
         }
       },
-      icon: function (event, data) {
-        if (data.node.key == 1122334455) {
-          return "fa fa-sitemap";
-        } else if (data.node.key == 5544332211) {
-          return "fa fa-question-circle";
-        } else if (data.node.data.eq_id == 0) {
-          return "t fa fa-clone";
-        } else {
-          return "t fa fa-file-o";
-        }
-      },
       activate: function (node, data) {
         $('.about-info').html('');
         $('#serial-number').val('');
@@ -486,6 +558,8 @@ $del_multi_nodes = 'Удалить С вложениями';
         $("#serial-control").prop("disabled", true);
         var node = data.node;
         var lvl = node.data.lvl;
+        console.log(node);
+        return;
         window.node$ = data.node;
         window.nodeId = node.data.id;
         var serial = node.data.eq_serial;
@@ -505,7 +579,7 @@ $del_multi_nodes = 'Удалить С вложениями';
           $.ajax({
             url: '/tehdoc/to/control/to-equipment/tools-serials',
             data: {
-              id: node.data.ref,
+              id: node.data.id,
             }
           }).done(function (result) {
             if (result) {
@@ -530,7 +604,7 @@ $del_multi_nodes = 'Удалить С вложениями';
                   } else {
                     serVal = 's/n: -';
                   }
-                  optionsValues += '<option value="' + obj.ref + '" ' +
+                  optionsValues += '<option value="' + obj.id + '" ' +
                     'data-serial="' + obj.eq_serial + '">' + obj.name + ' ' + serVal + '</option>';
                 });
                 optionsValues += '</select>';
@@ -555,7 +629,6 @@ $del_multi_nodes = 'Удалить С вложениями';
           $(".save-btn").prop("disabled", true);
         }
         if (lvl == 0) {
-          $(".del-root").show();
           $(".del-node").hide();
           $(".del-multi-nodes").hide();
         } else {
@@ -565,7 +638,6 @@ $del_multi_nodes = 'Удалить С вложениями';
           } else {
             $(".del-multi-nodes").hide();
           }
-          $(".del-root").hide();
           $(".del-node").show();
         }
       },

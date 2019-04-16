@@ -223,13 +223,22 @@ $task_hint = 'Добавить выделенные элементы в зада
     $('#main-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
-      location.href = "/tehdoc/equipment/control-panel/" + data[0] + '/info/index';
+      var href = "/tehdoc/equipment/control-panel/" + data[0] + '/info/index';
+      if (e.ctrlKey) {
+        window.open(href);
+      } else {
+        location.href = href;
+      }
     });
     $('#main-table tbody').on('click', '.view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
       var href = "/tehdoc/equipment/tool/" + data[0] + '/info/index';
-      window.open(href);
+      if (e.ctrlKey) {
+        window.open(href);
+      } else {
+        location.href = href;
+      }
     });
   });
 

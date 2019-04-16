@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель управления видами технического обслуживания.";
 $add_hint = 'Добавить новый тип';
+$refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить';
 
 ?>
@@ -53,6 +54,12 @@ $del_hint = 'Удалить';
       <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
         'style' => ['margin-top' => '5px'],
         'title' => $add_hint,
+        'data-toggle' => 'tooltip',
+        'data-placement' => 'top'
+      ]) ?>
+      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
+        'style' => ['margin-top' => '5px'],
+        'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top'
       ]) ?>
@@ -123,44 +130,25 @@ $del_hint = 'Удалить';
   $(document).ready(function () {
     $('.add-subcategory').click(function (event) {
       event.preventDefault();
-      var tree = $(".ui-draggable-handle").fancytree("getTree");
-      $.ajax({
-        url: "/tehdoc/to/control/to-type/create-root",
-        data: {title: 'Новый вид ТО'}
-      })
-        .done(function () {
-          tree.reload();
-        })
-        .fail(function () {
-          alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-        });
+      var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+      if (!node) {
+        alert("Выберите родительскую категорию");
+        return;
+      }
+      if (node.data.lvl <= 1) {                                       // ограничение на вложенность
+        node.editCreateNode("child", " ");
+      } else {
+        alert("Нельзя создавать вложенность более 3х");
+        return;
+      }
     });
   });
-
-
-  /*
-    $(document).ready(function () {
-      $('.add-subcategory').click(function (event) {
-        event.preventDefault();
-        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-        if (!node) {
-          alert("Выберите родительскую категорию");
-          return;
-        } else if (node.data.lvl != 0) {
-          alert("Название группы вклядавать в оборудование нельзя");
-          return;
-        }
-        node.editCreateNode("child", " ");
-      })
-    });
-  */
 
   $(document).ready(function () {
     $('.refresh').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       tree.reload();
-      $(".del-root").hide();
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
       $('.about-info').html('')
@@ -169,59 +157,112 @@ $del_hint = 'Удалить';
 
   $(document).ready(function () {
     $('.del-node').click(function (event) {
-      if (confirm('Вы уверены, что хотите удалить выбранный элемент?')) {
-        event.preventDefault();
-        var csrf = $('meta[name=csrf-token]').attr("content");
-        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-        $.ajax({
-          url: "/tehdoc/to/control/to-type/delete-node",
-          type: "post",
-          data: {
-            id: node.data.ref,
-            _csrf: csrf
+      var url = 'to-type/delete';
+      event.preventDefault();
+      jc = $.confirm({
+        icon: 'fa fa-question',
+        title: 'Вы уверены?',
+        content: 'Вы действительно хотите удалить выделенное?',
+        type: 'red',
+        closeIcon: false,
+        autoClose: 'cancel|9000',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+              var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+              jc.close();
+              deleteProcess(url, node);
+            }
+          },
+          cancel: {
+            action: function () {
+              return;
+            }
           }
-        })
-          .done(function () {
-            node.remove();
-            $('.about-info').html('');
-            $('.del-node').hide();
-          })
-          .fail(function () {
-            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-          });
-      }
+        }
+      });
     });
 
-    $('.del-multi-nodes').click(function (event) {
-      return;
-      if (confirm('Вы уверены, что хотите удалить выбранный классификатор вместе с вложениями?')) {
-        event.preventDefault();
-        var csrf = $('meta[name=csrf-token]').attr("content");
-        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-        if (!node) {
-          alert('Выберите узел');
-          return;
-        }
-        $.ajax({
-          url: "/vks/control/vks-order/delete-root",
-          type: "post",
-          data: {
-            id: node.data.id,
-            _csrf: csrf
-          }
-        })
-          .done(function () {
-            node.remove();
-            $('.about-info').html('');
-            $('.del-multi-nodes').hide();
-            $('.del-node').hide();
-
-          })
-          .fail(function () {
-            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
+    function deleteProcess(url, node) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Ваш запрос выполняется!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
+      $.ajax({
+        url: url,
+        type: "post",
+        data: {id: node.data.id, _csrf: csrf}
+      }).done(function (response) {
+        if (response != false) {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-thumbs-up',
+            title: 'Успех!',
+            content: 'Ваш запрос выполнен.',
+            type: 'green',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-success',
+                action: function () {
+                  node.remove();
+                  $('.about-info').html('');
+                  $('.del-node').hide();
+                }
+              }
+            }
           });
-      }
-    })
+        } else {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-exclamation-triangle',
+            title: 'Неудача!',
+            content: 'Запрос не выполнен. Что-то пошло не так.',
+            type: 'red',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-danger',
+                action: function () {
+                }
+              }
+            }
+          });
+        }
+      }).fail(function () {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|4000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
+      });
+    }
+
   });
 
 
@@ -400,17 +441,6 @@ $del_hint = 'Удалить';
           }
         }
       },
-      icon: function (event, data) {
-        if (data.node.key == 1122334455) {
-          return "fa fa-sitemap";
-        } else if (data.node.key == 5544332211) {
-          return "fa fa-question-circle";
-        } else if (data.node.data.eq_id == 0) {
-          return "t fa fa-clone";
-        } else {
-          return "t fa fa-file-o";
-        }
-      },
       activate: function (node, data) {
         $('.about-info').html('');
         var node = data.node;
@@ -425,16 +455,9 @@ $del_hint = 'Удалить';
           $(".add-subcategory").hide();
         }
         if (lvl == 0) {
-          $(".del-root").show();
           $(".del-node").hide();
           $(".del-multi-nodes").hide();
         } else {
-          if (node.hasChildren()) {
-            $(".del-multi-nodes").show();
-          } else {
-            $(".del-multi-nodes").hide();
-          }
-          $(".del-root").hide();
           $(".del-node").show();
         }
       },

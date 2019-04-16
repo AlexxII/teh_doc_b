@@ -10,13 +10,13 @@ class ToTypeController extends Controller
 {
   public function actionAllTypes()
   {
-    $id = ToType::find()->select('id')->all();
+    $id = ToType::find()->all();
     if (!$id) {
       $data = array();
       $data = [['title' => 'База данных пуста', 'key' => -999]];
       return json_encode($data);
     }
-    $roots = ToType::findOne($id)->tree();
+    $roots = ToType::findModel($id)->tree();
     return json_encode($roots);
   }
 
@@ -25,16 +25,15 @@ class ToTypeController extends Controller
     return $this->render('index');
   }
 
-  public function actionCreateRoot($title)
+  public function actionCreateNode($title)
   {
-    $parentId = 1;
-    $newGroup = new ToType(['name' => $title]);
-    $parentOrder = ToType::findOne($parentId);
-    $newGroup->ref = mt_rand();
+    $newGroup = new ToType();
+    $newGroup->name = $title;
+    $parentOrder = ToType::findModel(['name' => 'Виды ТО']);
+    $newGroup->id = mt_rand();
     if ($newGroup->appendTo($parentOrder)) {
       $data['acceptedTitle'] = $title;
       $data['acceptedId'] = $newGroup->id;
-      $data['acceptedRef'] = $newGroup->ref;
       return json_encode($data);
     }
     $data = $newGroup->getErrors();
@@ -43,7 +42,7 @@ class ToTypeController extends Controller
 
   public function actionUpdateNode($id, $title)
   {
-    $tool = ToType::findOne(['id' => $id]);
+    $tool = ToType::findModel($id);
     $tool->name = $title;
     if ($tool->save()) {
       $data['acceptedTitle'] = $title;
@@ -54,8 +53,8 @@ class ToTypeController extends Controller
 
   public function actionMoveNode($item, $action, $second, $parentId)
   {
-    $item_model = ToType::findOne($item);
-    $second_model = ToType::findOne($second);
+    $item_model = ToType::findModel($item);
+    $second_model = ToType::findModel($second);
     switch ($action) {
       case 'after':
         $item_model->insertAfter($second_model);
@@ -67,22 +66,26 @@ class ToTypeController extends Controller
         $item_model->appendTo($second_model);
         break;
     }
-    $parent = ToType::findOne($parentId);
-    $item_model->parent_id = $parent->ref;
+    $parent = ToType::findModel($parentId);
+    $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
       return true;
     }
     return false;
   }
 
-  public function actionDeleteNode()
+  public function actionDelete()
   {
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $type = ToType::findOne(['ref' => $id]);
-      $type->delete();
+      $type = ToType::findModel($id);
+      if ($type->delete()){
+        return true;
+      }
+      return false;
     }
+    return false;
   }
 
 
