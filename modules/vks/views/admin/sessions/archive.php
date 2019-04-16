@@ -192,7 +192,6 @@ $return_hint = 'Восстановить удаленные сеансы';
           "data": null,
           "width": '45px',
           "defaultContent":
-            "<a href='#' class='fa fa-edit edit' style='padding-right: 5px' title='Обновить' data-placement='top' data-toggle='tooltip'></a>" +
             "<a href='#' class='fa fa-info view' title='Подробности' style='padding-right: 5px'></a>"
         }, {
           "orderable": false,
@@ -230,15 +229,10 @@ $return_hint = 'Восстановить удаленные сеансы';
       }
     });
 
-    $('#main-table tbody').on('click', '.edit', function (e) {
-      e.preventDefault();
-      var data = table.row($(this).parents('tr')).data();
-      location.href = "/vks/sessions/update-session?id=" + data[0];
-    });
     $('#main-table tbody').on('click', '.view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
-      var href = "/vks/sessions/view-session?id=" + data[0];
+      var href = "/vks/admin/sessions/view-session?id=" + data[0];
       window.open(href);
     });
   });
@@ -266,7 +260,7 @@ $return_hint = 'Восстановить удаленные сеансы';
 
   $(document).ready(function () {
     $('#delete').click(function (event) {
-      var url = "/vks/sessions/delete-completely";
+      var url = "/vks/admin/sessions/delete-completely";
       event.preventDefault();
       if ($(this).attr('disabled')) {
         return;
@@ -283,7 +277,7 @@ $return_hint = 'Восстановить удаленные сеансы';
             btnClass: 'btn-danger',
             action: function () {
               jc.close();
-              remoteProcess(url)
+              remoteProcess(url);
               $('#return').attr('disabled', true);
               $('#delete').attr('disabled', true);
             }
@@ -298,7 +292,7 @@ $return_hint = 'Восстановить удаленные сеансы';
     });
 
     $('#return').click(function (event) {
-      var url = "/vks/sessions/restore";
+      var url = "/vks/admin/sessions/restore";
       event.preventDefault();
       if ($(this).attr('disabled')) {
         return;

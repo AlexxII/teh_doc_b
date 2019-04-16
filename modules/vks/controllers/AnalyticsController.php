@@ -226,7 +226,7 @@ class AnalyticsController extends Controller
         $table_ex = (string)$_GET['db_tbl'];
         $identifier = (string)$_GET['identifier'];
         $whereEx = ' ' . $table . '.vks_upcoming_session = 0 AND Date(vks_date) >= "' . $startDate . '" AND Date(vks_date) <= "' . $endDate . '"  AND vks_cancel = 0';
-        $where = '' . $identifier . ' in (SELECT ref
+        $where = '' . $identifier . ' in (SELECT id
     FROM ' . $table_ex . '
       WHERE ' . $table_ex . '.lft >= ' . $lft .
           ' AND ' . $table_ex . '.rgt <= ' . $rgt .

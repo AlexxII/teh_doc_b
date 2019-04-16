@@ -2,11 +2,13 @@
 
 namespace app\modules\tehdoc\modules\to\controllers;
 
-use app\modules\tehdoc\modules\to\models\ToEquipment;
-use app\modules\tehdoc\modules\to\models\ToSchedule;
 use Yii;
 use yii\web\Controller;
+
 use app\base\Model;
+use app\modules\tehdoc\modules\to\models\ToEquipment;
+use app\modules\tehdoc\modules\to\models\ToSchedule;
+
 
 class ScheduleController extends Controller
 {
@@ -20,25 +22,27 @@ class ScheduleController extends Controller
   {
     $month = date("Y-m-") . '01';
     $idReq = ToSchedule::find()->select('schedule_id')->where(['to_month' => $month])->distinct()->asArray()->all();
-    if (!$idReq){
+    if (!$idReq) {
       $month = ToSchedule::find()->max('to_month');
       $idReq = ToSchedule::find()->select('schedule_id')->where(['to_month' => $month])->distinct()->asArray()->all();
       Yii::$app->session->setFlash('info', "На текущий месяц график не найден. Выбран график ТО из БД на последний месяц.");
+      if (!$idReq) {
+        return $this->render();
+      }
+      $id = $idReq[0]['schedule_id'];
+      $model = ToSchedule::find()
+        ->with(['admin', 'auditor', 'toType', 'toEq'])
+        ->where(['schedule_id' => $id]);
+      $month = $model->max('plan_date');
+      setlocale(LC_ALL, 'ru_RU');
+      $month = strftime("%B %Y", strtotime($month));
+      return $this->render('index', [
+        'tos' => $model->all(),
+        'month' => $month,
+        'id' => $id
+      ]);
     }
-    $id = $idReq[0]['schedule_id'];
-    $model = ToSchedule::find()
-      ->with(['admin', 'auditor', 'toType', 'toEq'])
-      ->where(['schedule_id' => $id]);
-    $month = $model->max('plan_date');
-    setlocale(LC_ALL, 'ru_RU');
-    $month = strftime("%B %Y", strtotime($month));
-    return $this->render('index', [
-      'tos' => $model->all(),
-      'month' => $month,
-      'id' => $id
-    ]);
   }
-
 
 
   public function actionArchive()
@@ -63,7 +67,8 @@ class ScheduleController extends Controller
   }
 
 
-  public function actionYear()
+  public
+  function actionYear()
   {
     $toEq = ToEquipment::find()->where(['valid' => 1])->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
     $scheduleRand = rand();
@@ -80,7 +85,8 @@ class ScheduleController extends Controller
 
 
   // создание нового графика ТО на основе оборудования в таблице toequip_tbl;
-  public function actionCreate()
+  public
+  function actionCreate()
   {
     $toEq = ToEquipment::find()
       ->where(['valid' => 1])
@@ -120,7 +126,8 @@ class ScheduleController extends Controller
     }
   }
 
-  public function actionView($id)
+  public
+  function actionView($id)
   {
     $model = ToSchedule::find()
       ->with(['admin', 'auditor', 'toType', 'toEq'])
@@ -136,7 +143,8 @@ class ScheduleController extends Controller
   }
 
   // Отметка о выполнении графика ТО на выбранный месяц
-  public function actionPerform($id)
+  public
+  function actionPerform($id)
   {
     $models = ToSchedule::find()
       ->with(['admin', 'auditor', 'toType', 'toEq'])
@@ -170,9 +178,10 @@ class ScheduleController extends Controller
   }
 
 
-  public function actionUpdate($id)
+  public
+  function actionUpdate($id)
   {
-    $models = $this->findModel($id)->all();
+    $models = ToSchedule::findModel($id)->all();
     if (Model::loadMultiple($models, Yii::$app->request->post())) {
       if (\yii\base\Model::validateMultiple($models)) {
         $count = 0;
@@ -197,7 +206,8 @@ class ScheduleController extends Controller
   }
 
 
-  public function actionFreeDays($start_date, $end_date)
+  public
+  function actionFreeDays($start_date, $end_date)
   {
     return false;
     $sql = 'SELECT people_labor_status.people_id, people_labor_status.free_date as free_dates,
@@ -214,23 +224,15 @@ class ScheduleController extends Controller
     return json_encode($ar);
   }
 
-  public function actionDelete($id)
+  public
+  function actionDelete($id)
   {
     $models = ToSchedule::find()->where(['schedule_id' => $id])->all();
     foreach ($models as $m) {
       $m->delete();
     }
     Yii::$app->session->setFlash('success', 'График успешно удален');
-    return $this->redirect(['index']);
-  }
-
-
-  protected function findModel($id)
-  {
-    if (($model = ToSchedule::find()->where(['schedule_id' => $id])) !== null) {
-      return $model;
-    }
-    throw new NotFoundHttpException('Запрошенная страница не существует.');
+    return $this->redirect(['archive']);
   }
 
 

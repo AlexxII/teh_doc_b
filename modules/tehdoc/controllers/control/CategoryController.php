@@ -1,11 +1,13 @@
 <?php
 
-namespace app\modules\tehdoc\controllers\settings;
+namespace app\modules\tehdoc\controllers\control;
 
-use app\modules\admin\models\Placement;
 use yii\web\Controller;
 
-class PlacementController extends Controller
+use app\modules\tehdoc\models\Category;
+
+
+class CategoryController extends Controller
 {
 
   public function actionIndex()
@@ -13,22 +15,22 @@ class PlacementController extends Controller
     return $this->render('index');
   }
 
-  public function actionPlacements()
+  public function actionCategories()
   {
-    $id = Placement::find()->select('id, lft, rgt, root')->where(['=', 'lvl', 0])->all();
+    $id = Category::find()->select('id')->where(['=', 'lvl', 0])->all();
     if (!$id) {
       $data = array();
       $data = [['title' => 'База данных пуста', 'key' => -999]];
       return json_encode($data);
     }
-    $roots = Placement::findOne($id)->tree();
+    $roots = Category::findModel($id)->tree();
     return json_encode($roots);
   }
 
   public function actionMove($item, $action, $second, $parentId)
   {
-    $item_model = Placement::findOne($item);
-    $second_model = Placement::findOne($second);
+    $item_model = Category::findModel($item);
+    $second_model = Category::findModel($second);
     switch ($action) {
       case 'after':
         $item_model->insertAfter($second_model);
@@ -40,38 +42,33 @@ class PlacementController extends Controller
         $item_model->appendTo($second_model);
         break;
     }
-    $parent = Placement::findOne($parentId);
-    $item_model->parent_id = $parent->ref;
+    $parent = Category::findModel($parentId);
+    $parent->icon = 't fa fa-folder-o';
+    $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
+      $parent->save();
       return true;
     }
     return false;
   }
 
-  public function actionCreateRoot($title)
-  {
-    $newRoot = new Placement(['name' => $title]);
-    $newRoot->makeRoot();
-    $data['acceptedTitle'] = $title;
-    return json_encode($data);
-  }
-
   public function actionCreate($parentId, $title)
   {
     $data = [];
-    $category = Placement::findOne($parentId);
-    $newSubcat = new Placement(['name' => $title]);
-    $newSubcat->parent_id = $category->ref;
-    $newSubcat->ref = mt_rand();
+    $category = Category::findModel($parentId);
+    $newSubcat = new Category();
+    $newSubcat->name = $title;
+    $newSubcat->parent_id = $category->id;
     $newSubcat->appendTo($category);
     $data['acceptedTitle'] = $title;
     $data['acceptedId'] = $newSubcat->id;
+    $data['lvl'] = $newSubcat->lvl;
     return json_encode($data);
   }
 
   public function actionUpdate($id, $title)
   {
-    $category = Placement::findOne(['id' => $id]);
+    $category = Category::findModel($id);                       // TODO опасно!!!!
     $category->name = $title;
     if ($category->save()){
       $data['acceptedTitle'] = $title;
@@ -82,31 +79,43 @@ class PlacementController extends Controller
 
   public function actionDelete()
   {
+    usleep(400*1000);
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $category = Placement::findOne(['id' => $id]);
-      $category->delete();
+      $category = Category::findModel($id);
+      if ($category->delete()){
+        return true;
+      }
+      return false;
     }
+    return false;
   }
 
   public function actionDeleteRoot()
   {
+    usleep(400*1000);
     if (!empty($_POST)) {
       $id = $_POST['id'];
-      $root = Placement::findOne(['id' => $id]);
+      $root = Category::findModel($id);
+      if ($root->deleteWithChildren()) {
+        return true;
+      }
+      return false;
     }
-    $root->deleteWithChildren();
+    return false;
   }
+
 
   public function actionGetLeaves()
   {
     $array = array();
-    $leaves = Placement::find()->select('id')->leaves()->orderBy('lft')->asArray()->all();
-    $categories = Placement::find()->select('id')->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
+    $leaves = Category::find()->select('id')->leaves()->orderBy('lft')->asArray()->all();
+    $categories = Category::find()->select('id')->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
     $array['leaves'] = $leaves;
     $array['cat'] = $categories;
     return json_encode($array);
   }
+
 
 }

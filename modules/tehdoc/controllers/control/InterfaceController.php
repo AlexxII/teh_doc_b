@@ -1,12 +1,13 @@
 <?php
 
-namespace app\modules\tehdoc\controllers\settings;
+namespace app\modules\tehdoc\controllers\control;
 
-use app\modules\admin\models\TehInterface;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+
+use app\modules\tehdoc\models\TehInterface;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -43,7 +44,7 @@ class InterfaceController extends Controller
     {
         if (!empty($_POST)) {
             $id = $_POST['id'];
-            $model = TehInterface::findOne(['id' => $id]);
+            $model = TehInterface::findModel($id);
             $model->text = $_POST['Data'];
             if ($model->save()){
                 return true;
