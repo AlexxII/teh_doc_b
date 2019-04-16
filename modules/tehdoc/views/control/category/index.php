@@ -437,8 +437,6 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         },
         triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
         beforeEdit: function (event, data) {
-          var node = data.node;
-          node.icon = 'fa fa-file-o';
           return true;
         },
         edit: function (event, data) {
