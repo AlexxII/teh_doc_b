@@ -6,7 +6,7 @@ use app\modules\tehdoc\asset;
 use yii\widgets\DetailView;
 
 
-$this->title = 'Просмотр';
+$this->title = 'Просмотр удаленного сеанса';
 
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
 $this->params['breadcrumbs'][] = ['label' => 'Журнал', 'url' => ['index']];
@@ -36,7 +36,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
   <div class="">
     <div class="container-fluid " style="margin-bottom: 20px">
-      <?= Html::a('Изменить', ['update-up-session', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']) ?>
       <?= Html::a('Удалить', ['delete-single-completely', 'id' => $model->id], [
         'class' => 'btn btn-danger btn-sm', 'id' => 'delete', 'data-id' => $model->id]) ?>
     </div>
@@ -118,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     $('#delete').click(function (event) {
       event.preventDefault();
-      var url = "/vks/sessions/delete-single";
+      var url = "/vks/admin/sessions/delete-single-completely";
       var id = $(this).data('id');
       jc = $.confirm({
         icon: 'fa fa-question',
@@ -174,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
               ok: {
                 btnClass: 'btn-success',
                 action: function () {
-                  location.href = '/vks/sessions';
+                  location.href = '/vks/admin/sessions/';
                 }
               }
             }
@@ -220,6 +219,7 @@ $this->params['breadcrumbs'][] = $this->title;
         });
       });
     }
+
 
   });
 </script>

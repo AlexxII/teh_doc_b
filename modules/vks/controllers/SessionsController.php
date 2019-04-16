@@ -2,15 +2,17 @@
 
 namespace app\modules\vks\controllers;
 
+use Yii;
+use yii\web\Controller;
+use yii\filters\AccessControl;
+use yii\web\NotFoundHttpException;
+
+use app\modules\vks\models\VksLog;
 use app\modules\vks\models\SSP;
 use app\modules\vks\models\VksPlaces;
 use app\modules\vks\models\VksSessions;
 use app\modules\vks\models\VksSubscribes;
 use app\modules\vks\models\VksTypes;
-use Yii;
-use yii\web\Controller;
-use app\modules\vks\models\VksLog;
-use yii\filters\AccessControl;
 
 
 class SessionsController extends Controller
@@ -181,7 +183,7 @@ class SessionsController extends Controller
       $model->vks_record_create = $date;
       $model->vks_record_update = $date;
       $model->vks_upcoming_session = 1;
-      $result = $model->save();
+      $result = $model->save();                                                             // TODO нет проверки на ошибки!
       $this->logVks($model->id, "info", "Добавил запись о предстоящем сеансе ВКС");
       if (!empty($_POST['test-type'])) {
         foreach ($_POST['test-type'] as $key => $item) {
@@ -344,7 +346,7 @@ class SessionsController extends Controller
 
   public function actionViewUpSession($id)
   {
-    $logs = VksLog::find()->where(['=', 'session_id', $id])->all();
+    $logs = VksLog::find()->where(['=', 'session_id', $id])->orderBy('log_time')->all();
     return $this->render('view_up_session', [
       'model' => $this->findModel($id),
       'logs' => $logs
@@ -353,7 +355,7 @@ class SessionsController extends Controller
 
   public function actionViewSession($id)
   {
-    $logs = VksLog::find()->where(['=', 'session_id', $id])->all();
+    $logs = VksLog::find()->where(['=', 'session_id', $id])->orderBy('log_time')->all();
     return $this->render('view_session', [
       'model' => $this->findModel($id),
       'logs' => $logs
@@ -376,17 +378,19 @@ class SessionsController extends Controller
     return false;
   }
 
-  public function actionDeleteSingle($id)
+  public function actionDeleteSingle()
   {
-    $model = $this->findModel($id);
-    $model->vks_cancel = 1;
-    if ($model->save()) {
-      $this->logVks($model->id, "danger", " Удалил запись о сеансе ВКС.");
-      Yii::$app->session->setFlash('success', 'Запись удалена');
-      return $this->redirect(['index']);
+    if (!empty($_POST)) {
+      $id = $_POST['id'];
+      $model = $this->findModel($id);
+      $model->vks_cancel = 1;
+      if ($model->save()) {
+        $this->logVks($model->id, "danger", " Удалил запись о сеансе ВКС.");
+        return true;
+      }
+      return false;
     }
-    Yii::$app->session->setFlash('error', 'Удалить запись не удалось');
-    return $this->redirect(['index']);
+    return false;
   }
 
   public function actionArchive()
@@ -419,60 +423,5 @@ class SessionsController extends Controller
     $log->log_time = date("Y-m-d H:i:s", time());;
     $log->save();
   }
-
-// ============================= admin ===========================================
-
-  public function actionSessionsEx()
-  {
-    return $this->render('index_ex');
-  }
-
-  public function actionArchiveEx()
-  {
-    return $this->render('archive_ex');
-  }
-
-  public function actionRestore()
-  {
-    $report = true;
-    foreach ($_POST['jsonData'] as $d) {
-      $model = $this->findModel($d);
-      $this->logVks($model->id, "info","Восстановил сеансе ВКС из перечня удаленных.");
-      $model->vks_cancel = 0;
-      $report = $model->save();
-    }
-    if ($report) {
-      return true;
-    }
-    return false;
-  }
-
-
-  public function actionDeleteCompletely()
-  {
-    $report = true;
-    foreach ($_POST['jsonData'] as $d) {
-      $model = $this->findModel($d);
-      $this->logVks($model->id, "danger", "Удалил запись о сеансе ВКС.");
-      $report = $model->delete();
-    }
-    if ($report) {
-      return true;
-    }
-    return false;
-  }
-
-  public function actionDeleteSingleCompletely($id)
-  {
-    $model = $this->findModel($id);
-    if ($model->delete()) {
-      $this->logVks($model->id, "danger", "Удалил запись о сеансе ВКС.");
-      Yii::$app->session->setFlash('success', 'Запись удалена');
-      return $this->redirect(['index']);
-    }
-    Yii::$app->session->setFlash('error', 'Удалить запись не удалось');
-    return $this->redirect(['index']);
-  }
-
 
 }

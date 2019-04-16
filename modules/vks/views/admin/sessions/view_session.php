@@ -6,10 +6,10 @@ use app\modules\tehdoc\asset;
 use yii\widgets\DetailView;
 
 
-$this->title = 'Просмотр';
+$this->title = 'Просмотр удаленного сеанса';
 
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
-$this->params['breadcrumbs'][] = ['label' => 'Журнал', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Архив', 'url' => ['archive']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -30,13 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
   table.detail-view th {
     width: 40%;
   }
-
 </style>
 
 <div class="row">
   <div class="">
     <div class="container-fluid " style="margin-bottom: 20px">
-      <?= Html::a('Изменить', ['update-up-session', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']) ?>
       <?= Html::a('Удалить', ['delete-single-completely', 'id' => $model->id], [
         'class' => 'btn btn-danger btn-sm', 'id' => 'delete', 'data-id' => $model->id]) ?>
     </div>
@@ -50,8 +48,20 @@ $this->params['breadcrumbs'][] = $this->title;
           'label' => 'Дата проведения ВКС:',
           'value' => date('d.m.Y', strtotime($model->vks_date)) . ' г.'
         ],
-        'vks_teh_time_start',
-        'vks_work_time_start',
+        [
+          'label' => 'Время:',
+          'value' => function ($data) {
+            $duration = $data->vks_duration_teh ? ' (' . $data->vks_duration_teh . ' мин.)' : '';
+            return $data->vks_teh_time_start . ' - ' . $data->vks_teh_time_end . $duration;
+          },
+        ],
+        [
+          'label' => 'Время:',
+          'value' => function ($data) {
+            $duration = $data->vks_duration_work ? ' (' . $data->vks_duration_work . ' мин.)' : '';
+            return $data->vks_work_time_start . ' - ' . $data->vks_work_time_end . $duration;
+          },
+        ],
         [
           'label' => 'Тип сеанса ВКС:',
           'value' => $model->type
@@ -61,8 +71,16 @@ $this->params['breadcrumbs'][] = $this->title;
           'value' => $model->place
         ],
         [
-          'label' => 'Абонент:',
+          'label' => 'Старший Абонент:',
           'value' => $model->subscriber
+        ],
+        [
+          'label' => 'Абонент в регионе:',
+          'value' => $model->subscriberReg
+        ],
+        [
+          'label' => 'Сотрудник СпецСвязи:',
+          'value' => $model->employee
         ],
         [
           'label' => 'Распоряжение:',
@@ -74,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
           'label' => 'Дата сообщения:',
-          'value' => date('d.m.Y', strtotime($model->vks_receive_msg_datetime)) . ' г.'
+          'value' => date('d.m.Y', strtotime($model->vks_receive_msg_datetime))
         ],
         [
           'label' => 'Передавший сообщение:',
@@ -90,6 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
   <div class="vks-log col-lg-6 col-md-6">
     <?php
     foreach ($logs as $log) {
+
       if ($log->status == 'danger') {
         $info = 'alert-danger';
       } else {
@@ -118,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     $('#delete').click(function (event) {
       event.preventDefault();
-      var url = "/vks/sessions/delete-single";
+      var url = "/vks/admin/sessions/delete-single-completely";
       var id = $(this).data('id');
       jc = $.confirm({
         icon: 'fa fa-question',
@@ -174,7 +193,7 @@ $this->params['breadcrumbs'][] = $this->title;
               ok: {
                 btnClass: 'btn-success',
                 action: function () {
-                  location.href = '/vks/sessions';
+                  location.href = '/vks/admin/sessions/archive';
                 }
               }
             }

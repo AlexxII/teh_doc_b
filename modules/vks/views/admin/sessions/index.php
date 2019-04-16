@@ -211,10 +211,7 @@ $return_hint = 'Восстановить удаленные сеансы';
           "data": null,
           "width": '70px',
           "defaultContent":
-            "<a href='#' class='fa fa-edit edit' style='padding-right: 5px' title='Обновить' data-placement='top' data-toggle='tooltip'></a>" +
-            "<a href='#' class='fa fa-info view' title='Подробности' style='padding-right: 5px'></a>" +
-            "<a href='#' class='fa fa-calendar-check-o confirm' title='Подтвердить сеанс' style='padding-right: 5px'></a>"
-          // "<a href='#' class='fa fa-calendar-minus-o abort' title='Отменить сеанс'></a>"
+            "<a href='#' class='fa fa-info view' title='Подробности' style='padding-right: 5px'></a>"
         }, {
           "orderable": false,
           "className": 'select-checkbox',
@@ -257,21 +254,11 @@ $return_hint = 'Восстановить удаленные сеансы';
       }
     });
 
-    $('#main-table tbody').on('click', '.edit', function (e) {
-      e.preventDefault();
-      var data = table.row($(this).parents('tr')).data();
-      location.href = "/vks/sessions/update-up-session?id=" + data[0];
-    });
     $('#main-table tbody').on('click', '.view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
-      var href = "/vks/sessions/view-up-session?id=" + data[0];
+      var href = "/vks/admin/sessions/view-up-session?id=" + data[0];
       window.open(href);
-    });
-    $('#main-table tbody').on('click', '.confirm', function (e) {
-      e.preventDefault();
-      var data = table.row($(this).parents('tr')).data();
-      location.href = "/vks/sessions/confirm?id=" + data[0];
     });
   });
 

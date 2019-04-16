@@ -51,11 +51,6 @@ class VksSessions extends \yii\db\ActiveRecord
     return 'vks_sessions_tbl';
   }
 
-  public function __construct()
-  {
-    $this->id = MHelper::generateId();
-  }
-
   public function scenarios()
   {
     $scenarios = parent::scenarios();
