@@ -32,6 +32,9 @@ class m181203_150055_vks_subscribes_tbl extends Migration
 
     $defaultId_1 = MHelper::genDefaultId();
     $defaultId_2 = MHelper::genDefaultId();
+    if ($defaultId_2 < $defaultId_1){
+      list($defaultId_1, $defaultId_2) = array($defaultId_2, $defaultId_1);
+    }
     $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (id, root, lft, rgt, lvl, name, parent_id, list) 
                 VALUES (' . $defaultId_1 . ', ' . $defaultId_1 . ', 1, 2, 0, "Старшие абоненты", ' . $defaultId_1 . ', 1), 
                 (' . $defaultId_2 . ', ' . $defaultId_2 . ', 3, 4, 0, "Абоненты в субъекте", ' . $defaultId_2 . ', 2)';
