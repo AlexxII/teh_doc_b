@@ -143,7 +143,7 @@ $this->params['breadcrumbs'][] = $this->title;
       jc = $.confirm({
         icon: 'fa fa-question',
         title: 'Вы уверены?',
-        content: 'Вы действительно хотите удалить выделенное безвозвратно?',
+        content: 'Вы действительно хотите удалить запись?',
         type: 'red',
         closeIcon: false,
         autoClose: 'cancel|9000',

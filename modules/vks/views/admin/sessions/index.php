@@ -286,7 +286,7 @@ $return_hint = 'Восстановить удаленные сеансы';
 
   $(document).ready(function () {
     $('#delete').click(function (event) {
-      var url = "/vks/sessions/delete-completely";
+      var url = "/vks/admin/sessions/delete-completely";
       event.preventDefault();
       if ($(this).attr('disabled')) {
         return;
@@ -319,7 +319,7 @@ $return_hint = 'Восстановить удаленные сеансы';
     });
 
     $('#return').click(function (event) {
-      var url = "/vks/sessions/restore";
+      var url = "/vks/admin/sessions/restore";
       event.preventDefault();
       if ($(this).attr('disabled')) {
         return;
