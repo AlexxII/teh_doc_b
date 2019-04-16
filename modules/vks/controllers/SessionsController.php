@@ -305,7 +305,7 @@ class SessionsController extends Controller
   public function actionSubscribersMsk()
   {
     $sql = "SELECT id as value, surnames as label 
-              FROM vks_subscribes_tbl where surnames IS NOT NULL and surnames != '' AND flag = 1";
+              FROM vks_subscribes_tbl where surnames IS NOT NULL and surnames != '' AND list = 1";
     $arrayOfNames = VksSubscribes::findBySql($sql)->asArray()->all();
     $newArrayOfNames = [];
     $tempArrayOfNames = [];
@@ -325,7 +325,7 @@ class SessionsController extends Controller
   public function actionSubscribersRegion()
   {
     $sql = "SELECT id as value, surnames as label 
-              FROM vks_subscribes_tbl where surnames IS NOT NULL and surnames != '' AND flag = 2";
+              FROM vks_subscribes_tbl where surnames IS NOT NULL and surnames != '' AND list = 2";
     $arrayOfNames = VksSubscribes::findBySql($sql)->asArray()->all();
     $newArrayOfNames = [];
     $tempArrayOfNames = [];

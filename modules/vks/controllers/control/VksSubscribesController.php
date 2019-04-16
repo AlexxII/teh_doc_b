@@ -16,7 +16,7 @@ class VksSubscribesController extends Controller
 
   public function actionSubscribes()
   {
-    $id = VksSubscribes::find()->select('id')->where(['=', 'lvl', 0])->all();
+    $id = VksSubscribes::find()->where(['=', 'lvl', 0])->all();
     if (!$id) {
       $data = array();
       $data = [['title' => 'База данных пуста', 'key' => -999]];
@@ -33,7 +33,7 @@ class VksSubscribesController extends Controller
     $newSubscr = new VksSubscribes();
     $newSubscr->name = $title;
     $newSubscr->parent_id = $parentSubscr->id;
-    $newSubscr->flag = $parentSubscr->flag;
+    $newSubscr->list = $parentSubscr->list;
     $newSubscr->appendTo($parentSubscr);
     $data['acceptedTitle'] = $title;
     $data['acceptedId'] = $newSubscr->id;
@@ -69,6 +69,7 @@ class VksSubscribesController extends Controller
     }
     $parent = VksSubscribes::findModel($parentId);
     $item_model->parent_id = $parent->id;
+    $item_model->list = $parent->list;
     if ($item_model->save()) {
       return true;
     }

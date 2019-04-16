@@ -24,16 +24,17 @@ class m181203_150055_vks_subscribes_tbl extends Migration
       'surnames' => $this->text(),
       'valid' => $this->boolean()->defaultValue(1),
       'del_reason' => $this->string(255),
-      'icon' => $this->string(50)
+      'icon' => $this->string(50),
+      'list' => $this->boolean()
     ], $tableOptions);
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
     $defaultId_1 = MHelper::genDefaultId();
     $defaultId_2 = MHelper::genDefaultId();
-    $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (id, root, lft, rgt, lvl, name, parent_id) 
-                VALUES (' . $defaultId_1 . ', ' . $defaultId_1 . ', 1, 2, 0, "Старшие абоненты", ' . $defaultId_1 . '), 
-                (' . $defaultId_2 . ', ' . $defaultId_2 . ', 3, 4, 0, "Абоненты в субъекте", ' . $defaultId_2 . ')';
+    $sql = 'INSERT INTO ' . self::TABLE_NAME . ' (id, root, lft, rgt, lvl, name, parent_id, list) 
+                VALUES (' . $defaultId_1 . ', ' . $defaultId_1 . ', 1, 2, 0, "Старшие абоненты", ' . $defaultId_1 . ', 1), 
+                (' . $defaultId_2 . ', ' . $defaultId_2 . ', 3, 4, 0, "Абоненты в субъекте", ' . $defaultId_2 . ', 2)';
     \Yii::$app->db->createCommand($sql)->execute();
   }
 

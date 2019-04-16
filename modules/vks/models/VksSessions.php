@@ -170,14 +170,14 @@ class VksSessions extends \yii\db\ActiveRecord
   public function getVksMskSubscribesList()
   {
     $sql = "SELECT C1.id, C1.name, C2.name as gr from vks_subscribes_tbl C1 LEFT JOIN 
-        vks_subscribes_tbl C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 AND C1.flag = 1 ORDER BY C1.lft";
+        vks_subscribes_tbl C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 AND C1.list = 1 ORDER BY C1.lft";
     return ArrayHelper::map($this->findBySql($sql)->asArray()->all(), 'id', 'name', 'gr');
   }
 
   public function getVksRegionSubscribesList()
   {
     $sql = "SELECT C1.id, C1.name, C2.name as gr from vks_subscribes_tbl C1 LEFT JOIN 
-        vks_subscribes_tbl C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 AND C1.flag = 2 ORDER BY C1.lft";
+        vks_subscribes_tbl C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 AND C1.list = 2 ORDER BY C1.lft";
     return ArrayHelper::map($this->findBySql($sql)->asArray()->all(), 'id', 'name', 'gr');
   }
 
@@ -191,14 +191,14 @@ class VksSessions extends \yii\db\ActiveRecord
   public function getVksEmployeesList()
   {
     $sql = "SELECT C1.id, C1.name, C2.name as gr from vks_employees_tbl C1 LEFT JOIN 
-        vks_employees_tbl C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 AND C1.flag = 2 ORDER BY C1.lft";
+        vks_employees_tbl C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 AND C1.list = 2 ORDER BY C1.lft";
     return ArrayHelper::map($this->findBySql($sql)->asArray()->all(), 'id', 'name', 'gr');
   }
 
   public function getVksEmployees4List()
   {
     $sql = "SELECT C1.id, C1.name, C2.name as gr from vks_employees_tbl C1 LEFT JOIN 
-        vks_employees_tbl C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 AND C1.flag = 1 ORDER BY C1.lft";
+        vks_employees_tbl C2 on C1.parent_id = C2.id WHERE C1.lvl > 1 AND C1.list = 1 ORDER BY C1.lft";
     return ArrayHelper::map($this->findBySql($sql)->asArray()->all(), 'id', 'name', 'gr');
   }
 
