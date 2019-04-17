@@ -109,34 +109,21 @@ class ToEquipmentController extends Controller
         break;
     }
     $parent = ToEquipment::findModel($parentId);
-    $item_model->parent_id = $parent->ref;
+    $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
       return true;
     }
     return false;
   }
 
+  // Удаляет только папки - агригаторы
   public function actionDelete()
   {
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
       $category = ToEquipment::findModel($id);
-      $category->delete();
-    }
-  }
-
-  public function actionDeleteRoot()
-  {
-    if (!empty($_POST)) {
-      $id = $_POST['id'];
-      $root = ToEquipment::findModel($id);
-      $children = $root->children()->all();
-      foreach ($children as $child){
-        $settings = ToolSettings::findModel($child->ref);
-        $settings->eq_to = 0;
-      }
-      if ($root->deleteWithChildren()){
+      if ($category->delete()) {
         return true;
       }
       return false;

@@ -7,7 +7,7 @@ FancytreeAsset::register($this);
 
 $this->title = 'Виды ТО';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to/schedule']];
+$this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель управления видами технического обслуживания.";

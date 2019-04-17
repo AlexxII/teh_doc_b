@@ -7,7 +7,7 @@ FancytreeAsset::register($this);
 
 $this->title = 'Оборудование';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to/schedule']];
+$this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель управления оборудованием, добавленным в графики проведения ТО.";
@@ -15,6 +15,7 @@ $add_hint = 'Добавить группу';
 $del_hint = 'Удалить БЕЗ вложений';
 $del_root_hint = 'Удалить ветку полностью';
 $del_multi_nodes = 'Удалить С вложениями';
+$refresh_hint = 'Перезапустить форму';
 
 ?>
 
@@ -23,19 +24,24 @@ $del_multi_nodes = 'Удалить С вложениями';
     font-size: 18px;
     color: #1e6887;
   }
+
   .fa {
     font-size: 15px;
   }
+
   ul.fancytree-container {
     font-size: 14px;
   }
+
   input {
     color: black;
   }
+
   .fancytree-custom-icon {
     color: #1e6887;
     font-size: 18px;
   }
+
   .t {
     font-size: 14px;
   }
@@ -58,15 +64,15 @@ $del_multi_nodes = 'Удалить С вложениями';
         'data-toggle' => 'tooltip',
         'data-placement' => 'top'
       ]) ?>
-      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
-        'style' => ['margin-top' => '5px', 'display' => 'none'],
-        'title' => $del_hint,
+      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
+        'style' => ['margin-top' => '5px'],
+        'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top'
       ]) ?>
-      <?= Html::a('<i class="fa fa-object-group" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-multi-nodes',
+      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
-        'title' => $del_multi_nodes,
+        'title' => $del_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top'
       ]) ?>
@@ -121,534 +127,511 @@ $del_multi_nodes = 'Удалить С вложениями';
 
 <script>
 
-  var nodeId;
-  var node$;
+    var nodeId;
+    var node$;
 
-  function goodAlert(text) {
-    var div = '' +
-      '<div id="w3-success-0" class="alert-success alert fade in">' +
-      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-      text +
-      '</div>';
-    return div;
-  }
-
-  function badAlert(text) {
-    var div = '' +
-      '<div id="w3-success-0" class="alert-danger alert fade in">' +
-      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-      text +
-      '</div>';
-    return div;
-  }
-
-  function warningAlert(text) {
-    var div = '' +
-      '<div id="w3-success-0" class="alert-warning alert fade in">' +
-      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-      text +
-      '</div>';
-    return div;
-  }
-
-  // сохрание оборудования, сереийный номер которого будет использоваться в графике ТО
-  function saveClick(e) {
-    e.preventDefault();
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    var nodeId = window.nodeId;
-    var serial = $('#serial-number').val();
-    $.ajax({
-      url: "/tehdoc/to/control/to-equipment/tool-serial-save",
-      type: "post",
-      data: {
-        serial: serial,
-        _csrf: csrf,
-        id: nodeId
-      },
-      success: function (result) {
-        if (result) {
-          $('.about-info').hide().html(goodAlert('Запись добавлена в БД.')).fadeIn('slow');
-          window.node$.data.eq_serial = serial;
-        } else {
-          $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-            'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-        }
-      },
-      error: function () {
-        $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-          'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-      }
-    });
-  }
-
-  function serialControl(el) {
-    var serial = $(el).find(':selected').data('serial');
-    if (serial == '' || serial == null){
-      $(".save-btn").prop("disabled", true);
-      $('#serial-number').val('');
-    } else {
-      $('#serial-number').val(serial);
-      $(".save-btn").prop("disabled", false);
+    function goodAlert(text) {
+        var div = '' +
+            '<div id="w3-success-0" class="alert-success alert fade in">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            text +
+            '</div>';
+        return div;
     }
-    return;
-  }
 
-  $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-  });
+    function badAlert(text) {
+        var div = '' +
+            '<div id="w3-success-0" class="alert-danger alert fade in">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            text +
+            '</div>';
+        return div;
+    }
 
-  $(document).ready(function () {
-    $("#serial-number").on('keyup mouseclick', function () {
-      $(".save-btn").prop("disabled", this.value.length == "" ? true : false);
+    function warningAlert(text) {
+        var div = '' +
+            '<div id="w3-success-0" class="alert-warning alert fade in">' +
+            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+            text +
+            '</div>';
+        return div;
+    }
+
+    // сохрание оборудования, сереийный номер которого будет использоваться в графике ТО
+    function saveClick(e) {
+        e.preventDefault();
+        var csrf = $('meta[name=csrf-token]').attr("content");
+        var nodeId = window.nodeId;
+        var serial = $('#serial-number').val();
+        $.ajax({
+            url: "/tehdoc/to/control/to-equipment/tool-serial-save",
+            type: "post",
+            data: {
+                serial: serial,
+                _csrf: csrf,
+                id: nodeId
+            },
+            success: function (result) {
+                if (result) {
+                    $('.about-info').hide().html(goodAlert('Запись добавлена в БД.')).fadeIn('slow');
+                    window.node$.data.eq_serial = serial;
+                } else {
+                    $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                        'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+                }
+            },
+            error: function () {
+                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                    'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+            }
+        });
+    }
+
+    function serialControl(el) {
+        var serial = $(el).find(':selected').data('serial');
+        if (serial == '' || serial == null) {
+            $(".save-btn").prop("disabled", true);
+            $('#serial-number').val('');
+        } else {
+            $('#serial-number').val(serial);
+            $(".save-btn").prop("disabled", false);
+        }
+        return;
+    }
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
     });
-  });
 
-  $(document).ready(function () {
-    $('.add-subcategory').click(function (event) {
-      event.preventDefault();
-      var tree = $(".ui-draggable-handle").fancytree("getTree");
-      $.ajax({
-        url: "/tehdoc/to/control/to-equipment/create-node",
-        data: {title: 'Новая группа'}
-      })
-        .done(function () {
-          tree.reload();
+    $(document).ready(function () {
+        $("#serial-number").on('keyup mouseclick', function () {
+            $(".save-btn").prop("disabled", this.value.length == "" ? true : false);
+        });
+    });
+
+    $(document).ready(function () {
+        $('.add-subcategory').click(function (event) {
+            event.preventDefault();
+            var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+            if (!node) {
+                alert("Выберите родительскую категорию");
+                return;
+            }
+            if (node.data.lvl <= 1) {                                       // ограничение на вложенность
+                node.editCreateNode("child", " ");
+            } else {
+                alert("Нельзя создавать вложенность более 3х");
+                return;
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        $('.refresh').click(function (event) {
+            event.preventDefault();
+            var tree = $(".ui-draggable-handle").fancytree("getTree");
+            tree.reload();
+            $(".del-node").hide();
+            $(".del-multi-nodes").hide();
+            $('.about-info').html('')
         })
-        .fail(function () {
-          alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-        });
-    });
-  });
-
-
-  $(document).ready(function () {
-    $('.refresh').click(function (event) {
-      event.preventDefault();
-      var tree = $(".ui-draggable-handle").fancytree("getTree");
-      tree.reload();
-      $(".del-node").hide();
-      $(".del-multi-nodes").hide();
-      $('.about-info').html('')
-    })
-  });
-
-  $(document).ready(function () {
-    $('.del-node').click(function (event) {
-      var url = 'delete';
-      event.preventDefault();
-      jc = $.confirm({
-        icon: 'fa fa-question',
-        title: 'Вы уверены?',
-        content: 'Вы действительно хотите удалить выделенное?',
-        type: 'red',
-        closeIcon: false,
-        autoClose: 'cancel|9000',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-              var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-              jc.close();
-              deleteProcess(url, node);
-            }
-          },
-          cancel: {
-            action: function () {
-              return;
-            }
-          }
-        }
-      });
     });
 
-    $('.del-multi-nodes').click(function (event) {
-      var url = 'delete-root';
-      event.preventDefault();
-      jc = $.confirm({
-        icon: 'fa fa-question',
-        title: 'Вы уверены?',
-        content: 'Вы действительно хотите удалить выделенное С вложениями?',
-        type: 'red',
-        closeIcon: false,
-        autoClose: 'cancel|9000',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-              var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-              jc.close();
-              deleteProcess(url, node);
-            }
-          },
-          cancel: {
-            action: function () {
-              return;
-            }
-          }
-        }
-      });
-    });
-
-    function deleteProcess(url, node) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Ваш запрос выполняется!',
-        buttons: false,
-        closeIcon: false,
-        confirmButtonClass: 'hide'
-      });
-      $.ajax({
-        url: url,
-        type: "post",
-        data: {id: node.data.id, _csrf: csrf}
-      }).done(function (response) {
-        if (response != false) {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-thumbs-up',
-            title: 'Успех!',
-            content: 'Ваш запрос выполнен.',
-            type: 'green',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-success',
-                action: function () {
-                  node.remove();
-                  $('.about-info').html('');
-                  $('.del-node').hide();
-                  $(".del-multi-nodes").hide();
+    $(document).ready(function () {
+        $('.del-node').click(function (event) {
+            var url = 'to-equipment/delete';
+            event.preventDefault();
+            jc = $.confirm({
+                icon: 'fa fa-question',
+                title: 'Вы уверены?',
+                content: 'Вы действительно хотите удалить выделенное?',
+                type: 'red',
+                closeIcon: false,
+                autoClose: 'cancel|9000',
+                buttons: {
+                    ok: {
+                        btnClass: 'btn-danger',
+                        action: function () {
+                            var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+                            jc.close();
+                            deleteProcess(url, node);
+                        }
+                    },
+                    cancel: {
+                        action: function () {
+                            return;
+                        }
+                    }
                 }
-              }
-            }
-          });
-        } else {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-exclamation-triangle',
-            title: 'Неудача!',
-            content: 'Запрос не выполнен. Что-то пошло не так.',
-            type: 'red',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-danger',
-                action: function () {
-                }
-              }
-            }
-          });
-        }
-      }).fail(function () {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-exclamation-triangle',
-          title: 'Неудача!',
-          content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
-          type: 'red',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|4000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-danger',
-              action: function () {
-              }
-            }
-          }
+            });
         });
-      });
-    }
-  });
 
-
-  $("input[name=search]").keyup(function (e) {
-    var n,
-      tree = $.ui.fancytree.getTree(),
-      args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-      opts = {},
-      filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-      match = $(this).val();
-
-    $.each(args, function (i, o) {
-      opts[o] = $("#" + o).is(":checked");
+        function deleteProcess(url, node) {
+            var csrf = $('meta[name=csrf-token]').attr("content");
+            jc = $.confirm({
+                icon: 'fa fa-cog fa-spin',
+                title: 'Подождите!',
+                content: 'Ваш запрос выполняется!',
+                buttons: false,
+                closeIcon: false,
+                confirmButtonClass: 'hide'
+            });
+            $.ajax({
+                url: url,
+                type: "post",
+                data: {id: node.data.id, _csrf: csrf}
+            }).done(function (response) {
+                if (response != false) {
+                    jc.close();
+                    jc = $.confirm({
+                        icon: 'fa fa-thumbs-up',
+                        title: 'Успех!',
+                        content: 'Ваш запрос выполнен.',
+                        type: 'green',
+                        buttons: false,
+                        closeIcon: false,
+                        autoClose: 'ok|8000',
+                        confirmButtonClass: 'hide',
+                        buttons: {
+                            ok: {
+                                btnClass: 'btn-success',
+                                action: function () {
+                                    node.remove();
+                                    var tree = $(".ui-draggable-handle").fancytree("getTree");
+                                    tree.reload();
+                                    $('.about-info').html('');
+                                    $('.del-node').hide();
+                                    $(".del-multi-nodes").hide();
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    jc.close();
+                    jc = $.confirm({
+                        icon: 'fa fa-exclamation-triangle',
+                        title: 'Неудача!',
+                        content: 'Запрос не выполнен. Что-то пошло не так.',
+                        type: 'red',
+                        buttons: false,
+                        closeIcon: false,
+                        autoClose: 'ok|8000',
+                        confirmButtonClass: 'hide',
+                        buttons: {
+                            ok: {
+                                btnClass: 'btn-danger',
+                                action: function () {
+                                }
+                            }
+                        }
+                    });
+                }
+            }).fail(function () {
+                jc.close();
+                jc = $.confirm({
+                    icon: 'fa fa-exclamation-triangle',
+                    title: 'Неудача!',
+                    content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
+                    type: 'red',
+                    buttons: false,
+                    closeIcon: false,
+                    autoClose: 'ok|4000',
+                    confirmButtonClass: 'hide',
+                    buttons: {
+                        ok: {
+                            btnClass: 'btn-danger',
+                            action: function () {
+                            }
+                        }
+                    }
+                });
+            });
+        }
     });
-    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
-
-    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-      $("button#btnResetSearch").click();
-      return;
-    }
-    if ($("#regex").is(":checked")) {
-      // Pass function to perform match
-      n = filterFunc.call(tree, function (node) {
-        return new RegExp(match, "i").test(node.title);
-      }, opts);
-    } else {
-      // Pass a string to perform case insensitive matching
-      n = filterFunc.call(tree, match, opts);
-    }
-    $("#btnResetSearch").attr("disabled", false);
-  }).focus();
 
 
-  $("#btnResetSearch").click(function (e) {
-    e.preventDefault();
-    $("input[name=search]").val("");
-    $("span#matches").text("");
-    var tree = $(".ui-draggable-handle").fancytree("getTree");
-    tree.clearFilter();
-  }).attr("disabled", true);
-
-  $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
-      if ($(this).val() == '') {
+        var n,
+            tree = $.ui.fancytree.getTree(),
+            args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+            opts = {},
+            filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+            match = $(this).val();
+
+        $.each(args, function (i, o) {
+            opts[o] = $("#" + o).is(":checked");
+        });
+        opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
+
+        if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+            $("button#btnResetSearch").click();
+            return;
+        }
+        if ($("#regex").is(":checked")) {
+            // Pass function to perform match
+            n = filterFunc.call(tree, function (node) {
+                return new RegExp(match, "i").test(node.title);
+            }, opts);
+        } else {
+            // Pass a string to perform case insensitive matching
+            n = filterFunc.call(tree, match, opts);
+        }
+        $("#btnResetSearch").attr("disabled", false);
+    }).focus();
+
+
+    $("#btnResetSearch").click(function (e) {
+        e.preventDefault();
+        $("input[name=search]").val("");
+        $("span#matches").text("");
         var tree = $(".ui-draggable-handle").fancytree("getTree");
         tree.clearFilter();
-      }
-    })
-  });
+    }).attr("disabled", true);
 
-
-  // отображение и логика работа дерева
-  jQuery(function ($) {
-    var main_url = '/tehdoc/to/control/to-equipment/all-tools';
-    var move_url = '/tehdoc/to/control/to-equipment/move-node';
-    var create_url = '/tehdoc/to/control/to-equipment/create-node';
-    var update_url = '/tehdoc/to/control/to-equipment/update-node';
-
-    $("#fancyree_w0").fancytree({
-      source: {
-        url: main_url,
-      },
-      extensions: ['dnd', 'edit', 'filter'],
-      quicksearch: true,
-      minExpandLevel: 2,
-      dnd: {
-        preventVoidMoves: true,
-        preventRecursiveMoves: true,
-        autoCollapse: true,
-        dragStart: function (node, data) {
-          return true;
-        },
-        dragEnter: function (node, data) {
-          return true;
-        },
-        dragDrop: function (node, data) {
-          if (data.hitMode == 'over') {
-            if (data.node.data.eq_id != 0) {             // Ограничение на вложенность
-              return false;
-            } else if (data.otherNode.data.eq_id == 0) {
-              return false;
+    $(document).ready(function () {
+        $("input[name=search]").keyup(function (e) {
+            if ($(this).val() == '') {
+                var tree = $(".ui-draggable-handle").fancytree("getTree");
+                tree.clearFilter();
             }
-            var pId = data.node.data.id;
-          } else {
-            var pId = data.node.parent.data.id;
-          }
-          $.get(move_url, {
-            item: data.otherNode.data.id,
-            action: data.hitMode,
-            second: node.data.id,
-            parentId: pId
-          }, function () {
-            data.otherNode.moveTo(node, data.hitMode);
-          })
-        }
-      },
-      filter: {
-        autoApply: true,                                    // Re-apply last filter if lazy data is loaded
-        autoExpand: true,                                   // Expand all branches that contain matches while filtered
-        counter: true,                                      // Show a badge with number of matching child nodes near parent icons
-        fuzzy: false,                                       // Match single characters in order, e.g. 'fb' will match 'FooBar'
-        hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
-        hideExpanders: true,                                // Hide expanders if all child nodes are hidden by filter
-        highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
-        leavesOnly: true,                                   // Match end nodes only
-        nodata: true,                                       // Display a 'no data' status node if result is empty
-        mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
-      },
-      edit: {
-        inputCss: {
-          minWidth: '10em'
-        },
-        triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
-        beforeEdit: function (event, data) {
-          return true;
-        },
-        edit: function (event, data) {
-          return true;
-        },
-        beforeClose: function (event, data) {
-          data.save
-        },
-        save: function (event, data) {
-          var node = data.node;
-          if (data.isNew) {
-            $.ajax({
-              url: create_url,
-              data: {
-                parentId: node.parent.data.id,
-                title: data.input.val()
-              }
-            }).done(function (result) {
-              if (result) {
-                result = JSON.parse(result);
-                node.data.id = result.acceptedId;
-                node.setTitle(result.acceptedTitle);
-                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
-              } else {
-                node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-              }
-            }).fail(function (result) {
-              node.setTitle(data.orgTitle);
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-            }).always(function () {
-              // data.input.removeClass("pending")
-            });
-          } else {
-            $.ajax({
-              url: update_url,
-              data: {
-                id: node.data.id,
-                title: data.input.val()
-              }
-            }).done(function (result) {
-              if (result) {
-                result = JSON.parse(result);
-                node.setTitle(result.acceptedTitle);
-                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
-              } else {
-                node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-              }
-            }).fail(function (result) {
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-              node.setTitle(data.orgTitle);
-            }).always(function () {
-              // data.input.removeClass("pending")
-            });
-          }
-          return true;
-        },
-        close: function (event, data) {
-          if (data.save) {
-            // Since we started an async request, mark the node as preliminary
-            $(data.node.span).addClass("pending")
-          }
-        }
-      },
-      activate: function (node, data) {
-        $('.about-info').html('');
-        $('#serial-number').val('');
-        $("#serial-control").children().remove();
-        $("#serial-control").prop("disabled", true);
-        var node = data.node;
-        var lvl = node.data.lvl;
-        console.log(node);
-        return;
-        window.node$ = data.node;
-        window.nodeId = node.data.id;
-        var serial = node.data.eq_serial;
-        if (node.key == -999) {
-          $(".add-subcategory").hide();
-          return;
-        } else {
-          $(".add-subcategory").show();
-        }
-        if (lvl > 1) {
-          $('#serial-number').prop("disabled", false);
-          if (serial) {
-            $('#serial-number').val(serial);
-          } else {
-            $('#serial-number').val('');
-          }
-          $.ajax({
-            url: '/tehdoc/to/control/to-equipment/tools-serials',
-            data: {
-              id: node.data.id,
-            }
-          }).done(function (result) {
-            if (result) {
-              var serial = 0;
-              var result = JSON.parse(result, function (key, value) {
-                if (key == 'single') serial = 1;
-                  return value;
-              });
-              if (serial){
-                if (result.single != '' && result.single != null){
-                  $('#serial-number').val(result.single);
-                } else {
-                  $('#serial-number').val('');
-                  $(".save-btn").prop("disabled", true);
-                }
-              } else {
-                var optionsValues = '<select class="form-control input-sm" id="serial-control" onchange=serialControl(this) style="margin-top: 5px">';
-                optionsValues += '<option selected disabled>Выберите</option>';
-                $.each(result, function (index, obj) {
-                  if (obj.eq_serial != '' && obj.eq_serial != null) {
-                    var serVal = 's/n: ' + obj.eq_serial;
-                  } else {
-                    serVal = 's/n: -';
-                  }
-                  optionsValues += '<option value="' + obj.id + '" ' +
-                    'data-serial="' + obj.eq_serial + '">' + obj.name + ' ' + serVal + '</option>';
-                });
-                optionsValues += '</select>';
-                var options = $('#serial-control');
-                options.replaceWith(optionsValues);
-              }
-            } else if (result == -1) {
-              $('.about-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
-                ' в поле ввода.')).fadeIn('slow');
-            } else {
-              $('.about-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
-                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-            }
-          }).fail(function (result) {
-            $('.about-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
-              ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-          }).always(function () {
-            return;
-          });
-        } else if (lvl == 1) {
-          $('#serial-number').prop("disabled", true);
-          $(".save-btn").prop("disabled", true);
-        }
-        if (lvl == 0) {
-          $(".del-node").hide();
-          $(".del-multi-nodes").hide();
-        } else {
-          $(".add-subcategory").hide();
-          if (node.hasChildren()) {
-            $(".del-multi-nodes").show();
-          } else {
-            $(".del-multi-nodes").hide();
-          }
-          $(".del-node").show();
-        }
-      },
-      renderNode: function (node, data) {
-        if (data.node.key == -999) {
-          $(".add-category").show();
-          $(".add-subcategory").hide();
-        }
-      }
+        })
     });
-  });
+
+
+    // отображение и логика работа дерева
+    jQuery(function ($) {
+        var main_url = '/tehdoc/to/control/to-equipment/all-tools';
+        var move_url = '/tehdoc/to/control/to-equipment/move-node';
+        var create_url = '/tehdoc/to/control/to-equipment/create-node';
+        var update_url = '/tehdoc/to/control/to-equipment/update-node';
+
+        $("#fancyree_w0").fancytree({
+            source: {
+                url: main_url
+            },
+            extensions: ['dnd', 'edit', 'filter'],
+            quicksearch: true,
+            minExpandLevel: 2,
+            dnd: {
+                preventVoidMoves: true,
+                preventRecursiveMoves: true,
+                autoCollapse: true,
+                dragStart: function (node, data) {
+                    return true;
+                },
+                dragEnter: function (node, data) {
+                    return true;
+                },
+                dragDrop: function (node, data) {
+                    if (data.hitMode == 'over') {
+                        if (data.node.data.eq_id != 0) {             // Ограничение на вложенность
+                            return false;
+                        } else if (data.otherNode.data.eq_id == 0) {
+                            return false;
+                        }
+                        var pId = data.node.data.id;
+                    } else {
+                        var pId = data.node.parent.data.id;
+                    }
+                    $.get(move_url, {
+                        item: data.otherNode.data.id,
+                        action: data.hitMode,
+                        second: node.data.id,
+                        parentId: pId
+                    }, function () {
+                        data.otherNode.moveTo(node, data.hitMode);
+                    })
+                }
+            },
+            filter: {
+                autoApply: true,                                    // Re-apply last filter if lazy data is loaded
+                autoExpand: true,                                   // Expand all branches that contain matches while filtered
+                counter: true,                                      // Show a badge with number of matching child nodes near parent icons
+                fuzzy: false,                                       // Match single characters in order, e.g. 'fb' will match 'FooBar'
+                hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
+                hideExpanders: true,                                // Hide expanders if all child nodes are hidden by filter
+                highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
+                leavesOnly: true,                                   // Match end nodes only
+                nodata: true,                                       // Display a 'no data' status node if result is empty
+                mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
+            },
+            edit: {
+                inputCss: {
+                    minWidth: '10em'
+                },
+                triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
+                beforeEdit: function (event, data) {
+                    return true;
+                },
+                edit: function (event, data) {
+                    return true;
+                },
+                beforeClose: function (event, data) {
+                    data.save
+                },
+                save: function (event, data) {
+                    var node = data.node;
+                    if (data.isNew) {
+                        $.ajax({
+                            url: create_url,
+                            data: {
+                                parentId: node.parent.data.id,
+                                title: data.input.val()
+                            }
+                        }).done(function (result) {
+                            if (result) {
+                                result = JSON.parse(result);
+                                node.data.id = result.acceptedId;
+                                node.setTitle(result.acceptedTitle);
+                                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
+                            } else {
+                                node.setTitle(data.orgTitle);
+                                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                                    ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+                            }
+                        }).fail(function (result) {
+                            node.setTitle(data.orgTitle);
+                            $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+                        }).always(function () {
+                            // data.input.removeClass("pending")
+                        });
+                    } else {
+                        $.ajax({
+                            url: update_url,
+                            data: {
+                                id: node.data.id,
+                                title: data.input.val()
+                            }
+                        }).done(function (result) {
+                            if (result) {
+                                result = JSON.parse(result);
+                                node.setTitle(result.acceptedTitle);
+                                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
+                            } else {
+                                node.setTitle(data.orgTitle);
+                                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                                    ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+                            }
+                        }).fail(function (result) {
+                            $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+                            node.setTitle(data.orgTitle);
+                        }).always(function () {
+                            // data.input.removeClass("pending")
+                        });
+                    }
+                    return true;
+                },
+                close: function (event, data) {
+                    if (data.save) {
+                        // Since we started an async request, mark the node as preliminary
+                        $(data.node.span).addClass("pending")
+                    }
+                }
+            },
+            activate: function (node, data) {
+                var node = data.node;
+                var lvl = node.data.lvl;
+                if (node.key == -999) {
+                    $(".add-subcategory").hide();
+                    return;
+                } else {
+                    $(".add-subcategory").show();
+                }
+                if (lvl > 1) {
+                    $('#serial-number').prop("disabled", false);
+                    if (serial) {
+                        $('#serial-number').val(serial);
+                    } else {
+                        $('#serial-number').val('');
+                    }
+                    $.ajax({
+                        url: '/tehdoc/to/control/to-equipment/tools-serials',
+                        data: {
+                            id: node.data.id
+                        }
+                    }).done(function (result) {
+                        if (result) {
+                            var serial = 0;
+                            var result = JSON.parse(result, function (key, value) {
+                                if (key == 'single') serial = 1;
+                                return value;
+                            });
+                            if (serial) {
+                                if (result.single != '' && result.single != null) {
+                                    $('#serial-number').val(result.single);
+                                } else {
+                                    $('#serial-number').val('');
+                                    $(".save-btn").prop("disabled", true);
+                                }
+                            } else {
+                                var optionsValues = '<select class="form-control input-sm" id="serial-control" onchange=serialControl(this) style="margin-top: 5px">';
+                                optionsValues += '<option selected disabled>Выберите</option>';
+                                $.each(result, function (index, obj) {
+                                    if (obj.eq_serial != '' && obj.eq_serial != null) {
+                                        var serVal = 's/n: ' + obj.eq_serial;
+                                    } else {
+                                        serVal = 's/n: -';
+                                    }
+                                    optionsValues += '<option value="' + obj.id + '" ' +
+                                        'data-serial="' + obj.eq_serial + '">' + obj.name + ' ' + serVal + '</option>';
+                                });
+                                optionsValues += '</select>';
+                                var options = $('#serial-control');
+                                options.replaceWith(optionsValues);
+                            }
+                        } else if (result == -1) {
+                            $('.about-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
+                                ' в поле ввода.')).fadeIn('slow');
+                        } else {
+                            $('.about-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
+                                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+                        }
+                    }).fail(function (result) {
+                        $('.about-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
+                            ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+                    }).always(function () {
+                        return;
+                    });
+                } else if (lvl == 1) {
+                    $('#serial-number').prop("disabled", true);
+                    $(".save-btn").prop("disabled", true);
+                }
+                if (lvl == 0) {
+                    $(".del-node").hide();
+                    $(".del-multi-nodes").hide();
+                } else {
+                    $(".add-subcategory").hide();
+                    if (node.hasChildren()) {
+                        $(".del-multi-nodes").show();
+                    } else {
+                        $(".del-multi-nodes").hide();
+                    }
+                    $(".del-node").show();
+                }
+            },
+            click: function (event, data) {
+                $('.about-info').html('');
+                $('#serial-number').val('');
+                $("#serial-control").children().remove();
+                $("#serial-control").prop("disabled", true);
+                var node = data.node;
+                var lvl = node.data.lvl;
+                window.node$ = data.node;
+                window.nodeId = node.data.id;
+                var serial = node.data.eq_serial;
+
+            },
+            renderNode: function (node, data) {
+                if (data.node.key == -999) {
+                    $(".add-category").show();
+                    $(".add-subcategory").hide();
+                }
+            }
+        })
+        ;
+    });
 
 
 </script>
