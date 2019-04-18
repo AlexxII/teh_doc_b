@@ -155,7 +155,7 @@ $form = ActiveForm::begin([
       <td>
         <?php
         if (!empty($to->toEq)) {
-          echo $to->toEq->groupName->name;
+          echo $to->toEq->groupName;
         } else {
           echo '<span style="color:#CC0000">Вероятно оборудование удалено</span>';
         }; ?>

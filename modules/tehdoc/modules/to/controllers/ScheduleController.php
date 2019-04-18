@@ -56,9 +56,9 @@ class ScheduleController extends Controller
               GROUP_CONCAT(DISTINCT t2.username ORDER BY t2.username ASC SEPARATOR ',<br> ') as auditors,
               GROUP_CONCAT(DISTINCT t3.name ORDER BY t3.name ASC SEPARATOR ',<br> ') as to_type
             from {$schTable}
-              LEFT JOIN {$usersTable} as t1 on {$schTable}.admin_id = t1.ref
-              LEFT JOIN {$usersTable} as t2 on {$schTable}.auditor_id = t2.ref
-              LEFT JOIN {$toTable} as t3 on {$schTable}.to_type = t3.ref
+              LEFT JOIN {$usersTable} as t1 on {$schTable}.admin_id = t1.id
+              LEFT JOIN {$usersTable} as t2 on {$schTable}.auditor_id = t2.id
+              LEFT JOIN {$toTable} as t3 on {$schTable}.to_type = t3.id
             GROUP BY schedule_id";
     return $this->render('archive', [
       'tos' => ToSchedule::findBySql($sql)->asArray()->all(),
@@ -74,7 +74,7 @@ class ScheduleController extends Controller
     $scheduleRand = rand();
     foreach ($toEq as $i => $eq) {
       $toss[] = new ToSchedule(['scenario' => ToSchedule::SCENARIO_CREATE]);
-      $toss[$i]->eq_id = $eq->ref;
+      $toss[$i]->eq_id = $eq->id;
       $toss[$i]->schedule_id = $scheduleRand;
     }
     return $this->render('year', [
@@ -85,8 +85,7 @@ class ScheduleController extends Controller
 
 
   // создание нового графика ТО на основе оборудования в таблице toequip_tbl;
-  public
-  function actionCreate()
+  public function actionCreate()
   {
     $toEq = ToEquipment::find()
       ->where(['valid' => 1])
@@ -100,7 +99,7 @@ class ScheduleController extends Controller
     $scheduleRand = rand();
     foreach ($toEq as $i => $eq) {
       $toss[] = new ToSchedule(['scenario' => ToSchedule::SCENARIO_CREATE]);
-      $toss[$i]->eq_id = $eq->ref;
+      $toss[$i]->eq_id = $eq->id;
       $toss[$i]->schedule_id = $scheduleRand;
     }
     if (ToSchedule::loadMultiple($toss, Yii::$app->request->post())) {
