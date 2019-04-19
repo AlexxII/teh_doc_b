@@ -67,8 +67,7 @@ class ScheduleController extends Controller
   }
 
 
-  public
-  function actionYear()
+  public function actionYear()
   {
     $toEq = ToEquipment::find()->where(['valid' => 1])->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
     $scheduleRand = rand();
@@ -126,8 +125,7 @@ class ScheduleController extends Controller
     }
   }
 
-  public
-  function actionView($id)
+  public function actionView($id)
   {
     $model = ToSchedule::find()
       ->with(['admin', 'auditor', 'toType', 'toEq'])
@@ -143,8 +141,7 @@ class ScheduleController extends Controller
   }
 
   // Отметка о выполнении графика ТО на выбранный месяц
-  public
-  function actionPerform($id)
+  public function actionPerform($id)
   {
     $models = ToSchedule::find()
       ->with(['admin', 'auditor', 'toType', 'toEq'])

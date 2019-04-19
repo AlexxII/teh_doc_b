@@ -193,6 +193,7 @@ require 'to_array.php';
     function remoteProcess(url, id) {
       var csrf = $('meta[name=csrf-token]').attr("content");
       var table = $('#main-table').DataTable();
+      var uri = window.location.href;
       jc = $.confirm({
         icon: 'fa fa-cog fa-spin',
         title: 'Подождите!',
@@ -222,7 +223,7 @@ require 'to_array.php';
               ok: {
                 btnClass: 'btn-success',
                 action: function () {
-                  table.clear().draw();
+                  location.href = uri
                 }
               }
             }

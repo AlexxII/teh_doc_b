@@ -90,9 +90,8 @@ $form = ActiveForm::begin([
       // orderFixed: [[3, 'desc']],
       rowGroup: {
         startRender: function (row, group) {
-          console.log(group);
           if (group == ''){
-            return null;
+            return '';
           }
           return group;
         },

@@ -13,9 +13,6 @@ require "to_array.php";
 ?>
 
 <style>
-  td {
-    text-align: center;
-  }
   td .fa {
     font-size: 25px;
   }
@@ -185,12 +182,11 @@ require "to_array.php";
         {"visible": false, "targets": 5}
       ],
       rowGroup: {
-        startRender: function (rows, group) {
-          var test = rows.data().pluck(5).reduce(function (a, b) {
-            return a, b;
-          }, 0);
-          return $('<tr/>')
-            .append('<td colspan="10" style="text-align: left">' + group + ' ' + test + '</td>');
+        startRender: function (row, group) {
+          if (group == ''){
+            return '';
+          }
+          return group;
         },
         dataSrc: 4
       },
