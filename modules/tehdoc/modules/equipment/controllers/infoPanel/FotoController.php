@@ -70,10 +70,15 @@ class FotoController extends Controller
       $counter = 0;
       foreach ($_POST['photosArray'] as $photoId) {
         $photo = Images::findModel($photoId);
-        if (unlink(\Yii::$app->params['uploadImg'] . $photo->image_path)) {
-          $photo->delete();
-          $counter++;
+        $fileName = Yii::$app->params['uploadImg'] . $photo->image_path;
+        if (is_file($fileName)) {
+          if (unlink($fileName)) {
+            $photo->delete();
+            $counter++;
+          }
         }
+        $photo->delete();
+        $counter++;
       }
       return $counter;
     }

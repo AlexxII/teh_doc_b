@@ -82,10 +82,15 @@ class DocsController extends Controller
       $counter = 0;
       foreach ($_POST['docsArray'] as $docId){
         $doc = Docs::findModel($docId);
-        if (unlink(\Yii::$app->params['uploadDocs'] . $doc->doc_path)){
-          $doc->delete();
-          $counter++ ;
+        $fileName = Yii::$app->params['uploadImg'] . $doc->doc_path;
+        if (is_file($fileName)) {
+          if (unlink($fileName)) {
+            $doc->delete();
+            $counter++;
+          }
         }
+        $doc->delete();
+        $counter++;
       }
       return $counter;
     }

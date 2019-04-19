@@ -42,7 +42,10 @@ class ToEquipment extends \yii\db\ActiveRecord
   {
     $parentCount = $this->parents()->count();
     if ($parentCount > 1){
-      return $this->parents(1);
+      if ($this->parents(1)->valid){
+        return $this->parents(1);
+      }
+      return false;
     }
     return '';
   }

@@ -110,12 +110,11 @@ require 'to_array.php';
                   'data-placement' => 'top'
                 ]); ?>
                 <?= Html::a('', ['delete', 'id' => $to['schedule_id']], [
-                  'class' => 'fa fa-trash',
+                  'class' => 'fa fa-trash remove-schedule',
                   'title' => 'Удалить весь график',
                   'data-toggle' => 'tooltip',
                   'data-placement' => 'top',
-                  'data-id' => $to['schedule_id'],
-                  'id' => 'remove-schedule'
+                  'data-id' => $to['schedule_id']
                   ]); ?>
               </td>
             </tr>
@@ -136,7 +135,7 @@ require 'to_array.php';
     var table = $('#main-table').DataTable({
       "columnDefs": [
         {"visible": false, "targets": 1},
-        {"visible": false, "targets": 4},
+        {"visible": false, "targets": 4}
       ],
       orderFixed: [[4, 'desc']],
       order: [[1, 'desc']],
@@ -159,7 +158,7 @@ require 'to_array.php';
       });
     }).draw();
 
-    $('#remove-schedule').click(function (event) {
+    $('.remove-schedule').click(function (event) {
       var url = "delete";
       event.preventDefault();
       if ($(this).attr('disabled')) {
@@ -206,7 +205,7 @@ require 'to_array.php';
         url: url,
         method: 'post',
         dataType: "JSON",
-        data: {scheduleId: id, _csrf: csrf},
+        data: {scheduleId: id, _csrf: csrf}
       }).done(function (response) {
         if (response != false) {
           jc.close();
