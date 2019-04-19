@@ -134,10 +134,10 @@ $form = ActiveForm::begin([
       </td>
       <td>
         <?php
-        if (!empty($to->toEq)) {
+        if (!empty($to->toEq->groupName)) {
           echo $to->toEq->groupName->name;
         } else {
-          echo '<span style="color:#CC0000">Вероятно оборудование удалено</span>';
+          echo '';
         }; ?>
       </td>
       <td>

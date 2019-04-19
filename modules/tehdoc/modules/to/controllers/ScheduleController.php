@@ -98,7 +98,8 @@ class ScheduleController extends Controller
     }
     $scheduleRand = rand();
     foreach ($toEq as $i => $eq) {
-      $toss[] = new ToSchedule(['scenario' => ToSchedule::SCENARIO_CREATE]);
+      $toss[] = new ToSchedule();
+      $toss[$i]->scenario = ToSchedule::SCENARIO_CREATE;
       $toss[$i]->eq_id = $eq->id;
       $toss[$i]->schedule_id = $scheduleRand;
     }
@@ -223,15 +224,21 @@ class ScheduleController extends Controller
     return json_encode($ar);
   }
 
-  public
-  function actionDelete($id)
+  public function actionDelete()
   {
-    $models = ToSchedule::find()->where(['schedule_id' => $id])->all();
-    foreach ($models as $m) {
-      $m->delete();
+    if (!empty($_POST['scheduleId'])) {
+      $result = false;
+      $id = $_POST['scheduleId'];
+      $models = ToSchedule::find()->where(['schedule_id' => $id])->all();
+      foreach ($models as $m) {
+        $result = $m->delete();
+      }
+      if ($result){
+        return true;
+      }
+      return false;
     }
-    Yii::$app->session->setFlash('success', 'График успешно удален');
-    return $this->redirect(['archive']);
+    return false;
   }
 
 

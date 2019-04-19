@@ -89,6 +89,13 @@ $form = ActiveForm::begin([
       paging: false,
       // orderFixed: [[3, 'desc']],
       rowGroup: {
+        startRender: function (row, group) {
+          console.log(group);
+          if (group == ''){
+            return null;
+          }
+          return group;
+        },
         dataSrc: 3
       },
       buttons: [
@@ -154,10 +161,10 @@ $form = ActiveForm::begin([
       </td>
       <td>
         <?php
-        if (!empty($to->toEq)) {
-          echo $to->toEq->groupName;
+        if (!empty($to->toEq->groupName)) {
+          echo $to->toEq->groupName->name;
         } else {
-          echo '<span style="color:#CC0000">Вероятно оборудование удалено</span>';
+          echo '';
         }; ?>
       </td>
       <td>

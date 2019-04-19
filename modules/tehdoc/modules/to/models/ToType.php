@@ -19,6 +19,7 @@ class ToType extends \yii\db\ActiveRecord
   public function __construct()
   {
     $this->id = MHelper::generateId();
+    parent::__construct();
   }
 
   public function behaviors()

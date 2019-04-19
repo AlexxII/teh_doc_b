@@ -109,10 +109,11 @@ require "to_array.php";
               }; ?>
             </td>
             <td>
-              <?php if (!empty($to->toEq)) {
+              <?php
+              if (!empty($to->toEq->groupName)) {
                 echo $to->toEq->groupName->name;
               } else {
-                echo '<span style="color:#CC0000">Вероятно оборудование удалено</span>';
+                echo '';
               }; ?>
             </td>
             <td>
@@ -137,10 +138,18 @@ require "to_array.php";
               } ?>
             </td>
             <td>
-              <?= $to->admin->username; ?>
+              <?php if (!empty($to->admin)) {
+                echo $to->admin->username;
+              } else {
+                echo '<span style="color:#CC0000">-</span>';
+              }; ?>
             </td>
             <td>
-              <?= $to->auditor->username; ?>
+              <?php if (!empty($to->auditor)) {
+                echo $to->auditor->username;
+              } else {
+                echo '<span style="color:#CC0000">-</span>';
+              }; ?>
             </td>
             <td>
               <?php

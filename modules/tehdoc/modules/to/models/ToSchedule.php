@@ -19,9 +19,11 @@ class ToSchedule extends \yii\db\ActiveRecord
     return 'teh_to_schedule_tbl';
   }
 
+
   public function __construct()
   {
     $this->id = MHelper::generateId();
+    parent::__construct();
   }
 
   public function scenarios()

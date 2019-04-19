@@ -55,7 +55,7 @@ require 'to_array.php';
         <thead>
         <tr>
           <th data-priority="1">№ п.п.</th>
-          <th ></th>
+          <th></th>
           <th data-priority="1">Месяц</th>
           <th data-priority="7">Отметки</th>
           <th>Год</th>
@@ -71,7 +71,7 @@ require 'to_array.php';
           <?php foreach ($tos as $to) : ?>
             <tr>
               <td></td>
-              <td> <?= $to['plan_date']?> </td>
+              <td> <?= $to['plan_date'] ?> </td>
               <td> <?= strftime("%B", strtotime($to['plan_date'])) ?> </td>
               <td>
                 <?php
@@ -91,7 +91,7 @@ require 'to_array.php';
                 ?>
               </td>
               <td> <?= strftime("%G", strtotime($to['plan_date'])) . ' год' ?> </td>
-              <td> <?= $to['to_type']?> </td>
+              <td> <?= $to['to_type'] ?> </td>
               <td> <?= $to['admins'] ?> </td>
               <td> <?= $to['auditors'] ?> </td>
               <td style="text-align: center">
@@ -114,10 +114,9 @@ require 'to_array.php';
                   'title' => 'Удалить весь график',
                   'data-toggle' => 'tooltip',
                   'data-placement' => 'top',
-                  'data' => [
-                    'confirm' => 'Вы уверены, что хотите удалить объект?',
-                    'method' => 'post',
-                  ]]); ?>
+                  'data-id' => $to['schedule_id'],
+                  'id' => 'remove-schedule'
+                  ]); ?>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -159,6 +158,117 @@ require 'to_array.php';
         cell.innerHTML = i + 1;
       });
     }).draw();
+
+    $('#remove-schedule').click(function (event) {
+      var url = "delete";
+      event.preventDefault();
+      if ($(this).attr('disabled')) {
+        return;
+      }
+      var id = $(this).data('id');
+      jc = $.confirm({
+        icon: 'fa fa-question',
+        title: 'Вы уверены?',
+        content: 'Удалить график ТО?',
+        type: 'red',
+        closeIcon: false,
+        autoClose: 'cancel|9000',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+              jc.close();
+              remoteProcess(url, id)
+            }
+          },
+          cancel: {
+            action: function () {
+              return;
+            }
+          }
+        }
+      })
+    });
+
+    function remoteProcess(url, id) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var table = $('#main-table').DataTable();
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Ваш запрос выполняется!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
+      $.ajax({
+        url: url,
+        method: 'post',
+        dataType: "JSON",
+        data: {scheduleId: id, _csrf: csrf},
+      }).done(function (response) {
+        if (response != false) {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-thumbs-up',
+            title: 'Успех!',
+            content: 'Ваш запрос выполнен.',
+            type: 'green',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-success',
+                action: function () {
+                  table.clear().draw();
+                }
+              }
+            }
+          });
+        } else {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-exclamation-triangle',
+            title: 'Неудача!',
+            content: 'Запрос не выполнен. Что-то пошло не так.',
+            type: 'red',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-danger',
+                action: function () {
+                }
+              }
+            }
+          });
+        }
+      }).fail(function () {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|4000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
+      });
+    }
   });
+
 
 </script>
