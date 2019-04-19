@@ -122,8 +122,9 @@ class ToEquipmentController extends Controller
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $category = ToEquipment::findModel($id);
-      if ($category->delete()) {
+      $toEquipment = ToEquipment::findModel($id);
+      $toEquipment->valid = 0;
+      if ($toEquipment->save()) {
         return true;
       }
       return false;

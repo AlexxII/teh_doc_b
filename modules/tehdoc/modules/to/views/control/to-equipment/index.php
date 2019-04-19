@@ -594,17 +594,12 @@ $refresh_hint = 'Перезапустить форму';
         } else {
           $("#serial-control").prop("disabled", true);
           $('#serial-number').prop("disabled", true);
+          $('#serial-number').val('');
         }
         if (lvl == 0) {
           $(".del-node").hide();
-          $(".del-multi-nodes").hide();
         } else {
           $(".add-subcategory").hide();
-          if (node.hasChildren()) {
-            $(".del-multi-nodes").show();
-          } else {
-            $(".del-multi-nodes").hide();
-          }
           $(".del-node").show();
         }
       },
