@@ -30,11 +30,9 @@ class ToAdminsController extends Controller
     $parentId = 1;
     $newGroup = new ToType(['name' => $title]);
     $parentOrder = ToType::findOne($parentId);
-    $newGroup->ref = mt_rand();
     if ($newGroup->appendTo($parentOrder)) {
       $data['acceptedTitle'] = $title;
       $data['acceptedId'] = $newGroup->id;
-      $data['acceptedRef'] = $newGroup->ref;
       return json_encode($data);
     }
     $data = $newGroup->getErrors();
@@ -68,7 +66,7 @@ class ToAdminsController extends Controller
         break;
     }
     $parent = ToType::findOne($parentId);
-    $item_model->parent_id = $parent->ref;
+    $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
       return true;
     }
@@ -80,7 +78,7 @@ class ToAdminsController extends Controller
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $type = ToType::findOne(['ref' => $id]);
+      $type = ToType::findOne(['id' => $id]);
       $type->delete();
     }
   }
