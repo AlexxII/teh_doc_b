@@ -230,12 +230,12 @@ $ref_hint= 'К оборудованию в основном перечне';
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       tree.reload();
+      $('.c-input').prop('disabled', true);
       $("#del-node").hide();
-      $(".del-multi-nodes").hide();
       $('#result-info').html('');
       $('#serial-number').val('');
-      $('.c-input').prop('disabled', true);
       $("#save-btn").prop('disabled', true);
+      $('#tool-ref').hide();
     });
 
     $('#tool-ref').click(function (event) {
