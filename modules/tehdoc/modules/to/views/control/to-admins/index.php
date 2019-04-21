@@ -60,23 +60,27 @@ $role_hint = 'Выберите роль пользователя при пров
 <div class="row">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
-      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm add-subcategory',
+      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm',
         'style' => ['margin-top' => '5px'],
         'title' => $add_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'id' => 'add-subcategory'
+
       ]) ?>
-      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm refresh',
+      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm',
         'style' => ['margin-top' => '5px'],
         'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'id' => 'refresh'
       ]) ?>
-      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', [''], ['class' => 'btn btn-danger btn-sm del-node',
+      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', [''], ['class' => 'btn btn-danger btn-sm',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'id' => 'del-node'
       ]) ?>
     </div>
 
@@ -174,7 +178,7 @@ $role_hint = 'Выберите роль пользователя при пров
   }
 
   $(document).ready(function () {
-    $('.add-subcategory').click(function (event) {
+    $('#add-subcategory').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree('getTree');
       var root = tree.findFirst('Сотрудники, участвующие в ТО');
@@ -182,11 +186,11 @@ $role_hint = 'Выберите роль пользователя при пров
     });
 
 
-    $('.refresh').click(function (event) {
+    $('#refresh').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       tree.reload();
-      $(".del-node").hide();
+      $("#del-node").hide();
       $('.c-select').prop('disabled', true);
       $('.c-select').val('none');
       $('#submit').prop('disabled', true);
@@ -196,7 +200,7 @@ $role_hint = 'Выберите роль пользователя при пров
   });
 
   $(document).ready(function () {
-    $('.del-node').click(function (event) {
+    $('#del-node').click(function (event) {
       var url = 'delete';
       event.preventDefault();
       jc = $.confirm({
@@ -255,7 +259,7 @@ $role_hint = 'Выберите роль пользователя при пров
                 btnClass: 'btn-success',
                 action: function () {
                   node.remove();
-                  $('.del-node').hide();
+                  $('#del-node').hide();
                   $('.c-select').prop('disabled', true);
                   $('.c-select').val('none');
                   $('#submit').prop('disabled', true);
@@ -523,13 +527,13 @@ $role_hint = 'Выберите роль пользователя при пров
         var node = data.node;
         var lvl = node.data.lvl;
         if (node.key == -999) {
-          $(".add-subcategory").hide();
+          $("#add-subcategory").hide();
           return;
         }
         if (lvl == 0) {
-          $(".del-node").hide();
+          $("#del-node").hide();
         } else {
-          $(".del-node").show();
+          $("#del-node").show();
         }
       },
       click: function (event, data) {
@@ -557,7 +561,7 @@ $role_hint = 'Выберите роль пользователя при пров
       },
       renderNode: function (node, data) {
         if (data.node.key == -999) {
-          $(".add-subcategory").hide();
+          $("#add-subcategory").hide();
         }
       }
     });

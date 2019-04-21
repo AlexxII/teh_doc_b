@@ -13,8 +13,9 @@ $this->params['breadcrumbs'][] = $this->title;
 $about = "Панель управления оборудованием, добавленным в графики проведения ТО.";
 $add_hint = 'Добавить группу';
 $del_hint = 'Удалить обертку';
-$del_root_hint = 'Удалить ветку полностью';
 $refresh_hint = 'Перезапустить форму';
+$serial_hint = 'Внимание! Серийный номер, присвоенный в данной форме отображается только в пределах раздела ТО';
+$ref_hint= 'К оборудованию в основном перечне';
 
 ?>
 
@@ -73,6 +74,13 @@ $refresh_hint = 'Перезапустить форму';
         'data-placement' => 'top',
         'id' => 'del-node'
       ]) ?>
+      <?= Html::a('<i class="fa fa-level-up" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-info btn-sm',
+        'style' => ['margin-top' => '5px', 'display' => 'none'],
+        'title' => $ref_hint,
+        'data-toggle' => 'tooltip',
+        'data-placement' => 'top',
+        'id' => 'tool-ref'
+      ]) ?>
     </div>
 
   </div>
@@ -107,14 +115,17 @@ $refresh_hint = 'Перезапустить форму';
     <div id="result-info" style="margin-bottom: 10px"></div>
     <form action="create" method="post" class="input-add">
       <div class="about-main">
-        <label>Серийный номер:</label>
+        <label>Серийный номер:
+          <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+               data-toggle="tooltip" data-placement="top" title="<?= $serial_hint ?>"></sup>
+        </label>
         <input id="serial-number" class="form-control c-input" disabled>
         <label>Оборудование:</label>
         <select type="text" id="serial-control" class="c-input form-control" name="sn" disabled></select>
         <label style="font-weight:400;font-size: 10px">Выберите оборудование.</label>
       </div>
       <div class="about-footer"></div>
-      <button type="submit" onclick="saveClick(event)" class="btn btn-primary save-btn" disabled>Сохранить</button>
+      <button type="submit" id="save-btn" onclick="saveClick(event)" class="btn btn-primary" disabled>Сохранить</button>
     </form>
   </div>
 
@@ -171,7 +182,8 @@ $refresh_hint = 'Перезапустить форму';
       success: function (result) {
         if (result) {
           $('#result-info').hide().html(goodAlert('Запись добавлена в БД.')).fadeIn('slow');
-          window.node$.data.eq_serial = serial;
+          node$.data.eq_serial = serial;
+          $("#save-btn").prop("disabled", true);
         } else {
           $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
             'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
@@ -187,11 +199,11 @@ $refresh_hint = 'Перезапустить форму';
   function serialControl(el) {
     var serial = $(el).find(':selected').data('serial');
     if (serial == '' || serial == null) {
-      $(".save-btn").prop("disabled", true);
+      $("#save-btn").prop("disabled", true);
       $('#serial-number').val('');
     } else {
       $('#serial-number').val(serial);
-      $(".save-btn").prop("disabled", false);
+      $("#save-btn").prop("disabled", false);
     }
     return;
   }
@@ -202,7 +214,7 @@ $refresh_hint = 'Перезапустить форму';
 
   $(document).ready(function () {
     $("#serial-number").on('keyup mouseclick', function () {
-      $(".save-btn").prop("disabled", this.value.length == "" ? true : false);
+      $("#save-btn").prop("disabled", this.value.length == "" ? true : false);
     });
   });
 
@@ -223,7 +235,20 @@ $refresh_hint = 'Перезапустить форму';
       $('#result-info').html('');
       $('#serial-number').val('');
       $('.c-input').prop('disabled', true);
-      $(".save-btn").prop('disabled', true);
+      $("#save-btn").prop('disabled', true);
+    });
+
+    $('#tool-ref').click(function (event) {
+      event.preventDefault();
+      var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+      var toolId = node.data.eq_id;
+      var prefix = '/tehdoc/equipment/tool/';
+      var href = prefix + toolId + '/info/index';
+      if (event.ctrlKey) {
+        window.open(href);
+      } else {
+        location.href = href;
+      }
     })
   });
 
@@ -495,7 +520,7 @@ $refresh_hint = 'Перезапустить форму';
             $.ajax({
               url: update_url,
               data: {
-                id: node.data.id,
+                id: nodeId,
                 title: data.input.val()
               }
             }).done(function (result) {
@@ -526,14 +551,11 @@ $refresh_hint = 'Перезапустить форму';
         }
       },
       activate: function (node, data) {
+        $('#serial-number').val('');
         var node = data.node;
         var lvl = node.data.lvl;
         var eqId = node.data.eq_id;
         serialVal = node.data.eq_serial;
-        if (node.key == -999) {
-          $("#add-subcategory").hide();
-          return;
-        }
         if (eqId != 0) {
           $('#serial-number').prop("disabled", false);
           if (serialVal) {
@@ -547,7 +569,7 @@ $refresh_hint = 'Перезапустить форму';
               id: node.data.eq_id
             }
           }).done(function (result) {
-            if (result) {
+            if (result != -1) {
               var serial = 0;
               var result = JSON.parse(result, function (key, value) {
                 if (key == 'single') serial = 1;
@@ -556,12 +578,16 @@ $refresh_hint = 'Перезапустить форму';
               if (serial) {
                 if (result.single != '' && result.single != null) {
                   $('#serial-number').val(result.single);
+                  if (node.data.eq_serial == null){
+                    $("#save-btn").prop("disabled", false);
+                  }
                 } else {
                   $('#serial-number').val('');
-                  $(".save-btn").prop("disabled", true);
+                  $("#save-btn").prop("disabled", true);
                 }
               } else {
-                var optionsValues = '<select class="form-control input-sm c-input" id="serial-control" onchange=serialControl(this) style="margin-top: 5px">';
+                var optionsValues = '<select class="form-control input-sm c-input" id="serial-control" ' +
+                  'onchange=serialControl(this) style="margin-top: 5px">';
                 optionsValues += '<option selected disabled>Выберите</option>';
                 $.each(result, function (index, obj) {
                   if (obj.eq_serial != '' && obj.eq_serial != null) {
@@ -575,13 +601,16 @@ $refresh_hint = 'Перезапустить форму';
                 optionsValues += '</select>';
                 var options = $('#serial-control');
                 options.replaceWith(optionsValues);
-                if (serialVal){
-                  $("#serial-control option[data-serial='" + serialVal +"']").attr("selected","selected");
+                if (serialVal) {
+                  $("#serial-control option[data-serial='" + serialVal + "']").attr("selected", "selected");
                 }
               }
             } else if (result == -1) {
-              $('#result-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
-                ' в поле ввода.')).fadeIn('slow');
+              if ($('#serial-number').text() == '') {
+                $('#result-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
+                  ' в поле ввода.')).fadeIn('slow');
+              }
+
             } else {
               $('#result-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
@@ -595,24 +624,30 @@ $refresh_hint = 'Перезапустить форму';
           $('#serial-number').prop("disabled", true);
           $('#serial-number').val('');
         }
-        if (lvl == 0) {
-          $("#del-node").hide();
-        } else {
-          $("#del-node").show();
-        }
       },
       click: function (event, data) {
         $('#result-info').html('');
-        $('#serial-number').val('');
         $("#serial-control").children().remove();
         $("#serial-control").prop("disabled", true);
         var node = data.node;
         var lvl = node.data.lvl;
         window.node$ = data.node;
         window.nodeId = node.data.id;
-        $(".save-btn").prop("disabled", true);
-        if (node.data.eq_id){
+        $("#save-btn").prop("disabled", true);
+        if (node.key == -999) {
+          $("#add-subcategory").hide();
+          return;
+        }
+        if (lvl == 0) {
           $("#del-node").hide();
+        } else {
+          $("#del-node").show();
+        }
+        if (node.data.eq_id != 0){
+          $('#tool-ref').show();
+          $("#del-node").hide();
+        } else {
+          $('#tool-ref').hide();
         }
       },
       renderNode: function (node, data) {
