@@ -24,15 +24,17 @@ class m190404_101323_teh_to_admins_tbl extends Migration
       'rgt' => $this->integer()->notNull(),
       'lvl' => $this->smallInteger(5)->notNull(),
       'name' => $this->string(120)->notNull(),
+      'user_id' => $this->bigInteger(),
+      'admin' => $this->boolean(),
       'parent_id' => $this->bigInteger(),
-      'valid' => $this->boolean()->defaultValue(1),
+      'valid' => $this->boolean()->defaultValue(1)
     ], $tableOptions);
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
     $defaultId = MHelper::genDefaultId();
     $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, root, lft, rgt, lvl, name) 
-                VALUES (' . $defaultId . ', ' . $defaultId . ', 1, 2, 0, "Сотрудники участвующие в ТО")';
+                VALUES (' . $defaultId . ', ' . $defaultId . ', 1, 2, 0, "Сотрудники, участвующие в ТО")';
     \Yii::$app->db->createCommand($sql)->execute();
 
   }

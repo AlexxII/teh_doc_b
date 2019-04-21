@@ -130,17 +130,9 @@ $del_hint = 'Удалить';
   $(document).ready(function () {
     $('.add-subcategory').click(function (event) {
       event.preventDefault();
-      var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-      if (!node) {
-        alert("Выберите родительскую категорию");
-        return;
-      }
-      if (node.data.lvl <= 1) {                                       // ограничение на вложенность
-        node.editCreateNode("child", " ");
-      } else {
-        alert("Нельзя создавать вложенность более 3х");
-        return;
-      }
+      var tree = $(".ui-draggable-handle").fancytree('getTree');
+      var root = tree.findFirst('Виды ТО');
+      root.editCreateNode("child", " ");
     });
   });
 

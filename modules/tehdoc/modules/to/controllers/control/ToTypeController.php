@@ -27,24 +27,23 @@ class ToTypeController extends Controller
 
   public function actionCreateNode($title)
   {
-    $newGroup = new ToType();
-    $newGroup->name = $title;
+    $newType = new ToType();
+    $newType->name = $title;
     $parentOrder = ToType::findModel(['name' => 'Виды ТО']);
-    $newGroup->id = mt_rand();
-    if ($newGroup->appendTo($parentOrder)) {
+    if ($newType->appendTo($parentOrder)) {
       $data['acceptedTitle'] = $title;
-      $data['acceptedId'] = $newGroup->id;
+      $data['acceptedId'] = $newType->id;
       return json_encode($data);
     }
-    $data = $newGroup->getErrors();
+    $data = $newType->getErrors();
     return json_encode($data);
   }
 
   public function actionUpdateNode($id, $title)
   {
-    $tool = ToType::findModel($id);
-    $tool->name = $title;
-    if ($tool->save()) {
+    $type = ToType::findModel($id);
+    $type->name = $title;
+    if ($type->save()) {
       $data['acceptedTitle'] = $title;
       return json_encode($data);
     }

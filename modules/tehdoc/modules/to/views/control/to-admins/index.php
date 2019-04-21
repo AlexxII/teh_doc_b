@@ -1,21 +1,24 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+
 use app\assets\FancytreeAsset;
 
 FancytreeAsset::register($this);
 
-$this->title = 'Оборудование';
+$this->title = 'Сотрудники, участвующие в ТО';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
 $this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$about = "Панель управления оборудованием, добавленным в графики проведения ТО.";
-$add_hint = 'Добавить группу';
-$del_hint = 'Удалить БЕЗ вложений';
-$del_root_hint = 'Удалить ветку полностью';
-$del_multi_nodes = 'Удалить С вложениями';
+$about = "Панель управления списком сотрудников, участвующих в ТО.";
+$add_hint = 'Добавить запись';
 $refresh_hint = 'Перезапустить форму';
+$del_hint = 'Удалить';
+
+$user_hint = 'Выберите пользователя';
 
 ?>
 
@@ -40,12 +43,15 @@ $refresh_hint = 'Перезапустить форму';
   .t {
     font-size: 14px;
   }
+  .result {
+    /*font-size: 18px;*/
+  }
 
 </style>
 
 <div class="admin-category-pannel">
 
-  <h3><?= Html::encode('Оборудование в графике ТО') ?>
+  <h3><?= Html::encode('Сотрудники ТО') ?>
     <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
          data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
   </h3>
@@ -53,19 +59,19 @@ $refresh_hint = 'Перезапустить форму';
 <div class="row">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
-      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
+      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm add-subcategory',
         'style' => ['margin-top' => '5px'],
         'title' => $add_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top'
       ]) ?>
-      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
+      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm refresh',
         'style' => ['margin-top' => '5px'],
         'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top'
       ]) ?>
-      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
+      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', [''], ['class' => 'btn btn-danger btn-sm del-node',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_hint,
         'data-toggle' => 'tooltip',
@@ -97,33 +103,59 @@ $refresh_hint = 'Перезапустить форму';
 
   <div class="col-lg-5 col-md-5">
     <div class="alert alert-warning" style="margin-bottom: 10px">
-      <a href="#" class="close" data-dismiss="alert">&times;</a>
-      <strong>Внимание!</strong> Выберите оборудование, серийный номер которого будет использоваться в графике ТО. Если
-      выпадающий список не активен, значит у объекта отсутствуют дочерные элементы.
+      <a href="" class="close" data-dismiss="alert">&times;</a>
+      <strong>Внимание!</strong> Будьте внимательны!
     </div>
-
-    <div class="about-info" style="margin-bottom: 10px"></div>
-    <form action="create" method="post" class="input-add">
-      <div class="about-main">
-        <label>Серийный номер:</label>
-        <input id="serial-number" class="form-control" disabled>
-        <label>Оборудование:</label>
-        <select type="text" id="serial-control" class="form-control" name="sn" disabled></select>
-        <label style="font-weight:400;font-size: 10px">Выберите оборудование.</label>
+    <div class="about-info">
+      <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'id' => 'user-form']]); ?>
+      <label> Пользователь системы:
+        <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+              data-toggle="tooltip" data-placement="top" title="<?= $user_hint ?>"></sup>
+      </label>
+      <?= $form->field($model, 'name', [
+        'template' => '{input}{hint}'])
+        ->dropDownList($model->usersList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
+          'options' => [
+            'value' => 'none',
+            'disabled' => 'true',
+            'selected' => 'true'
+          ]], 'id' => 'user-control', 'class' => 'form-control c-select'])->hint('', ['class' => ' w3-label-under']);
+      ?>
+      <label> Роль:
+        <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+             data-toggle="tooltip" data-placement="top" title="<?= $user_hint ?>"></sup>
+      </label>
+      <?= $form->field($model, 'name', [
+        'template' => '{input}{hint}'])
+        ->dropDownList($model->rolesList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
+          'options' => [
+            'value' => 'none',
+            'disabled' => 'true',
+            'selected' => 'true'
+          ]], 'id' => 'role-control', 'class' => 'form-control c-select'])->hint('', ['class' => ' w3-label-under']);
+      ?>
+      <div class="form-group">
+        <?= Html::button('Сохранить', ['class' => 'btn btn-primary', 'id' => 'submit']) ?>
+        <span id="result"></span>
       </div>
-      <div class="about-footer"></div>
-      <button type="submit" onclick="saveClick(event)" class="btn btn-primary save-btn" disabled>Сохранить</button>
-    </form>
+      <?php ActiveForm::end(); ?>
+    </div>
   </div>
-
 
 </div>
 
 
 <script>
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
 
-  var nodeId;
-  var node$;
+
+  });
+
+  var successCheck = '<i class="fa fa-check result" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
+  var waiting = '<i class="fa fa-cog fa-spin result" aria-hidden="true"></i>';
+  var warningCheck = '<i class="fa fa-times result" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
+
 
   function goodAlert(text) {
     var div = '' +
@@ -143,88 +175,29 @@ $refresh_hint = 'Перезапустить форму';
     return div;
   }
 
-  function warningAlert(text) {
-    var div = '' +
-      '<div id="w3-success-0" class="alert-warning alert fade in">' +
-      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-      text +
-      '</div>';
-    return div;
-  }
-
-  // сохрание оборудования, сереийный номер которого будет использоваться в графике ТО
-  function saveClick(e) {
-    e.preventDefault();
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    var nodeId = window.nodeId;
-    var serial = $('#serial-number').val();
-    $.ajax({
-      url: "/tehdoc/to/control/to-equipment/tool-serial-save",
-      type: "post",
-      data: {
-        serial: serial,
-        _csrf: csrf,
-        id: nodeId
-      },
-      success: function (result) {
-        if (result) {
-          $('.about-info').hide().html(goodAlert('Запись добавлена в БД.')).fadeIn('slow');
-          window.node$.data.eq_serial = serial;
-        } else {
-          $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-            'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-        }
-      },
-      error: function () {
-        $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-          'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-      }
-    });
-  }
-
-  function serialControl(el) {
-    var serial = $(el).find(':selected').data('serial');
-    if (serial == '' || serial == null) {
-      $(".save-btn").prop("disabled", true);
-      $('#serial-number').val('');
-    } else {
-      $('#serial-number').val(serial);
-      $(".save-btn").prop("disabled", false);
-    }
-    return;
-  }
-
-  $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-  });
-
-  $(document).ready(function () {
-    $("#serial-number").on('keyup mouseclick', function () {
-      $(".save-btn").prop("disabled", this.value.length == "" ? true : false);
-    });
-  });
-
   $(document).ready(function () {
     $('.add-subcategory').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree('getTree');
-      var root = tree.findFirst('Оборудование');
+      var root = tree.findFirst('Сотрудники, участвующие в ТО');
       root.editCreateNode("child", " ");
     });
+
 
     $('.refresh').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       tree.reload();
       $(".del-node").hide();
-      $(".del-multi-nodes").hide();
-      $('.about-info').html('')
+      $('.c-select').prop('disabled', true);
+      $('.c-select').val('none');
+      $('#submit').prop('disabled', true);
     })
   });
 
   $(document).ready(function () {
     $('.del-node').click(function (event) {
-      var url = 'to-equipment/delete';
+      var url = 'to-admins/delete';
       event.preventDefault();
       jc = $.confirm({
         icon: 'fa fa-question',
@@ -282,11 +255,10 @@ $refresh_hint = 'Перезапустить форму';
                 btnClass: 'btn-success',
                 action: function () {
                   node.remove();
-                  var tree = $(".ui-draggable-handle").fancytree("getTree");
-                  tree.reload();
-                  $('.about-info').html('');
                   $('.del-node').hide();
-                  $(".del-multi-nodes").hide();
+                  $('.c-select').prop('disabled', true);
+                  $('.c-select').val('none');
+                  $('#submit').prop('disabled', true);
                 }
               }
             }
@@ -316,7 +288,7 @@ $refresh_hint = 'Перезапустить форму';
         jc = $.confirm({
           icon: 'fa fa-exclamation-triangle',
           title: 'Неудача!',
-          content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
           type: 'red',
           buttons: false,
           closeIcon: false,
@@ -332,6 +304,26 @@ $refresh_hint = 'Перезапустить форму';
         });
       });
     }
+
+    $('#submit').prop("disabled", true);
+    $('.c-select').prop('disabled', true);
+
+    $('.c-select').change(function (e) {
+      $('#submit').prop("disabled", false);
+    });
+
+    $('#submit').click(function (e) {
+      $.ajax({
+        url: url,
+        type: "post",
+        data: {id: node.data.id, _csrf: csrf}
+      }).done(function (response) {
+        $('#result').html(successCheck);
+      }).fail(functio (response)){
+        $('#result').html(warningCheck);
+      });
+    })
+
   });
 
 
@@ -382,17 +374,17 @@ $refresh_hint = 'Перезапустить форму';
     })
   });
 
-
+  var parent;
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/tehdoc/to/control/to-equipment/all-tools';
-    var move_url = '/tehdoc/to/control/to-equipment/move-node';
-    var create_url = '/tehdoc/to/control/to-equipment/create-node';
-    var update_url = '/tehdoc/to/control/to-equipment/update-node';
+    var main_url = '/tehdoc/to/control/to-admins/all-types';
+    var move_url = '/tehdoc/to/control/to-admins/move-node';
+    var create_url = '/tehdoc/to/control/to-admins/create-node';
+    var update_url = '/tehdoc/to/control/to-admins/update-node';
 
     $("#fancyree_w0").fancytree({
       source: {
-        url: main_url
+        url: main_url,
       },
       extensions: ['dnd', 'edit', 'filter'],
       quicksearch: true,
@@ -404,17 +396,13 @@ $refresh_hint = 'Перезапустить форму';
         dragStart: function (node, data) {
           return true;
         },
+
         dragEnter: function (node, data) {
           return true;
         },
         dragDrop: function (node, data) {
           if (data.hitMode == 'over') {
-            if (data.node.data.eq_id != 0) {             // Ограничение на вложенность
-              return false;
-            } else if (data.otherNode.data.eq_id == 0) {
-              return false;
-            }
-            var pId = data.node.data.id;
+            return false;
           } else {
             var pId = data.node.parent.data.id;
           }
@@ -470,7 +458,6 @@ $refresh_hint = 'Перезапустить форму';
                 result = JSON.parse(result);
                 node.data.id = result.acceptedId;
                 node.setTitle(result.acceptedTitle);
-                node.data.eq_id = 0;
                 parent.renderTitle();
                 $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
               } else {
@@ -522,69 +509,9 @@ $refresh_hint = 'Перезапустить форму';
       activate: function (node, data) {
         var node = data.node;
         var lvl = node.data.lvl;
-        var eqId = node.data.eq_id;
-        var serial = node.data.eq_serial;
         if (node.key == -999) {
           $(".add-subcategory").hide();
           return;
-        }
-        if (eqId != 0) {
-          $('#serial-number').prop("disabled", false);
-          if (serial) {
-            $('#serial-number').val(serial);
-          } else {
-            $('#serial-number').val('');
-          }
-          $.ajax({
-            url: '/tehdoc/to/control/to-equipment/tools-serials',
-            data: {
-              id: node.data.eq_id
-            }
-          }).done(function (result) {
-            if (result) {
-              var serial = 0;
-              var result = JSON.parse(result, function (key, value) {
-                if (key == 'single') serial = 1;
-                return value;
-              });
-              if (serial) {
-                if (result.single != '' && result.single != null) {
-                  $('#serial-number').val(result.single);
-                } else {
-                  $('#serial-number').val('');
-                  $(".save-btn").prop("disabled", true);
-                }
-              } else {
-                var optionsValues = '<select class="form-control input-sm" id="serial-control" onchange=serialControl(this) style="margin-top: 5px">';
-                optionsValues += '<option selected disabled>Выберите</option>';
-                $.each(result, function (index, obj) {
-                  if (obj.eq_serial != '' && obj.eq_serial != null) {
-                    var serVal = 's/n: ' + obj.eq_serial;
-                  } else {
-                    serVal = 's/n: -';
-                  }
-                  optionsValues += '<option value="' + obj.id + '" ' +
-                    'data-serial="' + obj.eq_serial + '">' + obj.name + ' ' + serVal + '</option>';
-                });
-                optionsValues += '</select>';
-                var options = $('#serial-control');
-                options.replaceWith(optionsValues);
-              }
-            } else if (result == -1) {
-              $('.about-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
-                ' в поле ввода.')).fadeIn('slow');
-            } else {
-              $('.about-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
-                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-            }
-          }).fail(function (result) {
-            $('.about-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
-              ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-          });
-        } else {
-          $("#serial-control").prop("disabled", true);
-          $('#serial-number').prop("disabled", true);
-          $('#serial-number').val('');
         }
         if (lvl == 0) {
           $(".del-node").hide();
@@ -593,24 +520,33 @@ $refresh_hint = 'Перезапустить форму';
         }
       },
       click: function (event, data) {
-        $('.about-info').html('');
-        $('#serial-number').val('');
-        $("#serial-control").children().remove();
-        $("#serial-control").prop("disabled", true);
         var node = data.node;
+        var userId = node.data.user_id;
+        var roleId = node.data.admin;
         var lvl = node.data.lvl;
-        window.node$ = data.node;
-        window.nodeId = node.data.id;
-        $(".save-btn").prop("disabled", true);
+        if (lvl == 0) {
+          $('.c-select').prop('disabled', true);
+          $('.c-select').val('none');
+          $('#submit').prop('disabled', true);
+        } else {
+          $('.c-select').prop('disabled', false);
+          $('#submit').prop('disabled', true);
+          $('.c-select').val('none');
+        }
+        if (userId) {
+          $('#user-control').val(userId);
+        }
+        if (roleId != null) {
+          $('#role-control').val(roleId);
+        }
       },
       renderNode: function (node, data) {
         if (data.node.key == -999) {
           $(".add-subcategory").hide();
         }
       }
-    })
-    ;
-  });
+    });
+  })
 
 
 </script>

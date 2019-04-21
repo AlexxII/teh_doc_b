@@ -136,14 +136,14 @@ require "to_array.php";
             </td>
             <td>
               <?php if (!empty($to->admin)) {
-                echo $to->admin->username;
+                echo $to->admin->name;
               } else {
                 echo '<span style="color:#CC0000">-</span>';
               }; ?>
             </td>
             <td>
               <?php if (!empty($to->auditor)) {
-                echo $to->auditor->username;
+                echo $to->auditor->name;
               } else {
                 echo '<span style="color:#CC0000">-</span>';
               }; ?>

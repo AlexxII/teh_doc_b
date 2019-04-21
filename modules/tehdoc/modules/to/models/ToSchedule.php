@@ -67,28 +67,22 @@ class ToSchedule extends \yii\db\ActiveRecord
 
   public function getAdmin()
   {
-    return $this->hasOne(User::class, ['id' => 'admin_id']);
+    return $this->hasOne(ToAdmins::class, ['id' => 'admin_id']);
   }
 
   public function getAuditor()
   {
-    return $this->hasOne(User::class, ['id' => 'auditor_id']);
+    return $this->hasOne(ToAdmins::class, ['id' => 'auditor_id']);
   }
 
   public function getAdminList()
   {
-    return [
-      44491978 => 'Лесин С.Н.',
-      47481824 => 'Игнатенко А.М.'
-    ];
+    return ArrayHelper::map(ToAdmins::find()->where(['admin' => 1])->orderBy('lft')->asArray()->all(), 'id', 'name');
   }
 
   public function getAuditorList()
   {
-    return [
-      24992690 => 'Малышев В.Ю.',
-      26823825 => 'Врачев Д.С.'
-    ];
+    return ArrayHelper::map(ToAdmins::find()->where(['admin' => 0])->orderBy('lft')->asArray()->all(), 'id', 'name');
   }
 
   public static function findModel($id)

@@ -115,7 +115,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="dropdown-header" style="font-size: 10px">Графики</li>',
           ['label' => 'Оборудование в графике', 'url' => ['/tehdoc/to/control/to-equipment']],
           ['label' => 'Виды Тех.обслуживания', 'url' => ['/tehdoc/to/control/to-type']],
-          ['label' => 'Сотрудники', 'url' => ['/tehdoc/to/control/to-admin']],
+          ['label' => 'Сотрудники', 'url' => ['/tehdoc/to/control/to-admins']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Наработка</li>',
           ['label' => 'Шаблоны наработки', 'url' => ['/tehdoc/to/control/#']],
