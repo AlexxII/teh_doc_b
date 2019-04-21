@@ -2,7 +2,6 @@
 
 use \yii\widgets\ActiveForm;
 use \yii\helpers\Html;
-use kartik\widgets\DatePicker;
 
 ?>
 

@@ -7,7 +7,6 @@ $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 
 $this->params['breadcrumbs'][] = ['label' => 'Графики ТО', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $about = "График технического обслуживания.";
-require "to_array.php";
 
 ?>
 <div class="to-update">

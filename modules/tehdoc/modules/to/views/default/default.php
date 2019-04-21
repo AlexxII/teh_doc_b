@@ -8,7 +8,7 @@ $about = "ВКС";
 
 ?>
 
-<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/schedule" style="text-align:center; cursor: pointer">
+<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/month-schedule" style="text-align:center; cursor: pointer">
   <div class="row" id="header">
     <h2>График</h2>
   </div>
@@ -21,7 +21,7 @@ $about = "ВКС";
 </div>
 
 
-<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/schedule/create" style="text-align: center; cursor: pointer">
+<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/month-schedule/create" style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Добавить график</h2>
   </div>
@@ -34,7 +34,7 @@ $about = "ВКС";
 </div>
 
 
-<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/schedule/archive" style="text-align: center; cursor: pointer">
+<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/month-schedule/archive" style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Архив графиков</h2>
   </div>

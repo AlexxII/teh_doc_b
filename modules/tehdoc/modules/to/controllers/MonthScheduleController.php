@@ -10,13 +10,12 @@ use app\modules\tehdoc\modules\to\models\ToEquipment;
 use app\modules\tehdoc\modules\to\models\ToSchedule;
 
 
-class ScheduleController extends Controller
+class MonthScheduleController extends Controller
 {
 
   const TO_TABLE = 'teh_to_schedule_tbl';
   const ADMINS_TABLE = 'teh_to_admins_tbl';
   const TOTYPE_TABLE = 'teh_to_type_tbl';
-
 
   public function actionIndex()
   {

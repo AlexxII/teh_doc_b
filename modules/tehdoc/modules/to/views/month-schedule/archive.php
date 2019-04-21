@@ -9,8 +9,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $about = "Графики технического обслуживания.";
 
-require 'to_array.php';
-
 ?>
 
 <style>
