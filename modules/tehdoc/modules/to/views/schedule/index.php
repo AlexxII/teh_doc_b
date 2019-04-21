@@ -135,10 +135,10 @@ require "to_array.php";
               } ?>
             </td>
             <td>
-              <?= $to->admin->username; ?>
+              <?= $to->admin->name; ?>
             </td>
             <td>
-              <?= $to->auditor->username; ?>
+              <?= $to->auditor->name; ?>
             </td>
             <td>
               <?php

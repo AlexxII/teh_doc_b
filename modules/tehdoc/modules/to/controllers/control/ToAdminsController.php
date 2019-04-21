@@ -95,4 +95,22 @@ class ToAdminsController extends Controller
     return false;
   }
 
+  public function actionSaveSettings()
+  {
+    sleep(1);
+    if (!empty($_POST['id'])) {
+      $id = $_POST['id'];
+      $admin = ToAdmins::findModel($id);
+      if (!empty($_POST['userVal'])){
+        $admin->user_id = $_POST['userVal'];
+      }
+      $admin->admin = $_POST['roleVal'];
+      if ($admin->save()){
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
 }

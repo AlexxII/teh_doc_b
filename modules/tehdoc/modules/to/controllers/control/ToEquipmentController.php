@@ -122,10 +122,21 @@ class ToEquipmentController extends Controller
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $toEquipment = ToEquipment::findModel($id);
-      $toEquipment->valid = 0;
-      if ($toEquipment->save()) {
-        return true;
+      $toWrap = ToEquipment::findModel($id);
+      if ($toWrap->eq_id == 0){
+        $parentOrder = ToEquipment::findOne(['name' => 'Оборудование']);
+        foreach ($toWrap->children()->all() as $child){
+          $child->appendTo($parentOrder);
+        }
+        if ($toWrap->delete()){
+          return true;
+        }
+        return false;
+      } else {
+        $toWrap->valid = 0;
+        if ($toWrap->save()) {
+          return true;
+        }
       }
       return false;
     }

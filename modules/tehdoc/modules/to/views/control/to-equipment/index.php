@@ -12,9 +12,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель управления оборудованием, добавленным в графики проведения ТО.";
 $add_hint = 'Добавить группу';
-$del_hint = 'Удалить БЕЗ вложений';
+$del_hint = 'Удалить обертку';
 $del_root_hint = 'Удалить ветку полностью';
-$del_multi_nodes = 'Удалить С вложениями';
 $refresh_hint = 'Перезапустить форму';
 
 ?>
@@ -53,23 +52,26 @@ $refresh_hint = 'Перезапустить форму';
 <div class="row">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
-      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
+      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm',
         'style' => ['margin-top' => '5px'],
         'title' => $add_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'id' => 'add-subcategory'
       ]) ?>
-      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
+      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm',
         'style' => ['margin-top' => '5px'],
         'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'id' => 'refresh'
       ]) ?>
-      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
+      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'id' => 'del-node'
       ]) ?>
     </div>
 
@@ -98,17 +100,17 @@ $refresh_hint = 'Перезапустить форму';
   <div class="col-lg-5 col-md-5">
     <div class="alert alert-warning" style="margin-bottom: 10px">
       <a href="#" class="close" data-dismiss="alert">&times;</a>
-      <strong>Внимание!</strong> Выберите оборудование, серийный номер которого будет использоваться в графике ТО. Если
+      <strong>Внимание!</strong> Выберите оборудование серийный номер которого будет использоваться в графике ТО. Если
       выпадающий список не активен, значит у объекта отсутствуют дочерные элементы.
     </div>
 
-    <div class="about-info" style="margin-bottom: 10px"></div>
+    <div id="result-info" style="margin-bottom: 10px"></div>
     <form action="create" method="post" class="input-add">
       <div class="about-main">
         <label>Серийный номер:</label>
-        <input id="serial-number" class="form-control" disabled>
+        <input id="serial-number" class="form-control c-input" disabled>
         <label>Оборудование:</label>
-        <select type="text" id="serial-control" class="form-control" name="sn" disabled></select>
+        <select type="text" id="serial-control" class="c-input form-control" name="sn" disabled></select>
         <label style="font-weight:400;font-size: 10px">Выберите оборудование.</label>
       </div>
       <div class="about-footer"></div>
@@ -168,15 +170,15 @@ $refresh_hint = 'Перезапустить форму';
       },
       success: function (result) {
         if (result) {
-          $('.about-info').hide().html(goodAlert('Запись добавлена в БД.')).fadeIn('slow');
+          $('#result-info').hide().html(goodAlert('Запись добавлена в БД.')).fadeIn('slow');
           window.node$.data.eq_serial = serial;
         } else {
-          $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+          $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
             'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
         }
       },
       error: function () {
-        $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+        $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
           'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
       }
     });
@@ -205,25 +207,28 @@ $refresh_hint = 'Перезапустить форму';
   });
 
   $(document).ready(function () {
-    $('.add-subcategory').click(function (event) {
+    $('#add-subcategory').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree('getTree');
       var root = tree.findFirst('Оборудование');
       root.editCreateNode("child", " ");
     });
 
-    $('.refresh').click(function (event) {
+    $('#refresh').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       tree.reload();
-      $(".del-node").hide();
+      $("#del-node").hide();
       $(".del-multi-nodes").hide();
-      $('.about-info').html('')
+      $('#result-info').html('');
+      $('#serial-number').val('');
+      $('.c-input').prop('disabled', true);
+      $(".save-btn").prop('disabled', true);
     })
   });
 
   $(document).ready(function () {
-    $('.del-node').click(function (event) {
+    $('#del-node').click(function (event) {
       var url = 'to-equipment/delete';
       event.preventDefault();
       jc = $.confirm({
@@ -284,8 +289,8 @@ $refresh_hint = 'Перезапустить форму';
                   node.remove();
                   var tree = $(".ui-draggable-handle").fancytree("getTree");
                   tree.reload();
-                  $('.about-info').html('');
-                  $('.del-node').hide();
+                  $('#result-info').html('');
+                  $('#del-node').hide();
                   $(".del-multi-nodes").hide();
                 }
               }
@@ -316,7 +321,7 @@ $refresh_hint = 'Перезапустить форму';
         jc = $.confirm({
           icon: 'fa fa-exclamation-triangle',
           title: 'Неудача!',
-          content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
           type: 'red',
           buttons: false,
           closeIcon: false,
@@ -383,6 +388,7 @@ $refresh_hint = 'Перезапустить форму';
   });
 
 
+  var serialVal;
   // отображение и логика работа дерева
   jQuery(function ($) {
     var main_url = '/tehdoc/to/control/to-equipment/all-tools';
@@ -472,15 +478,15 @@ $refresh_hint = 'Перезапустить форму';
                 node.setTitle(result.acceptedTitle);
                 node.data.eq_id = 0;
                 parent.renderTitle();
-                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
+                $('#result-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                   ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+              $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
             }).always(function () {
               // data.input.removeClass("pending")
@@ -496,14 +502,14 @@ $refresh_hint = 'Перезапустить форму';
               if (result) {
                 result = JSON.parse(result);
                 node.setTitle(result.acceptedTitle);
-                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
+                $('#result-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                   ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+              $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               node.setTitle(data.orgTitle);
             }).always(function () {
@@ -523,15 +529,15 @@ $refresh_hint = 'Перезапустить форму';
         var node = data.node;
         var lvl = node.data.lvl;
         var eqId = node.data.eq_id;
-        var serial = node.data.eq_serial;
+        serialVal = node.data.eq_serial;
         if (node.key == -999) {
-          $(".add-subcategory").hide();
+          $("#add-subcategory").hide();
           return;
         }
         if (eqId != 0) {
           $('#serial-number').prop("disabled", false);
-          if (serial) {
-            $('#serial-number').val(serial);
+          if (serialVal) {
+            $('#serial-number').val(serialVal);
           } else {
             $('#serial-number').val('');
           }
@@ -555,7 +561,7 @@ $refresh_hint = 'Перезапустить форму';
                   $(".save-btn").prop("disabled", true);
                 }
               } else {
-                var optionsValues = '<select class="form-control input-sm" id="serial-control" onchange=serialControl(this) style="margin-top: 5px">';
+                var optionsValues = '<select class="form-control input-sm c-input" id="serial-control" onchange=serialControl(this) style="margin-top: 5px">';
                 optionsValues += '<option selected disabled>Выберите</option>';
                 $.each(result, function (index, obj) {
                   if (obj.eq_serial != '' && obj.eq_serial != null) {
@@ -569,16 +575,19 @@ $refresh_hint = 'Перезапустить форму';
                 optionsValues += '</select>';
                 var options = $('#serial-control');
                 options.replaceWith(optionsValues);
+                if (serialVal){
+                  $("#serial-control option[data-serial='" + serialVal +"']").attr("selected","selected");
+                }
               }
             } else if (result == -1) {
-              $('.about-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
+              $('#result-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
                 ' в поле ввода.')).fadeIn('slow');
             } else {
-              $('.about-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
+              $('#result-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
             }
           }).fail(function (result) {
-            $('.about-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
+            $('#result-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
               ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
           });
         } else {
@@ -587,13 +596,13 @@ $refresh_hint = 'Перезапустить форму';
           $('#serial-number').val('');
         }
         if (lvl == 0) {
-          $(".del-node").hide();
+          $("#del-node").hide();
         } else {
-          $(".del-node").show();
+          $("#del-node").show();
         }
       },
       click: function (event, data) {
-        $('.about-info').html('');
+        $('#result-info').html('');
         $('#serial-number').val('');
         $("#serial-control").children().remove();
         $("#serial-control").prop("disabled", true);
@@ -602,10 +611,13 @@ $refresh_hint = 'Перезапустить форму';
         window.node$ = data.node;
         window.nodeId = node.data.id;
         $(".save-btn").prop("disabled", true);
+        if (node.data.eq_id){
+          $("#del-node").hide();
+        }
       },
       renderNode: function (node, data) {
         if (data.node.key == -999) {
-          $(".add-subcategory").hide();
+          $("#add-subcategory").hide();
         }
       }
     })

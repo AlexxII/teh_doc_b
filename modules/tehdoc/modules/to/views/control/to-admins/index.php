@@ -18,7 +18,8 @@ $add_hint = 'Добавить запись';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить';
 
-$user_hint = 'Выберите пользователя';
+$user_hint = 'Выберите пользователя системы с которым вы хотите сопоставить узел в дереве';
+$role_hint = 'Выберите роль пользователя при проведении ТО';
 
 ?>
 
@@ -102,11 +103,8 @@ $user_hint = 'Выберите пользователя';
 
 
   <div class="col-lg-5 col-md-5">
-    <div class="alert alert-warning" style="margin-bottom: 10px">
-      <a href="" class="close" data-dismiss="alert">&times;</a>
-      <strong>Внимание!</strong> Будьте внимательны!
-    </div>
-    <div class="about-info">
+    <div id="result-info" style="margin-bottom: 10px"></div>
+    <div id="admin-settings">
       <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'id' => 'user-form']]); ?>
       <label> Пользователь системы:
         <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
@@ -123,7 +121,7 @@ $user_hint = 'Выберите пользователя';
       ?>
       <label> Роль:
         <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-             data-toggle="tooltip" data-placement="top" title="<?= $user_hint ?>"></sup>
+             data-toggle="tooltip" data-placement="top" title="<?= $role_hint ?>"></sup>
       </label>
       <?= $form->field($model, 'name', [
         'template' => '{input}{hint}'])
@@ -192,12 +190,14 @@ $user_hint = 'Выберите пользователя';
       $('.c-select').prop('disabled', true);
       $('.c-select').val('none');
       $('#submit').prop('disabled', true);
+      $('#result').html('');
+      $('#result-info').html('');
     })
   });
 
   $(document).ready(function () {
     $('.del-node').click(function (event) {
-      var url = 'to-admins/delete';
+      var url = 'delete';
       event.preventDefault();
       jc = $.confirm({
         icon: 'fa fa-question',
@@ -313,15 +313,28 @@ $user_hint = 'Выберите пользователя';
     });
 
     $('#submit').click(function (e) {
+      var url = 'save-settings';
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+      $('#result').html(waiting);
+      var userVal = $('#user-control').val();
+      var roleVal = $('#role-control').val();
       $.ajax({
         url: url,
         type: "post",
-        data: {id: node.data.id, _csrf: csrf}
+        data: {
+          _csrf: csrf,
+          id: node.data.id,
+          userVal: userVal,
+          roleVal: roleVal
+        }
       }).done(function (response) {
         $('#result').html(successCheck);
-      }).fail(functio (response)){
+        node.data.admin = roleVal;
+        node.data.user_id = userVal;
+      }).fail(function (response) {
         $('#result').html(warningCheck);
-      });
+      })
     })
 
   });
@@ -459,15 +472,15 @@ $user_hint = 'Выберите пользователя';
                 node.data.id = result.acceptedId;
                 node.setTitle(result.acceptedTitle);
                 parent.renderTitle();
-                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
+                $('#result-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                   ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+              $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
             }).always(function () {
               // data.input.removeClass("pending")
@@ -483,14 +496,14 @@ $user_hint = 'Выберите пользователя';
               if (result) {
                 result = JSON.parse(result);
                 node.setTitle(result.acceptedTitle);
-                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
+                $('#result-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                   ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+              $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               node.setTitle(data.orgTitle);
             }).always(function () {
@@ -524,6 +537,8 @@ $user_hint = 'Выберите пользователя';
         var userId = node.data.user_id;
         var roleId = node.data.admin;
         var lvl = node.data.lvl;
+        $('#result').html('');
+        $('#result-info').html('');
         if (lvl == 0) {
           $('.c-select').prop('disabled', true);
           $('.c-select').val('none');
