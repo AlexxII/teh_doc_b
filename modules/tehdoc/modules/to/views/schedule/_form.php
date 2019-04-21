@@ -232,7 +232,7 @@ $form = ActiveForm::begin([
 <script>
 
   var freeDays = new Array();
-  var start_day, end_day; // глобальные переменных хранения дат
+  var startDay, endDay; // глобальные переменных хранения дат
   var busyDays = new Array(); // глобальный массив хранения
 
   // формат для всех календарей!!!!!!!!!!!!
@@ -269,6 +269,7 @@ $form = ActiveForm::begin([
       $('.admin-list').val('none');
       $('.to-date').prop('disabled', true);
       // getFreeDays(toMonth);
+      getMonthBorders();
       setMonth();
       $('.admin-list').prop('disabled', false);
       $('.admin-list').removeClass('loading-ex');
@@ -280,6 +281,19 @@ $form = ActiveForm::begin([
     }
   });
 
+  function getMonthBorders() {
+    var toMonth = $('.to-month').datepicker('getDate');
+    var month = toMonth.getMonth();
+    var year = toMonth.getFullYear();
+    var mDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    var nMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+    var start_date = year + '-' + nMonth[month] + '-01';
+    var end_date = year + '-' + nMonth[month] + '-' + mDays[month];
+    startDay = '01.' + nMonth[month] + '.' + year;
+    endDay = mDays[month] + '.' + nMonth[month] + '.' + year;
+  }
+
+
   // формирует ajax запрос на получение выxодных дней в зависимоти от месяца
   function getFreeDays(toMonth) {
     var month = toMonth.getMonth();
@@ -288,8 +302,8 @@ $form = ActiveForm::begin([
     var nMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
     var start_date = year + '-' + nMonth[month] + '-01';
     var end_date = year + '-' + nMonth[month] + '-' + mDays[month];
-    window.start_day = '01.' + nMonth[month] + '.' + year;
-    window.end_day = mDays[month] + '.' + nMonth[month] + '.' + year;
+    startDay = '01.' + nMonth[month] + '.' + year;
+    endDay = mDays[month] + '.' + nMonth[month] + '.' + year;
     var tempArray = new Array();
     $.ajax({
       url: "free-days?start_date=" + start_date + "&end_date=" + end_date,
@@ -343,38 +357,39 @@ $form = ActiveForm::begin([
       $(this).addClass('loading');
       var val = $(this).closest('tr').find('.admin-list').val();
       $(this).datepicker('remove');
-      if (busyDays[val]) {
-        $(this).datepicker({
-          autoclose: true,
-          forceParse: false,
-          clearBtn: true,
-          beforeShowDay: function (date) {
-            if (window.busyDays[val]) {
-              if (window.busyDays[val][moment(date).format('Y-MM-DD')]) {
-                return {
-                  classes: 'highlight',
-                  tooltip: window.busyDays[val][moment(date).format('Y-MM-DD')]
-                };
-              }
-            }
-          }
-        });
-      } else {
-        $(this).datepicker({
-          autoclose: true,
-          forceParse: false,
-          clearBtn: true
-        })
-      }
-      $(this).datepicker('setStartDate', window.start_day);
-      $(this).datepicker('setEndDate', window.end_day);
+      console.log(startDay);
+      // if (busyDays[val]) {
+      //   $(this).datepicker({
+      //     autoclose: true,
+      //     forceParse: false,
+      //     clearBtn: true,
+      //     beforeShowDay: function (date) {
+      //       if (window.busyDays[val]) {
+      //         if (window.busyDays[val][moment(date).format('Y-MM-DD')]) {
+      //           return {
+      //             classes: 'highlight',
+      //             tooltip: window.busyDays[val][moment(date).format('Y-MM-DD')]
+      //           };
+      //         }
+      //       }
+      //     }
+      //   });
+      // } else {
+      //   $(this).datepicker({
+      //     autoclose: true,
+      //     forceParse: false,
+      //     clearBtn: true
+      //   })
+      // }
+      $(this).datepicker('setStartDate', startDay);
+      $(this).datepicker('setEndDate', endDay);
       $(this).datepicker('update');
       $(this).prop('disabled', false);
       $(this).removeClass('loading');
       $(this).datepicker('show');
       $(this).on('change', copySl);                           // обработчик изменения сосотяния input -> копирование
       $(this).on('input', copySl);                           // обработчик изменения сосотяния input -> копирование
-         $('.to-date').datepicker('setDatesDisabled', arr);
+         // $('.to-date').datepicker('setDatesDisabled', arr);
     })
   });
 

@@ -14,7 +14,7 @@ class ScheduleController extends Controller
 {
 
   const TO_TABLE = 'teh_to_schedule_tbl';
-  const USERS_TABLE = 'user';
+  const ADMINS_TABLE = 'teh_to_admins_tbl';
   const TOTYPE_TABLE = 'teh_to_type_tbl';
 
 
@@ -48,12 +48,12 @@ class ScheduleController extends Controller
   public function actionArchive()
   {
     $schTable = self::TO_TABLE;
-    $usersTable = self::USERS_TABLE;
+    $usersTable = self::ADMINS_TABLE;
     $toTable = self::TOTYPE_TABLE;
     $sql = "SELECT {$schTable}.id, {$schTable}.plan_date, {$schTable}.schedule_id,
               GROUP_CONCAT(DISTINCT {$schTable}.checkmark ORDER BY {$schTable}.checkmark ASC SEPARATOR ', ') as checkmark,
-              GROUP_CONCAT(DISTINCT t1.username ORDER BY t1.username ASC SEPARATOR ',<br> ') as admins,
-              GROUP_CONCAT(DISTINCT t2.username ORDER BY t2.username ASC SEPARATOR ',<br> ') as auditors,
+              GROUP_CONCAT(DISTINCT t1.name ORDER BY t1.name ASC SEPARATOR ',<br> ') as admins,
+              GROUP_CONCAT(DISTINCT t2.name ORDER BY t2.name ASC SEPARATOR ',<br> ') as auditors,
               GROUP_CONCAT(DISTINCT t3.name ORDER BY t3.name ASC SEPARATOR ',<br> ') as to_type
             from {$schTable}
               LEFT JOIN {$usersTable} as t1 on {$schTable}.admin_id = t1.id

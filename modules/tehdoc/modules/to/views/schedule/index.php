@@ -107,7 +107,8 @@ require "to_array.php";
               }; ?>
             </td>
             <td>
-              <?php if (!empty($to->toEq)) {
+              <?php
+              if (!empty($to->toEq->groupName)) {
                 echo $to->toEq->groupName->name;
               } else {
                 echo '<span style="color:#CC0000">Вероятно оборудование удалено</span>';
@@ -174,13 +175,6 @@ require "to_array.php";
         {"visible": false, "targets": 5}
       ],
       rowGroup: {
-        startRender: function (rows, group) {
-          var test = rows.data().pluck(5).reduce(function (a, b) {
-            return a, b;
-          }, 0);
-          return $('<tr/>')
-            .append('<td colspan="10" style="text-align: left">' + group + ' ' + test + '</td>');
-        },
         dataSrc: 4
       },
       iDisplayLength: 50,
