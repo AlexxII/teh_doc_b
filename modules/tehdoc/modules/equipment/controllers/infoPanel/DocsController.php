@@ -87,6 +87,7 @@ class DocsController extends Controller
           if (unlink($fileName)) {
             $doc->delete();
             $counter++;
+            continue;
           }
         }
         $doc->delete();

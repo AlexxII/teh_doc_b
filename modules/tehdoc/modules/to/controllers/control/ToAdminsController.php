@@ -97,7 +97,6 @@ class ToAdminsController extends Controller
 
   public function actionSaveSettings()
   {
-    sleep(1);
     if (!empty($_POST['id'])) {
       $id = $_POST['id'];
       $admin = ToAdmins::findModel($id);
