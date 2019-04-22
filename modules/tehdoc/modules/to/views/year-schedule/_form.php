@@ -145,74 +145,74 @@ $ref_hint = 'К оборудованию в основном перечне';
     <td></td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
     <td>
       <select name="sel1" id="">
-        <option value="a">A</option>
-        <option value="b">B</option>
+        <option value=0>М</option>
+        <option value=1>Г</option>
       </select>
     </td>
   </tr>
