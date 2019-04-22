@@ -34,6 +34,9 @@ $role_hint = 'Выберите роль пользователя при пров
   ul.fancytree-container {
     font-size: 14px;
   }
+  .ui-fancytree {
+    overflow: auto;
+  }
   input {
     color: black;
   }

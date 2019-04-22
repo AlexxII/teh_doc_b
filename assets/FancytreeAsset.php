@@ -28,11 +28,11 @@ class FancytreeAsset extends \yii\web\AssetBundle
   public function init()
   {
     $this->setupAssets('css', [$this->skin]);
-    $this->setupAssets('js', ['dist/jquery.fancytree-all']);
-//    $this->setupAssets('js', [
-//      '3rd-party/extensions/hotkeys/js/jquery.hotkeys',
-//      '3rd-party/extensions/hotkeys/js/jquery.fancytree.hotkeys'
-//      ]);
+    $this->setupAssets('js', [
+      'dist/jquery.fancytree-all',
+      'src/jquery.fancytree.table',
+      'src/jquery.fancytree.gridnav'
+    ]);
     parent::init();
   }
 }

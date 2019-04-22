@@ -174,8 +174,7 @@ class MonthScheduleController extends Controller
   }
 
 
-  public
-  function actionUpdate($id)
+  public function actionUpdate($id)
   {
     $models = ToSchedule::findModel($id)->all();
     if (Model::loadMultiple($models, Yii::$app->request->post())) {
@@ -202,8 +201,7 @@ class MonthScheduleController extends Controller
   }
 
 
-  public
-  function actionFreeDays($start_date, $end_date)
+  public function actionFreeDays($start_date, $end_date)
   {
     return false;
     $sql = 'SELECT people_labor_status.people_id, people_labor_status.free_date as free_dates,
@@ -229,7 +227,7 @@ class MonthScheduleController extends Controller
       foreach ($models as $m) {
         $result = $m->delete();
       }
-      if ($result){
+      if ($result) {
         return true;
       }
       return false;

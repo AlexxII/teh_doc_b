@@ -47,7 +47,7 @@ $about = "ВКС";
 </div>
 
 
-<div class="col-lg-4 col-md-6 about" data-url="#" style="text-align: center; cursor: pointer">
+<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/year-schedule/create" style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Добавить на год</h2>
   </div>

@@ -28,6 +28,9 @@ $del_hint = 'Удалить';
   ul.fancytree-container {
     font-size: 14px;
   }
+  .ui-fancytree {
+    overflow: auto;
+  }
   input {
     color: black;
   }
