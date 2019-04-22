@@ -54,4 +54,25 @@ class YearScheduleController extends Controller
     }
   }
 
+  public function actionSelect()
+  {
+    $toEq = ToEquipment::find()
+      ->where(['valid' => 1])
+      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
+    if (empty($toEq)) {
+      Yii::$app->session->setFlash('error', "Не добавлено ни одного оборудования в график ТО.");
+      return $this->render('create', [
+        'tos' => $toEq,
+      ]);
+    }
+    $scheduleRand = rand();
+    foreach ($toEq as $i => $eq) {
+      $toss[] = new ToSchedule();
+      $toss[$i]->scenario = ToSchedule::SCENARIO_CREATE;
+      $toss[$i]->eq_id = $eq->id;
+      $toss[$i]->schedule_id = $scheduleRand;
+    }
+
+  }
+
 }

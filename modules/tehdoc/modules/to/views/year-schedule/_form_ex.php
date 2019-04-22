@@ -7,7 +7,7 @@ FancytreeAsset::register($this);
 
 $this->title = 'График ТО на год';
 
-$about = "Панель управления оборудованием, добавленным в графики проведения ТО.";
+$about = "Панель формирования графика ТО на год.";
 $add_hint = 'Добавить группу';
 $del_hint = 'Удалить обертку';
 $refresh_hint = 'Перезапустить форму';
@@ -96,11 +96,9 @@ $ref_hint = 'К оборудованию в основном перечне';
       <a href="#" class="close" data-dismiss="alert">&times;</a>
       <strong>Внимание!</strong>
     </div>
-
     <div id="result-info" style="margin-bottom: 10px"></div>
-
-    <div id="content-info" style="margin-bottom: 10px"></div>
-
+    <div id="content-info" style="margin-bottom: 10px">
+    </div>
   </div>
 </div>
 
@@ -250,6 +248,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         } else {
           $('#tool-ref').hide();
         }
+
       },
       click: function (event, data) {
       },

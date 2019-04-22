@@ -15,7 +15,7 @@ $add_hint = 'Добавить группу';
 $del_hint = 'Удалить обертку';
 $refresh_hint = 'Перезапустить форму';
 $serial_hint = 'Внимание! Серийный номер, присвоенный в данной форме отображается только в пределах раздела ТО';
-$ref_hint= 'К оборудованию в основном перечне';
+$ref_hint = 'К оборудованию в основном перечне';
 
 ?>
 
@@ -211,17 +211,95 @@ $ref_hint= 'К оборудованию в основном перечне';
     return;
   }
 
-  $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-  });
+  function deleteProcess(url, node) {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    jc = $.confirm({
+      icon: 'fa fa-cog fa-spin',
+      title: 'Подождите!',
+      content: 'Ваш запрос выполняется!',
+      buttons: false,
+      closeIcon: false,
+      confirmButtonClass: 'hide'
+    });
+    $.ajax({
+      url: url,
+      type: "post",
+      data: {id: node.data.id, _csrf: csrf}
+    }).done(function (response) {
+      if (response != false) {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-thumbs-up',
+          title: 'Успех!',
+          content: 'Ваш запрос выполнен.',
+          type: 'green',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-success',
+              action: function () {
+                node.remove();
+                var tree = $(".ui-draggable-handle").fancytree("getTree");
+                tree.reload();
+                $('#result-info').html('');
+                $('#del-node').hide();
+                $(".del-multi-nodes").hide();
+              }
+            }
+          }
+        });
+      } else {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
+      }
+    }).fail(function () {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-exclamation-triangle',
+        title: 'Неудача!',
+        content: 'Запрос не выполнен. Что-то пошло не так.',
+        type: 'red',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|4000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+            }
+          }
+        }
+      });
+    });
+  }
 
   $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+
     $("#serial-number").on('keyup mouseclick', function () {
       $("#save-btn").prop("disabled", this.value.length == "" ? true : false);
     });
-  });
 
-  $(document).ready(function () {
     $('#add-subcategory').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree('getTree');
@@ -252,10 +330,8 @@ $ref_hint= 'К оборудованию в основном перечне';
       } else {
         location.href = href;
       }
-    })
-  });
+    });
 
-  $(document).ready(function () {
     $('#del-node').click(function (event) {
       var url = 'to-equipment/delete';
       event.preventDefault();
@@ -284,129 +360,44 @@ $ref_hint= 'К оборудованию в основном перечне';
       });
     });
 
-    function deleteProcess(url, node) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Ваш запрос выполняется!',
-        buttons: false,
-        closeIcon: false,
-        confirmButtonClass: 'hide'
+    $("input[name=search]").keyup(function (e) {
+      var n,
+        tree = $.ui.fancytree.getTree(),
+        args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+        opts = {},
+        filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+        match = $(this).val();
+
+      $.each(args, function (i, o) {
+        opts[o] = $("#" + o).is(":checked");
       });
-      $.ajax({
-        url: url,
-        type: "post",
-        data: {id: node.data.id, _csrf: csrf}
-      }).done(function (response) {
-        if (response != false) {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-thumbs-up',
-            title: 'Успех!',
-            content: 'Ваш запрос выполнен.',
-            type: 'green',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-success',
-                action: function () {
-                  node.remove();
-                  var tree = $(".ui-draggable-handle").fancytree("getTree");
-                  tree.reload();
-                  $('#result-info').html('');
-                  $('#del-node').hide();
-                  $(".del-multi-nodes").hide();
-                }
-              }
-            }
-          });
-        } else {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-exclamation-triangle',
-            title: 'Неудача!',
-            content: 'Запрос не выполнен. Что-то пошло не так.',
-            type: 'red',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-danger',
-                action: function () {
-                }
-              }
-            }
-          });
-        }
-      }).fail(function () {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-exclamation-triangle',
-          title: 'Неудача!',
-          content: 'Запрос не выполнен. Что-то пошло не так.',
-          type: 'red',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|4000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-danger',
-              action: function () {
-              }
-            }
-          }
-        });
-      });
-    }
-  });
+      opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
+
+      if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+        $("button#btnResetSearch").click();
+        return;
+      }
+      if ($("#regex").is(":checked")) {
+        // Pass function to perform match
+        n = filterFunc.call(tree, function (node) {
+          return new RegExp(match, "i").test(node.title);
+        }, opts);
+      } else {
+        // Pass a string to perform case insensitive matching
+        n = filterFunc.call(tree, match, opts);
+      }
+      $("#btnResetSearch").attr("disabled", false);
+    }).focus();
 
 
-  $("input[name=search]").keyup(function (e) {
-    var n,
-      tree = $.ui.fancytree.getTree(),
-      args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-      opts = {},
-      filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-      match = $(this).val();
+    $("#btnResetSearch").click(function (e) {
+      e.preventDefault();
+      $("input[name=search]").val("");
+      $("span#matches").text("");
+      var tree = $(".ui-draggable-handle").fancytree("getTree");
+      tree.clearFilter();
+    }).attr("disabled", true);
 
-    $.each(args, function (i, o) {
-      opts[o] = $("#" + o).is(":checked");
-    });
-    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
-
-    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-      $("button#btnResetSearch").click();
-      return;
-    }
-    if ($("#regex").is(":checked")) {
-      // Pass function to perform match
-      n = filterFunc.call(tree, function (node) {
-        return new RegExp(match, "i").test(node.title);
-      }, opts);
-    } else {
-      // Pass a string to perform case insensitive matching
-      n = filterFunc.call(tree, match, opts);
-    }
-    $("#btnResetSearch").attr("disabled", false);
-  }).focus();
-
-
-  $("#btnResetSearch").click(function (e) {
-    e.preventDefault();
-    $("input[name=search]").val("");
-    $("span#matches").text("");
-    var tree = $(".ui-draggable-handle").fancytree("getTree");
-    tree.clearFilter();
-  }).attr("disabled", true);
-
-  $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
       if ($(this).val() == '') {
         var tree = $(".ui-draggable-handle").fancytree("getTree");
@@ -548,13 +539,13 @@ $ref_hint= 'К оборудованию в основном перечне';
         },
         close: function (event, data) {
           if (data.save) {
-            // Since we started an async request, mark the node as preliminary
             $(data.node.span).addClass("pending")
           }
         }
       },
       activate: function (node, data) {
         $('#serial-number').val('');
+        $('#serial-control').val('none');
         var node = data.node;
         var lvl = node.data.lvl;
         var eqId = node.data.eq_id;
@@ -581,7 +572,7 @@ $ref_hint= 'К оборудованию в основном перечне';
               if (serial) {
                 if (result.single != '' && result.single != null) {
                   $('#serial-number').val(result.single);
-                  if (node.data.eq_serial == null){
+                  if (node.data.eq_serial == null) {
                     $("#save-btn").prop("disabled", false);
                   }
                 } else {
@@ -609,11 +600,10 @@ $ref_hint= 'К оборудованию в основном перечне';
                 }
               }
             } else if (result == -1) {
-              if ($('#serial-number').text() == '') {
+              if ($('#serial-number').val() == '') {
                 $('#result-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
                   ' в поле ввода.')).fadeIn('slow');
               }
-
             } else {
               $('#result-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
@@ -646,7 +636,7 @@ $ref_hint= 'К оборудованию в основном перечне';
         } else {
           $("#del-node").show();
         }
-        if (node.data.eq_id != 0){
+        if (node.data.eq_id != 0) {
           $('#tool-ref').show();
           $("#del-node").hide();
         } else {

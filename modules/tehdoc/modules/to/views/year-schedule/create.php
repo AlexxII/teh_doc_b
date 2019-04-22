@@ -12,7 +12,7 @@ $about = "График технического обслуживания.";
 ?>
 
 <div class="to-create">
-  <?= $this->render('_form_ex', [
+  <?= $this->render('_form', [
     'tos' => $tos,
     'header' => 'Составление графика ТО на'
   ]) ?>

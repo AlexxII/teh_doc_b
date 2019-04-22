@@ -1,12 +1,45 @@
-<style type="text/css">
-  .ui-menu {
-    width: 180px;
-    font-size: 63%;
+<?php
+
+use yii\helpers\Html;
+use app\assets\FancytreeAsset;
+
+FancytreeAsset::register($this);
+
+$this->title = 'График ТО на год';
+
+$about = "Панель формирования графика ТО на год.";
+$add_hint = 'Добавить группу';
+$del_hint = 'Удалить обертку';
+$refresh_hint = 'Перезапустить форму';
+$serial_hint = 'Внимание! Серийный номер, присвоенный в данной форме отображается только в пределах раздела ТО';
+$ref_hint = 'К оборудованию в основном перечне';
+
+?>
+
+<style>
+  .h-title {
+    font-size: 18px;
+    color: #1e6887;
   }
-  .ui-menu kbd { /* Keyboard shortcuts for ui-contextmenu titles */
-    float: right;
+  .fa {
+    font-size: 15px;
   }
-  /* custom alignment (set by 'renderColumns'' event) */
+  ul.fancytree-container {
+    font-size: 14px;
+  }
+  input {
+    color: black;
+  }
+  .fancytree-custom-icon {
+    color: #1e6887;
+    font-size: 18px;
+  }
+  .t {
+    font-size: 14px;
+  }
+  .ui-fancytree {
+    overflow: auto;
+  }
   td.alignRight {
     text-align: right;
   }
@@ -16,10 +49,58 @@
   td input[type=input] {
     width: 40px;
   }
+
 </style>
 
+<div class="admin-category-pannel">
 
-<h1>График ТО на год</h1>
+  <h3><?= Html::encode($this->title) ?>
+    <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
+         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
+  </h3>
+</div>
+<div class="row">
+  <div class="">
+    <div class="container-fluid" style="margin-bottom: 10px">
+      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm',
+        'style' => ['margin-top' => '5px'],
+        'title' => $refresh_hint,
+        'data-toggle' => 'tooltip',
+        'data-placement' => 'top',
+        'id' => 'refresh'
+      ]) ?>
+      <?= Html::a('<i class="fa fa-level-up" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-info btn-sm',
+        'style' => ['margin-top' => '5px', 'display' => 'none'],
+        'title' => $ref_hint,
+        'data-toggle' => 'tooltip',
+        'data-placement' => 'top',
+        'id' => 'tool-ref'
+      ]) ?>
+    </div>
+
+  </div>
+
+  <div class="col-lg-12 col-md-12" style="padding-bottom: 10px">
+    <div style="position: relative">
+      <div class="container-fuid" style="float:left; width: 100%">
+        <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
+      </div>
+      <div style="padding-top: 8px; right: 10px; position: absolute">
+        <a href="" id="btnResetSearch">
+          <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="row" style="padding: 0 15px">
+      <div style="border-radius:2px;padding-top:40px">
+        <div id="fancyree_w0" class="ui-draggable-handle"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
 <table id="tree">
   <colgroup>
     <col width="30px">
@@ -40,7 +121,7 @@
   <thead>
   <tr>
     <th></th>
-    <th>№ п.п.</th>
+    <th>№</th>
     <th>Оборудование</th>
     <th>Янв.</th>
     <th>Фев.</th>
@@ -139,73 +220,38 @@
 </table>
 
 
-
-
-
 <script>
   $(function () {
 
     $("#tree").fancytree({
       checkbox: true,
-      titlesTabbable: true,     // Add all node titles to TAB chain
       quicksearch: true,        // Jump to nodes when pressing first character
       source: {url: '/tehdoc/to/control/to-equipment/all-tools'},
-      extensions: ["edit", "dnd5", "table", "gridnav"],
+      extensions: ["table"],
       minExpandLevel: 2,
       selectMode: 3,
-      dnd5: {
-        preventVoidMoves: true,
-        preventRecursiveMoves: true,
-        autoExpandMS: 400,
-        dragStart: function (node, data) {
-          return true;
-        },
-        dragEnter: function (node, data) {
-// return ["before", "after"];
-          return true;
-        },
-        dragDrop: function (node, data) {
-          data.otherNode.moveTo(node, data.hitMode);
-        }
-      },
-      edit: {
-        triggerStart: ["f2", "shift+click", "mac+enter"],
-        close: function (event, data) {
-          if (data.save && data.isNew) {
-// Quick-enter: add new nodes until we hit [enter] on an empty title
-            $("#tree").trigger("nodeCommand", {cmd: "addSibling"});
-          }
-        }
-      },
       table: {
         indentation: 20,
         nodeColumnIdx: 2,
         checkboxColumnIdx: 0
       },
-      // gridnav: {
-      //   autofocusInput: false,
-      //   handleCursorKeys: true
-      // },
-
       lazyLoad: function (event, data) {
         data.result = {url: "../demo/ajax-sub2.json"};
       },
       createNode: function (event, data) {
         var node = data.node,
           $tdList = $(node.tr).find(">td");
-
-// Span the remaining columns if it's a folder.
-// We can do this in createNode instead of renderColumns, because
-// the `isFolder` status is unlikely to change later
         if (node.isFolder()) {
           $tdList.eq(2)
-            .prop("colspan", 6)
+            .prop("colspan", 20)
             .nextAll().remove();
         }
       },
       renderColumns: function (event, data) {
         var node = data.node,
-        $tdList = $(node.tr).find(">td");
+          $tdList = $(node.tr).find(">td");
+        $tdList.eq(1).text(node.getIndexHier());
+        $tdList.eq(3).text(node.data.qty);
       }
     })
   });
