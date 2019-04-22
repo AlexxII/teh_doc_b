@@ -21,31 +21,40 @@ $ref_hint = 'К оборудованию в основном перечне';
     font-size: 18px;
     color: #1e6887;
   }
+
   .fa {
     font-size: 15px;
   }
+
   ul.fancytree-container {
     font-size: 14px;
   }
+
   input {
     color: black;
   }
+
   .fancytree-custom-icon {
     color: #1e6887;
     font-size: 18px;
   }
+
   .t {
     font-size: 14px;
   }
+
   .ui-fancytree {
     overflow: auto;
   }
+
   td.alignRight {
     text-align: right;
   }
+
   td.alignCenter {
     text-align: center;
   }
+
   td input[type=input] {
     width: 40px;
   }
@@ -81,11 +90,11 @@ $ref_hint = 'К оборудованию в основном перечне';
   </div>
 
   <div class="col-lg-12 col-md-12" style="padding-bottom: 10px">
-    <div style="position: relative">
+    <div class="col-lg-4 col-md-4" style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
       </div>
-      <div style="padding-top: 8px; right: 10px; position: absolute">
+      <div style="padding-top: 8px; right: 20px; position: absolute">
         <a href="" id="btnResetSearch">
           <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
         </a>
@@ -105,7 +114,7 @@ $ref_hint = 'К оборудованию в основном перечне';
   <colgroup>
     <col width="30px">
     <col width="50px">
-    <col width="350px">
+    <col width="750px">
     <col width="50px">
     <col width="50px">
     <col width="50px">
@@ -125,16 +134,16 @@ $ref_hint = 'К оборудованию в основном перечне';
     <th>Оборудование</th>
     <th>Янв.</th>
     <th>Фев.</th>
-    <th>Март</th>
-    <th>Апр</th>
+    <th>Мар.</th>
+    <th>Апр.</th>
     <th>Май</th>
-    <th>Июн</th>
-    <th>Июл</th>
-    <th>Авг</th>
-    <th>Сен</th>
-    <th>Окт</th>
-    <th>Нояб</th>
-    <th>Дек</th>
+    <th>Июн.</th>
+    <th>Июл.</th>
+    <th>Авг.</th>
+    <th>Сен.</th>
+    <th>Окт.</th>
+    <th>Ноя.</th>
+    <th>Дек.</th>
   </tr>
   </thead>
   <tbody>
@@ -221,40 +230,55 @@ $ref_hint = 'К оборудованию в основном перечне';
 
 
 <script>
-  $(function () {
 
-    $("#tree").fancytree({
-      checkbox: true,
-      quicksearch: true,        // Jump to nodes when pressing first character
-      source: {url: '/tehdoc/to/control/to-equipment/all-tools'},
-      extensions: ["table"],
-      minExpandLevel: 2,
-      selectMode: 3,
-      table: {
-        indentation: 20,
-        nodeColumnIdx: 2,
-        checkboxColumnIdx: 0
-      },
-      lazyLoad: function (event, data) {
-        data.result = {url: "../demo/ajax-sub2.json"};
-      },
-      createNode: function (event, data) {
-        var node = data.node,
-          $tdList = $(node.tr).find(">td");
-        if (node.isFolder()) {
-          $tdList.eq(2)
-            .prop("colspan", 20)
-            .nextAll().remove();
-        }
-      },
-      renderColumns: function (event, data) {
-        var node = data.node,
-          $tdList = $(node.tr).find(">td");
-        $tdList.eq(1).text(node.getIndexHier());
-        $tdList.eq(3).text(node.data.qty);
-      }
-    })
-  });
+    $(document).ready(function () {
+        $('#refresh').click(function (event) {
+            event.preventDefault();
+            var tree = $("#tree").fancytree("getTree");
+            tree.reload();
+            $("#del-node").hide();
+            $('.c-select').prop('disabled', true);
+            $('.c-select').val('none');
+            $('#submit').prop('disabled', true);
+            $('#result').html('');
+            $('#result-info').html('');
+        })
+    });
+
+    $(function () {
+
+        $("#tree").fancytree({
+            checkbox: true,
+            quicksearch: true,        // Jump to nodes when pressing first character
+            source: {url: '/tehdoc/to/control/to-equipment/all-tools'},
+            extensions: ["table"],
+            minExpandLevel: 2,
+            selectMode: 3,
+            table: {
+                indentation: 20,
+                nodeColumnIdx: 2,
+                checkboxColumnIdx: 0
+            },
+            lazyLoad: function (event, data) {
+                data.result = {url: "../demo/ajax-sub2.json"};
+            },
+            createNode: function (event, data) {
+                var node = data.node,
+                    $tdList = $(node.tr).find(">td");
+                if (node.isFolder()) {
+                    $tdList.eq(2)
+                        .prop("colspan", 20)
+                        .nextAll().remove();
+                }
+            },
+            renderColumns: function (event, data) {
+                var node = data.node,
+                    $tdList = $(node.tr).find(">td");
+                    $tdList.eq(1).text(node.getIndexHier());
+//                $tdList.eq(3).text(node.data.qty);
+            }
+        })
+    });
 
 </script>
 

@@ -320,7 +320,7 @@ $role_hint = 'Выберите роль пользователя при пров
     });
 
     $('#submit').click(function (e) {
-      var url = 'save-settings';
+      var url = '/tehdoc/to/control/to-admins/save-settings';
       var csrf = $('meta[name=csrf-token]').attr("content");
       var node = $(".ui-draggable-handle").fancytree("getActiveNode");
       $('#result').html(waiting);
