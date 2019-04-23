@@ -290,7 +290,7 @@ $del_multi_nodes = 'Удалить С вложениями';
       },
       extensions: ['filter'],
       quicksearch: true,
-      minExpandLevel: 2,
+      minExpandLevel: 3,
       wide: {
         iconWidth: "32px",     // Adjust this if @fancy-icon-width != "16px"
         iconSpacing: "6px", // Adjust this if @fancy-icon-spacing != "3px"

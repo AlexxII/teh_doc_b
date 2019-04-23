@@ -84,12 +84,14 @@ class DocsController extends Controller
         $doc = Docs::findModel($docId);
         $fileName = Yii::$app->params['uploadImg'] . $doc->doc_path;
         if (is_file($fileName)) {
+          return false;
           if (unlink($fileName)) {
             $doc->delete();
             $counter++;
             continue;
           }
         }
+        return var_dump(is_file($fileName));
         $doc->delete();
         $counter++;
       }
