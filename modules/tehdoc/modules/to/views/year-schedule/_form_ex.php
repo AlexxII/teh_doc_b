@@ -228,6 +228,8 @@ $ref_hint = 'К оборудованию в основном перечне';
       },
       extensions: ['filter'],
       quicksearch: true,
+      checkbox: true,
+      selectMode: 3,
       minExpandLevel: 2,
       filter: {
         autoApply: true,                                    // Re-apply last filter if lazy data is loaded
@@ -251,6 +253,8 @@ $ref_hint = 'К оборудованию в основном перечне';
 
       },
       click: function (event, data) {
+        var dt = data.node.toggleSelected();
+        console.log(dt);
       },
       renderNode: function (node, data) {
       }
