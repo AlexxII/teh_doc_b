@@ -253,8 +253,6 @@ $ref_hint = 'К оборудованию в основном перечне';
 
       },
       click: function (event, data) {
-        var dt = data.node.toggleSelected();
-        console.log(dt);
       },
       renderNode: function (node, data) {
       }
