@@ -53,6 +53,11 @@ $ref_hint = 'К оборудованию в основном перечне';
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
   }
+  .save {
+    color: #0b58a2;
+    font-size: 18px;
+    cursor: pointer;
+  }
 
 </style>
 
@@ -91,21 +96,15 @@ $ref_hint = 'К оборудованию в основном перечне';
 
   </div>
 
-  <div class="col-lg-12 col-md-12" style="padding-bottom: 10px">
-    <div class="col-lg-4 col-md-4" style="position: relative">
+  <div class="col-lg-5 col-md-5" style="padding-bottom: 10px">
+    <div style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
       </div>
-      <div style="padding-top: 8px; right: 20px; position: absolute">
+      <div style="padding-top: 8px; right: 10px; position: absolute">
         <a href="" id="btnResetSearch">
           <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
         </a>
-      </div>
-    </div>
-
-    <div class="row" style="padding: 0 15px">
-      <div style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_w0" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
@@ -146,6 +145,7 @@ $ref_hint = 'К оборудованию в основном перечне';
     <th>Окт.</th>
     <th>Ноя.</th>
     <th>Дек.</th>
+    <th></th>
   </tr>
   </thead>
   <tbody>
@@ -155,76 +155,78 @@ $ref_hint = 'К оборудованию в основном перечне';
     <td></td>
     <td></td>
     <td>
-      <select name="sel1" class="jan">
+      <select class="jan">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
     </td>
     <td>
-      <select name="sel1" class="feb">
+      <select class="feb">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
     </td>
     <td>
-      <select name="sel1" class="march">
+      <select class="march">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
     </td>
     <td>
-      <select name="sel1" class="">
+      <select class="apr">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
     </td>
     <td>
-      <select name="sel1" class="">
+      <select class="may">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
     </td>
     <td>
-      <select name="sel1" class="">
+      <select class="jun">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
     </td>
     <td>
-      <select name="sel1" class="">
+      <select class="jul">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
     </td>
     <td>
-      <select name="sel1" class="">
+      <select class="aug">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
     </td>
     <td>
-      <select name="sel1" class="">
+      <select class="sep">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
     </td>
     <td>
-      <select name="sel1" class="">
+      <select class="oct">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
     </td>
     <td>
-      <select name="sel1" class="">
+      <select class="nov">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
     </td>
     <td>
-      <select name="sel1" class="">
+      <select class="dec">
         <option value=0>М</option>
         <option value=1>Г</option>
       </select>
+    </td>
+    <td class="result">
     </td>
   </tr>
   </tbody>
@@ -234,21 +236,24 @@ $ref_hint = 'К оборудованию в основном перечне';
 <script>
 
   $(document).ready(function () {
-    $("#tree").on("click", "select", function(e){
-      // var node = $.ui.fancytree.getNode(e),
-      //   $input = $(e.target);
-      var ar = $('#tree').fancytree('getTree').getSelectedNodes();
-      console.log(ar);
+    $("#tree").on("change", "select", function (e) {
+      var val = $(this).val();
       var cl = $(this).attr('class');
-      $('.'+cl).each(function () {
-        console.log(1);
+      if (!cl) {
+        return;
+      }
+      var ar = $('#tree').fancytree('getTree').getSelectedNodes();
+      ar.forEach(function (item, i, arr) {
+        var tr = item.tr;
+        $(tr).find('.'+cl).each(function () {
+          $(this).val(val);
+        })
       });
-      // e.stopPropagation();  // prevent fancytree activate for this row
     });
 
     $('#refresh').click(function (event) {
       event.preventDefault();
-      var tree = $(".ui-draggable-handle").fancytree("getTree");
+      var tree = $("#tree").fancytree("getTree");
       tree.reload();
       $('.c-input').prop('disabled', true);
       $("#del-node").hide();
@@ -260,7 +265,7 @@ $ref_hint = 'К оборудованию в основном перечне';
 
     $('#tool-ref').click(function (event) {
       event.preventDefault();
-      var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+      var node = $("#tree").fancytree("getActiveNode");
       var toolId = node.data.eq_id;
       var prefix = '/tehdoc/equipment/tool/';
       var href = prefix + toolId + '/info/index';
@@ -269,10 +274,8 @@ $ref_hint = 'К оборудованию в основном перечне';
       } else {
         location.href = href;
       }
-    })
-  });
+    });
 
-  $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
       var n,
         tree = $.ui.fancytree.getTree(),
@@ -306,7 +309,7 @@ $ref_hint = 'К оборудованию в основном перечне';
       e.preventDefault();
       $("input[name=search]").val("");
       $("span#matches").text("");
-      var tree = $(".ui-draggable-handle").fancytree("getTree");
+      var tree = $("#tree").fancytree("getTree");
       tree.clearFilter();
     }).attr("disabled", true);
 
@@ -315,11 +318,8 @@ $ref_hint = 'К оборудованию в основном перечне';
         var tree = $("#tree").fancytree("getTree");
         tree.clearFilter();
       }
-    })
-  });
+    });
 
-
-  $(document).ready(function () {
     $("#tree").fancytree({
       checkbox: true,
       quicksearch: true,        // Jump to nodes when pressing first character
@@ -338,9 +338,12 @@ $ref_hint = 'К оборудованию в основном перечне';
       createNode: function (event, data) {
         var node = data.node,
           $tdList = $(node.tr).find(">td");
-        if (node.isFolder()) {
-          $tdList.eq(2)
-            .prop("colspan", 20)
+        if (node.data.lvl == 0){
+          $tdList.eq(2).prop("colspan", 20).nextAll().remove();
+        } else if (node.isFolder()) {
+          $tdList.eq(2).prop("colspan", 13);
+          $tdList.eq(3).html(
+            '<i class="fa fa-floppy-o save" data-nodeid="'+ node.data.id +'" aria-hidden="true"></i>')
             .nextAll().remove();
         }
       },
@@ -351,17 +354,20 @@ $ref_hint = 'К оборудованию в основном перечне';
         } else {
           $('#tool-ref').hide();
         }
-
+      },
+      click: function (event, data) {
+        var node = data.node;
+      },
+      dclick: function (event, data){
+        return;
       },
       renderColumns: function (event, data) {
         var node = data.node,
           $tdList = $(node.tr).find(">td");
         $tdList.eq(1).text(node.getIndexHier());
-//                $tdList.eq(3).text(node.data.qty);
       }
     })
   });
-
 
 
 </script>
