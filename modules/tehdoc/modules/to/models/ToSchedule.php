@@ -20,7 +20,7 @@ class ToSchedule extends \yii\db\ActiveRecord
   }
 
 
-  public function __construct()
+  public function   __construct()
   {
     parent::__construct();
   }
@@ -56,6 +56,11 @@ class ToSchedule extends \yii\db\ActiveRecord
   }
 
   public function getToList()
+  {
+    return ArrayHelper::map(ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all(), 'id', 'name');
+  }
+
+  public function getToListShort()
   {
     return ArrayHelper::map(ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all(), 'id', 'name');
   }

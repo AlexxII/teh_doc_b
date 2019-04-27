@@ -8,6 +8,7 @@ use yii\web\Controller;
 use app\base\Model;
 use app\modules\tehdoc\modules\to\models\ToEquipment;
 use app\modules\tehdoc\modules\to\models\ToSchedule;
+use app\modules\tehdoc\modules\to\models\ToType;
 
 
 class YearScheduleController extends Controller
@@ -15,6 +16,11 @@ class YearScheduleController extends Controller
 
   public function actionCreate()
   {
+    $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
+    $toTypeArray = array();
+    foreach ($toTypes as $toType){
+      $toTypeArray[$toType['id']] = mb_substr($toType['name'], 0, 1);
+    }
     $toEq = ToEquipment::find()
       ->where(['valid' => 1])
       ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
@@ -31,6 +37,8 @@ class YearScheduleController extends Controller
       $toss[$i]->eq_id = $eq->id;
       $toss[$i]->schedule_id = $scheduleRand;
     }
+
+    $to = new ToSchedule();
     if (ToSchedule::loadMultiple($toss, Yii::$app->request->post())) {
       if (!$to_month = Yii::$app->request->post('month')) {
         Yii::$app->session->setFlash('error', "Введите месяц проведения ТО");
@@ -49,7 +57,8 @@ class YearScheduleController extends Controller
       return $this->redirect('archive'); // redirect to your next desired page
     } else {
       return $this->render('create', [
-        'tos' => $toss,
+        'to' => $to,
+        'list' => $toTypeArray
       ]);
     }
   }

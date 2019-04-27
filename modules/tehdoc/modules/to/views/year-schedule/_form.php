@@ -53,7 +53,7 @@ $ref_hint = 'К оборудованию в основном перечне';
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
   }
-  .save {
+  .save-it {
     color: #0b58a2;
     font-size: 18px;
     cursor: pointer;
@@ -155,83 +155,46 @@ $ref_hint = 'К оборудованию в основном перечне';
     <td></td>
     <td></td>
     <td>
-      <select class="jan">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'jan']) ?>
     </td>
     <td>
-      <select class="feb">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'feb']) ?>
     </td>
     <td>
-      <select class="march">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'march']) ?>
     </td>
     <td>
-      <select class="apr">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'apr']) ?>
     </td>
     <td>
-      <select class="may">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'may']) ?>
     </td>
     <td>
-      <select class="jun">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'jun']) ?>
     </td>
     <td>
-      <select class="jul">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'jul']) ?>
     </td>
     <td>
-      <select class="aug">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'aug']) ?>
     </td>
     <td>
-      <select class="sep">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'sep']) ?>
     </td>
     <td>
-      <select class="oct">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'oct']) ?>
     </td>
     <td>
-      <select class="nov">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'nov']) ?>
     </td>
     <td>
-      <select class="dec">
-        <option value=0>М</option>
-        <option value=1>Г</option>
-      </select>
+      <?= Html::dropDownList('name',0, $list, ['class' => 'dec']) ?>
     </td>
     <td class="result">
     </td>
   </tr>
   </tbody>
 </table>
-
 
 <script>
 
@@ -250,6 +213,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         })
       });
     });
+
 
     $('#refresh').click(function (event) {
       event.preventDefault();
@@ -332,9 +296,6 @@ $ref_hint = 'К оборудованию в основном перечне';
         nodeColumnIdx: 2,
         checkboxColumnIdx: 0
       },
-      lazyLoad: function (event, data) {
-        data.result = {url: "../demo/ajax-sub2.json"};
-      },
       createNode: function (event, data) {
         var node = data.node,
           $tdList = $(node.tr).find(">td");
@@ -343,7 +304,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         } else if (node.isFolder()) {
           $tdList.eq(2).prop("colspan", 13);
           $tdList.eq(3).html(
-            '<i class="fa fa-floppy-o save" data-nodeid="'+ node.data.id +'" aria-hidden="true"></i>')
+            '<span class="fa fa-floppy-o save-it" onclick="saveMe(this)" data-nodeid="'+ node.data.id +'" aria-hidden="true"></span>')
             .nextAll().remove();
         }
       },
@@ -355,19 +316,21 @@ $ref_hint = 'К оборудованию в основном перечне';
           $('#tool-ref').hide();
         }
       },
-      click: function (event, data) {
-        var node = data.node;
-      },
-      dclick: function (event, data){
-        return;
-      },
       renderColumns: function (event, data) {
-        var node = data.node,
-          $tdList = $(node.tr).find(">td");
-        $tdList.eq(1).text(node.getIndexHier());
+        // var node = data.node,
+        //   $tdList = $(node.tr).find(">td");
+        // $tdList.eq(1).text(node.getIndexHier());
       }
     })
   });
+
+  function saveMe(ident) {
+    var nodeId = $(ident).data('nodeid');
+    console.log(nodeId);
+    $("#tree").fancytree("getTree").getNodeByKey(nodeId).setActive();
+    var node = $("#tree").fancytree("getActiveNode");
+    console.log(node);
+  }
 
 
 </script>
