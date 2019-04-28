@@ -84,4 +84,9 @@ class YearScheduleController extends Controller
 
   }
 
+  public function actionTestUrl()
+  {
+    return var_dump($_POST);
+  }
+
 }
