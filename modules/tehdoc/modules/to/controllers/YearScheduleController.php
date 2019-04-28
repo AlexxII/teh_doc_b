@@ -86,6 +86,7 @@ class YearScheduleController extends Controller
 
   public function actionTestUrl()
   {
+    sleep(3);
     return var_dump($_POST);
   }
 

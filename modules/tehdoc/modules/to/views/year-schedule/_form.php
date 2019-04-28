@@ -130,6 +130,8 @@ $ref_hint = 'К оборудованию в основном перечне';
     <col width="50px">
     <col width="50px">
     <col width="50px">
+    <col width="30px">
+    <col width="30px">
   </colgroup>
   <thead>
   <tr>
@@ -194,15 +196,20 @@ $ref_hint = 'К оборудованию в основном перечне';
     <td>
       <?= Html::dropDownList('name', 0, $list, ['class' => 'dec']) ?>
     </td>
-    <td class="save">
+    <td class="save" style="text-align: center">
     </td>
-    <td class="status">
+    <td class="status" style="text-align: center">
     </td>
   </tr>
   </tbody>
 </table>
 
 <script>
+
+
+  var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
+  var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
+  var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
 
   $(document).ready(function () {
     $("#tree").on("change", "select", function (e) {
@@ -291,7 +298,9 @@ $ref_hint = 'К оборудованию в основном перечне';
     });
 
     $("#tree").on("click", ".save-it", function (e) {
-
+      var node = $.ui.fancytree.getNode(e);
+      var $td = $(node.tr).find(">td");
+      $td.eq(4).html(waiting);
       jc = $.confirm({
         icon: 'fa fa-cog fa-spin',
         title: 'Подождите!',
@@ -300,9 +309,6 @@ $ref_hint = 'К оборудованию в основном перечне';
         closeIcon: false,
         confirmButtonClass: 'hide'
       });
-
-
-      var node = $.ui.fancytree.getNode(e);
       var result = [];
       var children = node.children;
       children.forEach(function (item, i, ar) {
@@ -347,6 +353,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         data: {id: result, _csrf: csrf}
       }).done(function (response) {
         jc.close();
+        $td.eq(4).html(successCheck);
         jc = $.confirm({
           icon: 'fa fa-thumbs-up',
           title: 'Успех!',
@@ -360,6 +367,7 @@ $ref_hint = 'К оборудованию в основном перечне';
             ok: {
               btnClass: 'btn-success',
               action: function () {
+
                 return;
               }
             }
@@ -406,11 +414,12 @@ $ref_hint = 'К оборудованию в основном перечне';
         if (node.data.lvl == 0) {
           $tdList.eq(2).prop("colspan", 13);
           $tdList.eq(3).html(
-            '<span class="fa fa-floppy-o save-it main" onclick="saveMe(this)" data-name="' + node.data.name + '" aria-hidden="true"></span>')
-            .nextAll().remove();
+            '<span class="fa fa-floppy-o save-it main" onclick="saveMe(this)" data-name="' + node.data.name + '" aria-hidden="true"></span>');
+          $tdList.eq(4).html('').nextAll().remove();
         } else if (node.isFolder()) {
           $tdList.eq(2).prop("colspan", 13);
-          $tdList.eq(3).html('').nextAll().remove();
+          $tdList.eq(3).html('');
+          $tdList.eq(4).html('').nextAll().remove();
         }
       },
       expand: function (node, data) {
@@ -418,12 +427,15 @@ $ref_hint = 'К оборудованию в основном перечне';
           $tdList = $(node.tr).find(">td");
         $tdList.eq(3).html(
           '<span class="fa fa-floppy-o save-it" onclick="saveMe(event)" data-name="' + node.data.name + '" aria-hidden="true"></span>');
+        $tdList.eq(4).html('');
+
         // console.log(data.node);
       },
       collapse: function (node, data) {
         var node = data.node,
           $tdList = $(node.tr).find(">td");
         $tdList.eq(3).html('');
+        $tdList.eq(4).html('');
       },
       activate: function (node, data) {
         var node = data.node;
