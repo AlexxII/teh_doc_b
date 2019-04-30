@@ -62,6 +62,9 @@ $ref_hint = 'К оборудованию в основном перечне';
     font-size: 24px;
   }
 
+
+  
+
 </style>
 
 <div class="admin-category-pannel">
