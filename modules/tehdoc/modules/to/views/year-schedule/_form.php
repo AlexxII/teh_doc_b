@@ -61,9 +61,9 @@ $ref_hint = 'К оборудованию в основном перечне';
   .main {
     font-size: 24px;
   }
-
-
-  
+  table.fancytree-ext-table tbody tr.fancytree-active {
+    background-color: #ecedf0;
+  }
 
 </style>
 
