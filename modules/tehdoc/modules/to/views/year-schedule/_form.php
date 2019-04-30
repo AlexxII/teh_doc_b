@@ -53,15 +53,9 @@ $ref_hint = 'К оборудованию в основном перечне';
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
   }
-  .save-it {
-    color: #0b58a2;
-    font-size: 18px;
-    cursor: pointer;
+  table.fancytree-ext-table tbody tr.fancytree-active {
+    background-color: #dee2ec;
   }
-  .main {
-    font-size: 24px;
-  }
-
 </style>
 
 <div class="admin-category-pannel">
@@ -99,15 +93,21 @@ $ref_hint = 'К оборудованию в основном перечне';
 
   </div>
 
-  <div class="col-lg-5 col-md-5" style="padding-bottom: 10px">
-    <div style="position: relative">
+  <div class="col-lg-12 col-md-12" style="padding-bottom: 10px">
+    <div class="col-lg-4 col-md-4" style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
       </div>
-      <div style="padding-top: 8px; right: 10px; position: absolute">
+      <div style="padding-top: 8px; right: 20px; position: absolute">
         <a href="" id="btnResetSearch">
           <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
         </a>
+      </div>
+    </div>
+
+    <div class="row" style="padding: 0 15px">
+      <div style="border-radius:2px;padding-top:40px">
+        <div id="fancyree_w0" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
@@ -130,8 +130,6 @@ $ref_hint = 'К оборудованию в основном перечне';
     <col width="50px">
     <col width="50px">
     <col width="50px">
-    <col width="30px">
-    <col width="30px">
   </colgroup>
   <thead>
   <tr>
@@ -150,8 +148,6 @@ $ref_hint = 'К оборудованию в основном перечне';
     <th>Окт.</th>
     <th>Ноя.</th>
     <th>Дек.</th>
-    <th></th>
-    <th></th>
   </tr>
   </thead>
   <tbody>
@@ -161,76 +157,100 @@ $ref_hint = 'К оборудованию в основном перечне';
     <td></td>
     <td></td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'jan']) ?>
+      <select name="sel1" class="jan">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'feb']) ?>
+      <select name="sel1" class="feb">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'march']) ?>
+      <select name="sel1" class="march">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'apr']) ?>
+      <select name="sel1" class="">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'may']) ?>
+      <select name="sel1" class="">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'jun']) ?>
+      <select name="sel1" class="">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'jul']) ?>
+      <select name="sel1" class="">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'aug']) ?>
+      <select name="sel1" class="">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'sep']) ?>
+      <select name="sel1" class="">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'oct']) ?>
+      <select name="sel1" class="">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'nov']) ?>
+      <select name="sel1" class="">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
     <td>
-      <?= Html::dropDownList('name', 0, $list, ['class' => 'dec']) ?>
-    </td>
-    <td class="save" style="text-align: center">
-    </td>
-    <td class="status" style="text-align: center">
+      <select name="sel1" class="">
+        <option value=0>М</option>
+        <option value=1>Г</option>
+      </select>
     </td>
   </tr>
   </tbody>
 </table>
 
+
 <script>
 
-
-  var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
-  var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
-  var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
-
   $(document).ready(function () {
-    $("#tree").on("change", "select", function (e) {
-      var val = $(this).val();
-      var cl = $(this).attr('class');
-      if (!cl) {
-        return;
-      }
+    $("#tree").on("click", "select", function(e){
+      // var node = $.ui.fancytree.getNode(e),
+      //   $input = $(e.target);
       var ar = $('#tree').fancytree('getTree').getSelectedNodes();
-      ar.forEach(function (item, i, arr) {
-        var tr = item.tr;
-        $(tr).find('.' + cl).each(function () {
-          $(this).val(val);
-        })
+      console.log(ar);
+      var cl = $(this).attr('class');
+      $('.'+cl).each(function () {
+        console.log(1);
       });
+      // e.stopPropagation();  // prevent fancytree activate for this row
     });
-
 
     $('#refresh').click(function (event) {
       event.preventDefault();
-      var tree = $("#tree").fancytree("getTree");
+      var tree = $(".ui-draggable-handle").fancytree("getTree");
       tree.reload();
       $('.c-input').prop('disabled', true);
       $("#del-node").hide();
@@ -242,7 +262,7 @@ $ref_hint = 'К оборудованию в основном перечне';
 
     $('#tool-ref').click(function (event) {
       event.preventDefault();
-      var node = $("#tree").fancytree("getActiveNode");
+      var node = $(".ui-draggable-handle").fancytree("getActiveNode");
       var toolId = node.data.eq_id;
       var prefix = '/tehdoc/equipment/tool/';
       var href = prefix + toolId + '/info/index';
@@ -251,8 +271,10 @@ $ref_hint = 'К оборудованию в основном перечне';
       } else {
         location.href = href;
       }
-    });
+    })
+  });
 
+  $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
       var n,
         tree = $.ui.fancytree.getTree(),
@@ -286,7 +308,7 @@ $ref_hint = 'К оборудованию в основном перечне';
       e.preventDefault();
       $("input[name=search]").val("");
       $("span#matches").text("");
-      var tree = $("#tree").fancytree("getTree");
+      var tree = $(".ui-draggable-handle").fancytree("getTree");
       tree.clearFilter();
     }).attr("disabled", true);
 
@@ -295,107 +317,11 @@ $ref_hint = 'К оборудованию в основном перечне';
         var tree = $("#tree").fancytree("getTree");
         tree.clearFilter();
       }
-    });
-
-    $("#tree").on("click", ".save-it", function (e) {
-      var node = $.ui.fancytree.getNode(e);
-      var $td = $(node.tr).find(">td");
-      $td.eq(4).html(waiting);
-      jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Ваш запрос выполняется!',
-        buttons: false,
-        closeIcon: false,
-        confirmButtonClass: 'hide'
-      });
-      var result = [];
-      var children = node.children;
-      children.forEach(function (item, i, ar) {
-        if (item.isFolder()) {
-          var children = item.children;
-          children.forEach(function (item, i, ar) {
-            var o = new Object();
-            var temp = [];
-            var $tdList = $(item.tr).find(">td");
-            if ($tdList.length == 0) {
-              return;
-            } else {
-              for (var c = 0; c < 12; c++) {
-                temp.push($tdList.eq(3 + c)[0].children[0].selectedOptions[0].attributes.value.nodeValue);
-              }
-              var index = item.data.id;
-              o[index] = temp;
-            }
-          });
-        } else {
-          var $tdList = $(item.tr).find(">td");
-          if ($tdList.length == 0) {
-            return;
-          } else {
-            var o = new Object();
-            var temp = [];
-            for (var c = 0; c < 12; c++) {
-              temp.push($tdList.eq(3 + c)[0].children[0].selectedOptions[0].attributes.value.nodeValue);
-            }
-            var index = item.data.id;
-            o[index] = temp;
-          }
-        }
-        result.push(o);
-      });
-
-      var url = 'test-url';
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      $.ajax({
-        url: url,
-        type: "post",
-        data: {id: result, _csrf: csrf}
-      }).done(function (response) {
-        jc.close();
-        $td.eq(4).html(successCheck);
-        jc = $.confirm({
-          icon: 'fa fa-thumbs-up',
-          title: 'Успех!',
-          content: 'Ваш запрос выполнен.',
-          type: 'green',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-success',
-              action: function () {
-
-                return;
-              }
-            }
-          }
-        });
-      }).fail(function (response) {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-exclamation-triangle',
-          title: 'Неудача!',
-          content: 'Запрос не выполнен. Что-то пошло не так.',
-          type: 'red',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-danger',
-              action: function () {
-              }
-            }
-          }
-        });
-      });
-    });
+    })
+  });
 
 
+  $(document).ready(function () {
     $("#tree").fancytree({
       checkbox: true,
       quicksearch: true,        // Jump to nodes when pressing first character
@@ -408,34 +334,17 @@ $ref_hint = 'К оборудованию в основном перечне';
         nodeColumnIdx: 2,
         checkboxColumnIdx: 0
       },
+      lazyLoad: function (event, data) {
+        data.result = {url: "../demo/ajax-sub2.json"};
+      },
       createNode: function (event, data) {
         var node = data.node,
           $tdList = $(node.tr).find(">td");
-        if (node.data.lvl == 0) {
-          $tdList.eq(2).prop("colspan", 13);
-          $tdList.eq(3).html(
-            '<span class="fa fa-floppy-o save-it main" onclick="saveMe(this)" data-name="' + node.data.name + '" aria-hidden="true"></span>');
-          $tdList.eq(4).html('').nextAll().remove();
-        } else if (node.isFolder()) {
-          $tdList.eq(2).prop("colspan", 13);
-          $tdList.eq(3).html('');
-          $tdList.eq(4).html('').nextAll().remove();
+        if (node.isFolder()) {
+          $tdList.eq(2)
+            .prop("colspan", 20)
+            .nextAll().remove();
         }
-      },
-      expand: function (node, data) {
-        var node = data.node,
-          $tdList = $(node.tr).find(">td");
-        $tdList.eq(3).html(
-          '<span class="fa fa-floppy-o save-it" onclick="saveMe(event)" data-name="' + node.data.name + '" aria-hidden="true"></span>');
-        $tdList.eq(4).html('');
-
-        // console.log(data.node);
-      },
-      collapse: function (node, data) {
-        var node = data.node,
-          $tdList = $(node.tr).find(">td");
-        $tdList.eq(3).html('');
-        $tdList.eq(4).html('');
       },
       activate: function (node, data) {
         var node = data.node;
@@ -444,25 +353,17 @@ $ref_hint = 'К оборудованию в основном перечне';
         } else {
           $('#tool-ref').hide();
         }
+
       },
       renderColumns: function (event, data) {
-        // var node = data.node,
-        //   $tdList = $(node.tr).find(">td");
-        // $tdList.eq(1).text(node.getIndexHier());
+        var node = data.node,
+          $tdList = $(node.tr).find(">td");
+        $tdList.eq(1).text(node.getIndexHier());
+//                $tdList.eq(3).text(node.data.qty);
       }
     })
   });
 
-  function saveMe(e) {
-    // var nodeName = $(ident).data('name');
-    // var tree = $("#tree").fancytree("getTree"),
-    //   node = tree.findFirst(nodeName);
-    //
-    // var node = $.ui.fancytree.getNode(e);
-    // console.log(node);
-
-
-  }
 
 
 </script>
