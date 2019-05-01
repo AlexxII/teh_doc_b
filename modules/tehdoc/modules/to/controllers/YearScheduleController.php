@@ -86,8 +86,12 @@ class YearScheduleController extends Controller
 
   public function actionTestUrl()
   {
-    sleep(3);
-    return var_dump($_POST);
+    sleep(1);
+    $array = $_POST['id'];
+    foreach ($array as $key => $ar) {
+      return var_dump($key);
+    }
+//    return var_dump($array['5'][4]);
   }
 
 }
