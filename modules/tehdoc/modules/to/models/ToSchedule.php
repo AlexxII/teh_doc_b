@@ -19,7 +19,6 @@ class ToSchedule extends \yii\db\ActiveRecord
     return 'teh_to_schedule_tbl';
   }
 
-
   public function   __construct()
   {
     parent::__construct();
