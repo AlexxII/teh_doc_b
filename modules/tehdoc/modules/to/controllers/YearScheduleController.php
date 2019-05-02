@@ -9,7 +9,7 @@ use app\base\Model;
 use app\modules\tehdoc\modules\to\models\ToEquipment;
 use app\modules\tehdoc\modules\to\models\ToSchedule;
 use app\modules\tehdoc\modules\to\models\ToType;
-
+use app\modules\tehdoc\modules\to\models\ToYearSchedule;
 
 class YearScheduleController extends Controller
 {
@@ -18,7 +18,7 @@ class YearScheduleController extends Controller
   {
     $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
     $toTypeArray = array();
-    foreach ($toTypes as $toType){
+    foreach ($toTypes as $toType) {
       $toTypeArray[$toType['id']] = mb_substr($toType['name'], 0, 1);
     }
     $toEq = ToEquipment::find()
@@ -81,12 +81,13 @@ class YearScheduleController extends Controller
       $toss[$i]->eq_id = $eq->id;
       $toss[$i]->schedule_id = $scheduleRand;
     }
-
   }
 
   public function actionTestUrl()
   {
-    sleep(3);
+    sleep(1);
+
+
     return var_dump($_POST);
   }
 

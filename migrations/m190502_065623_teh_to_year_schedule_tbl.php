@@ -1,0 +1,45 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Class m190502_065623_teh_to_year_schedule_tbl
+ */
+class m190502_065623_teh_to_year_schedule_tbl extends Migration
+{
+  const TABLE_NAME = '{{%teh_to_year_schedule_tbl}}';
+
+  public function up()
+  {
+    $tableOptions = null;
+    if ($this->db->driverName === 'mysql') {
+      $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+    }
+    $this->createTable(self::TABLE_NAME, [
+      'id' => $this->bigInteger()->notNull(),
+      'eq_id' => $this->bigInteger(),
+      'schedule_year' => $this->integer(),
+      'm1' => $this->bigInteger(),
+      'm2' => $this->bigInteger(),
+      'm3' => $this->bigInteger(),
+      'm4' => $this->bigInteger(),
+      'm5' => $this->bigInteger(),
+      'm6' => $this->bigInteger(),
+      'm7' => $this->bigInteger(),
+      'm8' => $this->bigInteger(),
+      'm9' => $this->bigInteger(),
+      'm10' => $this->bigInteger(),
+      'm11' => $this->bigInteger(),
+      'm12' => $this->bigInteger(),
+      'valid' => $this->boolean()->defaultValue(1)
+    ], $tableOptions);
+
+    $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
+  }
+
+  public function down()
+  {
+    $this->dropTable(self::TABLE_NAME);
+    return false;
+  }
+}
