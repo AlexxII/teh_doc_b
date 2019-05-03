@@ -47,7 +47,6 @@ $ref_hint = 'К оборудованию в основном перечне';
 </style>
 
 <div class="admin-category-pannel">
-
   <h3><?= Html::encode('Оборудование в графике ТО') ?>
     <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
          data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
@@ -549,6 +548,8 @@ $ref_hint = 'К оборудованию в основном перечне';
         var node = data.node;
         var lvl = node.data.lvl;
         var eqId = node.data.eq_id;
+        window.node$ = node;
+        window.nodeId = node.data.id;
         serialVal = node.data.eq_serial;
         if (eqId != 0) {
           $('#serial-number').prop("disabled", false);
@@ -624,8 +625,6 @@ $ref_hint = 'К оборудованию в основном перечне';
         $("#serial-control").prop("disabled", true);
         var node = data.node;
         var lvl = node.data.lvl;
-        window.node$ = data.node;
-        window.nodeId = node.data.id;
         $("#save-btn").prop("disabled", true);
         if (node.key == -999) {
           $("#add-subcategory").hide();

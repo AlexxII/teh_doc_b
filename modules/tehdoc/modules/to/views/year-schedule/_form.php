@@ -5,13 +5,10 @@ use app\assets\FancytreeAsset;
 
 FancytreeAsset::register($this);
 
-$this->title = 'График ТО на год';
+$this->title = 'График ТО на - ';
 
 $about = "Панель формирования графика ТО на год.";
-$add_hint = 'Добавить группу';
-$del_hint = 'Удалить обертку';
 $refresh_hint = 'Перезапустить форму';
-$serial_hint = 'Внимание! Серийный номер, присвоенный в данной форме отображается только в пределах раздела ТО';
 $ref_hint = 'К оборудованию в основном перечне';
 
 ?>
@@ -21,59 +18,46 @@ $ref_hint = 'К оборудованию в основном перечне';
     font-size: 18px;
     color: #1e6887;
   }
-
   .fa {
     font-size: 15px;
   }
-
   ul.fancytree-container {
     font-size: 14px;
   }
-
   input {
     color: black;
   }
-
   .fancytree-custom-icon {
     color: #1e6887;
     font-size: 18px;
   }
-
   .t {
     font-size: 14px;
   }
-
   .ui-fancytree {
     overflow: auto;
   }
-
   td.alignRight {
     text-align: right;
   }
-
   td.alignCenter {
     text-align: center;
   }
-
   td input[type=input] {
     width: 40px;
   }
-
   #tree tr {
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
   }
-
   .save-it {
     color: #0b58a2;
     font-size: 18px;
     cursor: pointer;
   }
-
   .main {
     font-size: 24px;
   }
-
   table.fancytree-ext-table tbody tr.fancytree-active {
     background-color: #ecedf0;
   }
@@ -81,13 +65,18 @@ $ref_hint = 'К оборудованию в основном перечне';
 </style>
 
 <div class="admin-category-pannel">
-
-  <h3><?= Html::encode($this->title) ?>
-    <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-  </h3>
+  <h3 style="float: left; padding-right: 15px;padding-bottom: 0px"><?= Html::encode($this->title) ?></h3>
+  <div style="float: left; padding-top: 18px; max-width: 200px">
+    <div class="input-group date to-month-tooltip" data-toggle='tooltip' data-placement='top'>
+      <input type="text" class="form-control" id="to-year" title="Необходимо ввести месяц"
+             style="font-size: 22px;color:#C50100;font-weight: 600" name="year"><span
+              class="input-group-addon"><i
+                class="fa fa-calendar" aria-hidden="true" style="font-size: 18px"></i></span>
+    </div>
+  </div>
 </div>
-<div class="row">
+
+<div class="row" style="clear: both">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm',
@@ -115,7 +104,7 @@ $ref_hint = 'К оборудованию в основном перечне';
 
   </div>
 
-  <div class="col-lg-5 col-md-5" style="padding-bottom: 10px">
+  <div class="col-lg-4 col-md-4" style="padding-bottom: 10px">
     <div style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
@@ -223,249 +212,366 @@ $ref_hint = 'К оборудованию в основном перечне';
 <script>
 
 
-    var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
-    var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
-    var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
+  var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
+  var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
+  var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
 
-    $(document).ready(function () {
-        $("#tree").on("change", "select", function (e) {
-            var val = $(this).val();
-            var cl = $(this).attr('class');
-            if (!cl) {
-                return;
-            }
-            var ar = $('#tree').fancytree('getTree').getSelectedNodes();
-            ar.forEach(function (item, i, arr) {
-                var tr = item.tr;
-                $(tr).find('.' + cl).each(function () {
-                    $(this).val(val);
-                })
-            });
-        });
-
-        $('#refresh').click(function (event) {
-            event.preventDefault();
-            var tree = $("#tree").fancytree("getTree");
-            tree.reload();
-            $('.c-input').prop('disabled', true);
-            $("#del-node").hide();
-            $('#result-info').html('');
-            $('#serial-number').val('');
-            $("#save-btn").prop('disabled', true);
-            $('#tool-ref').hide();
-        });
-
-        $('#tool-ref').click(function (event) {
-            event.preventDefault();
-            var node = $("#tree").fancytree("getActiveNode");
-            var toolId = node.data.eq_id;
-            var prefix = '/tehdoc/equipment/tool/';
-            var href = prefix + toolId + '/info/index';
-            if (event.ctrlKey) {
-                window.open(href);
-            } else {
-                location.href = href;
-            }
-        });
-
-        $("input[name=search]").keyup(function (e) {
-            var n,
-                tree = $.ui.fancytree.getTree(),
-                args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-                opts = {},
-                filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-                match = $(this).val();
-
-            $.each(args, function (i, o) {
-                opts[o] = $("#" + o).is(":checked");
-            });
-            opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
-
-            if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-                $("button#btnResetSearch").click();
-                return;
-            }
-            if ($("#regex").is(":checked")) {
-                // Pass function to perform match
-                n = filterFunc.call(tree, function (node) {
-                    return new RegExp(match, "i").test(node.title);
-                }, opts);
-            } else {
-                // Pass a string to perform case insensitive matching
-                n = filterFunc.call(tree, match, opts);
-            }
-            $("#btnResetSearch").attr("disabled", false);
-        }).focus();
-
-        $("#btnResetSearch").click(function (e) {
-            e.preventDefault();
-            $("input[name=search]").val("");
-            $("span#matches").text("");
-            var tree = $("#tree").fancytree("getTree");
-            tree.clearFilter();
-        }).attr("disabled", true);
-
-        $("input[name=search]").keyup(function (e) {
-            if ($(this).val() == '') {
-                var tree = $("#tree").fancytree("getTree");
-                tree.clearFilter();
-            }
-        });
-
-        $("#tree").on("click", ".save-it", function (e) {
-            var node = $.ui.fancytree.getNode(e);
-            var $td = $(node.tr).find(">td");
-            $td.eq(4).html(waiting);
-            jc = $.confirm({
-                icon: 'fa fa-cog fa-spin',
-                title: 'Подождите!',
-                content: 'Ваш запрос выполняется!',
-                buttons: false,
-                closeIcon: false,
-                confirmButtonClass: 'hide'
-            });
-            var result = [];
-            var children = node.children;
-            children.forEach(function (item, i, ar) {
-                if (item.isFolder()) {
-                    var children = item.children;
-                    children.forEach(function (item, i, ar) {
-                        var o = new Object();
-                        var temp = [];
-                        var $tdList = $(item.tr).find(">td");
-                        if ($tdList.length == 0) {
-                            return;
-                        } else {
-                            for (var c = 0; c < 12; c++) {
-                                temp.push($tdList.eq(3 + c)[0].children[0].selectedOptions[0].attributes.value.nodeValue);
-                            }
-                            var index = item.data.id;
-                            o[index] = temp;
-                        }
-                    });
-                } else {
-                    var $tdList = $(item.tr).find(">td");
-                    if ($tdList.length == 0) {
-                        return;
-                    } else {
-                        var o = new Object();
-                        var temp = [];
-                        for (var c = 0; c < 12; c++) {
-                            temp.push($tdList.eq(3 + c)[0].children[0].selectedOptions[0].attributes.value.nodeValue);
-                        }
-                        var index = item.data.id;
-                        o[index] = temp;
-                    }
-                }
-                result.push(o);
-            });
-
-            var url = 'test-url';
-            var csrf = $('meta[name=csrf-token]').attr("content");
-            $.ajax({
-                url: url,
-                type: "post",
-                data: {id: result, _csrf: csrf}
-            }).done(function (response) {
-                jc.close();
-                $td.eq(4).html(successCheck);
-                jc = $.confirm({
-                    icon: 'fa fa-thumbs-up',
-                    title: 'Успех!',
-                    content: 'Ваш запрос выполнен.',
-                    type: 'green',
-                    buttons: false,
-                    closeIcon: false,
-                    autoClose: 'ok|8000',
-                    confirmButtonClass: 'hide',
-                    buttons: {
-                        ok: {
-                            btnClass: 'btn-success',
-                            action: function () {
-                                return;
-                            }
-                        }
-                    }
-                });
-            }).fail(function (response) {
-                jc.close();
-                $td.eq(4).html(warningCheck);
-                jc = $.confirm({
-                    icon: 'fa fa-exclamation-triangle',
-                    title: 'Неудача!',
-                    content: 'Запрос не выполнен. Что-то пошло не так.',
-                    type: 'red',
-                    buttons: false,
-                    closeIcon: false,
-                    autoClose: 'ok|8000',
-                    confirmButtonClass: 'hide',
-                    buttons: {
-                        ok: {
-                            btnClass: 'btn-danger',
-                            action: function () {
-                            }
-                        }
-                    }
-                });
-            });
-        });
-
-        $("#tree").fancytree({
-            checkbox: true,
-            quicksearch: true,        // Jump to nodes when pressing first character
-            source: {url: '/tehdoc/to/control/to-equipment/all-tools'},
-            extensions: ["table"],
-            minExpandLevel: 2,
-            selectMode: 3,
-            table: {
-                indentation: 20,
-                nodeColumnIdx: 2,
-                checkboxColumnIdx: 0
-            },
-            createNode: function (event, data) {
-                var node = data.node,
-                    $tdList = $(node.tr).find(">td");
-                if (node.data.lvl == 0) {
-                    $tdList.eq(2).prop("colspan", 13);
-                    $tdList.eq(3).html(
-                        '<span class="fa fa-floppy-o save-it" data-name="' + node.data.name + '" aria-hidden="true"></span>');
-                    $tdList.eq(4).html('').nextAll().remove();
-                } else if (node.isFolder()) {
-                    $tdList.eq(2).prop("colspan", 13);
-                    $tdList.eq(3).html('');
-                    $tdList.eq(4).html('').nextAll().remove();
-                }
-            },
-            expand: function (node, data) {
-                var node = data.node,
-                    $tdList = $(node.tr).find(">td");
-                $tdList.eq(3).html(
-                    '<span class="fa fa-floppy-o save-it" data-name="' + node.data.name + '" aria-hidden="true"></span>');
-                $tdList.eq(4).html('');
-                // console.log(data.node);
-            },
-            collapse: function (node, data) {
-                var node = data.node,
-                    $tdList = $(node.tr).find(">td");
-                $tdList.eq(3).html('');
-                $tdList.eq(4).html('');
-                $('#tool-ref').hide();
-            },
-            activate: function (node, data) {
-                var node = data.node;
-                if (node.data.eq_id != 0) {
-                    $('#tool-ref').show();
-                } else {
-                    $('#tool-ref').hide();
-                }
-            },
-            renderColumns: function (event, data) {
-                // var node = data.node,
-                //   $tdList = $(node.tr).find(">td");
-                // $tdList.eq(1).text(node.getIndexHier());
-            }
+  $(document).ready(function () {
+    $("#tree").on("change", "select", function (e) {
+      var val = $(this).val();
+      var cl = $(this).attr('class');
+      if (!cl) {
+        return;
+      }
+      var ar = $('#tree').fancytree('getTree').getSelectedNodes();
+      ar.forEach(function (item, i, arr) {
+        var tr = item.tr;
+        $(tr).find('.' + cl).each(function () {
+          $(this).val(val);
         })
+      });
     });
+
+    $('#refresh').click(function (event) {
+      event.preventDefault();
+      var tree = $("#tree").fancytree("getTree");
+      tree.reload();
+      $('.c-input').prop('disabled', true);
+      $("#del-node").hide();
+      $('#result-info').html('');
+      $('#serial-number').val('');
+      $("#save-btn").prop('disabled', true);
+      $('#tool-ref').hide();
+    });
+
+    $('#tool-ref').click(function (event) {
+      event.preventDefault();
+      var node = $("#tree").fancytree("getActiveNode");
+      var toolId = node.data.eq_id;
+      var prefix = '/tehdoc/equipment/tool/';
+      var href = prefix + toolId + '/info/index';
+      if (event.ctrlKey) {
+        window.open(href);
+      } else {
+        location.href = href;
+      }
+    });
+
+    $('#to-year').datepicker({
+      format: 'yyyy г.',
+      autoclose: true,
+      language: "ru",
+      startView: "years",
+      minViewMode: "years",
+      clearBtn: true
+    });
+
+    $('#to-year').on('change', function (event) {
+      var yearString = $(this).val();
+      console.log(yearString);
+      if (yearString) {
+        var year = yearString.match(/[0-9]*/i)[0];
+        monthProcess('test-url', year);
+      }
+    });
+
+    function monthProcess(url, year) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Формируются необходимые данные!',
+        buttons: false,
+        type: 'blue',
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
+      $.ajax({
+        url: url,
+        type: "post",
+        data: {id: year,_csrf: csrf}
+      }).done(function (response) {
+        if (response != false) {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-thumbs-up',
+            title: 'Успех!',
+            content: 'Данные сформированы',
+            type: 'green',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-success',
+                action: function () {
+                }
+              }
+            }
+          });
+        } else {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-exclamation-triangle',
+            title: 'Неудача!',
+            content: 'Запрос не выполнен. Что-то пошло не так.',
+            type: 'red',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-danger',
+                action: function () {
+                }
+              }
+            }
+          });
+        }
+      }).fail(function () {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|4000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
+      });
+    }
+
+    $("input[name=search]").keyup(function (e) {
+      var n,
+        tree = $.ui.fancytree.getTree(),
+        args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+        opts = {},
+        filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+        match = $(this).val();
+
+      $.each(args, function (i, o) {
+        opts[o] = $("#" + o).is(":checked");
+      });
+      opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
+
+      if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+        $("button#btnResetSearch").click();
+        return;
+      }
+      if ($("#regex").is(":checked")) {
+        // Pass function to perform match
+        n = filterFunc.call(tree, function (node) {
+          return new RegExp(match, "i").test(node.title);
+        }, opts);
+      } else {
+        // Pass a string to perform case insensitive matching
+        n = filterFunc.call(tree, match, opts);
+      }
+      $("#btnResetSearch").attr("disabled", false);
+    }).focus();
+
+    $("#btnResetSearch").click(function (e) {
+      e.preventDefault();
+      $("input[name=search]").val("");
+      $("span#matches").text("");
+      var tree = $("#tree").fancytree("getTree");
+      tree.clearFilter();
+    }).attr("disabled", true);
+
+    $("input[name=search]").keyup(function (e) {
+      if ($(this).val() == '') {
+        var tree = $("#tree").fancytree("getTree");
+        tree.clearFilter();
+      }
+    });
+
+    $("#tree").on("click", ".save-it", function (e) {
+      var node = $.ui.fancytree.getNode(e);
+      var $td = $(node.tr).find(">td");
+      $td.eq(4).html(waiting);
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Ваш запрос выполняется!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
+      var result = [];
+      var children = node.children;
+      children.forEach(function (item, i, ar) {
+        if (item.isFolder()) {
+          var children = item.children;
+          children.forEach(function (item, i, ar) {
+            var o = new Object();
+            var temp = [];
+            var $tdList = $(item.tr).find(">td");
+            if ($tdList.length == 0) {
+              return;
+            } else {
+              for (var c = 0; c < 12; c++) {
+                temp.push($tdList.eq(3 + c)[0].children[0].selectedOptions[0].attributes.value.nodeValue);
+              }
+              var index = item.data.id;
+              o[index] = temp;
+            }
+          });
+        } else {
+          var $tdList = $(item.tr).find(">td");
+          if ($tdList.length == 0) {
+            return;
+          } else {
+            var o = new Object();
+            var temp = [];
+            for (var c = 0; c < 12; c++) {
+              temp.push($tdList.eq(3 + c)[0].children[0].selectedOptions[0].attributes.value.nodeValue);
+            }
+            var index = item.data.id;
+            o[index] = temp;
+          }
+        }
+        result.push(o);
+      });
+
+      var url = 'test-url';
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      $.ajax({
+        url: url,
+        type: "post",
+        data: {id: result, _csrf: csrf}
+      }).done(function (response) {
+        jc.close();
+        $td.eq(4).html(successCheck);
+        jc = $.confirm({
+          icon: 'fa fa-thumbs-up',
+          title: 'Успех!',
+          content: 'Ваш запрос выполнен.',
+          type: 'green',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-success',
+              action: function () {
+                return;
+              }
+            }
+          }
+        });
+      }).fail(function (response) {
+        jc.close();
+        $td.eq(4).html(warningCheck);
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
+      });
+    });
+
+    $("#tree").fancytree({
+      checkbox: true,
+      quicksearch: true,        // Jump to nodes when pressing first character
+      source: {url: '/tehdoc/to/control/to-equipment/all-tools'},
+      extensions: ["table"],
+      minExpandLevel: 2,
+      selectMode: 3,
+      table: {
+        indentation: 20,
+        nodeColumnIdx: 2,
+        checkboxColumnIdx: 0
+      },
+      lazyLoad: function (event, data) {
+        var node = data.node;
+        data.result = {
+          url: 'test',
+          data: {mode: 'children', parent: node.key},
+          cache: true
+        }
+      },
+      createNode: function (event, data) {
+        var node = data.node,
+          $tdList = $(node.tr).find(">td");
+        if (node.data.lvl == 0) {
+          children = node.children;
+          var flag = false;
+          children.forEach(function (item, i, children) {
+            if (!item.folder) {
+              flag = true;
+              return;
+            }
+          });
+          if (!flag) {
+            $tdList.eq(2).prop("colspan", 13);
+            $tdList.eq(3).html('');
+            $tdList.eq(4).html('').nextAll().remove();
+          } else {
+            $tdList.eq(2).prop("colspan", 13);
+            $tdList.eq(3).html(
+              '<span class="fa fa-floppy-o save-it" data-name="' + node.data.name + '" aria-hidden="true"></span>');
+            $tdList.eq(4).html('').nextAll().remove();
+          }
+        } else if (node.isFolder()) {
+          $tdList.eq(2).prop("colspan", 13);
+          $tdList.eq(3).html('');
+          $tdList.eq(4).html('').nextAll().remove();
+        }
+      },
+      expand: function (node, data) {
+        var node = data.node,
+          $tdList = $(node.tr).find(">td");
+        $tdList.eq(3).html(
+          '<span class="fa fa-floppy-o save-it" data-name="' + node.data.name + '" aria-hidden="true"></span>');
+        $tdList.eq(4).html('');
+        // console.log(data.node);
+      },
+      collapse: function (node, data) {
+        var node = data.node,
+          $tdList = $(node.tr).find(">td");
+        $tdList.eq(3).html('');
+        $tdList.eq(4).html('');
+        $('#tool-ref').hide();
+      },
+      activate: function (node, data) {
+        var node = data.node;
+        if (node.data.eq_id != 0) {
+          $('#tool-ref').show();
+        } else {
+          $('#tool-ref').hide();
+        }
+      },
+      renderColumns: function (event, data) {
+        // var node = data.node,
+        //   $tdList = $(node.tr).find(">td");
+        // $tdList.eq(1).text(node.getIndexHier());
+      }
+    })
+  });
 
 </script>
 
