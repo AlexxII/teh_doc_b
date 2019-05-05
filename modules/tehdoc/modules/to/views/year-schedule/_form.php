@@ -484,7 +484,7 @@ $ref_hint = 'К оборудованию в основном перечне';
       checkbox: true,
       quicksearch: true,        // Jump to nodes when pressing first character
       source: {url: '/tehdoc/to/control/to-equipment/all-tools'},
-      extensions: ["table"],
+      extensions: ["table", "multi"],
       minExpandLevel: 2,
       selectMode: 3,
       table: {
