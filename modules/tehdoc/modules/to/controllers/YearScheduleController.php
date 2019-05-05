@@ -88,7 +88,7 @@ class YearScheduleController extends Controller
     $year = $_POST['year'];
     $yearModel = ToYearSchedule::findAll(['schedule_year' => $year]);
     if (count($yearModel)) {
-      return false;
+      return true;
     }
     $toEq = ToEquipment::find()
       ->where(['valid' => 1])
@@ -114,9 +114,9 @@ class YearScheduleController extends Controller
       $eqId = $ar['eqId'];
       $types = $ar['types'];
       $model = ToYearSchedule::find()->where(['eq_id' => $eqId])->andWhere(['schedule_year' => $year])->one();
-      for ($i = 1; $i < 13; $i++) {
+      for ($i = 0; $i < 12; $i++) {
         $month = 'm' . $i;
-        $model->$month = $types[$i - 1];
+        $model->$month = $types[$i];
       }
       if ($model->save(false)) {
         $result = true;

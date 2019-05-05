@@ -269,20 +269,95 @@ $form = ActiveForm::begin([
   $(document).ready(function () {
     // обработчик события - выбрать месяц проведения ТО
     // и формирование массива выходных дней
-    $('#to-month').on('change', function (e) {
-      /*
-                  jc = $.confirm({
-                      icon: 'fa fa-cog fa-spin',
-                      title: 'Подождите!',
-                      content: 'Формируются необходимые данные на выбранный месяц!',
-                      buttons: false,
-                      closeIcon: false,
-                      confirmButtonClass: 'hide'
-                  });
-      */
 
+    $('#to-month').on('change', function (e) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Формируются необходимые данные на выбранный месяц!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
       if (e.target.value != '') {
         var toMonth = $('#to-month').datepicker('getDate');
+        var year = toMonth.getFullYear();
+        var month = toMonth.getMonth();
+        var url = 'get-types';
+        $.ajax({
+          url: url,
+          type: "post",
+          data: {year: year, month: month,_csrf: csrf}
+        }).done(function (response) {
+          if (response != false) {
+            var respArray = JSON.parse(response);
+            respArray.forEach(function (item, i, ar) {
+              if (item.month == null) return;
+              $('#'+item.eq_id).val(item.month);
+            });
+            jc.close();
+            jc = $.confirm({
+              icon: 'fa fa-thumbs-up',
+              title: 'Успех!',
+              content: 'Данные сформированы',
+              type: 'green',
+              buttons: false,
+              closeIcon: false,
+              autoClose: 'ok|8000',
+              confirmButtonClass: 'hide',
+              buttons: {
+                ok: {
+                  btnClass: 'btn-success',
+                  action: function () {
+                  }
+                }
+              }
+            });
+          } else {
+            jc.close();
+            jc = $.confirm({
+              icon: 'fa fa-exclamation-triangle',
+              title: 'Неудача!',
+              content: 'Запрос не выполнен. Что-то пошло не так.',
+              type: 'red',
+              buttons: false,
+              closeIcon: false,
+              autoClose: 'ok|8000',
+              confirmButtonClass: 'hide',
+              buttons: {
+                ok: {
+                  btnClass: 'btn-danger',
+                  action: function () {
+                  }
+                }
+              }
+            });
+          }
+        }).fail(function () {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-exclamation-triangle',
+            title: 'Неудача!',
+            content: 'Запрос не выполнен. Что-то пошло не так.',
+            type: 'red',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|4000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-danger',
+                action: function () {
+                }
+              }
+            }
+          });
+        });
+
+
+
+
         $('.admin-list').prop('disabled', true);
         $('.admin-list').addClass('loading-ex');
         $('.to-date').val('');

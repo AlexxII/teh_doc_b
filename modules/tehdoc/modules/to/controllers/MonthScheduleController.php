@@ -14,6 +14,7 @@ class MonthScheduleController extends Controller
 {
 
   const TO_TABLE = 'teh_to_schedule_tbl';
+  const TO_YEAR_TABLE = 'teh_to_year_schedule_tbl';
   const ADMINS_TABLE = 'teh_to_admins_tbl';
   const TOTYPE_TABLE = 'teh_to_type_tbl';
 
@@ -216,6 +217,22 @@ class MonthScheduleController extends Controller
       ->bindValue(':end_date', $end_date)
       ->queryAll();
     return json_encode($ar);
+  }
+
+  public function actionGetTypes()
+  {
+    if ($_POST){
+      $year = $_POST['year'];
+      $monthNumber = $_POST['month'];
+      $month = 'm' . $monthNumber;
+      $table = self::TO_YEAR_TABLE;
+      $sql = "SELECT eq_id, {$month} as month FROM {$table} WHERE schedule_year = :year";
+      $req = Yii::$app->db->createCommand($sql)
+        ->bindValue(':year', $year)
+        ->queryAll();
+      return json_encode($req);
+    }
+    return false;
   }
 
   public function actionDelete()

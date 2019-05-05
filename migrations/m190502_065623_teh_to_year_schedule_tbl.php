@@ -19,6 +19,7 @@ class m190502_065623_teh_to_year_schedule_tbl extends Migration
       'id' => $this->bigPrimaryKey(),
       'eq_id' => $this->bigInteger(),
       'schedule_year' => $this->integer(),
+      'm0' => $this->bigInteger(),
       'm1' => $this->bigInteger(),
       'm2' => $this->bigInteger(),
       'm3' => $this->bigInteger(),
@@ -30,7 +31,6 @@ class m190502_065623_teh_to_year_schedule_tbl extends Migration
       'm9' => $this->bigInteger(),
       'm10' => $this->bigInteger(),
       'm11' => $this->bigInteger(),
-      'm12' => $this->bigInteger(),
       'valid' => $this->boolean()->defaultValue(1)
     ], $tableOptions);
 

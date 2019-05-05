@@ -274,8 +274,7 @@ $ref_hint = 'К оборудованию в основном перечне';
     $('#to-year').datepicker().on('changeDate', function (e) {
       var year = $(this).data('datepicker').getFormattedDate('yyyy');
       if (year) {
-        // var year = yearString.match(/[0-9]*/i)[0];
-        // monthProcess('create-year-schedule', year);
+        monthProcess('create-year-schedule', year);
       }
       $("#tree").fancytree("getTree").reload();
     });
@@ -476,10 +475,8 @@ $ref_hint = 'К оборудованию в основном перечне';
           _csrf: csrf
         }
       }).done(function (response) {
-        jc.close();
         $td.eq(4).html(successCheck);
       }).fail(function (response) {
-        jc.close();
         $td.eq(4).html(warningCheck);
       });
     });
@@ -533,8 +530,6 @@ $ref_hint = 'К оборудованию в основном перечне';
         $tdList.eq(3).html(
           '<span class="fa fa-floppy-o save-it" data-name="' + node.data.name + '" aria-hidden="true"></span>');
         $tdList.eq(4).html('');
-
-        // console.log(data.node);
       },
       collapse: function (node, data) {
         var node = data.node,
