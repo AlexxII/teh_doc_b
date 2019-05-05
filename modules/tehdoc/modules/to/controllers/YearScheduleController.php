@@ -83,14 +83,48 @@ class YearScheduleController extends Controller
     }
   }
 
-  public function actionTestUrl()
+  public function actionCreateYearSchedule()
   {
-    sleep(1);
-    $array = $_POST['id'];
-    foreach ($array as $key => $ar) {
-      return var_dump($key);
+    $year = $_POST['year'];
+    $yearModel = ToYearSchedule::findAll(['schedule_year' => $year]);
+    if (count($yearModel)) {
+      return false;
     }
-    return var_dump($_POST);
+    $toEq = ToEquipment::find()
+      ->where(['valid' => 1])
+      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
+    if (empty($toEq)) {
+      // TODO что-то сделать
+    }
+    foreach ($toEq as $i => $eq) {
+      $toss[] = new ToYearSchedule();
+      $toss[$i]->eq_id = $eq->id;
+      $toss[$i]->schedule_year = $year;
+      $toss[$i]->save();
+    }
+    return true;
+  }
+
+  public function actionSaveTypes()
+  {
+    $array = $_POST['id'];
+    $year = $_POST['year'];
+    $result = false;
+    foreach ($array as $ar) {
+      $eqId = $ar['eqId'];
+      $types = $ar['types'];
+      $model = ToYearSchedule::find()->where(['eq_id' => $eqId])->andWhere(['schedule_year' => $year])->one();
+      for ($i = 1; $i < 13; $i++) {
+        $month = 'm' . $i;
+        $model->$month = $types[$i - 1];
+      }
+      if ($model->save(false)) {
+        $result = true;
+        continue;
+      }
+      return false;
+    }
+    return true;
   }
 
 }

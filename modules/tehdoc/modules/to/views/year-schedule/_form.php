@@ -5,7 +5,7 @@ use app\assets\FancytreeAsset;
 
 FancytreeAsset::register($this);
 
-$this->title = 'График ТО на - ';
+$this->title = 'График ТО на год';
 
 $about = "Панель формирования графика ТО на год.";
 $refresh_hint = 'Перезапустить форму';
@@ -61,14 +61,18 @@ $ref_hint = 'К оборудованию в основном перечне';
   table.fancytree-ext-table tbody tr.fancytree-active {
     background-color: #ecedf0;
   }
+  form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    background-color: #fff;
+    opacity: 1;
+  }
 
 </style>
 
 <div class="admin-category-pannel">
-  <h3 style="float: left; padding-right: 15px;padding-bottom: 0px"><?= Html::encode($this->title) ?></h3>
+  <h3 style="float: left; padding-right: 15px;padding-bottom: 0px">График то на - </h3>
   <div style="float: left; padding-top: 18px; max-width: 200px">
     <div class="input-group date to-month-tooltip" data-toggle='tooltip' data-placement='top'>
-      <input type="text" class="form-control" id="to-year" title="Необходимо ввести месяц"
+      <input type="text" class="form-control" readonly id="to-year" title="Необходимо ввести месяц"
              style="font-size: 22px;color:#C50100;font-weight: 600" name="year"><span
               class="input-group-addon"><i
                 class="fa fa-calendar" aria-hidden="true" style="font-size: 18px"></i></span>
@@ -266,13 +270,14 @@ $ref_hint = 'К оборудованию в основном перечне';
       clearBtn: true
     });
 
-    $('#to-year').on('change', function (event) {
-      var yearString = $(this).val();
-      console.log(yearString);
-      if (yearString) {
-        var year = yearString.match(/[0-9]*/i)[0];
-        monthProcess('test-url', year);
+
+    $('#to-year').datepicker().on('changeDate', function (e) {
+      var year = $(this).data('datepicker').getFormattedDate('yyyy');
+      if (year) {
+        // var year = yearString.match(/[0-9]*/i)[0];
+        // monthProcess('create-year-schedule', year);
       }
+      $("#tree").fancytree("getTree").reload();
     });
 
     function monthProcess(url, year) {
@@ -289,7 +294,7 @@ $ref_hint = 'К оборудованию в основном перечне';
       $.ajax({
         url: url,
         type: "post",
-        data: {id: year,_csrf: csrf}
+        data: {year: year, _csrf: csrf}
       }).done(function (response) {
         if (response != false) {
           jc.close();
@@ -400,84 +405,13 @@ $ref_hint = 'К оборудованию в основном перечне';
       var node = $.ui.fancytree.getNode(e);
       var $td = $(node.tr).find(">td");
       $td.eq(4).html(waiting);
-      jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Ваш запрос выполняется!',
-        buttons: false,
-        closeIcon: false,
-        confirmButtonClass: 'hide'
-      });
-      var result = [];
-      var children = node.children;
-      children.forEach(function (item, i, ar) {
-        if (item.isFolder()) {
-          var children = item.children;
-          children.forEach(function (item, i, ar) {
-            var o = new Object();
-            var temp = [];
-            var $tdList = $(item.tr).find(">td");
-            if ($tdList.length == 0) {
-              return;
-            } else {
-              for (var c = 0; c < 12; c++) {
-                temp.push($tdList.eq(3 + c)[0].children[0].selectedOptions[0].attributes.value.nodeValue);
-              }
-              var index = item.data.id;
-              o[index] = temp;
-            }
-          });
-        } else {
-          var $tdList = $(item.tr).find(">td");
-          if ($tdList.length == 0) {
-            return;
-          } else {
-            var o = new Object();
-            var temp = [];
-            for (var c = 0; c < 12; c++) {
-              temp.push($tdList.eq(3 + c)[0].children[0].selectedOptions[0].attributes.value.nodeValue);
-            }
-            var index = item.data.id;
-            o[index] = temp;
-          }
-        }
-        result.push(o);
-      });
-
-      var url = 'test-url';
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      $.ajax({
-        url: url,
-        type: "post",
-        data: {id: result, _csrf: csrf}
-      }).done(function (response) {
-        jc.close();
-        $td.eq(4).html(successCheck);
-        jc = $.confirm({
-          icon: 'fa fa-thumbs-up',
-          title: 'Успех!',
-          content: 'Ваш запрос выполнен.',
-          type: 'green',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-success',
-              action: function () {
-                return;
-              }
-            }
-          }
-        });
-      }).fail(function (response) {
-        jc.close();
-        $td.eq(4).html(warningCheck);
+      var yearString = $('#to-year').val();
+      var year = yearString.match(/[0-9]*/i)[0];
+      if (!year) {
         jc = $.confirm({
           icon: 'fa fa-exclamation-triangle',
           title: 'Неудача!',
-          content: 'Запрос не выполнен. Что-то пошло не так.',
+          content: 'Необходимо выбрать год.',
           type: 'red',
           buttons: false,
           closeIcon: false,
@@ -491,6 +425,62 @@ $ref_hint = 'К оборудованию в основном перечне';
             }
           }
         });
+        return;
+      }
+      var result = [];
+      var children = node.children;
+      children.forEach(function (item, i, ar) {
+        if (item.isFolder()) {
+          var children = item.children;
+          children.forEach(function (item, i, ar) {
+            var os = {};
+            var temp = [];
+            var $tdList = $(item.tr).find(">td");
+            if ($tdList.length == 0) {
+              return;
+            } else {
+              for (var c = 0; c < 12; c++) {
+                temp.push($tdList.eq(3 + c)[0].children[0].selectedOptions[0].attributes.value.nodeValue);
+              }
+              var index = item.data.id;
+              o['eqId'] = index;
+              o['types'] = temp;
+            }
+          });
+        } else {
+          var $tdList = $(item.tr).find(">td");
+          if ($tdList.length == 0) {
+            return;
+          } else {
+            var o = {};
+            var temp = [];
+            for (var c = 0; c < 12; c++) {
+              temp.push($tdList.eq(3 + c)[0].children[0].selectedOptions[0].attributes.value.nodeValue);
+            }
+            var index = item.data.id;
+            o['eqId'] = index;
+            o['types'] = temp;
+          }
+        }
+        result.push(o);
+      });
+
+      var url = 'save-types';
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      $.ajax({
+        url: url,
+        type: "post",
+        data: {
+          id: result,
+          year: year,
+          _csrf: csrf
+        }
+      }).done(function (response) {
+        jc.close();
+        $td.eq(4).html(successCheck);
+      }).fail(function (response) {
+        jc.close();
+        $td.eq(4).html(warningCheck);
       });
     });
 
@@ -505,14 +495,6 @@ $ref_hint = 'К оборудованию в основном перечне';
         indentation: 20,
         nodeColumnIdx: 2,
         checkboxColumnIdx: 0
-      },
-      lazyLoad: function (event, data) {
-        var node = data.node;
-        data.result = {
-          url: 'test',
-          data: {mode: 'children', parent: node.key},
-          cache: true
-        }
       },
       createNode: function (event, data) {
         var node = data.node,
@@ -543,11 +525,15 @@ $ref_hint = 'К оборудованию в основном перечне';
         }
       },
       expand: function (node, data) {
+        if (!$('#to-year').val()) {
+          return false;
+        }
         var node = data.node,
           $tdList = $(node.tr).find(">td");
         $tdList.eq(3).html(
           '<span class="fa fa-floppy-o save-it" data-name="' + node.data.name + '" aria-hidden="true"></span>');
         $tdList.eq(4).html('');
+
         // console.log(data.node);
       },
       collapse: function (node, data) {

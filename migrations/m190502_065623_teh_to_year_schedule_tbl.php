@@ -16,7 +16,7 @@ class m190502_065623_teh_to_year_schedule_tbl extends Migration
       $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
     }
     $this->createTable(self::TABLE_NAME, [
-      'id' => $this->bigInteger()->notNull(),
+      'id' => $this->bigPrimaryKey(),
       'eq_id' => $this->bigInteger(),
       'schedule_year' => $this->integer(),
       'm1' => $this->bigInteger(),
@@ -34,7 +34,6 @@ class m190502_065623_teh_to_year_schedule_tbl extends Migration
       'valid' => $this->boolean()->defaultValue(1)
     ], $tableOptions);
 
-    $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
   }
 
   public function down()
