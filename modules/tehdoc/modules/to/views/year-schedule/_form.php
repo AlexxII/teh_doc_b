@@ -72,7 +72,7 @@ $ref_hint = 'К оборудованию в основном перечне';
   <h3 style="float: left; padding-right: 15px;padding-bottom: 0px">График то на - </h3>
   <div style="float: left; padding-top: 18px; max-width: 200px">
     <div class="input-group date to-month-tooltip" data-toggle='tooltip' data-placement='top'>
-      <input type="text" class="form-control" readonly id="to-year" title="Необходимо ввести месяц"
+      <input type="text" class="form-control" readonly id="to-year" title="Необходимо ввести год"
              style="font-size: 22px;color:#C50100;font-weight: 600" name="year"><span
               class="input-group-addon"><i
                 class="fa fa-calendar" aria-hidden="true" style="font-size: 18px"></i></span>
@@ -269,7 +269,6 @@ $ref_hint = 'К оборудованию в основном перечне';
       minViewMode: "years",
       clearBtn: true
     });
-
 
     $('#to-year').datepicker().on('changeDate', function (e) {
       var year = $(this).data('datepicker').getFormattedDate('yyyy');
@@ -530,6 +529,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         $tdList.eq(3).html(
           '<span class="fa fa-floppy-o save-it" data-name="' + node.data.name + '" aria-hidden="true"></span>');
         $tdList.eq(4).html('');
+
       },
       collapse: function (node, data) {
         var node = data.node,
@@ -547,9 +547,15 @@ $ref_hint = 'К оборудованию в основном перечне';
         }
       },
       renderColumns: function (event, data) {
-        // var node = data.node,
-        //   $tdList = $(node.tr).find(">td");
-        // $tdList.eq(1).text(node.getIndexHier());
+        var node = data.node;
+        if (!node.folder) {
+          $tdList = $(node.tr).find(">td");
+          if (!$('#to-year').val()) {
+            for (i = 0; i < 12; i++) {
+              $($tdList.eq(3 + i)[0].children[0]).val('')
+            }
+          }
+        }
       }
     })
   });
