@@ -226,9 +226,9 @@ $ref_hint = 'К оборудованию в основном перечне';
       source: {
         url: main_url
       },
-      extensions: ['filter'],
+      extensions: ['filter', 'multi'],
       quicksearch: true,
-      checkbox: true,
+      checkbox: false,
       selectMode: 3,
       minExpandLevel: 2,
       filter: {

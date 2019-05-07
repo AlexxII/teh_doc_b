@@ -486,7 +486,6 @@ $ref_hint = 'К оборудованию в основном перечне';
       source: {url: '/tehdoc/to/control/to-equipment/all-tools'},
       extensions: ["table", "multi"],
       minExpandLevel: 2,
-      selectMode: 3,
       table: {
         indentation: 20,
         nodeColumnIdx: 2,
@@ -554,6 +553,8 @@ $ref_hint = 'К оборудованию в основном перечне';
             for (i = 0; i < 12; i++) {
               $($tdList.eq(3 + i)[0].children[0]).val('')
             }
+          } else {
+
           }
         }
       }

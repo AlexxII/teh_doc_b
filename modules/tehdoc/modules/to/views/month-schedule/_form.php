@@ -272,15 +272,15 @@ $form = ActiveForm::begin([
 
     $('#to-month').on('change', function (e) {
       var csrf = $('meta[name=csrf-token]').attr("content");
-      jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Формируются необходимые данные на выбранный месяц!',
-        buttons: false,
-        closeIcon: false,
-        confirmButtonClass: 'hide'
-      });
       if (e.target.value != '') {
+        jc = $.confirm({
+          icon: 'fa fa-cog fa-spin',
+          title: 'Подождите!',
+          content: 'Формируются необходимые данные на выбранный месяц!',
+          buttons: false,
+          closeIcon: false,
+          confirmButtonClass: 'hide'
+        });
         var toMonth = $('#to-month').datepicker('getDate');
         var year = toMonth.getFullYear();
         var month = toMonth.getMonth();
@@ -354,10 +354,6 @@ $form = ActiveForm::begin([
             }
           });
         });
-
-
-
-
         $('.admin-list').prop('disabled', true);
         $('.admin-list').addClass('loading-ex');
         $('.to-date').val('');
