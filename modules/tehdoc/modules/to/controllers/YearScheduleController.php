@@ -14,6 +14,19 @@ use app\modules\tehdoc\modules\to\models\ToYearSchedule;
 class YearScheduleController extends Controller
 {
 
+  public function actionIndex()
+  {
+    $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
+    $toTypeArray = array();
+    foreach ($toTypes as $toType) {
+      $toTypeArray[$toType['id']] = mb_substr($toType['name'], 0, 1);
+    }
+    return $this->render('create', [
+      'list' => $toTypeArray
+    ]);
+  }
+
+
   public function actionCreate()
   {
     $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();

@@ -105,8 +105,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           ['label' => 'Составить график', 'url' => ['/tehdoc/to/month-schedule/create']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Годовые</li>',
-          ['label' => 'Графики ТО', 'url' => ['/tehdoc/to/year-schedule']],
-          ['label' => 'Составить график', 'url' => ['/tehdoc/to/year-schedule/create']],
+          ['label' => 'Планы ТО', 'url' => ['/tehdoc/to/year-schedule/index']],
         ],
       ],
       [
