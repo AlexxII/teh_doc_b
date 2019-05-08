@@ -12,16 +12,16 @@ $about = "График технического обслуживания.";
 ?>
 
 <div class="to-create">
-  <?= $this->render('_form', [
+  <?= $this->render('_form_ex_ex', [
     'tos' => $tos,
-//    'list' => $list,
+    'list' => $list,
     'header' => 'Составление графика ТО на'
   ]) ?>
 
 </div>
 
 <script>
-  $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-  });
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 </script>

@@ -106,6 +106,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Годовые</li>',
           ['label' => 'Планы ТО', 'url' => ['/tehdoc/to/year-schedule/index']],
+          ['label' => 'Планы ТО_EX', 'url' => ['/tehdoc/to/year-schedule/create']],
         ],
       ],
       [

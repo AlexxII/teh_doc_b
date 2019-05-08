@@ -6,6 +6,8 @@ use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
 use app\modules\admin\models\User;
+use app\modules\tehdoc\modules\to\models\ToAdmins;
+use app\modules\tehdoc\modules\to\models\ToType;
 use app\base\MHelper;
 
 class ToYearSchedule extends \yii\db\ActiveRecord
@@ -25,6 +27,23 @@ class ToYearSchedule extends \yii\db\ActiveRecord
   {
     [['eq_id', 'schedule_year', 'm1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8', 'm9', 'm10', 'm11', 'm12'], 'safe'];
   }*/
+
+  public function getAdminList()
+  {
+    return ArrayHelper::map(ToAdmins::find()->where(['admin' => 1])->orderBy('lft')->asArray()->all(), 'id', 'name');
+  }
+
+  public function getToList()
+  {
+    $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
+    $toTypeArray = array();
+    foreach ($toTypes as $toType) {
+      $toTypeArray[$toType['id']] = mb_substr($toType['name'], 0, 1);
+    }
+    return $toTypeArray;
+    return ArrayHelper::map(ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all(), 'id', 'name');
+  }
+
 
   public static function findModel($year)
   {
