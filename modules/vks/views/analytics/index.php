@@ -492,7 +492,7 @@ $send_hint = 'Передать выделенные строки в подроб
       "processing": true,
       "serverSide": true,
       "responsive": true,
-      "lengthMenu": [[25, 50, 100], [25, 50, 100]],
+      "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
       "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
         if ((aData[10] == '-' && aData[12] != '') || (aData[11] == '-' && aData[14] != '')){
           $('td', nRow).css('background-color', '#fff1ef');
