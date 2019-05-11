@@ -28,6 +28,37 @@ class YearScheduleController extends Controller
 */
   public function actionCreate()
   {
+    $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
+    $toTypeArray = array();
+    foreach ($toTypes as $toType) {
+      $toTypeArray[$toType['id']] = mb_substr($toType['name'], 0, 1);
+    }
+    $toEq = ToEquipment::find()
+      ->where(['valid' => 1])
+      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
+    if (empty($toEq)) {
+      Yii::$app->session->setFlash('error', "Не добавлено ни одного оборудования в график ТО.");
+      return $this->render('create', [
+        'tos' => $toEq,
+        'list' => $toTypeArray
+      ]);
+    }
+    $scheduleRand = rand();
+    foreach ($toEq as $i => $eq) {
+      $toss[] = new ToYearSchedule();
+      $toss[$i]->eq_id = $eq->id;
+      $toss[$i]->schedule_year = 2019;
+    }
+    return $this->render('create', [
+      'tos' => $toss,
+      'list' => $toTypeArray
+    ]);
+
+  }
+
+
+  public function actionIndex()
+  {
     $toEq = ToEquipment::find()
       ->where(['valid' => 1])
       ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
@@ -41,46 +72,15 @@ class YearScheduleController extends Controller
     foreach ($toEq as $i => $eq) {
       $toss[] = new ToYearSchedule();
       $toss[$i]->eq_id = $eq->id;
-      $toss[$i]->schedule_year = 2019;
-    }
-    return $this->render('create', [
-      'tos' => $toss
-    ]);
-
-  }
-
-
-  public function actionIndex()
-  {
-    $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
-    $toTypeArray = array();
-    foreach ($toTypes as $toType) {
-      $toTypeArray[$toType['id']] = mb_substr($toType['name'], 0, 1);
-    }
-    $toEq = ToEquipment::find()
-      ->where(['valid' => 1])
-      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
-    if (empty($toEq)) {
-      Yii::$app->session->setFlash('error', "Не добавлено ни одного оборудования в график ТО.");
-      return $this->render('create', [
-        'tos' => $toEq,
-      ]);
-    }
-    $scheduleRand = rand();
-    foreach ($toEq as $i => $eq) {
-      $toss[] = new ToSchedule();
-      $toss[$i]->scenario = ToSchedule::SCENARIO_CREATE;
-      $toss[$i]->eq_id = $eq->id;
-      $toss[$i]->schedule_id = $scheduleRand;
     }
 
-    $to = new ToSchedule();
-    if (ToSchedule::loadMultiple($toss, Yii::$app->request->post())) {
+    $to = new ToYearSchedule();
+    if (ToYearSchedule::loadMultiple($toss, Yii::$app->request->post())) {
       if (!$to_month = Yii::$app->request->post('month')) {
         Yii::$app->session->setFlash('error', "Введите месяц проведения ТО");
         return $this->render('create', ['tos' => $toss]);
       }
-      if (ToSchedule::validateMultiple($toss)) {
+      if (ToYearSchedule::validateMultiple($toss)) {
         foreach ($toss as $t) {
           $t->to_month = $to_month;
           $t->save();
@@ -92,9 +92,8 @@ class YearScheduleController extends Controller
       Yii::$app->session->setFlash('success', "Новый график ТО создан успешно");
       return $this->redirect('archive'); // redirect to your next desired page
     } else {
-      return $this->render('create', [
-        'to' => $to,
-        'list' => $toTypeArray
+      return $this->render('create_ex', [
+        'tos' => $toss
       ]);
     }
   }
@@ -112,8 +111,8 @@ class YearScheduleController extends Controller
     }
     $scheduleRand = rand();
     foreach ($toEq as $i => $eq) {
-      $toss[] = new ToSchedule();
-      $toss[$i]->scenario = ToSchedule::SCENARIO_CREATE;
+      $toss[] = new ToYearSchedule();
+      $toss[$i]->scenario = ToYearSchedule::SCENARIO_CREATE;
       $toss[$i]->eq_id = $eq->id;
       $toss[$i]->schedule_id = $scheduleRand;
     }
