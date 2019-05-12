@@ -11,11 +11,6 @@ class TehdocAsset extends AssetBundle
 
   public $css = [
       'css/tehdoc.css',
-      'css/fotorama.css'
-  ];
-
-  public $js = [
-      'js/fotorama.js',
   ];
 
   public $depends = [

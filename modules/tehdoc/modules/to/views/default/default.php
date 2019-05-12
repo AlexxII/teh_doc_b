@@ -22,7 +22,8 @@ $about = "ВКС";
 </div>
 -->
 
-<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/month-schedule/archive" style="text-align: center; cursor: pointer">
+<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/month-schedule/archive"
+     style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Архив графиков</h2>
   </div>
@@ -34,7 +35,8 @@ $about = "ВКС";
   </div>
 </div>
 
-<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/month-schedule/create" style="text-align: center; cursor: pointer">
+<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/month-schedule/create"
+     style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Добавить график</h2>
   </div>
@@ -46,7 +48,8 @@ $about = "ВКС";
   </div>
 </div>
 
-<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/year-schedule/create" style="text-align: center; cursor: pointer">
+<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/year-schedule/create"
+     style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Годовые планы ТО</h2>
   </div>
@@ -70,6 +73,17 @@ $about = "ВКС";
   </div>
 </div>
 
+<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/to-audit/index" style="text-align: center; cursor: pointer">
+  <div class="row" id="header">
+    <h2>Контроль ТО</h2>
+  </div>
+  <div class="" id="main">
+    <i class="fa fa-eye" aria-hidden="true" style="font-size: 150px"></i>
+  </div>
+  <div class="row" id="footer">
+    <h4>Контроль проведения ТО</h4>
+  </div>
+</div>
 
 
 <script>

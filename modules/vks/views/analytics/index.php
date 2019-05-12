@@ -2,12 +2,12 @@
 //
 use yii\helpers\Html;
 use app\assets\FancytreeAsset;
-use app\modules\vks\assets\AnalyticsAsset;
+use app\assets\AirDatepickerAsset;
 use app\modules\vks\assets\VksFormAsset;
 
 FancytreeAsset::register($this);
 VksFormAsset::register($this);
-AnalyticsAsset::register($this);
+AirDatepickerAsset::register($this);
 
 $this->title = 'Анализ сеансов ВКС';
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];

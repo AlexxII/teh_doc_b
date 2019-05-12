@@ -1,6 +1,9 @@
 <?php
 
 use yii\helpers\Html;
+use app\assets\BootstrapDatepickerAsset;
+
+BootstrapDatepickerAsset::register($this);
 
 $this->title = 'Добавить график ТО';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];

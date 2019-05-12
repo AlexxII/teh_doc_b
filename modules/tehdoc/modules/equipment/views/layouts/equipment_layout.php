@@ -8,17 +8,16 @@ use yii\widgets\Breadcrumbs;
 
 use app\assets\AppAsset;
 use app\assets\FancytreeAsset;
-use app\modules\tehdoc\asset\TehdocAsset;
-use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
-use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
 use app\assets\JConfirmAsset;
+
+use app\assets\BootstrapDatepickerAsset;
+use app\modules\tehdoc\asset\TehdocAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 FancytreeAsset::register($this);
 TehdocAsset::register($this);       // регистрация ресурсов модуля
-MdeAsset::register($this);
-EquipmentAsset::register($this);
 JConfirmAsset::register($this);
+BootstrapDatepickerAsset::register($this);
 
 $about = "Панель управления оборудованием";
 $add_hint = 'Добавить новый узел';

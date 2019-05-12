@@ -2,10 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use app\modules\vks\assets\VksFormAsset;
-use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
-use unclead\multipleinput\MultipleInput;
 
+use app\modules\vks\assets\VksFormAsset;
+use app\assets\BootstrapDatepickerAsset;
+use unclead\multipleinput\MultipleInput;
 
 ?>
 
@@ -35,7 +35,7 @@ use unclead\multipleinput\MultipleInput;
 <?php
 
 VksFormAsset::register($this);
-EquipmentAsset::register($this);
+BootstrapDatepickerAsset::register($this);
 
 $vks_date_hint = 'Обязательное поле! Укажите дату проведения сеанса ВКС';
 $vks_type_hint = 'Обязательное поле! Укажите ТИП сеанса ВКС. Сеанс ВКС из п.403 => ЗВС-ОГВ, ГФИ => КВС-ГФИ, Приемная Президента => КВС Приемной';

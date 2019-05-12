@@ -10,15 +10,12 @@ use app\widgets\Alert;
 use app\assets\AppAsset;
 use app\assets\JConfirmAsset;
 use app\assets\FancytreeAsset;
-use app\modules\tehdoc\asset\TehdocAsset;
-use app\modules\tehdoc\modules\to\assets\ToAsset;
+use app\assets\TableBaseAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 FancytreeAsset::register($this);
-TehdocAsset::register($this);       // регистрация ресурсов модуля
-ToAsset::register($this);
+TableBaseAsset::register($this);       // регистрация ресурсов модуля
 JConfirmAsset::register($this);
-
 
 $about = "Панель управления оборудованием";
 $add_hint = 'Добавить новый узел';
@@ -116,6 +113,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
           ['label' => 'Оборудование в графике', 'url' => ['/tehdoc/to/control/to-equipment']],
           ['label' => 'Виды Тех.обслуживания', 'url' => ['/tehdoc/to/control/to-type']],
           ['label' => 'Сотрудники', 'url' => ['/tehdoc/to/control/to-admins']],
+          ['label' => 'Контроль ТО', 'url' => ['/tehdoc/to/control/to-admins']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Наработка</li>',
           ['label' => 'Шаблоны наработки', 'url' => ['/tehdoc/to/control/#']],

@@ -2,8 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
 use app\modules\vks\assets\VksFormAsset;
-use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
+use app\assets\BootstrapDatepickerAsset;
 
 ?>
 
@@ -37,8 +38,7 @@ use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
 
 \yii\widgets\MaskedInputAsset::register($this);
 VksFormAsset::register($this);
-EquipmentAsset::register($this);
-
+BootstrapDatepickerAsset::register($this);
 
 $vks_date_hint = 'Обязательное поле! Укажите дату проведения сеанса ВКС';
 $vks_type_hint = 'Обязательное поле! Укажите ТИП сеанса ВКС (Напрмер: ЗВС-ОГВ, КВС и т.д.)';

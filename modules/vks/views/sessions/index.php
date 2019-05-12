@@ -1,9 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use app\modules\vks\assets\AnalyticsAsset;
-
-AnalyticsAsset::register($this);
+use app\assets\AirDatepickerAsset;
 
 $this->title = 'Журнал предстоящих сеансов видеосвязи';
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
@@ -14,6 +12,7 @@ $add_hint = 'Добавить предстоящий сеанс';
 $dell_hint = 'Удалить выделенные сеансы';
 $date_about = "Выберите период";
 
+AirDatepickerAsset::register($this);
 Yii::$app->cache->flush();
 ?>
 

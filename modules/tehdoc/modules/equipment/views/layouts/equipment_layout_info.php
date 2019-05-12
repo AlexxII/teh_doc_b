@@ -5,21 +5,24 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
+
 use app\assets\AppAsset;
-use app\modules\tehdoc\asset\TehdocAsset;
-use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
+use app\assets\MdeAsset;
 use app\assets\FancytreeAsset;
 use app\assets\PhotoswipeAsset;
-use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
 use app\assets\JConfirmAsset;
+use app\assets\BootstrapDatepickerAsset;
+
+
+use app\modules\tehdoc\asset\TehdocAsset;
 
 PhotoswipeAsset::register($this);
 FancytreeAsset::register($this);
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 TehdocAsset::register($this);       // регистрация ресурсов модуля
-EquipmentAsset::register($this);
 MdeAsset::register($this);
 JConfirmAsset::register($this);
+BootstrapDatepickerAsset::register($this);
 
 $about = "Панель управления оборудованием";
 $add_hint = 'Добавить новый узел';

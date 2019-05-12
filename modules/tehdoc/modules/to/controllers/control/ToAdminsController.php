@@ -13,7 +13,7 @@ use app\modules\tehdoc\modules\to\models\ToAdmins;
 
 class ToAdminsController extends Controller
 {
-  public function actionAllTypes()
+  public function actionAllAdmins()
   {
     $id = ToAdmins::find()->all();
     if (!$id) {

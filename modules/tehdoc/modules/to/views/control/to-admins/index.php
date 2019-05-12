@@ -397,7 +397,7 @@ $role_hint = 'Выберите роль пользователя при пров
   var parent;
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/tehdoc/to/control/to-admins/all-types';
+    var main_url = '/tehdoc/to/control/to-admins/all-admins';
     var move_url = '/tehdoc/to/control/to-admins/move-node';
     var create_url = '/tehdoc/to/control/to-admins/create-node';
     var update_url = '/tehdoc/to/control/to-admins/update-node';
