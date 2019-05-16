@@ -1,7 +1,13 @@
 <?php
 
-use \yii\widgets\ActiveForm;
 use \yii\helpers\Html;
+use \yii\widgets\ActiveForm;
+
+use app\assets\FancytreeAsset;
+use app\assets\BootstrapDatepickerAsset;
+
+FancytreeAsset::register($this);
+BootstrapDatepickerAsset::register($this);
 
 
 ?>
@@ -585,7 +591,6 @@ $form = ActiveForm::begin([
     $('#to-month').tooltip('hide');
     $('#to-month').tooltip('disable');
   });
-
 
   //==================================================== 76859
 

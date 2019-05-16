@@ -33,7 +33,8 @@
         "bower-asset/fotorama": "^4.6",
         "bower-asset/noty": "^3.1",
         "bower-asset/tether": "^1.4",
-        "bower-asset/moment": "^2.24"
+        "bower-asset/moment": "^2.24",
+        "bower-asset/floatthead": "^2.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

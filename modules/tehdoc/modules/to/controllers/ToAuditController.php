@@ -2,6 +2,8 @@
 
 namespace app\modules\tehdoc\modules\to\controllers;
 
+use app\modules\tehdoc\modules\to\models\ToEquipment;
+use app\modules\tehdoc\modules\to\models\ToSchedule;
 use Yii;
 use yii\web\Controller;
 
@@ -27,7 +29,7 @@ class ToAuditController extends Controller
     $admins = $roots[0]['children'];
     $result = array();
     foreach ($admins as $admin) {
-      if (!$admin['admin']){
+      if (!$admin['admin']) {
         $result[] = $admin;
       }
     }
@@ -38,12 +40,23 @@ class ToAuditController extends Controller
   {
     $auId = $_POST['auditorId'];
     $query = new yii\db\Query();
-    $data = $query->select(['plan_date'])
+    $data = $query->select(['plan_date', 'eq_id'])
       ->from('teh_to_schedule_tbl')
-      ->where('auditor_id=:auditor',[':auditor' => $auId])
+      ->where('auditor_id=:auditor', [':auditor' => $auId])
       ->groupBy(['plan_date'])
       ->all();
-    return true;
+//    return var_dump($data);
+    $parents = array();
+    foreach ($data as $key => $d) {
+      $eqId = $d['eq_id'];
+      $sql = "SELECT parent.name FROM teh_to_equipment_tbl as parent
+                   LEFT JOIN teh_to_equipment_tbl as child
+                     ON child.parent_id = parent.id WHERE child.id=:id GROUP BY child.parent_id";
+      $data = ToEquipment::findBySql($sql, ['id' => $eqId])->asArray()->all();
+      $parents[$eqId] = $data[0]['name'];
+
+    }
+    return json_encode($parents);
   }
 
 }

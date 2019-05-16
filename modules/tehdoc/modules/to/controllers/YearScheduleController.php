@@ -14,18 +14,18 @@ use app\modules\tehdoc\modules\to\models\ToYearSchedule;
 class YearScheduleController extends Controller
 {
 
-/*  public function actionIndex()
-  {
-    $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
-    $toTypeArray = array();
-    foreach ($toTypes as $toType) {
-      $toTypeArray[$toType['id']] = mb_substr($toType['name'], 0, 1);
+  /*  public function actionIndex()
+    {
+      $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
+      $toTypeArray = array();
+      foreach ($toTypes as $toType) {
+        $toTypeArray[$toType['id']] = mb_substr($toType['name'], 0, 1);
+      }
+      return $this->render('create', [
+        'list' => $toTypeArray
+      ]);
     }
-    return $this->render('create', [
-      'list' => $toTypeArray
-    ]);
-  }
-*/
+  */
   public function actionCreate()
   {
     $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
@@ -54,6 +54,7 @@ class YearScheduleController extends Controller
       'list' => $toTypeArray
     ]);
 
+
   }
 
 
@@ -73,7 +74,6 @@ class YearScheduleController extends Controller
       $toss[] = new ToYearSchedule();
       $toss[$i]->eq_id = $eq->id;
     }
-
     $to = new ToYearSchedule();
     if (ToYearSchedule::loadMultiple($toss, Yii::$app->request->post())) {
       if (!$to_month = Yii::$app->request->post('month')) {
@@ -121,23 +121,40 @@ class YearScheduleController extends Controller
   public function actionCreateYearSchedule()
   {
     $year = $_POST['year'];
+    $result = array();
     $yearModel = ToYearSchedule::findAll(['schedule_year' => $year]);
-    if (count($yearModel)) {
-      return true;
-    }
     $toEq = ToEquipment::find()
       ->where(['valid' => 1])
-      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
+      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->asArray()->all();
     if (empty($toEq)) {
-      // TODO что-то сделать
+      $result['status'] = false;
+      $result['data'] = '';
+      return json_encode($result);
     }
-    foreach ($toEq as $i => $eq) {
-      $toss[] = new ToYearSchedule();
-      $toss[$i]->eq_id = $eq->id;
-      $toss[$i]->schedule_year = $year;
-      $toss[$i]->save();
+    if (count($yearModel) == count($toEq)) {
+      $t = array();
+      foreach ($yearModel as $model) {
+        $temp = array();
+        for ($i = 0; $i < 12; $i++) {
+          $string = 'm' . $i;
+          $temp[$i] = $model[$string];
+        }
+        $t[$model['eq_id']] = $temp;
+      }
+      $result['status'] = 'old';
+      $result['data'] = &$t;
+      return json_encode($result);
+    } else {
+      foreach ($toEq as $i => $eq) {
+        $toss[] = new ToYearSchedule();
+        $toss[$i]->eq_id = $eq['id'];
+        $toss[$i]->schedule_year = $year;
+        $toss[$i]->save();
+      }
+      $result['status'] = 'new';
+      $result['data'] = '';
+      return json_encode($result);
     }
-    return true;
   }
 
   public function actionSaveTypes()

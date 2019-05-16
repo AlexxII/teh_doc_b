@@ -12,9 +12,9 @@ use app\assets\JConfirmAsset;
 use app\assets\FancytreeAsset;
 use app\assets\TableBaseAsset;
 
-AppAsset::register($this);    // регистрация ресурсов всего приложения
+AppAsset::register($this);              // регистрация ресурсов всего приложения
 FancytreeAsset::register($this);
-TableBaseAsset::register($this);       // регистрация ресурсов модуля
+TableBaseAsset::register($this);        // регистрация ресурсов модуля
 JConfirmAsset::register($this);
 
 $about = "Панель управления оборудованием";

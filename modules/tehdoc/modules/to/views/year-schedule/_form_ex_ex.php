@@ -3,6 +3,11 @@
 use \yii\widgets\ActiveForm;
 use \yii\helpers\Html;
 
+use app\assets\BootstrapDatepickerAsset;
+
+BootstrapDatepickerAsset::register($this);
+
+
 ?>
 
 <style>
@@ -56,64 +61,68 @@ $form = ActiveForm::begin([
       <div class="input-group date to-month-tooltip" data-toggle='tooltip' data-placement='top'>
         <input type="text" class="form-control" id="to-month" title="Необходимо ввести месяц"
                style="font-size: 22px;color:#C50100;font-weight: 600" name="month"><span
-          class="input-group-addon"><i
-            class="fa fa-calendar" aria-hidden="true" style="font-size: 18px"></i></span>
+                class="input-group-addon"><i
+                  class="fa fa-calendar" aria-hidden="true" style="font-size: 18px"></i></span>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-    $(document).ready(function () {
-        var table = $('#main-table').DataTable({
-            "columnDefs": [
-                {"visible": false, "targets": 3},
-                {"width": "180px", "targets": 4},
-                {"width": "150px", "targets": 5},
-                {"width": "150px", "targets": 6},
-                {"width": "150px", "targets": 7},
-                {"orderable": false, "className": 'select-checkbox', "targets": 8}
-            ],
-            dom: 'Bfrtip',
-            select: {
-                style: 'os',
-                selector: 'td:last-child'
-            },
-            paging: true,
-            // orderFixed: [[3, 'desc']],
-            rowGroup: {
-                startRender: function (row, group) {
-                    if (group == '') {
-                        return '';
-                    }
-                    return group;
-                },
-                dataSrc: 3
-            },
-            buttons: [
-                'selectAll',
-                'selectNone'
-            ],
-            fixedHeader: {
-                header: true,
-                headerOffset: $('#topnav').height()
-            },
-            responsive: true,
-            language: {
-                url: "/lib/ru.json",
-                "buttons": {
-                    "selectAll": "Выделить все",
-                    "selectNone": "Снять выделение"
-                }
-            }
-        });
-        table.on('order.dt search.dt', function () {
-            table.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
-                cell.innerHTML = i + 1;
-            });
-        }).draw();
-
+  $(document).ready(function () {
+    var table = $('#main-table').DataTable({
+      "columnDefs": [
+        {"visible": false, "targets": 3},
+        {"width": "180px", "targets": 4},
+        {"width": "150px", "targets": 5},
+        {"width": "150px", "targets": 6},
+        {"width": "150px", "targets": 7},
+        {"orderable": false, "className": 'select-checkbox', "targets": 8}
+      ],
+      scrollY: 300,
+      scrollX: true,
+      scrollCollapse: true,
+      paging: true,
+      fixedColumns: true,
+      dom: 'Bfrtip',
+      select: {
+        style: 'os',
+        selector: 'td:last-child'
+      },
+      // orderFixed: [[3, 'desc']],
+      rowGroup: {
+        startRender: function (row, group) {
+          if (group == '') {
+            return '';
+          }
+          return group;
+        },
+        dataSrc: 3
+      },
+      buttons: [
+        'selectAll',
+        'selectNone'
+      ],
+      fixedHeader: {
+        header: true,
+        headerOffset: $('#topnav').height()
+      },
+      responsive: false,
+      language: {
+        url: "/lib/ru.json",
+        "buttons": {
+          "selectAll": "Выделить все",
+          "selectNone": "Снять выделение"
+        }
+      }
     });
+    table.on('order.dt search.dt', function () {
+      table.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+        cell.innerHTML = i + 1;
+      });
+    }).draw();
+
+  });
 </script>
 
 <table id="main-table" class="display no-wrap cell-border" style="width:100%">
@@ -185,7 +194,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td>
@@ -200,7 +208,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td>
@@ -215,7 +222,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td>
@@ -230,7 +236,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td>
@@ -245,7 +250,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td>
@@ -260,7 +264,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td>
@@ -275,7 +278,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td>
@@ -290,7 +292,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td>
@@ -305,7 +306,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td>
@@ -320,7 +320,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td>
@@ -335,7 +334,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td>
@@ -350,7 +348,6 @@ $form = ActiveForm::begin([
               ]
             ],
             'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
           ])->label(false); ?>
       </td>
       <td></td>
@@ -367,17 +364,17 @@ $form = ActiveForm::begin([
 
 <script>
 
-    // инициализация календаря месяца проведения ТО
-    $(document).ready(function () {
-        $('#to-month').datepicker({
-            format: 'MM yyyy г.',
-            autoclose: true,
-            language: "ru",
-            startView: "months",
-            minViewMode: "months",
-            clearBtn: true
-        })
-    });
+  // инициализация календаря месяца проведения ТО
+  $(document).ready(function () {
+    $('#to-month').datepicker({
+      format: 'MM yyyy г.',
+      autoclose: true,
+      language: "ru",
+      startView: "months",
+      minViewMode: "months",
+      clearBtn: true
+    })
+  });
 
 
 </script>

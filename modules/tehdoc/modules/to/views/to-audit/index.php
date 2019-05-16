@@ -54,18 +54,20 @@ $date_about = 'Выберите период';
   </h3>
 </div>
 <div class="row">
-  <div class="">
-    <div class="container-fluid" style="margin-bottom: 10px">
+  <div class="col-lg-5 col-md-5" style="padding-bottom: 10px">
+    <div class="container-fluid row" style="margin-bottom: 10px;position: relative">
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
         'style' => ['margin-top' => '5px'],
         'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top'
       ]) ?>
+      <div style="position: absolute;top:0px;right:15px;width:180px">
+        <input class="form-control input-sm" id="dates" style="margin-top:5px;po" type="text" data-range="true"
+               data-multiple-dates-separator=" - " placeholder="Выберите период"/>
+      </div>
     </div>
-  </div>
 
-  <div class="col-lg-5 col-md-5" style="padding-bottom: 10px">
     <div style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
@@ -86,14 +88,6 @@ $date_about = 'Выберите период';
 
 
   <div class="col-lg-7 col-md-7">
-    <div style="position: absolute;top:0px;right:30px;width:185px">
-      <label class="h-title fa fa-info-circle" data-toggle="tooltip" data-placement="left"
-             title="<?php echo $date_about ?>"
-             style="position: absolute;top:13px;right:190px"></label>
-      <input class="form-control input-sm" id="dates" style="margin-top:5px;po" type="text" data-range="true"
-             data-multiple-dates-separator=" - " placeholder="Выберите период"/>
-    </div>
-
     <div id="about-info"></div>
   </div>
 
@@ -102,10 +96,6 @@ $date_about = 'Выберите период';
 
 <script>
   $(document).ready(function () {
-    // $('#dates').datepicker({
-    //   language: "ru",
-    //   numberOfMonths: 12
-    // });
 
     $('#dates').datepicker({
       clearButton: true,
@@ -114,23 +104,19 @@ $date_about = 'Выберите период';
           var range = $('#vks-dates').val();
           var stDate = range.substring(6, 10) + '-' + range.substring(3, 5) + '-' + range.substring(0, 2);
           var eDate = range.substring(19, 24) + '-' + range.substring(16, 18) + '-' + range.substring(13, 15);
-          $(".start-date").val(stDate);
-          $(".end-date").val(eDate);
           $("#main-table").DataTable().clearPipeline().draw();
         }
       }
     });
 
-
-
     $('[data-toggle="tooltip"]').tooltip();
 
     $('.refresh').click(function (event) {
       event.preventDefault();
+      var datepicker = $('#dates').datepicker().data('datepicker');
+      datepicker.clear();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       tree.reload();
-      $(".del-node").hide();
-      $(".del-multi-nodes").hide();
       $('.about-info').html('')
     })
   });
@@ -183,15 +169,14 @@ $date_about = 'Выберите период';
   });
 
 
-  function loadShowData(id)
-  {
+  function loadShowData(id) {
     var url = '/tehdoc/to/to-audit/get-days';
     var csrf = $('meta[name=csrf-token]').attr("content");
     var uri = window.location.href;
     jc = $.confirm({
       icon: 'fa fa-cog fa-spin',
       title: 'Подождите!',
-      content: 'Ваш запрос выполняется!',
+      content: 'Выполняется запрос к серверу и формируются данные!',
       buttons: false,
       closeIcon: false,
       confirmButtonClass: 'hide'
@@ -206,8 +191,13 @@ $date_about = 'Выберите период';
       }
     }).done(function (response) {
       if (response != false) {
+        // var result = $.parseJSON(response);
+        // var result = JSON.parse(response);
+        var result = responses;
+        result.forEach(function (item, i, ar) {
+          $('#about-info').append(item);
+        });
         jc.close();
-        return 'good';
       } else {
         jc.close();
         jc = $.confirm({
