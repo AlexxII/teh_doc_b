@@ -151,8 +151,18 @@ class YearScheduleController extends Controller
         $toss[$i]->schedule_year = $year;
         $toss[$i]->save();
       }
+      $yearModel = ToYearSchedule::findAll(['schedule_year' => $year]);
+      $t = array();
+      foreach ($yearModel as $model) {
+        $temp = array();
+        for ($i = 0; $i < 12; $i++) {
+          $string = 'm' . $i;
+          $temp[$i] = $model[$string];
+        }
+        $t[$model['eq_id']] = $temp;
+      }
       $result['status'] = 'new';
-      $result['data'] = '';
+      $result['data'] = &$t;
       return json_encode($result);
     }
   }

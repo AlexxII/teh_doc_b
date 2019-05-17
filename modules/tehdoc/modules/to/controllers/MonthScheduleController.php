@@ -201,7 +201,6 @@ class MonthScheduleController extends Controller
     }
   }
 
-
   public function actionFreeDays($start_date, $end_date)
   {
     return false;
@@ -221,7 +220,8 @@ class MonthScheduleController extends Controller
 
   public function actionGetTypes()
   {
-    if ($_POST){
+    sleep(1);
+    if ($_POST) {
       $year = $_POST['year'];
       $monthNumber = $_POST['month'];
       $month = 'm' . $monthNumber;

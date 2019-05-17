@@ -238,24 +238,23 @@ $form = ActiveForm::begin([
 
 <script>
 
+  //=============================== Работа с календарями =====================================
+
   var freeDays = new Array();
-  var startDay, endDay; // глобальные переменных хранения дат
   var busyDays = new Array(); // глобальный массив хранения
+  var startDay, endDay, startDayBorder, endDayBorder; // глобальные переменных хранения дат
 
-  // формат для всех календарей!!!!!!!!!!!!
   $(document).ready(function () {
-    //первичные настройки интерфейса
+    //первичные настройки интерфейса и календаря
 
-    $.fn.datepicker.defaults.format = "dd.dd.yyyy";
+    $.fn.datepicker.defaults.format = "dd.mm.yyyy";
     $.fn.datepicker.defaults.language = "ru";
     $.fn.datepicker.defaults.daysOfWeekDisabled = "0,6";
 
     $('.admin-list').prop('disabled', true);
     $('.to-date').prop('disabled', true);
-  });
 
-  // инициализация календаря месяца проведения ТО
-  $(document).ready(function () {
+    // инициализация календаря месяца проведения ТО
     $('#to-month').datepicker({
       format: 'MM yyyy г.',
       autoclose: true,
@@ -265,13 +264,6 @@ $form = ActiveForm::begin([
       clearBtn: true
     })
   });
-
-  $(document).ready(function () {
-    // необходимо формировать на основе месяца проведения ТО
-    $.get('/lib/free_days.js', function (data) {
-    });
-  });
-
 
   $(document).ready(function () {
     // обработчик события - выбрать месяц проведения ТО
@@ -298,11 +290,17 @@ $form = ActiveForm::begin([
           data: {year: year, month: month,_csrf: csrf}
         }).done(function (response) {
           if (response != false) {
-            var respArray = JSON.parse(response);
-            respArray.forEach(function (item, i, ar) {
+            var result = JSON.parse(response);
+            result.forEach(function (item, i, ar) {
               if (item.month == null) return;
               $('#'+item.eq_id).val(item.month);
             });
+            getMonthBorders();
+            setMonth();
+            $('.to-date').val('');
+            $('.to-date').prop('disabled', true);
+            $('.admin-list').val('none');
+            $('.admin-list').prop('disabled', false);
             jc.close();
             jc = $.confirm({
               icon: 'fa fa-thumbs-up',
@@ -361,16 +359,6 @@ $form = ActiveForm::begin([
             }
           });
         });
-        $('.admin-list').prop('disabled', true);
-        $('.admin-list').addClass('loading-ex');
-        $('.to-date').val('');
-        $('.admin-list').val('none');
-        $('.to-date').prop('disabled', true);
-        // getFreeDays(toMonth);
-        getMonthBorders();
-        setMonth();
-        $('.admin-list').prop('disabled', false);
-        $('.admin-list').removeClass('loading-ex');
       } else {
         $('.to-date').val('');
         $('.to-date').prop('disabled', true);
@@ -389,41 +377,30 @@ $form = ActiveForm::begin([
     var nMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
     var start_date = year + '-' + nMonth[month] + '-01';
     var end_date = year + '-' + nMonth[month] + '-' + mDays[month];
+
+    startDayBorder = '01-' + nMonth[month] + '-' + year;
+    endDayBorder =  mDays[month] + '-' + nMonth[month] + '-' + year;
+
     startDay = '01.' + nMonth[month] + '.' + year;
     endDay = mDays[month] + '.' + nMonth[month] + '.' + year;
   }
 
 
-  // формирует ajax запрос на получение выxодных дней в зависимоти от месяца
-  function getFreeDays(toMonth) {
-    var month = toMonth.getMonth();
-    var year = toMonth.getFullYear();
-    var mDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    var nMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-    var start_date = year + '-' + nMonth[month] + '-01';
-    var end_date = year + '-' + nMonth[month] + '-' + mDays[month];
-    startDay = '01.' + nMonth[month] + '.' + year;
-    endDay = mDays[month] + '.' + nMonth[month] + '.' + year;
-    var tempArray = new Array();
-    $.ajax({
-      url: "free-days?start_date=" + start_date + "&end_date=" + end_date,
-      cache: false,
-      success: function (responce) {
-        tempArray = $.parseJSON(responce);
-        busyDays[tempArray[0]['people_id']] = new Array();
-        busyDays[tempArray[0]['people_id']][tempArray[0]['free_dates']] = tempArray[0]['labor_title'];
-        for (var j = 1; j < tempArray.length; j++) {
-          if (busyDays[tempArray[j]['people_id']] == busyDays[tempArray[j - 1]['people_id']]) {
-            busyDays[tempArray[j]['people_id']][tempArray[j]['free_dates']] = tempArray[j]['labor_title']
-          } else {
-            busyDays[tempArray[j]['people_id']] = new Array();
-            busyDays[tempArray[j]['people_id']][tempArray[j]['free_dates']] = tempArray[j]['labor_title']
-          }
-        }
-        console.log(busyDays);
-      }
-    });
+  function setMonth() {
+    var m = $('#to-month');
+    if (m.val() != '') {
+      var fullDate = new Date(m.val());
+      var year = fullDate.getFullYear();
+      var month = fullDate.getMonth();
+      var nMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+      $('.to-date').prop('disabled', false);
+      $('.to-date').datepicker('setStartDate', startDay);
+      $('.to-date').datepicker('update', startDay);
+      $('.to-date').on('change', copySl);                    // обработчик события 'change'
+    }
+    return;
   }
+
 
   // обработка выбора ответственного за проведение ТО
   $('.admin-list').on('change', function (e) {
@@ -449,65 +426,6 @@ $form = ActiveForm::begin([
   });
 
 
-  //селект не изменялся => нет неоходимости перегружать календарь!!!!!
-  // обработка события нажатия на input даты проведения ТО
-  $(document).ready(function () {
-    $('.to-date').mouseup(function () {
-      $(this).prop('disabled', true);
-      $(this).addClass('loading');
-      var val = $(this).closest('tr').find('.admin-list').val();
-      $(this).datepicker('remove');
-      console.log(startDay);
-      // if (busyDays[val]) {
-      //   $(this).datepicker({
-      //     autoclose: true,
-      //     forceParse: false,
-      //     clearBtn: true,
-      //     beforeShowDay: function (date) {
-      //       if (window.busyDays[val]) {
-      //         if (window.busyDays[val][moment(date).format('Y-MM-DD')]) {
-      //           return {
-      //             classes: 'highlight',
-      //             tooltip: window.busyDays[val][moment(date).format('Y-MM-DD')]
-      //           };
-      //         }
-      //       }
-      //     }
-      //   });
-      // } else {
-      //   $(this).datepicker({
-      //     autoclose: true,
-      //     forceParse: false,
-      //     clearBtn: true
-      //   })
-      // }
-      $(this).datepicker('setStartDate', startDay);
-      $(this).datepicker('setEndDate', endDay);
-      $(this).datepicker('update');
-      $(this).prop('disabled', false);
-      $(this).removeClass('loading');
-      $(this).datepicker('show');
-      $(this).on('change', copySl);                           // обработчик изменения сосотяния input -> копирование
-      $(this).on('input', copySl);                           // обработчик изменения сосотяния input -> копирование
-      // $('.to-date').datepicker('setDatesDisabled', arr);
-    })
-  });
-
-
-  function setMonth() {
-    var m = $('#to-month');
-    if (m.val() != '') {
-      var fullDate = new Date(m.val());
-      var year = fullDate.getFullYear();
-      var month = fullDate.getMonth();
-      var nMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-      $('.m-date').prop('disabled', false);
-      $('.m-date').datepicker('setStartDate', '01-' + nMonth[month] + '-' + year);
-      $('.m-date').datepicker('update');
-      $('.m-date').on('change', copySl);                    // обработчик события 'change'
-    }
-    return;
-  }
 
 
   // функция копирования дат проведения ТО

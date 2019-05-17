@@ -149,6 +149,7 @@ $collapse_hint = 'Скрыть все';
     <col width="50px">
     <col width="30px">
     <col width="30px">
+    <col width="30px">
   </colgroup>
   <thead>
   <tr>

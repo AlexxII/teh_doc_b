@@ -2,6 +2,13 @@
 
 use \yii\widgets\ActiveForm;
 use \yii\helpers\Html;
+use app\assets\FancytreeAsset;
+use app\assets\BootstrapDatepickerAsset;
+
+
+FancytreeAsset::register($this);
+BootstrapDatepickerAsset::register($this);
+
 
 ?>
 
