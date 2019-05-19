@@ -83,6 +83,7 @@ $exit_hint = 'Выход ';
   $menuItems = [
     ['label' => 'ТехДок', 'url' => ['/tehdoc']],
     ['label' => 'ВКС', 'url' => ['/vks']],
+    ['label' => 'Планировщик', 'url' => ['/scheduler']],
   ];
 
   if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin) {

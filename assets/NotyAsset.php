@@ -13,6 +13,7 @@ class NotyAsset extends AssetBundle
 
   public $css = [
     'lib/noty.css',
+    'src/themes/metroui.scss'
   ];
 
   public $js = [
