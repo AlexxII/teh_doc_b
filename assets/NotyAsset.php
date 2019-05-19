@@ -12,8 +12,7 @@ class NotyAsset extends AssetBundle
   public $sourcePath = '@bower/noty';
 
   public $css = [
-    'lib/noty.css',
-    'src/themes/metroui.scss'
+    'lib/noty.css'
   ];
 
   public $js = [

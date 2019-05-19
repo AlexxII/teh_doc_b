@@ -177,6 +177,7 @@ $send_hint = 'Передать выделенные строки в подроб
 
     $('#vks-dates').datepicker({
       clearButton: true,
+      toggleSelected: false,
       onHide: function (dp, animationCompleted) {
         if (animationCompleted) {
           var range = $('#vks-dates').val();

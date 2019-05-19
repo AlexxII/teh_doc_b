@@ -30,7 +30,7 @@ class UserController extends Controller
           ],
           [
             'allow' => true,
-            'actions' => ['profile'],
+            'actions' => ['profile', 'calendar-form'],
             'roles' => ['@']
           ]
         ],
@@ -119,6 +119,12 @@ class UserController extends Controller
   {
     return $this->render('profile');
   }
+
+  public function actionCalendarForm()
+  {
+    return $this->render('_holiday_form');
+  }
+
 
   protected function findModel($id)
   {
