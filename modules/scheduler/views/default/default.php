@@ -47,7 +47,6 @@ AirDatepickerAsset::register($this);
 
   #calendar {
     max-width: 900px;
-    margin: 20px auto;
   }
 
 </style>
