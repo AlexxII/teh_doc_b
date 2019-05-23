@@ -14,6 +14,11 @@ CalendarInteractionAsset::register($this);
 CalendarBootstrapAsset::register($this);
 AirDatepickerAsset::register($this);
 
+$this->title = 'Добавить события';
+$this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 <style>
   html, body {
@@ -43,11 +48,6 @@ AirDatepickerAsset::register($this);
     position: relative;
     z-index: 1;
     margin-left: 200px;
-  }
-
-  #calendar {
-    max-width: 900px;
-    margin: 20px auto;
   }
 
 </style>
