@@ -252,7 +252,7 @@ class SessionsController extends Controller
       if ($model->save()) {
         $this->logVks($model->id, "info", "Подтвердил прошедший сеанс ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
-        return $this->redirect('archive');
+        return $this->redirect('index');
       } else {
         Yii::$app->session->setFlash('error', 'Что-то не так.');
       }
