@@ -60,7 +60,8 @@ $this->params['breadcrumbs'][] = $this->title;
       weekNumbers: true,
       selectable: true,
       nowIndicator: true,
-      slotDuration: '00:30:00',
+      slotDuration: '00:15:00',
+      minTime: '06:00:00',
       navLinks: true,
       eventSources: [
         {
@@ -75,14 +76,6 @@ $this->params['breadcrumbs'][] = $this->title;
           },
         }
       ],
-
-      dateClick: function (info) {
-        // console.log(info.dateStr);
-        // info.dayEl.style.backgroundColor = 'red';
-      },
-      droppable: true, // this allows things to be dropped onto the calendar
-      drop: function (info) {
-      },
       buttonText: {
         month: 'M',
         week: 'Н',
@@ -120,13 +113,38 @@ $this->params['breadcrumbs'][] = $this->title;
           startTime: '09:00',
           endTime: '17:00'
         }
-      ]
+      ],
+      droppable: true, // this allows things to be dropped onto the calendar
+      showNonCurrentDates: false,
+
+      
+      //========================= actions =====================================
+
+      
+      drop: function (info) {
+
+      },
+      dateClick: function (info) {
+        // console.log(info.dateStr);
+        // info.dayEl.style.backgroundColor = 'red';
+      },
+      select: function(info) {
+        console.log('selected ' + info.startStr + ' to ' + info.endStr);
+        console.log(info);
+      },
+
+      //========================= events =======================================
+      eventResizeStart: function (info) {
+        console.log(info.view);
+      }
+      
     });
     calendar.render();
 
     var tText = '<span style="font-weight: 600">Александр Михайлович!</span><br> Вы что-то не сделали!!!';
 
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < 1; i++) {
+      initNoty(tText);
     }
 
     function initNoty(text) {

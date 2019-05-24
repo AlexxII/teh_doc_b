@@ -39,7 +39,7 @@ class EventsController extends Controller
         $result[$key]['color'] = '#f5cf99';
       }
       $result[$key]['url'] = 'vks/sessions/view-up-session?id=' . $session['id'];
-
+      $result[$key]['durationEditable'] = 'true';
     }
     return json_encode($result);
   }
