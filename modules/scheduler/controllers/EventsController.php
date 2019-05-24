@@ -29,16 +29,17 @@ class EventsController extends Controller
       ->andWhere(['vks_upcoming_session' => 1])
       ->andWhere(['vks_cancel' => 0])
       ->asArray()->all();
+    $now = date("Y-m-d");
     foreach ($sessions as $key => $session) {
       $result[$key]['title'] = $session['vks_type_text'];
-      $result[$key]['start'] = $session['vks_date'];
-
-      if ($session['vks_type'] == 1982793808) {
-        $result[$key]['color'] = '#f4e0f9';
+      $result[$key]['start'] = $session['vks_date']. 'T' . $session['vks_teh_time_start'];
+      if ($session['vks_date'] < $now) {
+        $result[$key]['color'] = 'red';
       } else {
-        $result[$key]['color'] = '#fdf3ce';
+        $result[$key]['color'] = '#f5cf99';
       }
       $result[$key]['url'] = 'vks/sessions/view-up-session?id=' . $session['id'];
+
     }
     return json_encode($result);
   }

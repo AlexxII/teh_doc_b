@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
       selectable: true,
       nowIndicator: true,
       slotDuration: '00:30:00',
-
+      navLinks: true,
       eventSources: [
         {
           url: '/scheduler/events/list',
@@ -71,14 +71,9 @@ $this->params['breadcrumbs'][] = $this->title;
             show: 'vks'
           },
           failure: function() {
-            console.log('there was an error while fetching events!');
+            console.log('Внимание! Ошибка получения событий из Журнала ВКС');
           },
-          color: 'yellow',   // a non-ajax option
-          textColor: 'black' // a non-ajax option
         }
-
-        // any other sources...
-
       ],
 
       dateClick: function (info) {
