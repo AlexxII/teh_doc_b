@@ -141,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
     });
     calendar.render();
 
-    var tText = '<span style="font-weight: 600">Александр Михайлович!</span><br> Вы что-то не сделали!!!';
+    var tText = '<span style="font-weight: 600"></span><br> Вы что-то не сделали!!!';
 
     for (var i = 0; i < 1; i++) {
       initNoty(tText);
