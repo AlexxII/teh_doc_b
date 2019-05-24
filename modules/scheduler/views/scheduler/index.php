@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
       header: {
         left: 'dayGridMonth,timeGridWeek,timeGridDay',
         center: 'title',
-        right: 'today prev,next',
+        right: 'today prev,next'
       },
       customButtons: {
         custom1: {
@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
           click: function () {
             alert('clicked custom button 1!');
           }
-        },
+        }
       },
       businessHours: [ // specify an array instead
         {

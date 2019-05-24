@@ -32,11 +32,16 @@ class EventsController extends Controller
     $now = date("Y-m-d");
     foreach ($sessions as $key => $session) {
       $result[$key]['title'] = $session['vks_type_text'];
-      $result[$key]['start'] = $session['vks_date']. 'T' . $session['vks_teh_time_start'];
+      if (!$session['vks_teh_time_start']){
+        $time = $session['vks_work_time_start'];
+      } else {
+        $time = $session['vks_teh_time_start'];
+      }
+      $result[$key]['start'] = $session['vks_date']. 'T' . $time;
       if ($session['vks_date'] < $now) {
         $result[$key]['color'] = 'red';
       } else {
-        $result[$key]['color'] = '#f5cf99';
+        $result[$key]['color'] = '#dd6813';
       }
       $result[$key]['url'] = 'vks/sessions/view-up-session?id=' . $session['id'];
       $result[$key]['durationEditable'] = 'true';
