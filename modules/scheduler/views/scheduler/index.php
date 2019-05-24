@@ -23,6 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
   .main-scheduler {
     margin-top: 20px;
   }
+  table.table-bordered > tbody > tr > td:nth-of-type(1) {
+    /*background-color: #0a0a0a;*/
+  }
+  .fc-week-number {
+    background-color: #e2e2e2;
+  }
 </style>
 
 
@@ -54,8 +60,9 @@ $this->params['breadcrumbs'][] = $this->title;
       weekNumbers: true,
       selectable: true,
       nowIndicator: true,
-      slotDuration: '00:30:00',
-
+      slotDuration: '00:15:00',
+      minTime: '06:00:00',
+      navLinks: true,
       eventSources: [
         {
           url: '/scheduler/events/list',
@@ -65,23 +72,10 @@ $this->params['breadcrumbs'][] = $this->title;
             show: 'vks'
           },
           failure: function() {
-            console.log('there was an error while fetching events!');
+            console.log('Внимание! Ошибка получения событий из Журнала ВКС');
           },
-          color: 'yellow',   // a non-ajax option
-          textColor: 'black' // a non-ajax option
         }
-
-        // any other sources...
-
       ],
-
-      dateClick: function (info) {
-        // console.log(info.dateStr);
-        // info.dayEl.style.backgroundColor = 'red';
-      },
-      droppable: true, // this allows things to be dropped onto the calendar
-      drop: function (info) {
-      },
       buttonText: {
         month: 'M',
         week: 'Н',
@@ -98,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
       header: {
         left: 'dayGridMonth,timeGridWeek,timeGridDay',
         center: 'title',
-        right: 'today prev,next',
+        right: 'today prev,next'
       },
       customButtons: {
         custom1: {
@@ -106,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
           click: function () {
             alert('clicked custom button 1!');
           }
-        },
+        }
       },
       businessHours: [ // specify an array instead
         {
@@ -119,13 +113,38 @@ $this->params['breadcrumbs'][] = $this->title;
           startTime: '09:00',
           endTime: '17:00'
         }
-      ]
+      ],
+      droppable: true, // this allows things to be dropped onto the calendar
+      showNonCurrentDates: false,
+
+      
+      //========================= actions =====================================
+
+      
+      drop: function (info) {
+
+      },
+      dateClick: function (info) {
+        // console.log(info.dateStr);
+        // info.dayEl.style.backgroundColor = 'red';
+      },
+      select: function(info) {
+        console.log('selected ' + info.startStr + ' to ' + info.endStr);
+        console.log(info);
+      },
+
+      //========================= events =======================================
+      eventResizeStart: function (info) {
+        console.log(info.view);
+      }
+      
     });
     calendar.render();
 
     var tText = '<span style="font-weight: 600">Александр Михайлович!</span><br> Вы что-то не сделали!!!';
 
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < 1; i++) {
+      initNoty(tText);
     }
 
     function initNoty(text) {

@@ -50,6 +50,13 @@ $this->params['breadcrumbs'][] = $this->title;
     margin-left: 200px;
   }
 
+<<<<<<< HEAD:modules/scheduler/views/default/default.php
+  #calendar {
+    max-width: 900px;
+  }
+
+=======
+>>>>>>> 8fb8e356effd3cb6e7d00e6250ceeed5a086254e:modules/scheduler/views/events/edit.php
 </style>
 
 
@@ -160,7 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
       calendar.prevYear();
     });
 
-    var tText = '<span style="font-weight: 600">Александр Михайлович!</span><br> Вы что-то не сделали!!!';
+    var tText = '<span style="font-weight: 600">Внимание!</span><br> Вы что-то не сделали!!!';
     new Noty({
       type: 'warning',
       theme: 'mint',
