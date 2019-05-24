@@ -37,6 +37,9 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
     color: #1e6887;
     font-size: 18px;
   }
+  .ui-fancytree {
+    overflow: auto;
+  }
 
 </style>
 
@@ -358,7 +361,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
 
     $("#fancyree_w0").fancytree({
       source: {
-        url: main_url,
+        url: main_url
       },
       extensions: ['dnd', 'edit', 'filter'],
       quicksearch: true,

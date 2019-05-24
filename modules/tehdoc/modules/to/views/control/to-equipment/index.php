@@ -7,14 +7,15 @@ FancytreeAsset::register($this);
 
 $this->title = 'Оборудование';
 $this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to/schedule']];
+$this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель управления оборудованием, добавленным в графики проведения ТО.";
-$add_hint = 'Добавить группу';
-$del_hint = 'Удалить БЕЗ вложений';
-$del_root_hint = 'Удалить ветку полностью';
-$del_multi_nodes = 'Удалить С вложениями';
+$add_hint = 'Добавить обертку';
+$del_hint = 'Удалить обертку';
+$refresh_hint = 'Перезапустить форму';
+$serial_hint = 'Внимание! Серийный номер, присвоенный в данной форме отображается только в пределах раздела ТО';
+$ref_hint = 'К оборудованию в основном перечне';
 
 ?>
 
@@ -28,6 +29,9 @@ $del_multi_nodes = 'Удалить С вложениями';
   }
   ul.fancytree-container {
     font-size: 14px;
+  }
+  .ui-fancytree {
+    overflow: auto;
   }
   input {
     color: black;
@@ -43,7 +47,6 @@ $del_multi_nodes = 'Удалить С вложениями';
 </style>
 
 <div class="admin-category-pannel">
-
   <h3><?= Html::encode('Оборудование в графике ТО') ?>
     <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
          data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
@@ -52,23 +55,33 @@ $del_multi_nodes = 'Удалить С вложениями';
 <div class="row">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
-      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
+      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm',
         'style' => ['margin-top' => '5px'],
         'title' => $add_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'id' => 'add-subcategory'
       ]) ?>
-      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
+      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm',
+        'style' => ['margin-top' => '5px'],
+        'title' => $refresh_hint,
+        'data-toggle' => 'tooltip',
+        'data-placement' => 'top',
+        'id' => 'refresh'
+      ]) ?>
+      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'id' => 'del-node'
       ]) ?>
-      <?= Html::a('<i class="fa fa-object-group" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-multi-nodes',
+      <?= Html::a('<i class="fa fa-level-up" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-info btn-sm',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
-        'title' => $del_multi_nodes,
+        'title' => $ref_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'id' => 'tool-ref'
       ]) ?>
     </div>
 
@@ -97,21 +110,24 @@ $del_multi_nodes = 'Удалить С вложениями';
   <div class="col-lg-5 col-md-5">
     <div class="alert alert-warning" style="margin-bottom: 10px">
       <a href="#" class="close" data-dismiss="alert">&times;</a>
-      <strong>Внимание!</strong> Выберите оборудование, серийный номер которого будет использоваться в графике ТО. Если
+      <strong>Внимание!</strong> Выберите оборудование серийный номер которого будет использоваться в графике ТО. Если
       выпадающий список не активен, значит у объекта отсутствуют дочерные элементы.
     </div>
 
-    <div class="about-info" style="margin-bottom: 10px"></div>
+    <div id="result-info" style="margin-bottom: 10px"></div>
     <form action="create" method="post" class="input-add">
       <div class="about-main">
-        <label>Серийный номер:</label>
-        <input id="serial-number" class="form-control" disabled+>
+        <label>Серийный номер:
+          <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+               data-toggle="tooltip" data-placement="top" title="<?= $serial_hint ?>"></sup>
+        </label>
+        <input id="serial-number" class="form-control c-input" disabled>
         <label>Оборудование:</label>
-        <select type="text" id="serial-control" class="form-control" name="sn" disabled></select>
+        <select type="text" id="serial-control" class="c-input form-control" name="sn" disabled></select>
         <label style="font-weight:400;font-size: 10px">Выберите оборудование.</label>
       </div>
       <div class="about-footer"></div>
-      <button type="submit" onclick="saveClick(event)" class="btn btn-primary save-btn" disabled>Сохранить</button>
+      <button type="submit" id="save-btn" onclick="saveClick(event)" class="btn btn-primary" disabled>Сохранить</button>
     </form>
   </div>
 
@@ -167,15 +183,16 @@ $del_multi_nodes = 'Удалить С вложениями';
       },
       success: function (result) {
         if (result) {
-          $('.about-info').hide().html(goodAlert('Запись добавлена в БД.')).fadeIn('slow');
-          window.node$.data.eq_serial = serial;
+          $('#result-info').hide().html(goodAlert('Запись добавлена в БД.')).fadeIn('slow');
+          node$.data.eq_serial = serial;
+          $("#save-btn").prop("disabled", true);
         } else {
-          $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+          $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
             'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
         }
       },
       error: function () {
-        $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+        $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
           'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
       }
     });
@@ -183,150 +200,203 @@ $del_multi_nodes = 'Удалить С вложениями';
 
   function serialControl(el) {
     var serial = $(el).find(':selected').data('serial');
-    if (serial == '' || serial == null){
-      $(".save-btn").prop("disabled", true);
+    if (serial == '' || serial == null) {
+      $("#save-btn").prop("disabled", true);
       $('#serial-number').val('');
     } else {
       $('#serial-number').val(serial);
-      $(".save-btn").prop("disabled", false);
+      $("#save-btn").prop("disabled", false);
     }
     return;
   }
 
+  function deleteProcess(url, node) {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    jc = $.confirm({
+      icon: 'fa fa-cog fa-spin',
+      title: 'Подождите!',
+      content: 'Ваш запрос выполняется!',
+      buttons: false,
+      closeIcon: false,
+      confirmButtonClass: 'hide'
+    });
+    $.ajax({
+      url: url,
+      type: "post",
+      data: {id: node.data.id, _csrf: csrf}
+    }).done(function (response) {
+      if (response != false) {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-thumbs-up',
+          title: 'Успех!',
+          content: 'Ваш запрос выполнен.',
+          type: 'green',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-success',
+              action: function () {
+                node.remove();
+                var tree = $(".ui-draggable-handle").fancytree("getTree");
+                tree.reload();
+                $('#result-info').html('');
+                $('#del-node').hide();
+                $(".del-multi-nodes").hide();
+              }
+            }
+          }
+        });
+      } else {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
+      }
+    }).fail(function () {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-exclamation-triangle',
+        title: 'Неудача!',
+        content: 'Запрос не выполнен. Что-то пошло не так.',
+        type: 'red',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|4000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+            }
+          }
+        }
+      });
+    });
+  }
+
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-  });
 
-  $(document).ready(function () {
     $("#serial-number").on('keyup mouseclick', function () {
-      $(".save-btn").prop("disabled", this.value.length == "" ? true : false);
+      $("#save-btn").prop("disabled", this.value.length == "" ? true : false);
     });
-  });
 
-  $(document).ready(function () {
-    $('.add-subcategory').click(function (event) {
+    $('#add-subcategory').click(function (event) {
       event.preventDefault();
-      var tree = $(".ui-draggable-handle").fancytree("getTree");
-      $.ajax({
-        url: "/tehdoc/to/control/to-equipment/create-root",
-        data: {title: 'Новая группа'}
-      })
-        .done(function () {
-          tree.reload();
-        })
-        .fail(function () {
-          alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-        });
+      var tree = $(".ui-draggable-handle").fancytree('getTree');
+      var root = tree.findFirst('Оборудование');
+      root.editCreateNode("child", " ");
     });
-  });
 
-
-  $(document).ready(function () {
-    $('.refresh').click(function (event) {
+    $('#refresh').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
       tree.reload();
-      $(".del-root").hide();
-      $(".del-node").hide();
-      $(".del-multi-nodes").hide();
-      $('.about-info').html('')
-    })
-  });
+      $('.c-input').prop('disabled', true);
+      $("#del-node").hide();
+      $('#result-info').html('');
+      $('#serial-number').val('');
+      $("#save-btn").prop('disabled', true);
+      $('#tool-ref').hide();
+    });
 
-  $(document).ready(function () {
-    $('.del-node').click(function (event) {
-      return;
-      if (confirm('Вы уверены, что хотите удалить выбранный классификатор?')) {
-        event.preventDefault();
-        var csrf = $('meta[name=csrf-token]').attr("content");
-        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-        $.ajax({
-          url: "/tehdoc/to/control/to-equipment/delete-node",
-          type: "post",
-          data: {id: node.data.id, _csrf: csrf}
-        })
-          .done(function () {
-            node.remove();
-            $('.about-info').html('');
-            $('.del-node').hide();
-          })
-          .fail(function () {
-            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-          });
+    $('#tool-ref').click(function (event) {
+      event.preventDefault();
+      var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+      var toolId = node.data.eq_id;
+      var prefix = '/tehdoc/equipment/tool/';
+      var href = prefix + toolId + '/info/index';
+      if (event.ctrlKey) {
+        window.open(href);
+      } else {
+        location.href = href;
       }
     });
 
-    $('.del-multi-nodes').click(function (event) {
-      if (confirm('Вы уверены, что хотите удалить выбранный классификатор вместе с вложениями?')) {
-        event.preventDefault();
-        var csrf = $('meta[name=csrf-token]').attr("content");
-        var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-        if (!node) {
-          alert('Выберите узел');
-          return;
-        }
-        $.ajax({
-          url: "/tehdoc/to/control/to-equipment/delete-root",
-          type: "post",
-          data: {
-            id: node.data.id,
-            _csrf: csrf
+    $('#del-node').click(function (event) {
+      var url = 'to-equipment/delete';
+      event.preventDefault();
+      jc = $.confirm({
+        icon: 'fa fa-question',
+        title: 'Вы уверены?',
+        content: 'Вы действительно хотите удалить выделенное?',
+        type: 'red',
+        closeIcon: false,
+        autoClose: 'cancel|9000',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+              var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+              jc.close();
+              deleteProcess(url, node);
+            }
+          },
+          cancel: {
+            action: function () {
+              return;
+            }
           }
-        })
-          .done(function () {
-            node.remove();
-            $('.about-info').html('');
-            $('.del-multi-nodes').hide();
-            $('.del-node').hide();
-
-          })
-          .fail(function () {
-            alert("Что-то пошло не так. Перезагрузите форму с помошью клавиши.");
-          });
-      }
-    })
-  });
-
-
-  $("input[name=search]").keyup(function (e) {
-    var n,
-      tree = $.ui.fancytree.getTree(),
-      args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-      opts = {},
-      filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-      match = $(this).val();
-
-    $.each(args, function (i, o) {
-      opts[o] = $("#" + o).is(":checked");
+        }
+      });
     });
-    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
 
-    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-      $("button#btnResetSearch").click();
-      return;
-    }
-    if ($("#regex").is(":checked")) {
-      // Pass function to perform match
-      n = filterFunc.call(tree, function (node) {
-        return new RegExp(match, "i").test(node.title);
-      }, opts);
-    } else {
-      // Pass a string to perform case insensitive matching
-      n = filterFunc.call(tree, match, opts);
-    }
-    $("#btnResetSearch").attr("disabled", false);
-  }).focus();
+    $("input[name=search]").keyup(function (e) {
+      var n,
+        tree = $.ui.fancytree.getTree(),
+        args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+        opts = {},
+        filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+        match = $(this).val();
+
+      $.each(args, function (i, o) {
+        opts[o] = $("#" + o).is(":checked");
+      });
+      opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
+
+      if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+        $("button#btnResetSearch").click();
+        return;
+      }
+      if ($("#regex").is(":checked")) {
+        // Pass function to perform match
+        n = filterFunc.call(tree, function (node) {
+          return new RegExp(match, "i").test(node.title);
+        }, opts);
+      } else {
+        // Pass a string to perform case insensitive matching
+        n = filterFunc.call(tree, match, opts);
+      }
+      $("#btnResetSearch").attr("disabled", false);
+    }).focus();
 
 
-  $("#btnResetSearch").click(function (e) {
-    e.preventDefault();
-    $("input[name=search]").val("");
-    $("span#matches").text("");
-    var tree = $(".ui-draggable-handle").fancytree("getTree");
-    tree.clearFilter();
-  }).attr("disabled", true);
+    $("#btnResetSearch").click(function (e) {
+      e.preventDefault();
+      $("input[name=search]").val("");
+      $("span#matches").text("");
+      var tree = $(".ui-draggable-handle").fancytree("getTree");
+      tree.clearFilter();
+    }).attr("disabled", true);
 
-  $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
       if ($(this).val() == '') {
         var tree = $(".ui-draggable-handle").fancytree("getTree");
@@ -336,6 +406,7 @@ $del_multi_nodes = 'Удалить С вложениями';
   });
 
 
+  var serialVal;
   // отображение и логика работа дерева
   jQuery(function ($) {
     var main_url = '/tehdoc/to/control/to-equipment/all-tools';
@@ -345,7 +416,7 @@ $del_multi_nodes = 'Удалить С вложениями';
 
     $("#fancyree_w0").fancytree({
       source: {
-        url: main_url,
+        url: main_url
       },
       extensions: ['dnd', 'edit', 'filter'],
       quicksearch: true,
@@ -399,6 +470,8 @@ $del_multi_nodes = 'Удалить С вложениями';
         },
         triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
         beforeEdit: function (event, data) {
+          parent = data.node.parent;
+          parent.folder = true;
           return true;
         },
         edit: function (event, data) {
@@ -421,15 +494,17 @@ $del_multi_nodes = 'Удалить С вложениями';
                 result = JSON.parse(result);
                 node.data.id = result.acceptedId;
                 node.setTitle(result.acceptedTitle);
-                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
+                node.data.eq_id = 0;
+                parent.renderTitle();
+                $('#result-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                   ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+              $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
             }).always(function () {
               // data.input.removeClass("pending")
@@ -438,21 +513,21 @@ $del_multi_nodes = 'Удалить С вложениями';
             $.ajax({
               url: update_url,
               data: {
-                id: node.data.id,
+                id: nodeId,
                 title: data.input.val()
               }
             }).done(function (result) {
               if (result) {
                 result = JSON.parse(result);
                 node.setTitle(result.acceptedTitle);
-                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
+                $('#result-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+                $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                   ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
+              $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               node.setTitle(data.orgTitle);
             }).always(function () {
@@ -463,66 +538,51 @@ $del_multi_nodes = 'Удалить С вложениями';
         },
         close: function (event, data) {
           if (data.save) {
-            // Since we started an async request, mark the node as preliminary
             $(data.node.span).addClass("pending")
           }
         }
       },
-      icon: function (event, data) {
-        if (data.node.key == 1122334455) {
-          return "fa fa-sitemap";
-        } else if (data.node.key == 5544332211) {
-          return "fa fa-question-circle";
-        } else if (data.node.data.eq_id == 0) {
-          return "t fa fa-clone";
-        } else {
-          return "t fa fa-file-o";
-        }
-      },
       activate: function (node, data) {
-        $('.about-info').html('');
         $('#serial-number').val('');
-        $("#serial-control").children().remove();
-        $("#serial-control").prop("disabled", true);
+        $('#serial-control').val('none');
         var node = data.node;
         var lvl = node.data.lvl;
-        window.node$ = data.node;
+        var eqId = node.data.eq_id;
+        window.node$ = node;
         window.nodeId = node.data.id;
-        var serial = node.data.eq_serial;
-        if (node.key == -999) {
-          $(".add-subcategory").hide();
-          return;
-        } else {
-          $(".add-subcategory").show();
-        }
-        if (lvl > 1) {
+        serialVal = node.data.eq_serial;
+        if (eqId != 0) {
           $('#serial-number').prop("disabled", false);
-          if (serial) {
-            $('#serial-number').val(serial);
+          if (serialVal) {
+            $('#serial-number').val(serialVal);
           } else {
             $('#serial-number').val('');
           }
           $.ajax({
             url: '/tehdoc/to/control/to-equipment/tools-serials',
             data: {
-              id: node.data.ref,
+              id: node.data.eq_id
             }
           }).done(function (result) {
-            if (result) {
+            if (result != -1) {
               var serial = 0;
               var result = JSON.parse(result, function (key, value) {
                 if (key == 'single') serial = 1;
-                  return value;
+                return value;
               });
-              if (serial){
-                if (result.single != '' && result.single != null){
+              if (serial) {
+                if (result.single != '' && result.single != null) {
                   $('#serial-number').val(result.single);
+                  if (node.data.eq_serial == null) {
+                    $("#save-btn").prop("disabled", false);
+                  }
                 } else {
                   $('#serial-number').val('');
-                  $(".save-btn").prop("disabled", true);
+                  $("#save-btn").prop("disabled", true);
                 }
               } else {
-                var optionsValues = '<select class="form-control input-sm" id="serial-control" onchange=serialControl(this) style="margin-top: 5px">';
+                var optionsValues = '<select class="form-control input-sm c-input" id="serial-control" ' +
+                  'onchange=serialControl(this) style="margin-top: 5px">';
                 optionsValues += '<option selected disabled>Выберите</option>';
                 $.each(result, function (index, obj) {
                   if (obj.eq_serial != '' && obj.eq_serial != null) {
@@ -530,52 +590,65 @@ $del_multi_nodes = 'Удалить С вложениями';
                   } else {
                     serVal = 's/n: -';
                   }
-                  optionsValues += '<option value="' + obj.ref + '" ' +
+                  optionsValues += '<option value="' + obj.id + '" ' +
                     'data-serial="' + obj.eq_serial + '">' + obj.name + ' ' + serVal + '</option>';
                 });
                 optionsValues += '</select>';
                 var options = $('#serial-control');
                 options.replaceWith(optionsValues);
+                if (serialVal) {
+                  $("#serial-control option[data-serial='" + serialVal + "']").attr("selected", "selected");
+                }
               }
             } else if (result == -1) {
-              $('.about-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
-                ' в поле ввода.')).fadeIn('slow');
+              if ($('#serial-number').val() == '') {
+                $('#result-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
+                  ' в поле ввода.')).fadeIn('slow');
+              }
             } else {
-              $('.about-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
+              $('#result-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
             }
           }).fail(function (result) {
-            $('.about-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
+            $('#result-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
               ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-          }).always(function () {
-            return;
           });
-        } else if (lvl == 1) {
+        } else {
+          $("#serial-control").prop("disabled", true);
           $('#serial-number').prop("disabled", true);
-          $(".save-btn").prop("disabled", true);
+          $('#serial-number').val('');
+        }
+      },
+      click: function (event, data) {
+        $('#result-info').html('');
+        $("#serial-control").children().remove();
+        $("#serial-control").prop("disabled", true);
+        var node = data.node;
+        var lvl = node.data.lvl;
+        $("#save-btn").prop("disabled", true);
+        if (node.key == -999) {
+          $("#add-subcategory").hide();
+          return;
         }
         if (lvl == 0) {
-          $(".del-root").show();
-          $(".del-node").hide();
-          $(".del-multi-nodes").hide();
+          $("#del-node").hide();
         } else {
-          $(".add-subcategory").hide();
-          if (node.hasChildren()) {
-            $(".del-multi-nodes").show();
-          } else {
-            $(".del-multi-nodes").hide();
-          }
-          $(".del-root").hide();
-          $(".del-node").show();
+          $("#del-node").show();
+        }
+        if (node.data.eq_id != 0) {
+          $('#tool-ref').show();
+          $("#del-node").hide();
+        } else {
+          $('#tool-ref').hide();
         }
       },
       renderNode: function (node, data) {
         if (data.node.key == -999) {
-          $(".add-category").show();
-          $(".add-subcategory").hide();
+          $("#add-subcategory").hide();
         }
       }
-    });
+    })
+    ;
   });
 
 

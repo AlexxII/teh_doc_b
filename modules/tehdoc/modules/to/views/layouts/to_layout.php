@@ -1,20 +1,21 @@
 <?php
 
-use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 
-use app\assets\AppAsset;
-use app\assets\FancytreeAsset;
-use app\modules\tehdoc\asset\TehdocAsset;
-use app\modules\tehdoc\modules\to\assets\ToAsset;
+use app\widgets\Alert;
 
-AppAsset::register($this);    // регистрация ресурсов всего приложения
+use app\assets\AppAsset;
+use app\assets\JConfirmAsset;
+use app\assets\FancytreeAsset;
+use app\assets\TableBaseAsset;
+
+AppAsset::register($this);              // регистрация ресурсов всего приложения
 FancytreeAsset::register($this);
-TehdocAsset::register($this);       // регистрация ресурсов модуля
-ToAsset::register($this);
+TableBaseAsset::register($this);        // регистрация ресурсов модуля
+JConfirmAsset::register($this);
 
 $about = "Панель управления оборудованием";
 $add_hint = 'Добавить новый узел';
@@ -97,12 +98,12 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'label' => 'Графики',
         'items' => [
           '<li class="dropdown-header" style="font-size: 10px">Ежемесячные</li>',
-          ['label' => 'Графики ТО', 'url' => ['/tehdoc/to/schedule']],
-          ['label' => 'Составить график', 'url' => ['/tehdoc/to/schedule/create']],
+          ['label' => 'Графики ТО', 'url' => ['/tehdoc/to/month-schedule/archive']],
+          ['label' => 'Составить график', 'url' => ['/tehdoc/to/month-schedule/create']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Годовые</li>',
-          ['label' => 'Графики ТО', 'url' => ['/tehdoc/to/schedule']],
-          ['label' => 'Составить график', 'url' => ['/tehdoc/to/schedule']],
+          ['label' => 'Планы ТО', 'url' => ['/tehdoc/to/year-schedule/index']],
+          ['label' => 'Планы ТО_EX', 'url' => ['/tehdoc/to/year-schedule/create']],
         ],
       ],
       [
@@ -111,7 +112,8 @@ $del_multi_nodes = 'Удвлить С вложениями';
           '<li class="dropdown-header" style="font-size: 10px">Графики</li>',
           ['label' => 'Оборудование в графике', 'url' => ['/tehdoc/to/control/to-equipment']],
           ['label' => 'Виды Тех.обслуживания', 'url' => ['/tehdoc/to/control/to-type']],
-          ['label' => 'Сотрудники', 'url' => ['/tehdoc/to/control/to-admin']],
+          ['label' => 'Сотрудники', 'url' => ['/tehdoc/to/control/to-admins']],
+          ['label' => 'Контроль ТО', 'url' => ['/tehdoc/to/control/to-admins']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Наработка</li>',
           ['label' => 'Шаблоны наработки', 'url' => ['/tehdoc/to/control/#']],

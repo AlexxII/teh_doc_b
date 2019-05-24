@@ -2,8 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
 use app\modules\vks\assets\VksFormAsset;
-use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
+use app\assets\BootstrapDatepickerAsset;
 
 ?>
 
@@ -27,14 +28,17 @@ use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
   .right {
     text-align: right;
   }
+  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    background-color: #fff;
+    opacity: 1;
+  }
 </style>
 
 <?php
 
 \yii\widgets\MaskedInputAsset::register($this);
 VksFormAsset::register($this);
-EquipmentAsset::register($this);
-
+BootstrapDatepickerAsset::register($this);
 
 $vks_date_hint = 'Обязательное поле! Укажите дату проведения сеанса ВКС';
 $vks_type_hint = 'Обязательное поле! Укажите ТИП сеанса ВКС (Напрмер: ЗВС-ОГВ, КВС и т.д.)';
@@ -60,7 +64,8 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
             'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_date_hint . '"></sup>{input}{hint}'
           ])->textInput([
-            'class' => 'fact-date form-control'
+            'class' => 'fact-date form-control',
+            'readonly' => true
           ])->hint('', ['class' => ' w3-label-under']); ?>
         </div>
       </div>

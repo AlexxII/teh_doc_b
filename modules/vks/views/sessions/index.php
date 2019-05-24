@@ -1,9 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use app\modules\vks\assets\AnalyticsAsset;
-
-AnalyticsAsset::register($this);
+use app\assets\AirDatepickerAsset;
 
 $this->title = 'Журнал предстоящих сеансов видеосвязи';
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
@@ -14,6 +12,7 @@ $add_hint = 'Добавить предстоящий сеанс';
 $dell_hint = 'Удалить выделенные сеансы';
 $date_about = "Выберите период";
 
+AirDatepickerAsset::register($this);
 Yii::$app->cache->flush();
 ?>
 
@@ -107,19 +106,20 @@ Yii::$app->cache->flush();
 <script>
 
   $(document).ready(function () {
-      $('#vks-dates').datepicker({
-          clearButton: true,
-          onHide: function (dp, animationCompleted) {
-              if (animationCompleted) {
-                  var range = $('#vks-dates').val();
-                  var stDate = range.substring(6, 10) + '-' + range.substring(3, 5) + '-' + range.substring(0, 2);
-                  var eDate = range.substring(19, 24) + '-' + range.substring(16, 18) + '-' + range.substring(13, 15);
-                  $(".start-date").val(stDate);
-                  $(".end-date").val(eDate);
-                  $("#main-table").DataTable().clearPipeline().draw();
-              }
-          }
-      });
+    $('#vks-dates').datepicker({
+      clearButton: true,
+      toggleSelected: false,
+      onHide: function (dp, animationCompleted) {
+        if (animationCompleted) {
+          var range = $('#vks-dates').val();
+          var stDate = range.substring(6, 10) + '-' + range.substring(3, 5) + '-' + range.substring(0, 2);
+          var eDate = range.substring(19, 24) + '-' + range.substring(16, 18) + '-' + range.substring(13, 15);
+          $(".start-date").val(stDate);
+          $(".end-date").val(eDate);
+          $("#main-table").DataTable().clearPipeline().draw();
+        }
+      }
+    });
   });
 
   // ************************* Работа таблицы **************************************
@@ -238,28 +238,28 @@ Yii::$app->cache->flush();
           $('td', nRow).css('background-color', '#e4f0dc');
         }
       },
-        "ajax": $.fn.dataTable.pipeline({
-            url: '/vks/sessions/server-side?index=0',
-            pages: 2, // number of pages to cache
-            data: function () {
-                var stDt = $(".start-date").val();
-                var eDt = $(".end-date").val();
-                if (stDt != '--') {
-                    var startDate = stDt;
-                } else {
-                    var startDate = '1970-01-01';
-                }
-                if (eDt != '--') {
-                    var endDate = eDt;
-                } else {
-                    var endDate = '2099-12-31';
-                }
-                return {
-                    'stDate': startDate,
-                    'eDate': endDate
-                }
-            }
-        }),
+      "ajax": $.fn.dataTable.pipeline({
+        url: '/vks/sessions/server-side?index=0',
+        pages: 2, // number of pages to cache
+        data: function () {
+          var stDt = $(".start-date").val();
+          var eDt = $(".end-date").val();
+          if (stDt != '--') {
+            var startDate = stDt;
+          } else {
+            var startDate = '1970-01-01';
+          }
+          if (eDt != '--') {
+            var endDate = eDt;
+          } else {
+            var endDate = '2099-12-31';
+          }
+          return {
+            'stDate': startDate,
+            'eDate': endDate
+          }
+        }
+      }),
       orderFixed: [2, 'asc'],
       order: [3, 'asc'],
       rowGroup: {
@@ -478,4 +478,4 @@ Yii::$app->cache->flush();
 
   });
 
-  </script>
+</script>

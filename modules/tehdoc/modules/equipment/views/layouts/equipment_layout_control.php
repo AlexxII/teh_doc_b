@@ -5,19 +5,19 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
+
 use app\assets\AppAsset;
-use app\modules\tehdoc\asset\TehdocAsset;
-use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
 use app\assets\FancytreeAsset;
-use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
 use app\assets\JConfirmAsset;
+use app\assets\BootstrapDatepickerAsset;
+
+use app\modules\tehdoc\asset\TehdocAsset;
 
 FancytreeAsset::register($this);
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 TehdocAsset::register($this);       // регистрация ресурсов модуля
-EquipmentAsset::register($this);
-MdeAsset::register($this);
 JConfirmAsset::register($this);
+BootstrapDatepickerAsset::register($this);
 
 
 $about = "Панель управления оборудованием. 
@@ -506,6 +506,13 @@ $del_multi_nodes = 'Удвлить С вложениями';
       quicksearch: true,
       minExpandLevel: 2,
       hotkeys: {},
+
+      childcounter: {
+        deep: true,
+        hideZeros: true,
+        hideExpanded: true
+      },
+
       // wide: {
       //   iconWidth: "32px",     // Adjust this if @fancy-icon-width != "16px"
       //   iconSpacing: "6px", // Adjust this if @fancy-icon-spacing != "3px"

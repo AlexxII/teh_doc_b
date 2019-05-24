@@ -7,6 +7,7 @@ use \Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
+use yii\web\NotFoundHttpException;
 
 use app\base\MHelper;
 

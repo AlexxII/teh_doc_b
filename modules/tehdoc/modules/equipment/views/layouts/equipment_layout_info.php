@@ -5,21 +5,24 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
+
 use app\assets\AppAsset;
-use app\modules\tehdoc\asset\TehdocAsset;
-use app\modules\tehdoc\modules\equipment\asset\MdeAsset;
+use app\assets\MdeAsset;
 use app\assets\FancytreeAsset;
 use app\assets\PhotoswipeAsset;
-use app\modules\tehdoc\modules\equipment\asset\EquipmentAsset;
 use app\assets\JConfirmAsset;
+use app\assets\BootstrapDatepickerAsset;
+
+
+use app\modules\tehdoc\asset\TehdocAsset;
 
 PhotoswipeAsset::register($this);
 FancytreeAsset::register($this);
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 TehdocAsset::register($this);       // регистрация ресурсов модуля
-EquipmentAsset::register($this);
 MdeAsset::register($this);
 JConfirmAsset::register($this);
+BootstrapDatepickerAsset::register($this);
 
 $about = "Панель управления оборудованием";
 $add_hint = 'Добавить новый узел';
@@ -228,50 +231,46 @@ $del_multi_nodes = 'Удалить С вложениями';
 <script>
 
 
-
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-  });
 
-  $("input[name=search]").keyup(function (e) {
-    var n,
-      tree = $.ui.fancytree.getTree(),
-      args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-      opts = {},
-      filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-      match = $(this).val();
+    $("input[name=search]").keyup(function (e) {
+      var n,
+        tree = $.ui.fancytree.getTree(),
+        args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+        opts = {},
+        filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+        match = $(this).val();
 
-    $.each(args, function (i, o) {
-      opts[o] = $("#" + o).is(":checked");
-    });
-    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
+      $.each(args, function (i, o) {
+        opts[o] = $("#" + o).is(":checked");
+      });
+      opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
 
-    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-      $("button#btnResetSearch").click();
-      return;
-    }
-    if ($("#regex").is(":checked")) {
-      // Pass function to perform match
-      n = filterFunc.call(tree, function (node) {
-        return new RegExp(match, "i").test(node.title);
-      }, opts);
-    } else {
-      // Pass a string to perform case insensitive matching
-      n = filterFunc.call(tree, match, opts);
-    }
-    $("#btnResetSearch").attr("disabled", false);
-  }).focus();
+      if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+        $("button#btnResetSearch").click();
+        return;
+      }
+      if ($("#regex").is(":checked")) {
+        // Pass function to perform match
+        n = filterFunc.call(tree, function (node) {
+          return new RegExp(match, "i").test(node.title);
+        }, opts);
+      } else {
+        // Pass a string to perform case insensitive matching
+        n = filterFunc.call(tree, match, opts);
+      }
+      $("#btnResetSearch").attr("disabled", false);
+    }).focus();
 
+    $("#btnResetSearch").click(function (e) {
+      e.preventDefault();
+      $("input[name=search]").val("");
+      $("span#matches").text("");
+      var tree = $(".ui-draggable-handle").fancytree("getTree");
+      tree.clearFilter();
+    }).attr("disabled", true);
 
-  $("#btnResetSearch").click(function (e) {
-    e.preventDefault();
-    $("input[name=search]").val("");
-    $("span#matches").text("");
-    var tree = $(".ui-draggable-handle").fancytree("getTree");
-    tree.clearFilter();
-  }).attr("disabled", true);
-
-  $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
       if ($(this).val() == '') {
         var tree = $(".ui-draggable-handle").fancytree("getTree");
@@ -290,7 +289,7 @@ $del_multi_nodes = 'Удалить С вложениями';
       },
       extensions: ['filter'],
       quicksearch: true,
-      minExpandLevel: 2,
+      minExpandLevel: 3,
       wide: {
         iconWidth: "32px",     // Adjust this if @fancy-icon-width != "16px"
         iconSpacing: "6px", // Adjust this if @fancy-icon-spacing != "3px"

@@ -2,9 +2,10 @@
 
 namespace app\modules\tehdoc\modules\to\models;
 
-use creocoder\nestedsets\NestedSetsBehavior;
+use yii\web\NotFoundHttpException;
 
 use app\base\MHelper;
+use creocoder\nestedsets\NestedSetsBehavior;
 use app\modules\tehdoc\modules\to\base\NestedSetsTreeBehaviorExX;
 
 class ToEquipment extends \yii\db\ActiveRecord
@@ -41,7 +42,10 @@ class ToEquipment extends \yii\db\ActiveRecord
   {
     $parentCount = $this->parents()->count();
     if ($parentCount > 1){
-      return $this->parents(1);
+      if ($this->parents(1)){
+        return $this->parents(1);
+      }
+      return false;
     }
     return '';
   }

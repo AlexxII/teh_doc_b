@@ -91,7 +91,7 @@ JConfirmAsset::register($this);
           ['label' => 'Сводная таблица', 'url' => ['/tehdoc/equipment/tools/index']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">Тех.обслуживание</li>',
-          ['label' => 'График ТО', 'url' => ['/tehdoc/']],
+          ['label' => 'Графики ТО', 'url' => ['/tehdoc/to/month-schedule/archive']],
           ['label' => 'Учет наработки', 'url' => ['/tehdoc/']],
         ],
       ],

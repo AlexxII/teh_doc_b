@@ -26,14 +26,10 @@ class AppAsset extends AssetBundle
 
   public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
 
-  public $js = [
-    'js/tether.min.js',
-    'js/moment-with-locales.min.js',
-
-  ];
-
   public $depends = [
     'yii\web\YiiAsset',
     'yii\bootstrap\BootstrapAsset',
+    'app\assets\TetherAsset',
+    'app\assets\MomentJSAsset'
   ];
 }

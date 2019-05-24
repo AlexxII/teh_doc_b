@@ -2,10 +2,11 @@
 
 namespace app\modules\tehdoc\modules\to\models;
 
+use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
 
 use app\modules\admin\models\User;
-use yii\helpers\ArrayHelper;
-
+use app\base\MHelper;
 
 class ToSchedule extends \yii\db\ActiveRecord
 {
@@ -16,6 +17,11 @@ class ToSchedule extends \yii\db\ActiveRecord
   public static function tableName()
   {
     return 'teh_to_schedule_tbl';
+  }
+
+  public function   __construct()
+  {
+    parent::__construct();
   }
 
   public function scenarios()
@@ -37,7 +43,7 @@ class ToSchedule extends \yii\db\ActiveRecord
       [['eq_id', 'to_type', 'plan_date', 'admin_id', 'auditor_id'], 'required', 'on' => self::SCENARIO_CREATE],
       [[
         'eq_id', 'to_type', 'plan_date', 'fact_date', 'checkmark', 'admin_id', 'auditor_id'
-      ], 'required', 'on' => self::SCENARIO_CREATE],
+      ], 'required', 'on' => self::SCENARIO_CONFIRM],
       [['plan_date', 'to_month', 'fact_date'], 'date', 'format' => 'yyyy-M-d'],
       [['date_in', 'to_month'], 'safe'],
     ];
@@ -45,44 +51,42 @@ class ToSchedule extends \yii\db\ActiveRecord
 
   public function getToType()
   {
-    return $this->hasOne(ToType::class, ['ref' => 'to_type']);
+    return $this->hasOne(ToType::class, ['id' => 'to_type']);
   }
 
   public function getToList()
   {
-    return ArrayHelper::map(ToType::find()->where(['!=', 'lvl', '0'])->asArray()->all(), 'ref', 'name');
+    return ArrayHelper::map(ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all(), 'id', 'name');
+  }
 
+  public function getToListShort()
+  {
+    return ArrayHelper::map(ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all(), 'id', 'name');
   }
 
   public function getToEq()
   {
-    return $this->hasOne(ToEquipment::class, ['ref' => 'eq_id']);
+    return $this->hasOne(ToEquipment::class, ['id' => 'eq_id']);
   }
 
   public function getAdmin()
   {
-    return $this->hasOne(User::class, ['ref' => 'admin_id']);
+    return $this->hasOne(ToAdmins::class, ['id' => 'admin_id']);
   }
 
   public function getAuditor()
   {
-    return $this->hasOne(User::class, ['ref' => 'auditor_id']);
+    return $this->hasOne(ToAdmins::class, ['id' => 'auditor_id']);
   }
 
   public function getAdminList()
   {
-    return [
-      44491978 => 'Лесин С.Н.',
-      47481824 => 'Игнатенко А.М.'
-    ];
+    return ArrayHelper::map(ToAdmins::find()->where(['admin' => 1])->orderBy('lft')->asArray()->all(), 'id', 'name');
   }
 
   public function getAuditorList()
   {
-    return [
-      24992690 => 'Малышев В.Ю.',
-      26823825 => 'Врачев Д.С.'
-    ];
+    return ArrayHelper::map(ToAdmins::find()->where(['admin' => 0])->orderBy('lft')->asArray()->all(), 'id', 'name');
   }
 
   public static function findModel($id)

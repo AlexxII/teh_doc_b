@@ -2,12 +2,12 @@
 //
 use yii\helpers\Html;
 use app\assets\FancytreeAsset;
-use app\modules\vks\assets\AnalyticsAsset;
+use app\assets\AirDatepickerAsset;
 use app\modules\vks\assets\VksFormAsset;
 
 FancytreeAsset::register($this);
 VksFormAsset::register($this);
-AnalyticsAsset::register($this);
+AirDatepickerAsset::register($this);
 
 $this->title = 'Анализ сеансов ВКС';
 $this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
@@ -177,6 +177,7 @@ $send_hint = 'Передать выделенные строки в подроб
 
     $('#vks-dates').datepicker({
       clearButton: true,
+      toggleSelected: false,
       onHide: function (dp, animationCompleted) {
         if (animationCompleted) {
           var range = $('#vks-dates').val();
@@ -492,7 +493,7 @@ $send_hint = 'Передать выделенные строки в подроб
       "processing": true,
       "serverSide": true,
       "responsive": true,
-      "lengthMenu": [[25, 50, 100], [25, 50, 100]],
+      "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
       "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
         if ((aData[10] == '-' && aData[12] != '') || (aData[11] == '-' && aData[14] != '')){
           $('td', nRow).css('background-color', '#fff1ef');
@@ -565,8 +566,8 @@ $send_hint = 'Передать выделенные строки в подроб
           return row[10] + '/т.' +
             "<br> " +
             row[11] + '/р.' +
-            "<br> " +
-            (a*1  + b*1) + '/общ.';
+            '<br> <span style="font-weight: 600">' +
+            (a*1  + b*1) + '/общ.</span>';
         }
       }, {
         "targets": 4,

@@ -37,6 +37,9 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
     color: #1e6887;
     font-size: 18px;
   }
+  .ui-fancytree {
+    overflow: auto;
+  }
 
 </style>
 
@@ -288,7 +291,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         jc = $.confirm({
           icon: 'fa fa-exclamation-triangle',
           title: 'Неудача!',
-          content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
           type: 'red',
           buttons: false,
           closeIcon: false,
@@ -437,8 +440,6 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         },
         triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
         beforeEdit: function (event, data) {
-          var node = data.node;
-          node.icon = 'fa fa-file-o';
           return true;
         },
         edit: function (event, data) {

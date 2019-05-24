@@ -5,6 +5,7 @@ namespace app\modules\tehdoc\modules\to\controllers\control;
 use Yii;
 use yii\web\Controller;
 use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
 
 use app\modules\tehdoc\modules\to\models\ToEquipment;
 use app\modules\tehdoc\modules\equipment\models\Tools;
@@ -34,7 +35,7 @@ class ToEquipmentController extends Controller
   public function actionToolsSerials($id)
   {
     $root = Tools::findModel($id);
-    $children = $root->children()->select(['ref', 'eq_serial', 'name'])
+    $children = $root->children()->select(['id', 'eq_serial', 'name'])
       ->orderby(['lft' => SORT_ASC])
       ->asArray()->all();
     if (!empty($children)){
@@ -64,18 +65,17 @@ class ToEquipmentController extends Controller
   }
 
 
-  public function actionCreateRoot($title)
+  public function actionCreateNode($title)
   {
     $parentId = 1;
-    $newGroup = new ToEquipment(['name' => $title]);
-    $parentOrder = ToEquipment::findModel($parentId);
-    $newGroup->parent_id = $parentOrder->ref;
+    $newGroup = new ToEquipment();
+    $newGroup->name = $title;
+    $parentOrder = ToEquipment::findModel(['name' => 'Оборудование']);
+    $newGroup->parent_id = $parentOrder->id;
     $newGroup->eq_id = 0;
-    $newGroup->ref = 0;
     if ($newGroup->appendTo($parentOrder)) {
       $data['acceptedTitle'] = $title;
       $data['acceptedId'] = $newGroup->id;
-      $data['acceptedRef'] = $newGroup->ref;
       return json_encode($data);
     }
     $data = $newGroup->getErrors();
@@ -109,35 +109,34 @@ class ToEquipmentController extends Controller
         break;
     }
     $parent = ToEquipment::findModel($parentId);
-    $item_model->parent_id = $parent->ref;
+    $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
       return true;
     }
     return false;
   }
 
-  public function actionDeleteNode()
+  // Удаляет только папки - агригаторы
+  public function actionDelete()
   {
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $category = ToEquipment::findModel($id);
-      $category->delete();
-    }
-  }
-
-  public function actionDeleteRoot()
-  {
-    if (!empty($_POST)) {
-      $id = $_POST['id'];
-      $root = ToEquipment::findModel($id);
-      $children = $root->children()->all();
-      foreach ($children as $child){
-        $settings = ToolSettings::findModel($child->ref);
-        $settings->eq_to = 0;
-      }
-      if ($root->deleteWithChildren()){
-        return true;
+      $toWrap = ToEquipment::findModel($id);
+      if ($toWrap->eq_id == 0){
+        $parentOrder = ToEquipment::findOne(['name' => 'Оборудование']);
+        foreach ($toWrap->children()->all() as $child){
+          $child->appendTo($parentOrder);
+        }
+        if ($toWrap->delete()){
+          return true;
+        }
+        return false;
+      } else {
+        $toWrap->valid = 0;
+        if ($toWrap->save()) {
+          return true;
+        }
       }
       return false;
     }
