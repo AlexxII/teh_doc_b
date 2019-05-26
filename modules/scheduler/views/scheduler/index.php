@@ -182,10 +182,22 @@ $this->params['breadcrumbs'][] = $this->title;
             },
             onContentReady: function () {
               this.setContentAppend('<div>Content ready!</div>');
+            },
+            buttons: {
+              go: {
+                text: 'К СОБЫТИЮ',
+                action: function () {
+                  console.log('push - GO');
+                }
+              },
+              cancel: {
+                action: function () {
+                  console.log('push - CANCEL');
+                },
+                text: 'НАЗАД',
+              }
             }
-          });
-
-
+          })
         }
       }
 
