@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </h3>
     <a class="btn btn-primary btn-sm" role="button" disabled="true">Сменить пароль</a>
     <a id="holiday_" href="calendar-form" class="btn btn-primary btn-sm" role="button">График</a>
+    <a id="holiday_" type="button" onclick="notifSet ()" class="btn btn-primary btn-sm" >Уведомления</a>
   </div>
 </div>
 
@@ -77,6 +78,30 @@ $this->params['breadcrumbs'][] = $this->title;
     });
 
   });
+
+
+  function notifyMe() {
+    var notification = new Notification ('Все еще отбеливаете??', {
+      tag: 'qwe',
+      body: 'Тогда мы идем к Вам!'
+    });
+  }
+
+
+  function notifSet () {
+    if (!('Notification' in window))
+      console.log('Браузер не поддерживает уведомления!!');
+    else if (Notification.permission === 'granted')
+      setTimeout(notifyMe, 2000);
+    else if (Notification.permission !== 'denied') {
+      Notification.requestPermission(function (permission) {
+        if (!('permission' in Notification))
+          Notification.permission = permission;
+        if (permission === 'granted')
+          setTimeout(notifyMe, 2000);
+      })
+    }
+  }
 
 
 </script>
