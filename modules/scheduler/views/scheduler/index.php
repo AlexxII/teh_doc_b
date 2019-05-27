@@ -29,6 +29,9 @@ $this->params['breadcrumbs'][] = $this->title;
   .fc-week-number {
     background-color: #e2e2e2;
   }
+  .past div.fc-time, .past div.fc-title {
+    text-decoration: line-through;
+  }
 </style>
 
 
@@ -68,12 +71,11 @@ $this->params['breadcrumbs'][] = $this->title;
           url: '/scheduler/events/list',
           method: 'POST',
           extraParams: {
-            _csrf: csrf,
-            show: 'vks'
+            _csrf: csrf
           },
-          failure: function() {
+          failure: function () {
             console.log('Внимание! Ошибка получения событий из Журнала ВКС');
-          },
+          }
         }
       ],
       buttonText: {
@@ -117,10 +119,20 @@ $this->params['breadcrumbs'][] = $this->title;
       droppable: true, // this allows things to be dropped onto the calendar
       showNonCurrentDates: false,
 
-      
+      //========================= rendering ==================================
+      eventRender: function (info) {
+        var ntoday = new Date();
+        if (info.event._instance.range.start < ntoday.getTime()) {
+//                    console.log(info.el);
+//                    info.el.addClass('past');
+//                    info.el.children().addClass('past');
+        }
+      },
+
+
       //========================= actions =====================================
 
-      
+
       drop: function (info) {
 
       },
@@ -128,7 +140,7 @@ $this->params['breadcrumbs'][] = $this->title;
         // console.log(info.dateStr);
         // info.dayEl.style.backgroundColor = 'red';
       },
-      select: function(info) {
+      select: function (info) {
         console.log('selected ' + info.startStr + ' to ' + info.endStr);
         console.log(info);
       },
@@ -136,8 +148,59 @@ $this->params['breadcrumbs'][] = $this->title;
       //========================= events =======================================
       eventResizeStart: function (info) {
         console.log(info.view);
+      },
+      eventClick: function (info) {
+        info.jsEvent.preventDefault(); // don't let the browser navigate
+        if (info.event.url) {
+          var urlText = info.event.url;
+          var ar = urlText.split('/');
+          var req = ar[0];
+          var ident = ar[1];
+          console.log(ar[1]);
+
+          var c = $.confirm({
+            content: function () {
+              var self = this;
+              self.setContent('Checking callback flow');
+              return $.ajax({
+                url: '/scheduler/events/' + req,
+                dataType: 'json',
+                method: 'get',
+                data: {
+                  i: ident
+                }
+              }).done(function (response) {
+                self.setContentAppend('<div>Done!</div>');
+              }).fail(function () {
+                self.setContentAppend('<div>Fail!</div>');
+              }).always(function () {
+                self.setContentAppend('<div>Always!</div>');
+              });
+            },
+            contentLoaded: function (data, status, xhr) {
+              self.setContentAppend('<div>Content loaded!</div>');
+            },
+            onContentReady: function () {
+              this.setContentAppend('<div>Content ready!</div>');
+            },
+            buttons: {
+              go: {
+                text: 'К СОБЫТИЮ',
+                action: function () {
+                  console.log('push - GO');
+                }
+              },
+              cancel: {
+                action: function () {
+                  console.log('push - CANCEL');
+                },
+                text: 'НАЗАД',
+              }
+            }
+          })
+        }
       }
-      
+
     });
     calendar.render();
 

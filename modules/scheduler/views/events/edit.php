@@ -49,14 +49,10 @@ $this->params['breadcrumbs'][] = $this->title;
     z-index: 1;
     margin-left: 200px;
   }
-
-<<<<<<< HEAD:modules/scheduler/views/default/default.php
   #calendar {
     max-width: 900px;
   }
 
-=======
->>>>>>> 8fb8e356effd3cb6e7d00e6250ceeed5a086254e:modules/scheduler/views/events/edit.php
 </style>
 
 
@@ -138,7 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
       header: {
         left: 'dayGridMonth,timeGridWeek,timeGridDay',
         center: 'title',
-        right: 'today prev,next',
+        right: 'today prev,next'
       },
       customButtons: {
         custom1: {
@@ -146,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
           click: function () {
             alert('clicked custom button 1!');
           }
-        },
+        }
       },
       businessHours: [ // specify an array instead
         {
