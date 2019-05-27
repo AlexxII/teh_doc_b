@@ -154,8 +154,10 @@ $this->params['breadcrumbs'][] = $this->title;
             },
             eventClick: function (info) {
                 info.jsEvent.preventDefault();
-                if (info.event.url) {
-                    var urlText = info.event.url;
+                console.log(info.event.extendedProps);
+                if (info.event.extendedProps) {
+                    var url = info.event.url;
+                    var urlText = info.event.extendedProps.exUrl;
                     var ar = urlText.split('/');
                     var req = ar[0];
                     var ident = ar[1];
@@ -178,7 +180,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         contentLoaded: function (data, status, xhr) {
                             console.log(xhr);
-                            this.setContentAppend('<div>'+ data +'</div>');
+                            this.setContentAppend('<div>' + data + '</div>');
                         },
                         type: 'blue',
                         columnClass: 'medium',
@@ -189,7 +191,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 text: 'К СОБЫТИЮ',
                                 action: function () {
 
-                                    window.open('to');
+                                    window.open(url);
                                 }
                             },
                             cancel: {
@@ -199,11 +201,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     })
                 }
             }
-
         });
         calendar.render();
 
-        var tText = '<span style="font-weight: 600">Александр Михайлович!</span><br> Вы что-то не сделали!!!';
+        var tText = '<span style="font-weight: 600"></span><br> Вы что-то не сделали!!!';
 
         for (var i = 0; i < 1; i++) {
             initNoty(tText);
