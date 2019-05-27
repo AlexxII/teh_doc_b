@@ -23,12 +23,15 @@ $this->params['breadcrumbs'][] = $this->title;
   .main-scheduler {
     margin-top: 20px;
   }
+
   table.table-bordered > tbody > tr > td:nth-of-type(1) {
     /*background-color: #0a0a0a;*/
   }
+
   .fc-week-number {
     background-color: #e2e2e2;
   }
+
   .past div.fc-time, .past div.fc-title {
     text-decoration: line-through;
   }
@@ -48,194 +51,190 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script>
 
-  var calendar, Draggable;
+    var calendar, Draggable;
 
-  $(document).ready(function () {
+    $(document).ready(function () {
 
-    // initialize the external events
-    // -----------------------------------------------------------------
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    var calendarEl = document.getElementById('calendar');
-    calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: ['interaction', 'dayGrid', 'timeGrid', 'bootstrap'],
-      locale: 'ru',
-      themeSystem: 'bootstrap',
-      weekNumbers: true,
-      selectable: true,
-      nowIndicator: true,
-      slotDuration: '00:15:00',
-      minTime: '06:00:00',
-      navLinks: true,
-      eventSources: [
-        {
-          url: '/scheduler/events/list',
-          method: 'POST',
-          extraParams: {
-            _csrf: csrf
-          },
-          failure: function () {
-            console.log('Внимание! Ошибка получения событий из Журнала ВКС');
-          }
-        }
-      ],
-      buttonText: {
-        month: 'M',
-        week: 'Н',
-        day: 'Д',
-        list: 'Лист'
-      },
-      bootstrapFontAwesome: {
-        close: 'fa-times',
-        prev: 'fa-chevron-left',
-        next: 'fa-chevron-right',
-        prevYear: 'fa-angle-double-left',
-        nextYear: 'fa-angle-double-right'
-      },
-      header: {
-        left: 'dayGridMonth,timeGridWeek,timeGridDay',
-        center: 'title',
-        right: 'today prev,next'
-      },
-      customButtons: {
-        custom1: {
-          text: 'custom 1',
-          click: function () {
-            alert('clicked custom button 1!');
-          }
-        }
-      },
-      businessHours: [ // specify an array instead
-        {
-          daysOfWeek: [1, 2, 3, 4], // Monday, Tuesday, Wednesday, Thursday
-          startTime: '09:00',
-          endTime: '18:15'
-        },
-        {
-          daysOfWeek: [5], // Friday
-          startTime: '09:00',
-          endTime: '17:00'
-        }
-      ],
-      droppable: true, // this allows things to be dropped onto the calendar
-      showNonCurrentDates: false,
+        // initialize the external events
+        // -----------------------------------------------------------------
+        var csrf = $('meta[name=csrf-token]').attr("content");
+        var calendarEl = document.getElementById('calendar');
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: ['interaction', 'dayGrid', 'timeGrid', 'bootstrap'],
+            locale: 'ru',
+            themeSystem: 'bootstrap',
+            weekNumbers: true,
+            selectable: true,
+            nowIndicator: true,
+            slotDuration: '00:15:00',
+            minTime: '06:00:00',
+            navLinks: true,
+            eventSources: [
+                {
+                    url: '/scheduler/events/list',
+                    method: 'POST',
+                    extraParams: {
+                        _csrf: csrf
+                    },
+                    failure: function () {
+                        console.log('Внимание! Ошибка получения событий из Журнала ВКС');
+                    }
+                }
+            ],
+            buttonText: {
+                month: 'M',
+                week: 'Н',
+                day: 'Д',
+                list: 'Лист'
+            },
+            bootstrapFontAwesome: {
+                close: 'fa-times',
+                prev: 'fa-chevron-left',
+                next: 'fa-chevron-right',
+                prevYear: 'fa-angle-double-left',
+                nextYear: 'fa-angle-double-right'
+            },
+            header: {
+                left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                center: 'title',
+                right: 'today prev,next'
+            },
+            customButtons: {
+                custom1: {
+                    text: 'custom 1',
+                    click: function () {
+                        alert('clicked custom button 1!');
+                    }
+                }
+            },
+            businessHours: [ // specify an array instead
+                {
+                    daysOfWeek: [1, 2, 3, 4], // Monday, Tuesday, Wednesday, Thursday
+                    startTime: '09:00',
+                    endTime: '18:15'
+                },
+                {
+                    daysOfWeek: [5], // Friday
+                    startTime: '09:00',
+                    endTime: '17:00'
+                }
+            ],
+            droppable: true, // this allows things to be dropped onto the calendar
+            showNonCurrentDates: false,
 
-      //========================= rendering ==================================
-      eventRender: function (info) {
-        var ntoday = new Date();
-        if (info.event._instance.range.start < ntoday.getTime()) {
+            //========================= rendering ==================================
+            eventRender: function (info) {
+                var ntoday = new Date();
+                if (info.event._instance.range.start < ntoday.getTime()) {
 //                    console.log(info.el);
 //                    info.el.addClass('past');
 //                    info.el.children().addClass('past');
-        }
-      },
-
-
-      //========================= actions =====================================
-
-
-      drop: function (info) {
-
-      },
-      dateClick: function (info) {
-        // console.log(info.dateStr);
-        // info.dayEl.style.backgroundColor = 'red';
-      },
-      select: function (info) {
-        console.log('selected ' + info.startStr + ' to ' + info.endStr);
-        console.log(info);
-      },
-
-      //========================= events =======================================
-      eventResizeStart: function (info) {
-        console.log(info.view);
-      },
-      eventClick: function (info) {
-        info.jsEvent.preventDefault(); // don't let the browser navigate
-        if (info.event.url) {
-          var urlText = info.event.url;
-          var ar = urlText.split('/');
-          var req = ar[0];
-          var ident = ar[1];
-          console.log(ar[1]);
-
-          var c = $.confirm({
-            content: function () {
-              var self = this;
-              self.setContent('Checking callback flow');
-              return $.ajax({
-                url: '/scheduler/events/' + req,
-                dataType: 'json',
-                method: 'get',
-                data: {
-                  i: ident
                 }
-              }).done(function (response) {
-                self.setContentAppend('<div>Done!</div>');
-              }).fail(function () {
-                self.setContentAppend('<div>Fail!</div>');
-              }).always(function () {
-                self.setContentAppend('<div>Always!</div>');
-              });
             },
-            contentLoaded: function (data, status, xhr) {
-              self.setContentAppend('<div>Content loaded!</div>');
+
+
+            //========================= actions =====================================
+
+
+            drop: function (info) {
+
             },
-            onContentReady: function () {
-              this.setContentAppend('<div>Content ready!</div>');
+            dateClick: function (info) {
+                // console.log(info.dateStr);
+                // info.dayEl.style.backgroundColor = 'red';
             },
-            buttons: {
-              go: {
-                text: 'К СОБЫТИЮ',
-                action: function () {
-                  console.log('push - GO');
+            select: function (info) {
+                console.log('selected ' + info.startStr + ' to ' + info.endStr);
+                console.log(info);
+            },
+
+            //========================= events =======================================
+            eventResizeStart: function (info) {
+                console.log(info.view);
+            },
+            eventClick: function (info) {
+                info.jsEvent.preventDefault();
+                if (info.event.url) {
+                    var urlText = info.event.url;
+                    var ar = urlText.split('/');
+                    var req = ar[0];
+                    var ident = ar[1];
+
+                    var c = $.confirm({
+                        content: function () {
+                            var self = this;
+//                            self.setContent('');
+                            return $.ajax({
+                                url: '/scheduler/events/' + req,
+                                method: 'get',
+                                data: {
+                                    i: ident
+                                }
+                            }).done(function (response) {
+                                console.log(response);
+                            }).fail(function () {
+                                self.setContentAppend('<div>Что-то пошло не так!</div>');
+                            });
+                        },
+                        contentLoaded: function (data, status, xhr) {
+                            console.log(xhr);
+                            this.setContentAppend('<div>'+ data +'</div>');
+                        },
+                        type: 'blue',
+                        columnClass: 'medium',
+                        title: 'Подробности',
+                        buttons: {
+                            go: {
+                                btnClass: 'btn-blue',
+                                text: 'К СОБЫТИЮ',
+                                action: function () {
+
+                                    window.open('to');
+                                }
+                            },
+                            cancel: {
+                                text: 'НАЗАД'
+                            }
+                        }
+                    })
                 }
-              },
-              cancel: {
-                action: function () {
-                  console.log('push - CANCEL');
-                },
-                text: 'НАЗАД',
-              }
             }
-          })
+
+        });
+        calendar.render();
+
+        var tText = '<span style="font-weight: 600">Александр Михайлович!</span><br> Вы что-то не сделали!!!';
+
+        for (var i = 0; i < 1; i++) {
+            initNoty(tText);
         }
-      }
+
+        function initNoty(text) {
+            new Noty({
+                type: 'warning',
+                theme: 'mint',
+                text: text,
+                progressBar: true,
+                timeout: '8000',
+                closeWith: ['click'],
+                killer: true,
+                animation: {
+                    open: 'animated noty_effects_open noty_anim_out', // Animate.css class names
+                    close: 'animated noty_effects_close noty_anim_in' // Animate.css class names
+                }
+            }).show();
+        }
+
+
+        $('#nav-calendar').datepicker({
+            inline: true,
+            onSelect: function (formattedDate, date, inst) {
+                var momentDate = moment(date);
+                var fDate = momentDate.format('Y-MM-DD');
+                calendar.gotoDate(fDate);
+            }
+        })
 
     });
-    calendar.render();
-
-    var tText = '<span style="font-weight: 600">Александр Михайлович!</span><br> Вы что-то не сделали!!!';
-
-    for (var i = 0; i < 1; i++) {
-      initNoty(tText);
-    }
-
-    function initNoty(text) {
-      new Noty({
-        type: 'warning',
-        theme: 'mint',
-        text: text,
-        progressBar: true,
-        timeout: '8000',
-        closeWith: ['click'],
-        killer: true,
-        animation: {
-          open: 'animated noty_effects_open noty_anim_out', // Animate.css class names
-          close: 'animated noty_effects_close noty_anim_in' // Animate.css class names
-        }
-      }).show();
-    }
-
-
-    $('#nav-calendar').datepicker({
-      inline: true,
-      onSelect: function (formattedDate, date, inst) {
-        var momentDate = moment(date);
-        var fDate = momentDate.format('Y-MM-DD');
-        calendar.gotoDate(fDate);
-      },
-    })
-
-  });
 
 </script>

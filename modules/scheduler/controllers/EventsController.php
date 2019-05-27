@@ -70,17 +70,26 @@ class EventsController extends Controller
   public function actionVks($i)
   {
     $vksId = $i;
-    $session = VksSessions::findOne($vksId);
+    $model = VksSessions::findOne($vksId);
+
+    return $this->renderAjax('_vks_view', [
+      'model' => $model, true
+    ]);
     return var_dump($session->vks_type_text);
   }
 
   public function actionTo($i)
   {
     $toPlanDate = $i;
-    $req = ToSchedule::find()
+    $models = ToSchedule::find()
+      ->with(['admin', 'auditor', 'toType', 'toEq'])
       ->where(['plan_date' => $toPlanDate])
-      ->asArray()->all();
-    return var_dump($req);
+      ->all();
+
+    return $this->renderAjax('_to_view', [
+      'models' => $models, true
+    ]);
+//    return var_dump($req);
   }
 
 }
