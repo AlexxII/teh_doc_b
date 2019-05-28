@@ -122,7 +122,7 @@ class UserController extends Controller
 
   public function actionCalendarForm()
   {
-    return $this->render('_holiday_form');
+    return $this->renderAjax('_holiday_form');
   }
 
 

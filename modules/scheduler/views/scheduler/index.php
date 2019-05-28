@@ -140,12 +140,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             },
             dateClick: function (info) {
-                // console.log(info.dateStr);
+//                 console.log(info.dateStr);
+                 console.log(info);
                 // info.dayEl.style.backgroundColor = 'red';
             },
             select: function (info) {
-                console.log('selected ' + info.startStr + ' to ' + info.endStr);
-                console.log(info);
+//                console.log('selected ' + info.startStr + ' to ' + info.endStr);
             },
 
             //========================= events =======================================
