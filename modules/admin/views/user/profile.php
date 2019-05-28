@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
         },
         contentLoaded: function (data, status, xhr) {
           // this.setContentAppend('<div>Content loaded!</div>');
-        },
+        }
       });
     });
 
