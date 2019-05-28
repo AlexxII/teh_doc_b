@@ -53,15 +53,16 @@ class EventsController extends Controller
       } else {
         $result[$key]['color'] = '#dd6813';
       }
-//      $result[$key]['url'] = 'vks/sessions/view-up-session?id=' . $session['id'];
-      $result[$key]['url'] = 'vks/' . $session['id'];
+      $result[$key]['url'] = 'vks/sessions/view-up-session?id=' . $session['id'];
+      $result[$key]['exUrl'] = 'vks/' . $session['id'];
       $result[$key]['durationEditable'] = 'true';
       $count++;
     }
     foreach ($tos as $key => $to) {
       $result[$key + $count]['title'] = "Проведение ТО";
       $result[$key + $count]['start'] = $to->plan_date;
-      $result[$key + $count]['url'] = 'to/' . $to->plan_date;
+      $result[$key + $count]['exUrl'] = 'to/' . $to->plan_date;
+      $result[$key + $count]['url'] = 'tehdoc/to/month-schedule/view?id=' . $to->schedule_id;
     }
 
     return json_encode($result);
