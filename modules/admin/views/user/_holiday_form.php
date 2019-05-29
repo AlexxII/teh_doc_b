@@ -10,12 +10,12 @@ $this->params['breadcrumbs'][] = ['label' => 'Профиль пользоват�
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
+
 <style>
   .datepicker {
     z-index: 999999999;
   }
 </style>
-
 
 <div id="main-wrap">
   <div class="dynamic-wrap">

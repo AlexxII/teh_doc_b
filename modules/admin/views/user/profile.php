@@ -36,14 +36,20 @@ $this->params['breadcrumbs'][] = $this->title;
     </h3>
     <a class="btn btn-primary btn-sm" role="button" disabled="true">Сменить пароль</a>
     <a id="holiday" href="calendar-form" class="btn btn-primary btn-sm" role="button">График</a>
-    <a id="holiday_" type="button" onclick="notifSet ()" class="btn btn-primary btn-sm">Уведомления</a>
+    <!--    <a id="holiday_" type="button" onclick="notifSet ()" class="btn btn-primary btn-sm">Уведомления</a>-->
   </div>
+
+
+
+
+
 </div>
 
 
 <script>
 
   $(document).ready(function () {
+
     $('[data-toggle="tooltip"]').tooltip();
 
     $('#holiday').on('click', function (e) {
@@ -57,6 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
             btnClass: 'btn-success',
             text: 'Сохранить',
             action: function () {
+
             }
           },
           cancel: {
@@ -79,10 +86,6 @@ $this->params['breadcrumbs'][] = $this->title;
           // this.setContentAppend('<div>Content loaded!</div>');
         }
       });
-    });
-
-    $('.input-daterange input').each(function () {
-      $(this).datepicker('clearDates');
     });
 
   });

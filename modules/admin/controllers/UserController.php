@@ -117,12 +117,13 @@ class UserController extends Controller
 
   public function actionProfile()
   {
+
     return $this->render('profile');
   }
 
   public function actionCalendarForm()
   {
-//    return $this->renderAjax('_holiday_count');
+
     return $this->renderAjax('_holiday_form');
   }
 
