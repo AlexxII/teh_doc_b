@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <span class="text-muted dynamic-title" style="position: absolute;top:5px;left:10px;font-size: 10px"></span>
 
       <div class="dynamic-wrap">
-        <div class="form-group col-md-12 col-lg-12" style="margin-top: 10px">
+        <div class="form-group col-md-11 col-lg-11" style="margin-top: 10px">
           <input id="holiday-1" class="form-control datepicker-here" type="text" style="background-color: #fff"
                  readonly>
         </div>
