@@ -16,17 +16,13 @@ $this->params['breadcrumbs'][] = $this->title;
   }
 </style>
 
+
 <div id="main-wrap">
-  <div class="holiday-wrap">
-    <div class="row col-lg-11 col-md-11">
+  <div class="dynamic-wrap">
+    <div class="form-group" style="margin-top: 0px">
       <label>Часть отпуска:</label>
-      <div class="input-date">
-        <input id="holiday-1" class="form-control datepicker-here" type="text" style="background-color: #fff"
-               readonly>
-      </div>
-    </div>
-    <div class="row col-lg-1 col-md-1">
-      <button id="add">+</button>
+      <input id="holiday-1" class="form-control datepicker-here" type="text" style="background-color: #fff"
+             readonly>
     </div>
   </div>
 </div>
@@ -34,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script>
   $(document).ready(function () {
+
     $('.datepicker-here').datepicker({
       toggleSelected: false,
       multipleDatesSeparator: ' - ',

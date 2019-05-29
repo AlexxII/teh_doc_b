@@ -14,7 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-
 <div class="admin-category-pannel row">
   <div class="col-md-3 col-lg-3">
     <a href="#" class="thumbnail">
@@ -49,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     $('#holiday').on('click', function (e) {
       e.preventDefault();
+
       $.confirm({
         title: 'График отпусков',
         type: 'blue',
@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
         },
         contentLoaded: function (data, status, xhr) {
           // this.setContentAppend('<div>Content loaded!</div>');
-        },
+        }
       });
     });
 

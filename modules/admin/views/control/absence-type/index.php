@@ -2,15 +2,18 @@
 
 use yii\helpers\Html;
 use app\assets\FancytreeAsset;
+use app\assets\JConfirmAsset;
 
 FancytreeAsset::register($this);
+JConfirmAsset::register($this);
 
-$this->title = 'Виды ТО';
-$this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to']];
+
+$this->title = 'Причины отсутствия';
+$this->params['breadcrumbs'][] = ['label' => 'Профиль пользователя', 'url' => ['/admin/user/profile']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$about = "Панель управления видами технического обслуживания.";
-$add_hint = 'Добавить новый тип';
+$about = "Панель управления наименованиями причин отсутствия.";
+$add_hint = 'Добавить';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить';
 
@@ -45,7 +48,7 @@ $del_hint = 'Удалить';
 
 <div class="admin-category-pannel">
 
-  <h3><?= Html::encode('Виды ТО') ?>
+  <h3><?= Html::encode('Причины отсутствия') ?>
     <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
          data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
   </h3>
@@ -133,7 +136,7 @@ $del_hint = 'Удалить';
     $('.add-subcategory').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree('getTree');
-      var root = tree.findFirst('Виды ТО');
+      var root = tree.findFirst('Причины отсутствия');
       root.editCreateNode("child", " ");
     });
   });
@@ -151,7 +154,7 @@ $del_hint = 'Удалить';
 
   $(document).ready(function () {
     $('.del-node').click(function (event) {
-      var url = 'to-type/delete';
+      var url = 'delete';
       event.preventDefault();
       jc = $.confirm({
         icon: 'fa fa-question',
@@ -310,10 +313,10 @@ $del_hint = 'Удалить';
 
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/tehdoc/to/control/to-type/all-types';
-    var move_url = '/tehdoc/to/control/to-type/move-node';
-    var create_url = '/tehdoc/to/control/to-type/create-node';
-    var update_url = '/tehdoc/to/control/to-type/update-node';
+    var main_url = '/admin/control/absence-type/all-types';
+    var move_url = '/admin/control/absence-type/move-node';
+    var create_url = '/admin/control/absence-type/create-node';
+    var update_url = '/admin/control/absence-type/update-node';
 
     $("#fancyree_w0").fancytree({
       source: {
