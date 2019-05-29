@@ -85,6 +85,13 @@ TableBaseAsset::register($this);
           'title' => 'Управление пользователями системы',
         ]
       ],
+      [
+        'label' => 'Настройки',
+        'items' => [
+          '<li class="dropdown-header" style="font-size: 10px">Графики</li>',
+          ['label' => 'Причины отсутствия', 'url' => ['control/absence-type/index']],
+        ],
+      ],
       Yii::$app->user->isGuest ? (
       ['label' => 'Войти', 'url' => ['/site/login']]
       ) : ([
