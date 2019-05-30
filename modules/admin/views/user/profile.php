@@ -40,9 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
   </div>
 
 
-
-
-
 </div>
 
 
@@ -63,11 +60,14 @@ $this->params['breadcrumbs'][] = $this->title;
             btnClass: 'btn-success',
             text: 'Сохранить',
             action: function () {
-
+              $('#datepickers-container').html('');
             }
           },
           cancel: {
-            text: 'Отмена'
+            text: 'Отмена',
+            action: function () {
+              $('#datepickers-container').html('');
+            }
           }
         },
         content: function () {
@@ -90,6 +90,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
   });
 
+
+  function calendarShow(e) {
+    var id = $(e).attr('id');
+    var myDatepicker = $('#'+id).datepicker({
+      toggleSelected: false,
+      multipleDatesSeparator: ' - ',
+      range: true,
+      clearButton: true,
+      autoClose: true
+    }).data('datepicker');
+    myDatepicker.show();
+  }
+
+
+
+
+
+
+
+
+
+  ///=============================== тестирование УВЕДОМЛЕНИЯ =======================
+
   function notifyMe() {
     var notification = new Notification('Все еще отбеливаете??', {
       tag: 'qwe',
@@ -111,6 +134,5 @@ $this->params['breadcrumbs'][] = $this->title;
       })
     }
   }
-
 
 </script>

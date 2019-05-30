@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\vks\models;
+namespace app\modules\admin\models;
 
 
 class Absence extends \yii\db\ActiveRecord
@@ -11,10 +11,16 @@ class Absence extends \yii\db\ActiveRecord
     return 'people_absence_tbl';
   }
 
-  public function rules()
+  public function attributeLabels()
   {
-
-
+    return [
+      'id' => 'ID',
+      'date' => 'Часть отпуска:'
+    ];
   }
+//  public function rules()
+//  {
+//
+//  }
 
 }
