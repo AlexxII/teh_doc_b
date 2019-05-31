@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="main-scheduler row">
   <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
     <div id="nav-calendar"></div>
-    <a type="button" class="btn-primary" href="scheduler/full-year">Годовой</a>
+    <button class="btn-primary" href="scheduler/full-year" onclick="test()">Годовой
   </div>
   <div class="col-md-10 col-lg-10">
     <div id="full-calendar"></div>
@@ -40,8 +40,11 @@ $this->params['breadcrumbs'][] = $this->title;
         if (e.events.length > 0) {
           var content = '';
           for (var i in e.events) {
+
+            console.log(e.events[i].color);
+
             content += '<div class="event-tooltip-content">'
-              + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+              + '<div class="event-name" style="color: #ff5a35">' + e.events[i].name + '</div>'
               + '<div class="event-location">' + e.events[i].location + '</div>'
               + '</div>';
           }
@@ -160,7 +163,22 @@ $this->params['breadcrumbs'][] = $this->title;
           endDate: new Date(currentYear, 10, 17)
         }
       ]
-    })
+    });
+
+    function test() {
+      var data = [
+        {
+          id: 5,
+          name: 'TEST MEEEEEEEEEE',
+          location: 'eeeeeeee',
+          startDate: new Date(currentYear, 10, 17),
+          endDate: new Date(currentYear, 10, 18)
+        }
+      ];
+
+      $('#full-calendar').data('calendar').setDataSource(data);
+
+    }
   });
 
 
