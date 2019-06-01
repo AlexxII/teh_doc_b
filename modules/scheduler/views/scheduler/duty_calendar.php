@@ -1,20 +1,18 @@
 <?php
 
-use app\assets\NotyAsset;
 use app\assets\AirDatepickerAsset;
 use app\assets\fullcalendar\CalendarDaygridAsset;
 use app\assets\fullcalendar\CalendarTimegridAsset;
 use app\assets\fullcalendar\CalendarInteractionAsset;
 use app\assets\fullcalendar\CalendarBootstrapAsset;
 
-NotyAsset::register($this);
 CalendarDaygridAsset::register($this);
 CalendarTimegridAsset::register($this);
 CalendarInteractionAsset::register($this);
 CalendarBootstrapAsset::register($this);
 AirDatepickerAsset::register($this);
 
-$this->title = 'Планировщик';
+$this->title = 'График дежурств';
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -38,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="main-scheduler row">
   <div class="col-md-3 col-lg-3" style="margin-bottom: 15px">
     <div id="nav-calendar"></div>
+    <a type="button" class="btn-primary" href="scheduler/full-year">Годовой</a>
   </div>
   <div class="col-md-9 col-lg-9">
     <div id="calendar">
@@ -162,7 +161,6 @@ $this->params['breadcrumbs'][] = $this->title;
           var c = $.confirm({
             content: function () {
               var self = this;
-//                            self.setContent('');
               return $.ajax({
                 url: '/scheduler/events/' + req,
                 method: 'get',
@@ -200,29 +198,6 @@ $this->params['breadcrumbs'][] = $this->title;
       }
     });
     calendar.render();
-
-    var tText = '<span style="font-weight: 600"></span><br> Вы что-то не сделали!!!';
-
-    for (var i = 0; i < 1; i++) {
-      initNoty(tText);
-    }
-
-    function initNoty(text) {
-      new Noty({
-        type: 'warning',
-        theme: 'mint',
-        text: text,
-        progressBar: true,
-        timeout: '8000',
-        closeWith: ['click'],
-        killer: true,
-        animation: {
-          open: 'animated noty_effects_open noty_anim_out', // Animate.css class names
-          close: 'animated noty_effects_close noty_anim_in' // Animate.css class names
-        }
-      }).show();
-    }
-
 
     $('#nav-calendar').datepicker({
       inline: true,

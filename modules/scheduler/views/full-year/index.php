@@ -22,7 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="main-scheduler row">
   <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
     <div id="nav-calendar"></div>
-    <button class="btn-primary" href="scheduler/full-year" onclick="test()">Годовой
   </div>
   <div class="col-md-10 col-lg-10">
     <div id="full-calendar"></div>
@@ -32,6 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
   $(document).ready(function () {
     var currentYear = new Date().getFullYear();
+
+    var redDateTime = new Date(currentYear, 2, 13).getTime();
+    var circleDateTime = new Date(currentYear, 1, 20).getTime();
+    var borderDateTime = new Date(currentYear, 0, 12).getTime();
+
     $('#full-calendar').calendar({
       language: 'ru',
       enableContextMenu: true,
@@ -41,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
           var content = '';
           for (var i in e.events) {
 
-            console.log(e.events[i].color);
+            // console.log(e.events[i].color);
 
             content += '<div class="event-tooltip-content">'
               + '<div class="event-name" style="color: #ff5a35">' + e.events[i].name + '</div>'
@@ -58,12 +62,41 @@ $this->params['breadcrumbs'][] = $this->title;
           $(e.element).popover('show');
         }
       },
+      selectRange: function (e) {
+        var day = 24 * 60 * 60 * 1000;
+        console.log(((e.endDate - e.startDate) / day) + 1);
+      },
       mouseOutDay: function (e) {
         if (e.events.length > 0) {
           $(e.element).popover('hide');
         }
       },
-      dataSource: [
+      renderEnd: function (e) {
+        var year = e.currentYear;
+        // testt(year);
+        // console.log(e.currentYear);
+      },
+      customDayRenderer: function(element, date) {
+        if(date.getTime() == redDateTime) {
+          $(element).css('font-weight', 'bold');
+          $(element).css('font-size', '15px');
+          $(element).css('color', 'green');
+        }
+        else if(date.getTime() == circleDateTime) {
+          $(element).css('background-color', 'red');
+          $(element).css('color', 'white');
+          $(element).css('border-radius', '15px');
+        }
+        else if(date.getTime() == borderDateTime) {
+          $(element).css('border', '2px solid blue');
+        }
+      }
+    });
+
+    function testt(year) {
+      var currentYear = new Date().getFullYear();
+
+      var data =  [
         {
           id: 0,
           name: 'Google I/O',
@@ -162,24 +195,30 @@ $this->params['breadcrumbs'][] = $this->title;
           startDate: new Date(currentYear, 10, 17),
           endDate: new Date(currentYear, 10, 17)
         }
-      ]
-    });
-
-    function test() {
-      var data = [
-        {
-          id: 5,
-          name: 'TEST MEEEEEEEEEE',
-          location: 'eeeeeeee',
-          startDate: new Date(currentYear, 10, 17),
-          endDate: new Date(currentYear, 10, 18)
-        }
       ];
 
       $('#full-calendar').data('calendar').setDataSource(data);
-
     }
+
   });
+
+  function test() {
+    var currentYear = new Date().getFullYear();
+
+    console.log(new Date(currentYear, 1, 20).getTime());
+    var data = [
+      {
+        id: 5,
+        name: 'TEST MEEEEEEEEEE',
+        location: 'eeeeeeee',
+        startDate: new Date(currentYear, 10, 17),
+        endDate: new Date(currentYear, 10, 18)
+      }
+    ];
+
+    $('#full-calendar').data('calendar').setDataSource(data);
+
+  }
 
 
 </script>

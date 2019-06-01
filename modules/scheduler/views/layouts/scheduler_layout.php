@@ -90,26 +90,24 @@ JConfirmAsset::register($this);
     'encodeLabels' => false,
     'items' => [
       [
-        'label' => 'Пусто',
+        'label' => 'Календари',
         'items' => [
-          '<li class="dropdown-header" style="font-size: 10px">Пусто</li>',
-          ['label' => 'Пусто', 'url' => ['#']],
-          ['label' => 'Пусто (админ)',
-            'url' => ['#'],
-            'visible' => Yii::$app->user->identity->isAdmin],
+          '<li class="dropdown-header" style="font-size: 10px">Календари</li>',
+          ['label' => 'Производственный календарь', 'url' => ['/scheduler/full-year/production-calendar']],
+          ['label' => 'Календари отпусков', 'url' => ['/scheduler/full-year/vacation-calendar']],
+          ['label' => 'Глобальный', 'url' => ['/scheduler/full-year']],
+          ['label' => 'Дежурства', 'url' => ['/scheduler/full-year']],
           '<li class="divider"></li>',
-          '<li class="dropdown-header" style="font-size: 10px">Пусто</li>',
-          ['label' => 'Пусто', 'url' => ['#']],
-          ['label' => 'Пусто (админ)',
-            'url' => ['#'],
-            'visible' => Yii::$app->user->identity->isAdmin]
+          '<li class="dropdown-header" style="font-size: 10px">События</li>',
+          ['label' => 'Пользовательские', 'url' => ['#']],
         ],
       ],
       [
         'label' => 'Настройки',
         'items' => [
-          '<li class="dropdown-header" style="font-size: 10px">Системные</li>',
-          ['label' => 'Пусто', 'url' => ['#']],
+          '<li class="dropdown-header" style="font-size: 10px">Календари</li>',
+          ['label' => 'Праздники', 'url' => ['#']],
+          ['label' => 'План-график событий', 'url' => ['#']],
         ],
       ],
       Yii::$app->user->isGuest ? (

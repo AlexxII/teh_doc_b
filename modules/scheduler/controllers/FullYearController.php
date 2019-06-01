@@ -11,4 +11,14 @@ class FullYearController extends Controller
 
     return $this->render('index');
   }
+
+  public function actionProductionCalendar()
+  {
+    return $this->render('production_calendar');
+  }
+
+  public function actionVacationCalendar()
+  {
+    return $this->render('vacation_calendar');
+  }
 }
