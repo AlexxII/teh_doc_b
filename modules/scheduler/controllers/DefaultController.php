@@ -23,4 +23,9 @@ class DefaultController extends Controller
     return json_encode($data);
   }
 
+  public function actionDutyCalendar()
+  {
+    return $this->render('duty_calendar');
+  }
+
 }

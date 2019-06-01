@@ -13,6 +13,7 @@ CalendarBootstrapAsset::register($this);
 AirDatepickerAsset::register($this);
 
 $this->title = 'График дежурств';
+$this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -33,14 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
 </style>
 
 
-<div class="main-scheduler row">
-  <div class="col-md-3 col-lg-3" style="margin-bottom: 15px">
-    <div id="nav-calendar"></div>
-    <a type="button" class="btn-primary" href="scheduler/full-year">Годовой</a>
-  </div>
-  <div class="col-md-9 col-lg-9">
+<div class="main-scheduler">
+  <div class="col-md-12 col-lg-12">
     <div id="calendar">
-
     </div>
   </div>
 </div>
@@ -116,7 +112,6 @@ $this->params['breadcrumbs'][] = $this->title;
         }
       ],
       droppable: true, // this allows things to be dropped onto the calendar
-      showNonCurrentDates: false,
 
       //========================= rendering ==================================
       eventRender: function (info) {

@@ -6,7 +6,7 @@ use app\assets\BootstrapDatepickerAsset;
 BootstrapYearCalendarAsset::register($this);
 BootstrapDatepickerAsset::register($this);
 
-$this->title = 'Весь год';
+$this->title = 'Глобальный';
 $this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -76,27 +76,27 @@ $this->params['breadcrumbs'][] = $this->title;
         // testt(year);
         // console.log(e.currentYear);
       },
-      customDayRenderer: function(element, date) {
-        if(date.getTime() == redDateTime) {
+      customDayRenderer: function (element, date) {
+        if (date.getTime() == redDateTime) {
           $(element).css('font-weight', 'bold');
           $(element).css('font-size', '15px');
           $(element).css('color', 'green');
         }
-        else if(date.getTime() == circleDateTime) {
+        else if (date.getTime() == circleDateTime) {
           $(element).css('background-color', 'red');
           $(element).css('color', 'white');
           $(element).css('border-radius', '15px');
         }
-        else if(date.getTime() == borderDateTime) {
+        else if (date.getTime() == borderDateTime) {
           $(element).css('border', '2px solid blue');
         }
-      }
+      },
     });
 
     function testt(year) {
       var currentYear = new Date().getFullYear();
 
-      var data =  [
+      var data = [
         {
           id: 0,
           name: 'Google I/O',
