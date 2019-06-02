@@ -233,42 +233,7 @@ $this->params['breadcrumbs'][] = $this->title;
       }
     });
     calendar.render();
-
-    var tText = '<span style="font-weight: 600"></span><br> Вы что-то не сделали!!!';
-
-    // for (var i = 0; i < 1; i++) {
-    //   initNoty(tText);
-    // }
-
-    function initNoty(text) {
-      new Noty({
-        type: 'warning',
-        theme: 'mint',
-        text: text,
-        progressBar: true,
-        timeout: '8000',
-        closeWith: ['click'],
-        killer: true,
-        animation: {
-          open: 'animated noty_effects_open noty_anim_out', // Animate.css class names
-          close: 'animated noty_effects_close noty_anim_in' // Animate.css class names
-        }
-      }).show();
-    }
-
-
   });
-
-  function te() {
-    $('#nav-calendar').datepicker({
-      autoClose: true,
-      onSelect: function (formattedDate, date, inst) {
-        var momentDate = moment(date);
-        var fDate = momentDate.format('Y-MM-DD');
-        calendar.gotoDate(fDate);
-      }
-    })
-  }
 
   function calendarShow(e) {
     var id = $(e).attr('id');
@@ -284,6 +249,31 @@ $this->params['breadcrumbs'][] = $this->title;
       }
     }).data('datepicker');
     myDatepicker.show();
+  }
+
+
+  // ================================ Оповещенияя =====================================
+
+  var tText = '<span style="font-weight: 600"></span><br> Вы что-то не сделали!!!';
+
+  // for (var i = 0; i < 1; i++) {
+  //   initNoty(tText);
+  // }
+
+  function initNoty(text) {
+    new Noty({
+      type: 'warning',
+      theme: 'mint',
+      text: text,
+      progressBar: true,
+      timeout: '8000',
+      closeWith: ['click'],
+      killer: true,
+      animation: {
+        open: 'animated noty_effects_open noty_anim_out', // Animate.css class names
+        close: 'animated noty_effects_close noty_anim_in' // Animate.css class names
+      }
+    }).show();
   }
 
 

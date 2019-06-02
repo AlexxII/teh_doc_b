@@ -27,7 +27,7 @@ AirDatepickerAsset::register($this);
     <?= $form->field($model, 'title')->textInput(['class' => 'date form-control'])->hint(' ', ['class' => ' w3-label-under']); ?>
   </div>
   <div class="form-group">
-    <div class="col-lg-6 col-md-6 row">
+    <div class="col-lg-6 col-md-6">
       <?= $form->field($model, 'start_date')->textInput(['class' => 'date form-control'])->hint(' ', ['class' => ' w3-label-under']); ?>
     </div>
     <div class="col-lg-6 col-md-6">

@@ -98,6 +98,8 @@ class EventsController extends Controller
   public function actionEventForm($startDate, $endDate)
   {
     $model = new Event();
+    $model->start_date = $startDate;
+    $model->end_date = $endDate;
     return $this->renderAjax('_create_form', [
       'model' => $model,
       'startDate' => $startDate,
