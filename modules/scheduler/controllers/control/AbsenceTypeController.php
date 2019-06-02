@@ -1,11 +1,11 @@
 <?php
 
-namespace app\modules\admin\controllers\control;
+namespace app\modules\scheduler\controllers\control;
 
 use Yii;
 use yii\web\Controller;
 
-use app\modules\admin\models\AbsenceType;
+use app\modules\scheduler\models\AbsenceType;
 
 class AbsenceTypeController extends Controller
 {

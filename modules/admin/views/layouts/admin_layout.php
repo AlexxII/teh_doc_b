@@ -89,7 +89,7 @@ TableBaseAsset::register($this);
         'label' => 'Настройки',
         'items' => [
           '<li class="dropdown-header" style="font-size: 10px">Графики</li>',
-          ['label' => 'Причины отсутствия', 'url' => ['control/absence-type/index']],
+          ['label' => 'Пусто', 'url' => ['#']],
         ],
       ],
       Yii::$app->user->isGuest ? (

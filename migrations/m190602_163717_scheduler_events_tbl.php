@@ -3,12 +3,12 @@
 use yii\db\Migration;
 
 /**
- * Class m190529_120802_people_absence_tbl
+ * Class m190602_163717_scheduler_events_tbl
  */
-class m190529_120802_people_absence_tbl extends Migration
+class m190602_163717_scheduler_events_tbl extends Migration
 {
 
-  const TABLE_NAME = '{{%people_absence_tbl}}';
+  const TABLE_NAME = '{{%scheduler_events_tbl}}';
 
   public function up()
   {
@@ -18,11 +18,12 @@ class m190529_120802_people_absence_tbl extends Migration
     }
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->bigInteger()->notNull(),
+      'start_date' => $this->date()->notNull(),
+      'end_date' => $this->date()->notNull(),
+      'title' => $this->string(255),
+      'description' => $this->string(255),
       'user_id' => $this->bigInteger()->notNull(),
-      'absence_type' => $this->integer()->notNull(),
-      'date_type' => $this->boolean()->notNull(),
-      'date' => $this->string(120),
-      'valid' => $this->boolean()->defaultValue(1),
+      'valid' => $this->boolean()->defaultValue(1)
     ], $tableOptions);
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
@@ -34,6 +35,7 @@ class m190529_120802_people_absence_tbl extends Migration
     $this->dropTable(self::TABLE_NAME);
     return false;
   }
+
 
 
 }

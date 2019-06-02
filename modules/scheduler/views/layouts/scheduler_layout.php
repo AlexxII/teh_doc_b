@@ -108,6 +108,7 @@ JConfirmAsset::register($this);
           '<li class="dropdown-header" style="font-size: 10px">Календари</li>',
           ['label' => 'Праздники', 'url' => ['#']],
           ['label' => 'План-график событий', 'url' => ['#']],
+          ['label' => 'Причины отсутствия', 'url' => ['/scheduler/control/absence-type']],
         ],
       ],
       Yii::$app->user->isGuest ? (

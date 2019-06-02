@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\admin\models;
+namespace app\modules\scheduler\models;
 
 use yii\web\NotFoundHttpException;
 
@@ -13,7 +13,7 @@ class AbsenceType extends \yii\db\ActiveRecord
 
   public static function tableName()
   {
-    return 'people_absence_type_tbl';
+    return 'scheduler_absence_type_tbl';
   }
 
   public function __construct()

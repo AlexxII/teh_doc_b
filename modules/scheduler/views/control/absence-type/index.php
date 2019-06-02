@@ -9,7 +9,7 @@ JConfirmAsset::register($this);
 
 
 $this->title = 'Причины отсутствия';
-$this->params['breadcrumbs'][] = ['label' => 'Профиль пользователя', 'url' => ['/admin/user/profile']];
+$this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель управления наименованиями причин отсутствия.";
@@ -313,10 +313,10 @@ $del_hint = 'Удалить';
 
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/admin/control/absence-type/all-types';
-    var move_url = '/admin/control/absence-type/move-node';
-    var create_url = '/admin/control/absence-type/create-node';
-    var update_url = '/admin/control/absence-type/update-node';
+    var main_url = '/scheduler/control/absence-type/all-types';
+    var move_url = '/scheduler/control/absence-type/move-node';
+    var create_url = '/scheduler/control/absence-type/create-node';
+    var update_url = '/scheduler/control/absence-type/update-node';
 
     $("#fancyree_w0").fancytree({
       source: {

@@ -192,7 +192,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         <?php endif; ?>
 
       </div>
-      <div class="form-group">
+      <div class="form`-group">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => 'btn btn-primary']) ?>
       </div>
     </div>
