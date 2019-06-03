@@ -3,9 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-use app\assets\AirDatepickerAsset;
+use app\assets\BootstrapDatepickerAsset;
 
-AirDatepickerAsset::register($this);
+BootstrapDatepickerAsset::register($this);
 
 ?>
 
@@ -13,6 +13,7 @@ AirDatepickerAsset::register($this);
   .datepicker {
     z-index: 999999999;
   }
+
   .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
     background-color: #fff;
     opacity: 1;
@@ -43,5 +44,31 @@ AirDatepickerAsset::register($this);
 
 
 <script>
+    $(document).ready(function () {
+        $('.vks-date').datepicker({
+            format: 'd MM yyyy г.',
+            autoclose: true,
+            language: "ru",
+            startView: "days",
+            minViewMode: "days",
+            todayHighlight: true,
+            daysOfWeekHighlighted: [0, 6]
+        });
+
+        $('.vks-date').datepicker({
+            format: 'd MM yyyy г.',
+            autoclose: true,
+            language: "ru",
+            startView: "days",
+            minViewMode: "days",
+            clearBtn: true,
+            todayHighlight: true,
+            daysOfWeekHighlighted: [0, 6]
+        });
+
+
+
+    });
+
 
 </script>

@@ -150,7 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
           content: function () {
             var self = this;
             return $.ajax({
-              url: '/scheduler/events/event-form',
+              url: '/scheduler/events/create-single-event',
               method: 'get',
               data: {
                 startDate: info.startStr,

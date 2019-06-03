@@ -95,7 +95,7 @@ class EventsController extends Controller
 //    return var_dump($req);
   }
 
-  public function actionEventForm($startDate, $endDate)
+  public function actionCreateSingleEvent($startDate, $endDate)
   {
     $model = new Event();
     $model->start_date = $startDate;
