@@ -12,7 +12,7 @@ CalendarDaygridAsset::register($this);
 CalendarTimegridAsset::register($this);
 CalendarInteractionAsset::register($this);
 CalendarBootstrapAsset::register($this);
-AirDatepickerAsset::register($this);
+//AirDatepickerAsset::register($this);
 
 $this->title = 'Планировщик';
 $this->params['breadcrumbs'][] = $this->title;
@@ -173,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
               btnClass: 'btn-blue',
               text: 'Сохранить',
               action: function () {
-
+                  $('#w0').submit();
               }
             },
             cancel: {
