@@ -39,6 +39,8 @@ class EventsController extends Controller
       ->groupBy('plan_date')
       ->with('toType')
       ->all();
+    $events = Event::find()
+      ->all();
 
     $now = date("Y-m-d");
     $count = 0;
@@ -66,7 +68,12 @@ class EventsController extends Controller
       $result[$key + $count]['exUrl'] = 'to/' . $to->plan_date;
       $result[$key + $count]['url'] = 'tehdoc/to/month-schedule/view?id=' . $to->schedule_id;
     }
-
+    foreach ($events as $key => $event) {
+      $result[$key + $count]['title'] = $event->title;
+      $result[$key + $count]['start'] = $event->start_date;
+      $result[$key + $count]['end'] = $event->end_date;
+      $result[$key + $count]['color'] = $event->color;
+    }
     return json_encode($result);
   }
 
@@ -95,7 +102,7 @@ class EventsController extends Controller
 //    return var_dump($req);
   }
 
-  public function actionCreateSingleEvent($startDate, $endDate)
+  public function actionEventForm($startDate, $endDate)
   {
     $model = new Event();
     $sDate = date('d.m.Y', strtotime($startDate));
@@ -107,6 +114,27 @@ class EventsController extends Controller
       'startDate' => $startDate,
       'endDate' => $endDate
     ]);
+  }
+
+  public function actionSaveEvent()
+  {
+    if (isset($_POST['msg'])) {
+      $userId = Yii::$app->user->identity->id;
+      $msg = $_POST['msg'];
+      $model = new Event();
+      $model->start_date = date('Y-m-d', strtotime($msg['start']));
+      $model->end_date = date('Y-m-d', strtotime($msg['end']));
+      $model->title = $msg['title'];
+      $model->description = $msg['desc'];
+      $model->color = $msg['color'];
+      $model->user_id = $userId;
+
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
   }
 
 }
