@@ -47,7 +47,6 @@ AirDatepickerAsset::register($this);
     </div>
   </div>
 </div>
-</div>
 
 <?php ActiveForm::end(); ?>
 

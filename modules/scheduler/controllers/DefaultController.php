@@ -17,10 +17,4 @@ class DefaultController extends Controller
     return $this->render('edit');
   }
 
-  public function actionEventsList()
-  {
-    $data = $_POST['p'];
-    return json_encode($data);
-  }
-
 }

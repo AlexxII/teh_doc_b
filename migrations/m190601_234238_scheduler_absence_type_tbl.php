@@ -6,9 +6,9 @@ use app\base\MHelper;
 /**
  * Class m190528_112418_people_absence_type_tbl
  */
-class m190528_112418_people_absence_type_tbl extends Migration
+class m190601_234238_scheduler_absence_type_tbl extends Migration
 {
-  const TABLE_NAME = '{{%people_absence_type_tbl}}';
+  const TABLE_NAME = '{{%scheduler_absence_type_tbl}}';
 
   public function up()
   {
