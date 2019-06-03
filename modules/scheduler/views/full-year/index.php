@@ -3,8 +3,8 @@
 use app\assets\BootstrapYearCalendarAsset;
 use app\assets\BootstrapDatepickerAsset;
 
-BootstrapYearCalendarAsset::register($this);
 BootstrapDatepickerAsset::register($this);
+BootstrapYearCalendarAsset::register($this);
 
 $this->title = 'Глобальный';
 $this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
