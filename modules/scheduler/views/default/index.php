@@ -12,7 +12,7 @@ CalendarDaygridAsset::register($this);
 CalendarTimegridAsset::register($this);
 CalendarInteractionAsset::register($this);
 CalendarBootstrapAsset::register($this);
-AirDatepickerAsset::register($this);
+//AirDatepickerAsset::register($this);
 
 $this->title = 'Планировщик';
 $this->params['breadcrumbs'][] = $this->title;
@@ -150,7 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
           content: function () {
             var self = this;
             return $.ajax({
-              url: '/scheduler/events/event-form',
+              url: '/scheduler/events/create-single-event',
               method: 'get',
               data: {
                 startDate: info.startStr,
@@ -173,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
               btnClass: 'btn-blue',
               text: 'Сохранить',
               action: function () {
-
+                  $('#w0').submit();
               }
             },
             cancel: {
