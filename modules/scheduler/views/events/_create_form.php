@@ -74,17 +74,5 @@ BootstrapDatepickerAsset::register($this);
 
 
     });
-
-
-  $('#start-date').datepicker({
-    format: 'd MM yyyy г.',
-    autoclose: true,
-    language: "ru",
-    startView: "days",
-    minViewMode: "days",
-    clearBtn: true,
-    todayHighlight: true,
-    daysOfWeekHighlighted: [0, 6]
-  })
-
+  
 </script>
