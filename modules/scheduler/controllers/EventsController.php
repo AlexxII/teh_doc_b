@@ -39,7 +39,11 @@ class EventsController extends Controller
       ->groupBy('plan_date')
       ->with('toType')
       ->all();
+
+    $luser = Yii::$app->user->identity->id;
+
     $events = Event::find()
+      ->where(['user_id' => $luser])
       ->all();
 
     $now = date("Y-m-d");
@@ -72,7 +76,8 @@ class EventsController extends Controller
       $result[$key + $count]['title'] = $event->title;
       $result[$key + $count]['start'] = $event->start_date;
       $result[$key + $count]['end'] = $event->end_date;
-      $result[$key + $count]['color'] = $event->color;
+      $result[$key + $count]['color'] = $event->color ;
+      $result[$key + $count]['exUrl'] = 'sub-event/' . $event->id;
     }
     return json_encode($result);
   }
@@ -100,6 +105,16 @@ class EventsController extends Controller
       'models' => $models, true
     ]);
 //    return var_dump($req);
+  }
+
+  public function actionSubEvent($i)
+  {
+    $sEventId = $i;
+    $model = Event::findOne($sEventId);
+
+    return $this->renderAjax('_sub_event_view', [
+      'model' => $model, true
+    ]);
   }
 
   public function actionEventForm($startDate, $endDate)

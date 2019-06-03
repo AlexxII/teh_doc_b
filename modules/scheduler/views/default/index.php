@@ -243,9 +243,33 @@ $this->params['breadcrumbs'][] = $this->title;
                   window.open(url);
                 }
               },
+              edit: {
+                btnClass: 'btn-blue',
+                text: 'Обновить',
+                action: function () {
+                }
+              },
+              del: {
+                btnClass: 'btn-red',
+                text: 'Удалить',
+                action: function () {
+                }
+              },
               cancel: {
                 text: 'НАЗАД'
               }
+            },
+            onContentReady: function () {
+              var self = this;
+
+              this.buttons.ok.disable();
+              this.$content.find('#event-title').on('keyup mouseclick', function(){
+                if ($(this).val() != ''){
+                  self.buttons.ok.enable();
+                } else {
+                  self.buttons.ok.disable();
+                }
+              });
             }
           })
         }
