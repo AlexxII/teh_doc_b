@@ -36,14 +36,17 @@ $this->params['breadcrumbs'][] = $this->title;
     </h3>
     <a class="btn btn-primary btn-sm" role="button" disabled="true">Сменить пароль</a>
     <a id="holiday" href="calendar-form" class="btn btn-primary btn-sm" role="button">График</a>
-    <a id="holiday_" type="button" onclick="notifSet ()" class="btn btn-primary btn-sm">Уведомления</a>
+    <!--    <a id="holiday_" type="button" onclick="notifSet ()" class="btn btn-primary btn-sm">Уведомления</a>-->
   </div>
+
+
 </div>
 
 
 <script>
 
   $(document).ready(function () {
+
     $('[data-toggle="tooltip"]').tooltip();
 
     $('#holiday').on('click', function (e) {
@@ -57,10 +60,14 @@ $this->params['breadcrumbs'][] = $this->title;
             btnClass: 'btn-success',
             text: 'Сохранить',
             action: function () {
+              $('#datepickers-container').html('');
             }
           },
           cancel: {
-            text: 'Отмена'
+            text: 'Отмена',
+            action: function () {
+              $('#datepickers-container').html('');
+            }
           }
         },
         content: function () {
@@ -81,11 +88,30 @@ $this->params['breadcrumbs'][] = $this->title;
       });
     });
 
-    $('.input-daterange input').each(function () {
-      $(this).datepicker('clearDates');
-    });
-
   });
+
+
+  function calendarShow(e) {
+    var id = $(e).attr('id');
+    var myDatepicker = $('#'+id).datepicker({
+      toggleSelected: false,
+      multipleDatesSeparator: ' - ',
+      range: true,
+      clearButton: true,
+      autoClose: true
+    }).data('datepicker');
+    myDatepicker.show();
+  }
+
+
+
+
+
+
+
+
+
+  ///=============================== тестирование УВЕДОМЛЕНИЯ =======================
 
   function notifyMe() {
     var notification = new Notification('Все еще отбеливаете??', {
@@ -108,6 +134,5 @@ $this->params['breadcrumbs'][] = $this->title;
       })
     }
   }
-
 
 </script>

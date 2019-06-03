@@ -2,6 +2,7 @@
 
 namespace app\modules\scheduler\controllers;
 
+use app\modules\scheduler\models\Event;
 use app\modules\tehdoc\modules\to\models\ToSchedule;
 use app\modules\vks\models\VksSessions;
 use Yii;
@@ -9,6 +10,7 @@ use yii\web\Controller;
 
 class EventsController extends Controller
 {
+
   public function actionIndex()
   {
     return $this->render('index');
@@ -91,6 +93,18 @@ class EventsController extends Controller
       'models' => $models, true
     ]);
 //    return var_dump($req);
+  }
+
+  public function actionEventForm($startDate, $endDate)
+  {
+    $model = new Event();
+    $model->start_date = $startDate;
+    $model->end_date = $endDate;
+    return $this->renderAjax('_create_form', [
+      'model' => $model,
+      'startDate' => $startDate,
+      'endDate' => $endDate
+    ]);
   }
 
 }

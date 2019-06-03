@@ -13,6 +13,8 @@ use app\modules\admin\models\SignupForm;
 use app\modules\admin\models\UserUpdateForm;
 use app\modules\admin\models\PasswordChangeForm;
 
+use app\modules\admin\models\Absence;
+
 /**
  * CategoryController implements the CRUD actions for Category model.
  */
@@ -100,7 +102,6 @@ class UserController extends Controller
     return $this->render('passwordChange', [
       'model' => $model,
     ]);
-
   }
 
   public function actionDeleteUser()
@@ -113,6 +114,7 @@ class UserController extends Controller
       }
       return false;
     }
+    return false;
   }
 
   public function actionProfile()
@@ -122,8 +124,10 @@ class UserController extends Controller
 
   public function actionCalendarForm()
   {
-//    return $this->renderAjax('_holiday_count');
-    return $this->renderAjax('_holiday_form');
+    $model = new Absence;
+    return $this->renderAjax('_holiday_form', [
+      'model' => $model
+    ]);
   }
 
 

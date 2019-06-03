@@ -1,20 +1,19 @@
 <?php
 
-use app\assets\NotyAsset;
 use app\assets\AirDatepickerAsset;
 use app\assets\fullcalendar\CalendarDaygridAsset;
 use app\assets\fullcalendar\CalendarTimegridAsset;
 use app\assets\fullcalendar\CalendarInteractionAsset;
 use app\assets\fullcalendar\CalendarBootstrapAsset;
 
-NotyAsset::register($this);
 CalendarDaygridAsset::register($this);
 CalendarTimegridAsset::register($this);
 CalendarInteractionAsset::register($this);
 CalendarBootstrapAsset::register($this);
 AirDatepickerAsset::register($this);
 
-$this->title = 'Планировщик';
+$this->title = 'График дежурств';
+$this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -32,28 +31,19 @@ $this->params['breadcrumbs'][] = $this->title;
   .past div.fc-time, .past div.fc-title {
     text-decoration: line-through;
   }
-   .datepicker {
-     z-index: 999999999;
-   }
-  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    background-color: #fff;
-    opacity: 1;
-  }
 </style>
 
 
 <div class="main-scheduler">
-  <div class="">
+  <div class="col-md-12 col-lg-12">
     <div id="calendar">
-
     </div>
   </div>
 </div>
 
 <script>
 
-  var calendar, Draggable, navCalendar;
-  var calInput = '<input class="form-control" id="nav-calendar" placeholder="Выберите дату" onclick="calendarShow(this)">';
+  var calendar, Draggable;
 
   $(document).ready(function () {
 
@@ -79,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
             _csrf: csrf
           },
           failure: function () {
-            console.log('Внимание! Ошибка получения событий!');
+            console.log('Внимание! Ошибка получения событий из Журнала ВКС');
           }
         }
       ],
@@ -97,24 +87,15 @@ $this->params['breadcrumbs'][] = $this->title;
         nextYear: 'fa-angle-double-right'
       },
       header: {
-        left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1',
+        left: 'dayGridMonth,timeGridWeek,timeGridDay',
         center: 'title',
         right: 'today prev,next'
       },
       customButtons: {
         custom1: {
-          text: 'Навигация',
+          text: 'custom 1',
           click: function () {
-            navCalendar = $.confirm({
-              title: 'Установка даты',
-              content: calInput,
-              buttons: {
-                cancel: {
-                  btnClass: 'btn-red',
-                  text: 'Отмена'
-                }
-              }
-            })
+            alert('clicked custom button 1!');
           }
         }
       },
@@ -130,7 +111,7 @@ $this->params['breadcrumbs'][] = $this->title;
           endTime: '17:00'
         }
       ],
-      showNonCurrentDates: true,
+      droppable: true, // this allows things to be dropped onto the calendar
 
       //========================= rendering ==================================
       eventRender: function (info) {
@@ -145,48 +126,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
       //========================= actions =====================================
 
-      select: function (info) {
-        var c = $.confirm({
-          content: function () {
-            var self = this;
-            return $.ajax({
-              url: '/scheduler/events/event-form',
-              method: 'get',
-              data: {
-                startDate: info.startStr,
-                endDate: info.endStr
-              }
-            }).done(function (response) {
-              // console.log(response);
-            }).fail(function () {
-              self.setContentAppend('<div>Что-то пошло не так!</div>');
-            });
-          },
-          contentLoaded: function (data, status, xhr) {
-            this.setContentAppend('<div>' + data + '</div>');
-          },
-          type: 'blue',
-          columnClass: 'medium',
-          title: 'Добавить событие',
-          buttons: {
-            go: {
-              btnClass: 'btn-blue',
-              text: 'Сохранить',
-              action: function () {
 
-              }
-            },
-            cancel: {
-              btnClass: 'btn-red',
-              text: 'Отмена'
-            }
-          }
-        })
+      drop: function (info) {
+
+      },
+      dateClick: function (info) {
+//                 console.log(info.dateStr);
+        console.log(info);
+        // info.dayEl.style.backgroundColor = 'red';
+      },
+      select: function (info) {
+//                console.log('selected ' + info.startStr + ' to ' + info.endStr);
       },
 
       //========================= events =======================================
+      eventResizeStart: function (info) {
+        console.log(info.view);
+      },
       eventClick: function (info) {
         info.jsEvent.preventDefault();
+        console.log(info.event.extendedProps);
         if (info.event.extendedProps) {
           var url = info.event.url;
           var urlText = info.event.extendedProps.exUrl;
@@ -204,12 +163,13 @@ $this->params['breadcrumbs'][] = $this->title;
                   i: ident
                 }
               }).done(function (response) {
-                // console.log(response);
+                console.log(response);
               }).fail(function () {
                 self.setContentAppend('<div>Что-то пошло не так!</div>');
               });
             },
             contentLoaded: function (data, status, xhr) {
+              console.log(xhr);
               this.setContentAppend('<div>' + data + '</div>');
             },
             type: 'blue',
@@ -233,48 +193,16 @@ $this->params['breadcrumbs'][] = $this->title;
       }
     });
     calendar.render();
-  });
 
-  function calendarShow(e) {
-    var id = $(e).attr('id');
-    var myDatepicker = $('#'+id).datepicker({
-      toggleSelected: false,
-      clearButton: true,
-      autoClose: true,
+    $('#nav-calendar').datepicker({
+      inline: true,
       onSelect: function (formattedDate, date, inst) {
         var momentDate = moment(date);
         var fDate = momentDate.format('Y-MM-DD');
         calendar.gotoDate(fDate);
-        navCalendar.close();
       }
-    }).data('datepicker');
-    myDatepicker.show();
-  }
+    })
 
-
-  // ================================ Оповещенияя =====================================
-
-  var tText = '<span style="font-weight: 600"></span><br> Вы что-то не сделали!!!';
-
-  // for (var i = 0; i < 1; i++) {
-  //   initNoty(tText);
-  // }
-
-  function initNoty(text) {
-    new Noty({
-      type: 'warning',
-      theme: 'mint',
-      text: text,
-      progressBar: true,
-      timeout: '8000',
-      closeWith: ['click'],
-      killer: true,
-      animation: {
-        open: 'animated noty_effects_open noty_anim_out', // Animate.css class names
-        close: 'animated noty_effects_close noty_anim_in' // Animate.css class names
-      }
-    }).show();
-  }
-
+  });
 
 </script>

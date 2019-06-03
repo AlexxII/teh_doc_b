@@ -290,7 +290,6 @@ $vks_add_combined = "Добавить совмещенный сеанс";
       div.find('.vks-type').clone().attr('name', 'test-type[' + mainCounter + ']').attr('id', 'new-type-' + mainCounter).insertAfter(insert.find('.control-label'));
       div.find('.vks-place').clone().attr('name', 'test-place[' + mainCounter + ']').insertAfter(insert.find('.place-label'));
 
-      $(insert).tooltip();
       if (mainCounter == 1) {
         insert.insertAfter(div);
       } else {
