@@ -13,7 +13,6 @@ BootstrapDatepickerAsset::register($this);
   .datepicker {
     z-index: 999999999;
   }
-
   .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
     background-color: #fff;
     opacity: 1;
@@ -50,41 +49,27 @@ BootstrapDatepickerAsset::register($this);
 
 
 <script>
-    $(document).ready(function () {
-        $('#start-date').datepicker({
-            format: 'd MM yyyy г.',
-            autoclose: true,
-            language: "ru",
-            startView: "days",
-            minViewMode: "days",
-            todayHighlight: true,
-            daysOfWeekHighlighted: [0, 6]
-        });
-
-        $('#end-date').datepicker({
-            format: 'd MM yyyy г.',
-            autoclose: true,
-            language: "ru",
-            startView: "days",
-            minViewMode: "days",
-            clearBtn: true,
-            todayHighlight: true,
-            daysOfWeekHighlighted: [0, 6]
-        });
-
-
+  $(document).ready(function () {
+    $('#start-date').datepicker({
+      format: 'd MM yyyy г.',
+      autoclose: true,
+      language: "ru",
+      startView: "days",
+      minViewMode: "days",
+      todayHighlight: true,
+      daysOfWeekHighlighted: [0, 6]
     });
 
-
-  $('#start-date').datepicker({
-    format: 'd MM yyyy г.',
-    autoclose: true,
-    language: "ru",
-    startView: "days",
-    minViewMode: "days",
-    clearBtn: true,
-    todayHighlight: true,
-    daysOfWeekHighlighted: [0, 6]
-  })
+    $('#end-date').datepicker({
+      format: 'd MM yyyy г.',
+      autoclose: true,
+      language: "ru",
+      startView: "days",
+      minViewMode: "days",
+      clearBtn: true,
+      todayHighlight: true,
+      daysOfWeekHighlighted: [0, 6]
+    });
+  });
 
 </script>
