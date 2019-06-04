@@ -252,7 +252,7 @@ class SessionsController extends Controller
       if ($model->save()) {
         $this->logVks($model->id, "info", "Подтвердил прошедший сеанс ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
-        return $this->redirect('archive');
+        return $this->redirect('index');
       } else {
         Yii::$app->session->setFlash('error', 'Что-то не так.');
       }
@@ -270,11 +270,13 @@ class SessionsController extends Controller
       $model->vks_record_create = date('Y-m-d H:i:s');
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
+      
       if ($model->save()) {
         $this->logVks($model->id, "info", "Добавил запись о прошедшем сеансе ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
         return $this->redirect('archive');
       } else {
+        return var_dump($model->getErrors());
         Yii::$app->session->setFlash('error', 'Что-то не так');
       }
     }
