@@ -199,7 +199,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 self.buttons.ok.disable();
               }
             });
-          },
+          }
         })
       },
 
@@ -261,8 +261,8 @@ $this->params['breadcrumbs'][] = $this->title;
             },
             onContentReady: function () {
               var self = this;
-
-              this.buttons.ok.disable();
+              this.buttons.ok.hide();
+              this.buttons.edit.hide();
               this.$content.find('#event-title').on('keyup mouseclick', function(){
                 if ($(this).val() != ''){
                   self.buttons.ok.enable();
