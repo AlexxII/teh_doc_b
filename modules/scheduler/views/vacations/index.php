@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <div class="main-scheduler row">
-  <div class="col-md-4 col-lg-4" style="margin-bottom: 15px">
+  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
     <div id="info-panel">
       <div>
         <div id="title">Сотрудники:</div>
@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
     </div>
   </div>
-  <div class="col-md-8 col-lg-8">
+  <div class="col-md-10 col-lg-10">
     <div id="full-calendar"></div>
   </div>
 </div>
