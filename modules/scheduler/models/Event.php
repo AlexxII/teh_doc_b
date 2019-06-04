@@ -37,5 +37,11 @@ class Event extends \yii\db\ActiveRecord
     ];
   }
 
+  public function getColorList()
+  {
+    return [
+      '#7bd148' => 'title'
+    ];
+  }
 
 }

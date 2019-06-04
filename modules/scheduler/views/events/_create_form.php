@@ -4,8 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 use app\assets\AirDatepickerAsset;
+use app\assets\ColorPickerAsset;
 
 AirDatepickerAsset::register($this);
+ColorPickerAsset::register($this);
 
 ?>
 
@@ -55,7 +57,32 @@ AirDatepickerAsset::register($this);
   <div class="form-group">
     <?= $form->field($model, 'color', [
       'template' => "{label}{input}"
-    ])->input('color',['id'=>"event-color"]) ?>
+    ])->input('color', ['id' => "event-color"]) ?>
+
+    <?= $form->field($model, 'color', [
+      'template' => '{label}{input}{hint}'
+    ])->dropDownList($model->colorList, [
+      'data-name' => 'vks_order',
+      'id' => 'colorpicker'
+    ])->hint('', ['class' => ' w3-label-under']);
+    ?>
+
+  </div>
+  <div>
+    <select name="colorpicker">
+      <option value="#7bd148">Green</option>
+      <option value="#5484ed">Bold blue</option>
+      <option value="#a4bdfc">Blue</option>
+      <option value="#46d6db">Turquoise</option>
+      <option value="#7ae7bf">Light green</option>
+      <option value="#51b749">Bold green</option>
+      <option value="#fbd75b">Yellow</option>
+      <option value="#ffb878">Orange</option>
+      <option value="#ff887c">Red</option>
+      <option value="#dc2127">Bold red</option>
+      <option value="#dbadff">Purple</option>
+      <option value="#e1e1e1">Gray</option>
+    </select>
   </div>
 
   <?php ActiveForm::end(); ?>
@@ -79,6 +106,8 @@ AirDatepickerAsset::register($this);
       weekends: [6, 0],
       timepicker: true,
     });
+
+    $('#colorpicker').simplecolorpicker();
   });
 
 </script>
