@@ -163,7 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
           color: 'red',
           startDate: new Date(currentYear, 9, 10),
           endDate: new Date(currentYear, 10, 18)
-        },
+        }
       ]
 
 

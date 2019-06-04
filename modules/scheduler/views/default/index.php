@@ -507,9 +507,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     var tText = '<span style="font-weight: 600"></span><br> Вы что-то не сделали!!!';
 
-    // for (var i = 0; i < 1; i++) {
-    //   initNoty(tText);
-    // }
+     for (var i = 0; i < 1; i++) {
+       initNoty(tText);
+     }
 
     function initNoty(text) {
         new Noty({
