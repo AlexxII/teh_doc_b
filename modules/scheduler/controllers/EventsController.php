@@ -32,6 +32,7 @@ class EventsController extends Controller
       ->andWhere(['vks_cancel' => 0])
       ->asArray()->all();
 
+
     $tos = ToSchedule::find()
       ->where('plan_date' > $startDate)
       ->andWhere(['checkmark' => 0])
@@ -43,7 +44,7 @@ class EventsController extends Controller
     $luser = Yii::$app->user->identity->id;
 
     $events = Event::find()
-      ->where(['user_id' => $luser])
+//      ->where(['user_id' => $luser])
       ->all();
 
     $now = date("Y-m-d");
