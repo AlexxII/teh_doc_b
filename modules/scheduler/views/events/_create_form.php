@@ -56,33 +56,12 @@ ColorPickerAsset::register($this);
   </div>
   <div class="form-group">
     <?= $form->field($model, 'color', [
-      'template' => "{label}{input}"
-    ])->input('color', ['id' => "event-color"]) ?>
-
-    <?= $form->field($model, 'color', [
-      'template' => '{label}{input}{hint}'
+      'template' => '{label} {input}{hint}'
     ])->dropDownList($model->colorList, [
       'data-name' => 'vks_order',
       'id' => 'colorpicker'
     ])->hint('', ['class' => ' w3-label-under']);
     ?>
-
-  </div>
-  <div>
-    <select name="colorpicker">
-      <option value="#7bd148">Green</option>
-      <option value="#5484ed">Bold blue</option>
-      <option value="#a4bdfc">Blue</option>
-      <option value="#46d6db">Turquoise</option>
-      <option value="#7ae7bf">Light green</option>
-      <option value="#51b749">Bold green</option>
-      <option value="#fbd75b">Yellow</option>
-      <option value="#ffb878">Orange</option>
-      <option value="#ff887c">Red</option>
-      <option value="#dc2127">Bold red</option>
-      <option value="#dbadff">Purple</option>
-      <option value="#e1e1e1">Gray</option>
-    </select>
   </div>
 
   <?php ActiveForm::end(); ?>
@@ -96,7 +75,7 @@ ColorPickerAsset::register($this);
       language: "ru",
       todayHighlight: true,
       weekends: [6, 0],
-      timepicker: true,
+      timepicker: true
     });
 
     $('#end-date').datepicker({
@@ -104,7 +83,7 @@ ColorPickerAsset::register($this);
       language: "ru",
       todayHighlight: true,
       weekends: [6, 0],
-      timepicker: true,
+      timepicker: true
     });
 
     $('#colorpicker').simplecolorpicker();

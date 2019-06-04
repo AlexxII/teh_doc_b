@@ -79,8 +79,9 @@ class EventsController extends Controller
       $result[$key + $count]['title'] = $event->title;
       $result[$key + $count]['start'] = $event->start_date;
       $result[$key + $count]['end'] = $event->end_date;
-      $result[$key + $count]['color'] = $event->color ;
+      $result[$key + $count]['color'] = $event->color;
       $result[$key + $count]['exUrl'] = 'sub-event/' . $event->id;
+      $result[$key + $count]['url'] = '#';
       $count++;
     }
 
@@ -130,9 +131,7 @@ class EventsController extends Controller
     $model->start_date = $sDate;
     $model->end_date = $eDate;
     return $this->renderAjax('_create_form', [
-      'model' => $model,
-      'startDate' => $startDate,
-      'endDate' => $endDate
+      'model' => $model
     ]);
   }
 
@@ -146,10 +145,53 @@ class EventsController extends Controller
       $model->end_date = date('Y-m-d', strtotime($msg['end']));
       $model->title = $msg['title'];
       $model->description = $msg['desc'];
-      $model->color = $msg['color'];
+      $model->color = $msg['color'] ? $msg['color'] : null;
       $model->user_id = $userId;
 
       if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  public function actionUpdateEvent($id)
+  {
+    $model = Event::findOne($id);
+    if ($model) {
+      return $this->renderAjax('_create_form', [
+        'model' => $model
+      ]);
+    }
+    return false;
+  }
+
+  public function actionSaveUpdatedEvent()
+  {
+    if (isset($_POST['id'])) {
+      $eId = $_POST['id'];
+      $model = Event::findOne($eId);
+      $msg = $_POST['msg'];
+      $model->start_date = date('Y-m-d', strtotime($msg['start']));
+      $model->end_date = date('Y-m-d', strtotime($msg['end']));
+      $model->title = $msg['title'];
+      $model->description = $msg['desc'];
+      $model->color = $msg['color'] ? $msg['color'] : null;
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  public function actionDeleteEvent()
+  {
+    if (isset($_POST['event'])) {
+      $eId = $_POST['event'];
+      $model = Event::findOne($eId);
+      if ($model->delete()) {
         return true;
       }
       return false;
