@@ -63,7 +63,6 @@ class EventsController extends Controller
       }
       $result[$key]['url'] = 'vks/sessions/view-up-session?id=' . $session['id'];
       $result[$key]['exUrl'] = 'vks/' . $session['id'];
-      $result[$key]['durationEditable'] = 'true';
       $count++;
     }
     foreach ($tos as $key => $to) {
@@ -71,15 +70,20 @@ class EventsController extends Controller
       $result[$key + $count]['start'] = $to->plan_date;
       $result[$key + $count]['exUrl'] = 'to/' . $to->plan_date;
       $result[$key + $count]['url'] = 'tehdoc/to/month-schedule/view?id=' . $to->schedule_id;
+      $count++;
     }
+    $count++;
+
     foreach ($events as $key => $event) {
       $result[$key + $count]['title'] = $event->title;
       $result[$key + $count]['start'] = $event->start_date;
       $result[$key + $count]['end'] = $event->end_date;
       $result[$key + $count]['color'] = $event->color ;
       $result[$key + $count]['exUrl'] = 'sub-event/' . $event->id;
+      $count++;
     }
-    return json_encode($result);
+
+    return json_encode(array_values($result));
   }
 
   public function actionVks($i)
