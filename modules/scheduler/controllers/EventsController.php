@@ -40,6 +40,12 @@ class EventsController extends Controller
       ->with('toType')
       ->all();
 
+    $luser = Yii::$app->user->identity->id;
+
+    $events = Event::find()
+      ->where(['user_id' => $luser])
+      ->all();
+
     $now = date("Y-m-d");
     $count = 0;
     foreach ($sessions as $key => $session) {
@@ -66,7 +72,13 @@ class EventsController extends Controller
       $result[$key + $count]['exUrl'] = 'to/' . $to->plan_date;
       $result[$key + $count]['url'] = 'tehdoc/to/month-schedule/view?id=' . $to->schedule_id;
     }
-
+    foreach ($events as $key => $event) {
+      $result[$key + $count]['title'] = $event->title;
+      $result[$key + $count]['start'] = $event->start_date;
+      $result[$key + $count]['end'] = $event->end_date;
+      $result[$key + $count]['color'] = $event->color ;
+      $result[$key + $count]['exUrl'] = 'sub-event/' . $event->id;
+    }
     return json_encode($result);
   }
 
@@ -95,16 +107,49 @@ class EventsController extends Controller
 //    return var_dump($req);
   }
 
+  public function actionSubEvent($i)
+  {
+    $sEventId = $i;
+    $model = Event::findOne($sEventId);
+
+    return $this->renderAjax('_sub_event_view', [
+      'model' => $model, true
+    ]);
+  }
+
   public function actionEventForm($startDate, $endDate)
   {
     $model = new Event();
-    $model->start_date = $startDate;
-    $model->end_date = $endDate;
+    $sDate = date('d.m.Y', strtotime($startDate));
+    $eDate = date('d.m.Y', strtotime($endDate));
+    $model->start_date = $sDate;
+    $model->end_date = $eDate;
     return $this->renderAjax('_create_form', [
       'model' => $model,
       'startDate' => $startDate,
       'endDate' => $endDate
     ]);
+  }
+
+  public function actionSaveEvent()
+  {
+    if (isset($_POST['msg'])) {
+      $userId = Yii::$app->user->identity->id;
+      $msg = $_POST['msg'];
+      $model = new Event();
+      $model->start_date = date('Y-m-d', strtotime($msg['start']));
+      $model->end_date = date('Y-m-d', strtotime($msg['end']));
+      $model->title = $msg['title'];
+      $model->description = $msg['desc'];
+      $model->color = $msg['color'];
+      $model->user_id = $userId;
+
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
   }
 
 }
