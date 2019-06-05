@@ -76,4 +76,29 @@ class VacationsController extends Controller
     return false;
   }
 
+  public function actionUpdateForm($id)
+  {
+    $model = Vacation::findOne($id);
+    if ($model) {
+      return $this->renderAjax('_form', [
+        'model' => $model
+      ]);
+    }
+    return false;
+  }
+
+
+  public function actionDeleteVacation()
+  {
+    if (isset($_POST['id'])) {
+      $id = $_POST['id'];
+      $model = Vacation::findOne($id);
+      if ($model->delete()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
 }

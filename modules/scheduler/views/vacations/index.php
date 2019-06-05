@@ -53,6 +53,19 @@ $this->params['breadcrumbs'][] = $this->title;
       language: 'ru',
       enableContextMenu: true,
       enableRangeSelection: true,
+      contextMenuItems: [
+        {
+          text: 'Обновить',
+          click: editVacation
+        },
+        {
+          text: 'Удалить',
+          click: deleteVacation
+        }
+      ],
+      dayContextMenu: function (e) {
+        $(e.element).popover('hide');
+      },
       mouseOnDay: function (e) {
         if (e.events.length > 0) {
           var content = '';
@@ -94,7 +107,6 @@ $this->params['breadcrumbs'][] = $this->title;
         var eDate = e.endDate;
         var sDateStr = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate();
         var eDateStr = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate();
-        $('#info-panel').append('<div style="font-size: 20px">' + diff + '</div>');
         var c = $.confirm({
           content: function () {
             var self = this;
@@ -153,31 +165,18 @@ $this->params['breadcrumbs'][] = $this->title;
           success: function (dataSource) {
             var data = JSON.parse(dataSource);
             data.forEach(function (el, index, theArray) {
-              // var sDate = element.startDate;
-              // var eDate = element.endDate;
               theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
               theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
             });
-            // data instanceof Array ? console.log('true') : console.log('false');
             $(e.target).data('calendar').setDataSource(data);
           }
         });
       },
     });
 
-
-    var testData = [{
-      id: 0,
-      name: 'Игнатенко А.М.',
-      location: 'Часть отпуска',
-      duration: '20 суток',
-      color: 'blue',
-      startDate: new Date(currentYear, 0, 21),
-      endDate: new Date(currentYear, 1, 13)
-    }];
-
     function saveVacation(data) {
       var csrf = $('meta[name=csrf-token]').attr("content");
+      var currentYear = $('#full-calendar').data('calendar').getYear();
       $.ajax({
         url: '/scheduler/vacations/save-vacation',
         method: 'post',
@@ -186,97 +185,76 @@ $this->params['breadcrumbs'][] = $this->title;
           msg: data
         }
       }).done(function (response) {
-
+        $('#full-calendar').data('calendar').setYear(currentYear); // для перезагрузки
       }).fail(function () {
         console.log('Что-то пошло не так!');
       });
     }
 
+    function editVacation(event) {
+      var currentYear = $('#full-calendar').data('calendar').getYear();
+      var eventId = event.id;
+      var c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: '/scheduler/vacations/update-form',
+            method: 'get',
+            data: {
+              id: eventId
+            }
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'medium',
+        title: 'Обновить отпуск',
+        buttons: {
+          ok: {
+            btnClass: 'btn-blue',
+            text: 'Сохранить',
+            action: function () {
+              var msg = {};
+              var title = $('#event-title').val();
+              if (title == '') {
+                return;
+              }
+              msg.user = $('#user').val();
+              msg.start = $('#start-date').val();
+              msg.end = $('#end-date').val();
+              msg.duration = $('#duration').val();
+              saveVacation(msg);
+            }
+          },
+          cancel: {
+            btnClass: 'btn-red',
+            text: 'Отмена'
+          }
+        }
+      })
+    }
 
-
-    var td = [
-      {
-        id: 0,
-        name: 'Игнатенко А.М.',
-        location: 'Часть отпуска',
-        duration: '20 суток',
-        color: 'blue',
-        startDate: new Date(currentYear, 0, 21),
-      endDate: new Date(currentYear, 1, 13)
-      },
-      {
-        id: 1,
-        name: 'Игнатенко А.М.',
-        location: 'Часть отпуска',
-        duration: '20 суток',
-        color: 'blue',
-        startDate: new Date(currentYear, 6, 8),
-      endDate: new Date(currentYear, 7, 4)
-      },
-      {
-        id: 2,
-        name: 'Игнатенко А.М.',
-        location: 'Часть отпуска',
-        duration: '20 суток',
-        color: 'blue',
-        startDate: new Date(currentYear, 8, 16),
-      endDate: new Date(currentYear, 9, 10)
-      },
-      {
-        id: 3,
-        name: 'Лесин С.Н.',
-        location: 'Часть отпуска',
-        duration: '20 суток',
-        color: 'green',
-        startDate: new Date(currentYear, 1, 19),
-      endDate: new Date(currentYear, 2, 5)
-      },
-      {
-        id: 4,
-        name: 'Лесин С.Н.',
-        location: 'Часть отпуска',
-        duration: '20 суток',
-        color: 'green',
-        startDate: new Date(currentYear, 5, 3),
-      endDate: new Date(currentYear, 5, 29)
-      },
-      {
-        id: 5,
-        name: 'Веснина Ю.В.',
-        location: 'Часть отпуска',
-        duration: '20 суток',
-        color: 'orange',
-        startDate: new Date(currentYear, 2, 14),
-      endDate: new Date(currentYear, 2, 25)
-      },
-      {
-        id: 6,
-        name: 'Веснина Ю.В.',
-        location: 'Часть отпуска',
-        duration: '20 суток',
-        color: 'orange',
-        startDate: new Date(currentYear, 3, 28),
-      endDate: new Date(currentYear, 4, 14)
-      },
-      {
-        id: 7,
-        name: 'Веснина Ю.В.',
-        location: 'Часть отпуска',
-        duration: '20 суток',
-        color: 'orange',
-        startDate: new Date(currentYear, 7, 18),
-      endDate: new Date(currentYear, 8, 14)
-      },
-      {
-        id: 8,
-        name: 'Дубницкая Е.А.',
-        location: 'Часть отпуска',
-        duration: '20 суток',
-        color: 'red',
-        startDate: new Date(currentYear, 9, 10),
-      endDate: new Date(currentYear, 10, 18)
-      }
-    ];
+    function deleteVacation(event) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var currentYear = $('#full-calendar').data('calendar').getYear();
+      var eventId = event.id;
+      $.ajax({
+        url: '/scheduler/vacations/delete-vacation',
+        method: 'post',
+        data: {
+          _csrf: csrf,
+          id: eventId
+        }
+      }).done(function (response) {
+        $('#full-calendar').data('calendar').setYear(currentYear); // для перезагрузки
+      }).fail(function () {
+        console.log('Что-то пошло не так!');
+      });
+    }
 
   });
 
