@@ -31,7 +31,8 @@ class YearScheduleController extends Controller
     $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
     $toTypeArray = array();
     foreach ($toTypes as $toType) {
-      $toTypeArray[$toType['id']] = mb_substr($toType['name'], 0, 1);
+//      $toTypeArray[$toType['id']] = mb_substr($toType['name'], 0, 1);
+      $toTypeArray[$toType['id']] = $toType['name'];
     }
     $toEq = ToEquipment::find()
       ->where(['valid' => 1])

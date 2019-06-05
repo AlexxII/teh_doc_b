@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     $('#full-calendar').calendar({
       language: 'ru',
-      enableContextMenu: true,
+      displayWeekNumber: true,
       enableRangeSelection: true,
       customDayRenderer: function (element, date) {
         if (date.getTime() == today) {

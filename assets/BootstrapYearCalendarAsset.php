@@ -13,7 +13,8 @@ class BootstrapYearCalendarAsset extends AssetBundle
   ];
 
   public $js = [
-    'js/bootstrap-year-calendar.min.js',
+//    'js/bootstrap-year-calendar.min.js',
+    'js/by-calendar.min.js',
     'js/languages/bootstrap-year-calendar.ru.js'
   ];
 
