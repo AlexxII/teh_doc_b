@@ -43,7 +43,7 @@ class User extends ActiveRecord implements IdentityInterface
   public function behaviors()
   {
     return [
-        TimestampBehavior::class,
+      TimestampBehavior::class,
     ];
   }
 
@@ -53,10 +53,10 @@ class User extends ActiveRecord implements IdentityInterface
   public function rules()
   {
     return [
-        ['status', 'default', 'value' => self::STATUS_ACTIVE],
-        ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-        ['password', 'safe'],
-        ['login', 'safe']
+      ['status', 'default', 'value' => self::STATUS_ACTIVE],
+      ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+      ['password', 'safe'],
+      ['login', 'safe']
 //        ['password', 'string', 'min' => 6]
     ];
   }
@@ -64,8 +64,9 @@ class User extends ActiveRecord implements IdentityInterface
   public function attributeLabels()
   {
     return [
-        'username' => 'Пользователь',
-        'login' => 'Новый логин',
+      'username' => 'Пользователь',
+      'login' => 'Новый логин',
+      'color_scheme' => 'Ваш цвет:'
     ];
   }
 
@@ -163,7 +164,7 @@ class User extends ActiveRecord implements IdentityInterface
 
   public function getSocial($d = null)
   {
-    if (Yii::$app->authManager->getAssignment('military', $this->getId())){
+    if (Yii::$app->authManager->getAssignment('military', $this->getId())) {
       return $d ? 1 : 'Военнослужащие';
     } else {
       return $d ? 2 : 'Гражданские';
@@ -173,7 +174,7 @@ class User extends ActiveRecord implements IdentityInterface
   public function getIsAdmin()
   {
     // TODO сделать проверку роли, а не логина
-    if ($this->login == "sAdmin"){
+    if ($this->login == "sAdmin") {
       return true;
     } else {
       return false;
@@ -183,17 +184,36 @@ class User extends ActiveRecord implements IdentityInterface
   static public function getGroupList()
   {
     return [
-        '1' => 'Военнослужащие',
-        '2' => 'Гражданский персонал'
+      '1' => 'Военнослужащие',
+      '2' => 'Гражданский персонал'
     ];
   }
 
   static public function getRoleList()
   {
     return [
-        '1' => 'military',
-        '2' => 'civilian'
+      '1' => 'military',
+      '2' => 'civilian'
     ];
   }
+
+  public function getColorList()
+  {
+    return [
+      '#7bd148' => 'Зеленый',
+      "#5484ed" => 'Темно-синий',
+      "#a4bdfc" => 'Синий',
+      "#46d6db" => 'Бирюзовый',
+      "#7ae7bf" => 'Светло-зеленый',
+      "#51b749" => 'Темно-зеленый',
+      "#fbd75b" => 'Желтый',
+      "#ffb878" => 'Оранжевый',
+      "#ff887c" => 'Красный',
+      "#dc2127" => 'Темно-красный',
+      "#dbadff" => 'Фиолетовый'
+    ];
+
+  }
+
 
 }

@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <?php echo Yii::$app->user->identity->login; ?>
     </h3>
     <a class="btn btn-primary btn-sm" role="button" disabled="true">Сменить пароль</a>
-    <a id="holiday" href="calendar-form" class="btn btn-primary btn-sm" role="button">График</a>
+    <a id="holiday" href="calendar-form" class="btn btn-primary btn-sm" role="button">Цветовая схема</a>
     <!--    <a id="holiday_" type="button" onclick="notifSet ()" class="btn btn-primary btn-sm">Уведомления</a>-->
   </div>
 
@@ -45,94 +45,93 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script>
 
-  $(document).ready(function () {
+    $(document).ready(function () {
 
-    $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip();
 
-    $('#holiday').on('click', function (e) {
-      e.preventDefault();
+        $('#holiday').on('click', function (e) {
+            e.preventDefault();
 
-      $.confirm({
-        title: 'График отпусков',
-        type: 'blue',
-        buttons: {
-          go: {
-            btnClass: 'btn-success',
-            text: 'Сохранить',
-            action: function () {
-              $('#datepickers-container').html('');
-            }
-          },
-          cancel: {
-            text: 'Отмена',
-            action: function () {
-              $('#datepickers-container').html('');
-            }
-          }
-        },
-        content: function () {
-          var self = this;
-          return $.ajax({
-            url: 'calendar-form',
-            method: 'get'
-          }).done(function (response) {
-            self.setContentAppend(response);
-            // self.setContentAppend('<div>' + response + '</div>');
-          }).fail(function () {
-            self.setContentAppend('<div>Fail!</div>');
-          });
-        },
-        contentLoaded: function (data, status, xhr) {
-          // this.setContentAppend('<div>Content loaded!</div>');
-        }
-      });
+            $.confirm({
+                title: 'Цветовая схема',
+                type: 'blue',
+                buttons: {
+                    go: {
+                        btnClass: 'btn-success',
+                        text: 'Сохранить',
+                        action: function () {
+                            saveColorScheme();
+                        }
+                    },
+                    cancel: {
+                        text: 'Отмена',
+                        action: function () {
+
+                        }
+                    }
+                },
+                content: function () {
+                    var self = this;
+                    return $.ajax({
+                        url: 'color-scheme-form',
+                        method: 'get'
+                    }).done(function (response) {
+                        self.setContentAppend(response);
+                        // self.setContentAppend('<div>' + response + '</div>');
+                    }).fail(function () {
+                        self.setContentAppend('<div>Fail!</div>');
+                    });
+                },
+                contentLoaded: function (data, status, xhr) {
+                    // this.setContentAppend('<div>Content loaded!</div>');
+                }
+            });
+        });
+
     });
+    
+    
+    function saveColorScheme() {
+        var colorInt = $('#colorpicker').val();
+        var csrf = $('meta[name=csrf-token]').attr("content");
+        $.ajax({
+            url: 'save-color-scheme',
+            method: 'post',
+            data: {
+                _csrf: csrf,
+                color: colorInt
+            }
+        }).done(function (response) {
+            console.log('Good');
+        }).fail(function () {
+            console.log('Что-то пошло не так!');
+        });
 
-  });
-
-
-  function calendarShow(e) {
-    var id = $(e).attr('id');
-    var myDatepicker = $('#'+id).datepicker({
-      toggleSelected: false,
-      multipleDatesSeparator: ' - ',
-      range: true,
-      clearButton: true,
-      autoClose: true
-    }).data('datepicker');
-    myDatepicker.show();
-  }
-
-
-
-
-
-
-
-
-
-  ///=============================== тестирование УВЕДОМЛЕНИЯ =======================
-
-  function notifyMe() {
-    var notification = new Notification('Все еще отбеливаете??', {
-      tag: 'qwe',
-      body: 'Тогда мы идем к Вам!'
-    });
-  }
-
-  function notifSet() {
-    if (!('Notification' in window))
-      console.log('Браузер не поддерживает уведомления!!');
-    else if (Notification.permission === 'granted')
-      setTimeout(notifyMe, 5000);
-    else if (Notification.permission !== 'denied') {
-      Notification.requestPermission(function (permission) {
-        if (!('permission' in Notification))
-          Notification.permission = permission;
-        if (permission === 'granted')
-          setTimeout(notifyMe, 5000);
-      })
     }
-  }
+
+
+    ///=============================== тестирование УВЕДОМЛЕНИЯ =======================
+
+    function notifyMe() {
+        var notification = new Notification('Все еще отбеливаете??', {
+            tag: 'qwe',
+            body: 'Тогда мы идем к Вам!'
+        });
+    }
+
+    function notifSet() {
+        if (!('Notification' in window))
+            console.log('Браузер не поддерживает уведомления!!');
+        else if (Notification.permission === 'granted')
+            setTimeout(notifyMe, 5000);
+        else if (Notification.permission !== 'denied') {
+            Notification.requestPermission(function (permission) {
+                if (!('permission' in Notification))
+                    Notification.permission = permission;
+                if (permission === 'granted')
+                    setTimeout(notifyMe, 5000);
+            })
+        }
+    }
 
 </script>

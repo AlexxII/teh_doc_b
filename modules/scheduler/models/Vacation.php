@@ -56,4 +56,13 @@ class Vacation extends \yii\db\ActiveRecord
       return '-';
     }
   }
+
+  public function getColor()
+  {
+    if ($this->user) {
+      return $this->user->color_scheme;
+    } else {
+      return null;
+    }
+  }
 }

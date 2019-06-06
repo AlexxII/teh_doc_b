@@ -32,7 +32,7 @@ class UserController extends Controller
           ],
           [
             'allow' => true,
-            'actions' => ['profile', 'calendar-form'],
+            'actions' => ['profile', 'calendar-form', 'color-scheme-form', 'save-color-scheme'],
             'roles' => ['@']
           ]
         ],
@@ -106,10 +106,10 @@ class UserController extends Controller
 
   public function actionDeleteUser()
   {
-    if (!empty($_POST['jsonData'])){
+    if (!empty($_POST['jsonData'])) {
       $userId = $_POST['jsonData'];
       $user = User::findIdentity($userId);
-      if ($user->delete()){
+      if ($user->delete()) {
         return true;
       }
       return false;
@@ -128,6 +128,30 @@ class UserController extends Controller
     return $this->renderAjax('_holiday_form', [
       'model' => $model
     ]);
+  }
+
+  public function actionColorSchemeForm()
+  {
+    $luser = Yii::$app->user->identity->id;
+    $model = User::findOne($luser);
+//    $model = Yii::$app->user;
+    return $this->renderAjax('_color_form', [
+      'model' => $model
+    ]);
+  }
+
+  public function actionSaveColorScheme()
+  {
+    $luser = Yii::$app->user->identity->id;
+    if (isset($_POST['color'])) {
+      $model = User::findOne($luser);
+      $model->color_scheme = $_POST['color'];
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
   }
 
 

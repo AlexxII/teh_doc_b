@@ -43,10 +43,6 @@ $this->params['breadcrumbs'][] = $this->title;
   $(document).ready(function () {
     var currentYear = new Date().getFullYear();
 
-    var redDateTime = new Date(currentYear, 2, 13).getTime();
-    var circleDateTime = new Date(currentYear, 1, 20).getTime();
-    var borderDateTime = new Date(currentYear, 0, 12).getTime();
-
     var today = new Date(currentYear, 5, 1).getTime();
 
     $('#full-calendar').calendar({
@@ -70,11 +66,8 @@ $this->params['breadcrumbs'][] = $this->title;
         if (e.events.length > 0) {
           var content = '';
           for (var i in e.events) {
-
-            // console.log(e.events[i].color);
-
             content += '<div class="event-tooltip-content">'
-              + '<div class="event-name" style="color: #ff5a35">' + e.events[i].name + '</div>'
+              + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
               + '<div class="event-location">' + e.events[i].location + ' - ' + e.events[i].duration + '</div>'
               + '</div>';
           }
@@ -94,11 +87,11 @@ $this->params['breadcrumbs'][] = $this->title;
         }
       },
       customDayRenderer: function (element, date) {
-        if (date.getTime() == today) {
-          $(element).css('background-color', 'red');
-          $(element).css('color', 'white');
-          $(element).css('border-radius', '15px');
-        }
+//        if (date.getTime() == today) {
+//          $(element).css('background-color', 'red');
+//          $(element).css('color', 'white');
+//          $(element).css('border-radius', '15px');
+//        }
       },
       selectRange: function (e) {
         var day = 24 * 60 * 60 * 1000;

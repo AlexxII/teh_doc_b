@@ -61,9 +61,9 @@ class VacationsController extends Controller
       foreach ($models as $key => $model) {
         $yearData[$key]['id'] = $model->id;
         $yearData[$key]['name'] = $model->username;
+        $yearData[$key]['color'] = $model->color;
         $yearData[$key]['location'] = 'Часть отпуска';
         $yearData[$key]['duration'] = $model->duration . ' сут.';
-        $yearData[$key]['color'] = 'red';
         $yearData[$key]['sYear'] = Date('Y', strtotime($model->start_date));
         $yearData[$key]['sMonth'] = Date('n', strtotime($model->start_date)) - 1;
         $yearData[$key]['sDay'] = Date('j', strtotime($model->start_date));
