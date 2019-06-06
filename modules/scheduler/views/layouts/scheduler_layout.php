@@ -94,6 +94,7 @@ JConfirmAsset::register($this);
         'items' => [
           '<li class="dropdown-header" style="font-size: 10px">Календари</li>',
           ['label' => 'Производственный календарь', 'url' => ['/scheduler/production']],
+          ['label' => 'Календарь Праздников', 'url' => ['/scheduler/holidays']],
           ['label' => 'Календари отпусков', 'url' => ['/scheduler/vacations']],
           ['label' => 'Годовые события', 'url' => ['/scheduler/full-year']],
           ['label' => 'Дежурства', 'url' => ['/scheduler/duty']],

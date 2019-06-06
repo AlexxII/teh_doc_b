@@ -48,6 +48,7 @@ class VacationsController extends Controller
 
   }
 
+
   public function actionVacationsData($year)
   {
     if (isset($year)) {
@@ -79,6 +80,8 @@ class VacationsController extends Controller
   public function actionUpdateForm($id)
   {
     $model = Vacation::findOne($id);
+    $model->start_date = date('d.m.Y', strtotime($model->start_date));
+    $model->end_date = date('d.m.Y', strtotime($model->end_date));
     if ($model) {
       return $this->renderAjax('_form', [
         'model' => $model
@@ -87,6 +90,23 @@ class VacationsController extends Controller
     return false;
   }
 
+  public function actionUpdateVacation()
+  {
+    if (isset($_POST['msg'])) {
+      $msg = $_POST['msg'];
+      $model = Vacation::findOne($msg['id']);
+      $model->start_date = date('Y-m-d', strtotime($msg['start']));
+      $model->end_date = date('Y-m-d', strtotime($msg['end']));
+      $model->user_id = $msg['user'];
+      $model->duration = $msg['duration'];
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+
+  }
 
   public function actionDeleteVacation()
   {

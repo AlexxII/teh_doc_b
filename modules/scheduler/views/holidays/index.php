@@ -6,7 +6,7 @@ use app\assets\BootstrapDatepickerAsset;
 BootstrapYearCalendarAsset::register($this);
 BootstrapDatepickerAsset::register($this);
 
-$this->title = 'Календарь отпусков';
+$this->title = 'Календарь праздников';
 $this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -20,20 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <div class="main-scheduler row">
-  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
-    <div id="info-panel">
-      <div>
-        <div id="title">Сотрудники:</div>
-        <div>Военнослужащие:</div>
-        <span style="color: blue;">Игнатенко А.М.</span><br>
-        <span style="color: green;">Лесин С.Н.</span><br>
-        <span style="color: orange;">Веснина Ю.В.</span>
-        <div>Гражданские:</div>
-        <span style="color: red;">Дубницкая Е.А.</span>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-10 col-lg-10">
+  <div class="col-md-12 col-lg-12">
     <div id="full-calendar" data-provide="ec"></div>
   </div>
 </div>
@@ -106,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
           content: function () {
             var self = this;
             return $.ajax({
-              url: '/scheduler/vacations/form',
+              url: '/scheduler/holidays/form',
               method: 'get',
               data: {
                 startDate: sDateStr,
@@ -122,22 +109,20 @@ $this->params['breadcrumbs'][] = $this->title;
           },
           type: 'blue',
           columnClass: 'medium',
-          title: 'Добавить отпуск',
+          title: 'Добавить праздник',
           buttons: {
             ok: {
               btnClass: 'btn-blue',
               text: 'Сохранить',
               action: function () {
                 var msg = {};
-                var title = $('#event-title').val();
-                if (title == '') {
-                  return;
-                }
-                msg.user = $('#user').val();
+                msg.title = $('#title').val();
+                msg.hType = $('#holiday_type').val();
                 msg.start = $('#start-date').val();
                 msg.end = $('#end-date').val();
                 msg.duration = $('#duration').val();
-                saveVacation(msg);
+                msg.description = $('#holiday-description').val();
+                saveHoliday(msg);
               }
             },
             cancel: {
@@ -152,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
         var currentYear = e.currentYear;
         $.ajax({
-          url: "vacations/vacations-data",
+          url: "holidays/holidays",
           type: 'GET',
           data: {
             year: currentYear
@@ -176,11 +161,11 @@ $this->params['breadcrumbs'][] = $this->title;
       },
     });
 
-    function saveVacation(data) {
+    function saveHoliday(data) {
       var csrf = $('meta[name=csrf-token]').attr("content");
       var currentYear = $('#full-calendar').data('calendar').getYear();
       $.ajax({
-        url: '/scheduler/vacations/save-vacation',
+        url: '/scheduler/holidays/save-holiday',
         method: 'post',
         data: {
           _csrf: csrf,
