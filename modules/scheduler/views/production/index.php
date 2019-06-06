@@ -29,33 +29,28 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <script>
-  $(document).ready(function () {
-    var currentYear = new Date().getFullYear();
+    $(document).ready(function () {
+        var todayAll = new Date();
+        todayAll.setHours(0, 0, 0, 0);
+        var today = todayAll.getTime();
+        $('#full-calendar').calendar({
+            language: 'ru',
+            displayWeekNumber: true,
+            enableRangeSelection: true,
+            customDayRenderer: function (element, date) {
+                if (date.getTime() == today) {
+                    $(element).css('background-color', 'red');
+                    $(element).css('color', 'white');
+                    $(element).css('border-radius', '15px');
+                }
+            },
+            selectRange: function (e) {
+                var day = 24 * 60 * 60 * 1000;
+                var diff = ((e.endDate - e.startDate) / day) + 1;
+                $('#info-panel').html('<div style="font-size: 20px">' + diff + '</div>')
+            }
+        });
 
-    var redDateTime = new Date(currentYear, 2, 13).getTime();
-    var circleDateTime = new Date(currentYear, 1, 20).getTime();
-    var borderDateTime = new Date(currentYear, 0, 12).getTime();
-
-    var today = new Date(currentYear, 5, 1).getTime();
-
-    $('#full-calendar').calendar({
-      language: 'ru',
-      displayWeekNumber: true,
-      enableRangeSelection: true,
-      customDayRenderer: function (element, date) {
-        if (date.getTime() == today) {
-          $(element).css('background-color', 'red');
-          $(element).css('color', 'white');
-          $(element).css('border-radius', '15px');
-        }
-      },
-      selectRange: function (e) {
-        var day = 24 * 60 * 60 * 1000;
-        var diff = ((e.endDate - e.startDate) / day) + 1;
-        $('#info-panel').html('<div style="font-size: 20px">' + diff + '</div>')
-      }
     });
-
-  });
 
 </script>
