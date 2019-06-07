@@ -107,7 +107,6 @@ JConfirmAsset::register($this);
         'label' => 'Настройки',
         'items' => [
           '<li class="dropdown-header" style="font-size: 10px">Календари</li>',
-          ['label' => 'Праздники', 'url' => ['#']],
           ['label' => 'План-график событий', 'url' => ['#']],
           ['label' => 'Причины отсутствия', 'url' => ['/scheduler/control/absence-type']],
         ],

@@ -3,6 +3,7 @@
 namespace app\modules\scheduler\controllers;
 
 use app\modules\scheduler\models\Event;
+use app\modules\scheduler\models\Holiday;
 use app\modules\tehdoc\modules\to\models\ToSchedule;
 use app\modules\vks\models\VksSessions;
 use Yii;
@@ -47,6 +48,11 @@ class EventsController extends Controller
 //      ->where(['user_id' => $luser])
       ->all();
 
+    $holidays = Holiday::find()
+      ->where('start_date' > $startDate)
+      ->andWhere(['<=', 'end_date', $endDate])
+      ->all();
+
     $now = date("Y-m-d");
     $count = 0;
     foreach ($sessions as $key => $session) {
@@ -84,6 +90,16 @@ class EventsController extends Controller
       $result[$key + $count]['url'] = '#';
       $count++;
     }
+    $count++;
+
+    foreach ($holidays as $key => $holiday) {
+      $result[$key + $count]['title'] = $holiday->title;
+      $result[$key + $count]['start'] = $holiday->start_date;
+      $result[$key + $count]['end'] = $holiday->end_date;
+      $result[$key + $count]['rendering'] = 'background';
+      $count++;
+    }
+    $count++;
 
     return json_encode(array_values($result));
   }
