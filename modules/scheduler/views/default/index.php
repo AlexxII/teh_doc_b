@@ -44,6 +44,9 @@ $this->params['breadcrumbs'][] = $this->title;
     background-color: #fff;
     opacity: 1;
   }
+  .holiday {
+    background-color: #df5000;
+  }
 </style>
 
 
@@ -140,14 +143,12 @@ $this->params['breadcrumbs'][] = $this->title;
             //========================= rendering ==================================
             eventRender: function (info) {
                 var ntoday = new Date();
-                console.log(info.event._def.rendering);
-
                 if (info.event._def.rendering == 'background')
                 {
-                    console.log(info.el);
                     info.el.append(info.event.title);
-                    console.log(info.event);
-                    info.event.backgroundColor = 'red'
+                    info.el.css({'background-color': 'red'});
+//                    info.el.addClass('holiday');
+                    console.log(info.el);
                 }
             },
 

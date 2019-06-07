@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
           var content = '';
           for (var i in e.events) {
             content += '<div class="event-tooltip-content">'
-              + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+              + '<div class="event-name" style="color:' + e.events[i].color + ' ! important ">' + e.events[i].name + '</div>'
               + '<div class="event-location">' + e.events[i].location + ' - ' + e.events[i].duration + '</div>'
               + '</div>';
           }
