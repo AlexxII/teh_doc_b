@@ -79,6 +79,12 @@ $this->params['breadcrumbs'][] = $this->title;
             slotDuration: '00:15:00',
             minTime: '06:00:00',
             navLinks: true,
+            eventLimit: true,
+//            view: {
+//                Month: {
+//                    eventLimit: 3
+//                }
+//            },
             eventSources: [
                 {
                     url: '/scheduler/events/list',
@@ -141,6 +147,7 @@ $this->params['breadcrumbs'][] = $this->title;
             showNonCurrentDates: true,
 
             //========================= rendering ==================================
+/*
             eventRender: function (info) {
                 var ntoday = new Date();
                 if (info.event._def.rendering == 'background')
@@ -151,6 +158,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     console.log(info.el);
                 }
             },
+*/
 
 
             //========================= actions =====================================
