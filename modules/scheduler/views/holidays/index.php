@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     $('#full-calendar').calendar({
       language: 'ru',
+      style: 'custom',
       enableContextMenu: true,
       enableRangeSelection: true,
       contextMenuItems: [
@@ -79,6 +80,35 @@ $this->params['breadcrumbs'][] = $this->title;
           $(element).css('background-color', 'red');
           $(element).css('color', 'white');
           $(element).css('border-radius', '15px');
+        }
+      },
+      customDataSourceRenderer: function (elt, date, events) {
+        var weight = 0;
+        if(events.length == 1) {
+          weight = 4;
+        }
+        else if(events.length <= 3) {
+          weight = 2;
+        }
+        else {
+          elt.parent().css('box-shadow', 'inset 0 -4px 0 0 black');
+        }
+        if(weight > 0)
+        {
+          var boxShadow = '';
+          for (var i = 0; i < events.length; i++)
+          {
+            if(boxShadow != '') {
+              boxShadow += ",";
+            }
+            boxShadow += 'inset 0 -' + (parseInt(i) + 1) * weight + 'px 0 0 ' + events[i].color;
+            if (events[i].hType == '3') {
+              elt.parent().css('font-weight', 'bold');
+              elt.parent().css('font-size', '14px');
+              elt.parent().css('color', 'red');
+            }
+          }
+          elt.parent().css('box-shadow', boxShadow);
         }
       },
       selectRange: function (e) {

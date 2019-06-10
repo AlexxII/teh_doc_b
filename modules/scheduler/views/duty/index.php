@@ -63,13 +63,13 @@ $this->params['breadcrumbs'][] = $this->title;
       navLinks: true,
       eventSources: [
         {
-          url: '/scheduler/events/list',
+          url: '/scheduler/duty/list',
           method: 'POST',
           extraParams: {
             _csrf: csrf
           },
           failure: function () {
-            console.log('Внимание! Ошибка получения событий из Журнала ВКС');
+            console.log('Внимание! Ошибка получения событий.');
           }
         }
       ],
@@ -116,13 +116,19 @@ $this->params['breadcrumbs'][] = $this->title;
       //========================= rendering ==================================
       eventRender: function (info) {
         var ntoday = new Date();
-        if (info.event._instance.range.start < ntoday.getTime()) {
-//                    console.log(info.el);
-//                    info.el.addClass('past');
-//                    info.el.children().addClass('past');
+        if (info.event._def.rendering == 'background') {
+          var type = info.event._def.extendedProps.holiday_type;
+          if (type == 0) {
+            $(info.el).css('background-color', '#E0FFFF');
+          } else if (type == 1 || type == 2) {
+            $(info.el).css('background-color', '#FFA07A');
+          } else {
+            $(info.el).css('background-color', '#ff5a35');
+          }
         }
       },
-
+      dayRender: function (dayRenderInfo) {
+      },
 
       //========================= actions =====================================
 

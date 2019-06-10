@@ -36,10 +36,10 @@ class HolidaysController extends Controller
           $yearData[$key]['duration'] = 'Предпраздничный';
           $yearData[$key]['color'] = '#ff8f8f';
         } else if ($type == 2) {
-          $yearData[$key]['duration'] = 'Сокращенный';
-          $yearData[$key]['color'] = '#ff8f8f';
-        } else {
           $yearData[$key]['duration'] = 'Выходной';
+          $yearData[$key]['color'] = 'red';
+        } else {
+          $yearData[$key]['duration'] = 'Праздник';
           $yearData[$key]['color'] = 'red';
         }
         $yearData[$key]['sYear'] = Date('Y', strtotime($model->start_date));
@@ -48,6 +48,7 @@ class HolidaysController extends Controller
         $yearData[$key]['eYear'] = Date('Y', strtotime($model->end_date));
         $yearData[$key]['eMonth'] = Date('n', strtotime($model->end_date)) - 1;
         $yearData[$key]['eDay'] = Date('j', strtotime($model->end_date));
+        $yearData[$key]['hType'] = $model->holiday_type;
       }
       return json_encode($yearData);
     }

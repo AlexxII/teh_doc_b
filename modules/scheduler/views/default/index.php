@@ -150,7 +150,6 @@ $this->params['breadcrumbs'][] = $this->title;
           } else {
             $(info.el).css('background-color', '#ff5a35');
           }
-          // info.el.append(info.event.title);
         }
       },
       dayRender: function (dayRenderInfo) {
