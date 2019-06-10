@@ -79,7 +79,7 @@ class VacationsController extends Controller
 
   public function actionHolidaysArray($year)
   {
-    $arrays = Holiday::find()->select('start_date')
+    $arrays = Holiday::find()
       ->asArray()
       ->orderBy('start_date')
       ->where(['>=', 'holiday_type', '2'])
@@ -88,7 +88,7 @@ class VacationsController extends Controller
     foreach ($arrays as $key => $ar) {
       $result[] = strtotime($ar['start_date']);
     }
-    return json_encode($result);
+    return json_encode($arrays);
   }
 
   public function actionUpdateForm($id)

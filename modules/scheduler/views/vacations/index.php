@@ -204,7 +204,7 @@ $this->params['breadcrumbs'][] = $this->title;
               $(e.target).data('calendar').setDataSource(data);
             }
           });
-        },
+        }
       });
     }
 
