@@ -5,7 +5,7 @@ namespace app\modules\scheduler\controllers;
 use Yii;
 use yii\web\Controller;
 use app\modules\scheduler\models\Vacation;
-
+use app\modules\scheduler\models\Holiday;
 
 class VacationsController extends Controller
 {
@@ -75,6 +75,20 @@ class VacationsController extends Controller
       return json_encode($yearData);
     }
     return false;
+  }
+
+  public function actionHolidaysArray($year)
+  {
+    $arrays = Holiday::find()->select('start_date')
+      ->asArray()
+      ->orderBy('start_date')
+      ->where(['>=', 'holiday_type', '2'])
+      ->all();
+    $result = [];
+    foreach ($arrays as $key => $ar) {
+      $result[] = strtotime($ar['start_date']);
+    }
+    return json_encode($result);
   }
 
   public function actionUpdateForm($id)

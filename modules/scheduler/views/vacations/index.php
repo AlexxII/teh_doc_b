@@ -46,135 +46,167 @@ $this->params['breadcrumbs'][] = $this->title;
     todayAll.setHours(0, 0, 0, 0);
     var today = todayAll.getTime();
 
+    var holidays;
 
-    $('#full-calendar').calendar({
-      language: 'ru',
-      enableContextMenu: true,
-      enableRangeSelection: true,
-      contextMenuItems: [
-        {
-          text: 'Обновить',
-          click: editVacation
+    function getHolidays() {
+      $.ajax({
+        url: "vacations/holidays-array",
+        type: 'GET',
+        data: {
+          year: currentYear
         },
-        {
-          text: 'Удалить',
-          click: deleteVacation
-        }
-      ],
-      dayContextMenu: function (e) {
-        $(e.element).popover('hide');
-      },
-      mouseOnDay: function (e) {
-        if (e.events.length > 0) {
-          var content = '';
-          for (var i in e.events) {
-            content += '<div class="event-tooltip-content">'
-              + '<div class="event-name" style="color:' + e.events[i].color + ' ! important ">' + e.events[i].name + '</div>'
-              + '<div class="event-location">' + e.events[i].location + ' - ' + e.events[i].duration + '</div>'
-              + '</div>';
+        success: function (dataSource) {
+          if (dataSource != '') {
+            holidays = JSON.parse(dataSource);
+            holidays instanceof Array ? holidays : [];
           }
-          $(e.element).popover({
-            trigger: 'manual',
-            container: 'body',
-            html: true,
-            content: content
-          });
+          initCalendar();
+        }
+      });
+    }
 
-          $(e.element).popover('show');
-        }
-      },
-      mouseOutDay: function (e) {
-        if (e.events.length > 0) {
+    getHolidays();
+
+    function initCalendar() {
+      $('#full-calendar').calendar({
+        language: 'ru',
+        enableContextMenu: true,
+        enableRangeSelection: true,
+        contextMenuItems: [
+          {
+            text: 'Обновить',
+            click: editVacation
+          },
+          {
+            text: 'Удалить',
+            click: deleteVacation
+          }
+        ],
+        dayContextMenu: function (e) {
           $(e.element).popover('hide');
-        }
-      },
-      customDayRenderer: function (element, date) {
-        if (date.getTime() == today) {
-          $(element).css('background-color', 'red');
-          $(element).css('color', 'white');
-          $(element).css('border-radius', '15px');
-        }
-      },
-      selectRange: function (e) {
-        var day = 24 * 60 * 60 * 1000;
-        var diff = ((e.endDate - e.startDate) / day) + 1;
-        var sDate = e.startDate;
-        var eDate = e.endDate;
-        var sDateStr = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate();
-        var eDateStr = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate();
-        var c = $.confirm({
-          content: function () {
-            var self = this;
-            return $.ajax({
-              url: '/scheduler/vacations/form',
-              method: 'get',
-              data: {
-                startDate: sDateStr,
-                endDate: eDateStr,
-                diff: diff
+        },
+        mouseOnDay: function (e) {
+          if (e.events.length > 0) {
+            var content = '';
+            for (var i in e.events) {
+              if ('hType' in e.events[i]) {
+                return;
               }
-            }).fail(function () {
-              self.setContentAppend('<div>Что-то пошло не так!</div>');
+              content += '<div class="event-tooltip-content">'
+                + '<div class="event-name" style="color:' + e.events[i].color + ' ! important ">' + e.events[i].name + '</div>'
+                + '<div class="event-location">' + e.events[i].location + ' - ' + e.events[i].duration + '</div>'
+                + '</div>';
+            }
+            $(e.element).popover({
+              trigger: 'manual',
+              container: 'body',
+              html: true,
+              content: content
             });
-          },
-          contentLoaded: function (data, status, xhr) {
-            this.setContentAppend('<div>' + data + '</div>');
-          },
-          type: 'blue',
-          columnClass: 'medium',
-          title: 'Добавить отпуск',
-          buttons: {
-            ok: {
-              btnClass: 'btn-blue',
-              text: 'Сохранить',
-              action: function () {
-                var msg = {};
-                var title = $('#event-title').val();
-                if (title == '') {
-                  return;
+
+            $(e.element).popover('show');
+          }
+        },
+        mouseOutDay: function (e) {
+          if (e.events.length > 0) {
+            $(e.element).popover('hide');
+          }
+        },
+        customDayRenderer: function (element, date) {
+          if (date.getTime() == today) {
+            $(element).css('background-color', 'red');
+            $(element).css('color', 'white');
+            $(element).css('border-radius', '15px');
+          }
+          if (contains(holidays, date.getTime()/1000)) {
+            console.log('find');
+            $(element).css('font-weight', 'bold');
+            $(element).css('font-size', '15px');
+            $(element).css('color', 'red');
+          }
+
+        },
+        selectRange: function (e) {
+          var day = 24 * 60 * 60 * 1000;
+          var diff = ((e.endDate - e.startDate) / day) + 1;
+          var sDate = e.startDate;
+          var eDate = e.endDate;
+          var sDateStr = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate();
+          var eDateStr = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate();
+          var c = $.confirm({
+            content: function () {
+              var self = this;
+              return $.ajax({
+                url: '/scheduler/vacations/form',
+                method: 'get',
+                data: {
+                  startDate: sDateStr,
+                  endDate: eDateStr,
+                  diff: diff
                 }
-                msg.user = $('#user').val();
-                msg.start = $('#start-date').val();
-                msg.end = $('#end-date').val();
-                msg.duration = $('#duration').val();
-                saveVacation(msg);
-              }
+              }).fail(function () {
+                self.setContentAppend('<div>Что-то пошло не так!</div>');
+              });
             },
-            cancel: {
-              btnClass: 'btn-red',
-              text: 'Отмена'
-            }
-          }
-        })
-      },
-      yearChanged: function (e) {
-        e.preventRendering = true;
-        $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
-        var currentYear = e.currentYear;
-        $.ajax({
-          url: "vacations/vacations-data",
-          type: 'GET',
-          data: {
-            year: currentYear
-          },
-          success: function (dataSource) {
-            if (dataSource != '') {
-              var data = JSON.parse(dataSource);
-              data instanceof Array ? data : [];
-              if (data instanceof Array) {
-                data.forEach(function (el, index, theArray) {
-                  theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
-                  theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
-                });
-              } else {
-                data = [];
+            contentLoaded: function (data, status, xhr) {
+              this.setContentAppend('<div>' + data + '</div>');
+            },
+            type: 'blue',
+            columnClass: 'medium',
+            title: 'Добавить отпуск',
+            buttons: {
+              ok: {
+                btnClass: 'btn-blue',
+                text: 'Сохранить',
+                action: function () {
+                  var msg = {};
+                  var title = $('#event-title').val();
+                  if (title == '') {
+                    return;
+                  }
+                  msg.user = $('#user').val();
+                  msg.start = $('#start-date').val();
+                  msg.end = $('#end-date').val();
+                  msg.duration = $('#duration').val();
+                  saveVacation(msg);
+                }
+              },
+              cancel: {
+                btnClass: 'btn-red',
+                text: 'Отмена'
               }
             }
-            $(e.target).data('calendar').setDataSource(data);
-          }
-        });
-      },
-    });
+          })
+        },
+        yearChanged: function (e) {
+          e.preventRendering = true;
+          $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
+          var currentYear = e.currentYear;
+          $.ajax({
+            url: "vacations/vacations-data",
+            type: 'GET',
+            data: {
+              year: currentYear
+            },
+            success: function (dataSource) {
+              if (dataSource != '') {
+                var data = JSON.parse(dataSource);
+                data instanceof Array ? data : [];
+                if (data instanceof Array) {
+                  data.forEach(function (el, index, theArray) {
+                    theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
+                    theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
+                  });
+                } else {
+                  data = [];
+                }
+              }
+              $(e.target).data('calendar').setDataSource(data);
+            }
+          });
+        },
+      });
+    }
 
     function saveVacation(data) {
       var csrf = $('meta[name=csrf-token]').attr("content");
@@ -276,6 +308,21 @@ $this->params['breadcrumbs'][] = $this->title;
         console.log('Что-то пошло не так!');
       });
     }
+
+    function contains(arr, elem) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === elem) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+
+    var dataSource = [
+      1575666000000,
+      1577221200000
+    ];
 
   });
 
