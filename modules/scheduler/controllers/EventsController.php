@@ -97,9 +97,9 @@ class EventsController extends Controller
       $result[$key + $count]['start'] = $holiday->start_date;
       $result[$key + $count]['end'] = $holiday->end_date;
       $result[$key + $count]['rendering'] = 'background';
+      $result[$key + $count]['holiday_type'] = $holiday->holiday_type;
       $count++;
     }
-    $count++;
 
     return json_encode(array_values($result));
   }
