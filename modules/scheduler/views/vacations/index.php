@@ -20,10 +20,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <div class="main-scheduler row">
-  <div class="col-md-2 col-lg-2" style="margin: 25px 0px">
+  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
     <div id="info-panel">
+      <span><h3>Сотрудники:</h3></span>
       <?php foreach ($models as $key => $model): ?>
-        <div style="color: <?= $model->color_scheme ?>; font-weight: bold"><?= $model->username ?></div>
+        <div style="color: <?= $model->color_scheme ?>; font-weight: bold">
+          <label><input type="checkbox" style="color: <?= $model->color_scheme ?>; font-weight: bold">
+            <?= $model->username ?>
+          </label>
+        </div>
       <?php endforeach; ?>
     </div>
   </div>

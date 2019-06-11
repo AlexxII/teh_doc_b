@@ -10,6 +10,7 @@ class ColorPickerAsset extends AssetBundle
 
   public $css = [
     'jquery.simplecolorpicker.css',
+    'jquery.simplecolorpicker-glyphicons.css',
   ];
 
   public $js = [

@@ -14,6 +14,7 @@ class VacationsController extends Controller
   {
     $models = User::find()
       ->where(['!=', 'login', 'sAdmin'])
+      ->orderBy('username')
       ->all();
     return $this->render('index', [
       'models' => $models

@@ -134,10 +134,16 @@ class UserController extends Controller
   {
     $luser = Yii::$app->user->identity->id;
     $model = User::findOne($luser);
-
-//    $model = Yii::$app->user;
+    $users = User::find()
+      ->where(['!=', 'id', $luser])
+      ->all();
+    $colors = [];
+    foreach ($users as $key => $user) {
+      $colors[$user->color_scheme] = ['disabled' => true];
+    }
     return $this->renderAjax('_color_form', [
-      'model' => $model
+      'model' => $model,
+      'disabledColors' => $colors
     ]);
   }
 
