@@ -48,24 +48,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
     var holidays;
 
-    function getHolidays() {
+    function getHolidays(year) {
       $.ajax({
-        url: "vacations/holidays-array",
+        url: "holidays/holidays-array",
         type: 'GET',
         data: {
-          year: currentYear
+          year: year
         },
         success: function (dataSource) {
           if (dataSource != '') {
             holidays = JSON.parse(dataSource);
             holidays instanceof Array ? holidays : [];
           }
-          initCalendar();
         }
       });
     }
 
-    getHolidays();
+    getHolidays(currentYear);
+    initCalendar();
 
     function initCalendar() {
       $('#full-calendar').calendar({
@@ -119,7 +119,6 @@ $this->params['breadcrumbs'][] = $this->title;
             $(element).css('border-radius', '15px');
           }
           if (contains(holidays, date.getTime()/1000)) {
-            console.log('find');
             $(element).css('font-weight', 'bold');
             $(element).css('font-size', '15px');
             $(element).css('color', 'red');
@@ -180,8 +179,9 @@ $this->params['breadcrumbs'][] = $this->title;
         },
         yearChanged: function (e) {
           e.preventRendering = true;
-          $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
           var currentYear = e.currentYear;
+          getHolidays(currentYear);
+          $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
           $.ajax({
             url: "vacations/vacations-data",
             type: 'GET',
@@ -317,12 +317,6 @@ $this->params['breadcrumbs'][] = $this->title;
       }
       return false;
     }
-
-
-    var dataSource = [
-      1575666000000,
-      1577221200000
-    ];
 
   });
 

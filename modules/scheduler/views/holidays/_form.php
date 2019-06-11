@@ -13,7 +13,6 @@ BootstrapDatepickerAsset::register($this);
   .datepicker {
     z-index: 999999999;
   }
-
   .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
     background-color: #fff;
     opacity: 1;
@@ -25,16 +24,25 @@ BootstrapDatepickerAsset::register($this);
   <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
   <div class="form-group">
-    <div class="col-lg-6 col-md-6">
+    <div class="col-lg-12 col-md-12">
       <?= $form->field($model, 'title')->textInput([
         'class' => 'form-control',
         'id' => 'holiday-title'
       ])->hint(' ', ['class' => ' w3-label-under']); ?>
     </div>
+  </div>
+  <div class="form-group">
     <div class="col-lg-6 col-md-6">
       <?= $form->field($model, 'duration')->textInput([
         'class' => 'form-control',
         'id' => 'duration',
+        'readonly' => 'true',
+      ])->hint(' ', ['class' => ' w3-label-under']); ?>
+    </div>
+    <div class="col-lg-6 col-md-6">
+      <?= $form->field($model, 'approval_year')->textInput([
+        'class' => 'form-control',
+        'id' => 'approval-year',
         'readonly' => 'true',
       ])->hint(' ', ['class' => ' w3-label-under']); ?>
     </div>
@@ -84,39 +92,47 @@ BootstrapDatepickerAsset::register($this);
 
 
 <script>
-    $(document).ready(function () {
+  $(document).ready(function () {
 
-        $('#start-date').datepicker({
-            autoclose: true,
-            language: "ru",
-            todayHighlight: true,
-            weekends: [6, 0]
-        });
-
-        $('#end-date').datepicker({
-            autoclose: true,
-            language: "ru",
-            todayHighlight: true,
-            weekends: [6, 0]
-        });
-
+    $('#start-date').datepicker({
+      autoclose: true,
+      language: "ru",
+      todayHighlight: true,
+      weekends: [6, 0]
     });
 
-    $('.date').on('change', function (e) {
-        var def = e.target.defaultValue;
-        var strStartDate = $('#start-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
-        var strEndDate = $('#end-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
-        var startDate = new Date(strStartDate);
-        var endDate = new Date(strEndDate);
-
-        var diff = endDate - startDate;
-        if (diff >= 0) {
-            var duration = (diff / (24 * 60 * 60 * 1000)) + 1;
-            $('#duration').val(duration);
-        } else {
-            $(e.target).datepicker('update', def);
-        }
+    $('#end-date').datepicker({
+      autoclose: true,
+      language: "ru",
+      todayHighlight: true,
+      weekends: [6, 0]
     });
+
+    $('#approval-year').datepicker({
+      autoclose: true,
+      format: 'yyyy',
+      language: "ru",
+      todayHighlight: true,
+      minViewMode: 'years'
+    });
+
+  });
+
+  $('.date').on('change', function (e) {
+    var def = e.target.defaultValue;
+    var strStartDate = $('#start-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+    var strEndDate = $('#end-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+    var startDate = new Date(strStartDate);
+    var endDate = new Date(strEndDate);
+
+    var diff = endDate - startDate;
+    if (diff >= 0) {
+      var duration = (diff / (24 * 60 * 60 * 1000)) + 1;
+      $('#duration').val(duration);
+    } else {
+      $(e.target).datepicker('update', def);
+    }
+  });
 
 
 </script>

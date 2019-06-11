@@ -150,6 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 msg.start = $('#start-date').val();
                 msg.end = $('#end-date').val();
                 msg.duration = $('#duration').val();
+                msg.approvalYear = $('#approval-year').val();
                 msg.repeat = 0;
                 if ($('#year-repeat').prop('checked')) {
                   msg.repeat = 1;
@@ -221,7 +222,8 @@ $this->params['breadcrumbs'][] = $this->title;
             url: '/scheduler/holidays/update-form',
             method: 'get',
             data: {
-              id: eventId
+              id: eventId,
+              year: currentYear
             }
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
@@ -245,6 +247,7 @@ $this->params['breadcrumbs'][] = $this->title;
               msg.start = $('#start-date').val();
               msg.end = $('#end-date').val();
               msg.duration = $('#duration').val();
+              msg.approvalYear = $('#approval-year').val();
               msg.repeat = 0;
               if ($('#year-repeat').prop('checked')) {
                 msg.repeat = 1;

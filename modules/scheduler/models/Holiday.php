@@ -26,7 +26,8 @@ class Holiday extends \yii\db\ActiveRecord
       'description' => 'Подробности:',
       'duration' => 'Продолжительность:',
       'year_repeat' => 'Ежегодный',
-      'holiday_type' => 'Тип:'
+      'holiday_type' => 'Тип:',
+      'approval_year' => 'Год утверждения:'
     ];
   }
 

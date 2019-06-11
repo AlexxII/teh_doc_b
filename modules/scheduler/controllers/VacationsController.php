@@ -77,20 +77,6 @@ class VacationsController extends Controller
     return false;
   }
 
-  public function actionHolidaysArray($year)
-  {
-    $arrays = Holiday::find()
-      ->asArray()
-      ->orderBy('start_date')
-      ->where(['>=', 'holiday_type', '2'])
-      ->all();
-    $result = [];
-    foreach ($arrays as $key => $ar) {
-      $result[] = strtotime($ar['start_date']);
-    }
-    return json_encode($arrays);
-  }
-
   public function actionUpdateForm($id)
   {
     $model = Vacation::findOne($id);
