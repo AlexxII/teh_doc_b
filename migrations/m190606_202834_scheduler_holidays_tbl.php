@@ -27,6 +27,8 @@ class m190606_202834_scheduler_holidays_tbl extends Migration
       'endYear' => $this->integer(),
       'duration' => $this->integer()->notNull(),
       'title' =>$this->string(255),
+      'stDateStr' => $this->string(64),
+      'eDateStr' => $this->string(64),
       'description' => $this->string(255),
       'holiday_type' => $this->smallInteger(),
       'approval_year' => $this->integer(),

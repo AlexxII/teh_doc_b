@@ -134,6 +134,7 @@ class UserController extends Controller
   {
     $luser = Yii::$app->user->identity->id;
     $model = User::findOne($luser);
+
 //    $model = Yii::$app->user;
     return $this->renderAjax('_color_form', [
       'model' => $model
