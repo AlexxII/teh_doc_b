@@ -2,6 +2,7 @@
 
 namespace app\modules\scheduler\controllers;
 
+use app\modules\admin\models\User;
 use Yii;
 use yii\web\Controller;
 use app\modules\scheduler\models\Vacation;
@@ -11,8 +12,12 @@ class VacationsController extends Controller
 {
   public function actionIndex()
   {
-
-    return $this->render('index');
+    $models = User::find()
+      ->where(['!=', 'login', 'sAdmin'])
+      ->all();
+    return $this->render('index', [
+      'models' => $models
+    ]);
   }
 
   public function actionForm($startDate, $endDate, $diff)

@@ -20,17 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <div class="main-scheduler row">
-  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
+  <div class="col-md-2 col-lg-2" style="margin: 25px 0px">
     <div id="info-panel">
-      <div>
-        <div id="title">Сотрудники:</div>
-        <div>Военнослужащие:</div>
-        <span style="color: blue;">Игнатенко А.М.</span><br>
-        <span style="color: green;">Лесин С.Н.</span><br>
-        <span style="color: orange;">Веснина Ю.В.</span>
-        <div>Гражданские:</div>
-        <span style="color: red;">Дубницкая Е.А.</span>
-      </div>
+      <?php foreach ($models as $key => $model): ?>
+        <div style="color: <?= $model->color_scheme ?>; font-weight: bold"><?= $model->username ?></div>
+      <?php endforeach; ?>
     </div>
   </div>
   <div class="col-md-10 col-lg-10">
@@ -118,7 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
             $(element).css('color', 'white');
             $(element).css('border-radius', '15px');
           }
-          if (contains(holidays, date.getTime()/1000)) {
+          if (contains(holidays, date.getTime() / 1000)) {
             $(element).css('font-weight', 'bold');
             $(element).css('font-size', '15px');
             $(element).css('color', 'red');

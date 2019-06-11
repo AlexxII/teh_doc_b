@@ -220,10 +220,7 @@ class HolidaysController extends Controller
       $ar3[$key]['start_date'] = $year . '-' . $a['stDateStr'];
       $ar3[$key]['duration'] = $a['duration'];
     }
-
     $arrays = array_merge($ar1, $ar3);
-//    return var_dump(count($arrays));
-//    return var_dump(count($arrays));
     $result = [];
     $count = 0;
     $mc = 3600 * 24;
@@ -247,6 +244,5 @@ class HolidaysController extends Controller
 
     }
   }
-
 
 }
