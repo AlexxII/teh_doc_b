@@ -25,7 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
       <span><h3>Сотрудники:</h3></span>
       <?php foreach ($models as $key => $model): ?>
         <div style="color: <?= $model->color_scheme ?>; font-weight: bold">
-          <label><input type="checkbox" style="color: <?= $model->color_scheme ?>; font-weight: bold">
+          <label style="cursor: pointer">
+            <input type="checkbox" class="users-checkboxes" id="<?= $model->id ?>" data-id="<?= $model->id ?>">
             <?= $model->username ?>
           </label>
         </div>
@@ -47,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     var holidays;
 
-    function getHolidays(year) {
+    function getHolidays(year, callback) {
       $.ajax({
         url: "holidays/holidays-array",
         type: 'GET',
@@ -61,10 +62,10 @@ $this->params['breadcrumbs'][] = $this->title;
           }
         }
       });
+      callback();
     }
 
-    getHolidays(currentYear);
-    initCalendar();
+    getHolidays(currentYear, initCalendar);
 
     function initCalendar() {
       $('#full-calendar').calendar({
@@ -113,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
         },
         customDayRenderer: function (element, date) {
           if (date.getTime() == today) {
-            $(element).css('background-color', 'red');
+            $(element).css('background-color', 'orange');
             $(element).css('color', 'white');
             $(element).css('border-radius', '15px');
           }
@@ -166,7 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   msg.start = $('#start-date').val();
                   msg.end = $('#end-date').val();
                   msg.duration = $('#duration').val();
-                  saveVacation(msg);
+                  saveVacation(msg, msg.user);
                 }
               },
               cancel: {
@@ -177,37 +178,17 @@ $this->params['breadcrumbs'][] = $this->title;
           })
         },
         yearChanged: function (e) {
+          console.log('11111');
+          $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
           e.preventRendering = true;
           var currentYear = e.currentYear;
-          getHolidays(currentYear);
-          $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
-          $.ajax({
-            url: "vacations/vacations-data",
-            type: 'GET',
-            data: {
-              year: currentYear
-            },
-            success: function (dataSource) {
-              if (dataSource != '') {
-                var data = JSON.parse(dataSource);
-                data instanceof Array ? data : [];
-                if (data instanceof Array) {
-                  data.forEach(function (el, index, theArray) {
-                    theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
-                    theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
-                  });
-                } else {
-                  data = [];
-                }
-              }
-              $(e.target).data('calendar').setDataSource(data);
-            }
-          });
+          getHolidays(currentYear, emptyFun);
+          yearRender(e, currentYear);
         }
       });
     }
 
-    function saveVacation(data) {
+    function saveVacation(data, userId) {
       var csrf = $('meta[name=csrf-token]').attr("content");
       var currentYear = $('#full-calendar').data('calendar').getYear();
       $.ajax({
@@ -218,9 +199,48 @@ $this->params['breadcrumbs'][] = $this->title;
           msg: data
         }
       }).done(function (response) {
+        $('#' + userId).prop('checked', true);
         $('#full-calendar').data('calendar').setYear(currentYear); // для перезагрузки
       }).fail(function () {
         console.log('Что-то пошло не так!');
+      });
+    }
+
+    function yearRender(e, year) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var users = [1];
+      $('.users-checkboxes').each(function (e) {
+        if ($(this).is(':checked')){
+          users.push($(this).data('id'));
+        }
+      });
+      data = [];
+      if (users.length > 0) {
+        data = [];
+      }
+      $.ajax({
+        url: "vacations/vacations-data",
+        type: 'POST',
+        data: {
+          _csrf: csrf,
+          year: year,
+          users: users
+        },
+        success: function (dataSource) {
+          if (dataSource != '') {
+            var data = JSON.parse(dataSource);
+            data instanceof Array ? data : [];
+            if (data instanceof Array) {
+              data.forEach(function (el, index, theArray) {
+                theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
+                theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
+              });
+            } else {
+              data = [];
+            }
+          }
+          $(e.target).data('calendar').setDataSource(data);
+        }
       });
     }
 
@@ -317,6 +337,51 @@ $this->params['breadcrumbs'][] = $this->title;
       return false;
     }
 
+    $('.users-checkboxes').click('on', function (e) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var currentYear = $('#full-calendar').data('calendar').getYear();
+      var users = [];
+      $('.users-checkboxes').each(function (e) {
+        if ($(this).is(':checked')){
+          users.push($(this).data('id'));
+        }
+      });
+      if (users.length > 0) {
+        $.ajax({
+          url: "vacations/vacations-data",
+          type: 'POST',
+          data: {
+            _csrf: csrf,
+            year: currentYear,
+            users: users
+          },
+          success: function (dataSource) {
+            if (dataSource != '') {
+              var data = JSON.parse(dataSource);
+              data instanceof Array ? data : [];
+              if (data instanceof Array) {
+                data.forEach(function (el, index, theArray) {
+                  theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
+                  theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
+                });
+              } else {
+                data = [];
+              }
+            }
+            $('#full-calendar').data('calendar').setDataSource(data);
+          }
+        });
+      } else {
+        data = [];
+        $('#full-calendar').data('calendar').setDataSource(data);
+      }
+
+    })
+
   });
+
+  function emptyFun() {
+    return 1;
+  }
 
 </script>

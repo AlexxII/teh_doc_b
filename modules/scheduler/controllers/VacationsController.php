@@ -55,32 +55,38 @@ class VacationsController extends Controller
   }
 
 
-  public function actionVacationsData($year)
+  public function actionVacationsData()
   {
-    if (isset($year)) {
+    if (isset($_POST['year']) && isset($_POST['users'])) {
+      $year = $_POST['year'];
+      $users = $_POST['users'];
       $sDate = $year . '-01-01';
       $eDate = $year . '-12-31';
       $models = Vacation::find()
         ->where(['>=', 'start_date', $sDate])
         ->andWhere(['<=', 'end_date', $eDate])
+        ->with('user')
         ->all();
       $yearData = [];
       foreach ($models as $key => $model) {
-        $yearData[$key]['id'] = $model->id;
-        $yearData[$key]['name'] = $model->username;
-        $yearData[$key]['color'] = $model->color;
-        $yearData[$key]['location'] = 'Часть отпуска';
-        $yearData[$key]['duration'] = $model->duration . ' сут.';
-        $yearData[$key]['sYear'] = Date('Y', strtotime($model->start_date));
-        $yearData[$key]['sMonth'] = Date('n', strtotime($model->start_date)) - 1;
-        $yearData[$key]['sDay'] = Date('j', strtotime($model->start_date));
-        $yearData[$key]['eYear'] = Date('Y', strtotime($model->end_date));
-        $yearData[$key]['eMonth'] = Date('n', strtotime($model->end_date)) - 1;
-        $yearData[$key]['eDay'] = Date('j', strtotime($model->end_date));
+        if (in_array($model->userId, $users)) {
+          $yearData[$key]['id'] = $model->id;
+          $yearData[$key]['name'] = $model->username;
+          $yearData[$key]['color'] = $model->color;
+          $yearData[$key]['location'] = 'Часть отпуска';
+          $yearData[$key]['duration'] = $model->duration . ' сут.';
+          $yearData[$key]['sYear'] = Date('Y', strtotime($model->start_date));
+          $yearData[$key]['sMonth'] = Date('n', strtotime($model->start_date)) - 1;
+          $yearData[$key]['sDay'] = Date('j', strtotime($model->start_date));
+          $yearData[$key]['eYear'] = Date('Y', strtotime($model->end_date));
+          $yearData[$key]['eMonth'] = Date('n', strtotime($model->end_date)) - 1;
+          $yearData[$key]['eDay'] = Date('j', strtotime($model->end_date));
+        }
+        continue;
       }
-      return json_encode($yearData);
+      return json_encode(array_values($yearData));
     }
-    return false;
+    return var_dump('false');
   }
 
   public function actionUpdateForm($id)

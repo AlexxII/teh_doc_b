@@ -45,8 +45,17 @@ class Vacation extends \yii\db\ActiveRecord
   public function getUser()
   {
     return $this->hasOne(User::class, ['id' => 'user_id']);
-
   }
+
+  public function getUserId()
+  {
+    if ($this->user) {
+      return $this->user->id;
+    } else {
+      return false;
+    }
+  }
+
 
   public function getUsername()
   {
