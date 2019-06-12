@@ -4,9 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 use app\assets\AirDatepickerAsset;
+use app\assets\BootstrapDatepickerAsset;
 use app\assets\ColorPickerAsset;
 
-AirDatepickerAsset::register($this);
+BootstrapDatepickerAsset::register($this);
 ColorPickerAsset::register($this);
 
 ?>
@@ -69,6 +70,10 @@ ColorPickerAsset::register($this);
 
 <script>
   $(document).ready(function () {
+
+    var stDate = $('#start-date').val();
+    var eDate = $('#end-date').val();
+
     $('#start-date').datepicker({
       autoClose: true,
       language: "ru",

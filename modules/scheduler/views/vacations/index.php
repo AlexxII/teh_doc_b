@@ -178,7 +178,6 @@ $this->params['breadcrumbs'][] = $this->title;
           })
         },
         yearChanged: function (e) {
-          console.log('11111');
           $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
           e.preventRendering = true;
           var currentYear = e.currentYear;
@@ -309,22 +308,112 @@ $this->params['breadcrumbs'][] = $this->title;
       });
     }
 
-
     function deleteVacation(event) {
+      var url = '/scheduler/vacations/delete-vacation';
+      var eventId = event.id;
+      jc = $.confirm({
+        icon: 'fa fa-question',
+        title: 'Вы уверены?',
+        content: 'Вы действительно хотите удалить отпуск?',
+        type: 'red',
+        closeIcon: false,
+        autoClose: 'cancel|9000',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+              jc.close();
+              deleteProcess(url, eventId);
+            }
+          },
+          cancel: {
+            action: function () {
+              return;
+            }
+          }
+        }
+      });
+    }
+
+    function deleteProcess(url, id) {
       var csrf = $('meta[name=csrf-token]').attr("content");
       var currentYear = $('#full-calendar').data('calendar').getYear();
-      var eventId = event.id;
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Ваш запрос выполняется!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
       $.ajax({
-        url: '/scheduler/vacations/delete-vacation',
+        url: url,
         method: 'post',
+        dataType: "JSON",
         data: {
-          _csrf: csrf,
-          id: eventId
+          id: id,
+          _csrf: csrf
         }
       }).done(function (response) {
-        $('#full-calendar').data('calendar').setYear(currentYear); // для перезагрузки
+        if (response != false) {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-thumbs-up',
+            title: 'Успех!',
+            content: 'Ваш запрос выполнен.',
+            type: 'green',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-success',
+                action: function () {
+                  $('#full-calendar').data('calendar').setYear(currentYear);
+                }
+              }
+            }
+          });
+        } else {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-exclamation-triangle',
+            title: 'Неудача!',
+            content: 'Запрос не выполнен. Что-то пошло не так.',
+            type: 'red',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-danger',
+                action: function () {
+                }
+              }
+            }
+          });
+        }
       }).fail(function () {
-        console.log('Что-то пошло не так!');
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|4000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
       });
     }
 
