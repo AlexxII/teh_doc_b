@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
 
   $(document).ready(function () {
-    var currentYear = new Date().getFullYear();
+    var startYear = new Date().getFullYear();
     var todayAll = new Date();
     todayAll.setHours(0, 0, 0, 0);
     var today = todayAll.getTime();
@@ -60,12 +60,18 @@ $this->params['breadcrumbs'][] = $this->title;
             holidays = JSON.parse(dataSource);
             holidays instanceof Array ? holidays : [];
           }
+          if (typeof callback == 'function')
+            callback();
+        },
+        fail: function (error) {
+          console.log(error);
+          if (typeof callback == 'function')
+            callback();
         }
       });
-      callback();
     }
 
-    getHolidays(currentYear, initCalendar);
+    getHolidays(startYear, initCalendar);
 
     function initCalendar() {
       $('#full-calendar').calendar({
@@ -181,8 +187,7 @@ $this->params['breadcrumbs'][] = $this->title;
           $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
           e.preventRendering = true;
           var currentYear = e.currentYear;
-          getHolidays(currentYear, emptyFun);
-          yearRender(e, currentYear);
+          getHolidays(currentYear, yearRender);
         }
       });
     }
@@ -205,11 +210,11 @@ $this->params['breadcrumbs'][] = $this->title;
       });
     }
 
-    function yearRender(e, year) {
+    function yearRender(year) {
       var csrf = $('meta[name=csrf-token]').attr("content");
       var users = [1];
       $('.users-checkboxes').each(function (e) {
-        if ($(this).is(':checked')){
+        if ($(this).is(':checked')) {
           users.push($(this).data('id'));
         }
       });
@@ -226,7 +231,7 @@ $this->params['breadcrumbs'][] = $this->title;
           users: users
         },
         success: function (dataSource) {
-          if (dataSource != '') {
+          if (dataSource.length > 0) {
             var data = JSON.parse(dataSource);
             data instanceof Array ? data : [];
             if (data instanceof Array) {
@@ -238,7 +243,7 @@ $this->params['breadcrumbs'][] = $this->title;
               data = [];
             }
           }
-          $(e.target).data('calendar').setDataSource(data);
+          $('#full-calendar').data('calendar').setDataSource(data);
         }
       });
     }
@@ -418,10 +423,13 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 
     function contains(arr, elem) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i] === elem) {
-          return true;
+      if (arr) {
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i] === elem) {
+            return true;
+          }
         }
+        return false;
       }
       return false;
     }
@@ -431,7 +439,7 @@ $this->params['breadcrumbs'][] = $this->title;
       var currentYear = $('#full-calendar').data('calendar').getYear();
       var users = [];
       $('.users-checkboxes').each(function (e) {
-        if ($(this).is(':checked')){
+        if ($(this).is(':checked')) {
           users.push($(this).data('id'));
         }
       });
@@ -464,13 +472,7 @@ $this->params['breadcrumbs'][] = $this->title;
         data = [];
         $('#full-calendar').data('calendar').setDataSource(data);
       }
-
     })
-
   });
-
-  function emptyFun() {
-    return 1;
-  }
 
 </script>

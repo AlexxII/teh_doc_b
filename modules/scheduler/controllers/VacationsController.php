@@ -86,7 +86,7 @@ class VacationsController extends Controller
       }
       return json_encode(array_values($yearData));
     }
-    return var_dump('false');
+    return false;
   }
 
   public function actionUpdateForm($id)
