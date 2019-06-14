@@ -30,7 +30,36 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script>
   $(document).ready(function () {
-    var currentYear = new Date().getFullYear();
+    var startYear = new Date().getFullYear();
+    var todayAll = new Date();
+    todayAll.setHours(0, 0, 0, 0);
+    var today = todayAll.getTime();
+    var holidays;
+
+    function getHolidays(year, callback) {
+      $.ajax({
+        url: "holidays/holidays-array",
+        type: 'GET',
+        data: {
+          year: year
+        },
+        success: function (dataSource) {
+          if (dataSource != '') {
+            holidays = JSON.parse(dataSource);
+            holidays instanceof Array ? holidays : [];
+          }
+          if (typeof callback == 'function')
+            callback();
+        },
+        fail: function (error) {
+          if (typeof callback == 'function')
+            callback();
+        }
+      });
+    }
+
+    getHolidays(startYear, initCalendar);
+
 
     $('#full-calendar').calendar({
       language: 'ru',

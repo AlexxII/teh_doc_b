@@ -45,7 +45,6 @@ $this->params['breadcrumbs'][] = $this->title;
     var todayAll = new Date();
     todayAll.setHours(0, 0, 0, 0);
     var today = todayAll.getTime();
-
     var holidays;
 
     function getHolidays(year, callback) {
