@@ -47,6 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
     var today = todayAll.getTime();
     var holidays;
 
+    $('.users-checkboxes').attr("disabled", true);
+
     function getHolidays(year, callback) {
       $.ajax({
         url: "holidays/holidays-array",
@@ -59,11 +61,12 @@ $this->params['breadcrumbs'][] = $this->title;
             holidays = JSON.parse(dataSource);
             holidays instanceof Array ? holidays : [];
           }
-          if (typeof callback == 'function')
+          if (typeof callback == 'function') {
             callback();
+          }
         },
         fail: function (error) {
-          console.log(error);
+          console.log('Ошибка выполнения запроса по праздникам!');
           if (typeof callback == 'function')
             callback();
         }
@@ -186,7 +189,10 @@ $this->params['breadcrumbs'][] = $this->title;
           $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
           e.preventRendering = true;
           var currentYear = e.currentYear;
-          getHolidays(currentYear, yearRender);
+          getHolidays(currentYear, yearRender(currentYear));
+        },
+        renderEnd: function (e) {
+          $('.users-checkboxes').removeAttr("disabled");
         }
       });
     }
@@ -436,6 +442,7 @@ $this->params['breadcrumbs'][] = $this->title;
     $('.users-checkboxes').click('on', function (e) {
       var csrf = $('meta[name=csrf-token]').attr("content");
       var currentYear = $('#full-calendar').data('calendar').getYear();
+      $('.months-container').html('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
       var users = [];
       $('.users-checkboxes').each(function (e) {
         if ($(this).is(':checked')) {

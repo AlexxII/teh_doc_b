@@ -6,11 +6,6 @@ use app\assets\BootstrapDatepickerAsset;
 BootstrapDatepickerAsset::register($this);
 BootstrapYearCalendarAsset::register($this);
 
-$this->title = 'Глобальный';
-$this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
-$this->params['breadcrumbs'][] = $this->title;
-
-
 ?>
 <style>
   .calendar {
@@ -20,10 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <div class="main-scheduler row">
-  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
-    <div id="nav-calendar"></div>
-  </div>
-  <div class="col-md-10 col-lg-10">
+  <div class="col-md-12 col-lg-12">
     <div id="full-calendar"></div>
   </div>
 </div>
@@ -38,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     function getHolidays(year, callback) {
       $.ajax({
-        url: "holidays/holidays-array",
+        url: "scheduler/holidays/holidays-array",
         type: 'GET',
         data: {
           year: year
@@ -154,7 +146,7 @@ $this->params['breadcrumbs'][] = $this->title;
   function yearRender(year) {
     var csrf = $('meta[name=csrf-token]').attr("content");
     $.ajax({
-      url: "full-year/year-events",
+      url: "scheduler/full-year/year-events",
       type: 'GET',
       data: {
         // _csrf: csrf,

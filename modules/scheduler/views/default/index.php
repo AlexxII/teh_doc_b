@@ -107,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
         nextYear: 'fa-angle-double-right'
       },
       header: {
-        left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1',
+        left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom2',
         center: 'title',
         right: 'today prev,next'
       },
@@ -115,6 +115,8 @@ $this->params['breadcrumbs'][] = $this->title;
         custom1: {
           text: 'Навигация',
           click: function () {
+            $('.fc-view-container').html('');
+
             navCalendar = $.confirm({
               title: 'Установка даты',
               content: calInput,
@@ -125,6 +127,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
               }
             })
+          }
+        },
+        custom2: {
+          text: 'ГОД',
+          click: function () {
+            $('.fc-view-container').html('');
+            $.ajax({
+              url: '/scheduler/full-year/test',
+              method: 'get',
+            }).done(function (resp) {
+              $('.fc-view-container').html(resp);
+            }).fail(function () {
+              self.setContentAppend('<div>Что-то пошло не так!</div>');
+            });
           }
         }
       },

@@ -57,8 +57,6 @@ class VacationsController extends Controller
 
   public function actionVacationsData()
   {
-//    sleep(5);
-//    return false;
     if (isset($_POST['year']) && isset($_POST['users'])) {
       $year = $_POST['year'];
       $users = $_POST['users'];
