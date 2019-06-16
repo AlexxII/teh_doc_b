@@ -24,6 +24,11 @@ class m190602_163717_scheduler_events_tbl extends Migration
       'description' => $this->string(255),
       'user_id' => $this->bigInteger()->notNull(),
       'color' => $this->string('50'),
+
+      'important' => $this->boolean()->defaultValue(0),
+      'year_view' => $this->boolean()->defaultValue(0),
+      'activity' => $this->bigInteger(),
+
       'created_at' => $this->timestamp(),
       'updated_at' => $this->timestamp(),
       'valid' => $this->boolean()->defaultValue(1)

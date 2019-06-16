@@ -48,6 +48,11 @@ $this->params['breadcrumbs'][] = $this->title;
   .fc-more-popover {
     background-color: white;
   }
+  .wrapper-class {
+    display: flex;
+    flex-direction: row;
+  }
+
 </style>
 
 
@@ -115,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
         custom1: {
           text: 'Навигация',
           click: function () {
-            $('.fc-view-container').html('');
+            // $('.fc-view-container').html('');
 
             navCalendar = $.confirm({
               title: 'Установка даты',

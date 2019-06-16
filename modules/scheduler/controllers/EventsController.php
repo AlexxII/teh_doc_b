@@ -112,7 +112,6 @@ class EventsController extends Controller
     return $this->renderAjax('_vks_view', [
       'model' => $model, true
     ]);
-    return var_dump($session->vks_type_text);
   }
 
   public function actionTo($i)
@@ -126,7 +125,6 @@ class EventsController extends Controller
     return $this->renderAjax('_to_view', [
       'models' => $models, true
     ]);
-//    return var_dump($req);
   }
 
   public function actionSubEvent($i)

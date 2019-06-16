@@ -41,7 +41,8 @@ class FullYearController extends Controller
       $yearData[$key]['sDay'] = Date('j', strtotime($model->start_date));
       $yearData[$key]['eYear'] = Date('Y', strtotime($model->end_date));
       $yearData[$key]['eMonth'] = Date('n', strtotime($model->end_date)) - 1;
-      $yearData[$key]['eDay'] = Date('j', strtotime($model->end_date));
+      $yearData[$key]['eDay'] = Date('j', strtotime($model->end_date)) - 1;
+      $yearData[$key]['req'] = 'sub-event';
     }
     return json_encode(array_values($yearData));
   }
@@ -50,6 +51,85 @@ class FullYearController extends Controller
   public function actionTest()
   {
     return $this->renderAjax('test');
+  }
+
+  public function actionSaveEvent()
+  {
+    if (isset($_POST['msg'])) {
+      $userId = Yii::$app->user->identity->id;
+      $msg = $_POST['msg'];
+      $model = new Event();
+      $day = 60*60*24;
+      $model->start_date = date('Y-m-d', strtotime($msg['start']));
+      $model->end_date = date('Y-m-d', strtotime($msg['end']) + $day);
+      $model->title = $msg['title'];
+      $model->description = $msg['desc'];
+      $model->color = $msg['color'] ? $msg['color'] : null;
+      $model->user_id = $userId;
+
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  public function actionUpdateEvent($id)
+  {
+    $model = Event::findOne($id);
+    if ($model) {
+      $day = 60*60*24;
+      $model->start_date = date('d.m.Y', strtotime($model->start_date));
+      $model->end_date = date('d.m.Y', strtotime($model->end_date) - $day);
+      return $this->renderAjax('_create_form', [
+        'model' => $model
+      ]);
+    }
+    return false;
+  }
+
+  public function actionSaveUpdatedEvent()
+  {
+    if (isset($_POST['id'])) {
+      $eId = $_POST['id'];
+      $model = Event::findOne($eId);
+      $msg = $_POST['msg'];
+      $day = 60*60*24;
+      $model->start_date = date('Y-m-d', strtotime($msg['start']));
+      $model->end_date = date('Y-m-d', strtotime($msg['end']) + $day);
+      $model->title = $msg['title'];
+      $model->description = $msg['desc'];
+      $model->color = $msg['color'] ? $msg['color'] : null;
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  public function actionDeleteEvent()
+  {
+    if (isset($_POST['event'])) {
+      $eId = $_POST['event'];
+      $model = Event::findOne($eId);
+      if ($model->delete()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  public function actionSubEvent($id)
+  {
+    $sEventId = $id;
+    $model = Event::findOne($sEventId);
+
+    return $this->renderAjax('_sub_event_view', [
+      'model' => $model, true
+    ]);
   }
 
 }

@@ -30,7 +30,7 @@ BootstrapYearCalendarAsset::register($this);
 
     function getHolidays(year, callback) {
       $.ajax({
-        url: "scheduler/holidays/holidays-array",
+        url: "/scheduler/holidays/holidays-array",
         type: 'GET',
         data: {
           year: year
@@ -95,6 +95,19 @@ BootstrapYearCalendarAsset::register($this);
             $(e.element).popover('show');
           }
         },
+        customDayRenderer: function (element, date) {
+          if (date.getTime() == today) {
+            $(element).css('background-color', 'orange');
+            $(element).css('color', 'white');
+            $(element).css('border-radius', '15px');
+          }
+          if (contains(holidays, date.getTime() / 1000)) {
+            $(element).css('font-weight', 'bold');
+            $(element).css('font-size', '15px');
+            $(element).css('color', 'red');
+          }
+
+        },
         selectRange: function (e) {
           var day = 24 * 60 * 60 * 1000;
           var year = $('#full-calendar').data('calendar').getYear();
@@ -146,7 +159,7 @@ BootstrapYearCalendarAsset::register($this);
   function yearRender(year) {
     var csrf = $('meta[name=csrf-token]').attr("content");
     $.ajax({
-      url: "scheduler/full-year/year-events",
+      url: "/scheduler/full-year/year-events",
       type: 'GET',
       data: {
         // _csrf: csrf,
@@ -239,7 +252,7 @@ BootstrapYearCalendarAsset::register($this);
   function saveEvent(data, year) {
     var csrf = $('meta[name=csrf-token]').attr("content");
     $.ajax({
-      url: '/scheduler/events/save-event',
+      url: '/scheduler/full-year/save-event',
       method: 'post',
       data: {
         _csrf: csrf,
@@ -252,14 +265,83 @@ BootstrapYearCalendarAsset::register($this);
     });
   }
 
+  function viewInfo(event) {
+    var year = $('#full-calendar').data('calendar').getYear();
+    var id = event.id;
+    var req = event.req;
+    var url = '/scheduler/full-year/' + req;
+    c = $.confirm({
+      content: function () {
+        var self = this;
+        return $.ajax({
+          url: url,
+          method: 'get',
+          data: {
+            id: id
+          }
+        }).done(function (response) {
+          // console.log(response);
+        }).fail(function () {
+          self.setContentAppend('<div>Что-то пошло не так!</div>');
+        });
+      },
+      contentLoaded: function (data, status, xhr) {
+        this.setContentAppend('<div>' + data + '</div>');
+      },
+      type: 'blue',
+      columnClass: 'medium',
+      title: 'Подробности',
+      buttons: {
+        ok: {
+          btnClass: 'btn-blue',
+          text: 'К СОБЫТИЮ',
+          action: function () {
+            window.open(url);
+          }
+        },
+        edit: {
+          btnClass: 'btn-blue',
+          text: 'Обновить',
+          action: function () {
+            editEvent(event);
+          }
+        },
+        del: {
+          btnClass: 'btn-red',
+          text: 'Удалить',
+          action: function () {
+            deleteEvent(event)
+          }
+        },
+        cancel: {
+          text: 'НАЗАД'
+        }
+      },
+      onContentReady: function () {
+        var self = this;
+        if (req == 'sub-event') {
+          this.buttons.ok.hide();
+        } else {
+          this.buttons.del.hide();
+          this.buttons.edit.hide();
+        }
+        this.$content.find('#event-title').on('keyup mouseclick', function () {
+          if ($(this).val() != '') {
+            self.buttons.ok.enable();
+          } else {
+            self.buttons.ok.disable();
+          }
+        });
+      }
+    })
 
-  function viewInfo() {
-    console.log(111);
+    // console.log(event);
   }
 
-
-  function editEvent(id) {
-    var url = '/scheduler/events/update-event';
+  function editEvent(event) {
+    var year = $('#full-calendar').data('calendar').getYear();
+    var url = '/scheduler/full-year/update-event';
+    var id = event.id;
     $.confirm({
       content: function () {
         var self = this;
@@ -294,7 +376,7 @@ BootstrapYearCalendarAsset::register($this);
             msg.end = $('#end-date').val();
             msg.desc = $('#event-description').val();
             msg.color = $('#colorpicker').val();
-            updateEvent(msg, id);
+            updateEvent(msg, id, year);
           }
         },
         cancel: {
@@ -316,7 +398,7 @@ BootstrapYearCalendarAsset::register($this);
     })
   }
 
-  function updateEvent(msg, id) {
+  function updateEvent(msg, id, year) {
     var csrf = $('meta[name=csrf-token]').attr("content");
     $.ajax({
       url: '/scheduler/events/save-updated-event',
@@ -327,15 +409,17 @@ BootstrapYearCalendarAsset::register($this);
         msg: msg
       }
     }).done(function (response) {
-      calendar.refetchEvents();
+      $('#full-calendar').data('calendar').setYear(year);
     }).fail(function () {
       console.log('Что-то пошло не так!');
     });
   }
 
-  function deleteEvent(id) {
+  function deleteEvent(event) {
     var csrf = $('meta[name=csrf-token]').attr("content");
-    var url = '/scheduler/events/delete-event';
+    var url = '/scheduler/full-year/delete-event';
+    var id = event.id;
+    var year = $('#full-calendar').data('calendar').getYear();
     jc = $.confirm({
       icon: 'fa fa-question',
       title: 'Вы уверены?',
@@ -348,7 +432,7 @@ BootstrapYearCalendarAsset::register($this);
           btnClass: 'btn-danger',
           action: function () {
             jc.close();
-            deleteProcess(url, id);
+            deleteProcess(url, id, year);
           }
         },
         cancel: {
@@ -360,7 +444,19 @@ BootstrapYearCalendarAsset::register($this);
     });
   }
 
-  function deleteProcess(url, id) {
+  function contains(arr, elem) {
+    if (arr) {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === elem) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return false;
+  }
+
+  function deleteProcess(url, id, year) {
     var csrf = $('meta[name=csrf-token]').attr("content");
     jc = $.confirm({
       icon: 'fa fa-cog fa-spin',
@@ -394,7 +490,7 @@ BootstrapYearCalendarAsset::register($this);
             ok: {
               btnClass: 'btn-success',
               action: function () {
-                calendar.refetchEvents();
+                $('#full-calendar').data('calendar').setYear(year);
               }
             }
           }
@@ -414,6 +510,7 @@ BootstrapYearCalendarAsset::register($this);
             ok: {
               btnClass: 'btn-danger',
               action: function () {
+                $('#full-calendar').data('calendar').setYear(year);
               }
             }
           }
