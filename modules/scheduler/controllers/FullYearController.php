@@ -132,4 +132,23 @@ class FullYearController extends Controller
     ]);
   }
 
+  public function actionImportantEvents()
+  {
+    $count = 0;
+    $mc = 3600 * 24;
+    $array = Event::find()
+      ->asArray()
+      ->all();
+    $result = [];
+
+    foreach ($array as $key => $item) {
+//      for ($i = 0; $i < $item['duration']; $i++) {
+      $result[$count] = strtotime($item['start_date']);
+      $count++;
+//      }
+    }
+    return json_encode($result);
+  }
+
+
 }

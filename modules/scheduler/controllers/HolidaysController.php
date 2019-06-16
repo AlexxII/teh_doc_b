@@ -201,6 +201,7 @@ class HolidaysController extends Controller
   // From vacation calendar
   public function actionHolidaysArray($year)
   {
+//    sleep(2);
     $ar1 = Holiday::find()
       ->select('start_date, duration')
       ->where(['>=', 'startYear', $year])

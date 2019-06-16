@@ -34,9 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
     var todayAll = new Date();
     todayAll.setHours(0, 0, 0, 0);
     var today = todayAll.getTime();
-    var holidays;
+    var holidays, importantEvents;
+
+    $('[data-toggle="tooltip"]').tooltip();
 
     function getHolidays(year, callback) {
+      // getImportantEvents();
       $.ajax({
         url: "/scheduler/holidays/holidays-array",
         type: 'GET',
@@ -48,13 +51,36 @@ $this->params['breadcrumbs'][] = $this->title;
             holidays = JSON.parse(dataSource);
             holidays instanceof Array ? holidays : [];
           }
-          if (typeof callback == 'function')
-            callback();
         },
-        fail: function (error) {
+        error: function (error) {
           console.log('Ошибка выполнения запроса по праздникам!');
+        },
+        complete: function () {
           if (typeof callback == 'function')
             callback();
+        }
+      });
+    }
+
+    function getImportantEvents() {
+      $.ajax({
+        url: "/scheduler/full-year/important-events",
+        type: 'GET',
+        data: {
+          // year: year
+        },
+        success: function (dataSource) {
+          if (dataSource != '') {
+            importantEvents = JSON.parse(dataSource);
+            importantEvents instanceof Array ? importantEvents : [];
+          }
+        },
+        error: function (error) {
+          console.log('Ошибка выполнения запроса по праздникам!');
+        },
+        complete: function () {
+          // if (typeof callback == 'function')
+          // callback();
         }
       });
     }
@@ -90,7 +116,6 @@ $this->params['breadcrumbs'][] = $this->title;
             for (var i in e.events) {
               content += '<div class="event-tooltip-content">'
                 + '<div class="event-name" style="color: #ff5a35">' + e.events[i].name + '</div>'
-                + '<div class="event-location">' + e.events[i].location + '</div>'
                 + '</div>';
             }
             $(e.element).popover({
@@ -99,9 +124,9 @@ $this->params['breadcrumbs'][] = $this->title;
               html: true,
               content: content
             });
-
             $(e.element).popover('show');
           }
+          e.element.tooltip('show');
         },
         customDayRenderer: function (element, date) {
           if (date.getTime() == today) {
@@ -113,8 +138,20 @@ $this->params['breadcrumbs'][] = $this->title;
             $(element).css('font-weight', 'bold');
             $(element).css('font-size', '15px');
             $(element).css('color', 'red');
+            // $(element).attr('title', 'Возьми МЕНЯ!!!!!');
+            // $(element).attr('data-toggle', 'tooltip');
+            // $(element).attr('data-placement', 'top');
+            // $(element).tooltip('toggle');
           }
-
+          if (contains(importantEvents, date.getTime() / 1000)) {
+            $(element).css('font-weight', 'bold');
+            $(element).css('font-size', '14px');
+            $(element).css('color', 'green');
+            // $(element).attr('title', 'Важное говно!');
+            // $(element).attr('data-toggle', 'tooltip');
+            // $(element).attr('data-placement', 'top');
+            // $(element).tooltip('toggle');
+          }
         },
         selectRange: function (e) {
           var day = 24 * 60 * 60 * 1000;
@@ -195,8 +232,6 @@ $this->params['breadcrumbs'][] = $this->title;
   function createEvent(e, year) {
     var sDate = e.startDate;
     var eDate = e.endDate;
-    // var sDateStr = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate();
-    // var eDateStr = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate();
     var sDateStr = sDate.getDate() + '.' + (sDate.getMonth() + 1) + '.' + sDate.getFullYear();
     var eDateStr = eDate.getDate() + '.' + (eDate.getMonth() + 1) + '.' + eDate.getFullYear();
 

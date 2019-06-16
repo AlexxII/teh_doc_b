@@ -21,40 +21,6 @@ class VacationsController extends Controller
     ]);
   }
 
-  public function actionForm($startDate, $endDate, $diff)
-  {
-    $model = new Vacation();
-    $userId = Yii::$app->user->identity->id;
-    $sDate = date('d.m.Y', strtotime($startDate));
-    $eDate = date('d.m.Y', strtotime($endDate));
-    $model->start_date = $sDate;
-    $model->end_date = $eDate;
-    $model->duration = $diff;
-    $model->user_id = $userId;
-    return $this->renderAjax('_form', [
-      'model' => $model
-    ]);
-  }
-
-  public function actionSaveVacation()
-  {
-    if (isset($_POST['msg'])) {
-      $msg = $_POST['msg'];
-      $model = new Vacation();
-      $model->start_date = date('Y-m-d', strtotime($msg['start']));
-      $model->end_date = date('Y-m-d', strtotime($msg['end']));
-      $model->user_id = $msg['user'];
-      $model->duration = $msg['duration'];
-      if ($model->save()) {
-        return true;
-      }
-      return false;
-    }
-    return false;
-
-  }
-
-
   public function actionVacationsData()
   {
     if (isset($_POST['year']) && isset($_POST['users'])) {
@@ -88,6 +54,40 @@ class VacationsController extends Controller
     }
     return false;
   }
+
+  public function actionForm($startDate, $endDate, $diff)
+  {
+    $model = new Vacation();
+    $userId = Yii::$app->user->identity->id;
+    $sDate = date('d.m.Y', strtotime($startDate));
+    $eDate = date('d.m.Y', strtotime($endDate));
+    $model->start_date = $sDate;
+    $model->end_date = $eDate;
+    $model->duration = $diff;
+    $model->user_id = $userId;
+    return $this->renderAjax('_form', [
+      'model' => $model
+    ]);
+  }
+
+  public function actionSaveVacation()
+  {
+    if (isset($_POST['msg'])) {
+      $msg = $_POST['msg'];
+      $model = new Vacation();
+      $model->start_date = date('Y-m-d', strtotime($msg['start']));
+      $model->end_date = date('Y-m-d', strtotime($msg['end']));
+      $model->user_id = $msg['user'];
+      $model->duration = $msg['duration'];
+      if ($model->save()) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+
+  }
+
 
   public function actionUpdateForm($id)
   {

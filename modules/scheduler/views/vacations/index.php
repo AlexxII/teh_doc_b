@@ -61,12 +61,11 @@ $this->params['breadcrumbs'][] = $this->title;
             holidays = JSON.parse(dataSource);
             holidays instanceof Array ? holidays : [];
           }
-          if (typeof callback == 'function') {
-            callback();
-          }
         },
-        fail: function (error) {
+        error: function (error) {
           console.log('Ошибка выполнения запроса по праздникам!');
+        },
+        complete: function () {
           if (typeof callback == 'function')
             callback();
         }
@@ -134,56 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         },
         selectRange: function (e) {
-          var day = 24 * 60 * 60 * 1000;
-          var diff = ((e.endDate - e.startDate) / day) + 1;
-          var sDate = e.startDate;
-          var eDate = e.endDate;
-          var sDateStr = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate();
-          var eDateStr = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate();
-          var c = $.confirm({
-            content: function () {
-              var self = this;
-              return $.ajax({
-                url: '/scheduler/vacations/form',
-                method: 'get',
-                data: {
-                  startDate: sDateStr,
-                  endDate: eDateStr,
-                  diff: diff
-                }
-              }).fail(function () {
-                self.setContentAppend('<div>Что-то пошло не так!</div>');
-              });
-            },
-            contentLoaded: function (data, status, xhr) {
-              this.setContentAppend('<div>' + data + '</div>');
-            },
-            type: 'blue',
-            columnClass: 'medium',
-            title: 'Добавить отпуск',
-            buttons: {
-              ok: {
-                btnClass: 'btn-blue',
-                text: 'Сохранить',
-                action: function () {
-                  var msg = {};
-                  var title = $('#event-title').val();
-                  if (title == '') {
-                    return;
-                  }
-                  msg.user = $('#user').val();
-                  msg.start = $('#start-date').val();
-                  msg.end = $('#end-date').val();
-                  msg.duration = $('#duration').val();
-                  saveVacation(msg, msg.user);
-                }
-              },
-              cancel: {
-                btnClass: 'btn-red',
-                text: 'Отмена'
-              }
-            }
-          })
+          createVacation(e);
         },
         yearChanged: function (e) {
           $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
@@ -195,6 +145,59 @@ $this->params['breadcrumbs'][] = $this->title;
           $('.users-checkboxes').removeAttr("disabled");
         }
       });
+    }
+
+    function createVacation(e) {
+      var day = 24 * 60 * 60 * 1000;
+      var diff = ((e.endDate - e.startDate) / day) + 1;
+      var sDate = e.startDate;
+      var eDate = e.endDate;
+      var sDateStr = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate();
+      var eDateStr = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate();
+      var c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: '/scheduler/vacations/form',
+            method: 'get',
+            data: {
+              startDate: sDateStr,
+              endDate: eDateStr,
+              diff: diff
+            }
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'medium',
+        title: 'Добавить отпуск',
+        buttons: {
+          ok: {
+            btnClass: 'btn-blue',
+            text: 'Сохранить',
+            action: function () {
+              var msg = {};
+              var title = $('#event-title').val();
+              if (title == '') {
+                return;
+              }
+              msg.user = $('#user').val();
+              msg.start = $('#start-date').val();
+              msg.end = $('#end-date').val();
+              msg.duration = $('#duration').val();
+              saveVacation(msg, msg.user);
+            }
+          },
+          cancel: {
+            btnClass: 'btn-red',
+            text: 'Отмена'
+          }
+        }
+      })
     }
 
     function saveVacation(data, userId) {

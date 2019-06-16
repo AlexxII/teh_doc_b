@@ -96,8 +96,8 @@ JConfirmAsset::register($this);
           ['label' => 'Производственный календарь', 'url' => ['/scheduler/production']],
           ['label' => 'Календарь праздников', 'url' => ['/scheduler/holidays']],
           ['label' => 'Календари отпусков', 'url' => ['/scheduler/vacations']],
+          ['label' => 'Календарь дежурств', 'url' => ['/scheduler/duty']],
           ['label' => 'Годовые события', 'url' => ['/scheduler/full-year']],
-          ['label' => 'Дежурства', 'url' => ['/scheduler/duty']],
           '<li class="divider"></li>',
           '<li class="dropdown-header" style="font-size: 10px">События</li>',
           ['label' => 'Пользовательские', 'url' => ['#']],
@@ -109,6 +109,7 @@ JConfirmAsset::register($this);
           '<li class="dropdown-header" style="font-size: 10px">Календари</li>',
           ['label' => 'План-график событий', 'url' => ['#']],
           ['label' => 'Причины отсутствия', 'url' => ['/scheduler/control/absence-type']],
+          ['label' => 'Виды дежурств', 'url' => ['/scheduler/control/duty-type']],
         ],
       ],
       Yii::$app->user->isGuest ? (

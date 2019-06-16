@@ -1,214 +1,502 @@
 <?php
 
-use app\assets\AirDatepickerAsset;
-use app\assets\fullcalendar\CalendarDaygridAsset;
-use app\assets\fullcalendar\CalendarTimegridAsset;
-use app\assets\fullcalendar\CalendarInteractionAsset;
-use app\assets\fullcalendar\CalendarBootstrapAsset;
+use app\assets\BootstrapYearCalendarAsset;
+use app\assets\BootstrapDatepickerAsset;
 
-CalendarDaygridAsset::register($this);
-CalendarTimegridAsset::register($this);
-CalendarInteractionAsset::register($this);
-CalendarBootstrapAsset::register($this);
-AirDatepickerAsset::register($this);
+BootstrapYearCalendarAsset::register($this);
+BootstrapDatepickerAsset::register($this);
 
-$this->title = 'График дежурств';
+$this->title = 'Календарь дежурств';
 $this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
 $this->params['breadcrumbs'][] = $this->title;
 
 
 ?>
 <style>
-  .main-scheduler {
-    margin-top: 20px;
-  }
-  table.table-bordered > tbody > tr > td:nth-of-type(1) {
-    /*background-color: #0a0a0a;*/
-  }
-  .fc-week-number {
-    background-color: #e2e2e2;
-  }
-  .past div.fc-time, .past div.fc-title {
-    text-decoration: line-through;
+  .calendar {
+    overflow: visible;
   }
 </style>
 
 
-<div class="main-scheduler">
-  <div class="col-md-12 col-lg-12">
-    <div id="calendar">
+<div class="main-scheduler row">
+  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
+    <div id="info-panel">
+      <span><h3>Сотрудники:</h3></span>
+      <?php foreach ($models as $key => $model): ?>
+        <div style="color: <?= $model->color_scheme ?>; font-weight: bold">
+          <label style="cursor: pointer">
+            <input type="checkbox" class="users-checkboxes" id="<?= $model->id ?>" data-id="<?= $model->id ?>">
+            <?= $model->username ?>
+          </label>
+        </div>
+      <?php endforeach; ?>
     </div>
+  </div>
+  <div class="col-md-10 col-lg-10">
+    <div id="full-calendar" data-provide="ec"></div>
   </div>
 </div>
 
 <script>
 
-  var calendar, Draggable;
-
   $(document).ready(function () {
+    var startYear = new Date().getFullYear();
+    var todayAll = new Date();
+    todayAll.setHours(0, 0, 0, 0);
+    var today = todayAll.getTime();
+    var holidays;
 
-    // initialize the external events
-    // -----------------------------------------------------------------
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    var calendarEl = document.getElementById('calendar');
-    calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: ['interaction', 'dayGrid', 'timeGrid', 'bootstrap'],
-      locale: 'ru',
-      themeSystem: 'bootstrap',
-      weekNumbers: true,
-      selectable: true,
-      nowIndicator: true,
-      slotDuration: '00:15:00',
-      minTime: '06:00:00',
-      navLinks: true,
-      eventSources: [
-        {
-          url: '/scheduler/duty/list',
-          method: 'POST',
-          extraParams: {
-            _csrf: csrf
-          },
-          failure: function () {
-            console.log('Внимание! Ошибка получения событий.');
-          }
-        }
-      ],
-      buttonText: {
-        month: 'M',
-        week: 'Н',
-        day: 'Д',
-        list: 'Лист'
-      },
-      bootstrapFontAwesome: {
-        close: 'fa-times',
-        prev: 'fa-chevron-left',
-        next: 'fa-chevron-right',
-        prevYear: 'fa-angle-double-left',
-        nextYear: 'fa-angle-double-right'
-      },
-      header: {
-        left: 'dayGridMonth,timeGridWeek,timeGridDay',
-        center: 'title',
-        right: 'today prev,next'
-      },
-      customButtons: {
-        custom1: {
-          text: 'custom 1',
-          click: function () {
-            alert('clicked custom button 1!');
-          }
-        }
-      },
-      businessHours: [ // specify an array instead
-        {
-          daysOfWeek: [1, 2, 3, 4], // Monday, Tuesday, Wednesday, Thursday
-          startTime: '09:00',
-          endTime: '18:15'
+    $('.users-checkboxes').attr("disabled", true);
+
+    function getHolidays(year, callback) {
+      $.ajax({
+        url: "holidays/holidays-array",
+        type: 'GET',
+        data: {
+          year: year
         },
-        {
-          daysOfWeek: [5], // Friday
-          startTime: '09:00',
-          endTime: '17:00'
+        success: function (dataSource) {
+          if (dataSource != '') {
+            holidays = JSON.parse(dataSource);
+            holidays instanceof Array ? holidays : [];
+          }
+        },
+        error: function (error) {
+          console.log('Ошибка выполнения запроса по праздникам!');
+        },
+        complete: function () {
+          if (typeof callback == 'function')
+            callback();
         }
-      ],
-      droppable: true, // this allows things to be dropped onto the calendar
+      });
+    }
 
-      //========================= rendering ==================================
-      eventRender: function (info) {
-        var ntoday = new Date();
-        if (info.event._def.rendering == 'background') {
-          var type = info.event._def.extendedProps.holiday_type;
-          if (type == 0) {
-            $(info.el).css('background-color', '#E0FFFF');
-          } else if (type == 1 || type == 2) {
-            $(info.el).css('background-color', '#FFA07A');
-          } else {
-            $(info.el).css('background-color', '#ff5a35');
+    getHolidays(startYear, initCalendar);
+
+    function initCalendar() {
+      $('#full-calendar').calendar({
+        language: 'ru',
+        enableContextMenu: true,
+        enableRangeSelection: true,
+        contextMenuItems: [
+          {
+            text: 'Обновить',
+            click: editDuty
+          },
+          {
+            text: 'Удалить',
+            click: deleteDuty
+          }
+        ],
+        dayContextMenu: function (e) {
+          $(e.element).popover('hide');
+        },
+        mouseOnDay: function (e) {
+          if (e.events.length > 0) {
+            var content = '';
+            for (var i in e.events) {
+              if ('hType' in e.events[i]) {
+                return;
+              }
+              content += '<div class="event-tooltip-content">'
+                + '<div class="event-name" style="color:' + e.events[i].color + ' ! important ">' + e.events[i].name + '</div>'
+                + '<div class="event-location">' + e.events[i].location + '</div>'
+                + '</div>';
+            }
+            $(e.element).popover({
+              trigger: 'manual',
+              container: 'body',
+              html: true,
+              content: content
+            });
+
+            $(e.element).popover('show');
+          }
+        },
+        mouseOutDay: function (e) {
+          if (e.events.length > 0) {
+            $(e.element).popover('hide');
+          }
+        },
+        customDayRenderer: function (element, date) {
+          if (date.getTime() == today) {
+            $(element).css('background-color', 'orange');
+            $(element).css('color', 'white');
+            $(element).css('border-radius', '15px');
+          }
+          if (contains(holidays, date.getTime() / 1000)) {
+            $(element).css('font-weight', 'bold');
+            $(element).css('font-size', '15px');
+            $(element).css('color', 'red');
+          }
+
+        },
+        selectRange: function (e) {
+          createDuty(e);
+        },
+        yearChanged: function (e) {
+          $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
+          e.preventRendering = true;
+          var currentYear = e.currentYear;
+          getHolidays(currentYear, yearRender(currentYear));
+        },
+        renderEnd: function (e) {
+          $('.users-checkboxes').removeAttr("disabled");
+        }
+      });
+    }
+
+    function createDuty(e) {
+      var sDate = e.startDate;
+      var eDate = e.endDate;
+      var sDateStr = sDate.getDate() + '.' + (sDate.getMonth() + 1) + '.' + sDate.getFullYear();
+      var eDateStr = eDate.getDate() + '.' + (eDate.getMonth() + 1) + '.' + eDate.getFullYear();
+      var day = 24 * 60 * 60 * 1000;
+      var diff = ((e.endDate - e.startDate) / day) + 1;
+      var c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: '/scheduler/duty/form',
+            method: 'get',
+            data: {
+              startDate: sDateStr,
+              endDate: eDateStr,
+              diff: diff
+            }
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'medium',
+        title: 'Добавить дежурство',
+        buttons: {
+          ok: {
+            btnClass: 'btn-blue',
+            text: 'Сохранить',
+            action: function () {
+              var msg = {};
+              var dutyType = $('#duty-type').val();
+              if (dutyType == '') {
+                return;
+              }
+              msg.duration = $('#duration').val();  // field is hidden
+              msg.user = $('#user').val();
+              msg.dutyType = dutyType;
+              msg.start = $('#start-date').val();
+              msg.end = $('#end-date').val();
+              saveDuty(msg, msg.user);
+            }
+          },
+          cancel: {
+            btnClass: 'btn-red',
+            text: 'Отмена'
+          }
+        },
+        onContentReady: function () {
+          var self = this;
+          this.buttons.ok.disable();
+          this.$content.find('#duty-type').on('change', function (e) {
+            if ($(this).val() != '') {
+              self.buttons.ok.enable();
+            } else {
+              self.buttons.ok.disable();
+            }
+          });
+        }
+      })
+    }
+
+
+    function saveDuty(data, userId) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var currentYear = $('#full-calendar').data('calendar').getYear();
+      $.ajax({
+        url: '/scheduler/duty/save',
+        method: 'post',
+        data: {
+          _csrf: csrf,
+          msg: data
+        }
+      }).done(function (response) {
+        $('#' + userId).prop('checked', true);
+        $('#full-calendar').data('calendar').setYear(currentYear); // для перезагрузки
+      }).fail(function () {
+        console.log('Что-то пошло не так!');
+      });
+    }
+
+    function yearRender(year) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var users = [1];
+      $('.users-checkboxes').each(function (e) {
+        if ($(this).is(':checked')) {
+          users.push($(this).data('id'));
+        }
+      });
+      data = [];
+      if (users.length > 0) {
+        data = [];
+      }
+      $.ajax({
+        url: "/scheduler/duty/duty-data",
+        type: 'POST',
+        data: {
+          _csrf: csrf,
+          year: year,
+          users: users
+        },
+        success: function (dataSource) {
+          if (dataSource.length > 0) {
+            var data = JSON.parse(dataSource);
+            data instanceof Array ? data : [];
+            if (data instanceof Array) {
+              data.forEach(function (el, index, theArray) {
+                theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
+                theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
+              });
+            } else {
+              data = [];
+            }
+          }
+          $('#full-calendar').data('calendar').setDataSource(data);
+        }
+      });
+    }
+
+    function editDuty(event) {
+      var currentYear = $('#full-calendar').data('calendar').getYear();
+      var dutyId = event.id;
+      var c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: '/scheduler/duty/update-form',
+            method: 'get',
+            data: {
+              id: dutyId
+            }
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'medium',
+        title: 'Обновить отпуск',
+        buttons: {
+          ok: {
+            btnClass: 'btn-blue',
+            text: 'Сохранить',
+            action: function () {
+              var msg = {};
+              var title = $('#event-title').val();
+              if (title == '') {
+                return;
+              }
+              msg.id = dutyId;
+              msg.user = $('#user').val();
+              msg.start = $('#start-date').val();
+              msg.end = $('#end-date').val();
+              msg.duration = $('#duration').val();
+              msg.dutyType = $('#duty-type').val();
+              updateDuty(msg, msg.user);
+            }
+          },
+          cancel: {
+            btnClass: 'btn-red',
+            text: 'Отмена'
           }
         }
-      },
-      dayRender: function (dayRenderInfo) {
-      },
+      })
+    }
 
-      //========================= actions =====================================
+    function updateDuty(data, userId) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var currentYear = $('#full-calendar').data('calendar').getYear();
+      $.ajax({
+        url: '/scheduler/duty/update-duty',
+        method: 'post',
+        data: {
+          _csrf: csrf,
+          msg: data
+        }
+      }).done(function (response) {
+        $('#' + userId).prop('checked', true);
+        $('#full-calendar').data('calendar').setYear(currentYear); // для перезагрузки
+      }).fail(function () {
+        console.log('Что-то пошло не так!');
+      });
+    }
 
+    function deleteDuty(event) {
+      var url = '/scheduler/duty/delete-duty';
+      var eventId = event.id;
+      jc = $.confirm({
+        icon: 'fa fa-question',
+        title: 'Вы уверены?',
+        content: 'Вы действительно хотите удалить отпуск?',
+        type: 'red',
+        closeIcon: false,
+        autoClose: 'cancel|9000',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+              jc.close();
+              deleteProcess(url, eventId);
+            }
+          },
+          cancel: {
+            action: function () {
+              return;
+            }
+          }
+        }
+      });
+    }
 
-      drop: function (info) {
-
-      },
-      dateClick: function (info) {
-//                 console.log(info.dateStr);
-        console.log(info);
-        // info.dayEl.style.backgroundColor = 'red';
-      },
-      select: function (info) {
-//                console.log('selected ' + info.startStr + ' to ' + info.endStr);
-      },
-
-      //========================= events =======================================
-      eventResizeStart: function (info) {
-        console.log(info.view);
-      },
-      eventClick: function (info) {
-        info.jsEvent.preventDefault();
-        console.log(info.event.extendedProps);
-        if (info.event.extendedProps) {
-          var url = info.event.url;
-          var urlText = info.event.extendedProps.exUrl;
-          var ar = urlText.split('/');
-          var req = ar[0];
-          var ident = ar[1];
-
-          var c = $.confirm({
-            content: function () {
-              var self = this;
-              return $.ajax({
-                url: '/scheduler/events/' + req,
-                method: 'get',
-                data: {
-                  i: ident
-                }
-              }).done(function (response) {
-                console.log(response);
-              }).fail(function () {
-                self.setContentAppend('<div>Что-то пошло не так!</div>');
-              });
-            },
-            contentLoaded: function (data, status, xhr) {
-              console.log(xhr);
-              this.setContentAppend('<div>' + data + '</div>');
-            },
-            type: 'blue',
-            columnClass: 'medium',
-            title: 'Подробности',
+    function deleteProcess(url, id) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var currentYear = $('#full-calendar').data('calendar').getYear();
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Ваш запрос выполняется!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
+      $.ajax({
+        url: url,
+        method: 'post',
+        dataType: "JSON",
+        data: {
+          id: id,
+          _csrf: csrf
+        }
+      }).done(function (response) {
+        if (response != false) {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-thumbs-up',
+            title: 'Успех!',
+            content: 'Ваш запрос выполнен.',
+            type: 'green',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
             buttons: {
-              go: {
-                btnClass: 'btn-blue',
-                text: 'К СОБЫТИЮ',
+              ok: {
+                btnClass: 'btn-success',
                 action: function () {
-
-                  window.open(url);
+                  $('#full-calendar').data('calendar').setYear(currentYear);
                 }
-              },
-              cancel: {
-                text: 'НАЗАД'
               }
             }
-          })
+          });
+        } else {
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-exclamation-triangle',
+            title: 'Неудача!',
+            content: 'Запрос не выполнен. Что-то пошло не так.',
+            type: 'red',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-danger',
+                action: function () {
+                }
+              }
+            }
+          });
         }
-      }
-    });
-    calendar.render();
+      }).fail(function () {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|4000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
+      });
+    }
 
-    $('#nav-calendar').datepicker({
-      inline: true,
-      onSelect: function (formattedDate, date, inst) {
-        var momentDate = moment(date);
-        var fDate = momentDate.format('Y-MM-DD');
-        calendar.gotoDate(fDate);
+    function contains(arr, elem) {
+      if (arr) {
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i] === elem) {
+            return true;
+          }
+        }
+        return false;
+      }
+      return false;
+    }
+
+    $('.users-checkboxes').click('on', function (e) {
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var currentYear = $('#full-calendar').data('calendar').getYear();
+      $('.months-container').html('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
+      var users = [];
+      $('.users-checkboxes').each(function (e) {
+        if ($(this).is(':checked')) {
+          users.push($(this).data('id'));
+        }
+      });
+      if (users.length > 0) {
+        $.ajax({
+          url: "/scheduler/duty/duty-data",
+          type: 'POST',
+          data: {
+            _csrf: csrf,
+            year: currentYear,
+            users: users
+          },
+          success: function (dataSource) {
+            if (dataSource != '') {
+              var data = JSON.parse(dataSource);
+              data instanceof Array ? data : [];
+              if (data instanceof Array) {
+                data.forEach(function (el, index, theArray) {
+                  theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
+                  theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
+                });
+              } else {
+                data = [];
+              }
+            }
+            $('#full-calendar').data('calendar').setDataSource(data);
+          }
+        });
+      } else {
+        data = [];
+        $('#full-calendar').data('calendar').setDataSource(data);
       }
     })
-
   });
 
 </script>
