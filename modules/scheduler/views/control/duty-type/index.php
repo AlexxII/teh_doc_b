@@ -12,7 +12,7 @@ $this->title = 'Дежурства';
 $this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
 $this->params['breadcrumbs'][] = $this->title;
 
-$about = "Панель управления вилами дежурств подразделения.";
+$about = "Панель управления типами дежурств сотрудников.";
 $add_hint = 'Добавить';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить';
@@ -96,16 +96,6 @@ $del_hint = 'Удалить';
       </div>
     </div>
   </div>
-
-
-  <div class="col-lg-5 col-md-5">
-    <div class="alert alert-warning" style="margin-bottom: 10px">
-      <a href="#" class="close" data-dismiss="alert">&times;</a>
-      <strong>Внимание!</strong> Будьте внимательны!
-    </div>
-    <div class="about-info"></div>
-  </div>
-
 </div>
 
 
