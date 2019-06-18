@@ -7,6 +7,8 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use app\base\MHelper;
+
 
 /**
  * User model
@@ -36,6 +38,11 @@ class User extends ActiveRecord implements IdentityInterface
     return 'user';
   }
 
+  public function __construct()
+  {
+    $this->id = MHelper::generateId();
+    parent::__construct();
+  }
 
   /**
    * @inheritdoc
