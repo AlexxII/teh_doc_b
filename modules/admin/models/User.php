@@ -217,7 +217,8 @@ class User extends ActiveRecord implements IdentityInterface
       "#ffb878" => 'Оранжевый',
       "#ff887c" => 'Красный',
       "#dc2127" => 'Темно-красный',
-      "#dbadff" => 'Фиолетовый'
+      "#dbadff" => 'Фиолетовый',
+      "#ac725e" => '#ac725e'
     ];
 
   }

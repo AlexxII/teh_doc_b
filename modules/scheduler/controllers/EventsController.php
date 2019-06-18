@@ -72,6 +72,7 @@ class EventsController extends Controller
       $result[$key]['exUrl'] = 'vks/' . $session['id'];
       $count++;
     }
+
     foreach ($tos as $key => $to) {
       $result[$key + $count]['title'] = "Проведение ТО";
       $result[$key + $count]['start'] = $to->plan_date;
