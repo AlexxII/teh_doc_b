@@ -55,6 +55,36 @@ class VacationsController extends Controller
     return false;
   }
 
+  public function actionMonthVacationsData()
+  {
+    if (isset($_POST['firstDay'])) {
+      $firstDay = $_POST['firstDay'];
+      $lastDay = $_POST['lastDay'];
+      $models = Vacation::find()
+        ->where(['>=', 'start_date', $firstDay])
+        ->andWhere(['<=', 'end_date', $lastDay])
+        ->with('user')
+        ->all();
+      $yearData = [];
+      foreach ($models as $key => $model) {
+        $yearData[$key]['id'] = $model->id;
+        $yearData[$key]['name'] = $model->username;
+        $yearData[$key]['user'] = $model->user_id;
+        $yearData[$key]['color'] = $model->color;
+        $yearData[$key]['location'] = 'Часть отпуска';
+        $yearData[$key]['duration'] = $model->duration . ' сут.';
+        $yearData[$key]['sYear'] = Date('Y', strtotime($model->start_date));
+        $yearData[$key]['sMonth'] = Date('n', strtotime($model->start_date)) - 1;
+        $yearData[$key]['sDay'] = Date('j', strtotime($model->start_date));
+        $yearData[$key]['eYear'] = Date('Y', strtotime($model->end_date));
+        $yearData[$key]['eMonth'] = Date('n', strtotime($model->end_date)) - 1;
+        $yearData[$key]['eDay'] = Date('j', strtotime($model->end_date));
+      }
+      return json_encode(array_values($yearData));
+    }
+    return false;
+  }
+
   public function actionForm($startDate, $endDate, $diff)
   {
     $model = new Vacation();

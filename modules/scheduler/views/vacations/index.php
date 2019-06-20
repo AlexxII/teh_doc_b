@@ -93,9 +93,21 @@ $this->params['breadcrumbs'][] = $this->title;
           $(e.element).popover('hide');
         },
         clickMonth: function (e) {
-
-          console.log('111111111');
-
+          var date = e.date;
+          var currentYear = e.date.getFullYear();
+          clearCheckbox();
+          if (e.event.ctrlKey) {
+            var selectedMonth = e.date.getMonth() + 1;
+            var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            getVacOnSelectedMonths(firstDay, lastDay);
+          } else {
+            clearBottom();
+            month = e.date.getMonth() + 1;
+            var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            getVacOnSelectedMonth(firstDay, lastDay);
+          }
         },
         mouseOnDay: function (e) {
           if (e.events.length > 0) {
@@ -141,6 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
           createVacation(e);
         },
         yearChanged: function (e) {
+          clearBottom();
           $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
           e.preventRendering = true;
           var currentYear = e.currentYear;
@@ -502,6 +515,88 @@ $this->params['breadcrumbs'][] = $this->title;
       $('#full-calendar').data('calendar').setDataSource(data);
     }
   }
+
+  function getVacOnSelectedMonth(firstDay, lastDay) {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    if (firstDay.getDay() != 1) {
+      firstDay = moment(firstDay).subtract(25, 'days');
+    } else {
+      firstDay = moment(firstDay);
+    }
+    if (lastDay.getDay() != 0) {
+      lastDay = moment(lastDay).add(25, 'days');
+    } else {
+      lastDay = moment(lastDay);
+    }
+    $.ajax({
+      url: "/scheduler/vacations/month-vacations-data",
+      type: 'POST',
+      data: {
+        _csrf: csrf,
+        firstDay: firstDay.format('YYYY-MM-DD'),
+        lastDay: lastDay.format('YYYY-MM-DD')
+      },
+      success: function (dataSource) {
+        if (dataSource != '') {
+          data = JSON.parse(dataSource);
+          data instanceof Array ? data : [];
+          if (data instanceof Array) {
+            data.forEach(function (el, index, theArray) {
+              theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
+              theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
+              $('#' + el.user).closest('label').css({"border-bottom": "2px solid black"})
+            });
+          } else {
+            $('#full-calendar').data('calendar').setDataSource(data);
+          }
+        }
+        $('#full-calendar').data('calendar').setDataSource(data);
+      }
+    });
+  }
+
+  var data;
+
+  function getVacOnSelectedMonths(firstDay, lastDay) {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    if (firstDay.getDay() != 1) {
+      firstDay = moment(firstDay).subtract(25, 'days');
+    } else {
+      firstDay = moment(firstDay);
+    }
+    if (lastDay.getDay() != 0) {
+      lastDay = moment(lastDay).add(25, 'days');
+    } else {
+      lastDay = moment(lastDay);
+    }
+    $.ajax({
+      url: "/scheduler/vacations/month-vacations-data",
+      type: 'POST',
+      data: {
+        _csrf: csrf,
+        firstDay: firstDay.format('YYYY-MM-DD'),
+        lastDay: lastDay.format('YYYY-MM-DD')
+      },
+      success: function (dataSource) {
+        if (dataSource != '') {
+          var parseData = JSON.parse(dataSource);
+          data = data.concat(parseData);
+          data instanceof Array ? data : [];
+          if (data instanceof Array) {
+            data.forEach(function (el, index, theArray) {
+              theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
+              theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
+              $('#' + el.user).closest('label').css({"border-bottom": "2px solid black"})
+            });
+          } else {
+            $('#full-calendar').data('calendar').setDataSource(data);
+          }
+        }
+        $('#full-calendar').data('calendar').setDataSource(data);
+      }
+    });
+  }
+
 
 
   $(document).ready(function () {
