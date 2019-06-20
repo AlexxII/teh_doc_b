@@ -137,7 +137,7 @@ JConfirmAsset::register($this);
   NavBar::end();
   ?>
 
-  <div class="container"s>
+  <div class="container">
     <?= Breadcrumbs::widget([
       'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
       'options' => [

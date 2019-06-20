@@ -154,21 +154,7 @@ class SiteController extends Controller
     echo 'Роли добавлены и унаследованы';
   }
 
-  public function actionTest($id)
-  {
-    return $this->render('test', [
-      'a' => $id
-    ]);
-  }
 
-
-//  public function actionTestt()
-//  {
-//    $user = User::find()->where(['login' => 'Boss'])->one();
-//    $roleCivilian = Yii::$app->authManager->getRole('civilian');
-//    Yii::$app->authManager->assign($roleCivilian, $user->getId());
-//  }
-//
 //    public function actionDeleteRole()
 //    {
 //        $user = User::find()->where(['login' => 'Boss'])->one();
@@ -177,10 +163,5 @@ class SiteController extends Controller
 //        $item = $item ?: $auth->getPermission('civilian');
 //        $auth->revoke($item, $user->getId());
 //    }
-
-  public function actionJStudy()
-  {
-    return $this->render('study');
-  }
 
 }
