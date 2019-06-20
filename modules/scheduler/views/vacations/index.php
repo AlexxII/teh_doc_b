@@ -22,10 +22,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="main-scheduler row">
   <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
     <div id="info-panel">
-      <span><h3>Сотрудники:</h3></span>
+      <span style="cursor: pointer" id="chbx-all"><h3>Сотрудники:</h3></span>
       <?php foreach ($models as $key => $model): ?>
         <div style="color: <?= $model->color_scheme ?>; font-weight: bold">
-          <label style="cursor: pointer">
+          <label class="labels" style="cursor: pointer">
             <input type="checkbox" class="users-checkboxes" id="<?= $model->id ?>" data-id="<?= $model->id ?>">
             <?= $model->username ?>
           </label>
@@ -91,6 +91,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         dayContextMenu: function (e) {
           $(e.element).popover('hide');
+        },
+        clickMonth: function (e) {
+
+          console.log('111111111');
+
         },
         mouseOnDay: function (e) {
           if (e.events.length > 0) {
@@ -442,46 +447,84 @@ $this->params['breadcrumbs'][] = $this->title;
       return false;
     }
 
+
     $('.users-checkboxes').click('on', function (e) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var currentYear = $('#full-calendar').data('calendar').getYear();
-      $('.months-container').html('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
-      var users = [];
-      $('.users-checkboxes').each(function (e) {
-        if ($(this).is(':checked')) {
-          users.push($(this).data('id'));
+      clearBottom();
+      checkProcess();
+    })
+  });
+
+  function clearBottom() {
+    $('.labels').css('border-bottom', 'none')
+  }
+
+  function clearCheckbox() {
+    $('.users-checkboxes').prop('checked', false);
+  }
+
+  function checkProcess() {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    var currentYear = $('#full-calendar').data('calendar').getYear();
+    $('.months-container').html('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
+    var users = [];
+    $('.users-checkboxes').each(function (e) {
+      if ($(this).is(':checked')) {
+        users.push($(this).data('id'));
+      }
+    });
+    if (users.length > 0) {
+      $.ajax({
+        url: "vacations/vacations-data",
+        type: 'POST',
+        data: {
+          _csrf: csrf,
+          year: currentYear,
+          users: users
+        },
+        success: function (dataSource) {
+          if (dataSource != '') {
+            var data = JSON.parse(dataSource);
+            data instanceof Array ? data : [];
+            if (data instanceof Array) {
+              data.forEach(function (el, index, theArray) {
+                theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
+                theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
+              });
+            } else {
+              data = [];
+            }
+          }
+          $('#full-calendar').data('calendar').setDataSource(data);
         }
       });
-      if (users.length > 0) {
-        $.ajax({
-          url: "vacations/vacations-data",
-          type: 'POST',
-          data: {
-            _csrf: csrf,
-            year: currentYear,
-            users: users
-          },
-          success: function (dataSource) {
-            if (dataSource != '') {
-              var data = JSON.parse(dataSource);
-              data instanceof Array ? data : [];
-              if (data instanceof Array) {
-                data.forEach(function (el, index, theArray) {
-                  theArray[index].startDate = new Date(el.sYear, el.sMonth, el.sDay);
-                  theArray[index].endDate = new Date(el.eYear, el.eMonth, el.eDay);
-                });
-              } else {
-                data = [];
-              }
-            }
-            $('#full-calendar').data('calendar').setDataSource(data);
-          }
-        });
+    } else {
+      data = [];
+      $('#full-calendar').data('calendar').setDataSource(data);
+    }
+  }
+
+
+  $(document).ready(function () {
+
+    $('.users-checkboxes').click('on', function (e) {
+      clearBottom();
+      checkProcess();
+    });
+
+    $('#chbx-all').click(function (e) {
+      clearBottom();
+      var boxes = $("input:checkbox:not(:checked)");
+      if (boxes.length > 0) {
+        $('.users-checkboxes').prop('checked', true);
+        checkProcess()
       } else {
+        $('.users-checkboxes').prop('checked', false);
         data = [];
         $('#full-calendar').data('calendar').setDataSource(data);
       }
-    })
+    });
+
   });
+
 
 </script>

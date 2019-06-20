@@ -10,7 +10,6 @@ $this->title = 'Календарь праздников';
 $this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
 $this->params['breadcrumbs'][] = $this->title;
 
-
 ?>
 <style>
   .calendar {
@@ -84,21 +83,19 @@ $this->params['breadcrumbs'][] = $this->title;
       },
       customDataSourceRenderer: function (elt, date, events) {
         var weight = 0;
-        if(events.length == 1) {
+        if (events.length == 1) {
           weight = 4;
         }
-        else if(events.length <= 3) {
+        else if (events.length <= 3) {
           weight = 2;
         }
         else {
           elt.parent().css('box-shadow', 'inset 0 -4px 0 0 black');
         }
-        if(weight > 0)
-        {
+        if (weight > 0) {
           var boxShadow = '';
-          for (var i = 0; i < events.length; i++)
-          {
-            if(boxShadow != '') {
+          for (var i = 0; i < events.length; i++) {
+            if (boxShadow != '') {
               boxShadow += ",";
             }
             boxShadow += 'inset 0 -' + (parseInt(i) + 1) * weight + 'px 0 0 ' + events[i].color;
