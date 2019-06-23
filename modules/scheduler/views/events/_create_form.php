@@ -77,17 +77,13 @@ ColorPickerAsset::register($this);
     $('#start-date').datepicker({
       autoClose: true,
       language: "ru",
-      todayHighlight: true,
-      weekends: [6, 0],
-      timepicker: true
+      todayHighlight: true
     });
 
     $('#end-date').datepicker({
       autoClose: true,
       language: "ru",
-      todayHighlight: true,
-      weekends: [6, 0],
-      timepicker: true
+      todayHighlight: true
     });
 
     $('#colorpicker').simplecolorpicker();

@@ -1,7 +1,7 @@
 <?php
 
 use app\assets\NotyAsset;
-use app\assets\AirDatepickerAsset;
+use app\assets\BootstrapDatepickerAsset;
 use app\assets\fullcalendar\CalendarDaygridAsset;
 use app\assets\fullcalendar\CalendarTimegridAsset;
 use app\assets\fullcalendar\CalendarInteractionAsset;
@@ -12,11 +12,10 @@ CalendarDaygridAsset::register($this);
 CalendarTimegridAsset::register($this);
 CalendarInteractionAsset::register($this);
 CalendarBootstrapAsset::register($this);
-AirDatepickerAsset::register($this);
+BootstrapDatepickerAsset::register($this);
 
 $this->title = 'Планировщик';
 $this->params['breadcrumbs'][] = $this->title;
-
 
 ?>
 <style>
@@ -69,11 +68,63 @@ $this->params['breadcrumbs'][] = $this->title;
   var calendar, Draggable, navCalendar, c;
   var calInput = '<input class="form-control" id="nav-calendar" placeholder="Выберите дату" onclick="calendarShow(this)">';
 
+  var csrf = $('meta[name=csrf-token]').attr("content");
+
+  var fcSources = {
+    vks: {
+      url: '/scheduler/events/vks-data',
+      method: 'POST',
+      extraParams: {
+        _csrf: csrf
+      },
+      failure: function () {
+        console.log('Внимание! Ошибка получения сеансов ВКС!');
+      },
+      color: 'green',   // a non-ajax option
+      textColor: 'white' // a non-ajax optio
+    },
+    to: {
+      url: '/scheduler/events/to-data',
+      method: 'POST',
+      extraParams: {
+        _csrf: csrf
+      },
+      failure: function () {
+        console.log('Внимание! Ошибка получения графиков ТО!');
+      },
+      color: 'green',   // a non-ajax option
+      textColor: 'white' // a non-ajax optio
+    },
+    events: {
+      url: '/scheduler/events/events-data',
+      method: 'POST',
+      extraParams: {
+        _csrf: csrf
+      },
+      failure: function () {
+        console.log('Внимание! Ошибка получения событий!');
+      },
+      color: 'green',   // a non-ajax option
+      textColor: 'white' // a non-ajax optio
+    },
+    holidays: {
+      url: '/scheduler/events/holidays-data',
+      method: 'POST',
+      extraParams: {
+        _csrf: csrf
+      },
+      failure: function () {
+        console.log('Внимание! Ошибка получения событий!');
+      },
+      color: 'green',   // a non-ajax option
+      textColor: 'white' // a non-ajax optio
+    }
+  };
+
   $(document).ready(function () {
 
     // initialize the external events
     // -----------------------------------------------------------------
-    var csrf = $('meta[name=csrf-token]').attr("content");
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: ['interaction', 'dayGrid', 'timeGrid', 'bootstrap'],
@@ -87,16 +138,10 @@ $this->params['breadcrumbs'][] = $this->title;
       navLinks: true,
       eventLimit: true,
       eventSources: [
-        {
-          url: '/scheduler/events/list',
-          method: 'POST',
-          extraParams: {
-            _csrf: csrf
-          },
-          failure: function () {
-            // console.log('Внимание! Ошибка получения событий!');
-          }
-        }
+        fcSources.vks,
+        fcSources.to,
+        fcSources.events,
+        fcSources.holidays,
       ],
       buttonText: {
         month: 'M',
@@ -112,7 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
         nextYear: 'fa-angle-double-right'
       },
       header: {
-        left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom2',
+        left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1',
         center: 'title',
         right: 'today prev,next'
       },
@@ -120,8 +165,6 @@ $this->params['breadcrumbs'][] = $this->title;
         custom1: {
           text: 'Навигация',
           click: function () {
-            // $('.fc-view-container').html('');
-
             navCalendar = $.confirm({
               title: 'Установка даты',
               content: calInput,
@@ -322,17 +365,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
   function calendarShow(e) {
     var id = $(e).attr('id');
-    var myDatepicker = $('#' + id).datepicker({
-      toggleSelected: false,
-      autoClose: true,
-      onSelect: function (formattedDate, date, inst) {
-        var momentDate = moment(date);
+    $('#' + id).datepicker({
+      autoclose: true,
+      language: "ru",
+    }).data('datepicker');
+    $('#' + id).datepicker('show');
+    $('#' + id).datepicker()
+      .on('hide', function(e) {
+        var momentDate = moment(e.date);
         var fDate = momentDate.format('Y-MM-DD');
         calendar.gotoDate(fDate);
         navCalendar.close();
-      }
-    }).data('datepicker');
-    myDatepicker.show();
+      });
   }
 
   function saveEvent(data) {
