@@ -49,9 +49,6 @@ Yii::$app->cache->flush();
 </div>
 
 
-
-
-
 <script>
     $(".about").on('click', function (e) {
         var url = $(this).data('url');
