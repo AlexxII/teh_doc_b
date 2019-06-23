@@ -182,6 +182,7 @@ class EventsController extends Controller
       ->all();
 
     foreach ($tos as $key => $to) {
+      $result[$count]['id'] = "1111";
       $result[$count]['title'] = "Проведение ТО";
       $result[$count]['start'] = $to->plan_date;
       $result[$count]['exUrl'] = 'to/' . $to->plan_date;

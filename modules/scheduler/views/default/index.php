@@ -73,6 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
   var fcSources = {
     vks: {
+      id: '1111',
       url: '/scheduler/events/vks-data',
       method: 'POST',
       extraParams: {
@@ -156,7 +157,7 @@ $this->params['breadcrumbs'][] = $this->title;
         nextYear: 'fa-angle-double-right'
       },
       header: {
-        left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom3',
+        left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom3, custom4',
         center: 'title',
         right: 'today prev,next'
       },
@@ -179,11 +180,15 @@ $this->params['breadcrumbs'][] = $this->title;
         custom3: {
           text: 'TEST',
           click: function () {
-            $('#calendar').fullCalendar( 'removeEventSource', fcSources.holidays )
-                    .fullCalendar( 'refetchEvents' );
-
-            // calendar.removeEventSources(fcSources.holidays);
-            calendar.refetchEvents();
+            var eb = calendar.getEventSourceById(1111);
+            eb.remove();
+            // calendar.refetchEvents();
+          }
+        },
+        custom4: {
+          text: 'TEST_2',
+          click: function () {
+            calendar.addEventSource(fcSources.vks);
           }
         },
         custom2: {
@@ -380,7 +385,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }).data('datepicker');
     $('#' + id).datepicker('show');
     $('#' + id).datepicker()
-      .on('hide', function(e) {
+      .on('hide', function (e) {
         var momentDate = moment(e.date);
         var fDate = momentDate.format('Y-MM-DD');
         calendar.gotoDate(fDate);
