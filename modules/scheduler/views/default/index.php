@@ -18,6 +18,7 @@ $this->title = 'Планировщик';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
+
 <style>
   .main-scheduler {
     margin-top: 20px;
@@ -123,8 +124,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
   $(document).ready(function () {
 
-    // initialize the external events
-    // -----------------------------------------------------------------
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: ['interaction', 'dayGrid', 'timeGrid', 'bootstrap'],
@@ -157,7 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
         nextYear: 'fa-angle-double-right'
       },
       header: {
-        left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1',
+        left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom3',
         center: 'title',
         right: 'today prev,next'
       },
@@ -175,6 +174,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
               }
             })
+          }
+        },
+        custom3: {
+          text: 'TEST',
+          click: function () {
+            $('#calendar').fullCalendar( 'removeEventSource', fcSources.holidays )
+                    .fullCalendar( 'refetchEvents' );
+
+            // calendar.removeEventSources(fcSources.holidays);
+            calendar.refetchEvents();
           }
         },
         custom2: {

@@ -15,7 +15,6 @@ use app\assets\TableBaseAsset;
 use app\assets\JConfirmAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
-TableBaseAsset::register($this);
 JConfirmAsset::register($this);
 
 ?>
