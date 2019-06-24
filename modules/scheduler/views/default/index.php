@@ -197,7 +197,6 @@ $this->params['breadcrumbs'][] = $this->title;
             }
         ];
 
-
         $('#selectt').select2({
             data: d
         });
@@ -280,7 +279,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 fcSources.vks,
                 fcSources.to,
                 fcSources.events,
-                fcSources.holidays,
+                fcSources.holidays
             ],
             header: {
                 // left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom3',
@@ -325,7 +324,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         $('.fc-view-container').html('');
                         $.ajax({
                             url: '/scheduler/full-year/test',
-                            method: 'get',
+                            method: 'get'
                         }).done(function (resp) {
                             $('.fc-view-container').html(resp);
                         }).fail(function () {
