@@ -4,7 +4,9 @@ body {
     height: 100%;
     font-family: Verdana, sans-serif;
 }
-
+.container {
+    width: 70%;
+}
 .wrap {
     min-height: 100%;
     height: auto;

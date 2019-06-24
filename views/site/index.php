@@ -19,7 +19,7 @@ Yii::$app->cache->flush();
 
 <div class="site-index">
 
-  <div class="col-lg-4 col-md-6 about" data-url="/vks/sessions/index" style="text-align:center; cursor: pointer">
+  <div class="col-lg-4 col-md-4 about" data-url="/vks/sessions/index" style="text-align:center; cursor: pointer">
     <div class="row" id="header">
       <h2>Предстоящие сеансы</h2>
     </div>
@@ -31,7 +31,7 @@ Yii::$app->cache->flush();
     </div>
   </div>
 
-  <div class="col-lg-4 col-md-6 about" data-url="tehdoc/equipment/tools" style="text-align:center; cursor: pointer">
+  <div class="col-lg-4 col-md-4 about" data-url="tehdoc/equipment/tools" style="text-align:center; cursor: pointer">
     <div class="row" id="header">
       <h2>Оборудование</h2>
     </div>
