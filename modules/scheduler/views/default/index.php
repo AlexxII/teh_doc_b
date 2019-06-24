@@ -53,18 +53,122 @@ $this->params['breadcrumbs'][] = $this->title;
     flex-direction: row;
   }
 
+  .fc-navigation-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 1px solid grey;
+    color: #000;
+  }
+
+  .btn-primary:focus, .btn-primary.focus {
+    background-color: #fff;
+  }
+
+  .btn-primary:active:focus {
+    background-color: #fff;
+  }
+
+  .btn-primary:active, .btn-primary.active {
+    background-color: lightgrey;
+
+  }
+
+  .btn-primary:active:hover {
+    background-color: #fff;
+  }
+
+  .btn-primary.disabled:hover,
+  .btn-primary[disabled]:hover,
+  fieldset[disabled] .btn-primary:hover,
+  .btn-primary.disabled:focus, .btn-primary[disabled]:focus,
+  fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus,
+  .btn-primary[disabled].focus, fieldset[disabled] .btn-primary.focus {
+    font-size: 10px;
+    background-color: lightgrey;
+    border: 1px solid grey;
+    color: #000;
+  }
+
+
+  .btn-primary.disabled:visited,
+  .btn-primary[disabled]:visited,
+  fieldset[disabled] .btn-primary:visited {
+    background-color: red;
+  }
+
+  .btn-primary.disabled:visited,
+  .btn-primary[disabled]:visited,
+  fieldset[disabled] .btn-primary:visited {
+    background-color: #fff;
+  }
+
+
+  .btn-primary:hover  {
+    font-size: 10px;
+    background-color: rgba(211, 211, 211, 0.21);
+    color: #000;
+  }
+
+  .fc-today-button:hover {
+    font-size: 10px;
+    background-color: lightgrey;
+    border: 1px solid grey;
+    color: #000;
+  }
+
+  #calendar .btn {
+    color: #000;
+  }
+
+  #calendar .fc-left .fa {
+    font-size: 10px;
+    color: #5f6368;
+  }
+
+  .fc-prev-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 0px;
+  }
+
+  .fc-next-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 0px;
+  }
+
+  .fc-today-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 1px solid grey;
+  }
+
+  .fc-left h2 {
+    float: right;
+  }
+
+
 </style>
 
 
 <div class="main-scheduler">
-  <div class="">
-    <div id="calendar">
-
-    </div>
+  <!--  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">-->
+  <!--    <div id="nav-calendar"></div>-->
+  <!--  </div>-->
+  <div class="col-md-12 col-lg-12">
+    <div id="calendar"></div>
   </div>
 </div>
 
 <script>
+
+
+  $(document).ready(function () {
+    $('#nav-calendar').datepicker({
+      language: 'ru'
+    });
+  });
+
 
   var calendar, Draggable, navCalendar, c;
   var calInput = '<input class="form-control" id="nav-calendar" placeholder="Выберите дату" onclick="calendarShow(this)">';
@@ -143,26 +247,14 @@ $this->params['breadcrumbs'][] = $this->title;
         fcSources.events,
         fcSources.holidays,
       ],
-      buttonText: {
-        month: 'M',
-        week: 'Н',
-        day: 'Д',
-        list: 'Лист'
-      },
-      bootstrapFontAwesome: {
-        close: 'fa-times',
-        prev: 'fa-chevron-left',
-        next: 'fa-chevron-right',
-        prevYear: 'fa-angle-double-left',
-        nextYear: 'fa-angle-double-right'
-      },
       header: {
-        left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom3, custom4',
-        center: 'title',
-        right: 'today prev,next'
+        // left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom3',
+        left: 'today prev next title',
+        // center: 'title',
+        right: 'navigation'
       },
       customButtons: {
-        custom1: {
+        navigation: {
           text: 'Навигация',
           click: function () {
             navCalendar = $.confirm({
@@ -178,11 +270,12 @@ $this->params['breadcrumbs'][] = $this->title;
           }
         },
         custom3: {
-          text: 'TEST',
+          text: 'Фильтр',
           click: function () {
-            var eb = calendar.getEventSourceById(1111);
-            eb.remove();
-            // calendar.refetchEvents();
+            calendar.changeView('dayGridMonth');
+
+            // var eb = calendar.getEventSourceById(1111);
+            // eb.remove();
           }
         },
         custom4: {
