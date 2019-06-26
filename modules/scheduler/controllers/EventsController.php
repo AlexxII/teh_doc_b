@@ -231,4 +231,8 @@ class EventsController extends Controller
     return json_encode($result);
   }
 
+  public function actionCalendarsArray()
+  {
+    return $this->renderAjax('_calendars_form');
+  }
 }

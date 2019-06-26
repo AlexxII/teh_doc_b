@@ -52,6 +52,12 @@ $this->params['breadcrumbs'][] = $this->title;
     display: flex;
     flex-direction: row;
   }
+  .fc-calendar-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 1px solid grey;
+    color: #000;
+  }
 
   .fc-navigation-button {
     font-size: 10px;
@@ -167,9 +173,42 @@ $this->params['breadcrumbs'][] = $this->title;
     $('#nav-calendar').datepicker({
       language: 'ru'
     });
-
   });
 
+  function showDialog(event) {
+    c = $.confirm({
+      content: function () {
+        var self = this;
+        return $.ajax({
+          url: '/scheduler/events/calendars-array',
+          method: 'get'
+        }).done(function (response) {
+          // console.log(response);
+        }).fail(function () {
+          self.setContentAppend('<div>Что-то пошло не так!</div>');
+        });
+      },
+      contentLoaded: function (data, status, xhr) {
+        this.setContentAppend('<div>' + data + '</div>');
+      },
+      type: 'blue',
+      columnClass: 'medium',
+      title: 'Подробности',
+      buttons: {
+        ok: {
+          btnClass: 'btn-blue',
+          text: 'ОК',
+          action: function () {
+            c.close();
+          }
+        },
+        cancel: {
+          text: 'НАЗАД'
+        }
+      },
+    })
+
+  }
 
   var calendar, Draggable, navCalendar, c;
   var calInput = '<input class="form-control" id="nav-calendar" placeholder="Выберите дату" onclick="calendarShow(this)">';
@@ -252,7 +291,7 @@ $this->params['breadcrumbs'][] = $this->title;
         // left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom3',
         left: 'today prev next title',
         // center: 'title',
-        right: 'navigation'
+        right: 'calendar navigation'
       },
       customButtons: {
         navigation: {
@@ -273,16 +312,16 @@ $this->params['breadcrumbs'][] = $this->title;
         custom3: {
           text: 'Фильтр',
           click: function () {
-            calendar.changeView('dayGridMonth');
-
+            // calendar.changeView('dayGridMonth');
+            // calendar.addEventSource(fcSources.vks);
             // var eb = calendar.getEventSourceById(1111);
             // eb.remove();
           }
         },
-        custom4: {
-          text: 'TEST_2',
-          click: function () {
-            calendar.addEventSource(fcSources.vks);
+        calendar: {
+          text: 'Календари',
+          click: function (e) {
+            showDialog(e);
           }
         },
         custom2: {
