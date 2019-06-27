@@ -155,7 +155,7 @@ $this->params['breadcrumbs'][] = $this->title;
   });
 
   function showDialog(event) {
-    c = $.confirm({
+    var c = $.confirm({
       content: function () {
         var self = this;
         return $.ajax({
@@ -184,7 +184,7 @@ $this->params['breadcrumbs'][] = $this->title;
         cancel: {
           text: 'НАЗАД'
         }
-      },
+      }
     })
   }
 
@@ -262,7 +262,7 @@ $this->params['breadcrumbs'][] = $this->title;
         fcSources.vks,
         fcSources.to,
         fcSources.events,
-        fcSources.holidays,
+        fcSources.holidays
       ],
       header: {
         // left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom3',
