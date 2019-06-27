@@ -52,37 +52,31 @@ $this->params['breadcrumbs'][] = $this->title;
     display: flex;
     flex-direction: row;
   }
-  .fc-calendar-button {
+  .fc-calendars-button {
     font-size: 10px;
     background-color: #fff;
     border: 1px solid grey;
     color: #000;
   }
-
   .fc-navigation-button {
     font-size: 10px;
     background-color: #fff;
     border: 1px solid grey;
     color: #000;
   }
-
   .btn-primary:focus, .btn-primary.focus {
     background-color: #fff;
   }
-
   .btn-primary:active:focus {
     background-color: #fff;
   }
-
   .btn-primary:active, .btn-primary.active {
     background-color: lightgrey;
 
   }
-
   .btn-primary:active:hover {
     background-color: #fff;
   }
-
   .btn-primary.disabled:hover,
   .btn-primary[disabled]:hover,
   fieldset[disabled] .btn-primary:hover,
@@ -94,61 +88,49 @@ $this->params['breadcrumbs'][] = $this->title;
     border: 1px solid grey;
     color: #000;
   }
-
-
   .btn-primary.disabled:visited,
   .btn-primary[disabled]:visited,
   fieldset[disabled] .btn-primary:visited {
     background-color: red;
   }
-
   .btn-primary.disabled:visited,
   .btn-primary[disabled]:visited,
   fieldset[disabled] .btn-primary:visited {
     background-color: #fff;
   }
-
-
-  .btn-primary:hover  {
+  .btn-primary:hover {
     font-size: 10px;
     background-color: rgba(211, 211, 211, 0.21);
     color: #000;
   }
-
   .fc-today-button:hover {
     font-size: 10px;
     background-color: lightgrey;
     border: 1px solid grey;
     color: #000;
   }
-
   #calendar .btn {
     color: #000;
   }
-
   #calendar .fc-left .fa {
     font-size: 10px;
     color: #5f6368;
   }
-
   .fc-prev-button {
     font-size: 10px;
     background-color: #fff;
     border: 0px;
   }
-
   .fc-next-button {
     font-size: 10px;
     background-color: #fff;
     border: 0px;
   }
-
   .fc-today-button {
     font-size: 10px;
     background-color: #fff;
     border: 1px solid grey;
   }
-
   .fc-left h2 {
     float: right;
   }
@@ -167,12 +149,9 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <script>
-
-
   $(document).ready(function () {
-    $('#nav-calendar').datepicker({
-      language: 'ru'
-    });
+
+
   });
 
   function showDialog(event) {
@@ -207,7 +186,6 @@ $this->params['breadcrumbs'][] = $this->title;
         }
       },
     })
-
   }
 
   var calendar, Draggable, navCalendar, c;
@@ -268,7 +246,6 @@ $this->params['breadcrumbs'][] = $this->title;
   };
 
   $(document).ready(function () {
-
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: ['interaction', 'dayGrid', 'timeGrid', 'bootstrap'],
@@ -291,24 +268,9 @@ $this->params['breadcrumbs'][] = $this->title;
         // left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom3',
         left: 'today prev next title',
         // center: 'title',
-        right: 'calendar navigation'
+        right: 'calendars'
       },
       customButtons: {
-        navigation: {
-          text: 'Навигация',
-          click: function () {
-            navCalendar = $.confirm({
-              title: 'Установка даты',
-              content: calInput,
-              buttons: {
-                cancel: {
-                  btnClass: 'btn-red',
-                  text: 'Отмена'
-                }
-              }
-            })
-          }
-        },
         custom3: {
           text: 'Фильтр',
           click: function () {
@@ -318,7 +280,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // eb.remove();
           }
         },
-        calendar: {
+        calendars: {
           text: 'Календари',
           click: function (e) {
             showDialog(e);
@@ -507,6 +469,25 @@ $this->params['breadcrumbs'][] = $this->title;
       }
     });
     calendar.render();
+
+    if ($('.fc-left').find('h2').length > 0) {
+      var h2 = $('.fc-left').find('h2')[0];
+      $(h2).css('cursor', 'pointer');
+      $(h2).bind('click', function (e) {
+        h2 = e.currentTarget;
+        $(h2).datepicker({
+          language: "ru",
+        }).data('datepicker');
+        $(h2).datepicker('setDate', calendar.getDate());
+        $(h2).datepicker('show');
+        $(h2).datepicker()
+          .on('changeDate', function (e) {
+            var momentDate = moment(e.date);
+            var fDate = momentDate.format('Y-MM-DD');
+            calendar.gotoDate(fDate);
+          });
+      })
+    }
   });
 
   function calendarShow(e) {

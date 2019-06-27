@@ -16,7 +16,7 @@
 <div class="">
   <ul id="check-list-box" class="list-group checked-list-box">
     <li class="list-group-item">Сеансы ВКС</li>
-    <li class="list-group-item" data-color="success">График ТО</li>
+    <li class="list-group-item"  data-color="success">График ТО</li>
     <li class="list-group-item" data-color="info">ИТД</li>
     <li class="list-group-item" data-color="warning">ИАД</li>
     <li class="list-group-item" data-color="danger">ИПД</li>
