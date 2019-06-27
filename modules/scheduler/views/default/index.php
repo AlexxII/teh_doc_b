@@ -6,7 +6,6 @@ use app\assets\fullcalendar\CalendarDaygridAsset;
 use app\assets\fullcalendar\CalendarTimegridAsset;
 use app\assets\fullcalendar\CalendarInteractionAsset;
 use app\assets\fullcalendar\CalendarBootstrapAsset;
-use app\assets\Select2Asset;
 
 NotyAsset::register($this);
 CalendarDaygridAsset::register($this);
@@ -14,8 +13,6 @@ CalendarTimegridAsset::register($this);
 CalendarInteractionAsset::register($this);
 CalendarBootstrapAsset::register($this);
 BootstrapDatepickerAsset::register($this);
-Select2Asset::register($this);
-
 
 $this->title = 'Планировщик';
 $this->params['breadcrumbs'][] = $this->title;
@@ -63,6 +60,13 @@ $this->params['breadcrumbs'][] = $this->title;
   .wrapper-class {
     display: flex;
     flex-direction: row;
+  }
+
+  .fc-calendar-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 1px solid grey;
+    color: #000;
   }
 
   .fc-navigation-button {
@@ -165,10 +169,6 @@ $this->params['breadcrumbs'][] = $this->title;
   <!--  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">-->
   <!--    <div id="nav-calendar"></div>-->
   <!--  </div>-->
-  <div style="margin-bottom : 10px">
-    <select id="selectt" class="form-control" placeholder="test">
-    </select>
-  </div>
   <div>
     <div id="calendar"></div>
   </div>
@@ -181,28 +181,42 @@ $this->params['breadcrumbs'][] = $this->title;
         $('#nav-calendar').datepicker({
             language: 'ru'
         });
-
-        var d = [
-            {
-                id: 1,
-                text: 'Опция 1'
-            },
-            {
-                id: 2,
-                text: 'Опция 2'
-            },
-            {
-                id: 3,
-                text: 'Опция 3'
-            }
-        ];
-
-        $('#selectt').select2({
-            data: d
-        });
-
     });
 
+    function showDialog(event) {
+        c = $.confirm({
+            content: function () {
+                var self = this;
+                return $.ajax({
+                    url: '/scheduler/events/calendars-array',
+                    method: 'get'
+                }).done(function (response) {
+                    // console.log(response);
+                }).fail(function () {
+                    self.setContentAppend('<div>Что-то пошло не так!</div>');
+                });
+            },
+            contentLoaded: function (data, status, xhr) {
+                this.setContentAppend('<div>' + data + '</div>');
+            },
+            type: 'blue',
+            columnClass: 'medium',
+            title: 'Подробности',
+            buttons: {
+                ok: {
+                    btnClass: 'btn-blue',
+                    text: 'ОК',
+                    action: function () {
+                        c.close();
+                    }
+                },
+                cancel: {
+                    text: 'НАЗАД'
+                }
+            },
+        })
+
+    }
 
     var calendar, Draggable, navCalendar, c;
     var calInput = '<input class="form-control" id="nav-calendar" placeholder="Выберите дату" onclick="calendarShow(this)">';
@@ -256,7 +270,7 @@ $this->params['breadcrumbs'][] = $this->title;
             failure: function () {
                 console.log('Внимание! Ошибка получения событий!');
             },
-            color: 'green',   // a non-ajax option
+            // color: 'green',   // a non-ajax option
             textColor: 'white' // a non-ajax optio
         }
     };
@@ -279,13 +293,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 fcSources.vks,
                 fcSources.to,
                 fcSources.events,
-                fcSources.holidays
+                fcSources.holidays,
             ],
             header: {
                 // left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom3',
                 left: 'today prev next title',
                 // center: 'title',
-                right: 'navigation'
+                right: 'calendar navigation'
             },
             customButtons: {
                 navigation: {
@@ -306,16 +320,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 custom3: {
                     text: 'Фильтр',
                     click: function () {
-                        calendar.changeView('dayGridMonth');
-
+                        // calendar.changeView('dayGridMonth');
+                        // calendar.addEventSource(fcSources.vks);
                         // var eb = calendar.getEventSourceById(1111);
                         // eb.remove();
                     }
                 },
-                custom4: {
-                    text: 'TEST_2',
-                    click: function () {
-                        calendar.addEventSource(fcSources.vks);
+                calendar: {
+                    text: 'Календари',
+                    click: function (e) {
+                        showDialog(e);
                     }
                 },
                 custom2: {
@@ -433,7 +447,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     var ar = urlText.split('/');
                     var req = ar[0];
                     var ident = ar[1];
-
                     c = $.confirm({
                         content: function () {
                             var self = this;
