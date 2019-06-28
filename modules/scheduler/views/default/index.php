@@ -64,6 +64,12 @@ $this->params['breadcrumbs'][] = $this->title;
     border: 1px solid grey;
     color: #000;
   }
+  .fc-view-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 1px solid grey;
+    color: #000;
+  }
   .btn-primary:focus, .btn-primary.focus {
     background-color: #fff;
   }
@@ -135,7 +141,6 @@ $this->params['breadcrumbs'][] = $this->title;
     float: right;
   }
 
-
 </style>
 
 
@@ -190,7 +195,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
   var calendar, Draggable, navCalendar, c;
   var calInput = '<input class="form-control" id="nav-calendar" placeholder="Выберите дату" onclick="calendarShow(this)">';
-
   var csrf = $('meta[name=csrf-token]').attr("content");
 
   var fcSources = {
@@ -240,8 +244,7 @@ $this->params['breadcrumbs'][] = $this->title;
       failure: function () {
         console.log('Внимание! Ошибка получения событий!');
       },
-      // color: 'green',   // a non-ajax option
-      textColor: 'white' // a non-ajax optio
+      textColor: 'white'
     }
   };
 
@@ -251,12 +254,12 @@ $this->params['breadcrumbs'][] = $this->title;
       plugins: ['interaction', 'dayGrid', 'timeGrid', 'bootstrap'],
       locale: 'ru',
       themeSystem: 'bootstrap',
+      navLinks: true,
       weekNumbers: true,
       selectable: true,
       nowIndicator: true,
       slotDuration: '00:15:00',
       minTime: '06:00:00',
-      navLinks: true,
       eventLimit: true,
       eventSources: [
         fcSources.vks,
@@ -265,25 +268,25 @@ $this->params['breadcrumbs'][] = $this->title;
         fcSources.holidays
       ],
       header: {
-        // left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1, custom3',
+        // left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1',
         left: 'today prev next title',
-        // center: 'title',
-        right: 'calendars'
+        right: 'view calendars'
       },
       customButtons: {
-        custom3: {
-          text: 'Фильтр',
-          click: function () {
-            // calendar.changeView('dayGridMonth');
-            // calendar.addEventSource(fcSources.vks);
-            // var eb = calendar.getEventSourceById(1111);
-            // eb.remove();
-          }
-        },
         calendars: {
           text: 'Календари',
           click: function (e) {
             showDialog(e);
+            // calendar.addEventSource(fcSources.vks);
+            // var eb = calendar.getEventSourceById(1111);
+            // eb.remove();
+
+          }
+        },
+        view: {
+          text: 'М',
+          click: function (e) {
+            calendar.changeView('dayGridMonth');
           }
         },
         custom2: {
@@ -301,7 +304,7 @@ $this->params['breadcrumbs'][] = $this->title;
           }
         }
       },
-      businessHours: [ // specify an array instead
+      businessHours: [
         {
           daysOfWeek: [1, 2, 3, 4], // Monday, Tuesday, Wednesday, Thursday
           startTime: '09:00',
@@ -329,11 +332,11 @@ $this->params['breadcrumbs'][] = $this->title;
           }
         }
       },
-      dayRender: function (dayRenderInfo) {
-      },
+      // dayRender: function (dayRenderInfo) {
+      //   return;
+      // },
 
       //========================= actions =====================================
-
       select: function (info) {
         var c = $.confirm({
           content: function () {
@@ -480,12 +483,11 @@ $this->params['breadcrumbs'][] = $this->title;
         }).data('datepicker');
         $(h2).datepicker('setDate', calendar.getDate());
         $(h2).datepicker('show');
-        $(h2).datepicker()
-          .on('changeDate', function (e) {
-            var momentDate = moment(e.date);
-            var fDate = momentDate.format('Y-MM-DD');
-            calendar.gotoDate(fDate);
-          });
+        $(h2).datepicker().on('changeDate', function (e) {
+          var momentDate = moment(e.date);
+          var fDate = momentDate.format('Y-MM-DD');
+          calendar.gotoDate(fDate);
+        });
       })
     }
   });
@@ -568,7 +570,6 @@ $this->params['breadcrumbs'][] = $this->title;
       },
       onContentReady: function () {
         var self = this;
-        this.buttons.ok.disable();
         this.$content.find('#event-title').on('keyup mouseclick', function () {
           if ($(this).val() != '') {
             self.buttons.ok.enable();
