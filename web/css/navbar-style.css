@@ -30,7 +30,8 @@ body {
 }
 
 #left-side {
-  width: 245px;
+  min-width: 245px;
+  height: 100%;
   display: inline-block;
   position: absolute;
   left: -255px;

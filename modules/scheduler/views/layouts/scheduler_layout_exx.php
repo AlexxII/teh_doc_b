@@ -115,14 +115,14 @@ JConfirmAsset::register($this);
         return;
       }
       if ($('#left-side').css('left') == '0px') {
-        $('#main-content').animate({paddingLeft: '0px'}, {queue: false, duration: 500});
         $('#left-side').css('width', '245px');
         $('#left-side').animate({left: '-250px'}, {queue: false, duration: 500});
+        $('#main-content').animate({paddingLeft: '0px'}, {queue: false, duration: 500});
       } else {
         var left = 250 - $('#main-content').offset().left;
         $('#left-side').css('width', '245px');
-        $('#main-content').animate({paddingLeft: left+'px'}, {queue: false, duration: 500});
         $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
+        $('#main-content').animate({paddingLeft: left+'px'}, {queue: false, duration: 500});
       }
     });
   })

@@ -112,13 +112,12 @@ JConfirmAsset::register($this);
     $('#push-it').click(function (e) {
       if ($('#left-side').css('left') == '0px') {
         $('#left-side').css('width', '245px');
-        $('#main-content').animate({marginLeft: '0px'}, {queue: false, duration: 500});
         $('#left-side').animate({left: '-250px'}, {queue: false, duration: 500});
+        $('#main-content').animate({marginLeft: '0px'}, {queue: false, duration: 500});
       } else {
-        // $('#main-content').css('float', 'right');
         $('#left-side').css('width', '245px');
-        $('#main-content').animate({marginLeft: '245px'}, {queue: false, duration: 500});
         $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
+        $('#main-content').animate({marginLeft: '245px'}, {queue: false, duration: 500});
       }
     });
   })

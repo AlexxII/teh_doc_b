@@ -20,6 +20,11 @@ JConfirmAsset::register($this);
   .container {
     /*max-width: 1170px;*/
   }
+  #main-add-button {
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302),0 1px 3px 1px rgba(60,64,67,0.149);
+    border-radius: 24px;
+    background-color: #fff;
+  }
 </style>
 
 
@@ -84,16 +89,27 @@ JConfirmAsset::register($this);
 
 <div id="main-wrap">
   <div id="left-side">
-    <div id="nav-calendar">
-      <div class="">
-        <ul id="check-list-box" class="list-group checked-list-box">
-          <li class="list-group-item">Сеансы ВКС</li>
-          <li class="list-group-item" data-color="success">График ТО</li>
-          <li class="list-group-item" data-color="info">ИТД</li>
-          <li class="list-group-item" data-color="warning">ИАД</li>
-          <li class="list-group-item" data-color="danger">ИПД</li>
-          <li class="list-group-item" data-color="danger">Личные</li>
-        </ul>
+    <div id="left-menu">
+      <div class="menu-list">
+
+        <div style="padding: 10px 0px">
+          <button id="main-add-button" style="padding: 0 24px; width: auto">
+            <span style="margin: 15px">+</span>
+            <span style="margin: 15px"> Добавить</span>
+          </button>
+        </div>
+        <div style="padding: 10px 0px">
+          <a href="./">
+            <span><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
+            <span>Добавить прошедший сеанс</span>
+          </a>
+        </div>
+        <div>
+          <a href="./create-session">
+            <span><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
+            <span>Добавить прошедший сеанс</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -119,14 +135,14 @@ JConfirmAsset::register($this);
         return;
       }
       if ($('#left-side').css('left') == '0px') {
-        $('#main-content').animate({paddingLeft: '0px'}, {queue: false, duration: 500});
         $('#left-side').css('width', '245px');
         $('#left-side').animate({left: '-250px'}, {queue: false, duration: 500});
+        $('#main-content').animate({paddingLeft: '0px'}, {queue: false, duration: 500});
       } else {
         var left = 250 - $('#main-content').offset().left;
         $('#left-side').css('width', '245px');
-        $('#main-content').animate({paddingLeft: left+'px'}, {queue: false, duration: 500});
         $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
+        $('#main-content').animate({paddingLeft: left+'px'}, {queue: false, duration: 500});
       }
     });
   })

@@ -16,10 +16,6 @@ AirDatepickerAsset::register($this);
 Yii::$app->cache->flush();
 ?>
 
-<div class="vks-pannel">
-
-</div>
-
 <style>
   td .fa {
     font-size: 25px;
