@@ -15,6 +15,9 @@ JConfirmAsset::register($this);
 ?>
 
 <style>
+  .navbar {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  }
 
 
 </style>
@@ -115,12 +118,12 @@ JConfirmAsset::register($this);
         return;
       }
       if ($('#left-side').css('left') == '0px') {
-        $('#left-side').css('width', '245px');
-        $('#left-side').animate({left: '-250px'}, {queue: false, duration: 500});
+        $('#left-side').css('width', '275px');
+        $('#left-side').animate({left: '-280px'}, {queue: false, duration: 500});
         $('#main-content').animate({paddingLeft: '0px'}, {queue: false, duration: 500});
       } else {
         var left = 250 - $('#main-content').offset().left;
-        $('#left-side').css('width', '245px');
+        $('#left-side').css('width', '275px');
         $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
         $('#main-content').animate({paddingLeft: left+'px'}, {queue: false, duration: 500});
       }

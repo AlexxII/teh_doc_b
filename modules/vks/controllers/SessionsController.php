@@ -217,7 +217,7 @@ class SessionsController extends Controller
         Yii::$app->session->setFlash('error', 'Что-то не так.');
       }
     }
-    return $this->render('create', [
+    return $this->renderAjax('create', [
       'model' => $model
     ]);
   }
