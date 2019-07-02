@@ -17,6 +17,8 @@ use app\modules\vks\models\VksTypes;
 
 class SessionsController extends Controller
 {
+  public $layout = 'vks_layout_ex';
+
   public function behaviors()
   {
     return [
@@ -270,7 +272,7 @@ class SessionsController extends Controller
       $model->vks_record_create = date('Y-m-d H:i:s');
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
-      
+
       if ($model->save()) {
         $this->logVks($model->id, "info", "Добавил запись о прошедшем сеансе ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');

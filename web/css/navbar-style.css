@@ -1,0 +1,44 @@
+body {
+  width: 100%;
+  height: 100%;
+  font-family: Verdana, sans-serif !important;
+}
+.container-fluid .fa {
+  font-size: 20px;
+}
+
+.navbar-default .fa {
+  color: #5f6368 !important;
+}
+
+.navbar-brand {
+  padding-top: 0 !important;
+  color: #5f6368 !important;
+  margin-top: 5px;
+}
+
+#push-it {
+  cursor: pointer;
+  padding-top: 15px! important;
+}
+
+#app-name {
+  color: #5f6368;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 15px 5px 5px 5px;
+}
+
+#left-side {
+  width: 245px;
+  display: inline-block;
+  position: absolute;
+  left: -255px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#main-content {
+  padding-left: 10px;
+}
+

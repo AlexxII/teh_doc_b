@@ -67,6 +67,17 @@ JConfirmAsset::register($this);
   a:hover {
     text-decoration: none;
   }
+  .container {
+    width: 100%;
+  }
+  .container-ex {
+    width: 1170px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
 </style>
 
 
@@ -79,7 +90,7 @@ JConfirmAsset::register($this);
 <div class="wrap">
   <?php
   NavBar::begin([
-    'brandLabel' => '<img src="/images/logo.jpg" style="display:inline">',
+    'brandLabel' => '<img src="/images/logo.jpg" style="display:inline;vertical-align: center"> Журнал ВКC',
     'brandUrl' => Yii::$app->homeUrl,
     'options' => [
       'class' => 'navbar-inverse',
@@ -153,15 +164,10 @@ JConfirmAsset::register($this);
   ?>
 
   <div class="container">
-    <?= Breadcrumbs::widget([
-      'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-      'options' => [
-        'class' => 'breadcrumb'
-      ],
-      'tag' => 'ol',
-    ]) ?>
     <?= Alert::widget() ?>
-    <?= $content ?>
+    <div class="container-ex">
+      <?= $content ?>
+    </div>
   </div>
 </div>
 

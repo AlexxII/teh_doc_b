@@ -10,6 +10,9 @@ use app\modules\scheduler\models\Holiday;
 
 class VacationsController extends Controller
 {
+
+  public $layout = 'scheduler_layout_exx.php';
+
   public function actionIndex()
   {
     $models = User::find()

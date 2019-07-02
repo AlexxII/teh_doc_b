@@ -17,12 +17,7 @@ Yii::$app->cache->flush();
 ?>
 
 <div class="vks-pannel">
-  <div class="row" style="border-radius:2px;padding-left:15px;margin-top: -10px">
-    <h3><?= Html::encode($this->title) ?>
-      <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-           data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-    </h3>
-  </div>
+
 </div>
 
 <style>

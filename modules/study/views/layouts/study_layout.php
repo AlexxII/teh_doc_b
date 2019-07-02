@@ -6,8 +6,13 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 
-
 ?>
+
+<style>
+  .container-fluid .fa {
+    font-size: 20px;
+  }
+</style>
 
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -24,9 +29,52 @@ use yii\widgets\Breadcrumbs;
 
 <?php $this->beginBody() ?>
 
-<div class="container">
-  <?= $content ?>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><span class="fa fa-bars navbar-brand" aria-hidden="true" style="cursor: pointer; font-size: 17px"></span></li>
+        <li class="navbar-brand">
+          Журнал ВКС
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Настройка 1</a></li>
+            <li><a href="#">Настройка 2</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Настройка 3</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" role="button" class="dropdown-toggle fa fa-th" aria-hidden="true" ></a>
+        </li>
+        <li>
+          <a href="#" role="button" class="dropdown-toggle fa fa-bell-o" aria-hidden="true" ></a>
+        </li>
+        <li class="dropdown">
+<!--          <a href="#" class="dropdown-toggle fa fa-user-o" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>-->
+          <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://www.fgruber.ch/" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span> Профиль</a></li>
+            <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="">
+  <div class="col-md-12">
+    <div class="col-md-12">
+      <?= $content ?>
+    </div>
+  </div>
 </div>
+
 
 <?php $this->endBody() ?>
 </body>

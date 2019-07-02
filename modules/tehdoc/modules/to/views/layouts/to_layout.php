@@ -74,6 +74,19 @@ $del_multi_nodes = 'Удвлить С вложениями';
   a:hover {
     text-decoration: none;
   }
+
+  .container {
+    width: 100%;
+  }
+
+  .container-ex {
+    /*width: 1170px;*/
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+  }
 </style>
 
 
@@ -150,17 +163,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
   ?>
 
   <div class="container">
-    <?= Breadcrumbs::widget([
-      'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-      'options' => [
-        'class' => 'breadcrumb'
-      ],
-      'tag' => 'ol',
-    ]) ?>
     <?= Alert::widget() ?>
-
-    <div><?= $content ?></div>
-
+    <div class="container-ex">
+      <div><?= $content ?></div>
+    </div>
   </div>
 </div>
 

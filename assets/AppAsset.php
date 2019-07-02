@@ -21,7 +21,8 @@ class AppAsset extends AssetBundle
   public $baseUrl = '@web';
   public $css = [
     'lib/awesome/css/font-awesome.min.css',
-    'css/site.css'
+    'css/navbar-style.css'
+//    'css/site.css'
   ];
 
   public $jsOptions = ['position' => \yii\web\View::POS_HEAD];

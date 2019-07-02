@@ -21,12 +21,159 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <style>
 
+  .state-icon {
+    left: -5px;
+  }
+  .list-group-item-primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(66, 139, 202);
+  }
+  /* DEMO ONLY - REMOVES UNWANTED MARGIN */
+  .well .list-group {
+    margin-bottom: 0px;
+  }
+
+
+  .main-scheduler {
+    margin-top: 20px;
+  }
+  table.table-bordered > tbody > tr > td:nth-of-type(1) {
+    /*background-color: #0a0a0a;*/
+  }
+  .fc-week-number {
+    background-color: #e2e2e2;
+  }
+  .past div.fc-time, .past div.fc-title {
+    text-decoration: line-through;
+  }
+  .datepicker {
+    z-index: 999999999;
+  }
+  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    background-color: #fff;
+    opacity: 1;
+  }
+  .holiday {
+    background-color: #df5000;
+  }
+  .cool-title {
+    font-size: 25px;
+  }
+  .fc-more-popover {
+    background-color: white;
+  }
+  .wrapper-class {
+    display: flex;
+    flex-direction: row;
+  }
+  .fc-calendars-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 1px solid grey;
+    color: #000;
+  }
+  .fc-navigation-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 1px solid grey;
+    color: #000;
+  }
+  .fc-view-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 1px solid grey;
+    color: #000;
+  }
+  .btn-primary:focus, .btn-primary.focus {
+    background-color: #fff;
+  }
+  .btn-primary:active:focus {
+    background-color: #fff;
+  }
+  .btn-primary:active, .btn-primary.active {
+    background-color: lightgrey;
+
+  }
+  .btn-primary:active:hover {
+    background-color: #fff;
+  }
+  .btn-primary.disabled:hover,
+  .btn-primary[disabled]:hover,
+  fieldset[disabled] .btn-primary:hover,
+  .btn-primary.disabled:focus, .btn-primary[disabled]:focus,
+  fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus,
+  .btn-primary[disabled].focus, fieldset[disabled] .btn-primary.focus {
+    font-size: 10px;
+    background-color: lightgrey;
+    border: 1px solid grey;
+    color: #000;
+  }
+  .btn-primary.disabled:visited,
+  .btn-primary[disabled]:visited,
+  fieldset[disabled] .btn-primary:visited {
+    background-color: red;
+  }
+  .btn-primary.disabled:visited,
+  .btn-primary[disabled]:visited,
+  fieldset[disabled] .btn-primary:visited {
+    background-color: #fff;
+  }
+  .btn-primary:hover {
+    font-size: 10px;
+    background-color: rgba(211, 211, 211, 0.21);
+    color: #000;
+  }
+  .fc-today-button:hover {
+    font-size: 10px;
+    background-color: lightgrey;
+    border: 1px solid grey;
+    color: #000;
+  }
+  #calendar .btn {
+    color: #000;
+  }
+  #calendar .fc-left .fa {
+    font-size: 10px;
+    color: #5f6368;
+  }
+  .fc-prev-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 0px;
+  }
+  .fc-next-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 0px;
+  }
+  .fc-today-button {
+    font-size: 10px;
+    background-color: #fff;
+    border: 1px solid grey;
+  }
+  .fc-left h2 {
+    float: right;
+  }
 
 </style>
 
 
 <div class="main-scheduler">
-  <div class="">
+  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
+    <div id="nav-calendar">
+      <div class="">
+        <ul id="check-list-box" class="list-group checked-list-box">
+          <li class="list-group-item">Сеансы ВКС</li>
+          <li class="list-group-item"  data-color="success">График ТО</li>
+          <li class="list-group-item" data-color="info">ИТД</li>
+          <li class="list-group-item" data-color="warning">ИАД</li>
+          <li class="list-group-item" data-color="danger">ИПД</li>
+          <li class="list-group-item" data-color="danger">Личные</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-10 col-lg-10">
     <div id="calendar"></div>
   </div>
 </div>
@@ -127,27 +274,13 @@ $this->params['breadcrumbs'][] = $this->title;
   };
 
   $(document).ready(function () {
-    $(window).resize(function() {
-      var wHeight = $(window).height();
-    });
-  });
-
-  $(document).ready(function () {
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: ['interaction', 'dayGrid', 'timeGrid', 'bootstrap'],
       locale: 'ru',
-      height: function () {
-        return $(window).height() - 55;
-      },
-      windowResize: function(view) {
-        var size = $(window).height() - 55;
-        // calendar.updateSize();
-      },
       themeSystem: 'bootstrap',
       navLinks: true,
       weekNumbers: true,
-      weekNumbersWithinDays:true,
       selectable: true,
       nowIndicator: true,
       slotDuration: '00:15:00',
@@ -159,8 +292,11 @@ $this->params['breadcrumbs'][] = $this->title;
         fcSources.events,
         fcSources.holidays
       ],
-      // height: 'auto',
-      header:false,
+      header: {
+        // left: 'dayGridMonth,timeGridWeek,timeGridDay, custom1',
+        left: 'today prev next title',
+        right: 'view calendars'
+      },
       customButtons: {
         calendars: {
           text: 'Календари',
@@ -169,6 +305,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // calendar.addEventSource(fcSources.vks);
             // var eb = calendar.getEventSourceById(1111);
             // eb.remove();
+
           }
         },
         view: {
