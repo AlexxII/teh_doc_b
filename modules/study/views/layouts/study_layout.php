@@ -6,6 +6,10 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 
+use app\assets\SlidebarsAsset;
+
+SlidebarsAsset::register($this);
+
 ?>
 
 <style>
@@ -33,7 +37,7 @@ use yii\widgets\Breadcrumbs;
   <div class="container-fluid">
     <div class="collapse navbar-collapse" id="navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><span class="fa fa-bars navbar-brand" aria-hidden="true" style="cursor: pointer; font-size: 17px"></span></li>
+        <li><span id="menu" class="fa fa-bars navbar-brand" aria-hidden="true" style="cursor: pointer; font-size: 17px"></span></li>
         <li class="navbar-brand">
           Журнал ВКС
         </li>
@@ -67,12 +71,23 @@ use yii\widgets\Breadcrumbs;
   </div><!-- /.container-fluid -->
 </nav>
 
-<div class="">
-  <div class="col-md-12">
-    <div class="col-md-12">
-      <?= $content ?>
+
+<div canvas="container">
+  <div class="container content">
+    <div class="row">
+      <div class="col-md-6 js-close-any">
+        <?= $content ?>
+      </div>
     </div>
   </div>
+</div>
+
+<div off-canvas="main-menu left shift">
+  <ul class="nav nav-pills nav-stacked">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Profile</a></li>
+    <li><a href="#">Messages</a></li>
+  </ul>
 </div>
 
 
@@ -80,3 +95,13 @@ use yii\widgets\Breadcrumbs;
 </body>
 </html>
 <?php $this->endPage() ?>
+
+<script>
+  $(function() {
+    var controller = new slidebars();
+    controller.init();
+    $('#menu').click(function(){
+      controller.toggle('main-menu');
+    });
+  });
+</script>
