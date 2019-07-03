@@ -8,9 +8,11 @@ use yii\widgets\Breadcrumbs;
 
 use app\assets\AppAsset;
 use app\assets\JConfirmAsset;
+use app\assets\SlidebarsAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 JConfirmAsset::register($this);
+SlidebarsAsset::register($this);
 
 ?>
 
@@ -60,13 +62,12 @@ JConfirmAsset::register($this);
           </ul>
         </li>
         <li>
-          <a href="#" role="button" class="dropdown-toggle fa fa-th" aria-hidden="true"></a>
-        </li>
-        <li>
           <a href="#" role="button" class="dropdown-toggle fa fa-bell-o" aria-hidden="true"></a>
         </li>
+        <li>
+          <a href="#" role="button" class="dropdown-toggle fa fa-th" aria-hidden="true"></a>
+        </li>
         <li class="dropdown">
-          <!--          <a href="#" class="dropdown-toggle fa fa-user-o" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>-->
           <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
              aria-haspopup="true" aria-expanded="false"></a>
           <ul class="dropdown-menu">
@@ -80,8 +81,22 @@ JConfirmAsset::register($this);
   </div><!-- /.container-fluid -->
 </nav>
 
-<div class="" id="main-wrap">
+<div id="main-wrap">
   <div id="left-side">
+    <div id="nav-calendar">
+      <div class="">
+        <ul id="check-list-box" class="list-group checked-list-box">
+          <li class="list-group-item">Сеансы ВКС</li>
+          <li class="list-group-item" data-color="success">График ТО</li>
+          <li class="list-group-item" data-color="info">ИТД</li>
+          <li class="list-group-item" data-color="warning">ИАД</li>
+          <li class="list-group-item" data-color="danger">ИПД</li>
+          <li class="list-group-item" data-color="danger">Личные</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div off-canvas="main-menu left overlay">
     <div id="nav-calendar">
       <div class="">
         <ul id="check-list-box" class="list-group checked-list-box">
@@ -109,16 +124,56 @@ JConfirmAsset::register($this);
 
 <script>
   $(document).ready(function () {
-    $('#push-it').click(function (e) {
+    $('#push-it').bind('click', clickMenu);
+  });
+
+  function clickMenu(){
+    if ($(window).width() >= 900) {
       if ($('#left-side').css('left') == '0px') {
-        $('#left-side').css('width', '275px');
-        $('#left-side').animate({left: '-280px'}, {queue: false, duration: 500});
-        $('#main-content').animate({marginLeft: '0px'}, {queue: false, duration: 500});
+        closeSlider();
       } else {
-        $('#left-side').css('width', '275px');
-        $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
-        $('#main-content').animate({marginLeft: '275px'}, {queue: false, duration: 500});
+        openSlider();
       }
-    });
-  })
+    } else {
+      openMenu();
+    }
+  }
+
+  function openSlider() {
+    $('#left-side').css('width', '275px');
+    $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
+    $('#main-content').animate({marginLeft: '275px'}, {queue: false, duration: 500});
+  }
+
+  function closeSlider() {
+    $('#left-side').css('width', '275px');
+    $('#left-side').animate({left: '-280px'}, {queue: false, duration: 500});
+    $('#main-content').animate({marginLeft: '0px'}, {queue: false, duration: 500});
+  }
+
+  var controller = new slidebars();
+  controller.init();
+
+  function openMenu() {
+    console.log('open init');
+    event.stopPropagation();
+    event.preventDefault();
+    controller.toggle('main-menu');
+    $('#main-content, .navbar').bind('click', closeMenu);
+  }
+
+  function closeMenu(e) {
+    console.log('close init');
+    $('#main-content, .navbar').off('click', closeMenu);
+    controller.toggle('main-menu');
+  }
+
+  $(window).resize(function () {
+    if ($(window).width() >= 900) {
+      return;
+    } else {
+      closeSlider();
+    }
+  });
+
 </script>

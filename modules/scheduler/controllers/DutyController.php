@@ -15,6 +15,8 @@ use app\modules\scheduler\models\Event;
 class DutyController extends Controller
 {
 
+  public $layout = 'scheduler_layout_exx.php';
+
   public function actionIndex()
   {
     $models = User::find()

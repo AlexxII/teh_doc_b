@@ -31,6 +31,7 @@ body {
 
 #left-side {
   min-width: 275px;
+  height: calc(100% - 57px);
   display: inline-block;
   position: absolute;
   left: -280px;

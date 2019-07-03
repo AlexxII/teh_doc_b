@@ -9,6 +9,9 @@ use app\modules\scheduler\models\Holiday;
 
 class HolidaysController extends Controller
 {
+
+  public $layout = 'scheduler_layout_exx.php';
+
   public function actionIndex()
   {
     return $this->render('index');

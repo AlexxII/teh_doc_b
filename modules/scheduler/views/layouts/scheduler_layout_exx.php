@@ -8,18 +8,24 @@ use yii\widgets\Breadcrumbs;
 
 use app\assets\AppAsset;
 use app\assets\JConfirmAsset;
+use app\assets\SlidebarsAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 JConfirmAsset::register($this);
+SlidebarsAsset::register($this);
 
 ?>
 
 <style>
   .navbar {
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   }
-
-
+  #left-menu {
+    background-color: #f8f8f8;
+  }
+  .pointer {
+    cursor: pointer;
+  }
 </style>
 
 <?php $this->beginPage() ?>
@@ -52,8 +58,10 @@ JConfirmAsset::register($this);
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true"
-             aria-expanded="false"></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false">
+            Календари
+          </a>
           <ul class="dropdown-menu">
             <li><a href="/scheduler/production">Производственный календарь</a></li>
             <li><a href="/scheduler/holidays">Календарь праздников</a></li>
@@ -62,14 +70,22 @@ JConfirmAsset::register($this);
             <li><a href="/scheduler/duty">Календарь дежурств</a></li>
           </ul>
         </li>
-        <li>
-          <a href="#" role="button" class="dropdown-toggle fa fa-th" aria-hidden="true"></a>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false"></a>
+          <ul class="dropdown-menu">
+            <li><a href="/scheduler/production">План-график событий</a></li>
+            <li><a href="/scheduler/control/absence-type">Причины отсутствия</a></li>
+            <li><a href="/scheduler/control/duty-type">Виды дежурств</a></li>
+          </ul>
         </li>
         <li>
           <a href="#" role="button" class="dropdown-toggle fa fa-bell-o" aria-hidden="true"></a>
         </li>
+        <li>
+          <a href="#" role="button" class="dropdown-toggle fa fa-th" aria-hidden="true"></a>
+        </li>
         <li class="dropdown">
-          <!--          <a href="#" class="dropdown-toggle fa fa-user-o" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"></a>-->
           <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
              aria-haspopup="true" aria-expanded="false"></a>
           <ul class="dropdown-menu">
@@ -84,7 +100,7 @@ JConfirmAsset::register($this);
 </nav>
 
 <div id="main-wrap">
-  <div id="left-side">
+  <div id='left-menu' off-canvas="main-menu left overlay">
     <div id="nav-calendar">
       <div class="">
         <ul id="check-list-box" class="list-group checked-list-box">
@@ -111,22 +127,25 @@ JConfirmAsset::register($this);
 <?php $this->endPage() ?>
 
 <script>
+  var controller = new slidebars();
+  controller.init();
+
   $(document).ready(function () {
-    $('#push-it').click(function (e) {
-      console.log($(document).width());
-      if ($(document).width() <= 1050) {
-        return;
-      }
-      if ($('#left-side').css('left') == '0px') {
-        $('#left-side').css('width', '275px');
-        $('#left-side').animate({left: '-280px'}, {queue: false, duration: 500});
-        $('#main-content').animate({paddingLeft: '0px'}, {queue: false, duration: 500});
-      } else {
-        var left = 250 - $('#main-content').offset().left;
-        $('#left-side').css('width', '275px');
-        $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
-        $('#main-content').animate({paddingLeft: left+'px'}, {queue: false, duration: 500});
-      }
+    $('#push-it').click(function () {
+      console.log('open init');
+      event.stopPropagation();
+      event.preventDefault();
+      controller.toggle('main-menu');
+      $('#main-content, .navbar').bind('click', closeMenu);
+      $('#main-content, .navbar').addClass('pointer');
     });
-  })
+  });
+
+  function closeMenu(e) {
+    console.log('close init');
+    $('#main-content, .navbar').removeClass('pointer');
+    $('#main-content, .navbar').off('click', closeMenu);
+    controller.toggle('main-menu');
+  }
+
 </script>
