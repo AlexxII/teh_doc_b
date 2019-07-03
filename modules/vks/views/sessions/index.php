@@ -33,6 +33,10 @@ Yii::$app->cache->flush();
   .testt {
     position: relative;
   }
+  strong {
+    font-size: 14px;
+    font-weight: 700;
+  }
 </style>
 
 <div class="row">
@@ -291,7 +295,16 @@ Yii::$app->cache->flush();
                 {
                     "targets": 3,
                     "render": function (data, type, row) {
-                        return row[3] + ' /т' + "<br> " + row[4] + ' /р';
+                        console.log(row[4]);
+                        if (row[3] == '') {
+                            return '<strong>' + row[4] + '</strong>' + ' / <strong>Р</strong>';
+                        } else if (row[4] == '') {
+                            return '<strong>' + row[3] + '</strong>' + ' / <strong>Т</strong>';
+                        } else {
+                            return '<strong>' + row[3] + '</strong>' +
+                                ' / <strong>Т</strong>' + "<br> " +
+                                '<strong>' + row[4] + '</strong>' + ' / <strong>Р</strong>';
+                        }
                     }
                 },
                 {
