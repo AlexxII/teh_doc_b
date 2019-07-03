@@ -49,7 +49,6 @@ Yii::$app->cache->flush();
           'data-toggle' => "tooltip",
           'data-placement' => "top",
           'title' => $add_hint,
-          'id' => 'add-new'
         ]) ?>
       <?= Html::a('Удалить',
         [''], [
@@ -260,7 +259,7 @@ Yii::$app->cache->flush();
                 }
             }),
             orderFixed: [2, 'asc'],
-            order: [3, 'asc'],
+            order: [[4, 'asc'], [3, 'asc']],
             rowGroup: {
                 dataSrc: 2
             },
