@@ -142,8 +142,8 @@ JConfirmAsset::register($this);
         $('#left-side').animate({left: '-280px'}, {queue: false, duration: 500});
         $('#main-content').animate({paddingLeft: '0px'}, {queue: false, duration: 500});
       } else {
-        var left = 2 - $('#main-content').offset().left;
-        $('#left-side').css('width', '275px');
+        var left = 250 - $('#main-content').offset().left;
+        $('#left-side').css('width', '2px');
         $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
         $('#main-content').animate({paddingLeft: left+'px'}, {queue: false, duration: 500});
       }
