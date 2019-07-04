@@ -8,6 +8,7 @@ use yii\web\Controller;
 class VksEmployeeController extends Controller
 {
   public $defaultAction = 'index';
+  public $layout = 'vks_settings_layout.php';
 
   public function actionIndex()
   {

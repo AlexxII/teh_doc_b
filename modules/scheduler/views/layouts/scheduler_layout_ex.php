@@ -17,8 +17,9 @@ SlidebarsAsset::register($this);
 ?>
 
 <style>
-
-
+  .pointer {
+    cursor: pointer;
+  }
 </style>
 
 <?php $this->beginPage() ?>
@@ -37,88 +38,96 @@ SlidebarsAsset::register($this);
 
 <?php $this->beginBody() ?>
 
-<nav class="navbar navbar-default" style="margin-bottom: 0px">
-  <div class="container-fluid">
-    <div class="collapse navbar-collapse" id="navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li><span class="fa fa-bars navbar-brand" id="push-it" aria-hidden="true"></span></li>
-        <li class="navbar-brand">
-          <img src="/images/logo.png" style="display:inline">
-        </li>
-        <li id="app-name">
-          Календарь
-        </li>
+<div off-canvas="main-menu left overlay">
+  <div id="nav-calendar">
+    <div class="">
+      <ul id="check-list-box" class="list-group checked-list-box">
+        <li class="list-group-item">Сеансы ВКС</li>
+        <li class="list-group-item" data-color="success">График ТО</li>
+        <li class="list-group-item" data-color="info">ИТД</li>
+        <li class="list-group-item" data-color="warning">ИАД</li>
+        <li class="list-group-item" data-color="danger">ИПД</li>
+        <li class="list-group-item" data-color="danger">Личные</li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true"
-             aria-expanded="false"></a>
-          <ul class="dropdown-menu">
-            <li><a href="/scheduler/production">Производственный календарь</a></li>
-            <li><a href="/scheduler/holidays">Календарь праздников</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="/scheduler/vacations">Календари отпусков</a></li>
-            <li><a href="/scheduler/duty">Календарь дежурств</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="#" role="button" class="dropdown-toggle fa fa-bell-o" aria-hidden="true"></a>
-        </li>
-        <li>
-          <a href="#" role="button" class="dropdown-toggle fa fa-th" aria-hidden="true"></a>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
-             aria-haspopup="true" aria-expanded="false"></a>
-          <ul class="dropdown-menu">
-            <li><a href="http://www.fgruber.ch/" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
-                Профиль</a></li>
-            <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+    </div>
+  </div>
+</div>
 
-<div id="main-wrap">
-  <div id="left-side">
-    <div id="nav-calendar">
-      <div class="">
-        <ul id="check-list-box" class="list-group checked-list-box">
-          <li class="list-group-item">Сеансы ВКС</li>
-          <li class="list-group-item" data-color="success">График ТО</li>
-          <li class="list-group-item" data-color="info">ИТД</li>
-          <li class="list-group-item" data-color="warning">ИАД</li>
-          <li class="list-group-item" data-color="danger">ИПД</li>
-          <li class="list-group-item" data-color="danger">Личные</li>
+<div id="app-wrap">
+
+  <nav class="navbar navbar-default" style="margin-bottom: 0px">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><span class="fa fa-bars navbar-brand" id="push-it" aria-hidden="true"></span></li>
+          <li class="navbar-brand">
+            <img src="/images/logo.png" style="display:inline">
+          </li>
+          <li id="app-name">
+            Календарь
+          </li>
         </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false"></a>
+            <ul class="dropdown-menu">
+              <li><a href="/scheduler/production">Производственный календарь</a></li>
+              <li><a href="/scheduler/holidays">Календарь праздников</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="/scheduler/vacations">Календари отпусков</a></li>
+              <li><a href="/scheduler/duty">Календарь дежурств</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#" role="button" class="dropdown-toggle fa fa-bell-o" aria-hidden="true"></a>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle fa fa-th" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false"></a>
+            <ul class="dropdown-menu">
+              <li><a href="/vks">Журнал ВКС</a></li>
+              <li><a href="/tehdoc">Тех. документация</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
+               aria-haspopup="true" aria-expanded="false"></a>
+            <ul class="dropdown-menu">
+              <li><a href="http://www.fgruber.ch/" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
+                  Профиль</a></li>
+              <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+  <div id="main-wrap">
+    <div id="left-side">
+      <div id="nav-calendar">
+        <div class="">
+          <ul id="check-list-box" class="list-group checked-list-box">
+            <li class="list-group-item">Сеансы ВКС</li>
+            <li class="list-group-item" data-color="success">График ТО</li>
+            <li class="list-group-item" data-color="info">ИТД</li>
+            <li class="list-group-item" data-color="warning">ИАД</li>
+            <li class="list-group-item" data-color="danger">ИПД</li>
+            <li class="list-group-item" data-color="danger">Личные</li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-  <div off-canvas="main-menu left overlay">
-    <div id="nav-calendar">
-      <div class="">
-        <ul id="check-list-box" class="list-group checked-list-box">
-          <li class="list-group-item">Сеансы ВКС</li>
-          <li class="list-group-item" data-color="success">График ТО</li>
-          <li class="list-group-item" data-color="info">ИТД</li>
-          <li class="list-group-item" data-color="warning">ИАД</li>
-          <li class="list-group-item" data-color="danger">ИПД</li>
-          <li class="list-group-item" data-color="danger">Личные</li>
-        </ul>
-      </div>
+    <div style="" id="main-content">
+      <?= $content ?>
     </div>
-  </div>
-  <div style="" id="main-content">
-    <?= $content ?>
   </div>
 </div>
 
 <?php $this->endBody() ?>
 
 </body>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 </html>
 <?php $this->endPage() ?>
 
@@ -127,7 +136,7 @@ SlidebarsAsset::register($this);
     $('#push-it').bind('click', clickMenu);
   });
 
-  function clickMenu(){
+  function clickMenu() {
     if ($(window).width() >= 900) {
       if ($('#left-side').css('left') == '0px') {
         closeSlider();
@@ -159,12 +168,12 @@ SlidebarsAsset::register($this);
     event.stopPropagation();
     event.preventDefault();
     controller.toggle('main-menu');
-    $('#main-content, .navbar').bind('click', closeMenu);
+    $('#app-wrap').bind('click', closeMenu).addClass('pointer');
   }
 
   function closeMenu(e) {
     console.log('close init');
-    $('#main-content, .navbar').off('click', closeMenu);
+    $('#app-wrap').off('click', closeMenu).removeClass('pointer');
     controller.toggle('main-menu');
   }
 

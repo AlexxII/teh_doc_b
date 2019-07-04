@@ -2,9 +2,19 @@ body {
   width: 100%;
   height: 100%;
   font-family: Verdana, sans-serif !important;
+  overflow-y: scroll !important;
 }
 .container-fluid .fa {
   font-size: 20px;
+}
+
+.navbar-default {
+  height: 55px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
 }
 
 .navbar-default .fa {
@@ -20,6 +30,17 @@ body {
 #push-it {
   cursor: pointer;
   padding-top: 15px! important;
+}
+
+#go-back {
+  font-size: 45px;
+}
+
+#go-back:hover {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(128, 128, 128, 0.15);
 }
 
 #app-name {
@@ -43,3 +64,28 @@ body {
   padding-left: 10px;
 }
 
+#main-wrap {
+  margin-top: 55px;
+}
+
+
+.btn-circle.btn-xl {
+  width: 40px;
+  height: 40px;
+  padding: 0px;
+  margin-left: -20px;
+  border-radius: 35px;
+  font-size: 30px;
+  line-height: 1.33;
+  margin-top: 5px !important;
+  float: left;
+  background-color: inherit;
+  border: none;
+}
+
+.btn-circle:hover {
+  background-color: rgba(128, 128, 128, 0.13);
+}
+.btn-circle > .fa {
+  font-size: 30px;
+}

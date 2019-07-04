@@ -7,7 +7,7 @@ use yii\web\Controller;
 
 class DefaultController extends Controller
 {
-//  public $layout = 'study_layout_ex.php';
+  public $layout = 'study_layout_ex.php';
 
   public function actionIndex()
   {

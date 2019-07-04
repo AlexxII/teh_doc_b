@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <div class="main-scheduler row">
-  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
+  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px;white-space: nowrap">
     <div id="info-panel">
       <span style="cursor: pointer" id="chbx-all"><h3>Сотрудники:</h3></span>
       <?php foreach ($models as $key => $model): ?>

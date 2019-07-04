@@ -10,7 +10,6 @@ $this->title = 'Производственный календарь';
 $this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
 $this->params['breadcrumbs'][] = $this->title;
 
-
 ?>
 <style>
   .calendar {
@@ -20,10 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <div class="main-scheduler row">
-  <div class="col-md-2 col-lg-2" style="margin-bottom: 15px">
-    <div id="info-panel"></div>
-  </div>
-  <div class="col-md-10 col-lg-10">
+  <div class="col-md-12 col-lg-12">
     <div id="full-calendar"></div>
   </div>
 </div>
