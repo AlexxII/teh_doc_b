@@ -112,7 +112,8 @@ class SessionsController extends Controller
 
 
 //    $where = 'vks_upcoming_session = 1 AND vks_cancel = ' . $index;
-    $where = ' ' . $table . '.vks_upcoming_session = 1 AND Date(vks_date) >= "' . $startDate . '" AND Date(vks_date) <= "' . $endDate . '" AND vks_cancel = ' . $index;
+    $where = ' ' . $table . '.vks_upcoming_session = 1 AND Date(vks_date) >= "' .
+      $startDate . '" AND Date(vks_date) <= "' . $endDate . '" AND vks_cancel = ' . $index;
 
     return json_encode(
       SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
@@ -169,7 +170,7 @@ class SessionsController extends Controller
       $index = 0;
     }
 
-    $where = 'vks_upcoming_session = 0 AND vks_cancel = '. $index . ' ORDER BY  vks_teh_time_start, vks_work_time_start ASC';
+    $where = 'vks_upcoming_session = 0 AND vks_cancel = '. $index;
 
     return json_encode(
       SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)

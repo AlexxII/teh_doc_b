@@ -193,6 +193,10 @@ SlidebarsAsset::register($this);
 
   function openSlider() {
     var left = 250 - $('#main-content').offset().left;
+    if (left < 0) {
+        left = 10;
+    }
+    console.log(left);
     $('#left-side').css('width', '2px');
     $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
     $('#main-content').animate({paddingLeft: left + 'px'}, {queue: false, duration: 500});
