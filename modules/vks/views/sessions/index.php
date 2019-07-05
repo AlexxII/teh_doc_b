@@ -25,13 +25,6 @@ Yii::$app->cache->flush();
   #main-table tbody td {
     font-size: 12px;
   }
-  .h-title {
-    font-size: 18px;
-    color: #1e6887;
-  }
-  .testt {
-    position: relative;
-  }
   strong {
     font-size: 14px;
     font-weight: 700;

@@ -2,6 +2,20 @@
   margin-top: 70px;
 }
 
+#left-menu {
+  text-align: left;
+  width: 150px;
+  background-color: #fff;
+  color: #000 !important;
+}
+
+#left-menu .fa {
+  color: #5f6368 !important;
+}
+
+.menu-list-about {
+  padding-top: 10px;
+}
 
 .btn-circle.btn-xl {
   width: 20px;
