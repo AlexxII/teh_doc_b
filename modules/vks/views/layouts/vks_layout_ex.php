@@ -10,11 +10,13 @@ use app\assets\AppAsset;
 use app\assets\TableBaseAsset;
 use app\assets\JConfirmAsset;
 use app\assets\SlidebarsAsset;
+use app\modules\vks\assets\VksAppAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 TableBaseAsset::register($this);
 JConfirmAsset::register($this);
 SlidebarsAsset::register($this);
+VksAppAsset::register($this);
 
 ?>
 
@@ -92,11 +94,13 @@ SlidebarsAsset::register($this);
           <li id="app-name">
             Журнал ВКС
           </li>
+          <li id="left-custom-data">
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li id="custom-data-ex">
+          <li id="right-custom-data-ex">
           </li>
-          <li id="custom-data">
+          <li id="right-custom-data">
           </li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -140,10 +144,7 @@ SlidebarsAsset::register($this);
       <div id="left-menu">
         <div class="menu-list">
           <div style="padding: 10px 0px">
-            <button id="main-add-button" style="padding: 0 24px; width: auto">
-              <span style="margin: 15px">+</span>
-              <span style="margin: 15px"> Добавить</span>
-            </button>
+            <button type="button" class="btn btn-lg" style="background-color: #2196f3; color: #fff">+ Создать</button>
           </div>
           <div style="padding: 10px 0px">
             <a href="./">
@@ -193,10 +194,6 @@ SlidebarsAsset::register($this);
 
   function openSlider() {
     var left = 250 - $('#main-content').offset().left;
-    if (left < 0) {
-        left = 10;
-    }
-    console.log(left);
     $('#left-side').css('width', '2px');
     $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
     $('#main-content').animate({paddingLeft: left + 'px'}, {queue: false, duration: 500});
@@ -212,20 +209,26 @@ SlidebarsAsset::register($this);
   controller.init();
 
   function openMenu() {
-    console.log('open init');
     event.stopPropagation();
     event.preventDefault();
     controller.toggle('main-menu');
     $('#app-wrap').bind('click', closeMenu).addClass('pointer');
+    $('#add-session-wrap').css('display', 'none');
   }
 
   function closeMenu(e) {
-    console.log('close init');
     $('#app-wrap').off('click', closeMenu).removeClass('pointer');
     controller.toggle('main-menu');
   }
 
   $(window).resize(function () {
+    var divPosition = $('#add-session-wrap').offset();
+    if (divPosition.left <= 0) {
+      $('#add-session').hide();
+    } else {
+      $('#add-session').show();
+    }
+
     if ($(window).width() >= 900) {
       return;
     } else {

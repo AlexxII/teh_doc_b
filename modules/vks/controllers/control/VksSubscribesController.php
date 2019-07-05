@@ -8,7 +8,7 @@ use yii\web\Controller;
 class VksSubscribesController extends Controller
 {
   public $defaultAction = 'index';
-  public $layout = 'vks_settings_layout.php';
+  public $layout = 'vks_control_layout.php';
 
   public function actionIndex()
   {

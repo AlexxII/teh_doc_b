@@ -21,10 +21,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
 ?>
 
 <style>
-  .h-title {
-    font-size: 18px;
-    color: #1e6887;
-  }
   .fa {
     font-size: 15px;
   }

@@ -13,7 +13,9 @@ $dell_hint = 'Удалить выделенные сеансы';
 $date_about = "Выберите период";
 
 AirDatepickerAsset::register($this);
+
 Yii::$app->cache->flush();
+
 ?>
 
 <style>
@@ -36,45 +38,29 @@ Yii::$app->cache->flush();
   }
   #vks-dates {
     margin-top: 10px;
+    width: 245px;
   }
-
   #delete-wrap {
     margin: 10px 10px 0px 0px;
     cursor: pointer;
   }
   #delete-wrap .fa {
     font-size: 28px;
-    color: red !important;
+    color: #ed1d1a !important;
   }
-
 </style>
 
 <div class="row">
-  <div class="">
-    <div class="container-fluid" style="margin-bottom: 20px;position: relative">
-      <?= Html::a('Добавить',
-        ['create-up-session'], [
-          'class' => 'btn btn-success btn-sm',
-          'style' => ['margin-top' => '5px'],
-          'data-toggle' => "tooltip",
-          'data-placement' => "top",
-          'title' => $add_hint,
-        ]) ?>
-      <?= Html::a('Удалить',
-        [''], [
-          'class' => 'btn btn-danger btn-sm hiddendel',
-          'style' => ['margin-top' => '5px', 'display' => 'none'],
-          'data-toggle' => "tooltip",
-          'data-placement' => "top",
-          'title' => $dell_hint,
-        ]) ?>
-    </div>
-  </div>
 
-  <div class="container-fluid">
+  <div class="container-fluid" style="position: relative">
+    <div id="add-session-wrap" style="position: absolute; top: 10px; left:-60px">
+      <a id="add-session" class="fab-button" href="" title="Добавить предстоящий сеанс">
+        <div class="plus"></div>
+      </a>
+    </div>
+
     <input class="start-date" style="display: none">
     <input class="end-date" style="display: none">
-
     <?php
 
     echo '
@@ -99,6 +85,7 @@ Yii::$app->cache->flush();
     ?>
   </div>
 
+
   <input class="csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" style="display: none">
 </div>
 <br>
@@ -112,12 +99,16 @@ Yii::$app->cache->flush();
   var trashBtn = '<div id="delete-wrap" data-toggle="tooltip" data-placement="bottom" title="Удалить выделенные сеансы"' +
     'style="display: none"><i class="fa fa-trash" aria-hidden="true"></i></div>';
 
+  // var addSession = '<a href="#" class="circle_fl ffdly"><i class="fa fa-plus"></i></a>';
+  // var addSession = '<button id="add-session" type="button" class="btn btn-success">Добавить</button>';
+
   // var trashEx = '<img src="/images/logo.png" style="display:inline">';
 
   $(document).ready(function () {
-    $('#custom-data').html(periodInput);
-    $('#custom-data-ex').html(trashBtn);
-    // $('#custom-data-ex').html(trashEx);
+    $('#right-custom-data').html(periodInput);
+    $('#right-custom-data-ex').html(trashBtn);
+    // $('#left-custom-data').html(addSession);
+    // $('#left-custom-data').html(addd);
   });
 
 
@@ -312,7 +303,6 @@ Yii::$app->cache->flush();
         {
           "targets": 3,
           "render": function (data, type, row) {
-            console.log(row[4]);
             if (row[3] == '') {
               return '<strong>' + row[4] + '</strong>' + ' / <strong>Р</strong>';
             } else if (row[4] == '') {

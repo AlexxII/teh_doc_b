@@ -1,0 +1,88 @@
+#main-wrap {
+  margin-top: 70px;
+}
+
+
+.btn-circle.btn-xl {
+  width: 20px;
+  height: 40px;
+  padding: 0px;
+  margin-left: 0px;
+  border-radius: 35px;
+  font-size: 30px;
+  line-height: 1.33;
+  margin-top: 5px !important;
+  float: left;
+  background-color: inherit;
+  border: none;
+}
+
+.btn-circle:hover {
+  background-color: rgba(128, 128, 128, 0.13);
+}
+.btn-circle > .fa {
+  font-size: 30px;
+}
+
+.btn-circle.btn-lg {
+  width: 40px;
+  height: 40px;
+  padding: 10px 12px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+}
+
+
+[class*="fab"] {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(255,255,255,0);
+  -webkit-tap-highlight-color: transparent;
+}
+.fab-button {
+  width: 54px;
+  height: 54px;
+  border-radius: 100%;
+  display: table;
+  background: #2196f3;
+  /*background: #28a745;*/
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
++  position: relative;
+  transition: box-shadow 0.2s;
+}
+.fab-button:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+}
+.fab-button:focus {
+  z-index: 450;
+  pointer-events: none;
+}
+.fab-button:focus ~ .fab-shadow {
+  width: 100%;
+  opacity: 1;
+  transition: opacity 0.5s, width 0s;
+}
+.fab-button div {
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  margin: 29px;
+  border-radius: 100%;
+  box-shadow: 0 -11px #fff, 0 11px #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
+  transition: all 0.5s cubic-bezier(0.5, 2, 0.5, 1);
+}
+.fab-button .plus {
+  width: 4px;
+  height: 4px;
+  margin: 25px;
+  border-radius: 0;
+  box-shadow: 0 0 #fff, 0 0 #fff, 0 -3px #fff, 0 3px #fff, -3px 0 #fff, 3px 0 #fff, 0 -6px #fff, 0 6px #fff, -6px 0 #fff, 6px 0 #fff, 0 -9px #fff, 0 9px #fff, -9px 0 #fff, 9px 0 #fff, 0 -12px #fff, 0 12px #fff, -12px 0 #fff, 12px 0 #fff;
+}
+.fab-button:focus .plus {
+  transform: rotate(45deg);
+}

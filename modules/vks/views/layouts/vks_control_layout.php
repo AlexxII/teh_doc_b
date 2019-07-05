@@ -10,49 +10,25 @@ use app\assets\AppAsset;
 use app\assets\TableBaseAsset;
 use app\assets\JConfirmAsset;
 use app\assets\SlidebarsAsset;
+use app\modules\vks\assets\VksAppAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 TableBaseAsset::register($this);
 JConfirmAsset::register($this);
 SlidebarsAsset::register($this);
+VksAppAsset::register($this);
 
 ?>
 
 <style>
-  .container {
-    /*max-width: 1170px;*/
-  }
-  #main-add-button {
-    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);
-    border-radius: 24px;
-    background-color: #fff;
-  }
-  .navbar {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  }
-  .settings-menu a {
-    display: block;
-    font-size: 16px;
-  }
-  .settings-menu a:hover {
-    background-color: rgba(0, 0, 0, 0.17);
-    text-decoration: none;
-    color: #3c4043;
-  }
-  .menu-link {
-    padding: 10px 15px;
-    white-space: nowrap;
-    color: #3c4043;
-  }
-  .setting-name {
-    margin-left: 20px;
-  }
-
   .app-settings {
     font-weight: 400 !important;
     margin: 12px 0px 0px 30px !important;
   }
-
+  #go-back {
+    width: 40px;
+    height: 40px;
+  }
 </style>
 
 
