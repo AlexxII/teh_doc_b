@@ -101,6 +101,7 @@ SlidebarsAsset::register($this);
             <ul class="dropdown-menu">
               <li><a href="/vks">Журнал ВКС</a></li>
               <li><a href="/tehdoc">Тех. документация</a></li>
+              <li><a href="/tehdoc">Календарь</a></li>
             </ul>
           </li>
 

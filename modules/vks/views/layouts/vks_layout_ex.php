@@ -46,6 +46,12 @@ VksAppAsset::register($this);
     white-space: nowrap;
     color: #3c4043;
   }
+  .list-group {
+    margin-bottom: 0px !important;
+  }
+  .list-group-item {
+    border: 0px !important;
+  }
 
 </style>
 
@@ -153,15 +159,24 @@ VksAppAsset::register($this);
             <a href="#" class="dropdown-toggle fa fa-th" data-toggle="dropdown" role="button" aria-haspopup="true"
                aria-expanded="false"></a>
             <ul class="dropdown-menu">
-              <li style="margin: 0px; width: 85px; height: 85px; display: inline">
-                <a href="/tehdoc" onclick='window.open(this.href); return false;'>
-                  333333333
+              <div class="list-group">
+                <a href="#" class="list-group-item">
+                  <h4 class="list-group-item-heading">Тех.документация</h4>
+                  <p class="list-group-item-text" style="white-space: nowrap">Техническая документация</p>
                 </a>
-              </li>
-              <li style="display: inline">
-                <a href="/scheduler" onclick='window.open(this.href); return false;'>Календарь
+              </div>
+              <div class="list-group">
+                <a href="#" class="list-group-item">
+                  <h4 class="list-group-item-heading">Журнал ВКС</h4>
+                  <p class="list-group-item-text" style="white-space: nowrap">Журнал сеансов видеосвязи</p>
                 </a>
-              </li>
+              </div>
+              <div class="list-group">
+                <a href="#" class="list-group-item">
+                  <h4 class="list-group-item-heading">Календарь</h4>
+                  <p class="list-group-item-text" style="white-space: nowrap">Календарь</p>
+                </a>
+              </div>
             </ul>
           </li>
           <li class="dropdown">
