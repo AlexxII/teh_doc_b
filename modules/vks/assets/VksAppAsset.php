@@ -12,7 +12,12 @@ use yii\web\AssetBundle;
 class VksAppAsset extends AssetBundle
 {
   public $sourcePath = '@app/modules/vks/lib';
+
   public $css = [
     'css/vks_main_layout.css',
+  ];
+
+  public $js = [
+    'js/vks.js'
   ];
 }

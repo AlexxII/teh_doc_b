@@ -58,13 +58,6 @@ OkaynavAsset::register($this);
   <?= $content ?>
 </div>
 
-<div off-canvas="main-menu left overlay">
-  <ul class="nav">
-    <li><a href="">Home</a></li>
-    <li><a href="#">Profile</a></li>
-    <li><a href="#">Messages</a></li>
-  </ul>
-</div>
 
 
 <?php $this->endBody() ?>

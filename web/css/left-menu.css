@@ -1,0 +1,30 @@
+#left-side {
+  min-width: 275px;
+  height: calc(100% - 57px);
+  display: inline-block;
+  position: absolute;
+  left: -280px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#main-content {
+  padding-left: 10px;
+}
+
+#main-wrap {
+  margin-top: 65px;
+}
+
+.menu-list-about {
+  text-align:center;
+  cursor: pointer;
+}
+
+.menu-list-about .fa {
+  font-size: 50px;
+}
+
+.menu-point-footer {
+  text-align: center;
+}

@@ -1,6 +1,5 @@
 <?php
 
-use app\widgets\Alert;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -21,37 +20,7 @@ VksAppAsset::register($this);
 ?>
 
 <style>
-  .container {
-    /*max-width: 1170px;*/
-  }
-  #main-add-button {
-    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.302), 0 1px 3px 1px rgba(60, 64, 67, 0.149);
-    border-radius: 24px;
-    background-color: #fff;
-  }
-  .navbar {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  }
-  .settings-menu a {
-    display: block;
-    font-size: 16px;
-  }
-  .settings-menu a:hover {
-    background-color: rgba(0, 0, 0, 0.17);
-    text-decoration: none;
-    color: #3c4043;
-  }
-  .menu-link {
-    padding: 10px 15px;
-    white-space: nowrap;
-    color: #3c4043;
-  }
-  .list-group {
-    margin-bottom: 0px !important;
-  }
-  .list-group-item {
-    border: 0px !important;
-  }
+
 
 </style>
 
@@ -71,47 +40,49 @@ VksAppAsset::register($this);
 
 <?php $this->beginBody() ?>
 
+<!--  Меню на маленьких экранах -->
+
 <div id='left-menu' off-canvas="main-menu left overlay">
   <div>
     <div class="menu-list">
-      <div class="menu-list-about" data-url="/vks/sessions/index" style="text-align:center; cursor: pointer">
+      <div class="menu-list-about" data-url="/vks/sessions/index">
         <div>
-          <i class="fa fa-television" aria-hidden="true" style="font-size: 50px"></i>
+          <i class="fa fa-television" aria-hidden="true"></i>
         </div>
-        <div class="menu-point-footer" style="text-align: center">
+        <div class="menu-point-footer">
           <h5>Журнал предстоящий сеансов ВКС</h5>
         </div>
       </div>
       <div class="menu-list-about" data-url="/vks/sessions/create-up-session"
-           style="text-align:center; cursor: pointer">
+      >
         <div>
-          <i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 50px"></i>
+          <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
         </div>
-        <div class="menu-point-footer" style="text-align: center">
+        <div class="menu-point-footer">
           <h5>Добавить предстоящий сеанс ВКС</h5>
         </div>
       </div>
-      <div class="menu-list-about" data-url="/vks/sessions/create-session" style="text-align:center; cursor: pointer">
+      <div class="menu-list-about" data-url="/vks/sessions/create-session">
         <div>
-          <i class="fa fa-calendar-check-o" aria-hidden="true" style="font-size: 50px"></i>
+          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
         </div>
-        <div class="menu-point-footer" style="text-align: center">
+        <div class="menu-point-footer">
           <h5>Добавить прошедший сеанс ВКС</h5>
         </div>
       </div>
-      <div class="menu-list-about" data-url="/vks/sessions/archive" style="text-align:center; cursor: pointer">
+      <div class="menu-list-about" data-url="/vks/sessions/archive">
         <div>
-          <i class="fa fa-calendar" aria-hidden="true" style="font-size: 50px"></i>
+          <i class="fa fa-calendar" aria-hidden="true"></i>
         </div>
-        <div class="menu-point-footer" style="text-align: center">
+        <div class="menu-point-footer">
           <h5>Архив сеансов ВКС</h5>
         </div>
       </div>
-      <div class="menu-list-about" data-url="/vks/analytics/index" style="text-align:center; cursor: pointer">
+      <div class="menu-list-about" data-url="/vks/analytics/index">
         <div>
-          <i class="fa fa-bar-chart" aria-hidden="true" style="font-size: 50px"></i>
+          <i class="fa fa-bar-chart" aria-hidden="true"></i>
         </div>
-        <div class="menu-point-footer" style="text-align: center">
+        <div class="menu-point-footer">
           <h5>Анализ сеансов ВКС</h5>
         </div>
       </div>
@@ -119,123 +90,125 @@ VksAppAsset::register($this);
   </div>
 </div>
 
+<!--  Навигационная панель  -->
+
 <div id="app-wrap">
-  <nav class="navbar navbar-default">
+  <nav class="navigation navigation-default">
     <div class="container-fluid">
-      <div class="collapse navbar-collapse" id="navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li><span class="fa fa-bars navbar-brand" id="push-it" aria-hidden="true" style=""></span></li>
-          <li class="navbar-brand">
-            <img src="/images/logo.png" style="display:inline">
-          </li>
-          <li id="app-name">
-            Журнал ВКС
-          </li>
-          <li id="left-custom-data">
-          </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li id="right-custom-data-ex">
-          </li>
-          <li id="right-custom-data">
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true"
-               aria-expanded="false"></a>
-            <ul class="dropdown-menu">
-              <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-type">Тип ВКС</a></div>
-              <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-place">Студии проведения ВКС</a>
-              </div>
-              <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-subscribes">Абоненты</a></div>
-              <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-order">Распоряжения</a></div>
-              <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-employee">Сотрудники</a></div>
-              <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-tools">Оборудование</a></div>
-            </ul>
-          </li>
-          <li>
-            <a href="#" role="button" class="dropdown-toggle fa fa-bell-o" aria-hidden="true"></a>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle fa fa-th" data-toggle="dropdown" role="button" aria-haspopup="true"
-               aria-expanded="false"></a>
-            <ul class="dropdown-menu">
-              <div class="list-group">
-                <a href="#" class="list-group-item">
-                  <h4 class="list-group-item-heading">Тех.документация</h4>
-                  <p class="list-group-item-text" style="white-space: nowrap">Техническая документация</p>
-                </a>
-              </div>
-              <div class="list-group">
-                <a href="#" class="list-group-item">
-                  <h4 class="list-group-item-heading">Журнал ВКС</h4>
-                  <p class="list-group-item-text" style="white-space: nowrap">Журнал сеансов видеосвязи</p>
-                </a>
-              </div>
-              <div class="list-group">
-                <a href="#" class="list-group-item">
-                  <h4 class="list-group-item-heading">Календарь</h4>
-                  <p class="list-group-item-text" style="white-space: nowrap">Календарь</p>
-                </a>
-              </div>
-            </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
-               aria-haspopup="true" aria-expanded="false"></a>
-            <ul class="dropdown-menu">
-              <li><a href="http://www.fgruber.ch/" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
-                  Профиль</a></li>
-              <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+      <ul class="navig navigation-nav" id="left">
+        <li><span id="push-it" class="fa fa-bars navigation-brand" aria-hidden="true"></span></li>
+        <li class="navigation-brand" id="app-logo">
+          <img src="/images/logo.png" style="display:inline">
+        </li>
+        <li id="app-name">
+          Календарь
+        </li>
+        <li id="left-custom-data">
+        </li>
+      </ul>
+      <ul id="right" class="navig navigation-nav navigation-right">
+        <li id="right-custom-data-ex">
+        </li>
+        <li id="right-custom-data">
+        </li>
+        <li id="app-control" class="dropdown">
+          <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false"></a>
+          <ul class="dropdown-menu">
+            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-type">Тип ВКС</a></div>
+            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-place">Студии проведения ВКС</a>
+            </div>
+            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-subscribes">Абоненты</a></div>
+            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-order">Распоряжения</a></div>
+            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-employee">Сотрудники</a></div>
+            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-tools">Оборудование</a></div>
+          </ul>
+        </li>
+        <li id="app-notify">
+          <a href="#" role="button" class="dropdown-toggle fa fa-bell-o" aria-hidden="true"></a>
+        </li>
+        <li id="apps" class="dropdown">
+          <a href="#" class="dropdown-toggle fa fa-th" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false"></a>
+          <ul class="dropdown-menu">
+            <div class="list-group">
+              <a href="/tehdoc" class="list-group-item">
+                <h4 class="list-group-item-heading">Техника</h4>
+                <p class="list-group-item-text">Техническая документация</p>
+              </a>
+            </div>
+            <div class="list-group">
+              <a href="/vks" class="list-group-item">
+                <h4 class="list-group-item-heading">Журнал ВКС</h4>
+                <p class="list-group-item-text">Журнал сеансов видеосвязи</p>
+              </a>
+            </div>
+            <div class="list-group">
+              <a href="/scheduler" class="list-group-item">
+                <h4 class="list-group-item-heading">Календарь</h4>
+                <p class="list-group-item-text">Календарь</p>
+              </a>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
+             aria-haspopup="true" aria-expanded="false"></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://www.fgruber.ch/" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
+                Профиль</a></li>
+            <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </nav>
 
+
   <div id="main-wrap">
+
+    <!--  Основное навишационное меню слева -->
+
     <div id="left-side">
       <div id="left-menu">
         <div class="menu-list">
-          <div class="menu-list-about" data-url="/vks/sessions/index" style="text-align:center; cursor: pointer">
+          <div class="menu-list-about" data-url="/vks/sessions/index">
             <div>
-              <i class="fa fa-television" aria-hidden="true" style="font-size: 50px"></i>
+              <i class="fa fa-television" aria-hidden="true"></i>
             </div>
-            <div class="menu-point-footer" style="text-align: center">
+            <div class="menu-point-footer">
               <h5>Журнал предстоящий сеансов ВКС</h5>
             </div>
           </div>
-          <div class="menu-list-about" data-url="/vks/sessions/create-up-session"
-               style="text-align:center; cursor: pointer">
+          <div class="menu-list-about" data-url="/vks/sessions/create-up-session">
             <div>
-              <i class="fa fa-calendar-plus-o" aria-hidden="true" style="font-size: 50px"></i>
+              <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
             </div>
-            <div class="menu-point-footer" style="text-align: center">
+            <div class="menu-point-footer">
               <h5>Добавить предстоящий сеанс ВКС</h5>
             </div>
           </div>
-          <div class="menu-list-about" data-url="/vks/sessions/create-session"
-               style="text-align:center; cursor: pointer">
+          <div class="menu-list-about" data-url="/vks/sessions/create-session">
             <div>
-              <i class="fa fa-calendar-check-o" aria-hidden="true" style="font-size: 50px"></i>
+              <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
             </div>
-            <div class="menu-point-footer" style="text-align: center">
+            <div class="menu-point-footer">
               <h5>Добавить прошедший сеанс ВКС</h5>
             </div>
           </div>
-          <div class="menu-list-about" data-url="/vks/sessions/archive" style="text-align:center; cursor: pointer">
+          <div class="menu-list-about" data-url="/vks/sessions/archive">
             <div>
-              <i class="fa fa-calendar" aria-hidden="true" style="font-size: 50px"></i>
+              <i class="fa fa-calendar" aria-hidden="true"></i>
             </div>
-            <div class="menu-point-footer" style="text-align: center">
+            <div class="menu-point-footer">
               <h5>Архив сеансов ВКС</h5>
             </div>
           </div>
-          <div class="menu-list-about" data-url="/vks/analytics/index" style="text-align:center; cursor: pointer">
+          <div class="menu-list-about" data-url="/vks/analytics/index">
             <div>
-              <i class="fa fa-bar-chart" aria-hidden="true" style="font-size: 50px"></i>
+              <i class="fa fa-bar-chart" aria-hidden="true"></i>
             </div>
-            <div class="menu-point-footer" style="text-align: center">
+            <div class="menu-point-footer">
               <h5>Анализ сеансов ВКС</h5>
             </div>
           </div>
@@ -246,8 +219,8 @@ VksAppAsset::register($this);
       <?= $content ?>
     </div>
   </div>
-</div>
 
+</div>
 
 <?php $this->endBody() ?>
 </body>
@@ -257,72 +230,6 @@ VksAppAsset::register($this);
 
 
 <script>
-  $(document).ready(function () {
-    $('#push-it').bind('click', clickMenu);
-
-    $(".menu-list-about").on('click', function (e) {
-      var url = $(this).data('url');
-      location.href = url;
-    })
-
-  });
-
-  function clickMenu() {
-    if ($(window).width() >= 900) {
-      if ($('#left-side').css('left') == '0px') {
-        closeSlider();
-      } else {
-        openSlider();
-      }
-    } else {
-      openMenu();
-    }
-  }
-
-  function openSlider() {
-    $('#add-session-wrap').hide();
-    var left = 275 - $('#main-content').offset().left;
-    $('#left-side').css('width', '2px');
-    $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
-    $('#main-content').animate({paddingLeft: left + 'px'}, {queue: false, duration: 500});
-  }
-
-  function closeSlider() {
-    $('#left-side').css('width', '275px');
-    $('#left-side').animate({left: '-280px'}, {queue: false, duration: 500});
-    $('#main-content').animate({paddingLeft: '0px'}, {queue: false, duration: 500});
-    $('#add-session-wrap').show();
-  }
-
-  var controller = new slidebars();
-  controller.init();
-
-  function openMenu() {
-    event.stopPropagation();
-    event.preventDefault();
-    controller.toggle('main-menu');
-    $('#app-wrap').bind('click', closeMenu).addClass('pointer');
-  }
-
-  function closeMenu(e) {
-    $('#app-wrap').off('click', closeMenu).removeClass('pointer');
-    controller.toggle('main-menu');
-  }
-
-  $(window).resize(function () {
-    var divPosition = $('#add-session-wrap').offset();
-    if (divPosition.left <= 0) {
-      $('#add-session').hide();
-    } else {
-      $('#add-session').show();
-    }
-
-    if ($(window).width() >= 900) {
-      return;
-    } else {
-      closeSlider();
-    }
-  });
 
 </script>
 
