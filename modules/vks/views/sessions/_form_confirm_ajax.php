@@ -53,8 +53,8 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
 
 ?>
 
-<div class="row">
-  <div class="col-lg-7 col-md-7" style="border-radius:2px;padding-top:10px">
+<div>
+  <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
 
     <div class="row">
@@ -261,15 +261,10 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
     <div class="row">
 
       <div class="form-group col-md-12 col-lg-12">
-        <?= $form->field($model, 'vks_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '5')) ?>
+        <?= $form->field($model, 'vks_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '2')) ?>
       </div>
     </div>
 
-    <div class="row">
-      <div class="form-group col-md-12 col-lg-12">
-        <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Подтвердить', ['class' => 'btn btn-primary']) ?>
-      </div>
-    </div>
   </div>
 </div>
 

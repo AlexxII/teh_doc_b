@@ -140,7 +140,7 @@ class VksSessions extends \yii\db\ActiveRecord
       'vks_subscriber_reg_name' => 'Фамилия:',
       'vks_employee_receive_msg' => 'Принявший сообщение:',
       'vks_receive_msg_datetime' => 'Дата сообщения:',
-      'vks_employee_send_msg' => 'Передавший сообщение:',
+      'vks_employee_send_msg' => 'Кто передал:',
       'vks_comments' => 'Примечание:',
       'vks_record_create' => 'Запись создана:',
       'vks_record_update' => 'Запись обновлена:',

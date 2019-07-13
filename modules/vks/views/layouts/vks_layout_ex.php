@@ -18,13 +18,6 @@ SlidebarsAsset::register($this);
 VksAppAsset::register($this);
 
 ?>
-
-<style>
-
-
-</style>
-
-
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
@@ -101,7 +94,7 @@ VksAppAsset::register($this);
           <img src="/images/logo.png" style="display:inline">
         </li>
         <li id="app-name">
-          Календарь
+          Журнал ВКС
         </li>
         <li id="left-custom-data">
         </li>

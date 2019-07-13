@@ -12,10 +12,10 @@ use app\assets\JConfirmAsset;
 use app\assets\SlidebarsAsset;
 use app\modules\vks\assets\VksAppAsset;
 
+SlidebarsAsset::register($this);
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 TableBaseAsset::register($this);
 JConfirmAsset::register($this);
-SlidebarsAsset::register($this);
 VksAppAsset::register($this);
 
 ?>
@@ -28,6 +28,13 @@ VksAppAsset::register($this);
   #go-back {
     width: 40px;
     height: 40px;
+  }
+  #main-wrap {
+    margin-top: 0px !important;
+
+  }
+  #main-wrap h3 {
+    margin-top: 10px;
   }
 </style>
 
@@ -48,57 +55,31 @@ VksAppAsset::register($this);
 <?php $this->beginBody() ?>
 
 <div id="app-wrap">
-  <nav class="navbar navbar-default">
+  <nav class="navigation navigation-default">
     <div class="container-fluid">
-      <div class="collapse navbar-collapse" id="navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <button id="go-back" type="button" class="btn btn-default btn-circle btn-xl"><i class="fa fa-angle-left"></i>
-            <a href="/"></a>
-          </button>
-          <li id="app-name" class="app-settings">
-            Настройки
-          </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
-               aria-haspopup="true" aria-expanded="false"></a>
-            <ul class="dropdown-menu">
-              <li><a href="#" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
-                  Профиль</a></li>
-              <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div><!-- /.navbar-collapse -->
+      <ul class="nav navbar-nav">
+        <button id="go-back" type="button" class="btn btn-default btn-circle btn-xl"><i class="fa fa-angle-left"></i>
+          <a href="/"></a>
+        </button>
+        <li id="app-name" class="app-settings">
+          Настройки
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
+             aria-haspopup="true" aria-expanded="false"></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
+                Профиль</a></li>
+            <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
+          </ul>
+        </li>
+      </ul>
     </div><!-- /.container-fluid -->
   </nav>
 
   <div id="main-wrap">
-    <div id="left-side">
-      <div id="left-menu">
-        <div class="menu-list">
-          <div style="padding: 10px 0px">
-            <button id="main-add-button" style="padding: 0 24px; width: auto">
-              <span style="margin: 15px">+</span>
-              <span style="margin: 15px"> Добавить</span>
-            </button>
-          </div>
-          <div style="padding: 10px 0px">
-            <a href="./">
-              <span><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
-              <span>Добавить прошедший сеанс</span>
-            </a>
-          </div>
-          <div>
-            <a href="./create-session">
-              <span><i class="fa fa-calendar-check-o" aria-hidden="true"></i></span>
-              <span>Добавить прошедший сеанс</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
     <div id="main-content" class="container">
       <?= $content ?>
     </div>
@@ -118,10 +99,14 @@ VksAppAsset::register($this);
 
     $('#go-back').click(function (e) {
       var history = window.history;
-      history.back();
-    })
+      if (history.length == 1) {
+        location.href = '/vks';
+      } else {
+        history.back();
+      }
+    });
 
-
+    $('[data-toggle="tooltip"]').tooltip();
   });
 
 </script>

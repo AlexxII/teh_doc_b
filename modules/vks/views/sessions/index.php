@@ -12,16 +12,13 @@ $add_hint = 'Добавить предстоящий сеанс';
 $dell_hint = 'Удалить выделенные сеансы';
 $date_about = "Выберите период";
 
-AirDatepickerAsset::register($this);
+//AirDatepickerAsset::register($this);
 
 Yii::$app->cache->flush();
 
 ?>
 
 <style>
-  td .fa {
-    font-size: 25px;
-  }
   #main-table tbody td {
     font-size: 12px;
   }
@@ -30,7 +27,7 @@ Yii::$app->cache->flush();
     font-weight: 700;
   }
   #vks-dates {
-    margin-top: 10px;
+    margin-top: 13px;
     width: 245px;
   }
   #delete-wrap {
@@ -41,14 +38,33 @@ Yii::$app->cache->flush();
     font-size: 28px;
     color: #ed1d1a !important;
   }
+  .jconfirm {
+    z-index: 9 !important;
+  }
+  i.check {
+    display: inline-block;
+    width: 15px;
+    height: 30px;
+    margin: 10px 20px 3px;
+    border: solid #fff;
+    border-width: 0 4px 4px 0;
+    transform: rotate( 45deg);
+  }
+
 </style>
 
 <div class="row">
 
   <div class="container-fluid" style="position: relative">
     <div id="add-session-wrap" style="position: absolute; top: 10px; left:-60px">
-      <a id="add-session" class="fab-button" href="" title="Добавить предстоящий сеанс">
+      <a id="add-session" class="fab-button" title="Добавить предстоящий сеанс" style="cursor: pointer">
         <div class="plus"></div>
+      </a>
+    </div>
+
+    <div id="add-session-wrap-ex" style="position: absolute; top: 10px; right:-60px">
+      <a id="add-session-ex" class="fab-button" title="Добавить прошедший сеанс" style="cursor: pointer; background-color: #4CAF50">
+        <i class='check'></i>
       </a>
     </div>
 
@@ -102,10 +118,8 @@ Yii::$app->cache->flush();
     $('#right-custom-data-ex').html(trashBtn);
     // $('#left-custom-data').html(addSession);
     // $('#left-custom-data').html(addd);
-  });
 
-
-  $(document).ready(function () {
+/*
     $('#vks-dates').datepicker({
       clearButton: true,
       toggleSelected: false,
@@ -120,11 +134,15 @@ Yii::$app->cache->flush();
         }
       }
     });
+*/
+
+
   });
 
   // ************************* Работа таблицы **************************************
 
   $(document).ready(function () {
+
     $.fn.dataTable.pipeline = function (opts) {
       var conf = $.extend({
         pages: 2,     // number of pages to cache
@@ -272,9 +290,9 @@ Yii::$app->cache->flush();
           "data": null,
           "width": '70px',
           "defaultContent":
-            "<a href='#' class='fa fa-edit edit' style='padding-right: 5px' title='Обновить' data-placement='top' data-toggle='tooltip'></a>" +
-            "<a href='#' class='fa fa-info view' title='Подробности' style='padding-right: 5px'></a>" +
-            "<a href='#' class='fa fa-calendar-check-o confirm' title='Подтвердить сеанс' style='padding-right: 5px'></a>"
+            "<a href='#' id='edit' class='fa fa-edit' style='padding-right: 5px' title='Обновить' data-placement='top' data-toggle='tooltip'></a>" +
+            "<a href='#' id='view' class='fa fa-info ' title='Подробности' style='padding-right: 5px'></a>" +
+            "<a href='#' id='confirm-session' class='fa fa-calendar-check-o ' title='Подтвердить сеанс' style='padding-right: 5px'></a>"
           // "<a href='#' class='fa fa-calendar-minus-o abort' title='Отменить сеанс'></a>"
         }, {
           "orderable": false,
@@ -326,21 +344,149 @@ Yii::$app->cache->flush();
       }
     });
 
-    $('#main-table tbody').on('click', '.edit', function (e) {
+    $('#main-table tbody').on('click', '#edit', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
-      location.href = "/vks/sessions/update-up-session?id=" + data[0];
+      var url = "/vks/sessions/update-up-session-ajax?id=" + data[0];
+      c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: url,
+            method: 'get'
+          }).done(function (response) {
+            // console.log(response);
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'large',
+        title: 'Обновить предстоящий сеанс',
+        buttons: {
+          ok: {
+            btnClass: 'btn-blue',
+            text: 'Обновить',
+            action: function () {
+              var $form = $("#w0"),
+                data = $form.data("yiiActiveForm");
+              $.each(data.attributes, function() {
+                this.status = 3;
+              });
+              $form.yiiActiveForm("validate");
+              if ($("#w0").find(".has-error").length) {
+                return false;
+              } else {
+                var d = $('.vks-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                $('.vks-date').val(d);
+                var d = $('.vks_receive-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                $('.vks_receive-date').val(d);
+                $("#w0").submit();
+              }
+            }
+          },
+          cancel: {
+            text: 'НАЗАД'
+          }
+        }
+      });
     });
-    $('#main-table tbody').on('click', '.view', function (e) {
+    $('#main-table tbody').on('click', '#view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
-      var href = "/vks/sessions/view-up-session?id=" + data[0];
-      window.open(href);
+      var url = "/vks/sessions/view-up-session-ajax?id=" + data[0];
+      c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: url,
+            method: 'get'
+          }).done(function (response) {
+            // console.log(response);
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'xlarge',
+        title: 'Подробности',
+        buttons: {
+          cancel: {
+            text: 'НАЗАД'
+          }
+        }
+      });
     });
-    $('#main-table tbody').on('click', '.confirm', function (e) {
+    $('#main-table tbody').on('click', '#confirm-session', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
-      location.href = "/vks/sessions/confirm?id=" + data[0];
+      var url = "/vks/sessions/confirm-ajax?id=" + data[0];
+      c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: url,
+            method: 'get',
+          }).done(function (response) {
+            // console.log(response);
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'large',
+        title: 'Подтвердить сеанс',
+        buttons: {
+          ok: {
+            btnClass: 'btn-blue',
+            text: 'Сохранить',
+            action: function () {
+              var $form = $("#w0"),
+                data = $form.data("yiiActiveForm");
+              $.each(data.attributes, function() {
+                this.status = 3;
+              });
+              $form.yiiActiveForm("validate");
+              if ($("#w0").find(".has-error").length) {
+                return false;
+              } else {
+                var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                $('.fact-date').val(d);
+                var tehStart = (moment($('#teh-start').val(), 'HH:mm'));
+                var tehEnd = (moment($('#teh-end').val(), 'HH:mm'));
+                var duration = moment.duration(tehEnd.diff(tehStart)).asMinutes();
+                if (duration > 0) {
+                  $('#vks-duration-teh').val(duration);
+                } else {
+                  $('#vks-duration-teh').val('');
+                }
+                var workStart = (moment($('#work-start').val(), 'HH:mm'));
+                var workEnd = (moment($('#work-end').val(), 'HH:mm'));
+                var duration = moment.duration(workEnd.diff(workStart)).asMinutes();
+                var label = $(this).parent().find('label');
+                if (duration > 0) {
+                  $('#vks-duration-work').val(duration);
+                } else {
+                  $('#vks-duration-work').val('');
+                }
+                $("#w0").submit();
+              }
+            }
+          },
+          cancel: {
+            text: 'НАЗАД'
+          }
+        }
+      });
     });
   });
 
@@ -486,11 +632,11 @@ Yii::$app->cache->flush();
 
   });
 
-  // тестирование
+  // создание предстоящего сеанса
   $(document).ready(function () {
-    $('#add-new').click(function (event) {
+    $('#add-session').click(function (event) {
       event.preventDefault();
-      var url = "/vks/sessions/create-up-session";
+      var url = "/vks/sessions/create-up-session-ajax";
       c = $.confirm({
         content: function () {
           var self = this;
@@ -507,14 +653,28 @@ Yii::$app->cache->flush();
           this.setContentAppend('<div>' + data + '</div>');
         },
         type: 'blue',
-        columnClass: 'xlarge',
-        title: 'Подробности',
+        columnClass: 'large',
+        title: 'Добавить предстоящий сеанс',
         buttons: {
           ok: {
             btnClass: 'btn-blue',
-            text: 'К СОБЫТИЮ',
+            text: 'Добавить',
             action: function () {
-              window.open(url);
+              var $form = $("#w0"),
+                data = $form.data("yiiActiveForm");
+              $.each(data.attributes, function() {
+                this.status = 3;
+              });
+              $form.yiiActiveForm("validate");
+              if ($("#w0").find(".has-error").length) {
+                return false;
+              } else {
+                var d = $('.vks-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                $('.vks-date').val(d);
+                var d = $('.vks_receive-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                $('.vks_receive-date').val(d);
+                $("#w0").submit();
+              }
             }
           },
           cancel: {
@@ -523,6 +683,73 @@ Yii::$app->cache->flush();
         }
       });
     });
+
+    $('#add-session-ex').click(function (event) {
+      event.preventDefault();
+      var url = "/vks/sessions/create-session-ajax";
+      c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: url,
+            method: 'get'
+          }).done(function (response) {
+            // console.log(response);
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'large',
+        title: 'Добавить прошедший сеанс',
+        buttons: {
+          ok: {
+            btnClass: 'btn-blue',
+            text: 'Добавить',
+            action: function () {
+              var $form = $("#w0"),
+                data = $form.data("yiiActiveForm");
+              $.each(data.attributes, function() {
+                this.status = 3;
+              });
+              $form.yiiActiveForm("validate");
+              if ($("#w0").find(".has-error").length) {
+                return false;
+              } else {
+                var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                $('.fact-date').val(d);
+                var tehStart = (moment($('#teh-start').val(), 'HH:mm'));
+                var tehEnd = (moment($('#teh-end').val(), 'HH:mm'));
+                var duration = moment.duration(tehEnd.diff(tehStart)).asMinutes();
+                if (duration > 0) {
+                  $('#vks-duration-teh').val(duration);
+                } else {
+                  $('#vks-duration-teh').val('');
+                }
+                var workStart = (moment($('#work-start').val(), 'HH:mm'));
+                var workEnd = (moment($('#work-end').val(), 'HH:mm'));
+                var duration = moment.duration(workEnd.diff(workStart)).asMinutes();
+                var label = $(this).parent().find('label');
+                if (duration > 0) {
+                  $('#vks-duration-work').val(duration);
+                } else {
+                  $('#vks-duration-work').val('');
+                }
+                $("#w0").submit();
+              }
+            }
+          },
+          cancel: {
+            text: 'НАЗАД'
+          }
+        }
+      });
+    });
+
+
   });
 
 

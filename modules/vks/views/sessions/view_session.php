@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
   }
 </style>
 
-<div class="row">
+<div class="">
   <div class="">
     <div class="container-fluid " style="margin-bottom: 20px">
       <?= Html::a('Изменить', ['update-session', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']) ?>
