@@ -24,37 +24,6 @@ TableBaseAsset::register($this);
   <?php $this->head() ?>
 
   <style>
-    .fa {
-      font-size: 18px;
-    }
-    .navbar-inverse .navbar-nav > .active > a {
-      background-color: #0000aa;
-    }
-    .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-      background-color: #0000aa;
-      color: white;
-    }
-    .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
-      background-color: #0000aa;
-      color: white;
-    }
-    .navbar-inverse .btn-link:hover, .navbar-inverse .btn-link:focus {
-      text-decoration: none;
-    }
-    .navbar-nav > li > .dropdown-menu {
-      background-color: #014993;
-      color: white;
-    }
-    .dropdown-menu > li > a {
-      color: white;
-    }
-    .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
-      background-color: #05226f;
-      color: white;
-    }
-    .dropdown-header {
-      color: white;
-    }
 
   </style>
 
@@ -66,13 +35,6 @@ TableBaseAsset::register($this);
 
 <div class="wrap">
   <?php
-  NavBar::begin([
-    'brandLabel' => '<img src="/images/logo.jpg" style="display:inline">',
-    'brandUrl' => Yii::$app->homeUrl,
-    'options' => [
-      'class' => 'navbar-inverse',
-    ],
-  ]);
   echo Nav::widget([
     'options' => ['class' => 'navbar-nav navbar-right'],
     'encodeLabels' => false,
@@ -120,7 +82,6 @@ TableBaseAsset::register($this);
       ])
     ],
   ]);
-  NavBar::end();
   ?>
 
   <div class="container">

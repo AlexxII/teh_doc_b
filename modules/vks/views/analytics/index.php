@@ -536,8 +536,8 @@ $send_hint = 'Передать выделенные строки в подроб
         "targets": -2,
         "data": null,
         "defaultContent": "<a href='#' class='fa fa-edit edit' style='padding-right: 5px'></a>" +
-          "<a href='#' class='fa fa-eye view'></a>",
-        "orderable": false
+        "<a href='#' class='fa fa-info view' style='padding-right: 5px' title='Подробности'></a>",
+          "orderable": false
       }, {
         "orderable": false,
         "className": 'select-checkbox',
@@ -633,22 +633,96 @@ $send_hint = 'Передать выделенные строки в подроб
     $('#main-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
-      if (e.ctrlKey) {
-        var href = "/vks/sessions/update-session?id=" + data[0];
-        window.open(href);
-      } else {
-        location.href = "/vks/sessions/update-session?id=" + data[0];
-      }
+      var url = "/vks/sessions/update-session-ajax?id=" + data[0];
+      c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: url,
+            method: 'get',
+          }).done(function (response) {
+            // console.log(response);
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'large',
+        title: 'Обновить сеанс',
+        buttons: {
+          ok: {
+            btnClass: 'btn-blue',
+            text: 'Обновить',
+            action: function () {
+              var $form = $("#w0"),
+                data = $form.data("yiiActiveForm");
+              $.each(data.attributes, function() {
+                this.status = 3;
+              });
+              $form.yiiActiveForm("validate");
+              if ($("#w0").find(".has-error").length) {
+                return false;
+              } else {
+                var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                $('.fact-date').val(d);
+                var tehStart = (moment($('#teh-start').val(), 'HH:mm'));
+                var tehEnd = (moment($('#teh-end').val(), 'HH:mm'));
+                var duration = moment.duration(tehEnd.diff(tehStart)).asMinutes();
+                if (duration > 0) {
+                  $('#vks-duration-teh').val(duration);
+                } else {
+                  $('#vks-duration-teh').val('');
+                }
+                var workStart = (moment($('#work-start').val(), 'HH:mm'));
+                var workEnd = (moment($('#work-end').val(), 'HH:mm'));
+                var duration = moment.duration(workEnd.diff(workStart)).asMinutes();
+                var label = $(this).parent().find('label');
+                if (duration > 0) {
+                  $('#vks-duration-work').val(duration);
+                } else {
+                  $('#vks-duration-work').val('');
+                }
+                $("#w0").submit();
+              }
+            }
+          },
+          cancel: {
+            text: 'НАЗАД'
+          }
+        }
+      });
     });
     $('#main-table tbody').on('click', '.view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
-      if (e.ctrlKey) {
-        var href = "/vks/sessions/view-session?id=" + data[0];
-        window.open(href);
-      } else {
-        location.href = "/vks/sessions/view-session?id=" + data[0];
-      }
+      var url = "/vks/sessions/view-session-ajax?id=" + data[0];
+      c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: url,
+            method: 'get'
+          }).done(function (response) {
+            // console.log(response);
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'xlarge',
+        title: 'Подробности',
+        buttons: {
+          cancel: {
+            text: 'НАЗАД'
+          }
+        }
+      });
     });
   });
 

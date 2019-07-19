@@ -125,9 +125,9 @@ VksAppAsset::register($this);
              aria-expanded="false"></a>
           <ul class="dropdown-menu">
             <div class="list-group">
-              <a href="/tehdoc" class="list-group-item">
+              <a href="/equipment/tools" class="list-group-item">
                 <h4 class="list-group-item-heading">Техника</h4>
-                <p class="list-group-item-text">Техническая документация</p>
+                <p class="list-group-item-text">Перечень оборудования</p>
               </a>
             </div>
             <div class="list-group">
@@ -160,7 +160,7 @@ VksAppAsset::register($this);
 
   <div id="main-wrap">
 
-    <!--  Основное навишационное меню слева -->
+    <!--  Основное навигационное меню слева -->
 
     <div id="left-side">
       <div id="left-menu">
@@ -171,22 +171,6 @@ VksAppAsset::register($this);
             </div>
             <div class="menu-point-footer">
               <h5>Журнал предстоящий сеансов ВКС</h5>
-            </div>
-          </div>
-          <div class="menu-list-about" data-url="/vks/sessions/create-up-session">
-            <div>
-              <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
-            </div>
-            <div class="menu-point-footer">
-              <h5>Добавить предстоящий сеанс ВКС</h5>
-            </div>
-          </div>
-          <div class="menu-list-about" data-url="/vks/sessions/create-session">
-            <div>
-              <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-            </div>
-            <div class="menu-point-footer">
-              <h5>Добавить прошедший сеанс ВКС</h5>
             </div>
           </div>
           <div class="menu-list-about" data-url="/vks/sessions/archive">

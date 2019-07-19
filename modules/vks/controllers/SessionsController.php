@@ -401,7 +401,7 @@ class SessionsController extends Controller
     ]);
   }
 
-  public function actionUpdateSession($id)
+  public function actionUpdateSessionAjax($id)
   {
     $model = VksSessions::findOne(['id' => $id]);
     $model->scenario = VksSessions::SCENARIO_CONFIRM;
@@ -417,7 +417,7 @@ class SessionsController extends Controller
         Yii::$app->session->setFlash('error', 'Что-то не так.');
       }
     }
-    return $this->render('update_session', [
+    return $this->renderAjax('_form_confirm_ajax', [
       'model' => $model
     ]);
   }
@@ -484,6 +484,15 @@ class SessionsController extends Controller
   {
     $logs = VksLog::find()->where(['=', 'session_id', $id])->orderBy('log_time')->all();
     return $this->render('view_session', [
+      'model' => $this->findModel($id),
+      'logs' => $logs
+    ]);
+  }
+
+  public function actionViewSessionAjax($id)
+  {
+    $logs = VksLog::find()->where(['=', 'session_id', $id])->orderBy('log_time')->all();
+    return $this->renderAjax('view_session', [
       'model' => $this->findModel($id),
       'logs' => $logs
     ]);

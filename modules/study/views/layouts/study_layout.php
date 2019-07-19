@@ -15,9 +15,6 @@ SlidebarsAsset::register($this);
 $title = 'Учебный';
 ?>
 
-<style>
-
-</style>
 
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -31,7 +28,13 @@ $title = 'Учебный';
   <title><?= Html::encode($this->title) ?></title>
   <?php $this->head() ?>
 
+  <style>
+
+  </style>
+
+
 </head>
+
 
 <?php $this->beginBody() ?>
 

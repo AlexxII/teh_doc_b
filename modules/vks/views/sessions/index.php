@@ -136,7 +136,6 @@ Yii::$app->cache->flush();
     });
 */
 
-
   });
 
   // ************************* Работа таблицы **************************************
@@ -290,7 +289,7 @@ Yii::$app->cache->flush();
           "data": null,
           "width": '70px',
           "defaultContent":
-            "<a href='#' id='edit' class='fa fa-edit' style='padding-right: 5px' title='Обновить' data-placement='top' data-toggle='tooltip'></a>" +
+            "<a href='#' id='edit' class='fa fa-edit' style='padding-right: 5px' title='Обновить'></a>" +
             "<a href='#' id='view' class='fa fa-info ' title='Подробности' style='padding-right: 5px'></a>" +
             "<a href='#' id='confirm-session' class='fa fa-calendar-check-o ' title='Подтвердить сеанс' style='padding-right: 5px'></a>"
           // "<a href='#' class='fa fa-calendar-minus-o abort' title='Отменить сеанс'></a>"
@@ -394,6 +393,7 @@ Yii::$app->cache->flush();
         }
       });
     });
+
     $('#main-table tbody').on('click', '#view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();

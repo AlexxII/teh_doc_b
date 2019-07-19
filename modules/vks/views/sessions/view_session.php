@@ -2,25 +2,12 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use app\modules\tehdoc\asset;
 use yii\widgets\DetailView;
 
-
-$this->title = 'Просмотр';
-
-$this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
-$this->params['breadcrumbs'][] = ['label' => 'Архив', 'url' => ['archive']];
-$this->params['breadcrumbs'][] = $this->title;
-
 ?>
-<div class="to-schedule-archive">
-
-  <h3><?= Html::encode($this->title) ?></h3>
-
-</div>
 
 <style>
-  td {
+  #w0 td {
     text-align: center;
   }
   .h-title {
@@ -33,15 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </style>
 
 <div class="">
-  <div class="">
-    <div class="container-fluid " style="margin-bottom: 20px">
-      <?= Html::a('Изменить', ['update-session', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']) ?>
-      <?= Html::a('Удалить', ['delete-single-completely', 'id' => $model->id], [
-        'class' => 'btn btn-danger btn-sm', 'id' => 'delete', 'data-id' => $model->id]) ?>
-    </div>
-  </div>
-
-  <div class="container-fluid col-lg-6 col-md-6">
+  <div class="container-fluid col-lg-7 col-md-7">
     <?= DetailView::widget([
       'model' => $model,
       'attributes' => [
@@ -106,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
   </div>
 
-  <div class="vks-log col-lg-6 col-md-6">
+  <div class="vks-log col-lg-5 col-md-5">
     <?php
     foreach ($logs as $log) {
 

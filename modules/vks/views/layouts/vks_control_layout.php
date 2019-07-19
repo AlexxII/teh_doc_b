@@ -36,6 +36,61 @@ VksAppAsset::register($this);
   #main-wrap h3 {
     margin-top: 10px;
   }
+  .arrow-1 {
+    cursor: pointer;
+    position: relative;
+    width: 80px;
+    height: 50px;
+    margin: 20px;
+  }
+  .arrow-1 div {
+    position: relative;
+    top: 20px;
+    width: 90px;
+    height: 10px;
+    background-color: #337AB7;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .2);
+    left: 0;
+    display: block;
+  }
+  .arrow-1 div::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 10px;
+    top: -11px;
+    right: -8px;
+    background-color: #337AB7;
+    transform: rotate(45deg);
+  }
+  .arrow-1 div::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 10px;
+    top: 11px;
+    right: -8px;
+    background-color: #337AB7;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .2);
+    transform: rotate(-45deg);
+  }
+  .arrow-1:hover {
+    animation: arrow-1 1s linear infinite;
+  }
+  @keyframes arrow-1 {
+    0% {
+      left: 0;
+    }
+    50% {
+      left: 10px;
+    }
+    100% {
+      left: 0;
+    }
+  }
+  svg {
+    color: #5f6368 !important;
+  }
 </style>
 
 
@@ -58,8 +113,10 @@ VksAppAsset::register($this);
   <nav class="navigation navigation-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
-        <button id="go-back" type="button" class="btn btn-default btn-circle btn-xl"><i class="fa fa-angle-left"></i>
-          <a href="/"></a>
+        <button id="go-back" type="button" class="btn btn-default btn-circle btn-xl">
+          <svg focusable="false" viewBox="0 0 24 24">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" ></path>
+          </svg>
         </button>
         <li id="app-name" class="app-settings">
           Настройки

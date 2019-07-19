@@ -1,0 +1,72 @@
+<?php
+
+namespace app\modules\equipment\controllers\infoPanel;
+
+use Yii;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
+
+use app\modules\equipment\models\Tools;
+use app\modules\equipment\models\Images;
+
+
+class FotoController extends Controller
+{
+  public $defaultAction = 'index';
+
+  public function actionIndex()
+  {
+    $toolId = $_GET['id'];
+    if ($toolId != 1122334455) {
+      $model = Tools::findModel($toolId);
+      $photoModels = $model->images;
+      return $this->renderAjax('index', [
+        'photoModels' => $photoModels
+      ]);
+    }
+  }
+
+  public function actionCreateAjax()
+  {
+    $toolId = $_GET['id'];
+    $imageModel = new Images();
+    $model = Tools::findModel($toolId);
+
+    if ($imageModel->load(Yii::$app->request->post())) {
+      $imageModel->imageFiles = UploadedFile::getInstances($imageModel, 'imageFiles');
+      if ($imageModel->uploadImage($toolId)) {
+        Yii::$app->session->setFlash('success', 'Изображение добавлено');
+      } else {
+        Yii::$app->session->setFlash('error', 'Изображение не добавлено');
+      }
+      $imageModel = new Images();
+      return $this->redirect(['tool/' . $toolId . '/foto/index']);
+    }
+    return $this->renderAjax('_form', [
+      'model' => $imageModel,
+    ]);
+  }
+
+  public function actionDeletePhotos()
+  {
+    if (!empty($_POST['photosArray'])) {
+      $counter = 0;
+      foreach ($_POST['photosArray'] as $photoId) {
+        $photo = Images::findModel($photoId);
+        $fileName = Yii::$app->params['uploadImg'] . $photo->image_path;
+        if (is_file($fileName)) {
+          if (unlink($fileName)) {
+            $photo->delete();
+            $counter++;
+          }
+        }
+        $photo->delete();
+        $counter++;
+      }
+      return $counter;
+    }
+    return false;
+  }
+
+}

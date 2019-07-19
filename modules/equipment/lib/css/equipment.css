@@ -1,0 +1,51 @@
+html body {
+  overflow-y: scroll !important;
+}
+.counter {
+  background-color: rgba(27, 31, 35, .08);
+  border-radius: 20px;
+  color: #586069;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 2px 5px;
+  font-family: BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
+  Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+}
+.fancytree-container {
+  overflow-x: auto;
+}
+h3 > .fa {
+  font-size: 16px;
+}
+
+.btn-circle.btn-xl {
+  width: 40px;
+  height: 40px;
+  padding: 0px;
+  padding-top: 2px;
+  padding-left: 1px;
+  margin-left: 0px;
+  border-radius: 35px;
+  font-size: 30px;
+  line-height: 1.33;
+  margin-top: 0px !important;
+  float: left;
+  background-color: inherit;
+  border: none;
+}
+.btn-circle:hover {
+  background-color: rgba(128, 128, 128, 0.13);
+}
+.btn-circle > .fa {
+  font-size: 30px;
+}
+.btn-circle.btn-lg {
+  width: 40px;
+  height: 40px;
+  padding: 10px 12px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 25px;
+}

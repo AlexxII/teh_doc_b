@@ -9,10 +9,12 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\assets\JConfirmAsset;
 use app\modules\tehdoc\asset\TehdocAsset;
+use app\assets\SlidebarsAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 TehdocAsset::register($this);       // регистрация ресурсов модуля
 JConfirmAsset::register($this);
+SlidebarsAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>
@@ -22,6 +24,7 @@ JConfirmAsset::register($this);
   <meta charset="<?= Yii::$app->charset ?>">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=320, initial-scale=1">
   <?= Html::csrfMetaTags() ?>
   <title><?= Html::encode($this->title) ?></title>
   <?php $this->head() ?>
@@ -29,173 +32,291 @@ JConfirmAsset::register($this);
 </head>
 
 <style>
-  .fa {
-    font-size: 18px;
-  }
-  .navbar-inverse .navbar-nav > .active > a {
-    background-color: #0000aa;
-  }
-  .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-    background-color: #0000aa;
-    color: white;
-  }
-  .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
-    background-color: #0000aa;
-    color: white;
-  }
-  .navbar-inverse .btn-link:hover, .navbar-inverse .btn-link:focus {
-    text-decoration: none;
-  }
-  .navbar-nav > li > .dropdown-menu {
-    background-color: #014993;
-    color: white;
-  }
-  .dropdown-menu > li > a {
-    color: white;
-  }
-  .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
-    background-color: #05226f;
-    color: white;
-  }
-  .dropdown-header {
-    color: white;
-  }
-  a:hover {
-    text-decoration: none;
+  hr {
+    margin: 10px 0px;
   }
 </style>
-
 
 <body>
 
 <?php $this->beginBody() ?>
 
-<div class="wrap">
-  <?php
-  NavBar::begin([
-    'brandLabel' => '<img src="/images/logo.jpg" style="display:inline">',
-    'brandUrl' => Yii::$app->homeUrl,
-    'options' => [
-      'class' => 'navbar-inverse',
-    ],
-  ]);
-  echo Nav::widget([
-    'options' => ['class' => 'navbar-nav navbar-right'],
-    'encodeLabels' => false,
-    'items' => [
-      [
-        'label' => 'Оборудование и ТО',
-        'items' => [
-          '<li class="dropdown-header" style="font-size: 10px">Оборудование</li>',
-          ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']],
-          ['label' => 'Сводная таблица', 'url' => ['/tehdoc/equipment/tools/index']],
-          '<li class="divider"></li>',
-          '<li class="dropdown-header" style="font-size: 10px">Тех.обслуживание</li>',
-          ['label' => 'Графики ТО', 'url' => ['/tehdoc/to/month-schedule/archive']],
-          ['label' => 'Учет наработки', 'url' => ['/tehdoc/']],
-        ],
-      ],
-      [
-        'label' => 'Настройки',
-        'items' => [
-          '<li class="dropdown-header" style="font-size: 10px">Представления</li>',
-          ['label' => 'Категории', 'url' => ['/tehdoc/control/category/index']],
-          ['label' => 'Места размещения', 'url' => ['/tehdoc/control/placement/index']],
-          '<li class="divider"></li>',
-          '<li class="dropdown-header" style="font-size: 10px">Инфтерфейса</li>',
-          ['label' => 'Производитель/модель', 'url' => ['/tehdoc/control/interface/index']],
-        ],
-      ],
-      Yii::$app->user->isGuest ? (
-      ['label' => 'Войти', 'url' => ['/site/login']]
-      ) : ([
-        'label' => '<i class="fa fa-user" aria-hidden="true" style="font-size: 18px"></i>',
-        'items' => [
-          '<li class="dropdown-header" style="font-size: 10px">' . Yii::$app->user->identity->username . '</li>',
-          ['label' => '<i class="fa fa-cogs" aria-hidden="true" style="font-size: 16px"></i> Профиль',
-            'url' => ['/admin/user/profile']
-          ],
-          ['label' => ''
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-              '<span style="cursor: default"><i class="fa fa-sign-out" aria-hidden="true"></i> Выход</span>',
-              [
-                'class' => 'btn btn-link logout',
-                'data-toggle' => "tooltip",
-                'data-placement' => "bottom",
-                'style' => [
-                  'padding' => '0px',
-                ]
-              ]
-            )
-            . Html::endForm()
-          ]
-        ]
-      ])
-    ],
-  ]);
-  NavBar::end();
-  ?>
+<!--  Меню на маленьких экранах -->
 
-  <div class="container">
-    <?= Breadcrumbs::widget([
-      'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-      'options' => [
-        'class' => 'breadcrumb'
-      ],
-      'tag' => 'ol',
-    ]) ?>
-    <?= Alert::widget() ?>
-    <div class="modal fade freeztime" id="Modal" tabindex="-1" role="dialog"
-         data-backdrop="static" data-keyboard="false" aria-labelledby="ModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="ModalLabel">Ожидание ответа от сервера.</h5>
-          </div>
-          <div class="modal-body">
-            Подождите пожалуйста. Ваш запрос обрабатывается.
-          </div>
-          <div class="modal-footer">
-          </div>
+<div id='left-menu' off-canvas="main-menu left overlay">
+  <div>
+    <div class="menu-list">
+      <div class="menu-list-about" data-url="/vks/sessions/index">
+        <div>
+          <i class="fa fa-television" aria-hidden="true"></i>
+        </div>
+        <div class="menu-point-footer">
+          <h5>Журнал предстоящий сеансов ВКС</h5>
+        </div>
+      </div>
+      <div class="menu-list-about" data-url="/vks/sessions/create-up-session"
+      >
+        <div>
+          <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
+        </div>
+        <div class="menu-point-footer">
+          <h5>Добавить предстоящий сеанс ВКС</h5>
+        </div>
+      </div>
+      <div class="menu-list-about" data-url="/vks/sessions/create-session">
+        <div>
+          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+        </div>
+        <div class="menu-point-footer">
+          <h5>Добавить прошедший сеанс ВКС</h5>
+        </div>
+      </div>
+      <div class="menu-list-about" data-url="/vks/sessions/archive">
+        <div>
+          <i class="fa fa-calendar" aria-hidden="true"></i>
+        </div>
+        <div class="menu-point-footer">
+          <h5>Архив сеансов ВКС</h5>
+        </div>
+      </div>
+      <div class="menu-list-about" data-url="/vks/analytics/index">
+        <div>
+          <i class="fa fa-bar-chart" aria-hidden="true"></i>
+        </div>
+        <div class="menu-point-footer">
+          <h5>Анализ сеансов ВКС</h5>
         </div>
       </div>
     </div>
-
-    <div class="modal fade" id="classifier-modal" tabindex="-1" role="dialog"
-         data-backdrop="static" data-keyboard="false" aria-labelledby="ModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="form">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h5 class="modal-title" id="ModalLabel">Присвоение классификатора.</h5>
-            <div class="modal-header-select-place">
-
-              <hr>
-            </div>
-          </div>
-          <div id="modal-form">
-            <form action="assign-classifier" id="form-classifier" method="POST"
-                  enctype="multipart/form-data">
-              <div class="modal-body" id="classifier-body">
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                <button type="submit" class="btn btn-primary" id="assign-classifier-btn" disabled>
-                  Просвоить
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <?= $content ?>
   </div>
 </div>
 
+<!--  Навигационная панель  -->
+
+<div id="app-wrap">
+  <nav class="navigation navigation-default">
+    <div class="container-fluid">
+      <ul class="navig navigation-nav" id="left">
+        <li><span id="push-it" class="fa fa-bars navigation-brand" aria-hidden="true"></span></li>
+        <li class="navigation-brand" id="app-logo">
+          <img src="/images/logo.png" style="display:inline">
+        </li>
+        <li id="app-name">
+          Техника
+        </li>
+        <li id="left-custom-data">
+        </li>
+      </ul>
+      <ul id="right" class="navig navigation-nav navigation-right">
+        <li id="right-custom-data-ex">
+        </li>
+        <li id="right-custom-data">
+        </li>
+        <li id="app-control" class="dropdown">
+          <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false"></a>
+          <ul class="dropdown-menu">
+            <div class="settings-menu"><a class="menu-link" href="/tehdoc/control/category/index">Категории</a></div>
+            <div class="settings-menu"><a class="menu-link" href="/tehdoc/control/placement/index">Места размещения</a></div>
+            <hr>
+            <div class="settings-menu"><a class="menu-link" href="/tehdoc/control/interface/index">Производитель/модель</a></div>
+          </ul>
+        </li>
+        <li id="app-notify">
+          <a href="#" role="button" class="dropdown-toggle fa fa-bell-o" aria-hidden="true"></a>
+        </li>
+        <li id="apps" class="dropdown">
+          <a href="#" class="dropdown-toggle fa fa-th" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false"></a>
+          <ul class="dropdown-menu">
+            <div class="list-group">
+              <a href="/tehdoc" class="list-group-item">
+                <h4 class="list-group-item-heading">Техника</h4>
+                <p class="list-group-item-text">Перечень оборудования</p>
+              </a>
+            </div>
+            <div class="list-group">
+              <a href="/vks" class="list-group-item">
+                <h4 class="list-group-item-heading">Журнал ВКС</h4>
+                <p class="list-group-item-text">Журнал сеансов видеосвязи</p>
+              </a>
+            </div>
+            <div class="list-group">
+              <a href="/scheduler" class="list-group-item">
+                <h4 class="list-group-item-heading">Календарь</h4>
+                <p class="list-group-item-text">Календарь</p>
+              </a>
+            </div>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
+             aria-haspopup="true" aria-expanded="false"></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://www.fgruber.ch/" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
+                Профиль</a></li>
+            <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div id="main-wrap">
+
+    <!--  Основное навишационное меню слева -->
+
+    <div id="left-side">
+      <div id="left-menu">
+        <div class="menu-list">
+          <div class="menu-list-about" data-url="/vks/sessions/index">
+            <div>
+              <i class="fa fa-television" aria-hidden="true"></i>
+            </div>
+            <div class="menu-point-footer">
+              <h5>Журнал предстоящий сеансов ВКС</h5>
+            </div>
+          </div>
+          <div class="menu-list-about" data-url="/vks/sessions/create-up-session">
+            <div>
+              <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
+            </div>
+            <div class="menu-point-footer">
+              <h5>Добавить предстоящий сеанс ВКС</h5>
+            </div>
+          </div>
+          <div class="menu-list-about" data-url="/vks/sessions/create-session">
+            <div>
+              <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+            </div>
+            <div class="menu-point-footer">
+              <h5>Добавить прошедший сеанс ВКС</h5>
+            </div>
+          </div>
+          <div class="menu-list-about" data-url="/vks/sessions/archive">
+            <div>
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+            </div>
+            <div class="menu-point-footer">
+              <h5>Архив сеансов ВКС</h5>
+            </div>
+          </div>
+          <div class="menu-list-about" data-url="/vks/analytics/index">
+            <div>
+              <i class="fa fa-bar-chart" aria-hidden="true"></i>
+            </div>
+            <div class="menu-point-footer">
+              <h5>Анализ сеансов ВКС</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="main-content" class="container">
+      <?= $content ?>
+    </div>
+  </div>
+
+</div>
 <?php $this->endBody() ?>
 </body>
 </html>
 <?php $this->endPage() ?>
+
+<script>
+  $(document).ready(function () {
+    $('#push-it').bind('click', clickMenu);
+
+    $(".menu-list-about").on('click', function (e) {
+      var url = $(this).data('url');
+      location.href = url;
+    })
+
+  });
+
+  function clickMenu() {
+    if ($(window).width() >= 900) {
+      if ($('#left-side').css('left') == '0px') {
+        closeSlider();
+      } else {
+        openSlider();
+      }
+    } else {
+      openMenu();
+    }
+  }
+
+  function openSlider() {
+    $('#add-session-wrap').hide();
+    var left = 275 - $('#main-content').offset().left;
+    $('#left-side').css('width', '2px');
+    $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
+    $('#main-content').animate({paddingLeft: left + 'px'}, {queue: false, duration: 500});
+  }
+
+  function closeSlider() {
+    $('#left-side').css('width', '275px');
+    $('#left-side').animate({left: '-280px'}, {queue: false, duration: 500});
+    $('#main-content').animate({paddingLeft: '0px'}, {queue: false, duration: 500});
+    $('#add-session-wrap').show();
+  }
+
+  var controller = new slidebars();
+  controller.init();
+
+  function openMenu() {
+    event.stopPropagation();
+    event.preventDefault();
+    controller.toggle('main-menu');
+    $('#app-wrap').bind('click', closeMenu).addClass('pointer');
+  }
+
+  function closeMenu(e) {
+    $('#app-wrap').off('click', closeMenu).removeClass('pointer');
+    controller.toggle('main-menu');
+  }
+
+  $(window).resize(function () {
+    showBar();
+    var d = $('#right').offset().left - $('#left').offset().left - $('#left').outerWidth();
+  });
+
+  $(document).ready(function () {
+    showBar();
+  });
+
+  function showBar() {
+    var width = $(window).width();
+    console.log(width);
+    /*
+        var d = $('#right').offset().left - $('#left').offset().left - $('#left').outerWidth(true);
+        if (d <= 0 || d < 54) {
+          if ($('#app-control').hasClass('show')) {
+            $('#app-control').removeClass('show').addClass('hide').hide();
+          }
+        } else {
+          if ($('#app-control').hasClass('hide')) {
+            $('#app-control').removeClass('hide').addClass('show').show();
+          }
+        }
+    */
+
+    if (width < 440 && width >= 370) {
+      $('#app-logo').hide();
+      $('#app-control').show();
+    } else if (width < 370) {
+      $('#app-logo').hide();
+      $('#app-notify').hide();
+    } else if (width < 320) {
+      $('#app-logo').hide();
+      $('#app-notify').hide();
+      $('#apps').hide();
+    } else {
+      $('#app-logo').show();
+      $('#app-notify').show();
+      $('#apps').show();
+    }
+  }
+
+</script>

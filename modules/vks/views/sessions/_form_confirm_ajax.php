@@ -9,11 +9,11 @@ use app\assets\BootstrapDatepickerAsset;
 ?>
 
 <style>
-  .fa {
+  #w0 .fa {
     font-size: 15px;
     color: #FF0000;
   }
-  .nonreq {
+  #w0 .nonreq {
     color: #1e6887;
   }
   .select-selected {

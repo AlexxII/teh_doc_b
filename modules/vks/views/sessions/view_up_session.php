@@ -8,7 +8,7 @@ use yii\widgets\DetailView;
 ?>
 
 <style>
-  td {
+  #w0 td {
     text-align: center;
   }
   .h-title {

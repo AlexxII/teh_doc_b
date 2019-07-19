@@ -94,9 +94,9 @@ SlidebarsAsset::register($this);
              aria-expanded="false"></a>
           <ul class="dropdown-menu">
             <div class="list-group">
-              <a href="/tehdoc" class="list-group-item">
+              <a href="/equipment/tools" class="list-group-item">
                 <h4 class="list-group-item-heading">Техника</h4>
-                <p class="list-group-item-text" style="white-space: nowrap">Техническая документация</p>
+                <p class="list-group-item-text">Перечень оборудования</p>
               </a>
             </div>
             <div class="list-group">
