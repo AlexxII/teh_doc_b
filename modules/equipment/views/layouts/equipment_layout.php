@@ -5,17 +5,20 @@ use yii\helpers\Html;
 use app\assets\AppAsset;
 use app\modules\equipment\asset\EquipmentAsset;
 
+use yii\bootstrap\BootstrapPluginAsset;
+
 use app\assets\MdeAsset;
 use app\assets\FancytreeAsset;
 use app\assets\PhotoswipeAsset;
 use app\assets\JConfirmAsset;
 use app\assets\BootstrapDatepickerAsset;
 use app\assets\SlidebarsAsset;
-use yii\bootstrap\BootstrapPluginAsset;
+use app\assets\NotyAsset;
 
 AppAsset::register($this);            // регистрация ресурсов всего приложения
 EquipmentAsset::register($this);      // регистрация ресурсов модуля
 
+NotyAsset::register($this);
 PhotoswipeAsset::register($this);
 FancytreeAsset::register($this);
 MdeAsset::register($this);
@@ -24,7 +27,9 @@ BootstrapDatepickerAsset::register($this);
 SlidebarsAsset::register($this);
 BootstrapPluginAsset::register($this);
 
-$this->title = 'Перечень оборудования';
+
+$this->title = 'Техника';
+
 $about = "Перечень оборудования";
 $add_hint = 'Добавить новый узел';
 $refresh_hint = 'Перезапустить форму';
@@ -60,45 +65,12 @@ $del_multi_nodes = 'Удалить С вложениями';
 <div id='left-menu' off-canvas="main-menu left overlay">
   <div>
     <div class="menu-list">
-      <div class="menu-list-about" data-url="/vks/sessions/index">
+      <div class="menu-list-about" data-url="/equipment/tools/task">
         <div>
           <i class="fa fa-television" aria-hidden="true"></i>
         </div>
         <div class="menu-point-footer">
-          <h5>Журнал предстоящий сеансов ВКС</h5>
-        </div>
-      </div>
-      <div class="menu-list-about" data-url="/vks/sessions/create-up-session"
-      >
-        <div>
-          <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
-        </div>
-        <div class="menu-point-footer">
-          <h5>Добавить предстоящий сеанс ВКС</h5>
-        </div>
-      </div>
-      <div class="menu-list-about" data-url="/vks/sessions/create-session">
-        <div>
-          <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-        </div>
-        <div class="menu-point-footer">
-          <h5>Добавить прошедший сеанс ВКС</h5>
-        </div>
-      </div>
-      <div class="menu-list-about" data-url="/vks/sessions/archive">
-        <div>
-          <i class="fa fa-calendar" aria-hidden="true"></i>
-        </div>
-        <div class="menu-point-footer">
-          <h5>Архив сеансов ВКС</h5>
-        </div>
-      </div>
-      <div class="menu-list-about" data-url="/vks/analytics/index">
-        <div>
-          <i class="fa fa-bar-chart" aria-hidden="true"></i>
-        </div>
-        <div class="menu-point-footer">
-          <h5>Анализ сеансов ВКС</h5>
+          <h5>Задание на обновление</h5>
         </div>
       </div>
     </div>
@@ -130,10 +102,14 @@ $del_multi_nodes = 'Удалить С вложениями';
           <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true"
              aria-expanded="false"></a>
           <ul class="dropdown-menu">
-            <div class="settings-menu"><a class="menu-link" href="/equipment/control/category/index">Категории</a></div>
-            <div class="settings-menu"><a class="menu-link" href="/equipment/control/placement/index">Места
-                размещения</a></div>
-            <div class="settings-menu"><a class="menu-link" href="/equipment/control/interface/index">Оборудование</a>
+            <div class="settings-menu">
+              <a class="menu-link" data-url="category" data-title="Категории" href="">Категории</a>
+            </div>
+            <div class="settings-menu">
+              <a class="menu-link" data-url="placement" data-title="Места размещения" href="">Места размещения</a>
+            </div>
+            <div class="settings-menu">
+              <a class="menu-link" data-url="interface" data-title="Улучшение интерфейса"  href="">Интерфейс</a>
             </div>
           </ul>
         </li>
@@ -185,44 +161,15 @@ $del_multi_nodes = 'Удалить С вложениями';
     <div id="left-side">
       <div id="left-menu">
         <div class="menu-list">
-          <div class="menu-list-about" data-url="/vks/sessions/index">
+          <div class="menu-list-about" data-url="/equipment/tools/task">
             <div>
-              <i class="fa fa-television" aria-hidden="true"></i>
+              <svg width="50" height="50" viewBox="0 0 25 25" class="NSy2Hd RTiFqe null">
+                <path fill="none" d="M0 0h24v24H0V0z"></path>
+                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17l-.59.59-.58.58V4h16v12zm-9-4h2v2h-2zm0-6h2v4h-2z"></path>
+              </svg>
             </div>
             <div class="menu-point-footer">
-              <h5>Журнал предстоящий сеансов ВКС</h5>
-            </div>
-          </div>
-          <div class="menu-list-about" data-url="/vks/sessions/create-up-session">
-            <div>
-              <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
-            </div>
-            <div class="menu-point-footer">
-              <h5>Добавить предстоящий сеанс ВКС</h5>
-            </div>
-          </div>
-          <div class="menu-list-about" data-url="/vks/sessions/create-session">
-            <div>
-              <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-            </div>
-            <div class="menu-point-footer">
-              <h5>Добавить прошедший сеанс ВКС</h5>
-            </div>
-          </div>
-          <div class="menu-list-about" data-url="/vks/sessions/archive">
-            <div>
-              <i class="fa fa-calendar" aria-hidden="true"></i>
-            </div>
-            <div class="menu-point-footer">
-              <h5>Архив сеансов ВКС</h5>
-            </div>
-          </div>
-          <div class="menu-list-about" data-url="/vks/analytics/index">
-            <div>
-              <i class="fa fa-bar-chart" aria-hidden="true"></i>
-            </div>
-            <div class="menu-point-footer">
-              <h5>Анализ сеансов ВКС</h5>
+              <h5>Задание на обновление</h5>
             </div>
           </div>
         </div>
@@ -240,7 +187,7 @@ $del_multi_nodes = 'Удалить С вложениями';
         <div id="tools-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
           <div style="position: relative">
             <div class="container-fuid" style="float:left; width: 100%">
-              <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
+              <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск по названию...">
             </div>
             <div style="padding-top: 8px; right: 10px; position: absolute">
               <a href="" id="btnResetSearch">
@@ -290,7 +237,6 @@ $del_multi_nodes = 'Удалить С вложениями';
     </div>
   </div>
 </div>
-
 <?php $this->endBody() ?>
 </body>
 </html>
@@ -298,6 +244,39 @@ $del_multi_nodes = 'Удалить С вложениями';
 
 <script>
 
+  $(document).ready(function () {
+    $('.menu-link').on('click', loadControls);
+  });
+
+  function loadControls(e) {
+    e.preventDefault();
+    var uri = $(this).data('url');
+    var title = $(this).data('title');
+    var url = '/equipment/control/' + uri +'/index';
+    c = $.confirm({
+      content: function () {
+        var self = this;
+        return $.ajax({
+          url: url,
+          method: 'get'
+        }).done(function (response) {
+        }).fail(function () {
+          self.setContentAppend('<div>Что-то пошло не так!</div>');
+        });
+      },
+      contentLoaded: function (data, status, xhr) {
+        this.setContentAppend('<div>' + data + '</div>');
+      },
+      columnClass: 'large',
+      title: title,
+      buttons: {
+        cancel: {
+          text: 'НАЗАД'
+        }
+      }
+    });
+
+  }
 
   $(document).ready(function () {
 
@@ -430,7 +409,7 @@ $del_multi_nodes = 'Удалить С вложениями';
 
     $('#main-teh-tab li').click(function (e) {
       e.preventDefault();
-      $('li').removeClass();
+      $('#main-teh-tab li').removeClass();
       $(this).addClass('active');
       var node = $("#fancyree_w0").fancytree("getActiveNode");
       var ref = $(this).data("tabName");

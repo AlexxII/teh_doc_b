@@ -14,26 +14,7 @@ use app\modules\equipment\models\ToolSettings;
 
 class SettingsController extends Controller
 {
-
   public $defaultAction = 'index';
-  public $layout = '@app/modules/equipment/views/layouts/equipment_layout_control.php';
-
-  public function actionIndex()
-  {
-    $id = $_GET['id'];
-    $tool = Tools::findModel($id);
-    $toolSettings = ToolSettings::findModel($id);
-    $wikiCount = $tool->countWikiPages;
-    $imagesCount = $tool->countImages;
-    $docsCount = $tool->countDocs;
-    return $this->render('header', [
-      'tool' => Tools::findModel($id),
-      'toolSettings' => $toolSettings,
-      'docsCount' => $docsCount,
-      'imagesCount' => $imagesCount,
-      'wikiCount' => $wikiCount,
-    ]);
-  }
 
   public function actionIndexAjax()
   {
@@ -266,21 +247,50 @@ class SettingsController extends Controller
     if (isset($_POST['toolId'])) {
       $toolId = $_POST['toolId'];
       $model = ToolSettings::findModel($toolId);
+      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       if (isset($_POST['bool'])) {
-        if ($_POST['bool'] === 'true') {
+        if ($_POST['bool'] === '1') {
           $model->eq_task = 1;
         } else {
           $model->eq_task = 0;
         }
       } else {
-        return false;
+        return [
+          'data' => [
+            'success' => false,
+            'model' => null,
+            'message' => '$_POST["bool"] empty'
+          ],
+          'code' => 0
+        ];
       }
       if ($model->save()) {
-        return true;
+        return [
+          'data' => [
+            'success' => true,
+            'data' => $model->eq_task,
+            'message' => 'Done'
+          ],
+          'code' => 1
+        ];
       }
-      return false;
+      return [
+        'data' => [
+          'success' => false,
+          'data' => $model->errors,
+          'message' => 'Model error occured'
+        ],
+        'code' => 0
+      ];
     }
-    return false;
+    return [
+      'data' => [
+        'success' => false,
+        'model' => null,
+        'message' => '$_POST["toolId"] empty'
+      ],
+      'code' => 0
+    ];
   }
 
 // серверная часть установки флажка "В задании на обновление" - пакетная обработка

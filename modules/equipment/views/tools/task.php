@@ -3,29 +3,11 @@
 use yii\helpers\Html;
 
 $this->title = 'Задание на обновление';
-$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']];
-$this->params['breadcrumbs'][] = $this->title;
 
 $about = "Данный раздел позволяет планировать работу по обновлению сведений об оборудовании с мобильных устройств. Оборудование 
 появляется в данном перечне после соответствующих настроек в панели управления.";
 
 ?>
-
-<style>
-  .Counter {
-    background-color: rgba(27, 31, 35, .08);
-    border-radius: 20px;
-    color: #586069;
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 1;
-    padding: 0px 5px;
-    font-family: BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif,
-    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-  }
-</style>
 
 <div class="tool-task">
 
@@ -68,11 +50,6 @@ $about = "Данный раздел позволяет планировать р
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-    $('#tools-category_id').on('change', function (e) {
-      var text = $("#tools-category_id option:selected").text();
-      $('#tools-eq_title').val(text);
-    });
-
     var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
     var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
     var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
@@ -81,7 +58,7 @@ $about = "Данный раздел позволяет планировать р
       var nodeId = $(this).data('id');
       var result = $(this).is(':checked');
       var parentDiv = $(this).closest('.task-wrap');
-      var url = '/tehdoc/equipment/control-panel/settings/task-set';
+      var url = '/equipment/control-panel/settings/task-set';
       var checkId = parentDiv.find('.status-indicator');
       checkId.html(waiting);
       $.ajax({

@@ -12,12 +12,14 @@ use yii\web\AssetBundle;
 class   VksFormAsset extends AssetBundle
 {
   public $sourcePath = '@app/modules/vks/lib';
-  public $css = [
-    'css/jquery-ui.min.css',
-  ];
 
   public $js = [
     'js/jquery.maskedinput.js',
-    'js/jquery-ui.min.js',
   ];
+
+  public $depends = [
+    'yii\jui\JuiAsset'
+  ];
+
+
 }

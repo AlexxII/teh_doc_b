@@ -28,6 +28,7 @@ if ($model->specialStatus) {
 
 <div id="complex-info" style="padding-top: 10px">
   <?= DetailView::widget([
+    'id' => 'tool-detail',
     'model' => $model,
     'attributes' => $attr
   ]) ?>

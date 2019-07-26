@@ -37,7 +37,7 @@ class InterfaceController extends Controller
   {
     $modelMan = TehInterface::findOne(['name' => 'Производители']);
     $modelMod = TehInterface::findOne(['name' => 'Модели']);
-    return $this->render('index', [
+    return $this->renderAjax('index', [
       'modelMan' => $modelMan,
       'modelMod' => $modelMod
     ]);

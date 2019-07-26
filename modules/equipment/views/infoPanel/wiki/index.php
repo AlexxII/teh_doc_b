@@ -21,8 +21,8 @@ use yii\helpers\Html;
     </div>
     <div class="col-lg-3 col-md-6 text-right">
       <p>
-        <a href="update?page=<?= $model->id ?>" class="btn btn-sm btn-primary">Edit</a>
-        <a href="create" class="btn btn-sm btn-success">New</a>
+        <a href="update?page=<?= $model->id ?>" id="update-wikipage" class="btn btn-sm btn-primary">Edit</a>
+        <a href="" id="create-wikipage" class="btn btn-sm btn-success">New</a>
       </p>
     </div>
   </div>

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
+use yii\bootstrap\BootstrapPluginAsset;
 
 use app\assets\AppAsset;
 use app\assets\TableBaseAsset;
@@ -16,6 +17,10 @@ TableBaseAsset::register($this);
 JConfirmAsset::register($this);
 SlidebarsAsset::register($this);
 VksAppAsset::register($this);
+BootstrapPluginAsset::register($this);
+
+$this->title = 'Журнал ВКС';
+
 
 ?>
 <?php $this->beginPage() ?>

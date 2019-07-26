@@ -30,43 +30,13 @@ class DocsController extends Controller
     return false;
   }
 
-  public function actionCreate()
-  {
-    $toolId = $_GET['id'];
-    $model = Tools::findModel($toolId);
-    $docModel = new Docs();
-    $wikiCount = $model->countWikiPages;
-    $imagesCount = $model->countImages;
-    $docsCount = $model->countDocs;
-    if ($docModel->load(Yii::$app->request->post())) {
-      $docModel->docFiles = UploadedFile::getInstances($docModel, 'docFiles');
-      $model = $docModel->uploadDoc($docModel, $toolId);
-      $year = strftime("%G", strtotime($docModel->doc_date));
-      $model->year = $year;
-      $model->doc_date = $docModel->doc_date;
-      $model->save();
-      if ($model) {
-        Yii::$app->session->setFlash('success', 'Документ добавлен');
-      } else {
-        Yii::$app->session->setFlash('error', 'Документ не добавлен');
-      }
-      $docModel = new Docs();
-      return $this->redirect(['tool/' . $toolId . '/docs/index']);
-    }
-    return $this->render('create', [
-      'model' => $docModel,
-      'docsCount' => $docsCount,
-      'imagesCount' => $imagesCount,
-      'wikiCount' => $wikiCount
-    ]);
-  }
-
   public function actionCreateAjax()
   {
     $toolId = $_GET['id'];
-    $model = Tools::findModel($toolId);
+    $tool = Tools::findModel($toolId);
     $docModel = new Docs();
     if ($docModel->load(Yii::$app->request->post())) {
+      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       $docModel->docFiles = UploadedFile::getInstances($docModel, 'docFiles');
       $model = $docModel->uploadDoc($docModel, $toolId);
       $year = strftime("%G", strtotime($docModel->doc_date));
@@ -74,12 +44,29 @@ class DocsController extends Controller
       $model->doc_date = $docModel->doc_date;
       $model->save();
       if ($model) {
-        return true;
+        $docModels = $tool->docsOrder;
+        $yearArray = $tool->yearArrayDocs;
+        return [
+          'data' => [
+            'success' => true,
+            'data' => $this->renderAjax('index', [
+              'docModels' => $docModels,
+              'years' => $yearArray
+            ]),
+            'message' => 'Doc saved.',
+          ],
+          'code' => 1,
+        ];
       } else {
-        return $model->errors;
+        return [
+          'data' => [
+            'success' => false,
+            'data' => $model->errors,
+            'message' => 'Saving failed.',
+          ],
+          'code' => 0,
+        ];
       }
-//      $docModel = new Docs();
-//      return $this->redirect(['tool/' . $toolId . '/docs/index']);
     }
     return $this->renderAjax('_form', [
       'model' => $docModel
@@ -89,6 +76,7 @@ class DocsController extends Controller
   public function actionDeleteDocs()
   {
     if (!empty($_POST['docsArray'])){
+      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       $counter = 0;
       foreach ($_POST['docsArray'] as $docId){
         $doc = Docs::findModel($docId);
@@ -96,16 +84,35 @@ class DocsController extends Controller
         if (is_file($fileName)) {
           if (unlink($fileName)) {
             $doc->delete();
-            $counter++;
             continue;
           }
         }
         $doc->delete();
-        $counter++;
       }
-      return $counter;
+      $toolId = $_POST['toolId'];
+      $tool = Tools::findModel($toolId);
+      $docModels = $tool->docsOrder;
+      $yearArray = $tool->yearArrayDocs;
+      return [
+        'data' => [
+          'success' => true,
+          'data' => $this->renderAjax('index', [
+            'docModels' => $docModels,
+            'years' => $yearArray
+          ]),
+          'message' => 'Model has been saved.',
+        ],
+        'code' => 1,
+      ];
     }
-    return false;
+    return [
+      'data' => [
+        'success' => false,
+        'data' => null,
+        'message' => '$_POST["docsArray"] - empty',
+      ],
+      'code' => 0,
+    ];
   }
 
 }

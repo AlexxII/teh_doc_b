@@ -34,17 +34,45 @@ class InfoController extends Controller
     return $this->render('meeting');
   }
 
+  // обновление оборудования на главной страницы
   public function actionUpdate()
   {
     $id = $_GET['id'];
     $tool = Tools::findModel($id);
     $fUpload = new Images();
     $tool->scenario = Tools::SCENARIO_UPDATE;
-    if ($tool->load(Yii::$app->request->post())) {
-      if ($tool->save()) {
-        return $this->redirect(['control-panel/' . $tool->id . '/info/index']);
-      } else {
-        Yii::$app->session->setFlash('error', 'Изменения НЕ внесены');
+    if (Yii::$app->request->isAjax) {
+      if ($tool->load(Yii::$app->request->post())) {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if ($tool->save()) {
+          $children = $tool->children(1)->all();
+          if ($tool->complex) {
+            $view = 'view_complex';
+          } else {
+            $view = 'view_single';
+          }
+          return [
+            'data' => [
+              'success' => true,
+              'data' => $this->renderAjax('index', [
+                'model' => $tool,
+                'view' => $view,
+                'children' => $children
+              ]),
+              'message' => 'Update done'
+            ],
+            'code' => 1
+          ];
+        } else {
+          return [
+            'data' => [
+              'success' => false,
+              'data' => $tool->errors,
+              'message' => 'Update false'
+            ],
+            'code' => 0
+          ];
+        }
       }
     }
     return $this->renderAjax('_form', [
@@ -52,7 +80,6 @@ class InfoController extends Controller
       'fUpload' => $fUpload
     ]);
   }
-
 
   public function actionCounters()
   {

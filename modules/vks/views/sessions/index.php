@@ -1,20 +1,14 @@
 <?php
 
 use yii\helpers\Html;
-use app\assets\AirDatepickerAsset;
-
-$this->title = 'Журнал предстоящих сеансов видеосвязи';
-$this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
-$this->params['breadcrumbs'][] = "Журнал";
+use yii\bootstrap\BootstrapPluginAsset;
 
 $about = "Журнал предстоящих сеансов видеосвязи";
 $add_hint = 'Добавить предстоящий сеанс';
 $dell_hint = 'Удалить выделенные сеансы';
 $date_about = "Выберите период";
 
-//AirDatepickerAsset::register($this);
-
-Yii::$app->cache->flush();
+BootstrapPluginAsset::register($this);
 
 ?>
 
@@ -48,7 +42,7 @@ Yii::$app->cache->flush();
     margin: 10px 20px 3px;
     border: solid #fff;
     border-width: 0 4px 4px 0;
-    transform: rotate( 45deg);
+    transform: rotate(45deg);
   }
 
 </style>
@@ -63,7 +57,8 @@ Yii::$app->cache->flush();
     </div>
 
     <div id="add-session-wrap-ex" style="position: absolute; top: 10px; right:-60px">
-      <a id="add-session-ex" class="fab-button" title="Добавить прошедший сеанс" style="cursor: pointer; background-color: #4CAF50">
+      <a id="add-session-ex" class="fab-button" title="Добавить прошедший сеанс"
+         style="cursor: pointer; background-color: #4CAF50">
         <i class='check'></i>
       </a>
     </div>
@@ -94,13 +89,27 @@ Yii::$app->cache->flush();
     ?>
   </div>
 
-
   <input class="csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" style="display: none">
 </div>
 <br>
 
 
+<!--<div id="toolbar-options" class="hidden">
+  <a href="#"><i class="fa fa-plane"></i></a>
+  <a href="#"><i class="fa fa-car"></i></a>
+  <a href="#"><i class="fa fa-bicycle"></i></a>
+</div>
+-->
 <script>
+
+/*
+  $(document).ready(function () {
+    $('#add-session').toolbar({
+      content: '#toolbar-options',
+    });
+  });
+*/
+
 
   var periodInput = '<input class="form-control input-sm" id="vks-dates" type="text" data-range="true"' +
     'data-multiple-dates-separator=" - " placeholder="Период отображения"/>';
@@ -108,33 +117,29 @@ Yii::$app->cache->flush();
   var trashBtn = '<div id="delete-wrap" data-toggle="tooltip" data-placement="bottom" title="Удалить выделенные сеансы"' +
     'style="display: none"><i class="fa fa-trash" aria-hidden="true"></i></div>';
 
-  // var addSession = '<a href="#" class="circle_fl ffdly"><i class="fa fa-plus"></i></a>';
-  // var addSession = '<button id="add-session" type="button" class="btn btn-success">Добавить</button>';
-
-  // var trashEx = '<img src="/images/logo.png" style="display:inline">';
-
   $(document).ready(function () {
     $('#right-custom-data').html(periodInput);
     $('#right-custom-data-ex').html(trashBtn);
     // $('#left-custom-data').html(addSession);
     // $('#left-custom-data').html(addd);
 
-/*
-    $('#vks-dates').datepicker({
-      clearButton: true,
-      toggleSelected: false,
-      onHide: function (dp, animationCompleted) {
-        if (animationCompleted) {
-          var range = $('#vks-dates').val();
-          var stDate = range.substring(6, 10) + '-' + range.substring(3, 5) + '-' + range.substring(0, 2);
-          var eDate = range.substring(19, 24) + '-' + range.substring(16, 18) + '-' + range.substring(13, 15);
-          $(".start-date").val(stDate);
-          $(".end-date").val(eDate);
-          $("#main-table").DataTable().clearPipeline().draw();
-        }
-      }
-    });
-*/
+
+    /*
+        $('#vks-dates').datepicker({
+          clearButton: true,
+          toggleSelected: false,
+          onHide: function (dp, animationCompleted) {
+            if (animationCompleted) {
+              var range = $('#vks-dates').val();
+              var stDate = range.substring(6, 10) + '-' + range.substring(3, 5) + '-' + range.substring(0, 2);
+              var eDate = range.substring(19, 24) + '-' + range.substring(16, 18) + '-' + range.substring(13, 15);
+              $(".start-date").val(stDate);
+              $(".end-date").val(eDate);
+              $("#main-table").DataTable().clearPipeline().draw();
+            }
+          }
+        });
+    */
 
   });
 
@@ -372,7 +377,7 @@ Yii::$app->cache->flush();
             action: function () {
               var $form = $("#w0"),
                 data = $form.data("yiiActiveForm");
-              $.each(data.attributes, function() {
+              $.each(data.attributes, function () {
                 this.status = 3;
               });
               $form.yiiActiveForm("validate");
@@ -452,7 +457,7 @@ Yii::$app->cache->flush();
             action: function () {
               var $form = $("#w0"),
                 data = $form.data("yiiActiveForm");
-              $.each(data.attributes, function() {
+              $.each(data.attributes, function () {
                 this.status = 3;
               });
               $form.yiiActiveForm("validate");
@@ -662,7 +667,7 @@ Yii::$app->cache->flush();
             action: function () {
               var $form = $("#w0"),
                 data = $form.data("yiiActiveForm");
-              $.each(data.attributes, function() {
+              $.each(data.attributes, function () {
                 this.status = 3;
               });
               $form.yiiActiveForm("validate");
@@ -712,7 +717,7 @@ Yii::$app->cache->flush();
             action: function () {
               var $form = $("#w0"),
                 data = $form.data("yiiActiveForm");
-              $.each(data.attributes, function() {
+              $.each(data.attributes, function () {
                 this.status = 3;
               });
               $form.yiiActiveForm("validate");

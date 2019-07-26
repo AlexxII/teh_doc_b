@@ -7,18 +7,11 @@ MasonryAsset::register($this);
 
 ?>
 
-<style>
-  .date {
-    color: #8f8f8f;
-    font-size: 10px;
-  }
-</style>
-
-<div class="complex-fotos" style="margin-top: 15px">
+<div class="complex-fotos">
 
   <div class="row">
     <div class="col-lg-9 col-md-6">
-      <h3 style="margin-top: 0px">
+      <h3>
         <?= Html::encode('Изображения') ?>
       </h3>
     </div>
@@ -31,14 +24,14 @@ MasonryAsset::register($this);
   </div>
 
   <div>
-    <div class="dw" style="margin-top: 10px">
+    <div class="dw foto-panel">
       <?php foreach ($photoModels as $photoModel): ?>
         <div class="dw-panel">
           <div class="thumbnail dw-panel__content">
             <div>
               <input class="foto-select" type="checkbox" data-docid="<?= $photoModel->id ?>">
             </div>
-            <a href="<?= $photoModel->imageUrl ?>">
+            <a href="<?= $photoModel->imageUrl ?>" target="_blank">
               <img src="<?= $photoModel->imageUrl ?>">
             </a>
             <span class="date">Добавлено: <?= $photoModel->uploadDate ?> </span>
@@ -120,7 +113,27 @@ MasonryAsset::register($this);
               if ($("#w0").find(".has-error").length) {
                 return false;
               } else {
-                $("#w0").submit();
+                var form = $('form')[0];
+                var formData = new FormData(form);
+                $.ajax({
+                  type: 'POST',
+                  url: url,
+                  processData: false,
+                  contentType: false,
+                  data: formData,
+                  success: function (response) {
+                    var tText = '<span style="font-weight: 600">Отлично!</span><br>Фотографии добавлены';
+                    initNoty(tText, 'success');
+                    getCounters(toolId);
+                    $('#tool-info-view').html(response.data.data);
+
+                  },
+                  error: function (response) {
+                    var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Фотографии не добавлены';
+                    initNoty(tText, 'warning');
+                    console.log(response.data.data);
+                  }
+                });
               }
             }
           },
@@ -162,8 +175,9 @@ MasonryAsset::register($this);
   });
 
   function deleteProcess() {
+    var node = $("#fancyree_w0").fancytree("getActiveNode");
+    var toolId = node.data.id;
     var csrf = $('meta[name=csrf-token]').attr("content");
-    var uri = window.location.href;
     var selected = [];
     $('.foto-select:checked').each(function () {
       selected.push($(this).data('docid'));
@@ -177,9 +191,10 @@ MasonryAsset::register($this);
       confirmButtonClass: 'hide'
     });
     $.ajax({
-      url: 'delete-photos',
+      url: '/equipment/infoPanel/foto/delete-photos',
       method: 'post',
       data: {
+        toolId: toolId,
         photosArray: selected,
         _csrf: csrf
       }
@@ -201,7 +216,8 @@ MasonryAsset::register($this);
             ok: {
               btnClass: 'btn-success',
               action: function () {
-                window.location.href = uri;
+                getCounters(toolId);
+                $('#tool-info-view').html(response.data.data);
               }
             }
           }

@@ -14,7 +14,7 @@ use app\modules\equipment\models\ToolSettings;
 class ToolsController extends Controller
 {
 
-  public $layout = '@app/modules/equipment/views/layouts/equipment_layout.php';
+  public $layout = '@app/modules/equipment/views/layouts/equipment_task_layout.php';
 
   public function actionAllTools()
   {
@@ -102,8 +102,9 @@ class ToolsController extends Controller
       ->joinWith('settings settings_table')
       ->orderBy('lft')
       ->all();
+    Yii::$app->view->params['title'] = 'Задание';
     return $this->render('task', [
-      'models' => $models
+      'models' => $models,
     ]);
   }
 

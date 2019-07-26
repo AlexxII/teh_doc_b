@@ -2,15 +2,18 @@
 
 use yii\helpers\Html;
 
+use yii\bootstrap\BootstrapPluginAsset;
+
+use app\modules\equipment\asset\EquipmentAsset;
+
 use app\assets\AppAsset;
-use app\assets\TableBaseAsset;
 use app\assets\JConfirmAsset;
-use app\assets\SlidebarsAsset;
+
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
-SlidebarsAsset::register($this);
-TableBaseAsset::register($this);
 JConfirmAsset::register($this);
+BootstrapPluginAsset::register($this);
+EquipmentAsset::register($this);
 
 ?>
 
@@ -30,38 +33,6 @@ JConfirmAsset::register($this);
   #main-wrap h3 {
     margin-top: 10px;
   }
-
-  .btn-circle.btn-xl {
-    width: 20px;
-    height: 40px;
-    padding: 8px;
-    margin-left: 0px;
-    border-radius: 35px;
-    font-size: 30px;
-    line-height: 1.33;
-    margin-top: 5px !important;
-    float: left;
-    background-color: inherit;
-    border: none;
-  }
-
-  .btn-circle:hover {
-    background-color: rgba(128, 128, 128, 0.13);
-  }
-  .btn-circle > .fa {
-    font-size: 30px;
-  }
-
-  .btn-circle.btn-lg {
-    width: 40px;
-    height: 40px;
-    padding: 10px 12px;
-    font-size: 18px;
-    line-height: 1.33;
-    border-radius: 25px;
-  }
-
-
 </style>
 
 
@@ -84,13 +55,13 @@ JConfirmAsset::register($this);
   <nav class="navigation navigation-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
-        <button id="go-back" type="button" class="btn btn-default btn-circle btn-xl">
+        <button id="go-back" type="button" class="btn btn-default btn-circle btn-ml">
           <svg focusable="false" viewBox="0 0 24 24">
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" ></path>
           </svg>
         </button>
         <li id="app-name" class="app-settings">
-          Настройки
+          <?= $this->params['title']; ?>
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

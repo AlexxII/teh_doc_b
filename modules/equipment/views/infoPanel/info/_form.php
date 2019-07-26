@@ -2,19 +2,15 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\helpers\Url;
-use yii\helpers\ArrayHelper;
-use kartik\file\FileInput;
+
 use app\modules\tehdoc\models\Equipment;
 use app\modules\tehdoc\asset\TehFormAsset;
-
-// TODO Добавить checkbox - возвращаться в данную форму после сохранения.
 
 ?>
 
 
 <style>
-  .fa {
+  #tool-edit-form .fa {
     font-size: 15px;
   }
   .nonreq {
@@ -44,10 +40,10 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
 
 ?>
 
-<div class="s">
+<div id="tool-edit-form">
   <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <div class="customer-form">
-      <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
+      <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
       <div class="row">
         <div class="col-md-6 col-lg-6">
           <?php
@@ -132,14 +128,6 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
 
     $('[data-toggle="tooltip"]').tooltip();
 
-    $('#tools-category_id').on('change', function (e) {
-      var text = $("#tools-category_id option:selected").text();
-      $('#tools-eq_title').val(text);
-    });
-  });
-
-
-  $(document).ready(function () {
     $('.fact-date').datepicker({
       format: 'MM yyyy г.',
       autoclose: true,
@@ -147,111 +135,17 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
       startView: "months",
       minViewMode: "months",
       clearBtn: true
-    })
-  });
+    });
 
-  $(document).ready(function () {
     if ($('.fact-date').val()) {
       var date = new Date($('.fact-date').val());
       moment.locale('ru');
       $('.fact-date').datepicker('update', moment(date).format('MMMM YYYY'))
     }
+
   });
 
-  //преобразование дат перед отправкой
-  $(document).ready(function () {
-    $('#w0').submit(function () {
-      var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
-      $('.fact-date').val(d);
-    });
-  });
-
-  function contains(arr, elem) {
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i] === elem) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // функционал улучшения интерфецса формы
-
-  $(document).ready(function () {
-    $.ajax({
-      type: 'get',
-      url: '/equipment/settings/interface/manufact',
-      autoFocus: true,
-      success: function (data) {
-        var manufact = $.parseJSON(data);
-        $(function () {
-          $("#manufact").autocomplete({
-            source: manufact,
-          });
-        });
-      },
-      error: function (data) {
-        console.log('Error loading Manufact list.');
-      }
-    });
-  });
-
-  $(document).ready(function () {
-    $.ajax({
-      type: 'get',
-      url: '/equipment/settings/interface/models',
-      autoFocus: true,
-      success: function (data) {
-        var models = $.parseJSON(data);
-        $(function () {
-          $("#models").autocomplete({
-            source: models,
-          });
-        });
-      },
-      error: function (data) {
-        console.log('Error loading Models list');
-      }
-    });
-  });
+  loadManufacturers();
+  loadModels();
 
 </script>
-
-
-<!--$(document).ready(function () {
-var variable = [];
-var cats, leaves, del = [];
-$.ajax("/admin/category/get-leaves")
-.done(function (data) {
-data = jQuery.parseJSON(data);
-cats = data.cat;
-leaves = data.leaves;
-for (var i = 0; i < cats.length; i++) {
-variable[i] = cats[i].id;
-}
-for (var i = 0; i < leaves.length; i++) {
-del[i] = leaves[i].id;
-}
-variable.forEach(function (t) {
-if (contains(del, t)) {
-return;
-}
-var element = $("select option[value='" + t + "']");
-$("select option[value='" + t + "']").attr('disabled', true);
-$("select option[value='" + t + "']").css({
-"background-color": '#e8e8e8',
-"font-weight": 700
-});
-});
-})
-.fail(function () {
-//                alert( "Произошла ошибка в выводе категорий." );
-})
-.always(function () {
-//                alert( "complete" );
-});
-
-});
-
-
--->

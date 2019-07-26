@@ -264,7 +264,6 @@ class SessionsController extends Controller
         return $this->redirect('index');
       } else {
         return var_dump($model->errors);
-        Yii::$app->session->setFlash('error', 'Что-то не так.');
       }
     }
     return $this->renderAjax('_form_ajax', [

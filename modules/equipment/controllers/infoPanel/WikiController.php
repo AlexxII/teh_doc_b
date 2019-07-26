@@ -35,9 +35,6 @@ class WikiController extends Controller
     $model = new Wiki();
     $id = $_GET['id'];
     $toolModel = Tools::findModel($id);
-    $wikiCount = $toolModel->countWikiPages;
-    $imagesCount = $toolModel->countImages;
-    $docsCount = $toolModel->countDocs;
 
     if ($model->load(Yii::$app->request->post())) {
       $date = date('Y-m-d H:i:s');
@@ -51,17 +48,11 @@ class WikiController extends Controller
         return $this->render('header', [
           'model' => $model,
           'list' => $list,
-          'docsCount' => $docsCount,
-          'imagesCount' => $imagesCount,
-          'wikiCount' => $wikiCount,
         ]);
       }
     }
-    return $this->render('create', [
+    return $this->renderAjax('_form', [
       'model' => $model,
-      'docsCount' => $docsCount,
-      'imagesCount' => $imagesCount,
-      'wikiCount' => $wikiCount,
     ]);
   }
 
@@ -70,9 +61,6 @@ class WikiController extends Controller
     $model = Wiki::findModel($page);
     $id = $_GET['id'];
     $toolModel = Tools::findModel($id);
-    $wikiCount = $toolModel->countWikiPages;
-    $imagesCount = $toolModel->countImages;
-    $docsCount = $toolModel->countDocs;
 
     if ($model->load(Yii::$app->request->post())) {
       $date = date('Y-m-d H:i:s');
@@ -83,17 +71,11 @@ class WikiController extends Controller
         return $this->render('header', [
           'model' => $model,
           'list' => $list,
-          'docsCount' => $docsCount,
-          'imagesCount' => $imagesCount,
-          'wikiCount' => $wikiCount,
         ]);
       }
     }
-    return $this->render('update', [
+    return $this->renderAjax('update', [
       'model' => $model,
-      'docsCount' => $docsCount,
-      'imagesCount' => $imagesCount,
-      'wikiCount' => $wikiCount,
     ]);
   }
 
@@ -102,17 +84,11 @@ class WikiController extends Controller
     if ($page) {
       $id = $_GET['id'];
       $toolModel = Tools::findModel($id);
-      $wikiCount = $toolModel->countWikiPages;
-      $imagesCount = $toolModel->countImages;
-      $docsCount = $toolModel->countDocs;
       $wikiPage = Wiki::findOne($page);
       $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
-      return $this->render('header', [
+      return $this->renderAjax('header', [
         'model' => $wikiPage,
         'list' => $list,
-        'docsCount' => $docsCount,
-        'imagesCount' => $imagesCount,
-        'wikiCount' => $wikiCount,
       ]);
     }
     return false;

@@ -4,17 +4,15 @@ namespace app\modules\equipment\controllers\control;
 
 use yii\web\Controller;
 
-use app\modules\tehdoc\models\Placement;
+use app\modules\equipment\models\Placement;
 
 
 class PlacementController extends Controller
 {
 
-  public $layout = '@app/modules/equipment/views/layouts/equipment_control_layout.php';
-
   public function actionIndex()
   {
-    return $this->render('index');
+    return $this->renderAjax('index');
   }
 
   public function actionPlacements()

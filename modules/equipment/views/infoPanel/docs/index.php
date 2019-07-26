@@ -2,19 +2,14 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\helpers\Url;
-use kartik\file\FileInput;
 
 ?>
 
-<div class="complex-doc+" style="margin-top: 15px">
+<div class="complex-doc" style="margin-top: 15px">
   <div class="row">
     <div class="col-lg-9 col-md-6">
       <h3 style="margin-top: 0px">
         <?= Html::encode('Документы') ?>
-        <a href="index">
-          <i class="fa fa-refresh reboot" aria-hidden="true" style="color: #db4865;font-size: 20px"></i>
-        </a>
       </h3>
     </div>
     <div class="col-lg-3 col-md-6 text-right">
@@ -31,8 +26,8 @@ use kartik\file\FileInput;
       <div class="calendar">
         <ul class="list-inline" style="border-top: 1px solid #cbcbcb;">
           <?php foreach ($years as $year): ?>
-            <li>
-              <a href=""><?= $year ?></a>
+            <li class="year-select">
+              <span><?= $year ?></span>
             </li>
           <?php endforeach; ?>
         </ul>
@@ -40,13 +35,12 @@ use kartik\file\FileInput;
     <?php endif; ?>
 
     <?php foreach ($docModels as $docModel): ?>
-      <div style="margin-left: 20px" id="">
+      <div class="doc-wrap" data-doc-year="<?= $docModel->year ?>">
         <div>
-          <input class="doc-select" type="checkbox" style="float: left; margin: 7px 0px 0px -20px"
-                 data-docid="<?= $docModel->id ?>">
+          <input class="doc-select" type="checkbox" data-docid="<?= $docModel->id ?>">
         </div>
         <div class="news-item">
-          <a href="<?= $docModel->docUrl ?>" style="text-align: justify">
+          <a href="<?= $docModel->docUrl ?>" target="_blank">
             <div>
               <div class="news-info__name">
                 <?= $docModel->doc_title ?>
@@ -75,6 +69,28 @@ use kartik\file\FileInput;
   var jc;
 
   $(document).ready(function () {
+
+    $('.year-select').on('click', function (e) {
+      e.preventDefault();
+      if ($(this).hasClass('active')) {
+        $(this).removeClass('active');
+        $('.doc-wrap[data-doc-year]').each(function () {
+          $(this).show();
+        });
+        return;
+      }
+      $('.year-select').not(this).removeClass('active');
+      $(this).addClass('active');
+      var year = $(this).text();
+      $('.doc-wrap[data-doc-year]').each(function () {
+        if ($(this).data('docYear') != year) {
+          $(this).hide();
+        } else {
+          $(this).show();
+        }
+      });
+
+    });
 
     $('.fact-date').datepicker({
       format: 'dd MM yyyy г.',
@@ -127,14 +143,36 @@ use kartik\file\FileInput;
             action: function () {
               var $form = $("#w0"),
                 data = $form.data("yiiActiveForm");
-              $.each(data.attributes, function() {
+              $.each(data.attributes, function () {
                 this.status = 3;
               });
               $form.yiiActiveForm("validate");
               if ($("#w0").find(".has-error").length) {
                 return false;
               } else {
-                $("#w0").submit();
+                var d = $('.doc-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                $('.doc-date').val(d);
+                var form = $('form')[0];
+                var formData = new FormData(form);
+                $.ajax({
+                  type: 'POST',
+                  url: url,
+                  processData: false,
+                  contentType: false,
+                  data: formData,
+                  success: function (response) {
+                    var tText = '<span style="font-weight: 600">Отлично!</span><br>Документ добавлен';
+                    initNoty(tText, 'success');
+                    getCounters(toolId);
+                    $('#tool-info-view').html(response.data.data);
+
+                  },
+                  error: function (response) {
+                    var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Документ не добавлен';
+                    initNoty(tText, 'warning');
+                    console.log(response.data.data);
+                  }
+                });
               }
             }
           },
@@ -150,6 +188,7 @@ use kartik\file\FileInput;
       if ($(this).attr('disabled')) {
         return;
       }
+
       jc = $.confirm({
         icon: 'fa fa-question',
         title: 'Вы уверены?',
@@ -176,8 +215,9 @@ use kartik\file\FileInput;
   });
 
   function deleteProcess() {
+    var node = $("#fancyree_w0").fancytree("getActiveNode");
+    var toolId = node.data.id;
     var csrf = $('meta[name=csrf-token]').attr("content");
-    var uri = window.location.href;
     var selected = [];
     $('.doc-select:checked').each(function () {
       selected.push($(this).data('docid'));
@@ -191,17 +231,16 @@ use kartik\file\FileInput;
       confirmButtonClass: 'hide'
     });
     $.ajax({
-      url: 'delete-docs',
+      url: '/equipment/infoPanel/docs/delete-docs',
       method: 'post',
       data: {
+        toolId: toolId,
         docsArray: selected,
         _csrf: csrf
       }
     }).done(function (response) {
       if (response != false) {
         jc.close();
-        var count = $('li.active span.Counter').text();
-        $('li.active span.Counter').text(count - response);
         jc = $.confirm({
           icon: 'fa fa-thumbs-up',
           title: 'Успех!',
@@ -215,7 +254,8 @@ use kartik\file\FileInput;
             ok: {
               btnClass: 'btn-success',
               action: function () {
-                window.location.href = uri;
+                getCounters(toolId);
+                $('#tool-info-view').html(response.data.data);
               }
             }
           }

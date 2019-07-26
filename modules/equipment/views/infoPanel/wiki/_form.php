@@ -9,7 +9,7 @@ $placeholder = 'Название страницы';
 
 ?>
 
-<div id="complex-wiki-form" class="row">
+<div id="complex-wiki-form">
   <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <div class="customer-form">
       <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => 'main-wiki-form']]); ?>
@@ -24,11 +24,6 @@ $placeholder = 'Название страницы';
             ->textArea(array('style' => 'resize:vertical', 'rows' => '10', 'id' => 'wiki-text'))
             ->label(false) ?>
         </div>
-      </div>
-      <div class="form-group" style="text-align: right">
-        <a id="delete-page" data-id="<?= $model->id ?>" <?php if($model->isNewRecord) echo 'disabled' ?> class="btn btn-sm btn-danger">Удалить</a>
-        <a onclick="history.back();" class="btn btn-sm btn-primary">Отмена</a>
-        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['class' => 'btn btn-sm btn-success']) ?>
       </div>
       <?php ActiveForm::end(); ?>
     </div>

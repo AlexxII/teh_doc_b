@@ -1,37 +1,6 @@
-<?php
-
-use yii\bootstrap\Nav;
-use wbraganca\dynamicform\DynamicFormWidget;
-use yii\helpers\Html;
-use yii\bootstrap\Modal;
-use yii\bootstrap\ActiveForm;
-use yii\web\JsExpression;
-
-$this->title = 'Панель управления интерфейсом';
-$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = 'Интерфейс';
-
-$about = "Панель улучшения интерфейса. Заполните представленные ниже формы
- известными производителями и моделями оборудования. При добавлении оборудования, соответствующие 
- поля формы заполняться автоматически";
-
-?>
-
-<style>
-    .h-title {
-        font-size: 18px;
-        color: #1e6887;
-    }
-</style>
-
 <div class="interface-pannel">
 
-    <h3><?= Html::encode($this->title) ?>
-        <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-             data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-    </h3>
-
-    <div class="col-lg-6 col-md-6 about">
+    <div class="col-lg-12 col-md-12 about" style="margin-bottom: 15px">
         <div class="manufact-info"></div>
         <form action="create" method="post" class="input-add">
             <div class="about-main">
@@ -48,7 +17,7 @@ $about = "Панель улучшения интерфейса. Заполнит
         </form>
     </div>
 
-    <div class="col-lg-6 col-md-6 about">
+    <div class="col-lg-12 col-md-12s about">
         <div class="models-info"></div>
         <form action="create" method="post" class="input-add">
             <div class="about-main">
@@ -101,7 +70,7 @@ $about = "Панель улучшения интерфейса. Заполнит
         e.preventDefault();
         var csrf = $('meta[name=csrf-token]').attr("content");
         var id = e.target.id;
-        var url = '/tehdoc/control/interface/create';
+        var url = '/equipment/control/interface/create';
         var mId = $('#'+id+'-id').val();
         var data = $('#'+id).val();
         $.ajax({

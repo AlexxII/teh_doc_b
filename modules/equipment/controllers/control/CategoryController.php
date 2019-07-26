@@ -4,7 +4,7 @@ namespace app\modules\equipment\controllers\control;
 
 use yii\web\Controller;
 
-use app\modules\tehdoc\models\Category;
+use app\modules\equipment\models\Category;
 
 
 class CategoryController extends Controller
@@ -13,7 +13,7 @@ class CategoryController extends Controller
 
   public function actionIndex()
   {
-    return $this->render('index');
+    return $this->renderAjax('index');
   }
 
   public function actionCategories()

@@ -1,94 +1,58 @@
 <?php
 
 use yii\helpers\Html;
-use app\assets\FancytreeAsset;
 
-FancytreeAsset::register($this);
-
-$this->title = 'Места размещения';
-$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = $this->title;
-
-$about = "Панель управления местами размещения оборудвания.";
+$about = "Панель управления местами размещения оборудования.";
 $add_hint = 'Добавить новый узел';
-$add_tree_hint = 'Добавить дерево';
 $refresh_hint = 'Перезапустить форму';
-$del_hint = 'Удалить выбранную категорию БЕЗ вложений';
-$del_root_hint = 'Удалить дерево с вложениями';
-$del_multi_nodes = 'Удвлить выбранную категорию С вложениями';
+$del_hint = 'Удалить БЕЗ вложений';
+$del_multi_nodes = 'Удвлить С вложениями';
 
 ?>
 
-<style>
-  .h-title {
-    font-size: 18px;
-    color: #1e6887;
-  }
-  .fa {
-    font-size: 15px;
-  }
-  ul.fancytree-container {
-    font-size: 16px;
-  }
-  input {
-    color: black;
-  }
-  .fancytree-custom-icon {
-    color: #1e6887;
-    font-size: 18px;
-  }
-  .ui-fancytree {
-    overflow: auto;
-  }
-
-</style>
-
 <div class="admin-placement-pannel">
-
-  <h3><?= Html::encode($this->title) ?>
-    <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-  </h3>
-</div>
-<div class="row">
-  <div class="">
+  <div class="fancytree-control-panel">
     <div class="container-fluid" style="margin-bottom: 10px">
       <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
         'style' => ['margin-top' => '5px'],
         'title' => $add_hint,
         'data-toggle' => 'tooltip',
+        'data-container' => 'body',
         'data-placement' => 'top'
       ]) ?>
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
         'style' => ['margin-top' => '5px'],
         'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
+        'data-container' => 'body',
         'data-placement' => 'top'
       ]) ?>
       <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_hint,
         'data-toggle' => 'tooltip',
+        'data-container' => 'body',
         'data-placement' => 'top'
       ]) ?>
       <?= Html::a('<i class="fa fa-object-group" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-multi-nodes',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_multi_nodes,
         'data-toggle' => 'tooltip',
+        'data-container' => 'body',
         'data-placement' => 'top'
       ]) ?>
     </div>
 
   </div>
 
-  <div class="col-lg-7 col-md-7" style="padding-bottom: 10px">
+  <div class="col-lg-12 col-md-12 search" style="padding-bottom: 10px">
     <div class="">
       <div style="position: relative">
         <div class="container-fuid" style="float:left; width: 100%">
           <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
         </div>
         <div style="padding-top: 8px; right: 10px; position: absolute">
-          <a href="" id="btnResetSearch"><i class="fa fa-times-circle" aria-hidden="true"
+          <a href="" class="btnResetSearch"><i class="fa fa-times-circle" aria-hidden="true"
                                             style="font-size:20px; color: #9d9d9d"></i></a>
         </div>
       </div>
@@ -96,19 +60,12 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
 
     <div class="row" style="padding: 0 15px">
       <div class="" style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_w0" class="ui-draggable-handle"></div>
+        <div id="fancyree_placement" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
 
 
-  <div class="col-lg-5 col-md-5">
-    <div class="alert alert-warning" style="margin-bottom: 10px">
-      <a href="#" class="close" data-dismiss="alert">&times;</a>
-      <strong>Внимание!</strong> Будьте внимательны!
-    </div>
-    <div class="about-info"></div>
-  </div>
 
 </div>
 
@@ -116,30 +73,10 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
 <script>
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-  });
 
-  function goodAlert(text) {
-    var div = '' +
-      '<div id="w3-success-0" class="alert-success alert fade in">' +
-      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-      text +
-      '</div>';
-    return div;
-  }
-
-  function badAlert(text) {
-    var div = '' +
-      '<div id="w3-success-0" class="alert-danger alert fade in">' +
-      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-      text +
-      '</div>';
-    return div;
-  }
-
-  $(document).ready(function () {
     $('.add-subcategory').click(function (event) {
       event.preventDefault();
-      var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+      var node = $("#fancyree_placement").fancytree("getActiveNode");
       if (!node) {
         alert("Выберите родительскую категорию");
         return;
@@ -150,24 +87,19 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         alert("Нельзя создавать вложенность более 3х");
         return;
       }
-    })
-  });
+    });
 
-  $(document).ready(function () {
     $('.refresh').click(function (event) {
       event.preventDefault();
-      var tree = $(".ui-draggable-handle").fancytree("getTree");
+      var tree = $("#fancyree_placement").fancytree("getTree");
       tree.reload();
-      $(".del-root").hide();
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
       $('.about-info').html('')
-    })
-  });
+    });
 
-  $(document).ready(function () {
     $('.del-node').click(function (event) {
-      var url = 'delete';
+      var url = '/equipment/control/placement/delete';
       event.preventDefault();
       jc = $.confirm({
         icon: 'fa fa-question',
@@ -180,7 +112,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
           ok: {
             btnClass: 'btn-danger',
             action: function () {
-              var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+              var node = $("#fancyree_placement").fancytree("getActiveNode");
               jc.close();
               deleteProcess(url, node);
             }
@@ -195,7 +127,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
     });
 
     $('.del-multi-nodes').click(function (event) {
-      var url = 'delete-root';
+      var url = '/equipment/control/placement/delete-root';
       event.preventDefault();
       jc = $.confirm({
         icon: 'fa fa-question',
@@ -208,7 +140,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
           ok: {
             btnClass: 'btn-danger',
             action: function () {
-              var node = $(".ui-draggable-handle").fancytree("getActiveNode");
+              var node = $("#fancyree_placement").fancytree("getActiveNode");
               jc.close();
               deleteProcess(url, node);
             }
@@ -221,6 +153,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         }
       });
     });
+  });
 
     function deleteProcess(url, node) {
       var csrf = $('meta[name=csrf-token]').attr("content");
@@ -301,12 +234,11 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         });
       });
     }
-  });
 
 
   $("input[name=search]").keyup(function (e) {
     var n,
-      tree = $.ui.fancytree.getTree(),
+      tree = $("#fancyree_placement").fancytree("getTree"),
       args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
       opts = {},
       filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
@@ -318,7 +250,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
     opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
 
     if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-      $("button#btnResetSearch").click();
+      $("button.btnResetSearch").click();
       return;
     }
     if ($("#regex").is(":checked")) {
@@ -330,22 +262,22 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
       // Pass a string to perform case insensitive matching
       n = filterFunc.call(tree, match, opts);
     }
-    $("#btnResetSearch").attr("disabled", false);
+    $(".btnResetSearch").attr("disabled", false);
   }).focus();
 
 
-  $("#btnResetSearch").click(function (e) {
+  $(".btnResetSearch").click(function (e) {
     e.preventDefault();
-    $("input[name=search]").val("");
+    $(this).closest('.search').find('input').val('');
     $("span#matches").text("");
-    var tree = $(".ui-draggable-handle").fancytree("getTree");
+    var tree = $("#fancyree_placement").fancytree("getTree");
     tree.clearFilter();
   }).attr("disabled", true);
 
   $(document).ready(function () {
     $("input[name=search]").keyup(function (e) {
       if ($(this).val() == '') {
-        var tree = $(".ui-draggable-handle").fancytree("getTree");
+        var tree = $("#fancyree_placement").fancytree("getTree");
         tree.clearFilter();
       }
     })
@@ -354,12 +286,12 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
 
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/tehdoc/control/placement/placements';
-    var move_url = '/tehdoc/control/placement/move';
-    var create_url = '/tehdoc/control/placement/create';
-    var update_url = '/tehdoc/control/placement/update';
+    var main_url = '/equipment/control/placement/placements';
+    var move_url = '/equipment/control/placement/move';
+    var create_url = '/equipment/control/placement/create';
+    var update_url = '/equipment/control/placement/update';
 
-    $("#fancyree_w0").fancytree({
+    $("#fancyree_placement").fancytree({
       source: {
         url: main_url
       },
@@ -377,6 +309,7 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
           return true;
         },
         dragDrop: function (node, data) {
+          var pId;
           if (data.hitMode == 'over') {
             if (data.node.data.lvl >= 2 || data.otherNode.isFolder()) {             // Ограничение на вложенность
               jc = $.confirm({
@@ -398,9 +331,9 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
               });
               return false;
             }
-            var pId = data.node.data.id;
+            pId = data.node.data.id;
           } else {
-            var pId = data.node.parent.data.id;
+            pId = data.node.parent.data.id;
           }
           $.get(move_url, {
             item: data.otherNode.data.id,
@@ -453,18 +386,11 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
                 node.data.id = result.acceptedId;
                 node.setTitle(result.acceptedTitle);
                 node.data.lvl = result.lvl;
-                $('.about-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-            }).always(function () {
-              // data.input.removeClass("pending")
             });
           } else {
             $.ajax({
@@ -477,18 +403,11 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
               if (result) {
                 result = JSON.parse(result);
                 node.setTitle(result.acceptedTitle);
-                $('.about-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
               } else {
                 node.setTitle(data.orgTitle);
-                $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
-              $('.about-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               node.setTitle(data.orgTitle);
-            }).always(function () {
-              // data.input.removeClass("pending")
             });
           }
           return true;
@@ -501,7 +420,6 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
         }
       },
       activate: function (node, data) {
-        $('.about-info').html('');
         var node = data.node;
         var lvl = node.data.lvl;
         if (node.key == -999) {
@@ -514,7 +432,6 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
           $(".add-subcategory").hide();
         }
         if (lvl == 0) {
-          $(".del-root").show();
           $(".del-node").hide();
           $(".del-multi-nodes").hide();
         } else {
@@ -523,7 +440,6 @@ $del_multi_nodes = 'Удвлить выбранную категорию С вл
           } else {
             $(".del-multi-nodes").hide();
           }
-          $(".del-root").hide();
           $(".del-node").show();
         }
       },
