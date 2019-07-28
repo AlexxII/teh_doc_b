@@ -275,3 +275,19 @@ h3 > .fa {
 .dw-panel__content {
   padding: 20px!important;
 }
+/* wiki */
+.complex-wiki-update {
+  margin-top: 15px;
+}
+.complex-wiki-update h3 {
+  margin-top: 0;
+}
+#wiki-body {
+  padding-left:0;
+}
+#wiki-rightbar {
+  padding: 0;
+}
+#wiki-rightbar .panel-heading {
+  text-align: left;
+}
