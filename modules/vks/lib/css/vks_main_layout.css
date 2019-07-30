@@ -1,33 +1,31 @@
+html body {
+  overflow-y: scroll !important;
+}
 #left-menu {
   text-align: left;
   width: 150px;
   background-color: #fff;
   color: #000 !important;
 }
-
 #left-menu .fa {
   color: #5f6368 !important;
 }
-
 .menu-list-about {
   padding-top: 10px;
 }
-
 #main-content .btn > .fa {
   font-size: 15px !important;
 }
-
 td .fa {
   font-size: 25px !important;
   text-decoration: none;
   color: #000;
 }
-
 .btn-circle.btn-xl {
   width: 20px;
   height: 40px;
   padding: 8px;
-  margin-left: 0px;
+  margin-left: 0;
   border-radius: 35px;
   font-size: 30px;
   line-height: 1.33;
@@ -37,14 +35,12 @@ td .fa {
   border: none;
   color: #5f6368;
 }
-
 .btn-circle:hover {
   background-color: rgba(128, 128, 128, 0.13);
 }
 .btn-circle > .fa {
   font-size: 30px;
 }
-
 .btn-circle.btn-lg {
   width: 40px;
   height: 40px;
@@ -53,8 +49,6 @@ td .fa {
   line-height: 1.33;
   border-radius: 25px;
 }
-
-
 [class*="fab"] {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -62,7 +56,7 @@ td .fa {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  -webkit-tap-highlight-color: rgba(255,255,255,0);
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   -webkit-tap-highlight-color: transparent;
 }
 .fab-button {
@@ -72,12 +66,12 @@ td .fa {
   display: table;
   background: #2196f3;
   /*background: #28a745;*/
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   position: relative;
   transition: box-shadow 0.2s;
 }
 .fab-button:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
 }
 .fab-button:focus {
   z-index: 450;
@@ -106,4 +100,10 @@ td .fa {
 }
 .fab-button:focus .plus {
   transform: rotate(45deg);
+}
+.ui-fancytree input {
+  color: #000;
+}
+.fancytree-control-panel .fa {
+  font-size: 15px;
 }

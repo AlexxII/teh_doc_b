@@ -41,6 +41,7 @@ BootstrapDatepickerAsset::register($this);
 
 $vks_date_hint = 'Обязательное поле! Укажите дату проведения сеанса ВКС';
 $vks_type_hint = 'Обязательное поле! Укажите ТИП сеанса ВКС. Сеанс ВКС из п.403 => ЗВС-ОГВ, ГФИ => КВС-ГФИ, Приемная Президента => КВС Приемной';
+$vks_type_add_hint = 'Добавить Тип сеанса ВКС';
 $vks_place_hint = 'Укажите место проведения сеанса видеосвязи';
 $vks_subscrof_hint = 'Ведомство определится автоматически после выбора фамилии абонента';
 $vks_subscr_hint = 'Вводите фамилию абонента, при совпадении предложенного варианты выберите его. Ведомство определится автоматически';
@@ -108,8 +109,12 @@ $vks_add_combined = "Добавить совмещенный сеанс";
           <div class="form-group col-md-5 col-lg-5" style="margin-top: 10px">
             <?php
             echo $form->field($model, 'vks_type', [
-              'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $vks_type_hint . '"></sup>{input}{hint}'
+              'template' => '{label} 
+              <sup class="h-title fa fa-info-circle" aria-hidden="true"
+                data-toggle="tooltip" data-placement="top" title="' . $vks_type_hint . '"></sup>
+              <sup class="h-title fa fa-plus-circle adddd" aria-hidden="true" style="color: #777777;cursor: pointer"
+                data-toggle="tooltip" data-placement="top" title="' . $vks_type_add_hint . '"></sup>
+                {input}{hint}'
             ])->dropDownList($model->vksTypesList, ['data-name' => 'vks_type', 'class' => 'vks-type form-control',
               'prompt' => ['text' => 'Выберите',
                 'options' => [
@@ -143,7 +148,10 @@ $vks_add_combined = "Добавить совмещенный сеанс";
 
     <div class="col-md-12 col-lg-12"
          style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">
-      <span class="text-muted" style="position: absolute;top:5px;right:10px;font-size: 10px">Старший абонент</span>
+      <span class="text-muted" style="position: absolute;top:5px;right:10px;font-size: 10px">
+      <sup class="h-title fa fa-plus-circle adddd" aria-hidden="true" style="color: #777777;cursor: pointer"
+         data-toggle="tooltip" data-placement="top" title="' . $vks_type_add_hint . '"></sup>
+      Старший абонент</span>
       <div class="form-group col-md-5 col-lg-5">
         <?= $form->field($model, 'vks_subscriber_name', [
           'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
@@ -244,14 +252,6 @@ $vks_add_combined = "Добавить совмещенный сеанс";
     '        </div>';
 
 
-  $('.dynamic-content').on('click', '.del-combined-session', function () {
-    var div = $(this).closest("div");
-    mainCounter--;
-    if (mainCounter == 1) {
-      $(parentSpanTitle).text('');
-    }
-    div.remove();
-  });
 
   var mainCounter = 1;
   var parentSpanTitle;
@@ -259,6 +259,51 @@ $vks_add_combined = "Добавить совмещенный сеанс";
   var maxInput = 4;
 
   $(document).ready(function () {
+
+    $('.adddd').on('click', function (e) {
+      e.preventDefault();
+      var uri = 'vks-subscribes';
+      var url = '/vks/control/' + uri +'/index';
+      var size = 'xlarge';
+      var title = 'Тип ВКС';
+      c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: url,
+            method: 'get'
+          }).done(function (response) {
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        columnClass: size,
+        title: title,
+        buttons: {
+          cancel: {
+            text: 'НАЗАД',
+            action: function () {
+              console.log(5555555);
+            }
+            
+          }
+        }
+      });
+    });
+
+
+    $('.dynamic-content').on('click', '.del-combined-session', function () {
+      var div = $(this).closest("div");
+      mainCounter--;
+      if (mainCounter == 1) {
+        $(parentSpanTitle).text('');
+      }
+      div.remove();
+    });
+
     $('.add-combined-session').on('click', function () {
       if (mainCounter >= maxInput) {
         return;

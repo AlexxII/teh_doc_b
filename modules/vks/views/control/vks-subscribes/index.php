@@ -5,46 +5,16 @@ use app\assets\FancytreeAsset;
 
 FancytreeAsset::register($this);
 
-$this->title = 'Абоненты ВКС';
-$this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
-$this->params['breadcrumbs'][] = ['label' => 'Журнал', 'url' => ['/vks/sessions']];
-$this->params['breadcrumbs'][] = $this->title;
-
 $about = "Панель управления абонента ВКС. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $add_hint = 'Добавить новый узел';
-$add_tree_hint = 'Добавить дерево';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить БЕЗ вложений';
-$del_root_hint = 'Удалить ветку полностью';
 $del_multi_nodes = 'Удвлить С вложениями';
 
 ?>
 
-<style>
-  .h-title {
-    font-size: 18px;
-    color: #1e6887;
-  }
-  .fa {
-    font-size: 15px;
-  }
-  ul.fancytree-container {
-    font-size: 14px;
-  }
-  input {
-    color: black;
-  }
-</style>
-
-<div class="admin-category-pannel">
-
-  <h3><?= Html::encode($this->title) ?>
-    <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-  </h3>
-</div>
-<div class="row">
-  <div class="">
+<div class="subscribers-control">
+  <div class="fancytree-control-panel">
     <div class="container-fluid" style="margin-bottom: 10px">
       <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
         'style' => ['margin-top' => '5px'],

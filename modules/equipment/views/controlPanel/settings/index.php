@@ -94,7 +94,7 @@
                      data-id="<?= $model->id ?>"
                      data-check='special-check'
                      data-url='special-works' <?php if ($model->specialStatus) echo 'checked' ?>>
-              Проведены Специальные работы</label>
+              Специальные работы</label>
             <span class="status-indicator" id="special-check"></span>
             <p class="note">Над данным оборудованием были проведены специальные работы.</p>
             <div class="d-blue border">

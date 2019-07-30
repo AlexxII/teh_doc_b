@@ -18,14 +18,22 @@ class DocsController extends Controller
   public function actionIndex()
   {
     $id = $_GET['id'];
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if ($id != 1122334455) {
       $model = Tools::findModel($id);
       $docModels = $model->docsOrder;
       $yearArray = $model->yearArrayDocs;
-      return $this->renderAjax('index', [
-        'docModels' => $docModels,
-        'years' => $yearArray
-      ]);
+      return [
+        'data' => [
+          'success' => true,
+          'data' => $this->renderAjax('index', [
+            'docModels' => $docModels,
+            'years' => $yearArray
+          ]),
+          'message' => 'Doc saved.',
+        ],
+        'code' => 1,
+      ];
     }
     return false;
   }

@@ -5,42 +5,16 @@ use app\assets\FancytreeAsset;
 
 FancytreeAsset::register($this);
 
-$this->title = 'Тип ВКС';
-$this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
-$this->params['breadcrumbs'][] = ['label' => 'Журнал', 'url' => ['/vks/sessions']];
-$this->params['breadcrumbs'][] = $this->title;
-
 $about = "Панель управления типами ВКС. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $add_hint = 'Добавить новый узел';
-$add_tree_hint = 'Добавить дерево';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить БЕЗ вложений';
-$del_root_hint = 'Удалить ветку полностью';
 $del_multi_nodes = 'Удвлить С вложениями';
 
 ?>
 
-<style>
-  .fa {
-    font-size: 15px;
-  }
-  ul.fancytree-container {
-    font-size: 14px;
-  }
-  input {
-    color: black;
-  }
-</style>
-
-<div class="admin-category-pannel">
-
-  <h3><?= Html::encode($this->title) ?>
-    <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-  </h3>
-</div>
-<div class="row">
-  <div class="">
+<div class="type-control">
+  <div class="fancytree-control-panel">
     <div class="container-fluid" style="margin-bottom: 10px">
       <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
         'style' => ['margin-top' => '5px'],
@@ -70,7 +44,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
   </div>
 
-  <div class="col-lg-7 col-md-7" style="padding-bottom: 10px">
+  <div class="col-lg-12 col-md-12" style="padding-bottom: 10px">
     <div style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
@@ -89,41 +63,13 @@ $del_multi_nodes = 'Удвлить С вложениями';
     </div>
   </div>
 
-  <div class="col-lg-5 col-md-5">
-    <div class="alert alert-warning" style="margin-bottom: 10px">
-      <a href="#" class="close" data-dismiss="alert">&times;</a>
-      <strong>Внимание!</strong> Будьте внимательны!
-    </div>
-    <div class="about-info"></div>
-  </div>
-
 </div>
 
 
 <script>
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-  });
 
-  function goodAlert(text) {
-    var div = '' +
-      '<div id="w3-success-0" class="alert-success alert fade in">' +
-      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-      text +
-      '</div>';
-    return div;
-  }
-
-  function badAlert(text) {
-    var div = '' +
-      '<div id="w3-success-0" class="alert-danger alert fade in">' +
-      '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-      text +
-      '</div>';
-    return div;
-  }
-
-  $(document).ready(function () {
     $('.add-subcategory').click(function (event) {
       event.preventDefault();
       var node = $(".ui-draggable-handle").fancytree("getActiveNode");
@@ -137,10 +83,8 @@ $del_multi_nodes = 'Удвлить С вложениями';
         alert("Нельзя создавать вложенность более 3х");
         return;
       }
-    })
-  });
+    });
 
-  $(document).ready(function () {
     $('.refresh').click(function (event) {
       event.preventDefault();
       var tree = $(".ui-draggable-handle").fancytree("getTree");
@@ -149,10 +93,8 @@ $del_multi_nodes = 'Удвлить С вложениями';
       $(".del-node").hide();
       $(".del-multi-nodes").hide();
       $('.about-info').html('')
-    })
-  });
+    });
 
-  $(document).ready(function () {
     $('.del-node').click(function (event) {
       var url = "/vks/control/vks-type/delete";
       event.preventDefault();

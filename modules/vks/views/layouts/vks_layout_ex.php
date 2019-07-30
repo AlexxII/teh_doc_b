@@ -113,13 +113,24 @@ $this->title = 'Журнал ВКС';
           <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true"
              aria-expanded="false"></a>
           <ul class="dropdown-menu">
-            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-type">Тип ВКС</a></div>
-            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-place">Студии проведения ВКС</a>
+            <div class="settings-menu">
+              <a class="menu-link" href="" data-wsize="large" data-url="vks-type" data-title="Тип ВКС">Тип ВКС</a>
             </div>
-            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-subscribes">Абоненты</a></div>
-            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-order">Распоряжения</a></div>
-            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-employee">Сотрудники</a></div>
-            <div class="settings-menu"><a class="menu-link" href="/vks/control/vks-tools">Оборудование</a></div>
+            <div class="settings-menu">
+              <a class="menu-link" href="" data-wsize="large" data-url="vks-place" data-title="Студии проведения ВКС">Студии проведения ВКС</a>
+            </div>
+            <div class="settings-menu">
+              <a class="menu-link" href="" data-wsize="xlarge" data-url="vks-subscribes" data-title="Абоненты">Абоненты</a>
+            </div>
+            <div class="settings-menu">
+              <a class="menu-link" href="" data-wsize="large" data-url="vks-order" data-title="Распоряжения">Распоряжения</a>
+            </div>
+            <div class="settings-menu">
+              <a class="menu-link" href="" data-wsize="large" data-url="vks-employee" data-title="Сотрудники">Сотрудники</a>
+            </div>
+            <div class="settings-menu">
+              <a class="menu-link" href="" data-wsize="large" data-url="vks-tools" data-title="Оборудование">Оборудование</a>
+            </div>
           </ul>
         </li>
         <li id="app-notify">
@@ -212,6 +223,39 @@ $this->title = 'Журнал ВКС';
 
 
 <script>
+  $(document).ready(function () {
+    $('.menu-link').on('click', loadControls);
+  });
+
+  function loadControls(e) {
+    e.preventDefault();
+    var uri = $(this).data('url');
+    var title = $(this).data('title');
+    var size = $(this).data('wsize');
+    var url = '/vks/control/' + uri +'/index';
+    c = $.confirm({
+      content: function () {
+        var self = this;
+        return $.ajax({
+          url: url,
+          method: 'get'
+        }).done(function (response) {
+        }).fail(function () {
+          self.setContentAppend('<div>Что-то пошло не так!</div>');
+        });
+      },
+      contentLoaded: function (data, status, xhr) {
+        this.setContentAppend('<div>' + data + '</div>');
+      },
+      columnClass: size,
+      title: title,
+      buttons: {
+        cancel: {
+          text: 'НАЗАД'
+        }
+      }
+    });
+  }
 
 </script>
 

@@ -40,3 +40,25 @@ use yii\helpers\Html;
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function () {
+    $('#create-wikipage').on('click', function (e) {
+      e.preventDefault();
+      var node = $("#fancyree_w0").fancytree("getActiveNode");
+      var toolId = node.data.id;
+      var url = '/equipment/infoPanel/wiki/create?id=' + toolId;
+      $.ajax({
+        type: 'POST',
+        url: url,
+        success: function (response) {
+          getCounters(toolId);
+          $('#tool-info-view').html(response.data.data);
+        },
+        error: function (response) {
+          console.log(response);
+        }
+      });
+    });
+  })
+</script>

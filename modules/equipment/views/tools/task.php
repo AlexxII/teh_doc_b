@@ -5,9 +5,22 @@ use yii\helpers\Html;
 $this->title = 'Задание на обновление';
 
 $about = "Данный раздел позволяет планировать работу по обновлению сведений об оборудовании с мобильных устройств. Оборудование 
-появляется в данном перечне после соответствующих настроек в панели управления.";
+появляется в данном перечне после соответствующих настроек";
 
 ?>
+<style>
+  .app-settings {
+    font-weight: 400 !important;
+    margin: 12px 0px 0px 30px !important;
+  }
+  #main-wrap {
+    margin-top: 0px !important;
+  }
+  #main-wrap h3 {
+    margin-top: 10px;
+  }
+</style>
+
 
 <div class="tool-task">
 
@@ -22,7 +35,7 @@ $about = "Данный раздел позволяет планировать р
           <div class="caption">
             <span><small><?= $model->toolParents(0) ?></small></span>
             <h4><?= $model->eq_title ?>
-              <span class="Counter" title="Кол-во изображений" data-toggle="tooltip" data-placement="top">
+              <span class="counter" title="Кол-во изображений" data-toggle="tooltip" data-placement="top">
                 <?= $model->countImages ?>
               </span>
             </h4>
@@ -31,7 +44,8 @@ $about = "Данный раздел позволяет планировать р
               <div class="form-checkbox js-complex-option">
                 <label style="font-weight: 500">
                   <input class="ch" id="consolidated-feature" type="checkbox" data-check='consolidated-check'
-                         data-id="<?= $model->id ?>" <?php if ($model->settings->eq_task) echo 'checked' ?> > В задании на
+                         data-id="<?= $model->id ?>" <?php if ($model->settings->eq_task) echo 'checked' ?> > В задании
+                  на
                   обновление
                 </label>
                 <span class="status-indicator"></span>
@@ -48,7 +62,6 @@ $about = "Данный раздел позволяет планировать р
 <script>
 
   $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
 
     var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
     var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';

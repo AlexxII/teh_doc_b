@@ -3,12 +3,8 @@
 use yii\helpers\Html;
 use app\assets\FancytreeAsset;
 
-FancytreeAsset::register($this);
 
 $this->title = 'Оборудование по местам размещения';
-$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']];
-$this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель отображения оборудования по местам размещения. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $refresh_hint = 'Перезапустить форму';
@@ -99,7 +95,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
     <div class="row" style="padding: 0 15px">
       <div style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_w0" class="ui-draggable-handle"></div>
+        <div id="fancyree_placement_show" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
@@ -277,7 +273,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
   //************************* Управление деревом ***************************************
 
-  window.treeId = "#fancyree_w0";
+  window.treeId = "#fancyree_placement_show";
 
   $(document).ready(function () {
     $('.refresh').click(function (event) {
@@ -631,9 +627,9 @@ $classif_hint = 'Присвоить выделенному оборудован�
   });
 
   jQuery(function ($) {
-    var main_url = '/tehdoc/control/placement/placements';
+    var main_url = '/equipment/control/placement/placements';
 
-    $("#fancyree_w0").fancytree({
+    $("#fancyree_placement_show").fancytree({
       source: {
         url: main_url
       },

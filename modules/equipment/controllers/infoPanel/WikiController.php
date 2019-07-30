@@ -18,24 +18,39 @@ class WikiController extends Controller
     $id = $_GET['id'];
     $model = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->limit(1)->all();
     $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
-    $toolModel = Tools::findModel($id);
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if (!empty($model)) {
       $indexModel = $model[0];
-      return $this->renderAjax('index', [
-        'model' => $indexModel,
-        'list' => $list,
-      ]);
+      return [
+        'data' => [
+          'success' => true,
+          'data' => $this->renderAjax('index', [
+            'model' => $indexModel,
+            'list' => $list,
+          ]),
+          'message' => 'Page load',
+        ],
+        'code' => 1,
+      ];
     }
-    return $this->renderAjax('_index', [
-    ]);
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('_index', [
+        ]),
+        'message' => 'Page load',
+      ],
+      'code' => 1,
+    ];
   }
+
 
   public function actionCreate()
   {
     $model = new Wiki();
     $id = $_GET['id'];
     $toolModel = Tools::findModel($id);
-
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if ($model->load(Yii::$app->request->post())) {
       $date = date('Y-m-d H:i:s');
       $model->eq_id = $_GET['id'];
@@ -45,15 +60,22 @@ class WikiController extends Controller
       if ($model->save()) {
         $id = $_GET['id'];
         $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
-        return $this->render('header', [
+        return $this->renderAjax('index', [
           'model' => $model,
           'list' => $list,
         ]);
       }
     }
-    return $this->renderAjax('_form', [
-      'model' => $model,
-    ]);
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('_form', [
+          'model' => $model,
+        ]),
+        'message' => 'Page load',
+      ],
+      'code' => 1,
+    ];
   }
 
   public function actionUpdate($page)

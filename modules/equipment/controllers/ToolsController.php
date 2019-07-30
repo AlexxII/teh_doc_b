@@ -97,15 +97,23 @@ class ToolsController extends Controller
 
   public function actionTask()
   {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     $models = Tools::find()
       ->where(['settings_table.eq_task' => 1])
       ->joinWith('settings settings_table')
       ->orderBy('lft')
       ->all();
     Yii::$app->view->params['title'] = 'Задание';
-    return $this->render('task', [
-      'models' => $models,
-    ]);
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('task', [
+          'models' => $models,
+        ]),
+        'message' => 'Page load',
+      ],
+      'code' => 1,
+    ];
   }
 
   public function actionUpdateEx($id)
@@ -140,12 +148,30 @@ class ToolsController extends Controller
 
   public function actionCategories()
   {
-    return $this->render('categories');
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'По категориям';
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('categories'),
+        'message' => 'Page load',
+      ],
+      'code' => 1,
+    ];
   }
 
   public function actionPlacement()
   {
-    return $this->render('placements');
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'По размещению';
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('placements'),
+        'message' => 'Page load',
+      ],
+      'code' => 1,
+    ];
   }
 
   public function actionOth()

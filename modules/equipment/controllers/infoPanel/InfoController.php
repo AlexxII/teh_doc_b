@@ -14,7 +14,7 @@ use app\modules\equipment\models\Images;
 class InfoController extends Controller
 {
 
-  public function actionIndex()
+  public function actionMainIndex()
   {
     if (!empty($_GET['id'])) {
       $id = $_GET['id'];
@@ -34,6 +34,41 @@ class InfoController extends Controller
     return $this->render('meeting');
   }
 
+  public function actionIndex()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (!empty($_GET['id'])) {
+      $id = $_GET['id'];
+      $model = Tools::findModel($id);
+      $children = $model->children(1)->all();
+      if ($model->complex) {
+        $view = 'view_complex';
+      } else {
+        $view = 'view_single';
+      }
+      return [
+        'data' => [
+          'success' => true,
+          'data' => $this->renderAjax('index', [
+            'model' => $model,
+            'view' => $view,
+            'children' => $children,
+          ]),
+          'message' => 'Update done'
+        ],
+        'code' => 1
+      ];
+    }
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('meeting'),
+        'message' => 'Update done'
+      ],
+      'code' => 1
+    ];
+  }
+
   // обновление оборудования на главной страницы
   public function actionUpdate()
   {
@@ -41,9 +76,9 @@ class InfoController extends Controller
     $tool = Tools::findModel($id);
     $fUpload = new Images();
     $tool->scenario = Tools::SCENARIO_UPDATE;
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if (Yii::$app->request->isAjax) {
       if ($tool->load(Yii::$app->request->post())) {
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         if ($tool->save()) {
           $children = $tool->children(1)->all();
           if ($tool->complex) {
@@ -67,7 +102,7 @@ class InfoController extends Controller
           return [
             'data' => [
               'success' => false,
-              'data' => $tool->errors,
+              'data' => null,
               'message' => 'Update false'
             ],
             'code' => 0
@@ -75,10 +110,17 @@ class InfoController extends Controller
         }
       }
     }
-    return $this->renderAjax('_form', [
-      'model' => $tool,
-      'fUpload' => $fUpload
-    ]);
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('_form', [
+          'model' => $tool,
+          'fUpload' => $fUpload
+        ]),
+        'message' => 'Update done'
+      ],
+      'code' => 1
+    ];
   }
 
   public function actionCounters()

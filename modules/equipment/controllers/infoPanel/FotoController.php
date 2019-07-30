@@ -18,12 +18,20 @@ class FotoController extends Controller
   public function actionIndex()
   {
     $toolId = $_GET['id'];
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if ($toolId != 1122334455) {
       $model = Tools::findModel($toolId);
       $photoModels = $model->images;
-      return $this->renderAjax('index', [
-        'photoModels' => $photoModels
-      ]);
+      return [
+        'data' => [
+          'success' => true,
+          'data' => $this->renderAjax('index', [
+            'photoModels' => $photoModels
+          ]),
+          'message' => 'Photos saved.',
+        ],
+        'code' => 1,
+      ];
     }
   }
 

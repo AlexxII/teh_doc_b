@@ -14,6 +14,7 @@ use app\assets\JConfirmAsset;
 use app\assets\BootstrapDatepickerAsset;
 use app\assets\SlidebarsAsset;
 use app\assets\NotyAsset;
+use app\assets\TableBaseAsset;
 
 AppAsset::register($this);            // регистрация ресурсов всего приложения
 EquipmentAsset::register($this);      // регистрация ресурсов модуля
@@ -25,6 +26,7 @@ MdeAsset::register($this);
 JConfirmAsset::register($this);
 BootstrapDatepickerAsset::register($this);
 SlidebarsAsset::register($this);
+TableBaseAsset::register($this);
 BootstrapPluginAsset::register($this);
 
 
@@ -65,7 +67,7 @@ $del_multi_nodes = 'Удалить С вложениями';
 <div id='left-menu' off-canvas="main-menu left overlay">
   <div>
     <div class="menu-list">
-      <div class="menu-list-about" data-url="/equipment/tools/task">
+      <div class="menu-list-about" data-url="/equipment/tools/task" data-title="Задание">
         <div>
           <i class="fa fa-television" aria-hidden="true"></i>
         </div>
@@ -109,7 +111,7 @@ $del_multi_nodes = 'Удалить С вложениями';
               <a class="menu-link" data-url="placement" data-title="Места размещения" href="">Места размещения</a>
             </div>
             <div class="settings-menu">
-              <a class="menu-link" data-url="interface" data-title="Улучшение интерфейса"  href="">Интерфейс</a>
+              <a class="menu-link" data-url="interface" data-title="Улучшение интерфейса" href="">Интерфейс</a>
             </div>
           </ul>
         </li>
@@ -161,15 +163,39 @@ $del_multi_nodes = 'Удалить С вложениями';
     <div id="left-side">
       <div id="left-menu">
         <div class="menu-list">
-          <div class="menu-list-about" data-url="/equipment/tools/task">
+          <div class="menu-list-about" data-url="/equipment/tools/task" data-uri="/equipment/tools/task-main">
             <div>
-              <svg width="50" height="50" viewBox="0 0 25 25" class="NSy2Hd RTiFqe null">
+              <svg width="50" height="50" viewBox="0 0 25 25">
                 <path fill="none" d="M0 0h24v24H0V0z"></path>
                 <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17l-.59.59-.58.58V4h16v12zm-9-4h2v2h-2zm0-6h2v4h-2z"></path>
               </svg>
             </div>
             <div class="menu-point-footer">
               <h5>Задание на обновление</h5>
+            </div>
+          </div>
+        </div>
+        <div class="menu-list">
+          <div class="menu-list-about" data-url="/equipment/tools/categories" data-uri="/equipment/tools/categories-view">
+            <div>
+              <svg width="50" height="50" viewBox="0 0 25 25">
+                <path d="M18 21H4V7H2v14c0 1.1.9 2 2 2h14v-2zm3-4V3c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2zm-2 0H8V3h11v14z"></path>
+              </svg>
+            </div>
+            <div class="menu-point-footer">
+              <h5>Классификация по категориям</h5>
+            </div>
+          </div>
+        </div>
+        <div class="menu-list">
+          <div class="menu-list-about" data-url="/equipment/tools/placement" data-uri="/equipment/tools/placement-view">
+            <div>
+              <svg width="50" height="50" viewBox="0 0 25 25">
+                <path fill="none" d="M0 0h24v24H0V0z"></path><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"></path>
+              </svg>
+            </div>
+            <div class="menu-point-footer">
+              <h5>Классификация по размещению</h5>
             </div>
           </div>
         </div>
@@ -187,7 +213,8 @@ $del_multi_nodes = 'Удалить С вложениями';
         <div id="tools-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
           <div style="position: relative">
             <div class="container-fuid" style="float:left; width: 100%">
-              <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск по названию...">
+              <input class="form-control form-control-sm" autocomplete="off" name="search"
+                     placeholder="Поиск по названию...">
             </div>
             <div style="padding-top: 8px; right: 10px; position: absolute">
               <a href="" id="btnResetSearch">
@@ -244,15 +271,29 @@ $del_multi_nodes = 'Удалить С вложениями';
 
 <script>
 
-  $(document).ready(function () {
-    $('.menu-link').on('click', loadControls);
-  });
+  var tid, ul;
+
+  function loadContent(url, uri) {
+    var node = $("#fancyree_w0").fancytree("getActiveNode");
+    if (node != undefined) {
+      tid = node.data.id;
+    }
+    $.ajax({
+      url: url,
+      method: 'get'
+    }).done(function (response) {
+      $('body').html(response.data.data);
+      window.history.pushState("object or string", "Title", uri);
+    }).fail(function () {
+      console.log('fail');
+    });
+  }
 
   function loadControls(e) {
     e.preventDefault();
     var uri = $(this).data('url');
     var title = $(this).data('title');
-    var url = '/equipment/control/' + uri +'/index';
+    var url = '/equipment/control/' + uri + '/index';
     c = $.confirm({
       content: function () {
         var self = this;
@@ -279,6 +320,12 @@ $del_multi_nodes = 'Удалить С вложениями';
   }
 
   $(document).ready(function () {
+
+    console.log($(location).attr('pathname'));
+    // if (window.location.href == )
+
+
+    $('.menu-link').on('click', loadControls);
 
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -327,7 +374,7 @@ $del_multi_nodes = 'Удалить С вложениями';
     })
   });
 
-  var uri, match;
+  var tId, toolInfo;
   // отображение и логика работа дерева
   jQuery(function ($) {
     var main_url = '/equipment/tools/all-tools';
@@ -356,6 +403,12 @@ $del_multi_nodes = 'Удалить С вложениями';
         nodata: true,                                       // Display a 'no data' status node if result is empty
         mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
       },
+      icon: function (event, data) {
+        var icon = data.node.data.icon;
+        if (icon) {
+          return icon;
+        }
+      },
       click: function (event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
         var url;
@@ -363,6 +416,7 @@ $del_multi_nodes = 'Удалить С вложениями';
           $('#tool-info').fadeIn(500);
           var node = data.node;
           var toolId = node.data.id;
+          tId = toolId;
           var ref = $('ul#main-teh-tab').find('li.active').data('tabName');
           getCounters(toolId);
           if (ref != undefined) {
@@ -374,21 +428,16 @@ $del_multi_nodes = 'Удалить С вложениями';
             url: url,
             method: 'get'
           }).done(function (response) {
-            $('#tool-info-view').html(response);
+            $('#tool-info-view').html(response.data.data);
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
           });
         }
       },
-      icon: function (event, data) {
-        var icon = data.node.data.icon;
-        if (icon) {
-          return icon;
-        }
-      },
       activate: function (event, data) {
         var node = data.node;
         var toolId = node.data.id;
+        tId = toolId;
         var ref = $('ul#main-teh-tab').find('li.active').data('tabName');
         getCounters(toolId);
         if (ref != undefined) {
@@ -400,11 +449,18 @@ $del_multi_nodes = 'Удалить С вложениями';
           url: url,
           method: 'get'
         }).done(function (response) {
-          $('#tool-info-view').html(response);
+          $('#tool-info-view').html(response.data.data);
         }).fail(function () {
           self.setContentAppend('<div>Что-то пошло не так!</div>');
         });
       },
+      init: function (event, data) {
+        if (tId != undefined) {
+          // getCounters(tId);
+          data.tree.activateKey(tId);
+          $('#tool-info').fadeIn(500);
+        }
+      }
     });
 
     $('#main-teh-tab li').click(function (e) {
@@ -420,13 +476,12 @@ $del_multi_nodes = 'Удалить С вложениями';
           url: url,
           method: 'get'
         }).done(function (response) {
-          $('#tool-info-view').html(response);
+          $('#tool-info-view').html(response.data.data);
         }).fail(function () {
           console.log('Что-то пошло не так');
         });
       }
     })
-
   });
 
   function getCounters(toolId) {
@@ -464,7 +519,8 @@ $del_multi_nodes = 'Удалить С вложениями';
 
     $(".menu-list-about").on('click', function (e) {
       var url = $(this).data('url');
-      location.href = url;
+      var uri = $(this).data('uri');
+      loadContent(url, uri);
     })
 
   });

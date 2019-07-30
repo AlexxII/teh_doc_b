@@ -2,18 +2,8 @@
 //
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\bootstrap\Modal;
-use kartik\tree\TreeViewInput;
-use app\modules\admin\models\ClassifierTbl;
-use app\assets\FancytreeAsset;
-
-FancytreeAsset::register($this);
 
 $this->title = 'Оборудование по категориям';
-$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'Перечень оборудования', 'url' => ['/tehdoc/equipment/tools']];
-$this->params['breadcrumbs'][] = $this->title;
-
 $about = "Панель отображения оборудования по категориям. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $refresh_hint = 'Перезапустить форму';
 $dell_hint = 'Удалить выделенное оборудование из ОСНОВНОЙ таблицы. БУДЬТЕ ВНИМАТЕЛЬНЫ, данные будут удалены безвозвратно.';
@@ -63,7 +53,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
 </style>
 
-<div class="eq-category-pannel">
+<div class="eq-categories-pannel">
   <h3><?= Html::encode($this->title) ?>
     <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
          data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
@@ -99,7 +89,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
     <div class="row" style="padding: 0 15px">
       <div style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_w0" class="ui-draggable-handle"></div>
+        <div id="fancyree_categories_show" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
@@ -284,7 +274,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
   //************************* Управление деревом ***************************************
 
-  window.treeId = "#fancyree_w0";
+  window.treeId = "#fancyree_categories_show";
 
   $(document).ready(function () {
     $('.refresh').click(function (event) {
@@ -691,9 +681,9 @@ $classif_hint = 'Присвоить выделенному оборудован�
   ///////////// -============================ tree ======================================
   
   jQuery(function ($) {
-    var main_url = '/tehdoc/control/category/categories';
+    var main_url = '/equipment/control/category/categories';
 
-    $("#fancyree_w0").fancytree({
+    $("#fancyree_categories_show").fancytree({
       source: {
         url: main_url
       },

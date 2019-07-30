@@ -16,15 +16,23 @@ class SettingsController extends Controller
 {
   public $defaultAction = 'index';
 
-  public function actionIndexAjax()
+  public function actionIndex()
   {
     $id = $_GET['id'];
     $tool = Tools::findModel($id);
     $toolSettings = ToolSettings::findModel($id);
-    return $this->renderAjax('index', [
-      'model' => Tools::findModel($id),
-      'toolSettings' => $toolSettings
-    ]);
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('index', [
+          'model' => Tools::findModel($id),
+          'toolSettings' => $toolSettings
+        ]),
+        'message' => 'Page load',
+      ],
+      'code' => 1,
+    ];
   }
 
 

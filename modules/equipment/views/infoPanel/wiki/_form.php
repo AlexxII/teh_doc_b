@@ -6,12 +6,13 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
 $placeholder = 'Название страницы';
-
+$title = 'Новая страница';
 ?>
 
-<div id="complex-wiki-form">
-  <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
+<div class="row" id="complex-wiki-form">
+  <div class="col-lg-12 col-md-12">
     <div class="customer-form">
+      <h3><?= Html::encode($title) ?></h3>
       <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => 'main-wiki-form']]); ?>
       <div class="row">
         <div class="col-md-12 col-lg-12">
@@ -24,6 +25,11 @@ $placeholder = 'Название страницы';
             ->textArea(array('style' => 'resize:vertical', 'rows' => '10', 'id' => 'wiki-text'))
             ->label(false) ?>
         </div>
+      </div>
+      <div class="form-group" style="text-align: right">
+        <a id="delete-page" data-id="<?= $model->id ?>" <?php if($model->isNewRecord) echo 'disabled' ?> class="btn btn-sm btn-danger">Удалить</a>
+        <a id="go-back" class="btn btn-sm btn-primary">Отмена</a>
+        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['class' => 'btn btn-sm btn-success']) ?>
       </div>
       <?php ActiveForm::end(); ?>
     </div>
@@ -82,7 +88,26 @@ $placeholder = 'Название страницы';
           }
         }
       });
+    });
+
+    $('#go-back').on('click', function (e) {
+      e.preventDefault();
+      var node = $("#fancyree_w0").fancytree("getActiveNode");
+      var toolId = node.data.id;
+      var url = '/equipment/infoPanel/wiki/index?id=' + toolId;
+      $.ajax({
+        type: 'GET',
+        url: url,
+        success: function (response) {
+          getCounters(toolId);
+          $('#tool-info-view').html(response.data.data);
+        },
+        error: function (response) {
+          console.log(response);
+        }
+      });
     })
+
   });
 
 </script>

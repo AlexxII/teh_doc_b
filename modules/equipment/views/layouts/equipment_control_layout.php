@@ -7,6 +7,7 @@ use app\assets\TableBaseAsset;
 use app\assets\JConfirmAsset;
 use app\assets\SlidebarsAsset;
 
+
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 SlidebarsAsset::register($this);
 TableBaseAsset::register($this);

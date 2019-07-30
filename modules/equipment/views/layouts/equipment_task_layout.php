@@ -9,16 +9,15 @@ use app\modules\equipment\asset\EquipmentAsset;
 use app\assets\AppAsset;
 use app\assets\JConfirmAsset;
 
-
-AppAsset::register($this);    // регистрация ресурсов всего приложения
-JConfirmAsset::register($this);
-BootstrapPluginAsset::register($this);
-EquipmentAsset::register($this);
+//AppAsset::register($this);    // регистрация ресурсов всего приложения
+//JConfirmAsset::register($this);
+//BootstrapPluginAsset::register($this);
+//EquipmentAsset::register($this);
 
 ?>
 
 <style>
-  .app-settings {
+  .app-settings  {
     font-weight: 400 !important;
     margin: 12px 0px 0px 30px !important;
   }
@@ -37,17 +36,6 @@ EquipmentAsset::register($this);
 
 
 <?php $this->beginPage() ?>
-<!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
-<head>
-  <meta charset="<?= Yii::$app->charset ?>">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <?= Html::csrfMetaTags() ?>
-  <title><?= Html::encode($this->title) ?></title>
-  <?php $this->head() ?>
-
-</head>
 
 <?php $this->beginBody() ?>
 
@@ -85,27 +73,28 @@ EquipmentAsset::register($this);
   </div>
 </div>
 
-
 <?php $this->endBody() ?>
-</body>
-
-</html>
 <?php $this->endPage() ?>
 
 
 <script>
   $(document).ready(function () {
 
+    $('[data-toggle="tooltip"]').tooltip();
+
     $('#go-back').click(function (e) {
-      var history = window.history;
-      if (history.length == 1) {
-        location.href = '/equipment';
-      } else {
-        history.back();
-      }
+      var url = '/equipment/tools';
+      $.ajax({
+        url: url,
+        method: 'get'
+      }).done(function (response) {
+        $('body').html(response);
+        window.history.pushState("object or string", "Title", "/equipment/tools");
+      }).fail(function () {
+        console.log('fail');
+      });
     });
 
-    $('[data-toggle="tooltip"]').tooltip();
   });
 
 </script>

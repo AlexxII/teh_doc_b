@@ -15,8 +15,8 @@ function toolUpdate(e) {
         self.setContentAppend('<div>Что-то пошло не так</div>');
       });
     },
-    contentLoaded: function (data, status, xhr) {
-      this.setContentAppend('<div>' + data + '</div>');
+    contentLoaded: function (response, status, xhr) {
+      this.setContentAppend('<div>' + response.data.data + '</div>');
     },
     type: 'blue',
     columnClass: 'large',
@@ -68,7 +68,7 @@ function toolSettings(e) {
   e.preventDefault();
   var node = $("#fancyree_w0").fancytree("getActiveNode");
   var toolId = node.data.id;
-  var url = '/equipment/controlPanel/settings/index-ajax?id=' + toolId;
+  var url = '/equipment/controlPanel/settings/index?id=' + toolId;
   c = $.confirm({
     content: function () {
       var self = this;
@@ -81,8 +81,8 @@ function toolSettings(e) {
         self.setContentAppend('<div>Что-то пошло не так!</div>');
       });
     },
-    contentLoaded: function (data, status, xhr) {
-      this.setContentAppend('<div>' + data + '</div>');
+    contentLoaded: function (response, status, xhr) {
+      this.setContentAppend('<div>' + response.data.data + '</div>');
     },
     columnClass: 'large',
     title: 'Настройки',
@@ -95,7 +95,7 @@ function toolSettings(e) {
             url: url,
             method: 'get'
           }).done(function (response) {
-            $('#tool-info-view').html(response);
+            $('#tool-info-view').html(response.data.data);
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так</div>');
           });
