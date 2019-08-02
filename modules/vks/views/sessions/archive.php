@@ -1,41 +1,17 @@
 <?php
 
 use yii\helpers\Html;
+use app\assets\NotyAsset;
+
+NotyAsset::register($this);
 
 $this->title = 'Архив прошедших сеансов видеосвязи';
-$this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
-$this->params['breadcrumbs'][] = "Архив";
 
 $about = "Архив сеансов видеосвязи за все время ведения данного журнала";
 $add_hint = 'Добавить сеанс';
 $dell_hint = 'Удалить выделенные сеансы';
 
 ?>
-
-<div class="vks-pannel">
-  <h3><?= Html::encode($this->title) ?>
-    <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-  </h3>
-</div>
-
-<style>
-  /*td {*/
-  /*text-align: center;*/
-  /*}*/
-  #main-table tbody td {
-    font-size: 12px;
-  }
-  .h-title {
-    font-size: 18px;
-    color: #1e6887;
-  }
-  td .fa {
-    font-size: 22px;
-  }
-
-
-</style>
 
 <div class="row">
   <div class="">
@@ -77,7 +53,11 @@ $dell_hint = 'Удалить выделенные сеансы';
 
   // ************************* Работа таблицы **************************************
 
+  var table;
   $(document).ready(function () {
+
+    $('[data-toggle="tooltip"]').tooltip();
+
     $.fn.dataTable.pipeline = function (opts) {
       var conf = $.extend({
         pages: 2,     // number of pages to cache
@@ -162,10 +142,8 @@ $dell_hint = 'Удалить выделенные сеансы';
         settings.clearCache = true;
       });
     });
-  });
 
-  $(document).ready(function () {
-    var table = $('#main-table').DataTable({
+    table = $('#main-table').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
@@ -257,7 +235,7 @@ $dell_hint = 'Удалить выделенные сеансы';
             action: function () {
               var $form = $("#w0"),
                 data = $form.data("yiiActiveForm");
-              $.each(data.attributes, function() {
+              $.each(data.attributes, function () {
                 this.status = 3;
               });
               $form.yiiActiveForm("validate");
@@ -283,7 +261,9 @@ $dell_hint = 'Удалить выделенные сеансы';
                 } else {
                   $('#vks-duration-work').val('');
                 }
-                $("#w0").submit();
+                var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс обновлен';
+                var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
+                sendFormData(url, table, $form, yText, nText);
               }
             }
           },
@@ -322,12 +302,10 @@ $dell_hint = 'Удалить выделенные сеансы';
         }
       });
     });
-  });
 
-  // Работа таблицы -> событие выделения и снятия выделения
+    // Работа таблицы -> событие выделения и снятия выделения
 
-  $(document).ready(function () {
-    var table = $('#main-table').DataTable();
+    table = $('#main-table').DataTable();
     table.on('select', function (e, dt, type, indexes) {
       if (type === 'row') {
         $('#delete').removeAttr('disabled');
@@ -339,11 +317,9 @@ $dell_hint = 'Удалить выделенные сеансы';
         $('#delete').attr('disabled', true);
       }
     });
-  });
 
-  //********************** Удаление записей ***********************************
+    //********************** Удаление записей ***********************************
 
-  $(document).ready(function () {
     $('#delete').click(function (event) {
       event.preventDefault();
       var url = "/vks/sessions/delete";
@@ -373,73 +349,52 @@ $dell_hint = 'Удалить выделенные сеансы';
         }
       });
     });
+  });
 
-
-    function deleteProcess(url) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var table = $('#main-table').DataTable();
-      var data = table.rows({selected: true}).data();
-      var ar = [];
-      var count = data.length;
-      for (var i = 0; i < count; i++) {
-        ar[i] = data[i][0];
-      }
-      jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Ваш запрос выполняется!',
-        buttons: false,
-        closeIcon: false,
-        confirmButtonClass: 'hide'
-      });
-      $.ajax({
-        url: url,
-        method: 'post',
-        dataType: "JSON",
-        data: {jsonData: ar, _csrf: csrf},
-      }).done(function (response) {
-        if (response != false) {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-thumbs-up',
-            title: 'Успех!',
-            content: 'Ваш запрос выполнен.',
-            type: 'green',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-success',
-                action: function () {
-                  $("#main-table").DataTable().clearPipeline().draw();
-                  $('#delete').attr('disabled', true);
-                }
+  function deleteProcess(url) {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    var data = table.rows({selected: true}).data();
+    var ar = [];
+    var count = data.length;
+    for (var i = 0; i < count; i++) {
+      ar[i] = data[i][0];
+    }
+    jc = $.confirm({
+      icon: 'fa fa-cog fa-spin',
+      title: 'Подождите!',
+      content: 'Ваш запрос выполняется!',
+      buttons: false,
+      closeIcon: false,
+      confirmButtonClass: 'hide'
+    });
+    $.ajax({
+      url: url,
+      method: 'post',
+      dataType: "JSON",
+      data: {jsonData: ar, _csrf: csrf},
+    }).done(function (response) {
+      if (response != false) {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-thumbs-up',
+          title: 'Успех!',
+          content: 'Ваш запрос выполнен.',
+          type: 'green',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-success',
+              action: function () {
+                table.clearPipeline().draw();
+                $('#delete').attr('disabled', true);
               }
             }
-          });
-        } else {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-exclamation-triangle',
-            title: 'Неудача!',
-            content: 'Запрос не выполнен. Что-то пошло не так.',
-            type: 'red',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-danger',
-                action: function () {
-                }
-              }
-            }
-          });
-        }
-      }).fail(function () {
+          }
+        });
+      } else {
         jc.close();
         jc = $.confirm({
           icon: 'fa fa-exclamation-triangle',
@@ -448,7 +403,7 @@ $dell_hint = 'Удалить выделенные сеансы';
           type: 'red',
           buttons: false,
           closeIcon: false,
-          autoClose: 'ok|4000',
+          autoClose: 'ok|8000',
           confirmButtonClass: 'hide',
           buttons: {
             ok: {
@@ -458,11 +413,28 @@ $dell_hint = 'Удалить выделенные сеансы';
             }
           }
         });
+      }
+    }).fail(function () {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-exclamation-triangle',
+        title: 'Неудача!',
+        content: 'Запрос не выполнен. Что-то пошло не так.',
+        type: 'red',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|4000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+            }
+          }
+        }
       });
-    }
+    });
+  }
 
-    $('[data-toggle="tooltip"]').tooltip();
-
-  });
 
 </script>

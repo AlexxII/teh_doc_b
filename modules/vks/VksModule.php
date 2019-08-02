@@ -7,7 +7,7 @@ use yii\filters\AccessControl;
 class VksModule extends \yii\base\Module
 {
 
-  public $layout = 'vks_layout_ex.php';
+  public $layout = 'vks_layout.php';
 
   public $defaultRoute = '/sessions';
 

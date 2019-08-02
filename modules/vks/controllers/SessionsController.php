@@ -18,7 +18,7 @@ use app\modules\vks\models\VksTypes;
 
 class SessionsController extends Controller
 {
-  public $layout = 'vks_layout_ex';
+  public $layout = 'vks_layout';
 
   public function behaviors()
   {
@@ -32,7 +32,7 @@ class SessionsController extends Controller
             'roles' => ['superAdmin']      // доступ только с ролью superAdmin
           ],[
             'allow' => false,
-            'actions' => ['sessions-ex', 'archive-ex', 'delete-completely', 'delete-single-completely'],
+            'actions' => ['sessions-ex', 'delete-completely', 'delete-single-completely'],
             'roles' => ['@', "?"]
           ],
           [
@@ -227,6 +227,7 @@ class SessionsController extends Controller
   {
     $model = new VksSessions(['scenario' => VksSessions::SCENARIO_CREATE]);
     if ($model->load(Yii::$app->request->post())) {
+      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       $date = date('Y-m-d H:i:s');
       $result = false;
       $model->vks_record_create = $date;
@@ -261,9 +262,23 @@ class SessionsController extends Controller
         $result = $model->save();
       }
       if ($result) {
-        return $this->redirect('index');
+        return [
+          'data' => [
+            'success' => true,
+            'data' => 'model save',
+            'message' => 'Page load',
+          ],
+          'code' => 1,
+        ];
       } else {
-        return var_dump($model->errors);
+        return [
+          'data' => [
+            'success' => false,
+            'data' => $model->errors,
+            'message' => 'Page load',
+          ],
+          'code' => 0,
+        ];
       }
     }
     return $this->renderAjax('_form_ajax', [
@@ -298,14 +313,28 @@ class SessionsController extends Controller
     $model->scenario = VksSessions::SCENARIO_CREATE;
 
     if ($model->load(Yii::$app->request->post())) {
+      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       $currentTime = new \DateTime();
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       if ($model->save()) {
         $this->logVks($model->id, "info","Обновил информацию о предстоящем сеансе ВКС");
-        Yii::$app->session->setFlash('success', 'Запись успешно обновлена!');
-        return $this->redirect('index');
+        return [
+          'data' => [
+            'success' => true,
+            'data' => 'Model save',
+            'message' => 'Page load',
+          ],
+          'code' => 1,
+        ];
       } else {
-        Yii::$app->session->setFlash('error', 'Что-то не так.');
+        return [
+          'data' => [
+            'success' => false,
+            'data' => $model->errors,
+            'message' => 'Page load',
+          ],
+          'code' => 0,
+        ];
       }
     }
     return $this->renderAjax('_form_ajax', [
@@ -339,15 +368,30 @@ class SessionsController extends Controller
     $model = VksSessions::findOne(['id' => $id]);
     $model->scenario = VksSessions::SCENARIO_CONFIRM;
     if ($model->load(Yii::$app->request->post())) {
+      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       $currentTime = new \DateTime();
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
         $this->logVks($model->id, "info", "Подтвердил прошедший сеанс ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
-        return $this->redirect('index');
+        return [
+          'data' => [
+            'success' => true,
+            'data' => 'Model save',
+            'message' => 'Page load',
+          ],
+          'code' => 1,
+        ];
       } else {
-        Yii::$app->session->setFlash('error', 'Что-то не так.');
+        return [
+          'data' => [
+            'success' => false,
+            'data' => $model->errors,
+            'message' => 'Page load',
+          ],
+          'code' => 0,
+        ];
       }
     }
     return $this->renderAjax('_form_confirm_ajax', [
@@ -382,11 +426,11 @@ class SessionsController extends Controller
   {
     $model = new VksSessions(['scenario' => VksSessions::SCENARIO_CONFIRM]);
     if ($model->load(Yii::$app->request->post())) {
+      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       $currentTime = new \DateTime();
       $model->vks_record_create = date('Y-m-d H:i:s');
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
-
       if ($model->save()) {
         $this->logVks($model->id, "info", "Добавил запись о прошедшем сеансе ВКС.");
         Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
@@ -405,15 +449,29 @@ class SessionsController extends Controller
     $model = VksSessions::findOne(['id' => $id]);
     $model->scenario = VksSessions::SCENARIO_CONFIRM;
     if ($model->load(Yii::$app->request->post())) {
+      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       $currentTime = new \DateTime();
       $model->vks_record_update = $currentTime->format('Y-m-d H:i:s');
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
         $this->logVks($model->id, "info","Обновил запись о прошедшем сеансе ВКС.");
-        Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
-        return $this->redirect('archive');
+        return [
+          'data' => [
+            'success' => true,
+            'data' => 'Model save',
+            'message' => 'Page load',
+          ],
+          'code' => 1,
+        ];
       } else {
-        Yii::$app->session->setFlash('error', 'Что-то не так.');
+        return [
+          'data' => [
+            'success' => false,
+            'data' => $model->errors,
+            'message' => 'Page load',
+          ],
+          'code' => 0,
+        ];
       }
     }
     return $this->renderAjax('_form_confirm_ajax', [
@@ -497,6 +555,22 @@ class SessionsController extends Controller
     ]);
   }
 
+  public function actionArchive()
+  {
+    $this->layout = 'vks_ex_layout.php';
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Архив';
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('archive'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
+  }
+
+
   // на удалении выставляется флаг vks_cancel
   public function actionDelete()
   {
@@ -528,15 +602,7 @@ class SessionsController extends Controller
     return false;
   }
 
-  public function actionArchive()
-  {
-    return $this->render('archive');
-  }
 
-  public function actionAnalysis()
-  {
-    return $this->render('analysis');
-  }
 
   protected function findModel($id)
   {

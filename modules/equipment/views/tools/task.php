@@ -45,8 +45,7 @@ $about = "Данный раздел позволяет планировать р
                 <label style="font-weight: 500">
                   <input class="ch" id="consolidated-feature" type="checkbox" data-check='consolidated-check'
                          data-id="<?= $model->id ?>" <?php if ($model->settings->eq_task) echo 'checked' ?> > В задании
-                  на
-                  обновление
+                  на обновление
                 </label>
                 <span class="status-indicator"></span>
               </div>

@@ -176,7 +176,8 @@ $del_multi_nodes = 'Удалить С вложениями';
           </div>
         </div>
         <div class="menu-list">
-          <div class="menu-list-about" data-url="/equipment/tools/categories" data-uri="/equipment/tools/categories-view">
+          <div class="menu-list-about" data-url="/equipment/tools/categories"
+               data-uri="/equipment/tools/categories-view">
             <div>
               <svg width="50" height="50" viewBox="0 0 25 25">
                 <path d="M18 21H4V7H2v14c0 1.1.9 2 2 2h14v-2zm3-4V3c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2zm-2 0H8V3h11v14z"></path>
@@ -191,7 +192,8 @@ $del_multi_nodes = 'Удалить С вложениями';
           <div class="menu-list-about" data-url="/equipment/tools/placement" data-uri="/equipment/tools/placement-view">
             <div>
               <svg width="50" height="50" viewBox="0 0 25 25">
-                <path fill="none" d="M0 0h24v24H0V0z"></path><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"></path>
+                <path fill="none" d="M0 0h24v24H0V0z"></path>
+                <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"></path>
               </svg>
             </div>
             <div class="menu-point-footer">
@@ -208,6 +210,9 @@ $del_multi_nodes = 'Удалить С вложениями';
                data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
         </h3>
       </div>
+      <button id="testtt">111111111</button>
+      <button id="testtt_tt">Посчитать</button>
+      <button id="testtt_t">Забить</button>
 
       <div class="row">
         <div id="tools-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
@@ -273,7 +278,7 @@ $del_multi_nodes = 'Удалить С вложениями';
 
   var tid, ul;
 
-  function loadContent(url, uri) {
+  function loadExContent(url, uri) {
     var node = $("#fancyree_w0").fancytree("getActiveNode");
     if (node != undefined) {
       tid = node.data.id;
@@ -321,9 +326,33 @@ $del_multi_nodes = 'Удалить С вложениями';
 
   $(document).ready(function () {
 
-    console.log($(location).attr('pathname'));
+    // console.log($(location).attr('pathname'));
     // if (window.location.href == )
 
+    $('#testtt_t').on('click', function () {
+      console.log('fuck');
+      $("#fancyree_w0").fancytree('option', 'childcounter', false)
+    });
+    var childcounter = {
+      deep: true,
+      hideZeros: true,
+      hideExpanded: true
+    };
+
+    $('#testtt_tt').on('click', function () {
+      console.log('count');
+      $("#fancyree_w0").fancytree('option', 'childcounter', true)
+    });
+
+    $('#testtt').on('click', function () {
+      // var rex = new RegExp("foo", "i");
+      // var rex = new RegExp('Монитор');
+      $("#fancyree_w0").fancytree("getTree").filterNodes(function (node) {
+        console.log(node);
+        return node;
+        // return rex.test(node.title);
+      });
+    });
 
     $('.menu-link').on('click', loadControls);
 
@@ -382,7 +411,7 @@ $del_multi_nodes = 'Удалить С вложениями';
       source: {
         url: main_url
       },
-      extensions: ['filter'],
+      extensions: ['filter', 'childcounter'],
       quicksearch: true,
       minExpandLevel: 3,
       wide: {
@@ -520,7 +549,7 @@ $del_multi_nodes = 'Удалить С вложениями';
     $(".menu-list-about").on('click', function (e) {
       var url = $(this).data('url');
       var uri = $(this).data('uri');
-      loadContent(url, uri);
+      loadExContent(url, uri);
     })
 
   });
@@ -582,9 +611,4 @@ $del_multi_nodes = 'Удалить С вложениями';
     }
   });
 
-</script>
-
-<script>
-  $.widget.bridge('uibutton', $.ui.button);
-  $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>

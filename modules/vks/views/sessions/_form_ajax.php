@@ -4,39 +4,9 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 use app\modules\vks\assets\VksFormAsset;
-//use app\assets\AirDatepickerAsset;
 use app\assets\BootstrapDatepickerAsset;
 
-?>
-
-<style>
-  #w0 .fa {
-    font-size: 15px;
-    color: #FF0000;
-  }
-  #w0 .nonreq {
-    color: #1e6887;
-  }
-  .select-selected {
-    padding-left: 40px;
-  }
-  .form-group {
-    margin-bottom: 5px;
-  }
-  .control-label {
-    font-size: 14px;
-  }
-  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    background-color: #fff;
-    opacity: 1;
-  }
-</style>
-
-
-<?php
-
 VksFormAsset::register($this);
-//AirDatepickerAsset::register($this);
 BootstrapDatepickerAsset::register($this);
 
 $vks_date_hint = 'Обязательное поле! Укажите дату проведения сеанса ВКС';
@@ -52,7 +22,7 @@ $vks_employee_hint = 'Обязательное поле! Укажите ';
 $vks_add_combined = "Добавить совмещенный сеанс";
 ?>
 
-<div class="">
+<div class="form-up-session">
   <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
     <div>
@@ -112,8 +82,6 @@ $vks_add_combined = "Добавить совмещенный сеанс";
               'template' => '{label} 
               <sup class="h-title fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_type_hint . '"></sup>
-              <sup class="h-title fa fa-plus-circle adddd" aria-hidden="true" style="color: #777777;cursor: pointer"
-                data-toggle="tooltip" data-placement="top" title="' . $vks_type_add_hint . '"></sup>
                 {input}{hint}'
             ])->dropDownList($model->vksTypesList, ['data-name' => 'vks_type', 'class' => 'vks-type form-control',
               'prompt' => ['text' => 'Выберите',
@@ -149,8 +117,6 @@ $vks_add_combined = "Добавить совмещенный сеанс";
     <div class="col-md-12 col-lg-12"
          style="border: dashed 1px #0c0c0c;border-radius: 4px;padding: 20px 0px 10px 0px;margin-bottom: 10px;position: relative">
       <span class="text-muted" style="position: absolute;top:5px;right:10px;font-size: 10px">
-      <sup class="h-title fa fa-plus-circle adddd" aria-hidden="true" style="color: #777777;cursor: pointer"
-         data-toggle="tooltip" data-placement="top" title="' . $vks_type_add_hint . '"></sup>
       Старший абонент</span>
       <div class="form-group col-md-5 col-lg-5">
         <?= $form->field($model, 'vks_subscriber_name', [
@@ -244,13 +210,12 @@ $vks_add_combined = "Добавить совмещенный сеанс";
     '        </i></span>\n';
 
   var newDiv = '' +
-    '        <div class="form-group col-md-5 col-lg-5  dynamic" style="margin-top: 10px">' +
+    '        <div class="form-group col-md-5 col-lg-5 dynamic" style="margin-top: 10px">' +
     '          <label class="control-label">Тип ВКС:</label>' +
     '        </div>' +
     '        <div class="form-group col-md-7 col-lg-7" style="margin-top: 10px">' +
     '          <label class="place-label">Место проведения ВКС:</label>' +
     '        </div>';
-
 
 
   var mainCounter = 1;
@@ -263,7 +228,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
     $('.adddd').on('click', function (e) {
       e.preventDefault();
       var uri = 'vks-subscribes';
-      var url = '/vks/control/' + uri +'/index';
+      var url = '/vks/control/' + uri + '/index';
       var size = 'xlarge';
       var title = 'Тип ВКС';
       c = $.confirm({
@@ -286,9 +251,37 @@ $vks_add_combined = "Добавить совмещенный сеанс";
           cancel: {
             text: 'НАЗАД',
             action: function () {
-              console.log(5555555);
+              $.ajax({
+                type: 'get',
+                url: '/vks/sessions/subscribers-msk',
+                autoFocus: true,
+                success: function (data) {
+                  var mskNames = $.parseJSON(data);
+                  $("#subscriber-name").autocomplete({
+                    source: mskNames,
+                    focus: function (event, ui) {
+                      // prevent autocomplete from updating the textbox
+                      event.preventDefault();
+                      // manually update the textbox
+                      $(this).val(ui.item.label);
+                    },
+                    select: function (event, ui) {
+                      // prevent autocomplete from updating the textbox
+                      event.preventDefault();
+                      // manually update the textbox and hidden field
+                      $(this).val(ui.item.label);
+                      $('#subscriber-office').val(ui.item.value);
+                      var text = $('#subscriber-office').find("option:selected").text();
+                      $('#vks_subscriber_office_text').val(text);              // т.к. событие всавки, а не изменения
+                    }
+                  });
+                },
+                error: function (data) {
+                  console.log('error occure');
+                }
+              });
             }
-            
+
           }
         }
       });
@@ -400,25 +393,23 @@ $vks_add_combined = "Добавить совмещенный сеанс";
       autoFocus: true,
       success: function (data) {
         var mskNames = $.parseJSON(data);
-        $(function () {
-          $("#subscriber-name").autocomplete({
-            source: mskNames,
-            focus: function (event, ui) {
-              // prevent autocomplete from updating the textbox
-              event.preventDefault();
-              // manually update the textbox
-              $(this).val(ui.item.label);
-            },
-            select: function (event, ui) {
-              // prevent autocomplete from updating the textbox
-              event.preventDefault();
-              // manually update the textbox and hidden field
-              $(this).val(ui.item.label);
-              $('#subscriber-office').val(ui.item.value);
-              var text = $('#subscriber-office').find("option:selected").text();
-              $('#vks_subscriber_office_text').val(text);              // т.к. событие всавки, а не изменения
-            }
-          });
+        $("#subscriber-name").autocomplete({
+          source: mskNames,
+          focus: function (event, ui) {
+            // prevent autocomplete from updating the textbox
+            event.preventDefault();
+            // manually update the textbox
+            $(this).val(ui.item.label);
+          },
+          select: function (event, ui) {
+            // prevent autocomplete from updating the textbox
+            event.preventDefault();
+            // manually update the textbox and hidden field
+            $(this).val(ui.item.label);
+            $('#subscriber-office').val(ui.item.value);
+            var text = $('#subscriber-office').find("option:selected").text();
+            $('#vks_subscriber_office_text').val(text);              // т.к. событие всавки, а не изменения
+          }
         });
       },
       error: function (data) {

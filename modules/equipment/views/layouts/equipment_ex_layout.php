@@ -1,43 +1,15 @@
-<?php
-
-use yii\helpers\Html;
-
-use yii\bootstrap\BootstrapPluginAsset;
-
-use app\modules\equipment\asset\EquipmentAsset;
-
-use app\assets\AppAsset;
-use app\assets\JConfirmAsset;
-
-//AppAsset::register($this);    // регистрация ресурсов всего приложения
-//JConfirmAsset::register($this);
-//BootstrapPluginAsset::register($this);
-//EquipmentAsset::register($this);
-
-?>
-
 <style>
   .app-settings  {
     font-weight: 400 !important;
-    margin: 12px 0px 0px 30px !important;
-  }
-  #go-back {
-    width: 40px;
-    height: 40px;
+    margin: 12px 0 0 30px !important;
   }
   #main-wrap {
-    margin-top: 0px !important;
-
+    margin-top: 0 !important;
   }
   #main-wrap h3 {
     margin-top: 10px;
   }
 </style>
-
-
-<?php $this->beginPage() ?>
-
-<?php $this->beginBody() ?>
 
 <div id="app-wrap">
   <nav class="navigation navigation-default">
@@ -73,10 +45,6 @@ use app\assets\JConfirmAsset;
   </div>
 </div>
 
-<?php $this->endBody() ?>
-<?php $this->endPage() ?>
-
-
 <script>
   $(document).ready(function () {
 
@@ -90,6 +58,7 @@ use app\assets\JConfirmAsset;
       }).done(function (response) {
         $('body').html(response);
         window.history.pushState("object or string", "Title", "/equipment/tools");
+        clickMenu();
       }).fail(function () {
         console.log('fail');
       });

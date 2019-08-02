@@ -2,50 +2,17 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\BootstrapPluginAsset;
+use app\assets\NotyAsset;
 
 $about = "Журнал предстоящих сеансов видеосвязи";
 $add_hint = 'Добавить предстоящий сеанс';
 $dell_hint = 'Удалить выделенные сеансы';
 $date_about = "Выберите период";
 
+NotyAsset::register($this);
 BootstrapPluginAsset::register($this);
 
 ?>
-
-<style>
-  #main-table tbody td {
-    font-size: 12px;
-  }
-  strong {
-    font-size: 14px;
-    font-weight: 700;
-  }
-  #vks-dates {
-    margin-top: 13px;
-    width: 245px;
-  }
-  #delete-wrap {
-    margin: 10px 10px 0px 0px;
-    cursor: pointer;
-  }
-  #delete-wrap .fa {
-    font-size: 28px;
-    color: #ed1d1a !important;
-  }
-  .jconfirm {
-    z-index: 9 !important;
-  }
-  i.check {
-    display: inline-block;
-    width: 15px;
-    height: 30px;
-    margin: 10px 20px 3px;
-    border: solid #fff;
-    border-width: 0 4px 4px 0;
-    transform: rotate(45deg);
-  }
-
-</style>
 
 <div class="row">
 
@@ -60,6 +27,15 @@ BootstrapPluginAsset::register($this);
       <a id="add-session-ex" class="fab-button" title="Добавить прошедший сеанс"
          style="cursor: pointer; background-color: #4CAF50">
         <i class='check'></i>
+      </a>
+    </div>
+    <div id="delete-wrap" style="position: absolute; top: 70px; right:-60px;display: none">
+      <a id="del-session-ex" class="fab-button" title="Удалить выделенный(е) сеанс(ы)"
+         style="cursor: pointer; background-color: red">
+        <svg width="50" height="50" viewBox="0 0 24 24">
+          <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
+          <path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>
+        </svg>
       </a>
     </div>
 
@@ -93,59 +69,37 @@ BootstrapPluginAsset::register($this);
 </div>
 <br>
 
-
-<!--<div id="toolbar-options" class="hidden">
-  <a href="#"><i class="fa fa-plane"></i></a>
-  <a href="#"><i class="fa fa-car"></i></a>
-  <a href="#"><i class="fa fa-bicycle"></i></a>
-</div>
--->
 <script>
-
-/*
-  $(document).ready(function () {
-    $('#add-session').toolbar({
-      content: '#toolbar-options',
-    });
-  });
-*/
-
 
   var periodInput = '<input class="form-control input-sm" id="vks-dates" type="text" data-range="true"' +
     'data-multiple-dates-separator=" - " placeholder="Период отображения"/>';
 
-  var trashBtn = '<div id="delete-wrap" data-toggle="tooltip" data-placement="bottom" title="Удалить выделенные сеансы"' +
-    'style="display: none"><i class="fa fa-trash" aria-hidden="true"></i></div>';
-
-  $(document).ready(function () {
-    $('#right-custom-data').html(periodInput);
-    $('#right-custom-data-ex').html(trashBtn);
-    // $('#left-custom-data').html(addSession);
-    // $('#left-custom-data').html(addd);
-
-
-    /*
-        $('#vks-dates').datepicker({
-          clearButton: true,
-          toggleSelected: false,
-          onHide: function (dp, animationCompleted) {
-            if (animationCompleted) {
-              var range = $('#vks-dates').val();
-              var stDate = range.substring(6, 10) + '-' + range.substring(3, 5) + '-' + range.substring(0, 2);
-              var eDate = range.substring(19, 24) + '-' + range.substring(16, 18) + '-' + range.substring(13, 15);
-              $(".start-date").val(stDate);
-              $(".end-date").val(eDate);
-              $("#main-table").DataTable().clearPipeline().draw();
-            }
+  /*
+      $('#vks-dates').datepicker({
+        clearButton: true,
+        toggleSelected: false,
+        onHide: function (dp, animationCompleted) {
+          if (animationCompleted) {
+            var range = $('#vks-dates').val();
+            var stDate = range.substring(6, 10) + '-' + range.substring(3, 5) + '-' + range.substring(0, 2);
+            var eDate = range.substring(19, 24) + '-' + range.substring(16, 18) + '-' + range.substring(13, 15);
+            $(".start-date").val(stDate);
+            $(".end-date").val(eDate);
+            $("#main-table").DataTable().clearPipeline().draw();
           }
-        });
-    */
+        }
+      });
+  */
 
-  });
-
-  // ************************* Работа таблицы **************************************
+  var table;
 
   $(document).ready(function () {
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $('#right-custom-data').html(periodInput);
+
+    // ************************* Работа таблицы **************************************
 
     $.fn.dataTable.pipeline = function (opts) {
       var conf = $.extend({
@@ -231,10 +185,8 @@ BootstrapPluginAsset::register($this);
         settings.clearCache = true;
       });
     });
-  });
 
-  $(document).ready(function () {
-    var table = $('#main-table').DataTable({
+    table = $('#main-table').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
@@ -251,7 +203,6 @@ BootstrapPluginAsset::register($this);
           // $(nRow.cells[0]).css('background-repeat', 'no-repeat');
           // $(nRow.cells[0]).css('background-size', '20px 20px');
           // $(nRow.cells[0]).css('background-position', '90% 5%');
-
         }
         if (moment().isAfter(dt, 'day')) {
           $('td', nRow).css('background-color', '#faeeec');
@@ -297,7 +248,6 @@ BootstrapPluginAsset::register($this);
             "<a href='#' id='edit' class='fa fa-edit' style='padding-right: 5px' title='Обновить'></a>" +
             "<a href='#' id='view' class='fa fa-info ' title='Подробности' style='padding-right: 5px'></a>" +
             "<a href='#' id='confirm-session' class='fa fa-calendar-check-o ' title='Подтвердить сеанс' style='padding-right: 5px'></a>"
-          // "<a href='#' class='fa fa-calendar-minus-o abort' title='Отменить сеанс'></a>"
         }, {
           "orderable": false,
           "className": 'select-checkbox',
@@ -358,8 +308,6 @@ BootstrapPluginAsset::register($this);
           return $.ajax({
             url: url,
             method: 'get'
-          }).done(function (response) {
-            // console.log(response);
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
           });
@@ -388,7 +336,9 @@ BootstrapPluginAsset::register($this);
                 $('.vks-date').val(d);
                 var d = $('.vks_receive-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
                 $('.vks_receive-date').val(d);
-                $("#w0").submit();
+                var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс обновлен';
+                var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
+                sendFormData(url, table, $form, yText, nText);
               }
             }
           },
@@ -483,7 +433,9 @@ BootstrapPluginAsset::register($this);
                 } else {
                   $('#vks-duration-work').val('');
                 }
-                $("#w0").submit();
+                var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс подтвержден';
+                var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Подтвердить не удалось';
+                sendFormData(url, table, $form, yText, nText);
               }
             }
           },
@@ -493,12 +445,9 @@ BootstrapPluginAsset::register($this);
         }
       });
     });
-  });
 
-  // Работа таблицы -> событие выделения и снятия выделения
+    // Работа таблицы -> событие выделения и снятия выделения
 
-  $(document).ready(function () {
-    var table = $('#main-table').DataTable();
     table.on('select', function (e, dt, type, indexes) {
       if (type === 'row') {
         $('#delete-wrap').show();
@@ -510,12 +459,10 @@ BootstrapPluginAsset::register($this);
         $('#delete-wrap').hide();
       }
     });
-  });
 
 
-  //********************** Удаление записей ***********************************
+    //********************** Удаление записей ***********************************
 
-  $(document).ready(function () {
     $('#delete-wrap').click(function (event) {
       event.preventDefault();
       var url = "/vks/sessions/delete";
@@ -547,98 +494,7 @@ BootstrapPluginAsset::register($this);
     });
 
 
-    function deleteProcess(url) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var table = $('#main-table').DataTable();
-      var data = table.rows({selected: true}).data();
-      var ar = [];
-      var count = data.length;
-      for (var i = 0; i < count; i++) {
-        ar[i] = data[i][0];
-      }
-      jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Ваш запрос выполняется!',
-        buttons: false,
-        closeIcon: false,
-        confirmButtonClass: 'hide'
-      });
-      $.ajax({
-        url: url,
-        method: 'post',
-        dataType: "JSON",
-        data: {jsonData: ar, _csrf: csrf},
-      }).done(function (response) {
-        if (response != false) {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-thumbs-up',
-            title: 'Успех!',
-            content: 'Ваш запрос выполнен.',
-            type: 'green',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-success',
-                action: function () {
-                  $("#main-table").DataTable().clearPipeline().draw();
-                  $('#delete-wrap').hide();
-                }
-              }
-            }
-          });
-        } else {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-exclamation-triangle',
-            title: 'Неудача!',
-            content: 'Запрос не выполнен. Что-то пошло не так.',
-            type: 'red',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-danger',
-                action: function () {
-                }
-              }
-            }
-          });
-        }
-      }).fail(function () {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-exclamation-triangle',
-          title: 'Неудача!',
-          content: 'Запрос не выполнен. Что-то пошло не так.',
-          type: 'red',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|4000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-danger',
-              action: function () {
-              }
-            }
-          }
-        });
-      });
-    }
-
-    $('[data-toggle="tooltip"]').tooltip();
-
-  });
-
-  // создание предстоящего сеанса
-  $(document).ready(function () {
+    // создание предстоящего сеанса
     $('#add-session').click(function (event) {
       event.preventDefault();
       var url = "/vks/sessions/create-up-session-ajax";
@@ -678,7 +534,9 @@ BootstrapPluginAsset::register($this);
                 $('.vks-date').val(d);
                 var d = $('.vks_receive-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
                 $('.vks_receive-date').val(d);
-                $("#w0").submit();
+                var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс добавлен';
+                var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить не удалось';
+                sendFormData(url, table, $form, yText, nText);
               }
             }
           },
@@ -689,6 +547,8 @@ BootstrapPluginAsset::register($this);
       });
     });
 
+    // создание прошедшего сеанса
+
     $('#add-session-ex').click(function (event) {
       event.preventDefault();
       var url = "/vks/sessions/create-session-ajax";
@@ -698,8 +558,6 @@ BootstrapPluginAsset::register($this);
           return $.ajax({
             url: url,
             method: 'get'
-          }).done(function (response) {
-            // console.log(response);
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
           });
@@ -743,7 +601,9 @@ BootstrapPluginAsset::register($this);
                 } else {
                   $('#vks-duration-work').val('');
                 }
-                $("#w0").submit();
+                var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс подтвержден';
+                var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
+                sendFormData(url, table, $form, yText, nText);
               }
             }
           },
@@ -753,9 +613,94 @@ BootstrapPluginAsset::register($this);
         }
       });
     });
-
-
   });
+  
+
+  function deleteProcess(url) {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    var data = table.rows({selected: true}).data();
+    var ar = [];
+    var count = data.length;
+    for (var i = 0; i < count; i++) {
+      ar[i] = data[i][0];
+    }
+    jc = $.confirm({
+      icon: 'fa fa-cog fa-spin',
+      title: 'Подождите!',
+      content: 'Ваш запрос выполняется!',
+      buttons: false,
+      closeIcon: false,
+      confirmButtonClass: 'hide'
+    });
+    $.ajax({
+      url: url,
+      method: 'post',
+      dataType: "JSON",
+      data: {jsonData: ar, _csrf: csrf},
+    }).done(function (response) {
+      if (response != false) {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-thumbs-up',
+          title: 'Успех!',
+          content: 'Ваш запрос выполнен.',
+          type: 'green',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-success',
+              action: function () {
+                $("#main-table").DataTable().clearPipeline().draw();
+                $('#delete-wrap').hide();
+              }
+            }
+          }
+        });
+      } else {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
+      }
+    }).fail(function () {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-exclamation-triangle',
+        title: 'Неудача!',
+        content: 'Запрос не выполнен. Что-то пошло не так.',
+        type: 'red',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|4000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+            }
+          }
+        }
+      });
+    });
+  }
+
 
 
 </script>

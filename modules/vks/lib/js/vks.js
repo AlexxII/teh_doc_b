@@ -1,11 +1,6 @@
 $(document).ready(function () {
   $('#push-it').bind('click', clickMenu);
 
-  $(".menu-list-about").on('click', function (e) {
-    var url = $(this).data('url');
-    location.href = url;
-  })
-
 });
 
 function clickMenu() {
@@ -64,3 +59,40 @@ $(window).resize(function () {
     closeSlider();
   }
 });
+
+
+/* form */
+function sendFormData(url, table, form, yTest, nTest) {
+  $.ajax({
+    type: 'POST',
+    url: url,
+    dataType: 'json',
+    data: form.serialize(),
+    success: function (response) {
+      initNoty(yTest, 'success');
+      table.clearPipeline().draw();
+      $('#delete-wrap').hide();
+    },
+    error: function (response) {
+      console.log(response.data.data);
+      initNoty(nTest, 'error');
+    }
+  });
+}
+
+function initNoty(text, type) {
+  new Noty({
+    type: type,
+    theme: 'mint',
+    text: text,
+    progressBar: true,
+    timeout: '4000',
+    closeWith: ['click'],
+    killer: true,
+    animation: {
+      open: 'animated noty_effects_open noty_anim_out', // Animate.css class names
+      close: 'animated noty_effects_close noty_anim_in' // Animate.css class names
+    }
+  }).show();
+}
+

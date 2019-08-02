@@ -6,36 +6,6 @@ use yii\widgets\ActiveForm;
 use app\modules\vks\assets\VksFormAsset;
 use app\assets\BootstrapDatepickerAsset;
 
-?>
-
-<style>
-  #w0 .fa {
-    font-size: 15px;
-    color: #FF0000;
-  }
-  #w0 .nonreq {
-    color: #1e6887;
-  }
-  .select-selected {
-    padding-left: 40px;
-  }
-  .form-group {
-    margin-bottom: 5px;
-  }
-  .control-label {
-    font-size: 14px;
-  }
-  .right {
-    text-align: right;
-  }
-  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    background-color: #fff;
-    opacity: 1;
-  }
-</style>
-
-<?php
-
 \yii\widgets\MaskedInputAsset::register($this);
 VksFormAsset::register($this);
 BootstrapDatepickerAsset::register($this);
@@ -53,7 +23,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
 
 ?>
 
-<div>
+<div class="form-confirm-session">
   <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
 
@@ -320,19 +290,15 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
           }
         }
       );
-    })
-  });
+    });
 
-  $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
     $('#w1-tree-input-menu').on('change', function (e) {
       var text = $('#w1-tree-input').text();
       $('#equipment-eq_title').val(text);
     });
-  });
 
-  $(document).ready(function () {
     $('.fact-date').datepicker({
       format: 'd MM yyyy г.',
       autoclose: true,
@@ -342,12 +308,9 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
       clearBtn: true,
       todayHighlight: true,
       daysOfWeekHighlighted: [0, 6]
+    });
 
-    })
-  });
-
-  // дублирование времени поля окончания тех.сеанса
-  $(document).ready(function () {
+    // дублирование времени поля окончания тех.сеанса
     if ($('#teh-end').val() === '') {
       var workStart = (moment($('#work-start').val(), 'HH:mm'));
       var tehStart = (moment($('#teh-start').val(), 'HH:mm'));
@@ -358,42 +321,13 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
         $('#vks-duration-teh').val(duration);
       }
     }
-  });
 
-  $(document).ready(function () {
     if ($('.fact-date').val()) {
       var date = new Date($('.fact-date').val());
       moment.locale('ru');
       $('.fact-date').datepicker('update', moment(date).format('D MM YYYY'));
     }
-  });
 
-  //преобразование дат перед отправкой
-  $(document).ready(function () {
-    $('#w0').submit(function () {
-      var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
-      $('.fact-date').val(d);
-      var tehStart = (moment($('#teh-start').val(), 'HH:mm'));
-      var tehEnd = (moment($('#teh-end').val(), 'HH:mm'));
-      var duration = moment.duration(tehEnd.diff(tehStart)).asMinutes();
-      if (duration > 0) {
-        $('#vks-duration-teh').val(duration);
-      } else {
-        $('#vks-duration-teh').val('');
-      }
-      var workStart = (moment($('#work-start').val(), 'HH:mm'));
-      var workEnd = (moment($('#work-end').val(), 'HH:mm'));
-      var duration = moment.duration(workEnd.diff(workStart)).asMinutes();
-      var label = $(this).parent().find('label');
-      if (duration > 0) {
-        $('#vks-duration-work').val(duration);
-      } else {
-        $('#vks-duration-work').val('');
-      }
-    });
-  });
-
-  $(document).ready(function () {
     $.ajax({
       type: 'get',
       url: '/vks/sessions/subscribers-region',
@@ -421,9 +355,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
         console.log('error occure');
       }
     });
-  });
 
-  $(document).ready(function () {
     $.ajax({
       type: 'get',
       url: '/vks/sessions/subscribers-msk',
@@ -451,9 +383,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
         console.log('error occure');
       }
     });
-  });
 
-  $(document).ready(function () {
     $('select').each(function () {
       var val = $(this).find("option:selected").text();
       if (val != 'Выберите') {

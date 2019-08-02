@@ -32,7 +32,8 @@ class FancytreeAsset extends \yii\web\AssetBundle
       'dist/jquery.fancytree-all',
       'src/jquery.fancytree.table',
       'src/jquery.fancytree.gridnav',
-      'src/jquery.fancytree.multi'
+      'src/jquery.fancytree.multi',
+      'dist/modules/jquery.fancytree.childcounter'
     ]);
     parent::init();
   }

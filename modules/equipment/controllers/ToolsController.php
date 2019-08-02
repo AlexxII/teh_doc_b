@@ -14,7 +14,7 @@ use app\modules\equipment\models\ToolSettings;
 class ToolsController extends Controller
 {
 
-  public $layout = '@app/modules/equipment/views/layouts/equipment_task_layout.php';
+  public $layout = '@app/modules/equipment/views/layouts/equipment_ex_layout.php';
 
   public function actionAllTools()
   {

@@ -5,14 +5,10 @@ use app\assets\FancytreeAsset;
 use app\assets\AirDatepickerAsset;
 use app\modules\vks\assets\VksFormAsset;
 
-FancytreeAsset::register($this);
 VksFormAsset::register($this);
 AirDatepickerAsset::register($this);
 
 $this->title = 'Анализ сеансов ВКС';
-$this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
-$this->params['breadcrumbs'][] = ['label' => 'Журнал', 'url' => ['/vks/sessions']];
-$this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель анализа сеансов ВКС. Выберите в выпадающем списке параметр, а в панеле выбора периода - необходимый период";
 $date_about = "Выберите период для анализа";
@@ -86,7 +82,7 @@ $send_hint = 'Передать выделенные строки в подроб
 
     <div style="position: relative">
       <div class="hideMenu-button hidden-sm hidden-xs" style="position: absolute;top: 5px;right: -20px">
-        <a href="#" class="fa fa-reply-all" data-placement="top" data-toggle="tooltip" title="Свернуть"
+        <a href="" class="fa fa-reply-all" data-placement="top" data-toggle="tooltip" title="Свернуть"
            aria-hidden="true"></a>
       </div>
 
@@ -488,7 +484,7 @@ $send_hint = 'Передать выделенные строки в подроб
   });
 
   $(document).ready(function () {
-    var main_url = 'server-side';
+    var main_url = '/vks/analytics/server-side';
     var table = $('#main-table').DataTable({
       "processing": true,
       "serverSide": true,

@@ -16,6 +16,8 @@ use app\modules\vks\models\VksTypes;
 
 class SessionsController extends Controller
 {
+  public $layout = 'vks_ex_layout.php';
+
   public function behaviors()
   {
     return [
@@ -99,7 +101,7 @@ class SessionsController extends Controller
       $endDate = "2099-12-31";
     }
 
-    $where = ' ' . $table . '.vks_upcoming_session = 1 AND Date(vks_date) >= "' . $startDate . '" AND Date(vks_date) <= "' . $endDate . '" AND vks_cancel = 1';
+    $where = ' ' . $table . 'Date(vks_date) >= "' . $startDate . '" AND Date(vks_date) <= "' . $endDate . '" AND vks_cancel = 1';
 
     return json_encode(
       SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
@@ -181,12 +183,30 @@ class SessionsController extends Controller
   // на удалении выставляется флаг vks_cancel
   public function actionIndex()
   {
-    return $this->render('index');
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Корзина';
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('index'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
   }
 
   public function actionArchive()
   {
-    return $this->render('archive');
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Корзина';
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('archive'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
   }
 
   public function actionRestore()

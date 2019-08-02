@@ -21,11 +21,27 @@ td .fa {
   text-decoration: none;
   color: #000;
 }
+/* buttons */
 .btn-circle.btn-xl {
+  width: 40px;
+  height: 40px;
+  padding: 0px;
+  padding-top: 2px;
+  padding-left: 1px;
+  margin-left: 0px;
+  border-radius: 35px;
+  font-size: 30px;
+  line-height: 1.33;
+  margin-top: 0px !important;
+  float: left;
+  background-color: inherit;
+  border: none;
+}
+.btn-circle.btn-ml {
   width: 20px;
   height: 40px;
   padding: 8px;
-  margin-left: 0;
+  margin-left: 0px;
   border-radius: 35px;
   font-size: 30px;
   line-height: 1.33;
@@ -33,7 +49,6 @@ td .fa {
   float: left;
   background-color: inherit;
   border: none;
-  color: #5f6368;
 }
 .btn-circle:hover {
   background-color: rgba(128, 128, 128, 0.13);
@@ -106,4 +121,73 @@ td .fa {
 }
 .fancytree-control-panel .fa {
   font-size: 15px;
+}
+.fab-button svg {
+  fill: #fff;
+  padding: 5px 3px 0 5px;
+}
+/* adding-page */
+#go-back {
+  width: 40px !important;
+  height: 40px !important;
+  font-size: 0;
+}
+.hideMenu-button a {
+  text-decoration: none;
+  color: #000 !important;
+  position: absolute;
+  top: 5px;
+  right: -20px;
+}
+/* index */
+i.check {
+  display: inline-block;
+  width: 15px;
+  height: 30px;
+  margin: 10px 20px 3px;
+  border: solid #fff;
+  border-width: 0 4px 4px 0;
+  transform: rotate(45deg);
+}
+.jconfirm {
+  z-index: 9 !important;
+}
+#vks-dates {
+  margin-top: 13px;
+  width: 245px;
+}
+#main-table strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+#main-table tbody td {
+  font-size: 12px;
+}
+/* form-up-session */
+#w0 .fa {
+  font-size: 15px;
+  color: #FF0000;
+}
+#w0 .nonreq {
+  color: #1e6887;
+}
+.form-up-session .form-group {
+  margin-bottom: 5px;
+}
+.dynamic .control-label {
+  font-size: 14px;
+}
+.form-up-session  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  background-color: #fff;
+  opacity: 1;
+}
+.form-confirm-session .form-group {
+  margin-bottom: 5px;
+}
+.vks-pannel .h-title {
+  font-size: 18px;
+  color: #1e6887;
+}
+#main-table td .fa {
+  font-size: 22px;
 }

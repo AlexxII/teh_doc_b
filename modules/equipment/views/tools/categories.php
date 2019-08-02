@@ -72,7 +72,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
     </div>
 
     <div style="position: relative">
-      <div class="hideMenu-button hidden-sm hidden-xs" style="position: absolute;top: 5px;right: -20px">
+      <div class="hideMenu-button hidden-sm hidden-xs">
         <a href="#" class="fa fa-reply-all" data-placement="top" data-toggle="tooltip" title="Свернуть"
            aria-hidden="true"></a>
       </div>

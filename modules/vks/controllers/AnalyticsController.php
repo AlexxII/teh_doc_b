@@ -2,6 +2,7 @@
 
 namespace app\modules\vks\controllers;
 
+use Yii;
 use app\modules\vks\models\SSP;
 use app\modules\vks\models\VksEmployees;
 use app\modules\vks\models\VksOrders;
@@ -14,9 +15,20 @@ use yii\web\Controller;
 
 class AnalyticsController extends Controller
 {
+  public $layout = 'vks_ex_layout';
+
   public function actionIndex()
   {
-    return $this->render('index');
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Статистка';
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('index'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
   }
 
   public function actionDefault()
