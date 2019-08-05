@@ -4,53 +4,33 @@ use yii\helpers\Html;
 
 // Для администратора системы
 
-$this->title = 'Журнал удаленных сеансов ВКС (предстоящие)';
-$this->params['breadcrumbs'][] = ['label' => 'ВКС', 'url' => ['/vks']];
-$this->params['breadcrumbs'][] = "Журнал";
-
 $about = "Журнал сеансов видеосвязи, которые были удалены из таблицы предстоящих сеансов ВКС";
 $dell_hint = 'Удалить выделенные сеансы окончательно';
 $return_hint = 'Восстановить удаленные сеансы';
 
 ?>
 
-<div class="vks-pannel">
-  <div class="row" style="border-radius:2px;padding-left:15px;margin-top: -10px">
-    <h3><?= Html::encode($this->title) ?>
-      <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-           data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-    </h3>
-  </div>
-</div>
-
-<style>
-  td .fa {
-    font-size: 25px;
-  }
-  #main-table tbody td {
-    font-size: 12px;
-  }
-  .h-title {
-    font-size: 18px;
-    color: #1e6887;
-  }
-  .testt {
-    position: relative;
-  }
-</style>
-
 <div class="row">
-  <div class="">
-    <div class="container-fluid" style="margin-bottom: 20px">
-      <a href="#" class="btn btn-sm btn-danger"
-         data-toggle="tooltip" data-placement="top" title="<?= $dell_hint ?>" id="delete" disabled="true">Удалить</a>
-      <a href="#" class="btn btn-sm btn-info"
-         data-toggle="tooltip" data-placement="top" title="<?= $return_hint ?>" id="return"
-         disabled="true">Восстановить</a>
+  <div class="container-fluid" style="position: relative">
+    <div id="delete" style="position: absolute; top: 70px; right:-60px;display: none">
+      <a id="del-session-ex" class="fab-button" title="Удалить окончательно"
+         style="cursor: pointer; background-color: red">
+        <svg width="50" height="50" viewBox="0 0 24 24">
+          <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
+          <path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>
+        </svg>
+      </a>
     </div>
-  </div>
+    <div id="restore" style="position: absolute; top: 135px; right:-60px;display: none">
+      <a id="restore-ex" class="fab-button" title="Восстановить"
+         style="cursor: pointer; background-color: #5bc0de">
+        <svg viewBox="0 0 24 24" focusable="false" width="50" height="50">
+          <path d="M14.1 8H7.83l2.59-2.59L9 4 4 9l5 5 1.41-1.41L7.83 10h6.27c2.15 0 3.9 1.57 3.9 3.5S16.25 17 14.1 17H7v2h7.1c3.25 0 5.9-2.47 5.9-5.5S17.35 8 14.1 8z">
+          </path>
+        </svg>
+      </a>
+    </div>
 
-  <div class="container-fluid">
     <?php
 
     echo '
@@ -81,13 +61,23 @@ $return_hint = 'Восстановить удаленные сеансы';
 
 
 <script>
-  // $(document).ready(function () {
-  //     $('[data-toggle="tooltip"]').tooltip();
-  // });
+  var upMark = '  <div title="Предстоящий сеанс" class="up-mark">\n' +
+    '    <svg width="15" height="15" viewBox="0 0 24 24">\n' +
+    '      <path fill="none" d="M0 0h24v24H0V0z"></path>\n' +
+    '      <path d="M13 3c-4.97 0-9 4.03-9 9H1l4 3.99L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 ' +
+    '0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.25 ' +
+    '2.52.77-1.28-3.52-2.09V8z"></path>\n' +
+    '    </svg>\n' +
+    '  </div>\n';
 
   // ************************* Работа таблицы **************************************
 
+  var adding, table;
+
   $(document).ready(function () {
+
+    $('[data-toggle="tooltip"]').tooltip();
+
     $.fn.dataTable.pipeline = function (opts) {
       var conf = $.extend({
         pages: 2,     // number of pages to cache
@@ -172,10 +162,8 @@ $return_hint = 'Восстановить удаленные сеансы';
         settings.clearCache = true;
       });
     });
-  });
 
-  $(document).ready(function () {
-    var table = $('#main-table').DataTable({
+    table = $('#main-table').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
@@ -197,7 +185,7 @@ $return_hint = 'Восстановить удаленные сеансы';
         }
       },
       "ajax": $.fn.dataTable.pipeline({
-        url: '/vks/sessions/server-side?index=1',
+        url: '/vks/admin/sessions/server-side',
         pages: 2 // number of pages to cache
       }),
       orderFixed: [2, 'asc'],
@@ -209,9 +197,10 @@ $return_hint = 'Восстановить удаленные сеансы';
           "orderable": false,
           "targets": -2,
           "data": null,
-          "width": '70px',
+          "width": '40px',
+          "sClass": "align-center",
           "defaultContent":
-            "<a href='#' class='fa fa-info view' title='Подробности' style='padding-right: 5px'></a>"
+            "<a href='#' class='fa fa-info' id='view' title='Подробности' style='padding-right: 5px'></a>"
         }, {
           "orderable": false,
           "className": 'select-checkbox',
@@ -223,6 +212,16 @@ $return_hint = 'Восстановить удаленные сеансы';
           "data": null,
           "visible": false
         }, {
+          "targets": 1,
+          "render": function (data, type, row) {
+            console.log(row);
+            if (row[15] == 1) {
+              return '<div class="inline-wrap"> ' + '<div>' + row[1] + '</div>' + ' ' + upMark + '</div>';
+            } else {
+              return row[1];
+            }
+          }
+        }, {
           "targets": 2,
           "visible": false
         }, {
@@ -232,7 +231,15 @@ $return_hint = 'Восстановить удаленные сеансы';
         {
           "targets": 3,
           "render": function (data, type, row) {
-            return row[3] + ' /т' + "<br> " + row[4] + ' /р';
+            if (row[3] == '') {
+              return '<strong>' + row[4] + '</strong>' + ' / <strong>Р</strong>';
+            } else if (row[4] == '') {
+              return '<strong>' + row[3] + '</strong>' + ' / <strong>Т</strong>';
+            } else {
+              return '<strong>' + row[3] + '</strong>' +
+                ' / <strong>Т</strong>' + "<br> " +
+                '<strong>' + row[4] + '</strong>' + ' / <strong>Р</strong>';
+            }
           }
         },
         {
@@ -254,37 +261,53 @@ $return_hint = 'Восстановить удаленные сеансы';
       }
     });
 
-    $('#main-table tbody').on('click', '.view', function (e) {
+    $('#main-table tbody').on('click', '#view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
-      var href = "/vks/admin/sessions/view-up-session?id=" + data[0];
-      window.open(href);
+      var url = "/vks/admin/sessions/view-session?id=" + data[0];
+      c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: url,
+            method: 'get'
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'xlarge',
+        title: 'Подробности',
+        buttons: {
+          cancel: {
+            text: 'НАЗАД'
+          }
+        }
+      });
     });
-  });
 
-  // Работа таблицы -> событие выделения и снятия выделения
+    // Работа таблицы -> событие выделения и снятия выделения
 
-  $(document).ready(function () {
-    var table = $('#main-table').DataTable();
     table.on('select', function (e, dt, type, indexes) {
       if (type === 'row') {
-        $('#return').removeAttr('disabled');
-        $('#delete').removeAttr('disabled');
+        $('#restore').show();
+        $('#delete').show();
       }
     });
     table.on('deselect', function (e, dt, type, indexes) {
       if (type === 'row') {
         if (table.rows({selected: true}).count() > 0) return;
-        $('#return').attr('disabled', true);
-        $('#delete').attr('disabled', true);
+        $('#restore').hide();
+        $('#delete').hide();
       }
     });
-  });
 
 
-  //********************** Удаление и восстановление записей ***********************************
+    //********************** Удаление и восстановление записей ***********************************
 
-  $(document).ready(function () {
     $('#delete').click(function (event) {
       var url = "/vks/admin/sessions/delete-completely";
       event.preventDefault();
@@ -304,8 +327,8 @@ $return_hint = 'Восстановить удаленные сеансы';
             action: function () {
               jc.close();
               if (remoteProcess(url)) {
-                $('#return').attr('disabled', true);
-                $('#delete').attr('disabled', true);
+                $('#restore').hide();
+                $('#delete').hide();
               }
             }
           },
@@ -318,7 +341,7 @@ $return_hint = 'Восстановить удаленные сеансы';
       })
     });
 
-    $('#return').click(function (event) {
+    $('#restore').click(function (event) {
       var url = "/vks/admin/sessions/restore";
       event.preventDefault();
       if ($(this).attr('disabled')) {
@@ -347,73 +370,54 @@ $return_hint = 'Восстановить удаленные сеансы';
         }
       })
     });
+  });
 
-    function remoteProcess(url) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var table = $('#main-table').DataTable();
-      var data = table.rows({selected: true}).data();
-      var ar = [];
-      var count = data.length;
-      for (var i = 0; i < count; i++) {
-        ar[i] = data[i][0];
-      }
-      jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Ваш запрос выполняется!',
-        buttons: false,
-        closeIcon: false,
-        confirmButtonClass: 'hide'
-      });
-      $.ajax({
-        url: url,
-        method: 'post',
-        dataType: "JSON",
-        data: {jsonData: ar, _csrf: csrf},
-      }).done(function (response) {
-        if (response != false) {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-thumbs-up',
-            title: 'Успех!',
-            content: 'Ваш запрос выполнен.',
-            type: 'green',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-success',
-                action: function () {
-                  $("#main-table").DataTable().clearPipeline().draw();
-                  $('#return').attr('disabled', true);
-                  $('#delete').attr('disabled', true);
-                }
+  function remoteProcess(url) {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    var table = $('#main-table').DataTable();
+    var data = table.rows({selected: true}).data();
+    var ar = [];
+    var count = data.length;
+    for (var i = 0; i < count; i++) {
+      ar[i] = data[i][0];
+    }
+    jc = $.confirm({
+      icon: 'fa fa-cog fa-spin',
+      title: 'Подождите!',
+      content: 'Ваш запрос выполняется!',
+      buttons: false,
+      closeIcon: false,
+      confirmButtonClass: 'hide'
+    });
+    $.ajax({
+      url: url,
+      method: 'post',
+      dataType: "JSON",
+      data: {jsonData: ar, _csrf: csrf},
+    }).done(function (response) {
+      if (response != false) {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-thumbs-up',
+          title: 'Успех!',
+          content: 'Ваш запрос выполнен.',
+          type: 'green',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-success',
+              action: function () {
+                $("#main-table").DataTable().clearPipeline().draw();
+                $('#restore').hide();
+                $('#delete').hide();
               }
             }
-          });
-        } else {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-exclamation-triangle',
-            title: 'Неудача!',
-            content: 'Запрос не выполнен. Что-то пошло не так.',
-            type: 'red',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-danger',
-                action: function () {
-                }
-              }
-            }
-          });
-        }
-      }).fail(function () {
+          }
+        });
+      } else {
         jc.close();
         jc = $.confirm({
           icon: 'fa fa-exclamation-triangle',
@@ -422,7 +426,7 @@ $return_hint = 'Восстановить удаленные сеансы';
           type: 'red',
           buttons: false,
           closeIcon: false,
-          autoClose: 'ok|4000',
+          autoClose: 'ok|8000',
           confirmButtonClass: 'hide',
           buttons: {
             ok: {
@@ -432,11 +436,27 @@ $return_hint = 'Восстановить удаленные сеансы';
             }
           }
         });
+      }
+    }).fail(function () {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-exclamation-triangle',
+        title: 'Неудача!',
+        content: 'Запрос не выполнен. Что-то пошло не так.',
+        type: 'red',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|4000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+            }
+          }
+        }
       });
-    }
-
-    $('[data-toggle="tooltip"]').tooltip();
-
-  });
+    });
+  }
 
 </script>

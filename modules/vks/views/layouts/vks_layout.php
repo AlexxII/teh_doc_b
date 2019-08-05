@@ -1,8 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use yii\bootstrap\BootstrapPluginAsset;
 
@@ -12,15 +10,16 @@ use app\assets\JConfirmAsset;
 use app\assets\SlidebarsAsset;
 use app\modules\vks\assets\VksAppAsset;
 use app\assets\FancytreeAsset;
+use app\assets\BootstrapDatepickerAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 TableBaseAsset::register($this);
 JConfirmAsset::register($this);
 SlidebarsAsset::register($this);
 VksAppAsset::register($this);
-BootstrapPluginAsset::register($this);
-
 FancytreeAsset::register($this);
+BootstrapDatepickerAsset::register($this);
+BootstrapPluginAsset::register($this);
 
 $this->title = 'Журнал ВКС';
 
@@ -45,7 +44,7 @@ $this->beginPage() ?>
 <div id='left-menu' off-canvas="main-menu left overlay">
   <div>
     <div class="menu-list">
-      <div class="menu-list-about"  data-url="/vks/sessions/index">
+      <div class="menu-list-about" data-url="/vks/sessions/index">
         <div>
           <i class="fa fa-television" aria-hidden="true"></i>
         </div>
@@ -53,8 +52,7 @@ $this->beginPage() ?>
           <h5>Журнал предстоящий сеансов ВКС</h5>
         </div>
       </div>
-      <div class="menu-list-about" data-url="/vks/sessions/create-up-session"
-      >
+      <div class="menu-list-about" data-url="/vks/sessions/create-up-session">
         <div>
           <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
         </div>
@@ -96,7 +94,11 @@ $this->beginPage() ?>
   <nav class="navigation navigation-default">
     <div class="container-fluid">
       <ul class="navig navigation-nav" id="left">
-        <li><span id="push-it" class="fa fa-bars navigation-brand" aria-hidden="true"></span></li>
+        <li><span id="push-it" class="navigation-brand" aria-hidden="true">
+            <svg focusable="false" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+            </svg>
+          </span></li>
         <li class="navigation-brand" id="app-logo">
           <img src="/images/logo.png" style="display:inline">
         </li>
@@ -112,14 +114,28 @@ $this->beginPage() ?>
         <li id="right-custom-data">
         </li>
         <li id="app-control" class="dropdown">
-          <a href="#" class="dropdown-toggle fa fa-cog" data-toggle="dropdown" role="button" aria-haspopup="true"
-             aria-expanded="false"></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false">
+            <svg width="24" height="24" viewBox="0 0 24 24" focusable="false">
+              <path d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2
+              15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62
+              1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27
+              1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52
+              1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46
+              1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56
+              2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39
+              2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path>
+              <circle cx="12" cy="12" r="3.5"></circle>
+            </svg>
+          </a>
           <ul class="dropdown-menu">
             <div class="settings-menu">
-              <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-type" data-title="Тип ВКС">Тип ВКС</a>
+              <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-type" data-title="Тип ВКС">Тип
+                ВКС</a>
             </div>
             <div class="settings-menu">
-              <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-place" data-title="Студии проведения ВКС">Студии проведения ВКС</a>
+              <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-place"
+                 data-title="Студии проведения ВКС">Студии проведения ВКС</a>
             </div>
             <div class="settings-menu">
               <a class="menu-link jclick" href="" data-wsize="xlarge" data-url="vks-subscribes" data-title="Абоненты">Абоненты</a>
@@ -140,11 +156,26 @@ $this->beginPage() ?>
           </ul>
         </li>
         <li id="app-notify">
-          <a href="#" role="button" class="dropdown-toggle fa fa-bell-o" aria-hidden="true"></a>
+          <a href="#" role="button" class="dropdown-toggle" aria-hidden="true">
+            <svg viewBox="0 0 16 16" width="24" height="24" aria-hidden="true">
+              <path fill-rule="evenodd" d="M14 12v1H0v-1l.73-.58c.77-.77.81-2.55 1.19-4.42C2.69 3.23 6 2 6 2c0-.55.45-1
+              1-1s1 .45 1 1c0 0 3.39 1.23 4.16 5 .38 1.88.42 3.66 1.19 4.42l.66.58H14zm-7 4c1.11 0 2-.89 2-2H5c0 1.11.89 2 2 2z">
+              </path>
+            </svg>
+          </a>
         </li>
         <li id="apps" class="dropdown">
-          <a href="#" class="dropdown-toggle fa fa-th" data-toggle="dropdown" role="button" aria-haspopup="true"
-             aria-expanded="false"></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2
+              2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2
+              2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9
+              -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2
+              2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z">
+              </path>
+            </svg>
+          </a>
           <ul class="dropdown-menu">
             <div class="list-group">
               <a href="/equipment/tools" class="list-group-item">
@@ -167,10 +198,16 @@ $this->beginPage() ?>
           </ul>
         </li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
-             aria-haspopup="true" aria-expanded="false"></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+             aria-haspopup="true" aria-expanded="false">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path fill="none" d="M0 0h24v24H0V0z"></path>
+              <path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2
+              6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+            </svg>
+          </a>
           <ul class="dropdown-menu">
-            <li><a href="http://www.fgruber.ch/" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
+            <li><a href="" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
                 Профиль</a></li>
             <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
           </ul>
@@ -222,8 +259,10 @@ $this->beginPage() ?>
 
 <script>
 
-
   $(document).ready(function () {
+
+    $('#push-it').bind('click', clickMenu);
+
     $('.jclick').on('click', loadControls);
 
     $('.ex-click').on('click', function (e) {
@@ -234,48 +273,6 @@ $this->beginPage() ?>
     })
 
   });
-
-  function loadExContent(url, uri) {
-    $.ajax({
-      url: url,
-      method: 'get'
-    }).done(function (response) {
-      $('body').html(response.data.data);
-      // window.history.pushState("object or string", "Title", uri);
-    }).fail(function () {
-      console.log('fail');
-    });
-  }
-
-  function loadControls(e) {
-    e.preventDefault();
-    var uri = $(this).data('url');
-    var title = $(this).data('title');
-    var size = $(this).data('wsize');
-    var url = '/vks/control/' + uri +'/index';
-    c = $.confirm({
-      content: function () {
-        var self = this;
-        return $.ajax({
-          url: url,
-          method: 'get'
-        }).done(function (response) {
-        }).fail(function () {
-          self.setContentAppend('<div>Что-то пошло не так!</div>');
-        });
-      },
-      contentLoaded: function (data, status, xhr) {
-        this.setContentAppend('<div>' + data + '</div>');
-      },
-      columnClass: size,
-      title: title,
-      buttons: {
-        cancel: {
-          text: 'НАЗАД'
-        }
-      }
-    });
-  }
 
 </script>
 

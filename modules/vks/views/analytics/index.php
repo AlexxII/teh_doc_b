@@ -1,69 +1,14 @@
 <?php
 //
 use yii\helpers\Html;
-use app\assets\FancytreeAsset;
-use app\assets\AirDatepickerAsset;
 use app\modules\vks\assets\VksFormAsset;
 
-VksFormAsset::register($this);
-AirDatepickerAsset::register($this);
-
-$this->title = 'Анализ сеансов ВКС';
-
-$about = "Панель анализа сеансов ВКС. Выберите в выпадающем списке параметр, а в панеле выбора периода - необходимый период";
 $date_about = "Выберите период для анализа";
 $refresh_hint = 'Перезапустить форму';
 $dell_hint = 'Удалить выделенные сеансы ВКС. БУДЬТЕ ВНИМАТЕЛЬНЫ, данные будут удалены безвозвратно.';
 $send_hint = 'Передать выделенные строки в подробную версию таблицы';
 
 ?>
-
-<style>
-  .h-title {
-    font-size: 18px;
-    color: #1e6887;
-  }
-  li {
-    word-wrap: break-word
-  }
-  .fa {
-    font-size: 15px;
-  }
-  ul.fancytree-container {
-    font-size: 12px;
-  }
-  input {
-    color: black;
-  }
-  #main-table {
-    font-size: 12px;
-  }
-  td .fa {
-    font-size: 22px;
-  }
-  .kv-has-checkbox .kv-selected > .kv-tree-list .kv-node-detail {
-    /*background-color: #fff;*/
-  }
-  .show-menu-button {
-    position: absolute;
-    background-color: #f5f7f8;
-    top: 0px;
-    left: -20px;
-    width: 15px;
-    height: 100%;
-    cursor: pointer;
-    text-align: center;
-    padding-top: 25px;
-    border-radius: 1px;
-  }
-</style>
-
-<div class="analytics-pannel">
-  <h3><?= Html::encode($this->title) ?>
-    <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-  </h3>
-</div>
 
 <div class="row">
   <div class="col-lg-4 col-md-4 fancy-tree" style="padding-bottom: 5px">
@@ -74,14 +19,13 @@ $send_hint = 'Передать выделенные строки в подроб
         'data-toggle' => 'tooltip',
         'data-placement' => 'top'
       ]) ?>
-      <div class="row" style="position: absolute;top:0px; left: 70px; width: 82%">
+      <div class="row" style="position: absolute;top:0; left: 70px; width: 82%">
         <select id="vars-control" class="form-control input-sm" style="margin-top: 5px"></select>
       </div>
     </div>
 
-
     <div style="position: relative">
-      <div class="hideMenu-button hidden-sm hidden-xs" style="position: absolute;top: 5px;right: -20px">
+      <div class="hideMenu-button hidden-sm hidden-xs" style="position: absolute;top: 5px;right:0">
         <a href="" class="fa fa-reply-all" data-placement="top" data-toggle="tooltip" title="Свернуть"
            aria-hidden="true"></a>
       </div>
@@ -105,7 +49,7 @@ $send_hint = 'Передать выделенные строки в подроб
 
 
   <div class="col-lg-8 col-md-8 about about-padding" style="position: relative;">
-    <div class="control-buttons-wrap" style="position: absolute;top: 0px;width: 100%">
+    <div class="control-buttons-wrap" style="position: absolute;top: 0;width: 100%">
       <?= Html::a('Удалить',
         [''], [
           'class' => 'btn btn-danger btn-sm hiddendel',
@@ -114,12 +58,15 @@ $send_hint = 'Передать выделенные строки в подроб
           'data-placement' => "top",
           'title' => $dell_hint,
         ]) ?>
-      <div style="position: absolute;top:0px;right:30px;width:185px">
-        <label class="h-title fa fa-info-circle" data-toggle="tooltip" data-placement="left"
-               title="<?php echo $date_about ?>"
-               style="position: absolute;top:13px;right:190px"></label>
-        <input class="form-control input-sm" id="vks-dates" style="margin-top:5px;po" type="text" data-range="true"
-               data-multiple-dates-separator=" - " placeholder="Выберите период"/>
+      <div style="position: absolute;top:0;right:30px;width:250px">
+        <div class="input-group input-daterange" style="position: relative">
+          <label class="h-title fa fa-info-circle" data-toggle="tooltip" data-placement="left"
+                 title="<?php echo $date_about ?>"
+                 style="position: absolute;top:10px;left:-20px"></label>
+          <input type="text" class="form-control input-sm" id="start-date">
+          <div class="input-group-addon">по</div>
+          <input type="text" class="form-control input-sm" id="end-date">
+        </div>
       </div>
     </div>
     <input class="root" style="display: none">
@@ -159,8 +106,7 @@ $send_hint = 'Передать выделенные строки в подроб
 
   // Глобальные переменные
 
-  var nodeid;
-  var treeId;
+  var nodeid, treeId, table;
 
   //************************ Работа над стилем ****************************
 
@@ -171,20 +117,30 @@ $send_hint = 'Передать выделенные строки в подроб
 
   $(document).ready(function () {
 
-    $('#vks-dates').datepicker({
-      clearButton: true,
-      toggleSelected: false,
-      onHide: function (dp, animationCompleted) {
-        if (animationCompleted) {
-          var range = $('#vks-dates').val();
-          var stDate = range.substring(6, 10) + '-' + range.substring(3, 5) + '-' + range.substring(0, 2);
-          var eDate = range.substring(19, 24) + '-' + range.substring(16, 18) + '-' + range.substring(13, 15);
-          $(".start-date").val(stDate);
-          $(".end-date").val(eDate);
-          $("#main-table").DataTable().clearPipeline().draw();
-        }
-      }
+
+    $('.input-daterange').datepicker({
+      autoclose: true,
+      language: "ru",
+      startView: "days",
+      minViewMode: "days",
+      clearBtn: true,
+      todayHighlight: true,
+      daysOfWeekHighlighted: [0, 6],
     });
+
+    $('.input-daterange').datepicker()
+      .on('hide', function (e) {
+        var stDate = $("#start-date").val();
+        var eDate = $("#end-date").val();
+        var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+        stDate = stDate.replace(pattern,'$3-$2-$1');
+        eDate = eDate.replace(pattern,'$3-$2-$1');
+        console.log(stDate + ' - ' + eDate);
+        $(".start-date").val(stDate);
+        $(".end-date").val(eDate);
+        $("#main-table").DataTable().clearPipeline().draw();
+      });
+
 
     var url = '/vks/analytics/list';
     $(document).ready(function () {
@@ -256,77 +212,21 @@ $send_hint = 'Передать выделенные строки в подроб
         }
       );
     });
-  });
 
-  function rememberSelectedRows() {
-    var table = $('#main-table').DataTable();
-    var indexes = table.rows({selected: true}).indexes();
-    return indexes;
-  }
+    $('#main-table').on('length.dt', function (e, settings, len) {
+      $('.hiddendel').hide();
+      $('.classif').hide();
+    });
 
-  $('#main-table').on('length.dt', function (e, settings, len) {
-    $('.hiddendel').hide();
-    $('.classif').hide();
-  });
+    $('#main-table').on('draw.dt', function (e, settings, len) {
+      $('.hiddendel').hide();
+      $('.classif').hide();
+    });
 
-  $('#main-table').on('draw.dt', function (e, settings, len) {
-    $('.hiddendel').hide();
-    $('.classif').hide();
-  });
+    //************************* Управление деревом ***************************************
 
-  function restoreSelectedRows(indexes) {
-    var table = $('#main-table').DataTable();
-    var count = indexes.count();
-    for (var i = 0; i < count; i++) {
-      table.rows(indexes[i]).select();
-    }
-  }
+    window.treeId = "#fancyree_w0";
 
-  function redrawTable() {
-    var table = $('#main-table').DataTable();
-    table.draw();
-    return true;
-  }
-
-  function onClick() {
-    var width = '33%';
-    var indexes;
-    if ($(document).width() < 600) {
-      width = '100%';
-    }
-    $('.show-menu-button').hide();
-    $('.fancy-tree').animate({
-        width: width
-      },
-      {
-        duration: 1000,
-        start: indexes = rememberSelectedRows(),
-        complete: function () {
-          $('.about').css('width', '');
-          $('#main-table_wrapper').css('margin-left', '0px');
-          $('#main-table_wrapper').css('position', 'inherit');
-          redrawTable();
-          restoreSelectedRows(indexes);
-          $('[data-toggle="tooltip"]').tooltip();
-          $('.fancy-tree').css('width', '');
-        },
-        step: function (now, fx) {
-          if (now > 5 && now < 14) {
-            $('.fancy-tree').show();
-            $('.about').removeClass('col-lg-12 col-md-12').addClass('col-lg-10 col-md-10');
-          } else if (now > 16) {
-            $('.about').removeClass('col-lg-10 col-md-10').addClass('col-lg-8 col-md-8');
-          }
-        }
-      }
-    );
-  }
-
-  //************************* Управление деревом ***************************************
-
-  window.treeId = "#fancyree_w0";
-
-  $(document).ready(function () {
     $('.refresh').click(function (event) {
       event.preventDefault();
       var tree = $(window.treeId).fancytree("getTree");
@@ -342,59 +242,54 @@ $send_hint = 'Передать выделенные строки в подроб
       $('.hiddendel').hide();
       $('.classif').hide();
       $("#main-table").DataTable().clearPipeline().draw();
-    })
-  });
-
-  $("input[name=search]").keyup(function (e) {
-    var n,
-      tree = $.ui.fancytree.getTree(),
-      args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-      opts = {},
-      filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-      match = $(this).val();
-
-    $.each(args, function (i, o) {
-      opts[o] = $("#" + o).is(":checked");
     });
-    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
 
-    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-      $("button#btnResetSearch").click();
-      return;
-    }
-    if ($("#regex").is(":checked")) {
-      // Pass function to perform match
-      n = filterFunc.call(tree, function (node) {
-        return new RegExp(match, "i").test(node.title);
-      }, opts);
-    } else {
-      // Pass a string to perform case insensitive matching
-      n = filterFunc.call(tree, match, opts);
-    }
-    $("#btnResetSearch").attr("disabled", false);
-  }).focus();
+    $("input[name=search]").keyup(function (e) {
+      var n,
+        tree = $.ui.fancytree.getTree(),
+        args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+        opts = {},
+        filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+        match = $(this).val();
 
+      $.each(args, function (i, o) {
+        opts[o] = $("#" + o).is(":checked");
+      });
+      opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
 
-  $("#btnResetSearch").click(function (e) {
-    e.preventDefault();
-    $("input[name=search]").val("");
-    $("span#matches").text("");
-    var tree = $(window.treeId).fancytree("getTree");
-    tree.clearFilter();
-  }).attr("disabled", true);
+      if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+        $("button#btnResetSearch").click();
+        return;
+      }
+      if ($("#regex").is(":checked")) {
+        // Pass function to perform match
+        n = filterFunc.call(tree, function (node) {
+          return new RegExp(match, "i").test(node.title);
+        }, opts);
+      } else {
+        // Pass a string to perform case insensitive matching
+        n = filterFunc.call(tree, match, opts);
+      }
+      $("#btnResetSearch").attr("disabled", false);
+    }).focus();
 
-  $(document).ready(function () {
+    $("#btnResetSearch").click(function (e) {
+      e.preventDefault();
+      $("input[name=search]").val("");
+      $("span#matches").text("");
+      var tree = $(window.treeId).fancytree("getTree");
+      tree.clearFilter();
+    }).attr("disabled", true);
+
     $("input[name=search]").keyup(function (e) {
       if ($(this).val() == '') {
         var tree = $(window.treeId).fancytree("getTree");
         tree.clearFilter();
       }
-    })
-  });
+    });
 
-  // ************************* Работа таблицы **************************************
+    // ************************* Работа таблицы **************************************
 
-  $(document).ready(function () {
     $.fn.dataTable.pipeline = function (opts) {
       var conf = $.extend({
         pages: 5,     // number of pages to cache
@@ -481,17 +376,15 @@ $send_hint = 'Передать выделенные строки в подроб
         settings.clearCache = true;
       });
     });
-  });
 
-  $(document).ready(function () {
     var main_url = '/vks/analytics/server-side';
-    var table = $('#main-table').DataTable({
+    table = $('#main-table').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
       "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
-      "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-        if ((aData[10] == '-' && aData[12] != '') || (aData[11] == '-' && aData[14] != '')){
+      "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        if ((aData[10] == '-' && aData[12] != '') || (aData[11] == '-' && aData[14] != '')) {
           $('td', nRow).css('background-color', '#fff1ef');
           $('td:eq(1)', nRow).append('<br>' + '<strong>Проверьте <i class="fa fa-clock-o" aria-hidden="true"></i></strong>');
         }
@@ -532,8 +425,8 @@ $send_hint = 'Передать выделенные строки в подроб
         "targets": -2,
         "data": null,
         "defaultContent": "<a href='#' class='fa fa-edit edit' style='padding-right: 5px'></a>" +
-        "<a href='#' class='fa fa-info view' style='padding-right: 5px' title='Подробности'></a>",
-          "orderable": false
+          "<a href='#' class='fa fa-info view' style='padding-right: 5px' title='Подробности'></a>",
+        "orderable": false
       }, {
         "orderable": false,
         "className": 'select-checkbox',
@@ -563,7 +456,7 @@ $send_hint = 'Передать выделенные строки в подроб
             "<br> " +
             row[11] + '/р.' +
             '<br> <span style="font-weight: 600">' +
-            (a*1  + b*1) + '/общ.</span>';
+            (a * 1 + b * 1) + '/общ.</span>';
         }
       }, {
         "targets": 4,
@@ -581,13 +474,13 @@ $send_hint = 'Передать выделенные строки в подроб
           var tCount = 0;
           var wCount = 0;
           rows.data().pluck(13).each(function (a) {
-            if (a !== ''){
+            if (a !== '') {
               tCount++;
             }
             return tCount;
           });
           rows.data().pluck(15).each(function (a) {
-            if (a !== ''){
+            if (a !== '') {
               wCount++;
             }
             return wCount;
@@ -595,7 +488,7 @@ $send_hint = 'Передать выделенные строки в подроб
 
           var intVal = function (i) {
             if (isNaN(i)) return 0;
-            return i*1;
+            return i * 1;
           };
           var durationTeh = rows
             .data()
@@ -609,7 +502,7 @@ $send_hint = 'Передать выделенные строки в подроб
             .reduce(function (a, b) {
               return intVal(a) + intVal(b);
             });
-          var sum = durationWork*1 + durationTeh*1;
+          var sum = durationWork * 1 + durationTeh * 1;
 
           return $('<tr/>')
             .append('<td colspan="8">ИТОГО: ' +
@@ -626,6 +519,7 @@ $send_hint = 'Передать выделенные строки в подроб
         url: "/lib/ru.json"
       },
     });
+
     $('#main-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
@@ -655,7 +549,7 @@ $send_hint = 'Передать выделенные строки в подроб
             action: function () {
               var $form = $("#w0"),
                 data = $form.data("yiiActiveForm");
-              $.each(data.attributes, function() {
+              $.each(data.attributes, function () {
                 this.status = 3;
               });
               $form.yiiActiveForm("validate");
@@ -691,6 +585,7 @@ $send_hint = 'Передать выделенные строки в подроб
         }
       });
     });
+
     $('#main-table tbody').on('click', '.view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
@@ -720,12 +615,9 @@ $send_hint = 'Передать выделенные строки в подроб
         }
       });
     });
-  });
 
-  // Работа таблицы -> событие выделения и снятия выделения
+    // Работа таблицы -> событие выделения и снятия выделения
 
-  $(document).ready(function () {
-    var table = $('#main-table').DataTable();
     table.on('select', function (e, dt, type) {
       if (type === 'row') {
         $('.hiddendel').show();
@@ -739,11 +631,9 @@ $send_hint = 'Передать выделенные строки в подроб
         $('.classif').hide();
       }
     });
-  });
 
-  //********************** Удаление записей ***********************************
+    //********************** Удаление записей ***********************************
 
-  $(document).ready(function () {
 
     $('.hiddendel').click(function (event) {
       event.preventDefault();
@@ -775,115 +665,8 @@ $send_hint = 'Передать выделенные строки в подроб
       });
     });
 
+    // -********************************* Дерево *****************************************
 
-    function deleteProcess(url) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var table = $('#main-table').DataTable();
-      var data = table.rows({selected: true}).data();
-      var ar = [];
-      var count = data.length;
-      for (var i = 0; i < count; i++) {
-        ar[i] = data[i][0];
-      }
-      jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Ваш запрос выполняется!',
-        buttons: false,
-        closeIcon: false,
-        confirmButtonClass: 'hide'
-      });
-      $.ajax({
-        url: url,
-        method: 'post',
-        dataType: "JSON",
-        data: {jsonData: ar, _csrf: csrf},
-      }).done(function (response) {
-        if (response != false) {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-thumbs-up',
-            title: 'Успех!',
-            content: 'Ваш запрос выполнен.',
-            type: 'green',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-success',
-                action: function () {
-                  $("#main-table").DataTable().clearPipeline().draw();
-                  $('.hiddendel').hide();
-                }
-              }
-            }
-          });
-        } else {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-exclamation-triangle',
-            title: 'Неудача!',
-            content: 'Запрос не выполнен. Что-то пошло не так.',
-            type: 'red',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-danger',
-                action: function () {
-                }
-              }
-            }
-          });
-        }
-      }).fail(function () {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-exclamation-triangle',
-          title: 'Неудача!',
-          content: 'Запрос не выполнен. Что-то пошло не так.',
-          type: 'red',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|4000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-danger',
-              action: function () {
-              }
-            }
-          }
-        });
-      });
-    }
-  });
-
-  (function ($) {
-    $.fn.serializefiles = function () {
-      var obj = $(this);
-      var formData = new FormData();
-      $.each($(obj).find("input[type='file']"), function (i, tag) {
-        $.each($(tag)[0].files, function (i, file) {
-          formData.append(tag.name + '|' + i, file);
-        });
-      });
-      var params = $(obj).serializeArray();
-      $.each(params, function (i, val) {
-        if (val.value !== '') {
-          formData.append(val.name, val.value);                       // добавляем только непустые поля
-        }
-      });
-      return formData;
-    };
-  })(jQuery);
-
-  // -********************************* Дерево *****************************************
-  jQuery(function ($) {
     var main_url = '/vks/analytics/default';
     $("#fancyree_w0").fancytree({
       source: {
@@ -925,6 +708,145 @@ $send_hint = 'Передать выделенные строки в подроб
       renderNode: function (node, data) {
       }
     });
-  })
+  });
+
+  function restoreSelectedRows(indexes) {
+    var table = $('#main-table').DataTable();
+    var count = indexes.count();
+    for (var i = 0; i < count; i++) {
+      table.rows(indexes[i]).select();
+    }
+  }
+
+  function redrawTable() {
+    var table = $('#main-table').DataTable();
+    table.draw();
+    return true;
+  }
+
+  function rememberSelectedRows() {
+    var table = $('#main-table').DataTable();
+    var indexes = table.rows({selected: true}).indexes();
+    return indexes;
+  }
+
+  function onClick() {
+    var width = '33%';
+    var indexes;
+    if ($(document).width() < 600) {
+      width = '100%';
+    }
+    $('.show-menu-button').hide();
+    $('.fancy-tree').animate({
+        width: width
+      },
+      {
+        duration: 1000,
+        start: indexes = rememberSelectedRows(),
+        complete: function () {
+          $('.about').css('width', '');
+          $('#main-table_wrapper').css('margin-left', '0px');
+          $('#main-table_wrapper').css('position', 'inherit');
+          redrawTable();
+          restoreSelectedRows(indexes);
+          $('[data-toggle="tooltip"]').tooltip();
+          $('.fancy-tree').css('width', '');
+        },
+        step: function (now, fx) {
+          if (now > 5 && now < 14) {
+            $('.fancy-tree').show();
+            $('.about').removeClass('col-lg-12 col-md-12').addClass('col-lg-10 col-md-10');
+          } else if (now > 16) {
+            $('.about').removeClass('col-lg-10 col-md-10').addClass('col-lg-8 col-md-8');
+          }
+        }
+      }
+    );
+  }
+
+  function deleteProcess(url) {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    var data = table.rows({selected: true}).data();
+    var ar = [];
+    var count = data.length;
+    for (var i = 0; i < count; i++) {
+      ar[i] = data[i][0];
+    }
+    jc = $.confirm({
+      icon: 'fa fa-cog fa-spin',
+      title: 'Подождите!',
+      content: 'Ваш запрос выполняется!',
+      buttons: false,
+      closeIcon: false,
+      confirmButtonClass: 'hide'
+    });
+    $.ajax({
+      url: url,
+      method: 'post',
+      dataType: "JSON",
+      data: {jsonData: ar, _csrf: csrf},
+    }).done(function (response) {
+      if (response != false) {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-thumbs-up',
+          title: 'Успех!',
+          content: 'Ваш запрос выполнен.',
+          type: 'green',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-success',
+              action: function () {
+                $("#main-table").DataTable().clearPipeline().draw();
+                $('.hiddendel').hide();
+              }
+            }
+          }
+        });
+      } else {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
+      }
+    }).fail(function () {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-exclamation-triangle',
+        title: 'Неудача!',
+        content: 'Запрос не выполнен. Что-то пошло не так.',
+        type: 'red',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|4000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+            }
+          }
+        }
+      });
+    });
+  }
 
 </script>

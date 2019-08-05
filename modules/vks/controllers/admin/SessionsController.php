@@ -18,31 +18,7 @@ class SessionsController extends Controller
 {
   public $layout = 'vks_ex_layout.php';
 
-  public function behaviors()
-  {
-    return [
-      'access' => [
-        'class' => AccessControl::class,
-        'rules' => [
-          [
-            'allow' => true,
-            'actions' => ['sessions-ex', 'archive-ex', 'delete-completely', 'delete-single-completely'],
-            'roles' => ['superAdmin']      // доступ только с ролью superAdmin
-          ],[
-            'allow' => false,
-            'actions' => ['sessions-ex', 'archive-ex', 'delete-completely', 'delete-single-completely'],
-            'roles' => ['@', "?"]
-          ],
-          [
-            'allow' => true,
-            'roles' => ['@']
-          ]
-        ],
-      ],
-    ];
-  }
-
-  public function actionServerSide($index)
+  public function actionServerSide()
   {
     $table = 'vks_sessions_tbl';
     $primaryKey = 'id';
@@ -86,22 +62,12 @@ class SessionsController extends Controller
       array('db' => 'vks_subscriber_office_text', 'dt' => 7),
       array('db' => 'vks_subscriber_name', 'dt' => 8),
       array('db' => 'vks_order_text', 'dt' => 9),
-      array('db' => 'important', 'dt' => 10)
+      array('db' => 'important', 'dt' => 10),
+      array('db' => 'vks_upcoming_session', 'dt' => 15)
     );
     $sql_details = \Yii::$app->params['sql_details'];
 
-    if (!empty($_GET['stDate'])){
-      $startDate = $_GET['stDate'];
-    } else {
-      $startDate = "1970-01-01";
-    }
-    if (!empty($_GET['eDate'])){
-      $endDate = $_GET['eDate'];
-    } else {
-      $endDate = "2099-12-31";
-    }
-
-    $where = ' ' . $table . 'Date(vks_date) >= "' . $startDate . '" AND Date(vks_date) <= "' . $endDate . '" AND vks_cancel = 1';
+    $where = 'vks_cancel = 1';
 
     return json_encode(
       SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
@@ -165,7 +131,7 @@ class SessionsController extends Controller
   public function actionViewUpSession($id)
   {
     $logs = VksLog::find()->where(['=', 'session_id', $id])->orderBy('log_time')->all();
-    return $this->render('view_up_session', [
+    return $this->renderAjax('view_up_session', [
       'model' => $this->findModel($id),
       'logs' => $logs
     ]);
@@ -174,7 +140,7 @@ class SessionsController extends Controller
   public function actionViewSession($id)
   {
     $logs = VksLog::find()->where(['=', 'session_id', $id])->orderBy('log_time')->all();
-    return $this->render('view_session', [
+    return $this->renderAjax('view_session', [
       'model' => $this->findModel($id),
       'logs' => $logs
     ]);

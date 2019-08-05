@@ -10,12 +10,12 @@ $dell_hint = 'Удалить выделенные сеансы';
 $date_about = "Выберите период";
 
 NotyAsset::register($this);
+
 BootstrapPluginAsset::register($this);
 
 ?>
 
 <div class="row">
-
   <div class="container-fluid" style="position: relative">
     <div id="add-session-wrap" style="position: absolute; top: 10px; left:-60px">
       <a id="add-session" class="fab-button" title="Добавить предстоящий сеанс" style="cursor: pointer">
@@ -64,32 +64,21 @@ BootstrapPluginAsset::register($this);
         </table>';
     ?>
   </div>
-
   <input class="csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" style="display: none">
 </div>
-<br>
 
 <script>
 
-  var periodInput = '<input class="form-control input-sm" id="vks-dates" type="text" data-range="true"' +
-    'data-multiple-dates-separator=" - " placeholder="Период отображения"/>';
-
-  /*
-      $('#vks-dates').datepicker({
-        clearButton: true,
-        toggleSelected: false,
-        onHide: function (dp, animationCompleted) {
-          if (animationCompleted) {
-            var range = $('#vks-dates').val();
-            var stDate = range.substring(6, 10) + '-' + range.substring(3, 5) + '-' + range.substring(0, 2);
-            var eDate = range.substring(19, 24) + '-' + range.substring(16, 18) + '-' + range.substring(13, 15);
-            $(".start-date").val(stDate);
-            $(".end-date").val(eDate);
-            $("#main-table").DataTable().clearPipeline().draw();
-          }
-        }
-      });
-  */
+  var periodInput = '<div id="vks-period-input">\n' +
+    '        <div class="input-group input-daterange">\n' +
+    '          <label class="h-title fa fa-info-circle" data-toggle="tooltip" data-placement="left"\n' +
+    '                 title="Выберите период"\n' +
+    '                 style="position: absolute;top:8px;left:-25px;font-size:16px"></label>\n' +
+    '          <input type="text" class="form-control input-sm" id="start-date">\n' +
+    '          <div class="input-group-addon">по</div>\n' +
+    '          <input type="text" class="form-control input-sm" id="end-date">\n' +
+    '        </div>\n' +
+    '      </div>\n';
 
   var table;
 
@@ -98,6 +87,21 @@ BootstrapPluginAsset::register($this);
     $('[data-toggle="tooltip"]').tooltip();
 
     $('#right-custom-data').html(periodInput);
+
+    $('.input-daterange').datepicker({
+      autoclose: true,
+      language: "ru",
+      startView: "days",
+      minViewMode: "days",
+      clearBtn: true,
+      todayHighlight: true,
+      daysOfWeekHighlighted: [0, 6],
+    });
+
+    $('.input-daterange').datepicker()
+      .on('hide', function (e) {
+        $("#main-table").DataTable().clearPipeline().draw();
+      });
 
     // ************************* Работа таблицы **************************************
 
@@ -215,15 +219,20 @@ BootstrapPluginAsset::register($this);
         url: '/vks/sessions/server-side?index=0',
         pages: 2, // number of pages to cache
         data: function () {
-          var stDt = $(".start-date").val();
-          var eDt = $(".end-date").val();
-          if (stDt != '--') {
-            var startDate = stDt;
+          var stDate = $("#start-date").val();
+          var eDate = $("#end-date").val();
+          var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+          stDate = stDate.replace(pattern, '$3-$2-$1');
+          eDate = eDate.replace(pattern, '$3-$2-$1');
+          $(".start-date").val(stDate);
+          $(".end-date").val(eDate);
+          if (stDate != '--') {
+            var startDate = stDate;
           } else {
             var startDate = '1970-01-01';
           }
-          if (eDt != '--') {
-            var endDate = eDt;
+          if (eDate != '--') {
+            var endDate = eDate;
           } else {
             var endDate = '2099-12-31';
           }
@@ -614,7 +623,7 @@ BootstrapPluginAsset::register($this);
       });
     });
   });
-  
+
 
   function deleteProcess(url) {
     var csrf = $('meta[name=csrf-token]').attr("content");
@@ -700,7 +709,6 @@ BootstrapPluginAsset::register($this);
       });
     });
   }
-
 
 
 </script>

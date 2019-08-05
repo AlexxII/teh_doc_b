@@ -191,3 +191,41 @@ i.check {
 #main-table td .fa {
   font-size: 22px;
 }
+.show-menu-button {
+  position: absolute;
+  background-color: #f5f7f8;
+  top: 0;
+  left: -20px;
+  width: 15px;
+  height: 100%;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 25px;
+  border-radius: 1px;
+}
+.control-buttons-wrap #vks-dates {
+  width: inherit;
+}
+.view-deleted-session td {
+  text-align: center;
+}
+.view-deleted-session table.detail-view th {
+  width: 40%;
+}
+td.align-center {
+  text-align: center;
+}
+/* wastebusket */
+#main-table .inline-wrap {
+  display: inline-flex;
+}
+#main-table .up-mark {
+  padding: 1px 0 0 5px;
+}
+#vks-period-input {
+  width:220px;
+  margin-top: 10px
+}
+.input-daterange {
+  position: relative;
+}

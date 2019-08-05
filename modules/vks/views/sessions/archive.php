@@ -14,16 +14,18 @@ $dell_hint = 'Удалить выделенные сеансы';
 ?>
 
 <div class="row">
-  <div class="">
-    <div class="container-fluid" style="margin-bottom: 20px">
-      <a href="#" class="btn btn-sm btn-danger"
-         data-toggle="tooltip" data-placement="top" title="<?= $dell_hint ?>" id="delete" disabled="true">Удалить</a>
+  <div class="container-fluid" style="position: relative">
+    <div id="delete" style="position: absolute; top: 70px; right:-60px;display: none">
+      <a id="del-session-ex" class="fab-button" title="Удалить выделенный(е) сеанс(ы)"
+         style="cursor: pointer; background-color: red">
+        <svg width="50" height="50" viewBox="0 0 24 24">
+          <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
+          <path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>
+        </svg>
+      </a>
     </div>
-  </div>
 
-  <div class="container-fluid">
     <?php
-
     echo '
         <table id="main-table" class="display no-wrap cell-border" style="width:100%">
           <thead>
@@ -305,16 +307,15 @@ $dell_hint = 'Удалить выделенные сеансы';
 
     // Работа таблицы -> событие выделения и снятия выделения
 
-    table = $('#main-table').DataTable();
     table.on('select', function (e, dt, type, indexes) {
       if (type === 'row') {
-        $('#delete').removeAttr('disabled');
+        $('#delete').show();
       }
     });
     table.on('deselect', function (e, dt, type, indexes) {
       if (type === 'row') {
         if (table.rows({selected: true}).count() > 0) return;
-        $('#delete').attr('disabled', true);
+        $('#delete').hide();
       }
     });
 
@@ -389,7 +390,7 @@ $dell_hint = 'Удалить выделенные сеансы';
               btnClass: 'btn-success',
               action: function () {
                 table.clearPipeline().draw();
-                $('#delete').attr('disabled', true);
+                $('#delete').hide();
               }
             }
           }

@@ -3,12 +3,6 @@
     font-weight: 400 !important;
     margin: 12px 0 0 30px !important;
   }
-  #main-wrap {
-    margin-top: 0 !important;
-  }
-  #main-wrap h3 {
-    margin-top: 10px;
-  }
 </style>
 
 <div id="app-wrap">

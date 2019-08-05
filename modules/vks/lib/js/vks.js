@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  $('#push-it').bind('click', clickMenu);
 
 });
 
@@ -95,4 +94,47 @@ function initNoty(text, type) {
     }
   }).show();
 }
+
+function loadExContent(url, uri) {
+  $.ajax({
+    url: url,
+    method: 'get'
+  }).done(function (response) {
+    $('body').html(response.data.data);
+    // window.history.pushState("object or string", "Title", uri);
+  }).fail(function () {
+    console.log('fail');
+  });
+}
+
+function loadControls(e) {
+  e.preventDefault();
+  var uri = $(this).data('url');
+  var title = $(this).data('title');
+  var size = $(this).data('wsize');
+  var url = '/vks/control/' + uri +'/index';
+  c = $.confirm({
+    content: function () {
+      var self = this;
+      return $.ajax({
+        url: url,
+        method: 'get'
+      }).done(function (response) {
+      }).fail(function () {
+        self.setContentAppend('<div>Что-то пошло не так!</div>');
+      });
+    },
+    contentLoaded: function (data, status, xhr) {
+      this.setContentAppend('<div>' + data + '</div>');
+    },
+    columnClass: size,
+    title: title,
+    buttons: {
+      cancel: {
+        text: 'НАЗАД'
+      }
+    }
+  });
+}
+
 
