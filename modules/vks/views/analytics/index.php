@@ -60,9 +60,14 @@ $send_hint = 'Передать выделенные строки в подроб
         ]) ?>
       <div style="position: absolute;top:0;right:30px;width:250px">
         <div class="input-group input-daterange" style="position: relative">
-          <label class="h-title fa fa-info-circle" data-toggle="tooltip" data-placement="left"
-                 title="<?php echo $date_about ?>"
-                 style="position: absolute;top:10px;left:-20px"></label>
+          <label class="h-title " data-toggle="tooltip" data-placement="left"
+                 title="<?php echo $date_about ?>">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#000">
+              <path d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48
+              10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"></path>
+            </svg>
+          </label>
           <input type="text" class="form-control input-sm" id="start-date">
           <div class="input-group-addon">по</div>
           <input type="text" class="form-control input-sm" id="end-date">
@@ -133,8 +138,8 @@ $send_hint = 'Передать выделенные строки в подроб
         var stDate = $("#start-date").val();
         var eDate = $("#end-date").val();
         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-        stDate = stDate.replace(pattern,'$3-$2-$1');
-        eDate = eDate.replace(pattern,'$3-$2-$1');
+        stDate = stDate.replace(pattern, '$3-$2-$1');
+        eDate = eDate.replace(pattern, '$3-$2-$1');
         console.log(stDate + ' - ' + eDate);
         $(".start-date").val(stDate);
         $(".end-date").val(eDate);

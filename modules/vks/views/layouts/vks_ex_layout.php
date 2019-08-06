@@ -18,12 +18,18 @@
           <?= $this->params['title']; ?>
         </li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="navig navigation-nav navigation-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
-             aria-haspopup="true" aria-expanded="false"></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+             aria-haspopup="true" aria-expanded="false">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path fill="none" d="M0 0h24v24H0V0z"></path>
+              <path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2
+              6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+            </svg>
+          </a>
           <ul class="dropdown-menu">
-            <li><a href="#" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
+            <li><a href="" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
                 Профиль</a></li>
             <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
           </ul>

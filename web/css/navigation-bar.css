@@ -32,7 +32,7 @@ body {
 .navig > li > a {
   position: relative;
   display: block;
-  padding: 13px 15px;
+  padding: 12px 15px;
 }
 .navig > li > a:hover, .navig > li > a:focus {
   text-decoration: none;

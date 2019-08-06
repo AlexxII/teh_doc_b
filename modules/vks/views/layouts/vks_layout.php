@@ -197,21 +197,36 @@ $this->beginPage() ?>
             </div>
           </ul>
         </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-             aria-haspopup="true" aria-expanded="false">
-            <svg width="24" height="24" viewBox="0 0 24 24">
-              <path fill="none" d="M0 0h24v24H0V0z"></path>
-              <path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2
-              6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
-            </svg>
-          </a>
-          <ul class="dropdown-menu">
-            <li><a href="" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
-                Профиль</a></li>
-            <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
-          </ul>
-        </li>
+        <?php if (Yii::$app->user->isGuest): ?>
+          <li class="dropdown">
+            <a href="/site/login" role="button" aria-haspopup="true" title="Войти">
+              <svg height="24" width="24" viewBox="0 0 1792 1792" style="fill:#000">
+                <path d="M1312 896q0 26-19 45l-544 544q-19 19-45 19t-45-19-19-45v-288h-448q-26 0-45-19t-19-45v-384q0-26
+            19-45t45-19h448v-288q0-26 19-45t45-19 45 19l544 544q19 19 19 45zm352-352v704q0 119-84.5 203.5t-203.5
+            84.5h-320q-13 0-22.5-9.5t-9.5-22.5q0-4-1-20t-.5-26.5 3-23.5 10-19.5 20.5-6.5h320q66 0
+            113-47t47-113v-704q0-66-47-113t-113-47h-312l-11.5-1-11.5-3-8-5.5-7-9-2-13.5q0-4-1-20t-.5-26.5 3-23.5 10-19.5
+            20.5-6.5h320q119 0 203.5 84.5t84.5 203.5z"/>
+                </path>
+              </svg>
+          </li>
+        <?php else: ?>
+          <li class="dropdown">
+            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false">
+              <svg class="rui-ToplineUser-userIcon" viewBox="0 0 16 16" width="24" height="24">
+                <path d="M14 12.197c0-.66-.205-1.311-.614-1.829a7.536 7.536 0 0 0-2.734-2.164 4.482 4.482 0 0 1-6.304 0
+              7.536 7.536 0 0 0-2.734 2.164A2.947 2.947 0 0 0 1 12.197V13a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-.803zM4.5 5c0
+              1.654 1.346 3 3 3s3-1.346 3-3V3c0-1.654-1.346-3-3-3s-3 1.346-3 3v2zM0 15V0v15zM15 0v15V0z">
+                </path>
+              </svg>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
+                  Профиль</a></li>
+              <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
+            </ul>
+          </li>
+        <?php endif; ?>
       </ul>
     </div>
   </nav>
