@@ -1,16 +1,8 @@
 <?php
 
-Yii::$app->cache->flush();
+//Yii::$app->cache->flush();
 
 use yii\helpers\Html;
-use app\assets\JConfirmAsset;
-
-JConfirmAsset::register($this);
-
-$about = 'Профиль пользователя';
-
-$this->title = 'Профиль пользователя';
-$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
@@ -36,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </h3>
     <a class="btn btn-primary btn-sm" role="button" disabled="true">Сменить пароль</a>
     <a id="holiday" href="calendar-form" class="btn btn-primary btn-sm" role="button">Цветовая схема</a>
-    <!--    <a id="holiday_" type="button" onclick="notifSet ()" class="btn btn-primary btn-sm">Уведомления</a>-->
   </div>
 
 
@@ -51,7 +42,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
         $('#holiday').on('click', function (e) {
             e.preventDefault();
-
             $.confirm({
                 title: 'Цветовая схема',
                 type: 'blue',
@@ -73,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 content: function () {
                     var self = this;
                     return $.ajax({
-                        url: 'color-scheme-form',
+                        url: '/admin/user/color-scheme-form',
                         method: 'get'
                     }).done(function (response) {
                         self.setContentAppend(response);
@@ -95,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
         var colorInt = $('#colorpicker').val();
         var csrf = $('meta[name=csrf-token]').attr("content");
         $.ajax({
-            url: 'save-color-scheme',
+            url: '/admin/user/save-color-scheme',
             method: 'post',
             data: {
                 _csrf: csrf,

@@ -20,7 +20,7 @@ class AnalyticsController extends Controller
   public function actionIndex()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'Статистка';
+    Yii::$app->view->params['title'] = 'Статистика';
     return [
       'data' => [
         'success' => true,

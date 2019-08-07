@@ -580,7 +580,9 @@ $send_hint = 'Передать выделенные строки в подроб
                 } else {
                   $('#vks-duration-work').val('');
                 }
-                $("#w0").submit();
+                var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс обновлен';
+                var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
+                sendFormData(url, table, $form, yText, nText);
               }
             }
           },

@@ -18,6 +18,30 @@ class SessionsController extends Controller
 {
   public $layout = 'vks_ex_layout.php';
 
+  public function behaviors()
+  {
+    return [
+      'access' => [
+        'class' => AccessControl::class,
+        'rules' => [
+          [
+            'allow' => true,
+            'actions' => ['sessions-ex', 'archive-ex', 'delete-completely', 'delete-single-completely'],
+            'roles' => ['superAdmin']      // доступ только с ролью superAdmin
+          ],[
+            'allow' => false,
+            'actions' => ['sessions-ex', 'archive-ex', 'delete-completely', 'delete-single-completely'],
+            'roles' => ['@', "?"]
+          ],
+          [
+            'allow' => true,
+            'roles' => ['@']
+          ]
+        ],
+      ],
+    ];
+  }
+
   public function actionServerSide()
   {
     $table = 'vks_sessions_tbl';

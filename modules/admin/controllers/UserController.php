@@ -119,7 +119,18 @@ class UserController extends Controller
 
   public function actionProfile()
   {
-    return $this->render('profile');
+    $this->layout = '@app/views/layouts/main_ex_layout.php';
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Профиль';
+    Yii::$app->view->params['backUrl'] = '/vks';
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('profile'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
   }
 
   public function actionCalendarForm()

@@ -94,7 +94,7 @@ $this->beginPage() ?>
   <nav class="navigation navigation-default">
     <div class="container-fluid">
       <ul class="navig navigation-nav" id="left">
-        <li><span id="push-it" class="navigation-brand" aria-hidden="true">
+        <li><span id="push-it" class="btn btn-default btn-circle btn-ml" aria-hidden="true">
             <svg focusable="false" width="24" height="24" viewBox="0 0 24 24">
               <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
             </svg>
@@ -109,7 +109,7 @@ $this->beginPage() ?>
         </li>
       </ul>
       <ul id="right" class="navig navigation-nav navigation-right">
-        <li id="right-custom-data-ex">
+        <li id="right-custom-data-ex" >
         </li>
         <li id="right-custom-data">
         </li>
@@ -221,9 +221,17 @@ $this->beginPage() ?>
               </svg>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
-                  Профиль</a></li>
-              <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
+              <div class="list-group">
+                <a href="" class="list-group-item ex-click" data-url="/admin/user/profile" data-uri="/admin/user/profile">
+                  <h4 class="list-group-item-heading">Профиль</h4>
+                  <p class="list-group-item-text"><?= Yii::$app->user->identity->username ?></p>
+                </a>
+              </div>
+              <div class="list-group">
+                <a href="/site/logout" class="list-group-item">
+                  <p class="list-group-item-text">Выход</p>
+                </a>
+              </div>
             </ul>
           </li>
         <?php endif; ?>
@@ -273,7 +281,6 @@ $this->beginPage() ?>
 
 
 <script>
-
   $(document).ready(function () {
 
     $('#push-it').bind('click', clickMenu);
@@ -288,6 +295,5 @@ $this->beginPage() ?>
     })
 
   });
-
 </script>
 

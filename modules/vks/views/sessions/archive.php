@@ -266,6 +266,7 @@ $dell_hint = 'Удалить выделенные сеансы';
                 var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс обновлен';
                 var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
                 sendFormData(url, table, $form, yText, nText);
+                $('#delete-wrap').hide();
               }
             }
           },

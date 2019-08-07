@@ -1,7 +1,3 @@
-$(document).ready(function () {
-
-});
-
 function clickMenu() {
   if ($(window).width() >= 900) {
     if ($('#left-side').css('left') == '0px') {
@@ -70,7 +66,6 @@ function sendFormData(url, table, form, yTest, nTest) {
     success: function (response) {
       initNoty(yTest, 'success');
       table.clearPipeline().draw();
-      $('#delete-wrap').hide();
     },
     error: function (response) {
       console.log(response.data.data);

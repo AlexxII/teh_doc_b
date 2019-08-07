@@ -1,5 +1,5 @@
 <style>
-  .app-settings {
+  .app-settings  {
     font-weight: 400 !important;
     margin: 12px 0 0 30px !important;
   }
@@ -9,7 +9,7 @@
   <nav class="navigation navigation-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
-        <button id="go-back" type="button" class="btn btn-default btn-circle btn-ml">
+        <button id="go-back" type="button" class="btn btn-default btn-circle btn-ml" data-back-url="<?= $this->params['backUrl']; ?>">
           <svg focusable="false" viewBox="0 0 24 24">
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
           </svg>
@@ -43,18 +43,9 @@
               </svg>
             </a>
             <ul class="dropdown-menu">
-              <div class="list-group">
-                <a href="" class="list-group-item ex-click" data-url="/admin/user/profile"
-                   data-uri="/admin/user/profile">
-                  <h4 class="list-group-item-heading">Профиль</h4>
-                  <p class="list-group-item-text"><?= Yii::$app->user->identity->username ?></p>
-                </a>
-              </div>
-              <div class="list-group">
-                <a href="/site/logout" class="list-group-item">
-                  <p class="list-group-item-text">Выход</p>
-                </a>
-              </div>
+              <li><a href="" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
+                  Профиль</a></li>
+              <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
             </ul>
           </li>
         <?php endif; ?>
