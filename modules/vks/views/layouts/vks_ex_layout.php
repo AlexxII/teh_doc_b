@@ -44,8 +44,7 @@
             </a>
             <ul class="dropdown-menu">
               <div class="list-group">
-                <a href="" class="list-group-item ex-click" data-url="/admin/user/profile"
-                   data-uri="/admin/user/profile">
+                <a href="" class="list-group-item ex-click" data-url="/admin/user/profile" data-uri="/admin/user/profile">
                   <h4 class="list-group-item-heading">Профиль</h4>
                   <p class="list-group-item-text"><?= Yii::$app->user->identity->username ?></p>
                 </a>
@@ -86,6 +85,13 @@
         console.log('fail');
       });
     });
+
+    $('.ex-click').on('click', function (e) {
+      e.preventDefault();
+      var url = $(this).data('url');
+      var uri = $(this).data('uri');
+      loadExContent(url, uri);
+    })
 
   });
 </script>

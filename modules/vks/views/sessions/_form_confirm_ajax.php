@@ -31,7 +31,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
       <div class="col-md-12 col-lg-9" style="padding: 0px">
         <div class="col-md-6 col-lg-6">
           <?= $form->field($model, 'vks_date', [
-            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+            'template' => '{label} <sup class="fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_date_hint . '"></sup>{input}{hint}'
           ])->textInput([
             'class' => 'fact-date form-control',
@@ -85,7 +85,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
       <div class="form-group col-md-5 col-lg-5">
         <?php
         echo $form->field($model, 'vks_type', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_type_hint . '"></sup>{input}{hint}'
         ])->dropDownList($model->vksTypesList, ['id' => 'vks-type', 'data-name' => 'vks_type',
           'prompt' => ['text' => 'Выберите',
@@ -100,7 +100,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
 
       <div class="form-group col-md-7 col-lg-7">
         <?= $form->field($model, 'vks_place', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle req" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_place_hint . '"></sup>{input}{hint}'
         ])->dropDownList($model->vksPlacesList, ['id' => 'vks-place', 'data-name' => 'vks_place',
           'prompt' => ['text' => 'Выберите',
@@ -119,13 +119,13 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
       <span class="text-muted" style="position: absolute;top:5px;right:10px;font-size: 10px">Старший абонент</span>
       <div class="form-group col-md-5 col-lg-5">
         <?= $form->field($model, 'vks_subscriber_name', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_subscr_hint . '"></sup>{input}{hint}'])
           ->textInput(['id' => 'subscriber-name'])->hint('', ['class' => ' w3-label-under']); ?>
       </div>
       <div class="form-group col-md-7 col-lg-7">
         <?= $form->field($model, 'vks_subscriber_office', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle req" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_subscrof_hint . '"></sup>{input}{hint}'])
           ->dropDownList($model->vksMskSubscribesList, ['id' => 'subscriber-office', 'data-name' => 'vks_subscriber_office',
             'prompt' => ['text' => 'Выберите',
@@ -143,7 +143,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
     <div class="row">
       <div class="form-group col-md-5 col-lg-5">
         <?= $form->field($model, 'vks_order', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle req" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_order_hint . '"></sup>{input}{hint}'])
           ->dropDownList($model->vksOrdersList, ['data-name' => 'vks_order',
             'prompt' => ['text' => 'Выберите',
@@ -158,7 +158,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
 
       <div class="form-group col-md-7 col-lg-7">
         <?= $form->field($model, 'vks_employee', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle req" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_employee_hint . '"></sup>{input}{hint}'])
           ->dropDownList($model->vksEmployees4List, ['id' => 'employee', 'data-name' => 'vks_employee',
             'prompt' => ['text' => 'Выберите',
@@ -177,13 +177,13 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
       <span class="text-muted" style="position: absolute;top:5px;right:10px;font-size: 10px">Абонент субъекта</span>
       <div class="form-group col-md-5 col-lg-5">
         <?= $form->field($model, 'vks_subscriber_reg_name', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_subscr_reg_hint . '"></sup>{input}{hint}'
         ])->textInput(['id' => 'subscriber-reg-name'])->hint('', ['class' => ' w3-label-under']); ?>
       </div>
       <div class="form-group col-md-7 col-lg-7">
         <?= $form->field($model, 'vks_subscriber_reg_office', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle req" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_subscr_regof_hint . '"></sup>{input}{hint}'
         ])->dropDownList($model->vksRegionSubscribesList, ['id' => 'subscriber-reg-office', 'data-name' => 'vks_subscriber_reg_office',
           'prompt' => ['text' => 'Выберите',
@@ -202,7 +202,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
     <div class="row">
       <div class="form-group col-md-12 col-lg-12">
         <?= $form->field($model, 'vks_equipment', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle req" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle req" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_tools_hint . '"></sup>{input}{hint}'
         ])->dropDownList($model->vksToolsList, ['data-name' => 'vks_equipment',
           'prompt' => ['text' => 'Выберите',

@@ -29,7 +29,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
       <div class="row col-md-6 col-lg-6">
         <div class="form-group">
           <?= $form->field($model, 'vks_date', [
-            'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+            'template' => '{label} <sup class="fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="bottom" title="' . $vks_date_hint . '"></sup>{input}{hint}'
           ])->textInput([
             'class' => 'vks-date form-control fact-date',
@@ -80,7 +80,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
             <?php
             echo $form->field($model, 'vks_type', [
               'template' => '{label} 
-              <sup class="h-title fa fa-info-circle" aria-hidden="true"
+              <sup class="fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_type_hint . '"></sup>
                 {input}{hint}'
             ])->dropDownList($model->vksTypesList, ['data-name' => 'vks_type', 'class' => 'vks-type form-control',
@@ -96,7 +96,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
 
           <div class="form-group col-md-7 col-lg-7" style="margin-top: 10px">
             <?= $form->field($model, 'vks_place', [
-              'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+              'template' => '{label} <sup class="fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_place_hint . '"></sup>{input}{hint}'
             ])->dropDownList($model->vksPlacesList, ['data-name' => 'vks_place', 'class' => 'vks-place form-control',
               'prompt' => ['text' => 'Выберите',
@@ -120,13 +120,13 @@ $vks_add_combined = "Добавить совмещенный сеанс";
       Старший абонент</span>
       <div class="form-group col-md-5 col-lg-5">
         <?= $form->field($model, 'vks_subscriber_name', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_subscr_hint . '"></sup>{input}'
         ])->textInput(['id' => 'subscriber-name'])->hint('', ['class' => ' w3-label-under']); ?>
       </div>
       <div class="form-group col-md-7 col-lg-7">
         <?= $form->field($model, 'vks_subscriber_office', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_subscrof_hint . '"></sup>{input}{hint}'
         ])->dropDownList($model->vksMskSubscribesList, ['id' => 'subscriber-office', 'data-name' => 'vks_subscriber_office',
           'prompt' => ['text' => 'Выберите',
@@ -144,7 +144,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
     <div class="row" style="margin-bottom: 10px">
       <div class="col-md-12 col-lg-12">
         <?= $form->field($model, 'vks_order', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle nonreq" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_order_hint . '"></sup>{input}{hint}'
         ])->dropDownList($model->vksOrdersList, ['data-name' => 'vks_order',
           'prompt' => ['text' => 'Выберите',
@@ -163,7 +163,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
       <span class="text-muted" style="position: absolute;top:5px;right:10px;font-size: 10px">Служебное</span>
       <div class="form-group col-md-5 col-lg-5">
         <?= $form->field($model, 'vks_employee_send_msg', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_employee_send_hint . '"></sup>{input}{hint}'
         ])->dropDownList($model->vksEmployeesList, ['data-name' => 'vks_employee_send_msg',
           'prompt' => ['text' => 'Выберите',
@@ -176,7 +176,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
       </div>
       <div class="form-group col-md-7 col-lg-7">
         <?= $form->field($model, 'vks_receive_msg_datetime', [
-          'template' => '{label} <sup class="h-title fa fa-info-circle" aria-hidden="true"
+          'template' => '{label} <sup class="fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_recmsg_date_hint . '"></sup>{input}{hint}'
         ])->textInput([
           'class' => 'vks_receive-date form-control'
@@ -355,6 +355,8 @@ $vks_add_combined = "Добавить совмещенный сеанс";
           $('#equipment-eq_title').val(text);
         });
     */
+
+
 
     $('.vks-date').datepicker({
       format: 'd MM yyyy г.',
