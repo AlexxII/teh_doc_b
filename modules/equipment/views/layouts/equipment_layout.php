@@ -223,7 +223,7 @@ $del_multi_nodes = 'Удалить С вложениями';
             </div>
             <div style="padding-top: 8px; right: 10px; position: absolute">
               <a href="" id="btnResetSearch">
-                <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
+                <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color:#9d9d9d"></i>
               </a>
             </div>
           </div>

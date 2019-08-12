@@ -296,11 +296,7 @@ $this->beginPage() ?>
 
     $('#logout').on('click', function (e) {
       var url = $(this).data('href');
-      $.post(url,
-        function(data) {
-          console.log('111111');
-        }
-      );
+      $.post(url);
     })
 
   });

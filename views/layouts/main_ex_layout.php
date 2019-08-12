@@ -43,9 +43,17 @@
               </svg>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
-                  Профиль</a></li>
-              <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
+              <div class="list-group">
+                <a href="" class="list-group-item ex-click" data-url="/admin/user/profile" data-uri="/admin/user/profile">
+                  <h4 class="list-group-item-heading">Профиль</h4>
+                  <p class="list-group-item-text"><?= Yii::$app->user->identity->username ?></p>
+                </a>
+              </div>
+              <div class="list-group">
+                <a href="/site/logout" method="post" class="list-group-item">
+                  <p class="list-group-item-text">Выход</p>
+                </a>
+              </div>
             </ul>
           </li>
         <?php endif; ?>

@@ -1,22 +1,30 @@
 <?php
 
-/* @var $this \yii\web\View */
-
-/* @var $content string */
-
-use app\widgets\Alert;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
+use yii\bootstrap\BootstrapPluginAsset;
+
 use app\assets\AppAsset;
+use app\assets\TableBaseAsset;
+use app\assets\JConfirmAsset;
+use app\assets\SlidebarsAsset;
+use app\modules\vks\assets\VksAppAsset;
+use app\assets\FancytreeAsset;
+use app\assets\BootstrapDatepickerAsset;
 
-AppAsset::register($this);
+AppAsset::register($this);    // регистрация ресурсов всего приложения
+TableBaseAsset::register($this);
+JConfirmAsset::register($this);
+SlidebarsAsset::register($this);
+VksAppAsset::register($this);
+FancytreeAsset::register($this);
+BootstrapDatepickerAsset::register($this);
+BootstrapPluginAsset::register($this);
 
-$exit_hint = 'Выход ';
+$this->title = 'Журнал ВКС';
 
-?>
-<?php $this->beginPage() ?>
+$this->beginPage() ?>
+
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
@@ -26,125 +34,186 @@ $exit_hint = 'Выход ';
   <?= Html::csrfMetaTags() ?>
   <title><?= Html::encode($this->title) ?></title>
   <?php $this->head() ?>
+
 </head>
 
-<style>
-  .fa {
-    font-size: 18px;
-  }
-  .navbar-inverse .navbar-nav > .active > a {
-    background-color: #0000aa;
-  }
-  .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-    background-color: #0000aa;
-    color: white;
-  }
-  .navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
-    background-color: #0000aa;
-    color: white;
-  }
-  .navbar-inverse .btn-link:hover, .navbar-inverse .btn-link:focus {
-    text-decoration: none;
-  }
-  .navbar-nav > li > .dropdown-menu {
-    background-color: #014993;
-    color: white;
-  }
-  .dropdown-menu > li > a {
-    color: white;
-  }
-  .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
-    background-color: #05226f;
-    color: white;
-  }
-  .dropdown-header {
-    color: white;
-  }
-  a:hover {
-    text-decoration: none;
-  }
-
-</style>
-
-
-<body>
 <?php $this->beginBody() ?>
 
+<!--  Меню на маленьких экранах -->
 
-<div class="wrap">
-  <?php
-  NavBar::begin([
-    'brandLabel' => '<img src="/images/logo.jpg" style="display:inline ">',
-    'brandUrl' => Yii::$app->homeUrl,
-    'options' => [
-      'class' => 'navbar-inverse navbar-fixed-top',
-    ],
-  ]);
-  $menuItems = [
-    ['label' => 'ТехДок', 'url' => ['/tehdoc']],
-    ['label' => 'ВКС', 'url' => ['/vks']],
-    ['label' => 'Планировщик', 'url' => ['/scheduler']],
-  ];
+<div id='left-menu' off-canvas="main-menu left overlay">
 
-  if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isAdmin) {
-    $menuItems[] = ['label' => 'Админ панель', 'url' => ['/admin']];
-  }
+</div>
 
-  if (Yii::$app->user->isGuest) {
-    $menuItems[] = ['label' => 'Войти', 'url' => ['/site/login']];
-  } else {
-    $menuItems[] = [
-      'label' => '<i class="fa fa-user" aria-hidden="true" style="font-size: 18px; color: #fff"></i>',
-      'items' => [
-        '<li class="dropdown-header" style="font-size: 10px">' . Yii::$app->user->identity->username . '</li>',
-        ['label' => '<i class="fa fa-cogs" aria-hidden="true" style="font-size: 16px; color: #fff"></i> Профиль',
-          'url' => ['/admin/user/profile']
-        ],
-        ['label' => ''
-          . Html::beginForm(['/site/logout'], 'post')
-          . Html::submitButton(
-            '<span style="cursor: default"><i class="fa fa-sign-out" aria-hidden="true" 
-                                        style="font-size: 16px; color: #fff"></i> Выход</span>',
-            [
-              'class' => 'btn btn-link logout',
-              'data-toggle' => "tooltip",
-              'data-placement' => "bottom",
-              'style' => [
-                'padding' => '0px',
-              ]
-            ]
-          )
-          . Html::endForm()
-        ]
-      ]
-    ];
-  }
+<!--  Навигационная панель  -->
 
-  echo Nav::widget([
-    'options' => ['class' => 'navbar-nav navbar-right'],
-    'encodeLabels' => false,
-    'items' => $menuItems,
-  ]);
-  NavBar::end();
-  ?>
+<div id="app-wrap">
+  <nav class="navigation navigation-default">
+    <div class="container-fluid">
+      <ul class="navig navigation-nav" id="left">
+        <li><span id="push-it" class="btn btn-default btn-circle btn-ml hidden" aria-hidden="true">
+            <svg focusable="false" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+            </svg>
+          </span></li>
+        <li id="app-logo" class="navigation-brand">
+          <img src="/images/logo.png" style="display:inline">
+        </li>
+        <li id="app-name">
 
-  <div class="container" style="padding-top: 80px">
-    <?= Breadcrumbs::widget([
-      'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-    ]) ?>
-    <?= Alert::widget() ?>
-    <?= $content ?>
+        </li>
+        <li id="left-custom-data">
+        </li>
+      </ul>
+      <ul id="right" class="navig navigation-nav navigation-right">
+        <li id="right-custom-data-ex">
+        </li>
+        <li id="right-custom-data">
+        </li>
+        <li id="app-control" class="dropdown hidden">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false">
+            <svg width="24" height="24" viewBox="0 0 24 24" focusable="false">
+              <path d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2
+              15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62
+              1.11-.9 1.79-.63l1.81.73c.26-.17.52-.32.78-.46l.27-1.91c.09-.7.71-1.25 1.44-1.25h3.7c.74 0 1.36.54 1.45 1.27l.27
+              1.89c.27.14.53.29.79.46l1.8-.72c.71-.26 1.48.03 1.82.65l1.84 3.18c.36.66.2 1.44-.36 1.88l-1.52 1.19c.01.15.02.3.02.46s-.01.31-.02.46l1.52
+              1.19c.56.45.72 1.23.37 1.86l-1.86 3.22c-.34.62-1.11.9-1.8.63l-1.8-.72c-.26.17-.52.32-.78.46l-.27 1.91c-.1.68-.72 1.22-1.46
+              1.22zm-3.23-2h2.76l.37-2.55.53-.22c.44-.18.88-.44 1.34-.78l.45-.34 2.38.96 1.38-2.4-2.03-1.58.07-.56c.03-.26.06-.51.06-.78s-.03-.53-.06-.78l-.07-.56
+              2.03-1.58-1.39-2.4-2.39.96-.45-.35c-.42-.32-.87-.58-1.33-.77l-.52-.22-.37-2.55h-2.76l-.37 2.55-.53.21c-.44.19-.88.44-1.34.79l-.45.33-2.38-.95-1.39 2.39
+              2.03 1.58-.07.56a7 7 0 0 0-.06.79c0 .26.02.53.06.78l.07.56-2.03 1.58 1.38 2.4 2.39-.96.45.35c.43.33.86.58 1.33.77l.53.22.38 2.55z"></path>
+              <circle cx="12" cy="12" r="3.5"></circle>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+          </ul>
+        </li>
+        <li id="app-notification">
+          <a href="#" role="button" class="dropdown-toggle" aria-hidden="true">
+            <svg viewBox="0 0 16 16" width="24" height="24" aria-hidden="true">
+              <path fill-rule="evenodd" d="M14 12v1H0v-1l.73-.58c.77-.77.81-2.55 1.19-4.42C2.69 3.23 6 2 6 2c0-.55.45-1
+              1-1s1 .45 1 1c0 0 3.39 1.23 4.16 5 .38 1.88.42 3.66 1.19 4.42l.66.58H14zm-7 4c1.11 0 2-.89 2-2H5c0 1.11.89 2 2 2z">
+              </path>
+            </svg>
+          </a>
+        </li>
+        <li id="apps" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2
+              2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2
+              2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9
+              -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2
+              2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z">
+              </path>
+            </svg>
+          </a>
+          <ul class="dropdown-menu">
+            <div class="list-group">
+              <a href="/equipment/tools" class="list-group-item">
+                <h4 class="list-group-item-heading">Техника</h4>
+                <p class="list-group-item-text">Перечень оборудования</p>
+              </a>
+            </div>
+            <div class="list-group">
+              <a href="/vks" class="list-group-item">
+                <h4 class="list-group-item-heading">Журнал ВКС</h4>
+                <p class="list-group-item-text">Журнал сеансов видеосвязи</p>
+              </a>
+            </div>
+            <div class="list-group">
+              <a href="/scheduler" class="list-group-item">
+                <h4 class="list-group-item-heading">Календарь</h4>
+                <p class="list-group-item-text">Календарь</p>
+              </a>
+            </div>
+          </ul>
+        </li>
+        <li id="accounts" class="dropdown">
+          <?php if (Yii::$app->user->isGuest): ?>
+          <a href="/site/login" role="button" aria-haspopup="true" title="Войти">
+            <svg height="24" width="24" viewBox="0 0 1792 1792" style="fill:#000">
+              <path d="M1312 896q0 26-19 45l-544 544q-19 19-45 19t-45-19-19-45v-288h-448q-26 0-45-19t-19-45v-384q0-26
+            19-45t45-19h448v-288q0-26 19-45t45-19 45 19l544 544q19 19 19 45zm352-352v704q0 119-84.5 203.5t-203.5
+            84.5h-320q-13 0-22.5-9.5t-9.5-22.5q0-4-1-20t-.5-26.5 3-23.5 10-19.5 20.5-6.5h320q66 0
+            113-47t47-113v-704q0-66-47-113t-113-47h-312l-11.5-1-11.5-3-8-5.5-7-9-2-13.5q0-4-1-20t-.5-26.5 3-23.5 10-19.5
+            20.5-6.5h320q119 0 203.5 84.5t84.5 203.5z"/>
+              </path>
+            </svg>
+            <?php else: ?>
+              <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                 aria-expanded="false">
+                <svg class="rui-ToplineUser-userIcon" viewBox="0 0 16 16" width="24" height="24">
+                  <path d="M14 12.197c0-.66-.205-1.311-.614-1.829a7.536 7.536 0 0 0-2.734-2.164 4.482 4.482 0 0 1-6.304 0
+              7.536 7.536 0 0 0-2.734 2.164A2.947 2.947 0 0 0 1 12.197V13a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-.803zM4.5 5c0
+              1.654 1.346 3 3 3s3-1.346 3-3V3c0-1.654-1.346-3-3-3s-3 1.346-3 3v2zM0 15V0v15zM15 0v15V0z">
+                  </path>
+                </svg>
+              </a>
+              <ul class="dropdown-menu">
+                <div class="list-group">
+                  <a href="" class="list-group-item ex-click" data-url="/admin/user/profile"
+                     data-uri="/admin/user/profile">
+                    <h4 class="list-group-item-heading">Профиль</h4>
+                    <p class="list-group-item-text"><?= Yii::$app->user->identity->username ?></p>
+                  </a>
+                </div>
+                <div class="list-group">
+                  <a id="logout" data-href="/site/logout" class="list-group-item">
+                    <p class="list-group-item-text">Выход</p>
+                  </a>
+                </div>
+              </ul>
+            <?php endif; ?>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div id="main-wrap">
+
+    <!--  Основное навигационное меню слева -->
+
+    <div id="left-side">
+      <div id="left-menu">
+
+      </div>
+    </div>
+    <div id="main-content" class="container">
+      <?= $content ?>
+    </div>
   </div>
+
 </div>
 
 <?php $this->endBody() ?>
 </body>
+
 </html>
 <?php $this->endPage() ?>
 
 
 <script>
   $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
+
+    $('#push-it').bind('click', clickMenu);
+
+    $('.jclick').on('click', loadControls);
+
+    $('.ex-click').on('click', function (e) {
+      e.preventDefault();
+      var url = $(this).data('url');
+      var uri = $(this).data('uri');
+      loadExContent(url, uri, '/vks');
+    });
+
+    $('#logout').on('click', function (e) {
+      var url = $(this).data('href');
+      $.post(url);
+    })
+
   });
 </script>
+
