@@ -254,6 +254,7 @@ class SessionsController extends Controller
           $newModel->vks_record_create = $date;
           $newModel->vks_record_update = $date;
           $newModel->vks_upcoming_session = 1;
+          $newModel->vks_employee_receive_msg = $user->username;
           $newModel->important = 1;
           $result = $newModel->save();
           $this->logVks($newModel->id, "info","Добавил запись о предстоящем сеансе ВКС");
@@ -560,6 +561,7 @@ class SessionsController extends Controller
     $this->layout = 'vks_ex_layout.php';
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     Yii::$app->view->params['title'] = 'Архив';
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     return [
       'data' => [
         'success' => true,

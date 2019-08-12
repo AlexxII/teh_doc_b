@@ -175,6 +175,7 @@ class SessionsController extends Controller
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     Yii::$app->view->params['title'] = 'Корзина';
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     return [
       'data' => [
         'success' => true,

@@ -228,7 +228,7 @@ $this->beginPage() ?>
                 </a>
               </div>
               <div class="list-group">
-                <a href="/site/logout" class="list-group-item">
+                <a id="logout" data-href="/site/logout" class="list-group-item">
                   <p class="list-group-item-text">Выход</p>
                 </a>
               </div>
@@ -291,7 +291,16 @@ $this->beginPage() ?>
       e.preventDefault();
       var url = $(this).data('url');
       var uri = $(this).data('uri');
-      loadExContent(url, uri);
+      loadExContent(url, uri, '/vks');
+    });
+
+    $('#logout').on('click', function (e) {
+      var url = $(this).data('href');
+      $.post(url,
+        function(data) {
+          console.log('111111');
+        }
+      );
     })
 
   });

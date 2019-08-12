@@ -55,7 +55,6 @@ $(window).resize(function () {
   }
 });
 
-
 /* form */
 function sendFormData(url, table, form, yTest, nTest) {
   $.ajax({
@@ -90,9 +89,9 @@ function initNoty(text, type) {
   }).show();
 }
 
-function loadExContent(url, uri) {
+function loadExContent(url, uri, backUrl) {
   $.ajax({
-    url: url,
+    url: url + '?back-url=' + backUrl,
     method: 'get'
   }).done(function (response) {
     $('body').html(response.data.data);

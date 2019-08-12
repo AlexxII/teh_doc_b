@@ -9,7 +9,7 @@
   <nav class="navigation navigation-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
-        <button id="go-back" type="button" class="btn btn-default btn-circle btn-ml">
+        <button id="go-back" type="button" class="btn btn-default btn-circle btn-ml" data-back-url="<?= Yii::$app->view->params['bUrl']?>">
           <svg focusable="false" viewBox="0 0 24 24">
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
           </svg>
@@ -50,7 +50,7 @@
                 </a>
               </div>
               <div class="list-group">
-                <a href="/site/logout" class="list-group-item">
+                <a href="/site/logout" method="post" class="list-group-item">
                   <p class="list-group-item-text">Выход</p>
                 </a>
               </div>
@@ -74,7 +74,7 @@
     $('[data-toggle="tooltip"]').tooltip();
 
     $('#go-back').click(function (e) {
-      var url = '/vks';
+      var url = $(this).data('backUrl');
       $.ajax({
         url: url,
         method: 'get'
@@ -90,7 +90,7 @@
       e.preventDefault();
       var url = $(this).data('url');
       var uri = $(this).data('uri');
-      loadExContent(url, uri);
+      loadExContent(url, uri, '/vks');
     })
 
   });

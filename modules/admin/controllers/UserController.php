@@ -122,7 +122,7 @@ class UserController extends Controller
     $this->layout = '@app/views/layouts/main_ex_layout.php';
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     Yii::$app->view->params['title'] = 'Профиль';
-    Yii::$app->view->params['backUrl'] = '/vks';
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     return [
       'data' => [
         'success' => true,
