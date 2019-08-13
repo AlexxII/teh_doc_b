@@ -1,0 +1,24 @@
+<div class="settings-menu">
+  <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-type" data-title="Тип ВКС">Тип
+    ВКС</a>
+</div>
+<div class="settings-menu">
+  <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-place"
+     data-title="Студии проведения ВКС">Студии проведения ВКС</a>
+</div>
+<div class="settings-menu">
+  <a class="menu-link jclick" href="" data-wsize="xlarge" data-url="vks-subscribes" data-title="Абоненты">Абоненты</a>
+</div>
+<div class="settings-menu">
+  <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-order" data-title="Распоряжения">Распоряжения</a>
+</div>
+<div class="settings-menu">
+  <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-employee" data-title="Сотрудники">Сотрудники</a>
+</div>
+<div class="settings-menu">
+  <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-tools" data-title="Оборудование">Оборудование</a>
+</div>
+<hr>
+<div class="settings-menu">
+  <a class="menu-link ex-click" href="" data-url="/vks/admin/sessions" data-uri="/vks/admin/sessions">Корзина</a>
+</div>

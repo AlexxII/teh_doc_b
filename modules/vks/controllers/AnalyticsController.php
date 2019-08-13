@@ -15,7 +15,7 @@ use yii\web\Controller;
 
 class AnalyticsController extends Controller
 {
-  public $layout = 'vks_ex_layout';
+  public $layout = '@app/views/layouts/main_ex.php';
 
   public function actionIndex()
   {

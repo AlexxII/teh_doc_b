@@ -33,6 +33,18 @@ $this->beginPage() ?>
   <title><?= Html::encode($this->title) ?></title>
   <?php $this->head() ?>
 
+  <style>
+    #ex-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      overflow-y: auto;
+    }
+  </style>
+
 </head>
 
 <?php $this->beginBody() ?>
@@ -68,6 +80,7 @@ $this->beginPage() ?>
         </li>
         <li id="right-custom-data">
         </li>
+
         <li id="app-control" class="dropdown hidden">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
              aria-expanded="false">
@@ -83,7 +96,8 @@ $this->beginPage() ?>
               <circle cx="12" cy="12" r="3.5"></circle>
             </svg>
           </a>
-          <ul class="dropdown-menu">
+          <ul id="app-control-ul" class="dropdown-menu">
+
           </ul>
         </li>
         <li id="app-notification">
@@ -107,7 +121,7 @@ $this->beginPage() ?>
               </path>
             </svg>
           </a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu navig">
             <div class="list-group">
               <a href="/equipment/tools" class="list-group-item">
                 <h4 class="list-group-item-heading">Техника</h4>
@@ -175,9 +189,7 @@ $this->beginPage() ?>
     <!--  Основное навигационное меню слева -->
 
     <div id="left-side">
-      <div id="left-menu">
 
-      </div>
     </div>
     <div id="main-content" class="container">
       <?= $content ?>
@@ -198,20 +210,20 @@ $this->beginPage() ?>
 
     $('#push-it').bind('click', clickMenu);
 
-    $('.jclick').on('click', loadControls);
-
-    $('.ex-click').on('click', function (e) {
-      e.preventDefault();
-      var url = $(this).data('url');
-      var uri = $(this).data('uri');
-      loadExContent(url, uri, '/vks');
-    });
-
     $('#logout').on('click', function (e) {
       var url = $(this).data('href');
       $.post(url);
     })
 
   });
+
+  $(document).on('click', '.jclick', loadControls);
+
+  $(document).on('click', '.ex-click', function (e) {
+    e.preventDefault();
+    var url = $(this).data('url');
+    var uri = $(this).data('uri');
+    loadExContent(url, uri, '/vks');
+  })
 </script>
 

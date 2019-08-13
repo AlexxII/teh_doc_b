@@ -94,7 +94,7 @@ function loadExContent(url, uri, backUrl) {
     url: url + '?back-url=' + backUrl,
     method: 'get'
   }).done(function (response) {
-    $('body').html(response.data.data);
+    $('#app-wrap').append('<div id="ex-wrap">' + response.data.data + '</div>');
     // window.history.pushState("object or string", "Title", uri);
   }).fail(function () {
     console.log('fail');

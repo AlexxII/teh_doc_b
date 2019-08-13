@@ -128,10 +128,9 @@ $this->beginPage() ?>
               <circle cx="12" cy="12" r="3.5"></circle>
             </svg>
           </a>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu navig">
             <div class="settings-menu">
-              <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-type" data-title="Тип ВКС">Тип
-                ВКС</a>
+              <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-type" data-title="Тип ВКС">Тип ВКС</a>
             </div>
             <div class="settings-menu">
               <a class="menu-link jclick" href="" data-wsize="large" data-url="vks-place"

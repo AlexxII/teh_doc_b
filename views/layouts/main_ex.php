@@ -1,5 +1,5 @@
 <style>
-  .app-settings  {
+  .app-settings {
     font-weight: 400 !important;
     margin: 12px 0 0 30px !important;
   }
@@ -9,7 +9,8 @@
   <nav class="navigation navigation-default">
     <div class="container-fluid">
       <ul class="nav navbar-nav">
-        <button id="go-back" type="button" class="btn btn-default btn-circle btn-ml" data-back-url="<?= $this->params['bUrl']; ?>">
+        <button id="go-back" type="button" class="btn btn-default btn-circle btn-ml"
+                data-back-url="<?= $this->params['bUrl']; ?>">
           <svg focusable="false" viewBox="0 0 24 24">
             <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
           </svg>
@@ -73,16 +74,9 @@
     $('[data-toggle="tooltip"]').tooltip();
 
     $('#go-back').click(function (e) {
+      $('#ex-wrap').detach();
       var url = $(this).data('backUrl');
-      $.ajax({
-        url: url,
-        method: 'get'
-      }).done(function (response) {
-        $('body').html(response);
-        window.history.pushState("object or string", "Title", "/vks");
-      }).fail(function () {
-        console.log('fail');
-      });
+      window.history.pushState("object or string", "Title", url);
     });
 
   });

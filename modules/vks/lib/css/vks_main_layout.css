@@ -156,13 +156,6 @@ i.check {
   margin-top: 13px;
   width: 245px;
 }
-#main-table strong {
-  font-size: 14px;
-  font-weight: 700;
-}
-#main-table tbody td {
-  font-size: 12px;
-}
 /* form-up-session */
 #w0 .fa {
   font-size: 15px;
@@ -188,7 +181,7 @@ i.check {
   font-size: 18px;
   color: #1e6887;
 }
-#main-table td .fa {
+#up-sessions-table td .fa {
   font-size: 22px;
 }
 .show-menu-button {
@@ -215,12 +208,32 @@ i.check {
 td.align-center {
   text-align: center;
 }
-/* wastebusket */
+/* wastebasket */
+#up-sessions-table .inline-wrap {
+  display: inline-flex;
+}
+#up-sessions-table .up-mark {
+  padding: 1px 0 0 5px;
+}
+#up-sessions-table strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+#up-sessions-table tbody td {
+  font-size: 12px;
+}
 #main-table .inline-wrap {
   display: inline-flex;
 }
 #main-table .up-mark {
   padding: 1px 0 0 5px;
+}
+#main-table strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+#main-table tbody td {
+  font-size: 12px;
 }
 #vks-period-input {
   width:220px;
@@ -234,3 +247,6 @@ td.align-center {
   top:5px;
   left:-25px;
 }
+/*.input-group .form-control {*/
+  /*position: static;*/
+/*}*/

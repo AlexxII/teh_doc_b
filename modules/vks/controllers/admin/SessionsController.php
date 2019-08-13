@@ -16,7 +16,7 @@ use app\modules\vks\models\VksTypes;
 
 class SessionsController extends Controller
 {
-  public $layout = 'vks_ex_layout.php';
+  public $layout = '@app/views/layouts/main_ex.php';
 
   public function behaviors()
   {

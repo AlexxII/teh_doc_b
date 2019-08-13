@@ -34,12 +34,10 @@ BootstrapPluginAsset::register($this);
       </a>
     </div>
 
-    <input class="start-date" style="display: none">
-    <input class="end-date" style="display: none">
     <?php
 
     echo '
-        <table id="main-table" class="display no-wrap cell-border" style="width:100%">
+        <table id="up-sessions-table" class="display no-wrap cell-border" style="width:100%">
           <thead>
             <tr>
               <th></th>
@@ -63,7 +61,7 @@ BootstrapPluginAsset::register($this);
 
 <script>
 
-  var periodInput = '<div id="vks-period-input">' +
+  var periodInput = '<div id="vks-period-input" style="position:relative;z-index:10">' +
     '        <div class="input-group input-daterange">' +
     '          <label class="h-title" data-toggle="tooltip" data-placement="left"' +
     '                 title="Выберите период" style="">' +
@@ -83,10 +81,35 @@ BootstrapPluginAsset::register($this);
 
   $(document).ready(function () {
 
-    $('#push-it').removeClass('hidden');
-    $('#app-control').removeClass('hidden');
-
     $('[data-toggle="tooltip"]').tooltip();
+
+    var url = '/vks/sessions/menu';
+    $.ajax({
+      type: 'GET',
+      url: url,
+      success: function (response) {
+        $('#left-side').html(response);
+      },
+      error: function (response) {
+        console.log('fail')
+      }
+    });
+
+    $.ajax({
+      type: 'GET',
+      url: '/vks/sessions/menu-ex',
+      success: function (response) {
+        $('#app-control-ul').html(response);
+      },
+      error: function (response) {
+        console.log('fail')
+      }
+    });
+
+
+    $('#push-it').removeClass('hidden');
+
+    $('#app-control').removeClass('hidden');
 
     $('#right-custom-data').html(periodInput);
 
@@ -102,7 +125,7 @@ BootstrapPluginAsset::register($this);
 
     $('.input-daterange').datepicker()
       .on('hide', function (e) {
-        $("#main-table").DataTable().clearPipeline().draw();
+        $("#up-sessions-table").DataTable().clearPipeline().draw();
       });
 
     // ************************* Работа таблицы **************************************
@@ -192,7 +215,7 @@ BootstrapPluginAsset::register($this);
       });
     });
 
-    table = $('#main-table').DataTable({
+    table = $('#up-sessions-table').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
@@ -309,7 +332,7 @@ BootstrapPluginAsset::register($this);
       }
     });
 
-    $('#main-table tbody').on('click', '#edit', function (e) {
+    $('#up-sessions-table tbody').on('click', '#edit', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
       var url = "/vks/sessions/update-up-session-ajax?id=" + data[0];
@@ -360,7 +383,7 @@ BootstrapPluginAsset::register($this);
       });
     });
 
-    $('#main-table tbody').on('click', '#view', function (e) {
+    $('#up-sessions-table tbody').on('click', '#view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
       var url = "/vks/sessions/view-up-session-ajax?id=" + data[0];
@@ -389,7 +412,7 @@ BootstrapPluginAsset::register($this);
         }
       });
     });
-    $('#main-table tbody').on('click', '#confirm-session', function (e) {
+    $('#up-sessions-table tbody').on('click', '#confirm-session', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
       var url = "/vks/sessions/confirm-ajax?id=" + data[0];
@@ -664,7 +687,7 @@ BootstrapPluginAsset::register($this);
             ok: {
               btnClass: 'btn-success',
               action: function () {
-                $("#main-table").DataTable().clearPipeline().draw();
+                $("#up-sessions-table").DataTable().clearPipeline().draw();
                 $('#delete-wrap').hide();
               }
             }
