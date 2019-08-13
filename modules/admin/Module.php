@@ -8,25 +8,26 @@ class Module extends \yii\base\Module
 {
 
   public $defaultRoute = 'admin';
-  public $layout = 'admin_layout.php';
+  public $layout = '@app/views/layouts/main_ex.php';
 
   public function behaviors()
   {
     return [
-        'access' => [
-            'class' => AccessControl::class,
-            'rules' => [
-                [
-                    'allow' =>true,
-                    'roles' => ['@'],      // доступ только зарегистрированным
-                ],
-            ],
+      'access' => [
+        'class' => AccessControl::class,
+        'rules' => [
+          [
+            'allow' => true,
+            'roles' => ['@'],      // доступ только зарегистрированным
+          ],
         ],
+      ],
     ];
   }
 
   public function init()
   {
+    \Yii::$app->view->title = 'РИАЦi';
     parent::init();
   }
 }

@@ -6,12 +6,14 @@ use yii\filters\AccessControl;
 
 class EquipmentModule extends \yii\base\Module
 {
-    public $layout = 'equipment_layout.php';
 //    public $defaultRoute = '/tools';
 
-    public function init()
-    {
-        parent::init();
-    }
+  public $layout = '@app/views/layouts/main.php';
+
+  public function init()
+  {
+    \Yii::$app->view->title = 'Техника';
+    parent::init();
+  }
 
 }

@@ -18,8 +18,6 @@ use app\modules\vks\models\VksTypes;
 
 class SessionsController extends Controller
 {
-  public $layout = 'vks_layout';
-
   public function behaviors()
   {
     return [
@@ -375,7 +373,6 @@ class SessionsController extends Controller
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
         $this->logVks($model->id, "info", "Подтвердил прошедший сеанс ВКС.");
-        Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
         return [
           'data' => [
             'success' => true,
@@ -434,10 +431,23 @@ class SessionsController extends Controller
       $model->vks_upcoming_session = 0;
       if ($model->save()) {
         $this->logVks($model->id, "info", "Добавил запись о прошедшем сеансе ВКС.");
-        Yii::$app->session->setFlash('success', 'Запись успешно сохранена и добавлена в архив сеансов ВКС.');
-        return $this->redirect('archive');
+        return [
+          'data' => [
+            'success' => true,
+            'data' => 'Model save',
+            'message' => 'Page load',
+          ],
+          'code' => 1,
+        ];
       } else {
-        return var_dump($model->getErrors());
+        return [
+          'data' => [
+            'success' => false,
+            'data' => $model->getErrors(),
+            'message' => 'Page load',
+          ],
+          'code' => 0,
+        ];
       }
     }
     return $this->renderAjax('_form_confirm_ajax', [

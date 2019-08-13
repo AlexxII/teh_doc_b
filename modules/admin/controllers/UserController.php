@@ -119,7 +119,7 @@ class UserController extends Controller
 
   public function actionProfile()
   {
-    $this->layout = '@app/views/layouts/main_ex_layout.php';
+    $this->layout = '@app/views/layouts/main_ex.php';
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     Yii::$app->view->params['title'] = 'Профиль';
     Yii::$app->view->params['bUrl'] = $_GET['back-url'];

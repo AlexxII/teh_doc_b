@@ -4,11 +4,6 @@ use yii\helpers\Html;
 use yii\bootstrap\BootstrapPluginAsset;
 use app\assets\NotyAsset;
 
-$about = "Журнал предстоящих сеансов видеосвязи";
-$add_hint = 'Добавить предстоящий сеанс';
-$dell_hint = 'Удалить выделенные сеансы';
-$date_about = "Выберите период";
-
 NotyAsset::register($this);
 
 BootstrapPluginAsset::register($this);
@@ -64,7 +59,6 @@ BootstrapPluginAsset::register($this);
         </table>';
     ?>
   </div>
-  <input class="csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" style="display: none">
 </div>
 
 <script>
@@ -88,6 +82,9 @@ BootstrapPluginAsset::register($this);
   var table;
 
   $(document).ready(function () {
+
+    $('#push-it').removeClass('hidden');
+    $('#app-control').removeClass('hidden');
 
     $('[data-toggle="tooltip"]').tooltip();
 

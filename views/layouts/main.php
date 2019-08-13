@@ -21,8 +21,6 @@ FancytreeAsset::register($this);
 BootstrapDatepickerAsset::register($this);
 BootstrapPluginAsset::register($this);
 
-$this->title = 'Журнал ВКС';
-
 $this->beginPage() ?>
 
 <!DOCTYPE html>
@@ -60,7 +58,7 @@ $this->beginPage() ?>
           <img src="/images/logo.png" style="display:inline">
         </li>
         <li id="app-name">
-
+          <?= $this->title ?>
         </li>
         <li id="left-custom-data">
         </li>

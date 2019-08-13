@@ -14,7 +14,6 @@ CalendarInteractionAsset::register($this);
 CalendarBootstrapAsset::register($this);
 BootstrapDatepickerAsset::register($this);
 
-$this->title = 'Планировщик';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -33,6 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script>
   $(document).ready(function () {
+    $('#push-it').removeClass('hidden');
+    $('#app-control').removeClass('hidden');
 
 
   });

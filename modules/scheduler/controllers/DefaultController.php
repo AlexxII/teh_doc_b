@@ -11,7 +11,6 @@ class DefaultController extends Controller
 
   public function actionIndex()
   {
-    $this->layout = 'scheduler_layout_ex.php';
     return $this->render('index');
   }
 
