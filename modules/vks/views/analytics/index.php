@@ -94,7 +94,24 @@ $send_hint = 'Передать выделенные строки в подроб
 
   // Глобальные переменные
 
-  var nodeid, treeId, table;
+  var periodInput = '<div id="vks-period-input" style="position: absolute; right:200px">' +
+    '        <div class="input-group input-daterange vks-daterange">' +
+    '          <label class="h-title" data-toggle="tooltip" data-placement="left"' +
+    '                 title="Выберите период" style="">' +
+    '                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="#000">' +
+    '                   <path d="M0 0h24v24H0z" fill="none"></path>' +
+    '                   <path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 ' +
+    '                      2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"></path>' +
+    '                 </svg>' +
+    '          </label>' +
+    '          <input type="text" class="form-control input-sm" id="start-date-ex">' +
+    '          <div class="input-group-addon">по</div>' +
+    '          <input type="text" class="form-control input-sm" id="end-date-ex">' +
+    '        </div>\n' +
+    '      </div>\n';
+
+
+  var treeId, table;
 
   //************************ Работа над стилем ****************************
 
@@ -106,6 +123,23 @@ $send_hint = 'Передать выделенные строки в подроб
   $(document).ready(function () {
 
     $('[data-toggle="tooltip"]').tooltip();
+
+    $('#ex-right-custom-data').html(periodInput);
+
+    $('.input-daterange').datepicker({
+      autoclose: true,
+      language: "ru",
+      startView: "days",
+      minViewMode: "days",
+      clearBtn: true,
+      todayHighlight: true,
+      daysOfWeekHighlighted: [0, 6],
+    });
+
+    $('.vks-daterange').datepicker()
+      .on('hide', function (e) {
+        $("#main-table").DataTable().clearPipeline().draw();
+      });
 
     var url = '/vks/analytics/list';
     $(document).ready(function () {
@@ -288,12 +322,12 @@ $send_hint = 'Передать выделенные строки в подроб
           var tbl = $(".tbl").val();
           var ident = $(".ident").val();
           var stDt = function() {
-            var stDate = $("#start-date").val();
+            var stDate = $("#start-date-ex").val();
             var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
             return stDate.replace(pattern, '$3-$2-$1');
           };
           var eDt = function() {
-            var eDate = $("#end-date").val();
+            var eDate = $("#end-date-ex").val();
             var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
             return eDate.replace(pattern, '$3-$2-$1');
           };
@@ -532,7 +566,6 @@ $send_hint = 'Передать выделенные строки в подроб
     // Работа таблицы -> перерисовка или изменение размера страницы
 
     table.on('length.dt', function (e, settings, len) {
-      console.log(1);
       $('#delete-wrap-ex').hide();
     });
 
@@ -545,6 +578,7 @@ $send_hint = 'Передать выделенные строки в подроб
 
     $('#delete-wrap-ex').click(function (event) {
       event.preventDefault();
+      var csrf = $('meta[name=csrf-token]').attr("content");
       var url = "/vks/sessions/delete";
       if ($(this).attr('disabled')) {
         return;
@@ -561,7 +595,7 @@ $send_hint = 'Передать выделенные строки в подроб
             btnClass: 'btn-danger',
             action: function () {
               jc.close();
-              deleteProcess(url);
+              deleteProcess(url, table, csrf)
             }
           },
           cancel: {
@@ -738,91 +772,6 @@ $send_hint = 'Передать выделенные строки в подроб
         }
       }
     );
-  }
-
-  function deleteProcess(url) {
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    var data = table.rows({selected: true}).data();
-    var ar = [];
-    var count = data.length;
-    for (var i = 0; i < count; i++) {
-      ar[i] = data[i][0];
-    }
-    jc = $.confirm({
-      icon: 'fa fa-cog fa-spin',
-      title: 'Подождите!',
-      content: 'Ваш запрос выполняется!',
-      buttons: false,
-      closeIcon: false,
-      confirmButtonClass: 'hide'
-    });
-    $.ajax({
-      url: url,
-      method: 'post',
-      dataType: "JSON",
-      data: {jsonData: ar, _csrf: csrf},
-    }).done(function (response) {
-      if (response != false) {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-thumbs-up',
-          title: 'Успех!',
-          content: 'Ваш запрос выполнен.',
-          type: 'green',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-success',
-              action: function () {
-                $("#main-table").DataTable().clearPipeline().draw();
-                $('.hiddendel').hide();
-              }
-            }
-          }
-        });
-      } else {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-exclamation-triangle',
-          title: 'Неудача!',
-          content: 'Запрос не выполнен. Что-то пошло не так.',
-          type: 'red',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-danger',
-              action: function () {
-              }
-            }
-          }
-        });
-      }
-    }).fail(function () {
-      jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-exclamation-triangle',
-        title: 'Неудача!',
-        content: 'Запрос не выполнен. Что-то пошло не так.',
-        type: 'red',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|4000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-            }
-          }
-        }
-      });
-    });
   }
 
 </script>

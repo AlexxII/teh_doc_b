@@ -4,10 +4,6 @@ use yii\helpers\Html;
 
 // Для администратора системы
 
-$about = "Журнал сеансов видеосвязи, которые были удалены из таблицы предстоящих сеансов ВКС";
-$dell_hint = 'Удалить выделенные сеансы окончательно';
-$return_hint = 'Восстановить удаленные сеансы';
-
 ?>
 
 <div class="row">
@@ -30,29 +26,24 @@ $return_hint = 'Восстановить удаленные сеансы';
         </svg>
       </a>
     </div>
-
-    <?php
-
-    echo '
-        <table id="main-table" class="display no-wrap cell-border" style="width:100%">
-          <thead>
-            <tr>
-              <th></th>
-              <th >Дата</th>
-              <th >Месяц</th>
-              <th >Время</th>
-              <th >Время</th>
-              <th >Тип ВКС</th>
-              <th >Студии</th>
-              <th >Абонент</th>
-              <th >Абонент</th>
-              <th >Распоряжение</th>
-              <th data-priority="3">Action</th>
-              <th></th>
-            </tr>
-          </thead>
-        </table>';
-    ?>
+    <table id="main-table" class="display no-wrap cell-border" style="width:100%">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Дата</th>
+        <th>Месяц</th>
+        <th>Время</th>
+        <th>Время</th>
+        <th>Тип ВКС</th>
+        <th>Студии</th>
+        <th>Абонент</th>
+        <th>Абонент</th>
+        <th>Распоряжение</th>
+        <th data-priority="3">Action</th>
+        <th></th>
+      </tr>
+      </thead>
+    </table>
   </div>
 
   <input class="csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" style="display: none">
@@ -305,6 +296,17 @@ $return_hint = 'Восстановить удаленные сеансы';
       }
     });
 
+    // Работа таблицы -> перерисовка или изменение размера страницы
+
+    table.on('length.dt', function (e, settings, len) {
+      $('#delete').hide();
+      $('#restore').hide();
+    });
+
+    table.on('draw.dt', function (e, settings, len) {
+      $('#delete').hide();
+      $('#restore').hide();
+    });
 
     //********************** Удаление и восстановление записей ***********************************
 

@@ -3,8 +3,10 @@
 use yii\helpers\Html;
 use yii\bootstrap\BootstrapPluginAsset;
 use app\assets\NotyAsset;
+use app\modules\vks\assets\VksAppAsset;
 
 NotyAsset::register($this);
+VksAppAsset::register($this);
 
 BootstrapPluginAsset::register($this);
 
@@ -34,30 +36,31 @@ BootstrapPluginAsset::register($this);
       </a>
     </div>
 
-    <?php
-
-    echo '
-        <table id="up-sessions-table" class="display no-wrap cell-border" style="width:100%">
-          <thead>
-            <tr>
-              <th></th>
-              <th >Дата</th>
-              <th >Месяц</th>
-              <th >Время</th>
-              <th >Время</th>
-              <th >Тип ВКС</th>
-              <th >Студии</th>
-              <th >Абонент</th>
-              <th >Абонент</th>
-              <th >Распоряжение</th>
-              <th data-priority="3">Action</th>
-              <th></th>
-            </tr>
-          </thead>
-        </table>';
-    ?>
+    <table id="up-sessions-table" class="display no-wrap cell-border" style="width:100%">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Дата</th>
+        <th>Месяц</th>
+        <th>Время</th>
+        <th>Время</th>
+        <th>Тип ВКС</th>
+        <th>Студии</th>
+        <th>Абонент</th>
+        <th>Абонент</th>
+        <th>Распоряжение</th>
+        <th data-priority="3">Action</th>
+        <th></th>
+      </tr>
+      </thead>
+    </table>
   </div>
 </div>
+
+
+
+
+
 
 <script>
 
@@ -83,28 +86,9 @@ BootstrapPluginAsset::register($this);
 
     $('[data-toggle="tooltip"]').tooltip();
 
-    var url = '/vks/sessions/menu';
-    $.ajax({
-      type: 'GET',
-      url: url,
-      success: function (response) {
-        $('#left-side').html(response);
-      },
-      error: function (response) {
-        console.log('fail')
-      }
-    });
+    initLeftMenu('/vks/sessions/menu');
+    initAppConfig('/vks/sessions/menu-ex');
 
-    $.ajax({
-      type: 'GET',
-      url: '/vks/sessions/menu-ex',
-      success: function (response) {
-        $('#app-control-ul').html(response);
-      },
-      error: function (response) {
-        console.log('fail')
-      }
-    });
 
     $('#push-it').removeClass('hidden');
 
@@ -248,8 +232,6 @@ BootstrapPluginAsset::register($this);
           var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
           stDate = stDate.replace(pattern, '$3-$2-$1');
           eDate = eDate.replace(pattern, '$3-$2-$1');
-          $(".start-date").val(stDate);
-          $(".end-date").val(eDate);
           if (stDate != '--') {
             var startDate = stDate;
           } else {
@@ -508,6 +490,7 @@ BootstrapPluginAsset::register($this);
 
     $('#delete-wrap').click(function (event) {
       event.preventDefault();
+      var csrf = $('meta[name=csrf-token]').attr("content");
       var url = "/vks/sessions/delete";
       if ($(this).attr('disabled')) {
         return;
@@ -524,7 +507,7 @@ BootstrapPluginAsset::register($this);
             btnClass: 'btn-danger',
             action: function () {
               jc.close();
-              deleteProcess(url);
+              deleteProcess(url, table, csrf);
             }
           },
           cancel: {
@@ -657,92 +640,6 @@ BootstrapPluginAsset::register($this);
       });
     });
   });
-
-
-  function deleteProcess(url) {
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    var data = table.rows({selected: true}).data();
-    var ar = [];
-    var count = data.length;
-    for (var i = 0; i < count; i++) {
-      ar[i] = data[i][0];
-    }
-    jc = $.confirm({
-      icon: 'fa fa-cog fa-spin',
-      title: 'Подождите!',
-      content: 'Ваш запрос выполняется!',
-      buttons: false,
-      closeIcon: false,
-      confirmButtonClass: 'hide'
-    });
-    $.ajax({
-      url: url,
-      method: 'post',
-      dataType: "JSON",
-      data: {jsonData: ar, _csrf: csrf},
-    }).done(function (response) {
-      if (response != false) {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-thumbs-up',
-          title: 'Успех!',
-          content: 'Ваш запрос выполнен.',
-          type: 'green',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-success',
-              action: function () {
-                $("#up-sessions-table").DataTable().clearPipeline().draw();
-                $('#delete-wrap').hide();
-              }
-            }
-          }
-        });
-      } else {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-exclamation-triangle',
-          title: 'Неудача!',
-          content: 'Запрос не выполнен. Что-то пошло не так.',
-          type: 'red',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-danger',
-              action: function () {
-              }
-            }
-          }
-        });
-      }
-    }).fail(function () {
-      jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-exclamation-triangle',
-        title: 'Неудача!',
-        content: 'Запрос не выполнен. Что-то пошло не так.',
-        type: 'red',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|4000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-            }
-          }
-        }
-      });
-    });
-  }
 
 
 </script>

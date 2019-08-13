@@ -19,8 +19,12 @@
           <?= $this->params['title']; ?>
         </li>
       </ul>
-      <ul class="navig navigation-nav navigation-right hidden">
-        <li id="accounts" class="dropdown">
+      <ul class="navig navigation-nav navigation-right">
+        <li id=ex-right-custom-data-ex">
+        </li>
+        <li id="ex-right-custom-data">
+        </li>
+        <li id="accounts" class="dropdown hidden">
           <?php if (Yii::$app->user->isGuest): ?>
           <a href="/site/login" role="button" aria-haspopup="true" title="Войти">
             <svg height="24" width="24" viewBox="0 0 1792 1792" style="fill:#000">

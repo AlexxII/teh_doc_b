@@ -25,6 +25,10 @@ class AppAsset extends AssetBundle
     'css/left-menu.css'
   ];
 
+  public $js = [
+    'js/main.js'
+  ];
+
   public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
 
   public $depends = [

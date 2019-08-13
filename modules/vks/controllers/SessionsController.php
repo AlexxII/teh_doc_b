@@ -511,12 +511,12 @@ class SessionsController extends Controller
 
   public function actionMenu()
   {
-    return $this->renderAjax('menu');
+    return $this->renderAjax('left_menu');
   }
 
   public function actionMenuEx()
   {
-    return $this->renderAjax('menu_ex');
+    return $this->renderAjax('app_config_menu');
   }
 
 }

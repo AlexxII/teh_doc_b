@@ -1,60 +1,3 @@
-function clickMenu() {
-  if ($(window).width() >= 900) {
-    if ($('#left-side').css('left') == '0px') {
-      closeSlider();
-    } else {
-      openSlider();
-    }
-  } else {
-    openMenu();
-  }
-}
-
-function openSlider() {
-  $('#add-session-wrap').hide();
-  var left = 275 - $('#main-content').offset().left;
-  $('#left-side').css('width', '2px');
-  $('#left-side').animate({left: '0px'}, {queue: false, duration: 500});
-  $('#main-content').animate({paddingLeft: left + 'px'}, {queue: false, duration: 500});
-}
-
-function closeSlider() {
-  $('#left-side').css('width', '275px');
-  $('#left-side').animate({left: '-280px'}, {queue: false, duration: 500});
-  $('#main-content').animate({paddingLeft: '0px'}, {queue: false, duration: 500});
-  $('#add-session-wrap').show();
-}
-
-var controller = new slidebars();
-controller.init();
-
-function openMenu() {
-  event.stopPropagation();
-  event.preventDefault();
-  controller.toggle('main-menu');
-  $('#app-wrap').bind('click', closeMenu).addClass('pointer');
-}
-
-function closeMenu(e) {
-  $('#app-wrap').off('click', closeMenu).removeClass('pointer');
-  controller.toggle('main-menu');
-}
-
-$(window).resize(function () {
-  var divPosition = $('#add-session-wrap').offset();
-  if (divPosition.left <= 0) {
-    $('#add-session').hide();
-  } else {
-    $('#add-session').show();
-  }
-
-  if ($(window).width() >= 900) {
-    return;
-  } else {
-    closeSlider();
-  }
-});
-
 /* form */
 function sendFormData(url, table, form, yTest, nTest) {
   $.ajax({
@@ -73,62 +16,85 @@ function sendFormData(url, table, form, yTest, nTest) {
   });
 }
 
-function initNoty(text, type) {
-  new Noty({
-    type: type,
-    theme: 'mint',
-    text: text,
-    progressBar: true,
-    timeout: '4000',
-    closeWith: ['click'],
-    killer: true,
-    animation: {
-      open: 'animated noty_effects_open noty_anim_out', // Animate.css class names
-      close: 'animated noty_effects_close noty_anim_in' // Animate.css class names
-    }
-  }).show();
-}
-
-function loadExContent(url, uri, backUrl) {
+function deleteProcess(url, table, csrf) {
+  var data = table.rows({selected: true}).data();
+  var ar = [];
+  var count = data.length;
+  for (var i = 0; i < count; i++) {
+    ar[i] = data[i][0];
+  }
+  jc = $.confirm({
+    icon: 'fa fa-cog fa-spin',
+    title: 'Подождите!',
+    content: 'Ваш запрос выполняется!',
+    buttons: false,
+    closeIcon: false,
+    confirmButtonClass: 'hide'
+  });
   $.ajax({
-    url: url + '?back-url=' + backUrl,
-    method: 'get'
+    url: url,
+    method: 'post',
+    dataType: "JSON",
+    data: {jsonData: ar, _csrf: csrf},
   }).done(function (response) {
-    $('#app-wrap').append('<div id="ex-wrap">' + response.data.data + '</div>');
-    // window.history.pushState("object or string", "Title", uri);
-  }).fail(function () {
-    console.log('fail');
-  });
-}
-
-function loadControls(e) {
-  e.preventDefault();
-  var uri = $(this).data('url');
-  var title = $(this).data('title');
-  var size = $(this).data('wsize');
-  var url = '/vks/control/' + uri +'/index';
-  c = $.confirm({
-    content: function () {
-      var self = this;
-      return $.ajax({
-        url: url,
-        method: 'get'
-      }).done(function (response) {
-      }).fail(function () {
-        self.setContentAppend('<div>Что-то пошло не так!</div>');
+    if (response != false) {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-thumbs-up',
+        title: 'Успех!',
+        content: 'Ваш запрос выполнен.',
+        type: 'green',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|8000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-success',
+            action: function () {
+              table.clearPipeline().draw();
+            }
+          }
+        }
       });
-    },
-    contentLoaded: function (data, status, xhr) {
-      this.setContentAppend('<div>' + data + '</div>');
-    },
-    columnClass: size,
-    title: title,
-    buttons: {
-      cancel: {
-        text: 'НАЗАД'
-      }
+    } else {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-exclamation-triangle',
+        title: 'Неудача!',
+        content: 'Запрос не выполнен. Что-то пошло не так.',
+        type: 'red',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|8000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+            }
+          }
+        }
+      });
     }
+  }).fail(function () {
+    jc.close();
+    jc = $.confirm({
+      icon: 'fa fa-exclamation-triangle',
+      title: 'Неудача!',
+      content: 'Запрос не выполнен. Что-то пошло не так.',
+      type: 'red',
+      buttons: false,
+      closeIcon: false,
+      autoClose: 'ok|4000',
+      confirmButtonClass: 'hide',
+      buttons: {
+        ok: {
+          btnClass: 'btn-danger',
+          action: function () {
+          }
+        }
+      }
+    });
   });
 }
-
-

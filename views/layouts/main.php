@@ -2,24 +2,20 @@
 
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
-use yii\bootstrap\BootstrapPluginAsset;
 
 use app\assets\AppAsset;
 use app\assets\TableBaseAsset;
 use app\assets\JConfirmAsset;
 use app\assets\SlidebarsAsset;
-use app\modules\vks\assets\VksAppAsset;
 use app\assets\FancytreeAsset;
 use app\assets\BootstrapDatepickerAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
-TableBaseAsset::register($this);
 JConfirmAsset::register($this);
 SlidebarsAsset::register($this);
-VksAppAsset::register($this);
+TableBaseAsset::register($this);
 FancytreeAsset::register($this);
 BootstrapDatepickerAsset::register($this);
-BootstrapPluginAsset::register($this);
 
 $this->beginPage() ?>
 
@@ -123,12 +119,6 @@ $this->beginPage() ?>
           </a>
           <ul class="dropdown-menu navig">
             <div class="list-group">
-              <a href="/equipment/tools" class="list-group-item">
-                <h4 class="list-group-item-heading">Техника</h4>
-                <p class="list-group-item-text">Перечень оборудования</p>
-              </a>
-            </div>
-            <div class="list-group">
               <a href="/vks" class="list-group-item">
                 <h4 class="list-group-item-heading">Журнал ВКС</h4>
                 <p class="list-group-item-text">Журнал сеансов видеосвязи</p>
@@ -138,6 +128,12 @@ $this->beginPage() ?>
               <a href="/scheduler" class="list-group-item">
                 <h4 class="list-group-item-heading">Календарь</h4>
                 <p class="list-group-item-text">Календарь</p>
+              </a>
+            </div>
+            <div class="list-group">
+              <a href="/equipment/tools" class="list-group-item">
+                <h4 class="list-group-item-heading">Техника</h4>
+                <p class="list-group-item-text">Перечень оборудования</p>
               </a>
             </div>
           </ul>

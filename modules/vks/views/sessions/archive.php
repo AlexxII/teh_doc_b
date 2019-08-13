@@ -24,32 +24,24 @@ $dell_hint = 'Удалить выделенные сеансы';
         </svg>
       </a>
     </div>
-
-    <?php
-    echo '
-        <table id="main-table" class="display no-wrap cell-border" style="width:100%">
-          <thead>
-            <tr>
-              <th></th>
-              <th >Дата</th>
-              <th >Месяц</th>
-              <th >Время</th>
-              <th >Тип ВКС</th>
-              <th >Студии</th>
-              <th >Абонент</th>
-              <th >Распоряжение</th>
-              <th data-priority="3">Action</th>
-              <th></th>
-            </tr>
-          </thead>
-        </table>';
-    ?>
+    <table id="main-table" class="display no-wrap cell-border" style="width:100%">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Дата</th>
+        <th>Месяц</th>
+        <th>Время</th>
+        <th>Тип ВКС</th>
+        <th>Студии</th>
+        <th>Абонент</th>
+        <th>Распоряжение</th>
+        <th data-priority="3">Action</th>
+        <th></th>
+      </tr>
+      </thead>
+    </table>
   </div>
-
-  <input class="csrf" value="<?= Yii::$app->request->getCsrfToken() ?>" style="display: none">
 </div>
-<br>
-
 
 <script>
 
@@ -266,7 +258,7 @@ $dell_hint = 'Удалить выделенные сеансы';
                 var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс обновлен';
                 var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
                 sendFormData(url, table, $form, yText, nText);
-                $('#delete-wrap').hide();
+                $('#delete').hide();
               }
             }
           },
@@ -320,10 +312,21 @@ $dell_hint = 'Удалить выделенные сеансы';
       }
     });
 
+    // Работа таблицы -> перерисовка или изменение размера страницы
+
+    table.on('length.dt', function (e, settings, len) {
+      $('#delete').hide();
+    });
+
+    table.on('draw.dt', function (e, settings, len) {
+      $('#delete').hide();
+    });
+
     //********************** Удаление записей ***********************************
 
     $('#delete').click(function (event) {
       event.preventDefault();
+      var csrf = $('meta[name=csrf-token]').attr("content");
       var url = "/vks/sessions/delete";
       if ($(this).attr('disabled')) {
         return;
@@ -340,7 +343,7 @@ $dell_hint = 'Удалить выделенные сеансы';
             btnClass: 'btn-danger',
             action: function () {
               jc.close();
-              deleteProcess(url)
+              deleteProcess(url, table, csrf)
             }
           },
           cancel: {
@@ -352,91 +355,5 @@ $dell_hint = 'Удалить выделенные сеансы';
       });
     });
   });
-
-  function deleteProcess(url) {
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    var data = table.rows({selected: true}).data();
-    var ar = [];
-    var count = data.length;
-    for (var i = 0; i < count; i++) {
-      ar[i] = data[i][0];
-    }
-    jc = $.confirm({
-      icon: 'fa fa-cog fa-spin',
-      title: 'Подождите!',
-      content: 'Ваш запрос выполняется!',
-      buttons: false,
-      closeIcon: false,
-      confirmButtonClass: 'hide'
-    });
-    $.ajax({
-      url: url,
-      method: 'post',
-      dataType: "JSON",
-      data: {jsonData: ar, _csrf: csrf},
-    }).done(function (response) {
-      if (response != false) {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-thumbs-up',
-          title: 'Успех!',
-          content: 'Ваш запрос выполнен.',
-          type: 'green',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-success',
-              action: function () {
-                table.clearPipeline().draw();
-                $('#delete').hide();
-              }
-            }
-          }
-        });
-      } else {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-exclamation-triangle',
-          title: 'Неудача!',
-          content: 'Запрос не выполнен. Что-то пошло не так.',
-          type: 'red',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-danger',
-              action: function () {
-              }
-            }
-          }
-        });
-      }
-    }).fail(function () {
-      jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-exclamation-triangle',
-        title: 'Неудача!',
-        content: 'Запрос не выполнен. Что-то пошло не так.',
-        type: 'red',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|4000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-            }
-          }
-        }
-      });
-    });
-  }
-
 
 </script>
