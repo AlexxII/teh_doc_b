@@ -1,14 +1,17 @@
 <?php
 
 use yii\helpers\Html;
-use yii\bootstrap\BootstrapPluginAsset;
 use app\assets\NotyAsset;
 use app\modules\vks\assets\VksAppAsset;
+use app\assets\TableBaseAsset;
+use app\assets\FancytreeAsset;
+use app\assets\BootstrapDatepickerAsset;
 
-NotyAsset::register($this);
 VksAppAsset::register($this);
-
-BootstrapPluginAsset::register($this);
+NotyAsset::register($this);
+TableBaseAsset::register($this);
+FancytreeAsset::register($this);
+BootstrapDatepickerAsset::register($this);
 
 ?>
 

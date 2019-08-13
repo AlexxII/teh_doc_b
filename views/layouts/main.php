@@ -1,21 +1,15 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\Breadcrumbs;
-
+use yii\bootstrap\BootstrapPluginAsset;
 use app\assets\AppAsset;
-use app\assets\TableBaseAsset;
-use app\assets\JConfirmAsset;
 use app\assets\SlidebarsAsset;
-use app\assets\FancytreeAsset;
-use app\assets\BootstrapDatepickerAsset;
+use app\assets\JConfirmAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 JConfirmAsset::register($this);
 SlidebarsAsset::register($this);
-TableBaseAsset::register($this);
-FancytreeAsset::register($this);
-BootstrapDatepickerAsset::register($this);
+BootstrapPluginAsset::register($this);
 
 $this->beginPage() ?>
 

@@ -1,15 +1,6 @@
 html body {
   overflow-y: scroll !important;
 }
-#left-menu {
-  text-align: left;
-  width: 150px;
-  background-color: #fff;
-  color: #000 !important;
-}
-#left-menu .fa {
-  color: #5f6368 !important;
-}
 .menu-list-about {
   padding-top: 10px;
 }
@@ -18,52 +9,10 @@ html body {
 }
 td .fa {
   font-size: 25px !important;
-  text-decoration: none;
-  color: #000;
+  text-decoration: none !important;
+  color: #000 !important;
 }
 /* buttons */
-.btn-circle.btn-xl {
-  width: 40px;
-  height: 40px;
-  padding: 0px;
-  padding-top: 2px;
-  padding-left: 1px;
-  margin-left: 0px;
-  border-radius: 35px;
-  font-size: 30px;
-  line-height: 1.33;
-  margin-top: 0px !important;
-  float: left;
-  background-color: inherit;
-  border: none;
-}
-.btn-circle.btn-ml {
-  width: 20px;
-  height: 40px;
-  padding: 8px;
-  margin-left: 0px;
-  border-radius: 35px;
-  font-size: 30px;
-  line-height: 1.33;
-  margin-top: 5px !important;
-  float: left;
-  background-color: inherit;
-  border: none;
-}
-.btn-circle:hover {
-  background-color: rgba(128, 128, 128, 0.13);
-}
-.btn-circle > .fa {
-  font-size: 30px;
-}
-.btn-circle.btn-lg {
-  width: 40px;
-  height: 40px;
-  padding: 10px 12px;
-  font-size: 18px;
-  line-height: 1.33;
-  border-radius: 25px;
-}
 [class*="fab"] {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -125,12 +74,6 @@ td .fa {
 .fab-button svg {
   fill: #fff;
   padding: 5px 3px 0 5px;
-}
-/* adding-page */
-#go-back {
-  width: 40px !important;
-  height: 40px !important;
-  font-size: 0;
 }
 .hideMenu-button a {
   text-decoration: none;
