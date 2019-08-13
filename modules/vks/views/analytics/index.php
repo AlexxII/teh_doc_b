@@ -49,31 +49,16 @@ $send_hint = 'Передать выделенные строки в подроб
 
 
   <div class="col-lg-8 col-md-8 about about-padding" style="position: relative;">
-    <div class="control-buttons-wrap" style="position: absolute;top: 0;width: 100%">
-      <?= Html::a('Удалить',
-        [''], [
-          'class' => 'btn btn-danger btn-sm hiddendel',
-          'style' => ['margin-top' => '5px', 'display' => 'none'],
-          'data-toggle' => "tooltip",
-          'data-placement' => "top",
-          'title' => $dell_hint,
-        ]) ?>
-      <div style="position: absolute;top:0;right:30px;width:250px">
-        <div class="input-group input-daterange" style="position: relative">
-          <label class="h-title " data-toggle="tooltip" data-placement="left"
-                 title="<?php echo $date_about ?>">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#000">
-              <path d="M0 0h24v24H0z" fill="none"></path>
-              <path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48
-              10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"></path>
-            </svg>
-          </label>
-          <input type="text" class="form-control input-sm" id="start-date">
-          <div class="input-group-addon">по</div>
-          <input type="text" class="form-control input-sm" id="end-date">
-        </div>
-      </div>
+    <div id="delete-wrap-ex" style="position: absolute; top: 70px; right:-60px;display: none">
+      <a id="del-session-ex" class="fab-button" title="Удалить выделенный(е) сеанс(ы)"
+         style="cursor: pointer; background-color: red">
+        <svg width="50" height="50" viewBox="0 0 24 24">
+          <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
+          <path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>
+        </svg>
+      </a>
     </div>
+
     <input class="root" style="display: none">
     <input class="lft" style="display: none">
     <input class="rgt" style="display: none">
@@ -82,8 +67,6 @@ $send_hint = 'Передать выделенные строки в подроб
     <input class="start-date" style="display: none">
     <input class="end-date" style="display: none">
 
-    <div class="table-wrapper" style="min-height:40px">
-    </div>
     <div class="about-header" style="font-size:18px;"></div>
     <table id="main-table" class="display no-wrap cell-border" style="width:100%">
       <thead>
@@ -122,30 +105,7 @@ $send_hint = 'Передать выделенные строки в подроб
 
   $(document).ready(function () {
 
-
-    $('.input-daterange').datepicker({
-      autoclose: true,
-      language: "ru",
-      startView: "days",
-      minViewMode: "days",
-      clearBtn: true,
-      todayHighlight: true,
-      daysOfWeekHighlighted: [0, 6],
-    });
-
-    $('.input-daterange').datepicker()
-      .on('hide', function (e) {
-        var stDate = $("#start-date").val();
-        var eDate = $("#end-date").val();
-        var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-        stDate = stDate.replace(pattern, '$3-$2-$1');
-        eDate = eDate.replace(pattern, '$3-$2-$1');
-        console.log(stDate + ' - ' + eDate);
-        $(".start-date").val(stDate);
-        $(".end-date").val(eDate);
-        $("#main-table").DataTable().clearPipeline().draw();
-      });
-
+    $('[data-toggle="tooltip"]').tooltip();
 
     var url = '/vks/analytics/list';
     $(document).ready(function () {
@@ -168,7 +128,7 @@ $send_hint = 'Передать выделенные строки в подроб
           $('.ident').val(identifier);
           var u = '/vks/analytics/';
           $("#main-table").DataTable().clearPipeline().draw();
-          var tree = $(window.treeId).fancytree("getTree");
+          var tree = $(treeId).fancytree("getTree");
           tree.reload({
             url: u + treeUrl
           });
@@ -176,7 +136,6 @@ $send_hint = 'Передать выделенные строки в подроб
       });
     });
 
-    $('[data-toggle="tooltip"]').tooltip();
 
     $('.hideMenu-button').click(function (e) {
       var indexes;
@@ -216,81 +175,6 @@ $send_hint = 'Передать выделенные строки в подроб
           }
         }
       );
-    });
-
-    $('#main-table').on('length.dt', function (e, settings, len) {
-      $('.hiddendel').hide();
-      $('.classif').hide();
-    });
-
-    $('#main-table').on('draw.dt', function (e, settings, len) {
-      $('.hiddendel').hide();
-      $('.classif').hide();
-    });
-
-    //************************* Управление деревом ***************************************
-
-    window.treeId = "#fancyree_w0";
-
-    $('.refresh').click(function (event) {
-      event.preventDefault();
-      var tree = $(window.treeId).fancytree("getTree");
-      tree.reload();
-      $('#vars-control').val("vks_types_tbl").change();
-      $(".about-header").text("");
-      $(".about-main").html('');
-      $(".del-node").hide();
-      $(".del-multi-nodes").hide();
-      $(".root").text('');
-      $(".lft").text('');
-      $(".rgt").text('');
-      $('.hiddendel').hide();
-      $('.classif').hide();
-      $("#main-table").DataTable().clearPipeline().draw();
-    });
-
-    $("input[name=search]").keyup(function (e) {
-      var n,
-        tree = $.ui.fancytree.getTree(),
-        args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-        opts = {},
-        filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-        match = $(this).val();
-
-      $.each(args, function (i, o) {
-        opts[o] = $("#" + o).is(":checked");
-      });
-      opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
-
-      if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-        $("button#btnResetSearch").click();
-        return;
-      }
-      if ($("#regex").is(":checked")) {
-        // Pass function to perform match
-        n = filterFunc.call(tree, function (node) {
-          return new RegExp(match, "i").test(node.title);
-        }, opts);
-      } else {
-        // Pass a string to perform case insensitive matching
-        n = filterFunc.call(tree, match, opts);
-      }
-      $("#btnResetSearch").attr("disabled", false);
-    }).focus();
-
-    $("#btnResetSearch").click(function (e) {
-      e.preventDefault();
-      $("input[name=search]").val("");
-      $("span#matches").text("");
-      var tree = $(window.treeId).fancytree("getTree");
-      tree.clearFilter();
-    }).attr("disabled", true);
-
-    $("input[name=search]").keyup(function (e) {
-      if ($(this).val() == '') {
-        var tree = $(window.treeId).fancytree("getTree");
-        tree.clearFilter();
-      }
     });
 
     // ************************* Работа таблицы **************************************
@@ -403,8 +287,16 @@ $send_hint = 'Передать выделенные строки в подроб
           var rgt = $(".rgt").text();
           var tbl = $(".tbl").val();
           var ident = $(".ident").val();
-          var stDt = $(".start-date").val();
-          var eDt = $(".end-date").val();
+          var stDt = function() {
+            var stDate = $("#start-date").val();
+            var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+            return stDate.replace(pattern, '$3-$2-$1');
+          };
+          var eDt = function() {
+            var eDate = $("#end-date").val();
+            var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+            return eDate.replace(pattern, '$3-$2-$1');
+          };
           if (stDt != '--') {
             var startDate = stDt;
           } else {
@@ -593,7 +485,7 @@ $send_hint = 'Передать выделенные строки в подроб
       });
     });
 
-    $('#main-table tbody').on('click', '.view', function (e) {
+    table.on('click', '.view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
       var url = "/vks/sessions/view-session-ajax?id=" + data[0];
@@ -627,22 +519,31 @@ $send_hint = 'Передать выделенные строки в подроб
 
     table.on('select', function (e, dt, type) {
       if (type === 'row') {
-        $('.hiddendel').show();
-        $('.classif').show();
+        $('#delete-wrap-ex').show();
       }
     });
     table.on('deselect', function (e, dt, type) {
-      var i = table.rows({selected: true}).indexes();
-      if (type === 'row' && i.count() == 0) {
-        $('.hiddendel').hide();
-        $('.classif').hide();
+      if (type === 'row') {
+        if (table.rows({selected: true}).count() > 0) return;
+        $('#delete-wrap-ex').hide();
       }
+    });
+
+    // Работа таблицы -> перерисовка или изменение размера страницы
+
+    table.on('length.dt', function (e, settings, len) {
+      console.log(1);
+      $('#delete-wrap-ex').hide();
+    });
+
+    table.on('draw.dt', function (e, settings, len) {
+      $('#delete-wrap-ex').hide();
     });
 
     //********************** Удаление записей ***********************************
 
 
-    $('.hiddendel').click(function (event) {
+    $('#delete-wrap-ex').click(function (event) {
       event.preventDefault();
       var url = "/vks/sessions/delete";
       if ($(this).attr('disabled')) {
@@ -716,6 +617,74 @@ $send_hint = 'Передать выделенные строки в подроб
       }
     });
   });
+
+
+
+  //************************* Управление деревом ***************************************
+
+  treeId = "#fancyree_w0";
+
+  $('.refresh').click(function (event) {
+    event.preventDefault();
+    var tree = $(treeId).fancytree("getTree");
+    tree.reload();
+    $('#vars-control').val("vks_types_tbl").change();
+    $(".about-header").text("");
+    $(".about-main").html('');
+    $(".del-node").hide();
+    $(".del-multi-nodes").hide();
+    $(".root").text('');
+    $(".lft").text('');
+    $(".rgt").text('');
+    $('.hiddendel').hide();
+    $('.classif').hide();
+    $("#main-table").DataTable().clearPipeline().draw();
+  });
+
+  $("input[name=search]").keyup(function (e) {
+    var n,
+      tree = $.ui.fancytree.getTree(),
+      args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+      opts = {},
+      filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+      match = $(this).val();
+
+    $.each(args, function (i, o) {
+      opts[o] = $("#" + o).is(":checked");
+    });
+    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
+
+    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+      $("button#btnResetSearch").click();
+      return;
+    }
+    if ($("#regex").is(":checked")) {
+      // Pass function to perform match
+      n = filterFunc.call(tree, function (node) {
+        return new RegExp(match, "i").test(node.title);
+      }, opts);
+    } else {
+      // Pass a string to perform case insensitive matching
+      n = filterFunc.call(tree, match, opts);
+    }
+    $("#btnResetSearch").attr("disabled", false);
+  }).focus();
+
+  $("#btnResetSearch").click(function (e) {
+    e.preventDefault();
+    $("input[name=search]").val("");
+    $("span#matches").text("");
+    var tree = $(treeId).fancytree("getTree");
+    tree.clearFilter();
+  }).attr("disabled", true);
+
+  $("input[name=search]").keyup(function (e) {
+    if ($(this).val() == '') {
+      var tree = $(treeId).fancytree("getTree");
+      tree.clearFilter();
+    }
+  });
+
 
   function restoreSelectedRows(indexes) {
     var table = $('#main-table').DataTable();

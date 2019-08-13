@@ -61,8 +61,8 @@ BootstrapPluginAsset::register($this);
 
 <script>
 
-  var periodInput = '<div id="vks-period-input" style="position:relative;z-index:10">' +
-    '        <div class="input-group input-daterange">' +
+  var periodInput = '<div id="vks-period-input">' +
+    '        <div class="input-group input-daterange" id="vks-daterange">' +
     '          <label class="h-title" data-toggle="tooltip" data-placement="left"' +
     '                 title="Выберите период" style="">' +
     '                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="#000">' +
@@ -106,7 +106,6 @@ BootstrapPluginAsset::register($this);
       }
     });
 
-
     $('#push-it').removeClass('hidden');
 
     $('#app-control').removeClass('hidden');
@@ -123,7 +122,7 @@ BootstrapPluginAsset::register($this);
       daysOfWeekHighlighted: [0, 6],
     });
 
-    $('.input-daterange').datepicker()
+    $('#vks-daterange').datepicker()
       .on('hide', function (e) {
         $("#up-sessions-table").DataTable().clearPipeline().draw();
       });
@@ -332,7 +331,8 @@ BootstrapPluginAsset::register($this);
       }
     });
 
-    $('#up-sessions-table tbody').on('click', '#edit', function (e) {
+
+    table.on('click', '#edit', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
       var url = "/vks/sessions/update-up-session-ajax?id=" + data[0];
@@ -383,7 +383,7 @@ BootstrapPluginAsset::register($this);
       });
     });
 
-    $('#up-sessions-table tbody').on('click', '#view', function (e) {
+    table.on('click', '#view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
       var url = "/vks/sessions/view-up-session-ajax?id=" + data[0];
@@ -412,7 +412,7 @@ BootstrapPluginAsset::register($this);
         }
       });
     });
-    $('#up-sessions-table tbody').on('click', '#confirm-session', function (e) {
+    table.on('click', '#confirm-session', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
       var url = "/vks/sessions/confirm-ajax?id=" + data[0];
@@ -494,6 +494,15 @@ BootstrapPluginAsset::register($this);
       }
     });
 
+    // Работа таблицы -> перерисовка или изменение размера страницы
+
+    table.on('length.dt', function (e, settings, len) {
+      $('#delete-wrap').hide();
+    });
+
+    table.on('draw.dt', function (e, settings, len) {
+      $('#delete-wrap').hide();
+    });
 
     //********************** Удаление записей ***********************************
 

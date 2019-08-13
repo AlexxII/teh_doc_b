@@ -150,7 +150,7 @@ i.check {
   transform: rotate(45deg);
 }
 .jconfirm {
-  z-index: 9 !important;
+  z-index: 200 !important;
 }
 #vks-dates {
   margin-top: 13px;
@@ -247,6 +247,6 @@ td.align-center {
   top:5px;
   left:-25px;
 }
-/*.input-group .form-control {*/
-  /*position: static;*/
-/*}*/
+.input-group .form-control {
+  position: static;
+}
