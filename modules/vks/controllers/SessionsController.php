@@ -2,12 +2,12 @@
 
 namespace app\modules\vks\controllers;
 
-use app\modules\admin\models\User;
 use Yii;
 use yii\web\Controller;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 
+use app\modules\admin\models\User;
 use app\modules\vks\models\VksLog;
 use app\modules\vks\models\SSP;
 use app\modules\vks\models\VksPlaces;
@@ -454,7 +454,6 @@ class SessionsController extends Controller
     ];
   }
 
-
   // на удалении выставляется флаг vks_cancel
   public function actionDelete()
   {
@@ -486,8 +485,6 @@ class SessionsController extends Controller
     return false;
   }
 
-
-
   protected function findModel($id)
   {
     $model = VksSessions::findOne(['id' => $id]);
@@ -507,16 +504,6 @@ class SessionsController extends Controller
     $log->user_id = $userId;
     $log->log_time = date("Y-m-d H:i:s", time());;
     $log->save();
-  }
-
-  public function actionMenu()
-  {
-    return $this->renderAjax('left_menu');
-  }
-
-  public function actionMenuEx()
-  {
-    return $this->renderAjax('app_config_menu');
   }
 
 }

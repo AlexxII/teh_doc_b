@@ -151,16 +151,6 @@ class SessionsController extends Controller
     );
   }
 
-
-  public function actionViewUpSession($id)
-  {
-    $logs = VksLog::find()->where(['=', 'session_id', $id])->orderBy('log_time')->all();
-    return $this->renderAjax('view_up_session', [
-      'model' => $this->findModel($id),
-      'logs' => $logs
-    ]);
-  }
-
   public function actionViewSession($id)
   {
     $logs = VksLog::find()->where(['=', 'session_id', $id])->orderBy('log_time')->all();
@@ -180,20 +170,6 @@ class SessionsController extends Controller
       'data' => [
         'success' => true,
         'data' => $this->render('index'),
-        'message' => 'Page load.',
-      ],
-      'code' => 1,
-    ];
-  }
-
-  public function actionArchive()
-  {
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'Корзина';
-    return [
-      'data' => [
-        'success' => true,
-        'data' => $this->renderAjax('archive'),
         'message' => 'Page load.',
       ],
       'code' => 1,

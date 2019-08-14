@@ -84,8 +84,8 @@ BootstrapDatepickerAsset::register($this);
 
     $('[data-toggle="tooltip"]').tooltip();
 
-    initLeftMenu('/vks/sessions/menu');
-    initAppConfig('/vks/sessions/menu-ex');
+    initLeftMenu('/vks/menu/left-side');
+    initAppConfig('/vks/menu/app-config');
 
     $('#right-custom-data').html(periodInput);
 
