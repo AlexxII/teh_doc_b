@@ -180,7 +180,8 @@ $vks_add_combined = "Добавить совмещенный сеанс";
           'template' => '{label} <sup class="fa fa-info-circle" aria-hidden="true"
                 data-toggle="tooltip" data-placement="top" title="' . $vks_recmsg_date_hint . '"></sup>{input}{hint}'
         ])->textInput([
-          'class' => 'vks_receive-date form-control'
+          'class' => 'vks_receive-date form-control',
+          'readonly' => true
         ])->hint('', ['class' => ' w3-label-under']); ?>
       </div>
     </div>

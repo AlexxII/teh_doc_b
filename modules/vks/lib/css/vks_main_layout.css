@@ -114,8 +114,8 @@ i.check {
   font-size: 14px;
 }
 .form-up-session  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-  background-color: #fff;
-  opacity: 1;
+  background-color: #fff !important;
+  opacity: 1 !important;
 }
 .form-confirm-session .form-group {
   margin-bottom: 5px;

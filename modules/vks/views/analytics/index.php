@@ -104,9 +104,9 @@ $send_hint = 'Передать выделенные строки в подроб
     '                      2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z"></path>' +
     '                 </svg>' +
     '          </label>' +
-    '          <input type="text" class="form-control input-sm" id="start-date-ex">' +
+    '          <input type="text" class="form-control input-sm" id="start-date-ex" readonly>' +
     '          <div class="input-group-addon">по</div>' +
-    '          <input type="text" class="form-control input-sm" id="end-date-ex">' +
+    '          <input type="text" class="form-control input-sm" id="end-date-ex" readonly>' +
     '        </div>\n' +
     '      </div>\n';
 
