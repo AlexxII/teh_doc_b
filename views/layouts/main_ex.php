@@ -65,7 +65,7 @@
     </div><!-- /.container-fluid -->
   </nav>
 
-  <div id="main-wrap">
+  <div id="ex-main-wrap" style="background-color: #fff; z-index: 200">
     <div id="main-content" class="container">
       <?= $content ?>
     </div>
@@ -81,6 +81,7 @@
       $('#ex-wrap').detach();
       var url = $(this).data('backUrl');
       window.history.pushState("object or string", "Title", url);
+      returnCallback();
     });
 
   });

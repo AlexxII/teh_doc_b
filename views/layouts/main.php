@@ -23,18 +23,6 @@ $this->beginPage() ?>
   <title><?= Html::encode($this->title) ?></title>
   <?php $this->head() ?>
 
-  <style>
-    #ex-wrap {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #fff;
-      overflow-y: auto;
-    }
-  </style>
-
 </head>
 
 <?php $this->beginBody() ?>
@@ -197,6 +185,7 @@ $this->beginPage() ?>
 
 <script>
   $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
 
     $('#push-it').bind('click', clickMenu);
 
@@ -214,6 +203,7 @@ $this->beginPage() ?>
     var url = $(this).data('url');
     var uri = $(this).data('uri');
     loadExContent(url, uri, '/vks');
-  })
+  });
+
 </script>
 

@@ -32,7 +32,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
         <div class="col-md-6 col-lg-6">
           <?= $form->field($model, 'vks_date', [
             'template' => '{label} <sup class="fa fa-info-circle" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $vks_date_hint . '"></sup>{input}{hint}'
+                data-toggle="tooltip" data-placement="top" data-container="body" title="' . $vks_date_hint . '"></sup>{input}{hint}'
           ])->textInput([
             'class' => 'fact-date form-control',
             'readonly' => true

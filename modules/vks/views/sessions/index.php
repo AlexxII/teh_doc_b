@@ -60,11 +60,6 @@ BootstrapDatepickerAsset::register($this);
   </div>
 </div>
 
-
-
-
-
-
 <script>
 
   var periodInput = '<div id="vks-period-input">' +
@@ -91,11 +86,6 @@ BootstrapDatepickerAsset::register($this);
 
     initLeftMenu('/vks/sessions/menu');
     initAppConfig('/vks/sessions/menu-ex');
-
-
-    $('#push-it').removeClass('hidden');
-
-    $('#app-control').removeClass('hidden');
 
     $('#right-custom-data').html(periodInput);
 
@@ -214,10 +204,6 @@ BootstrapDatepickerAsset::register($this);
         if (important == 1) {
           $(nRow.cells[0]).css('color', 'red');
           $(nRow.cells[0]).css('font-weight', '600');
-          // $(nRow.cells[0]).css('background-image', 'url("/lib/_warning.webp")');
-          // $(nRow.cells[0]).css('background-repeat', 'no-repeat');
-          // $(nRow.cells[0]).css('background-size', '20px 20px');
-          // $(nRow.cells[0]).css('background-position', '90% 5%');
         }
         if (moment().isAfter(dt, 'day')) {
           $('td', nRow).css('background-color', '#faeeec');
@@ -316,7 +302,6 @@ BootstrapDatepickerAsset::register($this);
       }
     });
 
-
     table.on('click', '#edit', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
@@ -378,8 +363,6 @@ BootstrapDatepickerAsset::register($this);
           return $.ajax({
             url: url,
             method: 'get'
-          }).done(function (response) {
-            // console.log(response);
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
           });
@@ -397,6 +380,7 @@ BootstrapDatepickerAsset::register($this);
         }
       });
     });
+
     table.on('click', '#confirm-session', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
@@ -407,8 +391,6 @@ BootstrapDatepickerAsset::register($this);
           return $.ajax({
             url: url,
             method: 'get',
-          }).done(function (response) {
-            // console.log(response);
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
           });
@@ -489,7 +471,7 @@ BootstrapDatepickerAsset::register($this);
       $('#delete-wrap').hide();
     });
 
-    //********************** Удаление записей ***********************************
+    // Удаление записей
 
     $('#delete-wrap').click(function (event) {
       event.preventDefault();
@@ -510,7 +492,7 @@ BootstrapDatepickerAsset::register($this);
             btnClass: 'btn-danger',
             action: function () {
               jc.close();
-              deleteProcess(url, table, csrf);
+              deleteRestoreProcess(url, table, csrf);
             }
           },
           cancel: {
@@ -522,8 +504,8 @@ BootstrapDatepickerAsset::register($this);
       });
     });
 
+    // Cоздание предстоящего сеанса
 
-    // создание предстоящего сеанса
     $('#add-session').click(function (event) {
       event.preventDefault();
       var url = "/vks/sessions/create-up-session-ajax";
@@ -576,7 +558,7 @@ BootstrapDatepickerAsset::register($this);
       });
     });
 
-    // создание прошедшего сеанса
+    // Cоздание прошедшего сеанса
 
     $('#add-session-ex').click(function (event) {
       event.preventDefault();
@@ -643,6 +625,10 @@ BootstrapDatepickerAsset::register($this);
       });
     });
   });
+  
+  function returnCallback() {
+    table.clearPipeline().draw();
+  }
 
 
 </script>

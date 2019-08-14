@@ -47,7 +47,7 @@ $dell_hint = 'Удалить выделенные сеансы';
 
   // ************************* Работа таблицы **************************************
 
-  var table;
+  var archTable;
   $(document).ready(function () {
 
     $('[data-toggle="tooltip"]').tooltip();
@@ -137,7 +137,7 @@ $dell_hint = 'Удалить выделенные сеансы';
       });
     });
 
-    table = $('#main-table').DataTable({
+    archTable = $('#main-table').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
@@ -202,7 +202,7 @@ $dell_hint = 'Удалить выделенные сеансы';
 
     $('#main-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
-      var data = table.row($(this).parents('tr')).data();
+      var data = archTable.row($(this).parents('tr')).data();
       var url = "/vks/sessions/update-session-ajax?id=" + data[0];
       c = $.confirm({
         content: function () {
@@ -210,8 +210,6 @@ $dell_hint = 'Удалить выделенные сеансы';
           return $.ajax({
             url: url,
             method: 'get',
-          }).done(function (response) {
-            // console.log(response);
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
           });
@@ -257,7 +255,7 @@ $dell_hint = 'Удалить выделенные сеансы';
                 }
                 var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс обновлен';
                 var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
-                sendFormData(url, table, $form, yText, nText);
+                sendFormData(url, archTable, $form, yText, nText);
                 $('#delete').hide();
               }
             }
@@ -270,7 +268,7 @@ $dell_hint = 'Удалить выделенные сеансы';
     });
     $('#main-table tbody').on('click', '.view', function (e) {
       e.preventDefault();
-      var data = table.row($(this).parents('tr')).data();
+      var data = archTable.row($(this).parents('tr')).data();
       var url = "/vks/sessions/view-session-ajax?id=" + data[0];
       c = $.confirm({
         content: function () {
@@ -278,8 +276,6 @@ $dell_hint = 'Удалить выделенные сеансы';
           return $.ajax({
             url: url,
             method: 'get'
-          }).done(function (response) {
-            // console.log(response);
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
           });
@@ -300,25 +296,25 @@ $dell_hint = 'Удалить выделенные сеансы';
 
     // Работа таблицы -> событие выделения и снятия выделения
 
-    table.on('select', function (e, dt, type, indexes) {
+    archTable.on('select', function (e, dt, type, indexes) {
       if (type === 'row') {
         $('#delete').show();
       }
     });
-    table.on('deselect', function (e, dt, type, indexes) {
+    archTable.on('deselect', function (e, dt, type, indexes) {
       if (type === 'row') {
-        if (table.rows({selected: true}).count() > 0) return;
+        if (archTable.rows({selected: true}).count() > 0) return;
         $('#delete').hide();
       }
     });
 
     // Работа таблицы -> перерисовка или изменение размера страницы
 
-    table.on('length.dt', function (e, settings, len) {
+    archTable.on('length.dt', function (e, settings, len) {
       $('#delete').hide();
     });
 
-    table.on('draw.dt', function (e, settings, len) {
+    archTable.on('draw.dt', function (e, settings, len) {
       $('#delete').hide();
     });
 
@@ -343,7 +339,7 @@ $dell_hint = 'Удалить выделенные сеансы';
             btnClass: 'btn-danger',
             action: function () {
               jc.close();
-              deleteProcess(url, table, csrf)
+              deleteProcess(url, archTable, csrf)
             }
           },
           cancel: {

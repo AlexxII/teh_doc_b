@@ -111,7 +111,7 @@ $send_hint = 'Передать выделенные строки в подроб
     '      </div>\n';
 
 
-  var treeId, table;
+  var treeId, analitycTable;
 
   //************************ Работа над стилем ****************************
 
@@ -169,7 +169,6 @@ $send_hint = 'Передать выделенные строки в подроб
         })
       });
     });
-
 
     $('.hideMenu-button').click(function (e) {
       var indexes;
@@ -301,7 +300,7 @@ $send_hint = 'Передать выделенные строки в подроб
     });
 
     var main_url = '/vks/analytics/server-side';
-    table = $('#main-table').DataTable({
+    analitycTable = $('#main-table').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
@@ -453,7 +452,7 @@ $send_hint = 'Передать выделенные строки в подроб
 
     $('#main-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
-      var data = table.row($(this).parents('tr')).data();
+      var data = analitycTable.row($(this).parents('tr')).data();
       var url = "/vks/sessions/update-session-ajax?id=" + data[0];
       c = $.confirm({
         content: function () {
@@ -461,8 +460,6 @@ $send_hint = 'Передать выделенные строки в подроб
           return $.ajax({
             url: url,
             method: 'get',
-          }).done(function (response) {
-            // console.log(response);
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
           });
@@ -508,7 +505,7 @@ $send_hint = 'Передать выделенные строки в подроб
                 }
                 var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс обновлен';
                 var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
-                sendFormData(url, table, $form, yText, nText);
+                sendFormData(url, analitycTable, $form, yText, nText);
               }
             }
           },
@@ -519,9 +516,9 @@ $send_hint = 'Передать выделенные строки в подроб
       });
     });
 
-    table.on('click', '.view', function (e) {
+    analitycTable.on('click', '.view', function (e) {
       e.preventDefault();
-      var data = table.row($(this).parents('tr')).data();
+      var data = analitycTable.row($(this).parents('tr')).data();
       var url = "/vks/sessions/view-session-ajax?id=" + data[0];
       c = $.confirm({
         content: function () {
@@ -529,8 +526,6 @@ $send_hint = 'Передать выделенные строки в подроб
           return $.ajax({
             url: url,
             method: 'get'
-          }).done(function (response) {
-            // console.log(response);
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
           });
@@ -551,30 +546,29 @@ $send_hint = 'Передать выделенные строки в подроб
 
     // Работа таблицы -> событие выделения и снятия выделения
 
-    table.on('select', function (e, dt, type) {
+    analitycTable.on('select', function (e, dt, type) {
       if (type === 'row') {
         $('#delete-wrap-ex').show();
       }
     });
-    table.on('deselect', function (e, dt, type) {
+    analitycTable.on('deselect', function (e, dt, type) {
       if (type === 'row') {
-        if (table.rows({selected: true}).count() > 0) return;
+        if (analitycTable.rows({selected: true}).count() > 0) return;
         $('#delete-wrap-ex').hide();
       }
     });
 
     // Работа таблицы -> перерисовка или изменение размера страницы
 
-    table.on('length.dt', function (e, settings, len) {
+    analitycTable.on('length.dt', function (e, settings, len) {
       $('#delete-wrap-ex').hide();
     });
 
-    table.on('draw.dt', function (e, settings, len) {
+    analitycTable.on('draw.dt', function (e, settings, len) {
       $('#delete-wrap-ex').hide();
     });
 
     //********************** Удаление записей ***********************************
-
 
     $('#delete-wrap-ex').click(function (event) {
       event.preventDefault();
@@ -595,7 +589,7 @@ $send_hint = 'Передать выделенные строки в подроб
             btnClass: 'btn-danger',
             action: function () {
               jc.close();
-              deleteProcess(url, table, csrf)
+              deleteRestoreProcess(url, analitycTable, csrf)
             }
           },
           cancel: {
@@ -651,8 +645,6 @@ $send_hint = 'Передать выделенные строки в подроб
       }
     });
   });
-
-
 
   //************************* Управление деревом ***************************************
 
@@ -718,7 +710,6 @@ $send_hint = 'Передать выделенные строки в подроб
       tree.clearFilter();
     }
   });
-
 
   function restoreSelectedRows(indexes) {
     var table = $('#main-table').DataTable();

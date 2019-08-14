@@ -16,7 +16,7 @@ function sendFormData(url, table, form, yTest, nTest) {
   });
 }
 
-function deleteProcess(url, table, csrf) {
+function deleteRestoreProcess(url, table, csrf) {
   var data = table.rows({selected: true}).data();
   var ar = [];
   var count = data.length;

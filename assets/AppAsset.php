@@ -22,7 +22,8 @@ class AppAsset extends AssetBundle
   public $css = [
     'lib/awesome/css/font-awesome.min.css',
     'css/navigation-bar.css',
-    'css/left-menu.css'
+    'css/left-menu.css',
+    'css/main.css'
   ];
 
   public $js = [

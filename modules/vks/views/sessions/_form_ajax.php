@@ -30,7 +30,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
         <div class="form-group">
           <?= $form->field($model, 'vks_date', [
             'template' => '{label} <sup class="fa fa-info-circle" aria-hidden="true"
-                data-toggle="tooltip" data-placement="bottom" title="' . $vks_date_hint . '"></sup>{input}{hint}'
+                data-toggle="tooltip" data-placement="top" data-container="body" title="' . $vks_date_hint . '"></sup>{input}{hint}'
           ])->textInput([
             'class' => 'vks-date form-control fact-date',
             'readonly' => true
@@ -71,6 +71,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
            style="cursor: pointer; font-size: 25px; color: #4eb305"
            data-toggle="tooltip"
            data-placement="top"
+           data-container="body"
            title="Добавить совмещенный сеанс">
         </i></span>
         <span class="text-muted dynamic-title" style="position: absolute;top:5px;left:10px;font-size: 10px"></span>
@@ -81,7 +82,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
             echo $form->field($model, 'vks_type', [
               'template' => '{label} 
               <sup class="fa fa-info-circle" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $vks_type_hint . '"></sup>
+                data-toggle="tooltip" data-placement="top" data-container="body" title="' . $vks_type_hint . '"></sup>
                 {input}{hint}'
             ])->dropDownList($model->vksTypesList, ['data-name' => 'vks_type', 'class' => 'vks-type form-control',
               'prompt' => ['text' => 'Выберите',
@@ -97,7 +98,7 @@ $vks_add_combined = "Добавить совмещенный сеанс";
           <div class="form-group col-md-7 col-lg-7" style="margin-top: 10px">
             <?= $form->field($model, 'vks_place', [
               'template' => '{label} <sup class="fa fa-info-circle nonreq" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $vks_place_hint . '"></sup>{input}{hint}'
+                data-toggle="tooltip" data-placement="top" data-container="body" title="' . $vks_place_hint . '"></sup>{input}{hint}'
             ])->dropDownList($model->vksPlacesList, ['data-name' => 'vks_place', 'class' => 'vks-place form-control',
               'prompt' => ['text' => 'Выберите',
                 'options' => [

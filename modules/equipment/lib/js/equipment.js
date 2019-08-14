@@ -208,8 +208,6 @@ function initNoty(text, type) {
   }).show();
 }
 
-
-
 $('#w0').on('appear', function () {
   console.log(11111111111);
 });

@@ -4,6 +4,7 @@ function initLeftMenu(url) {
     url: url,
     success: function (response) {
       $('#left-side').html(response);
+      $('#push-it').removeClass('hidden');
     },
     error: function (response) {
       console.log('left menu failed')
@@ -17,6 +18,7 @@ function initAppConfig(url) {
     url: url,
     success: function (response) {
       $('#app-control-ul').html(response);
+      $('#app-control').removeClass('hidden');
     },
     error: function (response) {
       console.log('appConfig menu failed')
@@ -95,10 +97,9 @@ function loadExContent(url, uri, backUrl) {
 
 function loadControls(e) {
   e.preventDefault();
-  var uri = $(this).data('url');
+  var url = $(this).data('url');
   var title = $(this).data('title');
-  var size = $(this).data('wsize');
-  var url = '/vks/control/' + uri + '/index';
+  var windowSize = $(this).data('wsize');
   c = $.confirm({
     content: function () {
       var self = this;
@@ -113,7 +114,7 @@ function loadControls(e) {
     contentLoaded: function (data, status, xhr) {
       this.setContentAppend('<div>' + data + '</div>');
     },
-    columnClass: size,
+    columnClass: windowSize,
     title: title,
     buttons: {
       cancel: {

@@ -63,7 +63,7 @@ use yii\helpers\Html;
 
   // ************************* Работа таблицы **************************************
 
-  var adding, table;
+  var adding, deletedTable;
 
   $(document).ready(function () {
 
@@ -154,7 +154,7 @@ use yii\helpers\Html;
       });
     });
 
-    table = $('#main-table').DataTable({
+    deletedTable = $('#main-table').DataTable({
       "processing": true,
       "serverSide": true,
       "responsive": true,
@@ -205,7 +205,6 @@ use yii\helpers\Html;
         }, {
           "targets": 1,
           "render": function (data, type, row) {
-            console.log(row);
             if (row[15] == 1) {
               return '<div class="inline-wrap"> ' + '<div>' + row[1] + '</div>' + ' ' + upMark + '</div>';
             } else {
@@ -254,7 +253,7 @@ use yii\helpers\Html;
 
     $('#main-table tbody').on('click', '#view', function (e) {
       e.preventDefault();
-      var data = table.row($(this).parents('tr')).data();
+      var data = deletedTable.row($(this).parents('tr')).data();
       var url = "/vks/admin/sessions/view-session?id=" + data[0];
       c = $.confirm({
         content: function () {
@@ -282,15 +281,15 @@ use yii\helpers\Html;
 
     // Работа таблицы -> событие выделения и снятия выделения
 
-    table.on('select', function (e, dt, type, indexes) {
+    deletedTable.on('select', function (e, dt, type, indexes) {
       if (type === 'row') {
         $('#restore').show();
         $('#delete').show();
       }
     });
-    table.on('deselect', function (e, dt, type, indexes) {
+    deletedTable.on('deselect', function (e, dt, type, indexes) {
       if (type === 'row') {
-        if (table.rows({selected: true}).count() > 0) return;
+        if (deletedTable.rows({selected: true}).count() > 0) return;
         $('#restore').hide();
         $('#delete').hide();
       }
@@ -298,12 +297,12 @@ use yii\helpers\Html;
 
     // Работа таблицы -> перерисовка или изменение размера страницы
 
-    table.on('length.dt', function (e, settings, len) {
+    deletedTable.on('length.dt', function (e, settings, len) {
       $('#delete').hide();
       $('#restore').hide();
     });
 
-    table.on('draw.dt', function (e, settings, len) {
+    deletedTable.on('draw.dt', function (e, settings, len) {
       $('#delete').hide();
       $('#restore').hide();
     });
@@ -311,8 +310,9 @@ use yii\helpers\Html;
     //********************** Удаление и восстановление записей ***********************************
 
     $('#delete').click(function (event) {
-      var url = "/vks/admin/sessions/delete-completely";
       event.preventDefault();
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var url = "/vks/admin/sessions/delete-completely";
       if ($(this).attr('disabled')) {
         return;
       }
@@ -328,10 +328,7 @@ use yii\helpers\Html;
             btnClass: 'btn-danger',
             action: function () {
               jc.close();
-              if (remoteProcess(url)) {
-                $('#restore').hide();
-                $('#delete').hide();
-              }
+              deleteRestoreProcess(url, deletedTable, csrf);
             }
           },
           cancel: {
@@ -344,8 +341,9 @@ use yii\helpers\Html;
     });
 
     $('#restore').click(function (event) {
-      var url = "/vks/admin/sessions/restore";
       event.preventDefault();
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var url = "/vks/admin/sessions/restore";
       if ($(this).attr('disabled')) {
         return;
       }
@@ -361,7 +359,7 @@ use yii\helpers\Html;
             btnClass: 'btn-info',
             action: function () {
               jc.close();
-              remoteProcess(url)
+              deleteRestoreProcess(url, deletedTable, csrf)
             }
           },
           cancel: {
@@ -373,92 +371,5 @@ use yii\helpers\Html;
       })
     });
   });
-
-  function remoteProcess(url) {
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    var table = $('#main-table').DataTable();
-    var data = table.rows({selected: true}).data();
-    var ar = [];
-    var count = data.length;
-    for (var i = 0; i < count; i++) {
-      ar[i] = data[i][0];
-    }
-    jc = $.confirm({
-      icon: 'fa fa-cog fa-spin',
-      title: 'Подождите!',
-      content: 'Ваш запрос выполняется!',
-      buttons: false,
-      closeIcon: false,
-      confirmButtonClass: 'hide'
-    });
-    $.ajax({
-      url: url,
-      method: 'post',
-      dataType: "JSON",
-      data: {jsonData: ar, _csrf: csrf},
-    }).done(function (response) {
-      if (response != false) {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-thumbs-up',
-          title: 'Успех!',
-          content: 'Ваш запрос выполнен.',
-          type: 'green',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-success',
-              action: function () {
-                $("#main-table").DataTable().clearPipeline().draw();
-                $('#restore').hide();
-                $('#delete').hide();
-              }
-            }
-          }
-        });
-      } else {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-exclamation-triangle',
-          title: 'Неудача!',
-          content: 'Запрос не выполнен. Что-то пошло не так.',
-          type: 'red',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-danger',
-              action: function () {
-              }
-            }
-          }
-        });
-      }
-    }).fail(function () {
-      jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-exclamation-triangle',
-        title: 'Неудача!',
-        content: 'Запрос не выполнен. Что-то пошло не так.',
-        type: 'red',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|4000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-            }
-          }
-        }
-      });
-    });
-  }
 
 </script>
