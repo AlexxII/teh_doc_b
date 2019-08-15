@@ -8,7 +8,7 @@ use app\assets\AppAsset;
 use app\assets\TableBaseAsset;
 use app\assets\JConfirmAsset;
 use app\assets\SlidebarsAsset;
-use app\modules\vks\assets\VksAppAsset;
+use app\modules\vks\assets\SchedulerAppAsset;
 use app\assets\FancytreeAsset;
 use app\assets\BootstrapDatepickerAsset;
 
@@ -16,7 +16,7 @@ AppAsset::register($this);    // регистрация ресурсов все�
 TableBaseAsset::register($this);
 JConfirmAsset::register($this);
 SlidebarsAsset::register($this);
-VksAppAsset::register($this);
+SchedulerAppAsset::register($this);
 FancytreeAsset::register($this);
 BootstrapDatepickerAsset::register($this);
 BootstrapPluginAsset::register($this);

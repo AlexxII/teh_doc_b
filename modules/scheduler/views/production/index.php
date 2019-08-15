@@ -6,10 +6,6 @@ use app\assets\BootstrapDatepickerAsset;
 BootstrapYearCalendarAsset::register($this);
 BootstrapDatepickerAsset::register($this);
 
-$this->title = 'Производственный календарь';
-$this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
-$this->params['breadcrumbs'][] = $this->title;
-
 ?>
 <style>
   .calendar {

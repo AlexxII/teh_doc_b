@@ -1,0 +1,28 @@
+/* navigation bar (fscreen) */
+#previous-date, #next-date {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+#today-btn {
+  margin: 10px 20px 0 20px;
+  float: left;
+  background-color: #fff;
+  border-color: #ccc;
+}
+.btn-circle.btn-ml {
+  margin-top: 10px !important;
+}
+#left-custom-data-ex {
+  padding: 10px 0 0 20px;
+  font-size: 22px;
+  font-family: sans-serif;
+  color: #3c4043;
+}
+/* scheduler events pop-up windows */
+.card-primary {
+  background-color: #fff;
+}
+.card-header {
+  background-color: #eee;
+}

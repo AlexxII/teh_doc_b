@@ -26,6 +26,33 @@ function initAppConfig(url) {
   });
 }
 
+function initLeftCustomData(url) {
+  $.ajax({
+    type: 'GET',
+    url: url,
+    success: function (response) {
+      $('#left-custom-data').html(response);
+    },
+    error: function (response) {
+      console.log('leftCustomData load failed')
+    }
+  });
+}
+
+function initRightCustomData(url) {
+  $.ajax({
+    type: 'GET',
+    url: url,
+    success: function (response) {
+      $('#right-custom-data').html(response);
+    },
+    error: function (response) {
+      console.log('rightCustomData load failed')
+    }
+  });
+}
+
+
 function clickMenu() {
   if ($(window).width() >= 900) {
     if ($('#left-side').css('left') == '0px') {
@@ -83,7 +110,7 @@ $(window).resize(function () {
   }
 });
 
-function loadExContent(url, uri, backUrl) {
+function loadExContent(url, backUrl) {
   $.ajax({
     url: url + '?back-url=' + backUrl,
     method: 'get'

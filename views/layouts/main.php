@@ -52,6 +52,8 @@ $this->beginPage() ?>
         </li>
         <li id="left-custom-data">
         </li>
+        <li id="left-custom-data-ex">
+        </li>
       </ul>
       <ul id="right" class="navig navigation-nav navigation-right">
         <li id="right-custom-data-ex">
@@ -201,8 +203,8 @@ $this->beginPage() ?>
   $(document).on('click', '.ex-click', function (e) {
     e.preventDefault();
     var url = $(this).data('url');
-    var uri = $(this).data('uri');
-    loadExContent(url, uri, '/vks');
+    var bUrl = $(this).data('backUrl');
+    loadExContent(url, bUrl);
   });
 
 </script>

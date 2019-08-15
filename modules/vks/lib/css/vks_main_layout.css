@@ -190,3 +190,7 @@ td.align-center {
   top:5px;
   left:-25px;
 }
+/* autocomplete */
+.ui-front {
+  z-index: 300 !important;
+}
