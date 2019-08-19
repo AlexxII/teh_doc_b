@@ -319,7 +319,7 @@
           btnClass: 'btn-blue',
           text: 'Обновить',
           action: function () {
-            editEvent(event);
+            editFullYearEvent(event);
           }
         },
         del: {
