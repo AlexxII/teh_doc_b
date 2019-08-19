@@ -9,12 +9,16 @@ use app\modules\scheduler\models\Holiday;
 
 class HolidaysController extends Controller
 {
-
-  public $layout = 'scheduler_layout_exx.php';
-
-  public function actionIndex()
-  {
-    return $this->render('index');
+  public function actionIndex(){
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('index'),
+        'message' => 'Page load.',
+        ],
+      'code' => 1,
+    ];
   }
 
   public function actionHolidays($year)

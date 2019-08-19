@@ -1,28 +1,5 @@
-<?php
 
-use app\assets\BootstrapYearCalendarAsset;
-use app\assets\BootstrapDatepickerAsset;
-
-BootstrapYearCalendarAsset::register($this);
-BootstrapDatepickerAsset::register($this);
-
-$this->title = 'Календарь праздников';
-$this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
-$this->params['breadcrumbs'][] = $this->title;
-
-?>
-<style>
-  .calendar {
-    overflow: visible;
-  }
-</style>
-
-
-<div class="main-scheduler row">
-  <div class="col-md-12 col-lg-12">
-    <div id="full-calendar" data-provide="ec"></div>
-  </div>
-</div>
+<div id="full-calendar" data-provide="ec"></div>
 
 <script>
 
@@ -168,7 +145,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $(e.target).append('<div style="text-align:center"><img src="/lib/3.gif" /></div>');
         var currentYear = e.currentYear;
         $.ajax({
-          url: "holidays/holidays",
+          url: "/scheduler/holidays/holidays",
           type: 'GET',
           data: {
             year: currentYear

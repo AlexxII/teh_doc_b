@@ -12,12 +12,10 @@ class ProductionController extends Controller
 
   public function actionIndex(){
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'Производственный календарь';
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     return [
       'data' => [
         'success' => true,
-        'data' => $this->render('index'),
+        'data' => $this->renderAjax('index'),
         'message' => 'Page load.',
       ],
       'code' => 1,

@@ -9,10 +9,16 @@ use app\modules\scheduler\models\Event;
 
 class FullYearController extends Controller
 {
-  public function actionIndex()
-  {
-
-    return $this->render('index');
+  public function actionIndex(){
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('index'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
   }
 
   public function actionProductionCalendar()

@@ -9,6 +9,7 @@ use app\assets\fullcalendar\CalendarTimegridAsset;
 use app\assets\fullcalendar\CalendarInteractionAsset;
 use app\assets\fullcalendar\CalendarBootstrapAsset;
 use app\assets\fullcalendar\CalendarListAsset;
+use app\assets\BootstrapYearCalendarAsset;
 
 SchedulerAppAsset::register($this);
 
@@ -19,6 +20,7 @@ CalendarInteractionAsset::register($this);
 CalendarBootstrapAsset::register($this);
 CalendarListAsset::register($this);
 BootstrapDatepickerAsset::register($this);
+BootstrapYearCalendarAsset::register($this);
 
 ?>
 
@@ -32,7 +34,7 @@ BootstrapDatepickerAsset::register($this);
 
 <script>
 
-  var calendar;
+  var calendar, calendarView, calendarTitle, fullYear;
   $(document).ready(function () {
 
     $('#push-it').removeClass('hidden');
@@ -42,17 +44,6 @@ BootstrapDatepickerAsset::register($this);
     initRightCustomData('/scheduler/menu/right-side-data');
     initLeftMenu('/scheduler/menu/left-side');
     initAppConfig('/scheduler/menu/app-config');
-
-    $('.main-scheduler').bind('mousewheel', function (e) {
-      console.log(e);
-      if (e.originalEvent.wheelDelta / 120 > 0) {
-        console.log('scrolling up !');
-      }
-      else {
-        console.log('scrolling down !');
-      }
-    });
-
 
     var csrf = $('meta[name=csrf-token]').attr("content");
     var fcSources = {
@@ -108,16 +99,15 @@ BootstrapDatepickerAsset::register($this);
 
     var calendarEl = document.getElementById('calendar');
     calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: ['interaction', 'dayGrid', 'timeGrid', 'bootstrap', 'list'],
+      plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
       locale: 'ru',
       height: function () {
         return $(window).height() - 55;
       },
-      windowResize: function (view) {
-        var size = $(window).height() - 55;
-        // calendar.updateSize();
-      },
-      themeSystem: 'bootstrap',
+      // windowResize: function (view) {
+      //   var size = $(window).height() - 55;
+      //   calendar.updateSize();
+      // },
       navLinks: true,
       weekNumbers: true,
       weekNumbersWithinDays: true,
@@ -134,31 +124,6 @@ BootstrapDatepickerAsset::register($this);
       ],
       defaultView: 'dayGridMonth',
       header: false,
-      customButtons: {
-        calendars: {
-          text: 'Календари',
-          click: function (e) {
-            showDialog(e);
-            // calendar.addEventSource(fcSources.vks);
-            // var eb = calendar.getEventSourceById(1111);
-            // eb.remove();
-          }
-        },
-        custom2: {
-          text: 'ГОД',
-          click: function () {
-            $('.fc-view-container').html('');
-            $.ajax({
-              url: '/scheduler/full-year/test',
-              method: 'get',
-            }).done(function (resp) {
-              $('.fc-view-container').html(resp);
-            }).fail(function () {
-              self.setContentAppend('<div>Что-то пошло не так!</div>');
-            });
-          }
-        }
-      },
       businessHours: [
         {
           daysOfWeek: [1, 2, 3, 4], // Monday, Tuesday, Wednesday, Thursday
@@ -326,8 +291,16 @@ BootstrapDatepickerAsset::register($this);
     });
     calendar.render();
     $('#left-custom-data-ex').html(calendar.view.title);
+  });
 
-
+  // загрузка календаря - год
+  $.ajax({
+    url: '/scheduler/full-year',
+    method: 'get',
+  }).done(function (response) {
+    fullYear = response.data.data;
+  }).fail(function (response) {
+    console.log('Ошибка загрузки годового календаря!');
   });
 
   function calendarShow(e) {
@@ -348,7 +321,18 @@ BootstrapDatepickerAsset::register($this);
     var viewType = $(this).attr('value');
     $('#view-menu-btn > #title').text($(this).text());
     $('#view-menu-btn > #title').attr('title', $(this).text());
-    calendar.changeView(viewType);
+    if (viewType == 'year') {
+      if($('#full-calendar').length) return;
+      calendarView = $('#calendar');
+      calendarTitle = calendar.view.title;
+      $('.main-scheduler').html(fullYear);
+      $('#left-custom-data-ex').html('');
+    } else {
+      $('#left-custom-data-ex').html(calendarTitle);
+      $('.main-scheduler').html(calendarView);
+      calendar.changeView(viewType);
+      calendar.refetchEvents();
+    }
   });
 
   $(document).on('click', '#previous-date', function (e) {
@@ -369,7 +353,7 @@ BootstrapDatepickerAsset::register($this);
   /* скролл над календарем (вид - месяц) */
   var timeStamp = new Date().getTime();
   $(document).on('wheel', '.fc-dayGridMonth-view', function (e) {
-    if(e.ctrlKey == true) return;
+    if (e.ctrlKey == true) return;
     e.preventDefault();
     var timeNow = new Date().getTime();
     if (timeNow - timeStamp < 200) {          //задержка для прокрутки (сдвиг на один месяц)
@@ -377,7 +361,7 @@ BootstrapDatepickerAsset::register($this);
       return;
     } else {
       timeStamp = timeNow;
-      if(e.originalEvent.deltaY < 0){
+      if (e.originalEvent.deltaY < 0) {
         calendar.prev();
       }
       else {
@@ -398,6 +382,5 @@ BootstrapDatepickerAsset::register($this);
   $(document).on('click', '.fc-day-number, .fc-day-header, .fc-list-heading-main', function (e) {
     $('#view-menu-btn > #title').text('День');
   });
-
 
 </script>

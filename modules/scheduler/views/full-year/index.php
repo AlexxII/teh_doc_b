@@ -1,32 +1,4 @@
-<?php
-
-use app\assets\BootstrapYearCalendarAsset;
-use app\assets\BootstrapDatepickerAsset;
-
-BootstrapDatepickerAsset::register($this);
-BootstrapYearCalendarAsset::register($this);
-
-$this->title = 'Глобальный';
-$this->params['breadcrumbs'][] = ['label' => 'Планировщик', 'url' => ['/scheduler']];
-$this->params['breadcrumbs'][] = $this->title;
-
-
-?>
-<style>
-  .calendar {
-    overflow: visible;
-  }
-</style>
-
-
-<div class="main-scheduler row">
-  <div class="col-md-3 col-lg-3" style="margin-bottom: 15px">
-    <div id="nav-calendar"></div>
-  </div>
-  <div class="col-md-9 col-lg-9">
-    <div id="full-calendar"></div>
-  </div>
-</div>
+<div id="full-calendar"></div>
 
 <script>
   $(document).ready(function () {
@@ -85,9 +57,9 @@ $this->params['breadcrumbs'][] = $this->title;
       });
     }
 
-    getHolidays(startYear, initCalendar);
+    getHolidays(startYear, initFullCalendar);
 
-    function initCalendar() {
+    function initFullCalendar() {
       $('#full-calendar').calendar({
         language: 'ru',
         style: 'custom',
@@ -96,15 +68,15 @@ $this->params['breadcrumbs'][] = $this->title;
         contextMenuItems: [
           {
             text: 'Инфо',
-            click: viewInfo
+            click: viewFullYearInfo
           },
           {
             text: 'Обновить',
-            click: editEvent
+            click: editFullYearEvent
           },
           {
             text: 'Удалить',
-            click: deleteEvent
+            click: deleteFullYearEvent
           }
         ],
         dayContextMenu: function (e) {
@@ -156,8 +128,9 @@ $this->params['breadcrumbs'][] = $this->title;
         selectRange: function (e) {
           var day = 24 * 60 * 60 * 1000;
           var year = $('#full-calendar').data('calendar').getYear();
-          // console.log(((e.endDate - e.startDate) / day) + 1);
-          createEvent(e, year);
+          // console.log
+          // -(((e.endDate - e.startDate) / day) + 1);
+          createFullYearEvent(e, year);
         },
         mouseOutDay: function (e) {
           if (e.events.length > 0) {
@@ -229,7 +202,7 @@ $this->params['breadcrumbs'][] = $this->title;
   }
 
 
-  function createEvent(e, year) {
+  function createFullYearEvent(e, year) {
     var sDate = e.startDate;
     var eDate = e.endDate;
     var sDateStr = sDate.getDate() + '.' + (sDate.getMonth() + 1) + '.' + sDate.getFullYear();
@@ -270,7 +243,7 @@ $this->params['breadcrumbs'][] = $this->title;
             msg.end = $('#end-date').val();
             msg.desc = $('#event-description').val();
             msg.color = $('#colorpicker').val();
-            var q = saveEvent(msg, year);
+            var q = saveFullYearEvent(msg, year);
           }
         },
         cancel: {
@@ -292,7 +265,7 @@ $this->params['breadcrumbs'][] = $this->title;
     })
   }
 
-  function saveEvent(data, year) {
+  function saveFullYearEvent(data, year) {
     var csrf = $('meta[name=csrf-token]').attr("content");
     $.ajax({
       url: '/scheduler/full-year/save-event',
@@ -308,7 +281,7 @@ $this->params['breadcrumbs'][] = $this->title;
     });
   }
 
-  function viewInfo(event) {
+  function viewFullYearInfo(event) {
     var year = $('#full-calendar').data('calendar').getYear();
     var id = event.id;
     var req = event.req;
@@ -353,7 +326,7 @@ $this->params['breadcrumbs'][] = $this->title;
           btnClass: 'btn-red',
           text: 'Удалить',
           action: function () {
-            deleteEvent(event)
+            deleteFullYearEvent(event)
           }
         },
         cancel: {
@@ -381,7 +354,7 @@ $this->params['breadcrumbs'][] = $this->title;
     // console.log(event);
   }
 
-  function editEvent(event) {
+  function editFullYearEvent(event) {
     var year = $('#full-calendar').data('calendar').getYear();
     var url = '/scheduler/full-year/update-event';
     var id = event.id;
@@ -419,7 +392,7 @@ $this->params['breadcrumbs'][] = $this->title;
             msg.end = $('#end-date').val();
             msg.desc = $('#event-description').val();
             msg.color = $('#colorpicker').val();
-            updateEvent(msg, id, year);
+            updateFullYearEvent(msg, id, year);
           }
         },
         cancel: {
@@ -441,7 +414,7 @@ $this->params['breadcrumbs'][] = $this->title;
     })
   }
 
-  function updateEvent(msg, id, year) {
+  function updateFullYearEvent(msg, id, year) {
     var csrf = $('meta[name=csrf-token]').attr("content");
     $.ajax({
       url: '/scheduler/full-year/save-updated-event',
@@ -458,7 +431,7 @@ $this->params['breadcrumbs'][] = $this->title;
     });
   }
 
-  function deleteEvent(event) {
+  function deleteFullYearEvent(event) {
     var csrf = $('meta[name=csrf-token]').attr("content");
     var url = '/scheduler/full-year/delete-event';
     var id = event.id;
@@ -475,7 +448,7 @@ $this->params['breadcrumbs'][] = $this->title;
           btnClass: 'btn-danger',
           action: function () {
             jc.close();
-            deleteProcess(url, id, year);
+            deleteFullYearProcess(url, id, year);
           }
         },
         cancel: {
@@ -499,7 +472,7 @@ $this->params['breadcrumbs'][] = $this->title;
     return false;
   }
 
-  function deleteProcess(url, id, year) {
+  function deleteFullYearProcess(url, id, year) {
     var csrf = $('meta[name=csrf-token]').attr("content");
     jc = $.confirm({
       icon: 'fa fa-cog fa-spin',

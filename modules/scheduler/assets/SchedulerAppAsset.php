@@ -13,5 +13,6 @@ class SchedulerAppAsset extends AssetBundle
   ];
 
   public $js = [
+    'js/scheduler.js'
   ];
 }
