@@ -243,6 +243,7 @@ BootstrapYearCalendarAsset::register($this);
             type: 'blue',
             columnClass: 'medium',
             title: 'Подробности',
+            closeIcon: true,
             buttons: {
               ok: {
                 btnClass: 'btn-blue',
@@ -252,21 +253,31 @@ BootstrapYearCalendarAsset::register($this);
                 }
               },
               edit: {
-                btnClass: 'btn-blue',
-                text: 'Обновить',
+                text: '<svg width="20" height="24" viewBox="0 0 20 25">'+
+                '<path fill="none" d="M0 0h24v24H0V0z"></path>'+
+                '<path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75'+
+                '1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>'+
+                '</svg>',
                 action: function () {
                   editEvent(ident);
                 }
               },
               del: {
                 btnClass: 'btn-red',
-                text: 'Удалить',
+                text: '<svg width="24" height="24" viewBox="0 0 24 24" style="fill:#fff">'+
+                '<path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>'+
+                '<path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>'+
+                '</svg>',
                 action: function () {
                   deleteEvent(ident)
                 }
               },
-              cancel: {
-                text: 'НАЗАД'
+              do: {
+                btnClass: 'btn-green',
+                text: 'К СОБЫТИЮ',
+                action: function () {
+                    window.open(url);
+                }
               }
             },
             onContentReady: function () {
@@ -276,6 +287,7 @@ BootstrapYearCalendarAsset::register($this);
               } else {
                 this.buttons.del.hide();
                 this.buttons.edit.hide();
+                this.buttons.do.hide();
               }
               this.$content.find('#event-title').on('keyup mouseclick', function () {
                 if ($(this).val() != '') {
