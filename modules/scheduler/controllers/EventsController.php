@@ -161,7 +161,8 @@ class EventsController extends Controller
       } else {
         $result[$count]['color'] = '#f4511e';
       }
-      $result[$count]['url'] = 'vks/sessions/view-up-session?id=' . $session['id'];
+//      $result[$count]['url'] = 'vks/sessions/view-up-session?id=' . $session['id'];
+      $result[$count]['url'] = 'vks/';
       $result[$count]['exUrl'] = 'vks/' . $session['id'];
       $count++;
     }

@@ -376,7 +376,7 @@ BootstrapYearCalendarAsset::register($this);
                           $('.vks_receive-date').val(d);
                           var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс добавлен';
                           var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить не удалось';
-                          sendFormData(url, table, $form, yText, nText);
+                          sendFormData(url, calendar, $form);
                       }
                   }
               },
@@ -388,6 +388,20 @@ BootstrapYearCalendarAsset::register($this);
       addEventDialog.close();
   });
 
+  function sendFormData(url, calendar, form) {
+      $.ajax({
+          type: 'POST',
+          url: url,
+          dataType: 'json',
+          data: form.serialize(),
+          success: function (response) {
+              calendar.refetchEvents();
+          },
+          error: function (response) {
+              console.log(response.data.data);
+          }
+      });
+  }
 
   $(document).on('click', '#view-selector li', function (e) {
     e.preventDefault();
