@@ -177,7 +177,12 @@ BootstrapYearCalendarAsset::register($this);
           },
           type: 'blue',
           columnClass: 'medium',
-          title: 'Добавить событие',
+          closeIcon: true,
+          title: 'Добавить событие' + '<svg width="20" height="24" viewBox="0 0 20 20" style="margin-left: 50px">'+
+          '<path fill="none" d="M0 0h24v24H0V0z"></path>'+
+          '<path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75'+
+          '1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>'+
+          '</svg>',
           buttons: {
             ok: {
               btnClass: 'btn-blue',
@@ -196,10 +201,6 @@ BootstrapYearCalendarAsset::register($this);
                 var q = saveEvent(msg);
               }
             },
-            cancel: {
-              btnClass: 'btn-red',
-              text: 'Отмена'
-            }
           },
           onContentReady: function () {
             var self = this;
@@ -253,7 +254,7 @@ BootstrapYearCalendarAsset::register($this);
                 }
               },
               edit: {
-                text: '<svg width="20" height="24" viewBox="0 0 20 25">'+
+                text: '<svg width="20" height="24" viewBox="0 0 20 20">'+
                 '<path fill="none" d="M0 0h24v24H0V0z"></path>'+
                 '<path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75'+
                 '1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>'+
@@ -264,7 +265,7 @@ BootstrapYearCalendarAsset::register($this);
               },
               del: {
                 btnClass: 'btn-red',
-                text: '<svg width="24" height="24" viewBox="0 0 24 24" style="fill:#fff">'+
+                text: '<svg width="24" height="24" viewBox="0 0 24 20" style="fill:#fff" title="Удалить нахуй">'+
                 '<path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>'+
                 '<path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>'+
                 '</svg>',
@@ -272,9 +273,9 @@ BootstrapYearCalendarAsset::register($this);
                   deleteEvent(ident)
                 }
               },
-              do: {
+              done: {
                 btnClass: 'btn-green',
-                text: '<svg width="24" height="24" viewBox="0 0 45 45" style="fill:#fff">'+
+                text: '<svg width="20" height="24" viewBox="0 0 38 40" style="fill:#fff">'+
                   '<path d="M1.36,17.427c0,0,7.311-0.122,10.844,8.163c0,0,15.474-22.175,31.435-18.885c0,0-17.789,7.067-32.045,31.922L1.36,17.427z"/>'+
                   '</svg>',
                 action: function () {
@@ -289,7 +290,7 @@ BootstrapYearCalendarAsset::register($this);
               } else {
                 this.buttons.del.hide();
                 this.buttons.edit.hide();
-                this.buttons.do.hide();
+                this.buttons.done.hide();
               }
               this.$content.find('#event-title').on('keyup mouseclick', function () {
                 if ($(this).val() != '') {
@@ -310,7 +311,7 @@ BootstrapYearCalendarAsset::register($this);
   // загрузка календаря - год
   $.ajax({
     url: '/scheduler/full-year',
-    method: 'get',
+    method: 'get'
   }).done(function (response) {
     fullYear = response.data.data;
   }).fail(function (response) {
