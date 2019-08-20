@@ -274,9 +274,9 @@ BootstrapYearCalendarAsset::register($this);
               },
               do: {
                 btnClass: 'btn-green',
-                text: 'К СОБЫТИЮ',
+                text: 'OK',
                 action: function () {
-                    window.open(url);
+                    console.log('Событие исполнено!');
                 }
               }
             },
