@@ -515,8 +515,6 @@ BootstrapDatepickerAsset::register($this);
           return $.ajax({
             url: url,
             method: 'get'
-          }).done(function (response) {
-            // console.log(response);
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
           });

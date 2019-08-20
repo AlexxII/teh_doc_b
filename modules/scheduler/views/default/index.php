@@ -34,7 +34,7 @@ BootstrapYearCalendarAsset::register($this);
 
 <script>
 
-  var calendar, calendarView, calendarTitle, fullYear;
+  var calendar, calendarView, calendarTitle, fullYear, addEventDialog;
   $(document).ready(function () {
 
     $('#push-it').removeClass('hidden');
@@ -158,7 +158,7 @@ BootstrapYearCalendarAsset::register($this);
       },
       //========================= actions =====================================
       select: function (info) {
-        var c = $.confirm({
+        addEventDialog = $.confirm({
           content: function () {
             var self = this;
             return $.ajax({
@@ -178,7 +178,11 @@ BootstrapYearCalendarAsset::register($this);
           type: 'blue',
           columnClass: 'medium',
           closeIcon: true,
-          title: 'Добавить событие',
+          title: 'Добавить событие' + '<svg id="add-vks" width="20" height="24" viewBox="0 0 20 20" style="margin-left: 50px;cursor: pointer">'+
+          '<path fill="none" d="M0 0h24v24H0V0z"></path>'+
+          '<path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75'+
+          '1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>'+
+          '</svg>',
           buttons: {
             ok: {
               btnClass: 'btn-blue',
@@ -196,7 +200,7 @@ BootstrapYearCalendarAsset::register($this);
                 msg.color = $('#colorpicker').val();
                 var q = saveEvent(msg);
               }
-            },
+            }
           },
           onContentReady: function () {
             var self = this;
@@ -326,6 +330,64 @@ BootstrapYearCalendarAsset::register($this);
         navCalendar.close();
       });
   }
+
+  $(document).on('click', '#add-vks', function (e) {
+      var url = "/vks/sessions/create-up-session-ajax";
+      var date = $('#start-date').val();
+      moment.locale('ru');
+      var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+      var vksDate = new Date(date.replace(pattern, '$3-$2-$1'));
+      console.log(vksDate);
+      console.log(moment(vksDate).format('D MM YYYY'));
+      $.confirm({
+          content: function () {
+              var self = this;
+              return $.ajax({
+                  url: url,
+                  method: 'get'
+              }).fail(function () {
+                  self.setContentAppend('<div>Что-то пошло не так!</div>');
+              });
+          },
+          contentLoaded: function (data, status, xhr) {
+              this.setContentAppend('<div>' + data + '</div>');
+              $('#vkssessions-vks_date').datepicker('update', vksDate);
+          },
+          type: 'blue',
+          columnClass: 'large',
+          title: 'Добавить предстоящий сеанс',
+          buttons: {
+              ok: {
+                  btnClass: 'btn-blue',
+                  text: 'Добавить',
+                  action: function () {
+                      var $form = $("#w0"),
+                          data = $form.data("yiiActiveForm");
+                      $.each(data.attributes, function () {
+                          this.status = 3;
+                      });
+                      $form.yiiActiveForm("validate");
+                      if ($("#w0").find(".has-error").length) {
+                          return false;
+                      } else {
+                          var d = $('.vks-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                          $('.vks-date').val(d);
+                          var d = $('.vks_receive-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                          $('.vks_receive-date').val(d);
+                          var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс добавлен';
+                          var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить не удалось';
+                          sendFormData(url, table, $form, yText, nText);
+                      }
+                  }
+              },
+              cancel: {
+                  text: 'НАЗАД'
+              }
+          }
+      });
+      addEventDialog.close();
+  });
+
 
   $(document).on('click', '#view-selector li', function (e) {
     e.preventDefault();
