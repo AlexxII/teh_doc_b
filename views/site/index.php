@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <div class="col-lg-4 col-md-4 about" data-url="/vks" style="text-align:center; cursor: pointer">
+  <div class="col-lg-4 col-md-4 about" data-url="/scheduler" style="text-align:center; cursor: pointer">
     <div class="row" id="header">
       <h2>Календарь</h2>
     </div>

@@ -47,7 +47,7 @@ BootstrapYearCalendarAsset::register($this);
 
     var csrf = $('meta[name=csrf-token]').attr("content");
 
-
+    var di = '<div style="position: absolute; top: 0; left: 20px">1</div>';
 
     var fcSources = {
       vks: {
@@ -177,6 +177,7 @@ BootstrapYearCalendarAsset::register($this);
           },
           contentLoaded: function (data, status, xhr) {
             this.setContentAppend('<div>' + data + '</div>');
+//              $('.jconfirm-closeIcon').append(di);
           },
           type: 'blue',
           columnClass: 'medium',
@@ -246,7 +247,7 @@ BootstrapYearCalendarAsset::register($this);
             },
             type: 'blue',
             columnClass: 'medium',
-            title: 'Подробности',
+            title: '',
             closeIcon: true,
             buttons: {
               ok: {
