@@ -175,9 +175,12 @@ class SessionsController extends Controller
     );
   }
 
-  public function actionCreateUpSessionAjax()
+  public function actionCreateUpSessionAjax($vks_date = null)
   {
     $model = new VksSessions(['scenario' => VksSessions::SCENARIO_CREATE]);
+    if ($vks_date) {
+      $model->vks_date = $vks_date;
+    }
     if ($model->load(Yii::$app->request->post())) {
       Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       $date = date('Y-m-d H:i:s');

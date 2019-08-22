@@ -96,7 +96,7 @@ BootstrapDatepickerAsset::register($this);
       minViewMode: "days",
       clearBtn: true,
       todayHighlight: true,
-      daysOfWeekHighlighted: [0, 6],
+      daysOfWeekHighlighted: [0, 6]
     });
 
     $('#vks-daterange').datepicker()
@@ -390,7 +390,7 @@ BootstrapDatepickerAsset::register($this);
           var self = this;
           return $.ajax({
             url: url,
-            method: 'get',
+            method: 'get'
           }).fail(function () {
             self.setContentAppend('<div>Что-то пошло не так!</div>');
           });

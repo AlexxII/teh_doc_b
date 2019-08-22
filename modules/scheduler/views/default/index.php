@@ -332,13 +332,12 @@ BootstrapYearCalendarAsset::register($this);
   }
 
   $(document).on('click', '#add-vks', function (e) {
-      var url = "/vks/sessions/create-up-session-ajax";
       var date = $('#start-date').val();
-      moment.locale('ru');
       var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-      var vksDate = new Date(date.replace(pattern, '$3-$2-$1'));
+      var vksDate = date.replace(pattern, '$3-$2-$1');
       console.log(vksDate);
-      console.log(moment(vksDate).format('D MM YYYY'));
+      var url = "/vks/sessions/create-up-session-ajax?vks_date=" + vksDate;
+//      var vksDate = new Date(date.replace(pattern, '$3-$2-$1'));
       $.confirm({
           content: function () {
               var self = this;
@@ -351,8 +350,16 @@ BootstrapYearCalendarAsset::register($this);
           },
           contentLoaded: function (data, status, xhr) {
               this.setContentAppend('<div>' + data + '</div>');
-              $('#vkssessions-vks_date').datepicker('update', vksDate);
           },
+/*
+          onContentReady: function () {
+              moment.locale('ru');
+              console.log(vksDate);
+              console.log(moment(vksDate).format('D MM YYYY'));
+//              $('#vkssessions-vks_date').datepicker('update', date);
+              $('.vks-date').datepicker('update', moment(vksDate).format('D MM YYYY'));
+          },
+*/
           type: 'blue',
           columnClass: 'large',
           title: 'Добавить предстоящий сеанс',

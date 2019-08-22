@@ -26,3 +26,10 @@
 .card-header {
   background-color: #eee;
 }
+#w0 .fa {
+  font-size: 15px;
+  color: #FF0000;
+}
+#w0 .nonreq {
+  color: #1e6887;
+}
