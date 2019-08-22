@@ -155,7 +155,11 @@ class EventsController extends Controller
       } else {
         $time = $session['vks_teh_time_start'];
       }
-      $result[$count]['start'] = $session['vks_date'] . 'T' . $time;
+      if (!$time) {
+        $result[$count]['start'] = $session['vks_date'];
+      } else {
+        $result[$count]['start'] = $session['vks_date'] . 'T' . $time;
+      }
       if ($session['vks_date'] < $now) {
         $result[$count]['color'] = '#d50000';
       } else {

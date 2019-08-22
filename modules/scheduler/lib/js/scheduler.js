@@ -105,7 +105,7 @@ function deleteEvent(id) {
   jc = $.confirm({
     icon: 'fa fa-question',
     title: 'Вы уверены?',
-    content: 'Вы действительно хотите удалить событие?',
+    content: 'Если событие прошло, то отметьте его как прошедшее. При ошибочном создании события - удалите его. Удалить событие?',
     type: 'red',
     closeIcon: false,
     autoClose: 'cancel|9000',
