@@ -3,14 +3,13 @@
 use yii\db\Migration;
 
 /**
- * Class m190602_163717_scheduler_events_tbl
+ * Class m190822_141900_calendars_pull_create
  */
-class m190602_163717_scheduler_events_tbl extends Migration
+class m190822_141900_calendars_pull_create extends Migration
 {
+  const TABLE_NAME = '{{%calendars_pull_tbl}}';
 
-  const TABLE_NAME = '{{%scheduler_events_tbl}}';
-
-  public function up()
+  public function safeUp()
   {
     $tableOptions = null;
     if ($this->db->driverName === 'mysql') {
@@ -20,31 +19,28 @@ class m190602_163717_scheduler_events_tbl extends Migration
       'id' => $this->bigInteger()->notNull(),
       'title' => $this->string(255),
       'description' => $this->string(255),
-      'user_id' => $this->bigInteger()->notNull(),
       'color' => $this->string('50'),
-      'start_date' => $this->date()->notNull(),
-      'end_date' => $this->date()->notNull(),
-      'start_time' => $this->time(),
-      'end_time' => $this->time(),
-      'calendar_id' => $this->bigInteger()->notNull(),
-
+      'created_user' => $this->bigInteger()->notNull(),
+      'is_own' => $this->boolean()->defaultValue(0),
       'important' => $this->boolean()->defaultValue(0),
       'created_at' => $this->timestamp(),
       'updated_at' => $this->timestamp(),
-      'done' => $this->boolean()->defaultValue(0),
-      'valid' => $this->boolean()->defaultValue(1)
+      'is_deleted' => $this->boolean()->defaultValue(1)
     ], $tableOptions);
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
+
   }
 
-  public function down()
+  /**
+   * {@inheritdoc}
+   */
+  public function safeDown()
   {
-    $this->dropTable(self::TABLE_NAME);
+    echo "m190822_141900_calendars_pull_create cannot be reverted.\n";
+
     return false;
   }
-
-
 
 }

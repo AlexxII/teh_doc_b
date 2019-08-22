@@ -24,7 +24,7 @@ class Event extends \yii\db\ActiveRecord
       'start_date' => 'Дата начала:',
       'end_date' => 'Дата окончания:',
       'title' => 'Наименование:',
-      'description' => 'Подробности:',
+      'description' => 'Описание:',
       'color' => 'Цвет события:'
     ];
   }

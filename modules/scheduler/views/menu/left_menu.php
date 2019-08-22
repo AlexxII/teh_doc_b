@@ -3,7 +3,7 @@
     <div id="datepicker" style="margin-left: 30px"></div>
   </div>
   <div>
-    <p style="padding-left: 30px">Добавить календарь</p>
+    <p style="padding-left: 30px">Мои календари</p>
   </div>
   <?php
 /*  TODO Таблица с календарями:
@@ -12,8 +12,6 @@
   - user_id пользователь, который создал
   - created дата создания
   - color цвет календаря
-
-
 */
 
 ?>

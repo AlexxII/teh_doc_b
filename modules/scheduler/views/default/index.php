@@ -46,6 +46,9 @@ BootstrapYearCalendarAsset::register($this);
     initAppConfig('/scheduler/menu/app-config');
 
     var csrf = $('meta[name=csrf-token]').attr("content");
+
+
+
     var fcSources = {
       vks: {
         id: '1111',
@@ -335,9 +338,7 @@ BootstrapYearCalendarAsset::register($this);
       var date = $('#start-date').val();
       var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
       var vksDate = date.replace(pattern, '$3-$2-$1');
-      console.log(vksDate);
       var url = "/vks/sessions/create-up-session-ajax?vks_date=" + vksDate;
-//      var vksDate = new Date(date.replace(pattern, '$3-$2-$1'));
       $.confirm({
           content: function () {
               var self = this;
@@ -351,15 +352,6 @@ BootstrapYearCalendarAsset::register($this);
           contentLoaded: function (data, status, xhr) {
               this.setContentAppend('<div>' + data + '</div>');
           },
-/*
-          onContentReady: function () {
-              moment.locale('ru');
-              console.log(vksDate);
-              console.log(moment(vksDate).format('D MM YYYY'));
-//              $('#vkssessions-vks_date').datepicker('update', date);
-              $('.vks-date').datepicker('update', moment(vksDate).format('D MM YYYY'));
-          },
-*/
           type: 'blue',
           columnClass: 'large',
           title: 'Добавить предстоящий сеанс',

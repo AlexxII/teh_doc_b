@@ -271,7 +271,9 @@ BootstrapDatepickerAsset::register($this);
         },
         {
           "targets": 3,
-          "render": function (data, type, row) {
+            "width": '80px',
+
+            "render": function (data, type, row) {
             if (row[3] == '') {
               return '<strong>' + row[4] + '</strong>' + ' / <strong>Р</strong>';
             } else if (row[4] == '') {
