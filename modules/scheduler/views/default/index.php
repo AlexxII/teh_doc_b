@@ -24,6 +24,12 @@ BootstrapYearCalendarAsset::register($this);
 
 ?>
 
+<style>
+  #add-vks {
+    margin: 0 !important;
+  }
+</style>
+
 <div class="main-wrap">
   <div class="main-scheduler">
     <div id="calendar">
@@ -110,7 +116,7 @@ BootstrapYearCalendarAsset::register($this);
       '<svg width="20" height="20" viewBox="2 2 22 22">' +
       '<path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>' +
       '<path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>' +
-      '</svg>'
+      '</svg>'+
     '</div>';
 
     calendar = new FullCalendar.Calendar(calendarEl, {
@@ -121,9 +127,11 @@ BootstrapYearCalendarAsset::register($this);
       },
       navLinks: true,
       navLinkWeekClick: function (weekStart, jsEvent) {
+        calendar.gotoDate(weekStart);
         calendar.changeView('timeGridWeek');
       },
       navLinkDayClick: function (date, jsEvent) {
+        calendar.gotoDate(date);
         calendar.changeView('timeGridDay');
       },
       weekNumbers: true,
@@ -463,7 +471,5 @@ BootstrapYearCalendarAsset::register($this);
   $(document).on('click', '.fc-day-number, .fc-day-header, .fc-list-heading-main', function (e) {
     $('#view-menu-btn > #title').text('День');
   });
-
-
 
 </script>

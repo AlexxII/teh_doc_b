@@ -113,7 +113,7 @@ i.check {
 .dynamic .control-label {
   font-size: 14px;
 }
-.form-up-session  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+.form-up-session .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
   background-color: #fff !important;
   opacity: 1 !important;
 }
@@ -151,6 +151,13 @@ i.check {
 td.align-center {
   text-align: center;
 }
+.datepicker {
+  z-index: 999999999;
+}
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  background-color: #fff;
+  opacity: 1;
+}
 /* wastebasket */
 #up-sessions-table .inline-wrap {
   display: inline-flex;
@@ -179,7 +186,7 @@ td.align-center {
   font-size: 12px;
 }
 #vks-period-input {
-  width:220px;
+  width: 220px;
   margin-top: 10px
 }
 .input-daterange {
@@ -187,11 +194,12 @@ td.align-center {
 }
 .h-title {
   position: absolute;
-  top:5px;
-  left:-25px;
+  top: 5px;
+  left: -25px;
 }
 /* autocomplete */
 .ui-front {
 
   dex: 300 !important;
 }
+

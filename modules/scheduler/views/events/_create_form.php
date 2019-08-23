@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-use app\assets\AirDatepickerAsset;
 use app\assets\BootstrapDatepickerAsset;
 use app\assets\ColorPickerAsset;
 
@@ -12,24 +11,12 @@ ColorPickerAsset::register($this);
 
 ?>
 
-<style>
-  .datepicker {
-    z-index: 999999999;
-  }
-  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-    background-color: #fff;
-    opacity: 1;
-  }
-  #add-vks {
-    margin: 0 !important;
-  }
-</style>
-
+<?php if ($model->isNewRecord) : ?>
 <strong>Добавить:</strong>
 <button id="add-vks" class="btn btn-primary btn-sm">ВКС</button>
+<?php endif; ?>
 
 <div style="margin-top: 10px">
-
   <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
   <div class="form-group">

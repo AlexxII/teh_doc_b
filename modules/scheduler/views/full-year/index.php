@@ -85,6 +85,8 @@
         clickMonth: function (e) {
           calendar.gotoDate(e.date);
           $('.main-scheduler').html(calendarView);
+          $('#view-menu-btn > #title').text('Месяц');
+          $('#left-custom-data-ex').html(calendar.view.title);
           calendar.changeView('dayGridMonth');
           calendar.refetchEvents();
         },

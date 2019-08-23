@@ -65,6 +65,13 @@
 .jconfirm {
   z-index: 200 !important;
 }
+.datepicker {
+  z-index: 999999999;
+}
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  background-color: #fff !important;
+  opacity: 1 !important;
+}
 /* autocomplete */
 .ui-front {
   z-index: 300 !important;
