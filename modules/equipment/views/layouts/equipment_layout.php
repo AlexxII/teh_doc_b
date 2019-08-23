@@ -278,56 +278,7 @@ $del_multi_nodes = 'Удалить С вложениями';
 
   var tid, ul;
 
-  function loadExContent(url, uri) {
-    var node = $("#fancyree_w0").fancytree("getActiveNode");
-    if (node != undefined) {
-      tid = node.data.id;
-    }
-    $.ajax({
-      url: url,
-      method: 'get'
-    }).done(function (response) {
-      $('body').html(response.data.data);
-      window.history.pushState("object or string", "Title", uri);
-    }).fail(function () {
-      console.log('fail');
-    });
-  }
-
-  function loadControls(e) {
-    e.preventDefault();
-    var uri = $(this).data('url');
-    var title = $(this).data('title');
-    var url = '/equipment/control/' + uri + '/index';
-    c = $.confirm({
-      content: function () {
-        var self = this;
-        return $.ajax({
-          url: url,
-          method: 'get'
-        }).done(function (response) {
-        }).fail(function () {
-          self.setContentAppend('<div>Что-то пошло не так!</div>');
-        });
-      },
-      contentLoaded: function (data, status, xhr) {
-        this.setContentAppend('<div>' + data + '</div>');
-      },
-      columnClass: 'large',
-      title: title,
-      buttons: {
-        cancel: {
-          text: 'НАЗАД'
-        }
-      }
-    });
-
-  }
-
   $(document).ready(function () {
-
-    // console.log($(location).attr('pathname'));
-    // if (window.location.href == )
 
     $('#testtt_t').on('click', function () {
       console.log('fuck');
@@ -353,8 +304,6 @@ $del_multi_nodes = 'Удалить С вложениями';
         // return rex.test(node.title);
       });
     });
-
-    $('.menu-link').on('click', loadControls);
 
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -543,16 +492,6 @@ $del_multi_nodes = 'Удалить С вложениями';
 
   //меню
 
-  $(document).ready(function () {
-    $('#push-it').bind('click', clickMenu);
-
-    $(".menu-list-about").on('click', function (e) {
-      var url = $(this).data('url');
-      var uri = $(this).data('uri');
-      loadExContent(url, uri);
-    })
-
-  });
 
   function clickMenu() {
     if ($(window).width() >= 900) {

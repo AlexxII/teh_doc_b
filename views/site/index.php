@@ -3,6 +3,7 @@
     font-size: 18px;
     color: #1e6887;
   }
+
   .placeholder {
     text-align: center;
   }
@@ -34,7 +35,7 @@
     </div>
   </div>
 
-<!--  <div class="col-lg-4 col-md-4 about" data-url="/equipment" style="text-align:center; cursor: pointer">
+  <div class="col-lg-4 col-md-4 about" data-url="/equipment" style="text-align:center; cursor: pointer">
     <div class="row" id="header">
       <h2>Техника</h2>
     </div>
@@ -45,7 +46,6 @@
       <h4 class="text-muted">Перечень оборудования</h4>
     </div>
   </div>
--->
   <div class="body-content">
 
   </div>
