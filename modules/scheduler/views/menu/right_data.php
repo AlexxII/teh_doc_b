@@ -11,8 +11,8 @@
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" aria-labelledby="view-menu-btn">
-    <li value="dayGridDay"><a href="">День</a></li>
-    <li value="dayGridWeek"><a href="">Неделя</a></li>
+    <li value="timeGridDay"><a href="">День</a></li>
+    <li value="timeGridWeek"><a href="">Неделя</a></li>
     <li value="dayGridMonth"><a href="">Месяц</a></li>
     <li value="year"><a href="">Год</a></li>
     <li value="list"><a href="">Расписание</a></li>

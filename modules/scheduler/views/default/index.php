@@ -23,9 +23,6 @@ BootstrapDatepickerAsset::register($this);
 BootstrapYearCalendarAsset::register($this);
 
 ?>
-<style>
-</style>
-
 
 <div class="main-wrap">
   <div class="main-scheduler">
@@ -49,8 +46,6 @@ BootstrapYearCalendarAsset::register($this);
     initAppConfig('/scheduler/menu/app-config');
 
     var csrf = $('meta[name=csrf-token]').attr("content");
-
-    var di = '<div style="position: absolute; top: 0; left: 20px">1</div>';
 
     var fcSources = {
       vks: {
@@ -106,17 +101,17 @@ BootstrapYearCalendarAsset::register($this);
     var calendarEl = document.getElementById('calendar');
 
     var editBtn = '<div id="event-edit-btn" onClick="editEvent()">' +
-      '<svg width="20" height="20" viewBox="2 2 22 22">'+
-      '<path fill="none" d="M0 0h24v24H0V0z"></path>'+
-      '<path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75'+
-      '1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>'+
+      '<svg width="20" height="20" viewBox="2 2 22 22">' +
+      '<path fill="none" d="M0 0h24v24H0V0z"></path>' +
+      '<path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75' +
+      '1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>' +
       '</svg></div>';
     var deleteBtn = '<div id="event-delete-btn" title="Удалить к чертям" onClick="deleteEvent()">' +
-      '<svg width="20" height="20" viewBox="2 2 22 22">'+
-      '<path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>'+
-      '<path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>'+
+      '<svg width="20" height="20" viewBox="2 2 22 22">' +
+      '<path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>' +
+      '<path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>' +
       '</svg>'
-      '</div>';
+    '</div>';
 
     calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
@@ -124,11 +119,13 @@ BootstrapYearCalendarAsset::register($this);
       height: function () {
         return $(window).height() - 55;
       },
-      // windowResize: function (view) {
-      //   var size = $(window).height() - 55;
-      //   calendar.updateSize();
-      // },
       navLinks: true,
+      navLinkWeekClick: function (weekStart, jsEvent) {
+        calendar.changeView('timeGridWeek');
+      },
+      navLinkDayClick: function (date, jsEvent) {
+        calendar.changeView('timeGridDay');
+      },
       weekNumbers: true,
       weekNumbersWithinDays: true,
       selectable: true,
@@ -194,16 +191,15 @@ BootstrapYearCalendarAsset::register($this);
           },
           contentLoaded: function (data, status, xhr) {
             this.setContentAppend('<div>' + data + '</div>');
-//              $('.jconfirm-closeIcon').append(di);
           },
           type: 'blue',
           columnClass: 'medium',
           closeIcon: true,
-          title: 'Добавить событие' + '<svg id="add-vks" width="20" height="24" viewBox="0 0 20 20" style="margin-left: 50px;cursor: pointer">'+
-          '<path fill="none" d="M0 0h24v24H0V0z"></path>'+
-          '<path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75'+
-          '1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>'+
-          '</svg>',
+          title: 'Добавить событие' + '<svg id="add-vks" width="20" height="24" viewBox="0 0 20 20" style="margin-left: 50px;cursor: pointer">' +
+            '<path fill="none" d="M0 0h24v24H0V0z"></path>' +
+            '<path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75' +
+            '1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>' +
+            '</svg>',
           buttons: {
             ok: {
               btnClass: 'btn-blue',
@@ -261,12 +257,12 @@ BootstrapYearCalendarAsset::register($this);
             },
             contentLoaded: function (data, status, xhr) {
               this.setContentAppend('<div>' + data + '</div>');
-              if (req == 'sub-event'){
+              if (req == 'sub-event') {
                 $('.jconfirm-box').append(editBtn);
                 $('.jconfirm-box').append(deleteBtn);
-                var eventInfo = '<span id="event-info" data-event-id="' + ident +'">';
+                var eventInfo = '<span id="event-info" data-event-id="' + ident + '">';
                 $('.jconfirm-box').append(eventInfo);
-                $('.jconfirm-box button').css('padding', '3px 7px');
+                $('.jconfirm-box button').css('padding', '1px 7px');
               }
             },
             type: 'blue',
@@ -283,11 +279,11 @@ BootstrapYearCalendarAsset::register($this);
               },
               done: {
                 btnClass: 'btn-green',
-                text: '<svg width="20" height="24" viewBox="0 0 38 40" style="fill:#fff">'+
-                  '<path d="M1.36,17.427c0,0,7.311-0.122,10.844,8.163c0,0,15.474-22.175,31.435-18.885c0,0-17.789,7.067-32.045,31.922L1.36,17.427z"/>'+
+                text: '<svg width="20" height="24" viewBox="0 0 38 40" style="fill:#fff">' +
+                  '<path d="M1.36,17.427c0,0,7.311-0.122,10.844,8.163c0,0,15.474-22.175,31.435-18.885c0,0-17.789,7.067-32.045,31.922L1.36,17.427z"/>' +
                   '</svg>',
                 action: function () {
-                    console.log('Событие исполнено!');
+                  console.log('Событие исполнено!');
                 }
               }
             },
@@ -338,71 +334,71 @@ BootstrapYearCalendarAsset::register($this);
   }
 
   $(document).on('click', '#add-vks', function (e) {
-      var date = $('#start-date').val();
-      var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-      var vksDate = date.replace(pattern, '$3-$2-$1');
-      var url = "/vks/sessions/create-up-session-ajax?vks_date=" + vksDate;
-      $.confirm({
-          content: function () {
-              var self = this;
-              return $.ajax({
-                  url: url,
-                  method: 'get'
-              }).fail(function () {
-                  self.setContentAppend('<div>Что-то пошло не так!</div>');
-              });
-          },
-          contentLoaded: function (data, status, xhr) {
-              this.setContentAppend('<div>' + data + '</div>');
-          },
-          type: 'blue',
-          columnClass: 'large',
-          title: 'Добавить предстоящий сеанс',
-          buttons: {
-              ok: {
-                  btnClass: 'btn-blue',
-                  text: 'Добавить',
-                  action: function () {
-                      var $form = $("#w0"),
-                          data = $form.data("yiiActiveForm");
-                      $.each(data.attributes, function () {
-                          this.status = 3;
-                      });
-                      $form.yiiActiveForm("validate");
-                      if ($("#w0").find(".has-error").length) {
-                          return false;
-                      } else {
-                          var d = $('.vks-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
-                          $('.vks-date').val(d);
-                          var d = $('.vks_receive-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
-                          $('.vks_receive-date').val(d);
-                          var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс добавлен';
-                          var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить не удалось';
-                          sendFormData(url, calendar, $form);
-                      }
-                  }
-              },
-              cancel: {
-                  text: 'НАЗАД'
-              }
+    var date = $('#start-date').val();
+    var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+    var vksDate = date.replace(pattern, '$3-$2-$1');
+    var url = "/vks/sessions/create-up-session-ajax?vks_date=" + vksDate;
+    $.confirm({
+      content: function () {
+        var self = this;
+        return $.ajax({
+          url: url,
+          method: 'get'
+        }).fail(function () {
+          self.setContentAppend('<div>Что-то пошло не так!</div>');
+        });
+      },
+      contentLoaded: function (data, status, xhr) {
+        this.setContentAppend('<div>' + data + '</div>');
+      },
+      type: 'blue',
+      columnClass: 'large',
+      title: 'Добавить предстоящий сеанс',
+      buttons: {
+        ok: {
+          btnClass: 'btn-blue',
+          text: 'Добавить',
+          action: function () {
+            var $form = $("#w0"),
+              data = $form.data("yiiActiveForm");
+            $.each(data.attributes, function () {
+              this.status = 3;
+            });
+            $form.yiiActiveForm("validate");
+            if ($("#w0").find(".has-error").length) {
+              return false;
+            } else {
+              var d = $('.vks-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+              $('.vks-date').val(d);
+              var d = $('.vks_receive-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+              $('.vks_receive-date').val(d);
+              var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс добавлен';
+              var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить не удалось';
+              sendFormData(url, calendar, $form);
+            }
           }
-      });
-      addEventDialog.close();
+        },
+        cancel: {
+          text: 'НАЗАД'
+        }
+      }
+    });
+    addEventDialog.close();
   });
 
   function sendFormData(url, calendar, form) {
-      $.ajax({
-          type: 'POST',
-          url: url,
-          dataType: 'json',
-          data: form.serialize(),
-          success: function (response) {
-              calendar.refetchEvents();
-          },
-          error: function (response) {
-              console.log(response.data.data);
-          }
-      });
+    $.ajax({
+      type: 'POST',
+      url: url,
+      dataType: 'json',
+      data: form.serialize(),
+      success: function (response) {
+        calendar.refetchEvents();
+      },
+      error: function (response) {
+        console.log(response.data.data);
+      }
+    });
   }
 
   $(document).on('click', '#view-selector li', function (e) {
@@ -411,7 +407,7 @@ BootstrapYearCalendarAsset::register($this);
     $('#view-menu-btn > #title').text($(this).text());
     $('#view-menu-btn > #title').attr('title', $(this).text());
     if (viewType == 'year') {
-      if($('#full-calendar').length) return;
+      if ($('#full-calendar').length) return;
       calendarView = $('#calendar');
       calendarTitle = calendar.view.title;
       $('.main-scheduler').html(fullYear);
