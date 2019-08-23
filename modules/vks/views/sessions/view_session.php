@@ -75,7 +75,7 @@ use yii\widgets\DetailView;
           'value' => date('d.m.Y', strtotime($model->vks_receive_msg_datetime))
         ],
         [
-          'label' => 'Передавший сообщение:',
+          'label' => 'Источник сообщения:',
           'value' => $model->sendMsg
         ],
         'vks_comments',

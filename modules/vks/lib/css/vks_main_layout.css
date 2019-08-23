@@ -192,5 +192,6 @@ td.align-center {
 }
 /* autocomplete */
 .ui-front {
-  z-index: 300 !important;
+
+  dex: 300 !important;
 }

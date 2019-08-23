@@ -25,8 +25,10 @@ function loadProductionCalendar() {
   });
 }
 
-function editEvent(id) {
+function editEvent() {
   var url = '/scheduler/events/update-event';
+  var id = $('#event-info').data('eventId');
+  eventView.close();
   $.confirm({
     content: function () {
       var self = this;
@@ -99,9 +101,11 @@ function updateEvent(msg, id) {
   });
 }
 
-function deleteEvent(id) {
+function deleteEvent() {
   var csrf = $('meta[name=csrf-token]').attr("content");
   var url = '/scheduler/events/delete-event';
+  var id = $('#event-info').data('eventId');
+  eventView.close();
   jc = $.confirm({
     icon: 'fa fa-question',
     title: 'Вы уверены?',

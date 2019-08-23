@@ -33,3 +33,39 @@
 #w0 .nonreq {
   color: #1e6887;
 }
+/* events view jconfirm style */
+#event-edit-btn {
+  position: absolute;
+  right:70px;
+  top:10px;
+  cursor: pointer;
+}
+#event-edit-btn {
+  opacity: 0.6;
+}
+#event-edit-btn:hover {
+  opacity: 1;
+}
+#event-delete-btn {
+  position: absolute;
+  right:45px;
+  top:10px;
+  cursor: pointer;
+}
+#event-delete-btn {
+  opacity: 0.6;
+}
+#event-delete-btn:hover {
+  opacity: 1;
+}
+/* vks add */
+.form-up-session .form-group {
+  margin-bottom: 5px;
+}
+.jconfirm {
+  z-index: 200 !important;
+}
+/* autocomplete */
+.ui-front {
+  z-index: 300 !important;
+}

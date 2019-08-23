@@ -23,6 +23,9 @@ BootstrapDatepickerAsset::register($this);
 BootstrapYearCalendarAsset::register($this);
 
 ?>
+<style>
+</style>
+
 
 <div class="main-wrap">
   <div class="main-scheduler">
@@ -34,7 +37,7 @@ BootstrapYearCalendarAsset::register($this);
 
 <script>
 
-  var calendar, calendarView, calendarTitle, fullYear, addEventDialog;
+  var calendar, calendarView, calendarTitle, fullYear, addEventDialog, eventView;
   $(document).ready(function () {
 
     $('#push-it').removeClass('hidden');
@@ -101,6 +104,20 @@ BootstrapYearCalendarAsset::register($this);
     };
 
     var calendarEl = document.getElementById('calendar');
+
+    var editBtn = '<div id="event-edit-btn" onClick="editEvent()">' +
+      '<svg width="20" height="20" viewBox="2 2 22 22">'+
+      '<path fill="none" d="M0 0h24v24H0V0z"></path>'+
+      '<path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75'+
+      '1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>'+
+      '</svg></div>';
+    var deleteBtn = '<div id="event-delete-btn" title="Удалить к чертям" onClick="deleteEvent()">' +
+      '<svg width="20" height="20" viewBox="2 2 22 22">'+
+      '<path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>'+
+      '<path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>'+
+      '</svg>'
+      '</div>';
+
     calendar = new FullCalendar.Calendar(calendarEl, {
       plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
       locale: 'ru',
@@ -229,7 +246,7 @@ BootstrapYearCalendarAsset::register($this);
           var ar = urlText.split('/');
           var req = ar[0];
           var ident = ar[1];
-          c = $.confirm({
+          eventView = $.confirm({
             content: function () {
               var self = this;
               return $.ajax({
@@ -244,10 +261,17 @@ BootstrapYearCalendarAsset::register($this);
             },
             contentLoaded: function (data, status, xhr) {
               this.setContentAppend('<div>' + data + '</div>');
+              if (req == 'sub-event'){
+                $('.jconfirm-box').append(editBtn);
+                $('.jconfirm-box').append(deleteBtn);
+                var eventInfo = '<span id="event-info" data-event-id="' + ident +'">';
+                $('.jconfirm-box').append(eventInfo);
+                $('.jconfirm-box button').css('padding', '3px 7px');
+              }
             },
             type: 'blue',
             columnClass: 'medium',
-            title: '',
+            title: 'Подробности',
             closeIcon: true,
             buttons: {
               ok: {
@@ -255,26 +279,6 @@ BootstrapYearCalendarAsset::register($this);
                 text: 'К СОБЫТИЮ',
                 action: function () {
                   window.open(url);
-                }
-              },
-              edit: {
-                text: '<svg width="20" height="24" viewBox="0 0 20 20">'+
-                '<path fill="none" d="M0 0h24v24H0V0z"></path>'+
-                '<path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75'+
-                '1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>'+
-                '</svg>',
-                action: function () {
-                  editEvent(ident);
-                }
-              },
-              del: {
-                btnClass: 'btn-red',
-                text: '<svg width="24" height="24" viewBox="0 0 24 20" style="fill:#fff" title="Удалить нахуй">'+
-                '<path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>'+
-                '<path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>'+
-                '</svg>',
-                action: function () {
-                  deleteEvent(ident)
                 }
               },
               done: {
@@ -292,8 +296,6 @@ BootstrapYearCalendarAsset::register($this);
               if (req == 'sub-event') {
                 this.buttons.ok.hide();
               } else {
-                this.buttons.del.hide();
-                this.buttons.edit.hide();
                 this.buttons.done.hide();
               }
               this.$content.find('#event-title').on('keyup mouseclick', function () {

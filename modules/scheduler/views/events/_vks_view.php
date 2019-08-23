@@ -54,7 +54,7 @@ $this->title = 'Просмотр';
           'value' => date('d.m.Y', strtotime($model->vks_receive_msg_datetime)) . ' г.'
         ],
         [
-          'label' => 'Передавший сообщение:',
+          'label' => 'Источник сообщения:',
           'value' => $model->sendMsg
         ],
         'vks_comments',
