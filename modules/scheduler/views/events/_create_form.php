@@ -20,10 +20,16 @@ ColorPickerAsset::register($this);
     background-color: #fff;
     opacity: 1;
   }
+  #add-vks {
+    margin: 0 !important;
+  }
 </style>
 
+<strong>Добавить:</strong>
+<button id="add-vks" class="btn btn-primary btn-sm">ВКС</button>
 
-<div>
+<div style="margin-top: 10px">
+
   <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
   <div class="form-group">

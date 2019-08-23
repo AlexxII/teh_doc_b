@@ -564,7 +564,7 @@ BootstrapDatepickerAsset::register($this);
       event.preventDefault();
       var url = "/vks/sessions/create-session-ajax";
       c = $.confirm({
-        content: function () {
+        content: function () {+
           var self = this;
           return $.ajax({
             url: url,

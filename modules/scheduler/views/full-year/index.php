@@ -82,6 +82,12 @@
         dayContextMenu: function (e) {
           $(e.element).popover('hide');
         },
+        clickMonth: function (e) {
+          calendar.gotoDate(e.date);
+          $('.main-scheduler').html(calendarView);
+          calendar.changeView('dayGridMonth');
+          calendar.refetchEvents();
+        },
         mouseOnDay: function (e) {
           if (e.events.length > 0) {
             var content = '';
@@ -350,8 +356,6 @@
         });
       }
     })
-
-    // console.log(event);
   }
 
   function editFullYearEvent(event) {

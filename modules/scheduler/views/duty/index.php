@@ -129,7 +129,6 @@ $this->params['breadcrumbs'][] = $this->title;
             html: true,
             content: content
           });
-
           $(e.element).popover('show');
         }
       },
@@ -149,7 +148,6 @@ $this->params['breadcrumbs'][] = $this->title;
           $(element).css('font-size', '15px');
           $(element).css('color', 'red');
         }
-
       },
       selectRange: function (e) {
         createDuty(e);
