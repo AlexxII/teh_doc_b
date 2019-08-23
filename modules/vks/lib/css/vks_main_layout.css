@@ -151,9 +151,6 @@ i.check {
 td.align-center {
   text-align: center;
 }
-.datepicker {
-  z-index: 999999999;
-}
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
   background-color: #fff;
   opacity: 1;
@@ -199,7 +196,6 @@ td.align-center {
 }
 /* autocomplete */
 .ui-front {
-
-  dex: 300 !important;
+  z-index: 300 !important;
 }
 

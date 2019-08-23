@@ -10,6 +10,8 @@ use app\modules\equipment\models\Placement;
 class PlacementController extends Controller
 {
 
+  public $layout = '@app/views/layouts/main_ex.php';
+
   public function actionIndex()
   {
     return $this->renderAjax('index');

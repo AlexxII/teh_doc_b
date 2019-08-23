@@ -15,7 +15,7 @@ use app\modules\equipment\models\TehInterface;
 class InterfaceController extends Controller
 {
 
-  public $layout = '@app/modules/equipment/views/layouts/equipment_control_layout.php';
+  public $layout = '@app/views/layouts/main_ex.php';
 
   public function behaviors()
   {

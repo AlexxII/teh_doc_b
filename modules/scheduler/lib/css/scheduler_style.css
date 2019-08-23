@@ -72,6 +72,9 @@
   background-color: #fff !important;
   opacity: 1 !important;
 }
+#add-vks {
+  margin: 0 !important;
+}
 /* autocomplete */
 .ui-front {
   z-index: 300 !important;

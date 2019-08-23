@@ -240,4 +240,22 @@ class EventsController extends Controller
   {
     return $this->renderAjax('_calendars_form');
   }
+
+  public function actionTrash()
+  {
+    $this->layout = '@app/views/layouts/main_ex.php';
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Корзина';
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('trash'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
+
+  }
+
 }

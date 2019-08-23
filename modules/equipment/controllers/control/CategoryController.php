@@ -9,7 +9,6 @@ use app\modules\equipment\models\Category;
 
 class CategoryController extends Controller
 {
-  public $layout = '@app/modules/equipment/views/layouts/equipment_control_layout.php';
 
   public function actionIndex()
   {

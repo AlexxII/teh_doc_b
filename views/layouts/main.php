@@ -114,14 +114,13 @@ $this->beginPage() ?>
                 <p class="list-group-item-text">Календарь</p>
               </a>
             </div>
-<!--
             <div class="list-group">
-              <a href="/equipment/tools" class="list-group-item">
+              <a href="/equipment" class="list-group-item">
                 <h4 class="list-group-item-heading">Техника</h4>
                 <p class="list-group-item-text">Перечень оборудования</p>
               </a>
             </div>
--->          </ul>
+          </ul>
         </li>
         <li id="accounts" class="dropdown">
           <?php if (Yii::$app->user->isGuest): ?>
@@ -197,7 +196,6 @@ $this->beginPage() ?>
             var url = $(this).data('href');
             $.post(url);
         })
-
     });
 
     $(document).on('click', '.jclick', loadControls);

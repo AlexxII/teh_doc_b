@@ -25,9 +25,6 @@ BootstrapYearCalendarAsset::register($this);
 ?>
 
 <style>
-  #add-vks {
-    margin: 0 !important;
-  }
 </style>
 
 <div class="main-wrap">
