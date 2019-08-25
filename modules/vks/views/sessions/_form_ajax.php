@@ -435,6 +435,20 @@ $vks_add_combined = "Добавить совмещенный сеанс";
       var id = '#' + $(this).data("name") + text;
       $(id).val(val);
     });
+
+
+    var select = '<select>' +
+      '<option>10:00</option>' +
+      '<option>11:00</option>' +
+      '<option>12:00</option>' +
+      '<option>13:00</option>' +
+      '</select>';
+
+    $('#vkssessions-vks_teh_time_start').on('click', function () {
+      $(this).html(select);
+    })
+
+
   });
 
 </script>

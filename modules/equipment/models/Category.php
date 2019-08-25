@@ -15,7 +15,7 @@ class Category extends ActiveRecord
 
   public static function tableName()
   {
-    return 'teh_category_tbl';
+    return 'equipment_category_tbl';
   }
 
   public function behaviors()

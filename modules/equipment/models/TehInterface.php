@@ -16,7 +16,7 @@ class TehInterface extends \yii\db\ActiveRecord
 
   public static function tableName()
   {
-    return 'teh_interface_tbl';
+    return 'equipment_interface_tbl';
   }
 
   public function rules()

@@ -14,9 +14,29 @@ use app\modules\equipment\models\ToolSettings;
 class InfoController extends Controller
 {
 
-  const CATEGORY_TABLE = '{{%teh_category_tbl}}';
+  const CATEGORY_TABLE = '{{%equipment_category_tbl}}';
 
   public $layout = '@app/modules/equipment/views/layouts/equipment_layout_control.php';
+
+  public function actionMainIndex()
+  {
+    if (!empty($_GET['id'])) {
+      $id = $_GET['id'];
+      $model = Tools::findModel($id);
+      $children = $model->children(1)->all();
+      if ($model->complex) {
+        $view = 'view_complex';
+      } else {
+        $view = 'view_single';
+      }
+      return $this->renderAjax('index', [
+        'model' => $model,
+        'view' => $view,
+        'children' => $children,
+      ]);
+    }
+    return $this->render('meeting');
+  }
 
   public function actionMeeting()
   {

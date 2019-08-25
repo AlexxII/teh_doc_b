@@ -14,7 +14,7 @@ use app\modules\equipment\models\ToolSettings;
 class ToolsController extends Controller
 {
 
-  public $layout = '@app/views/layouts/main_ex.php';
+  public $layout = '@app/modules/equipment/views/layouts/equipment_ex_layout.php';
 
   public function actionAllTools()
   {
@@ -98,7 +98,6 @@ class ToolsController extends Controller
   public function actionTask()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     $models = Tools::find()
       ->where(['settings_table.eq_task' => 1])
       ->joinWith('settings settings_table')
@@ -150,7 +149,6 @@ class ToolsController extends Controller
   public function actionCategories()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     Yii::$app->view->params['title'] = 'По категориям';
     return [
       'data' => [
@@ -165,7 +163,6 @@ class ToolsController extends Controller
   public function actionPlacement()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     Yii::$app->view->params['title'] = 'По размещению';
     return [
       'data' => [
@@ -184,7 +181,7 @@ class ToolsController extends Controller
 
   public function actionServerSide()
   {
-    $table = 'teh_equipment_tbl';
+    $table = 'equipment_tools_tbl';
     $primaryKey = 'id';
     $columns = array(
       array('db' => 'id', 'dt' => 0),
@@ -235,7 +232,7 @@ class ToolsController extends Controller
     }
     if (isset($_GET['index'])) {
       $index = $_GET['index'];
-      $where = ' id in (SELECT eq_id FROM teh_settings_tbl WHERE ' . $index . '= 1)';
+      $where = ' id in (SELECT eq_id FROM equipment_settings_tbl WHERE ' . $index . '= 1)';
     } else {
       $where = ' lvl != 0';
     }
@@ -247,8 +244,8 @@ class ToolsController extends Controller
 
   public function actionServerSideOth()
   {
-    $table = 'teh_oth_tbl';
-    $tableTwo = 'teh_equipment_tbl';
+    $table = 'equipment_oth_tbl';
+    $tableTwo = 'equipment_tools_tbl';
 
     $primaryKey = 'id';
     $columns = array(

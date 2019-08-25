@@ -31,8 +31,8 @@ use app\modules\tehdoc\modules\to\models\ToEquipment;
  */
 class Tools extends \yii\db\ActiveRecord
 {
-  const PLACEMENT_TABLE = '{{%teh_placement_tbl}}';
-  const CATEGORY_TABLE = '{{%teh_category_tbl}}';
+  const PLACEMENT_TABLE = '{{%equipment_placement_tbl}}';
+  const CATEGORY_TABLE = '{{%equipment_category_tbl}}';
 
   const SCENARIO_CREATE = 'create';
   const SCENARIO_UPDATE = 'update';
@@ -45,7 +45,7 @@ class Tools extends \yii\db\ActiveRecord
 
   public static function tableName()
   {
-    return 'teh_equipment_tbl';
+    return 'equipment_tools_tbl';
   }
 
   public function behaviors()

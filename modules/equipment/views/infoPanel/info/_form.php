@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 use app\modules\tehdoc\models\Equipment;
-use app\modules\tehdoc\asset\TehFormAsset;
 
 ?>
 
@@ -27,7 +26,6 @@ use app\modules\tehdoc\asset\TehFormAsset;
 </style>
 
 <?php
-TehFormAsset::register($this);
 
 // текст к подсказкам
 $serial_hint = 'Укажите серийный номер (s/n), на некоторых моделях оборудования указывается только производственный номер (p/n), 

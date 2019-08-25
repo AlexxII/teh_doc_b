@@ -18,7 +18,7 @@ class Oth extends \yii\db\ActiveRecord
 
   public static function tableName()
   {
-    return 'teh_oth_tbl';
+    return 'equipment_oth_tbl';
   }
 
 }

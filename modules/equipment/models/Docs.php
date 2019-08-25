@@ -14,7 +14,7 @@ class Docs extends \yii\db\ActiveRecord
 
   public static function tableName()
   {
-    return 'teh_docs_tbl';
+    return 'equipment_docs_tbl';
   }
 
   public function __construct()

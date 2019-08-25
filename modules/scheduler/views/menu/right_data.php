@@ -2,6 +2,20 @@
   button {
     margin: 10px 20px 0 20px;
   }
+  .checkk {
+    left:26px;
+    top: 2px;
+    width: 6px;
+    height: 14px;
+    transform: rotate(45deg);
+    transform-origin: left;
+    display: block;
+    border-right: 2px solid #222;
+    border-bottom: 2px solid #222;
+    opacity: .54;
+    position: absolute;
+  }
+
 </style>
 <div class="dropdown" id="view-selector" title="Месяц">
   <button class="btn btn-default dropdown-toggle" type="button" id="view-menu-btn"
@@ -17,7 +31,21 @@
     <li value="year"><a href="">Год</a></li>
     <li value="list"><a href="">Расписание</a></li>
     <li role="separator" class="divider"></li>
-    <li value="production"><a href="">Показывать отклоненные мероприятия</a></li>
-    <li value="production"><a href="">Показывать отработанные мероприятия</a></li>
+    <li value="holidays" style="position: relative">
+      <a href="">
+        <span class="checkk" style="display: none"></span>
+        <span style="margin-left:28px">
+          Показывать праздники
+        </span>
+      </a>
+    </li>
+    <li value="waste" style="position: relative">
+      <a href="">
+        <span class="checkk" style="display: none"></span>
+        <span style="margin-left:28px">
+        Показывать отработанные мероприятия
+        </span>
+      </a>
+    </li>
   </ul>
 </div>

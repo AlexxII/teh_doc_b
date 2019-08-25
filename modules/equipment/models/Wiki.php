@@ -14,7 +14,7 @@ class Wiki extends \yii\db\ActiveRecord
 
   public static function tableName()
   {
-    return 'teh_wiki_tbl';
+    return 'equipment_wiki_tbl';
   }
 
   public function __construct()

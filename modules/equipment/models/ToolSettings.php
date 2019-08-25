@@ -12,7 +12,7 @@ class ToolSettings extends \yii\db\ActiveRecord
 {
   public static function tableName()
   {
-    return 'teh_settings_tbl';
+    return 'equipment_settings_tbl';
   }
 
   public static function findModel($id)

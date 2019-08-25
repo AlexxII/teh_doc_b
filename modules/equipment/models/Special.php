@@ -13,7 +13,7 @@ class Special extends \yii\db\ActiveRecord
   // Описывает Спец работы
   public static function tableName()
   {
-    return 'teh_special_works_tbl';
+    return 'equipment_special_works_tbl';
   }
 
   public function __construct()

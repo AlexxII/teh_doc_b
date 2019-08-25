@@ -25,12 +25,14 @@ BootstrapYearCalendarAsset::register($this);
 ?>
 
 <style>
+  #add-vks {
+    margin: 0 !important;
+  }
 </style>
 
 <div class="main-wrap">
   <div class="main-scheduler">
     <div id="calendar">
-
     </div>
   </div>
 </div>
@@ -77,6 +79,7 @@ BootstrapYearCalendarAsset::register($this);
         textColor: 'white' // a non-ajax optio
       },
       events: {
+        id: '222222',
         url: '/scheduler/events/events-data',
         method: 'POST',
         extraParams: {
@@ -89,13 +92,26 @@ BootstrapYearCalendarAsset::register($this);
         textColor: 'white' // a non-ajax optio
       },
       holidays: {
+        id: '333333',
         url: '/scheduler/events/holidays-data',
         method: 'POST',
         extraParams: {
           _csrf: csrf
         },
         failure: function () {
-          console.log('Внимание! Ошибка получения дат дней рождений!');
+          console.log('Внимание! Ошибка получения праздников!');
+        },
+        textColor: 'white'
+      },
+      waste: {
+        id: '999999',
+        url: '/scheduler/events/waste-events',
+        method: 'POST',
+        extraParams: {
+          _csrf: csrf
+        },
+        failure: function () {
+          console.log('Внимание! Ошибка получения отработанных событий!');
         },
         textColor: 'white'
       }
@@ -309,6 +325,7 @@ BootstrapYearCalendarAsset::register($this);
       }
     });
     calendar.render();
+    window.ee = calendar.getEventSources();
     $('#left-custom-data-ex').html(calendar.view.title);
   });
 
@@ -406,20 +423,35 @@ BootstrapYearCalendarAsset::register($this);
   $(document).on('click', '#view-selector li', function (e) {
     e.preventDefault();
     var viewType = $(this).attr('value');
-    $('#view-menu-btn > #title').text($(this).text());
-    $('#view-menu-btn > #title').attr('title', $(this).text());
     if (viewType == 'year') {
       if ($('#full-calendar').length) return;
       calendarView = $('#calendar');
       calendarTitle = calendar.view.title;
       $('.main-scheduler').html(fullYear);
       $('#left-custom-data-ex').html('');
+    } else if (viewType == 'holidays') {
+      var holidays = calendar.getEventSourceById('333333');
+      window.t = holidays;
+      console.log(holidays);
+      console.log(ee);
+      if (holidays == null) {
+        calendar.addEventSource(ee[3]);
+        return;
+      }
+      holidays.remove();
+      return;
+    } else if (viewType == 'waste') {
+      var wasteEvents = calendar.getEventSourceById('333333');
+      wasteEvents.remove();
+      return;
     } else {
       $('#left-custom-data-ex').html(calendarTitle);
       $('.main-scheduler').html(calendarView);
       calendar.changeView(viewType);
       calendar.refetchEvents();
     }
+    $('#view-menu-btn > #title').text($(this).text());
+    $('#view-menu-btn > #title').attr('title', $(this).text());
   });
 
   $(document).on('click', '#previous-date', function (e) {

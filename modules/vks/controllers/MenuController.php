@@ -18,4 +18,10 @@ class MenuController extends Controller
   {
     return $this->renderAjax('app_config_menu');
   }
+
+  public function actionRightSideData()
+  {
+    return $this->renderAjax('right_data');
+  }
+
 }

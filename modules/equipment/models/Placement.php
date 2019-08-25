@@ -14,7 +14,7 @@ class Placement extends ActiveRecord
 
   public static function tableName()
   {
-    return 'teh_placement_tbl';
+    return 'equipment_placement_tbl';
   }
 
   public function behaviors()
