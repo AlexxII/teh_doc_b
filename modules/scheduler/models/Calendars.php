@@ -9,7 +9,7 @@ class Calendars extends \yii\db\ActiveRecord
 {
   public static function tableName()
   {
-    return 'calendars_pull_tbl';
+    return 'calendar_pull_tbl';
   }
 
   public function __construct()
