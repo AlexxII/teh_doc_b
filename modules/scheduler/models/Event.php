@@ -9,7 +9,7 @@ class Event extends \yii\db\ActiveRecord
 {
   public static function tableName()
   {
-    return 'scheduler_events_tbl';
+    return 'calendar_events_tbl';
   }
 
   public function __construct()

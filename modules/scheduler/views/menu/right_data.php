@@ -31,17 +31,17 @@
     <li value="year"><a href="">Год</a></li>
     <li value="list"><a href="">Расписание</a></li>
     <li role="separator" class="divider"></li>
-    <li value="holidays" style="position: relative">
+    <li id="holidays-view" value="holidays" style="position: relative">
       <a href="">
-        <span class="checkk" style="display: none"></span>
+        <span class="checkk"></span>
         <span style="margin-left:28px">
           Показывать праздники
         </span>
       </a>
     </li>
-    <li value="waste" style="position: relative">
+    <li id="waste-wiew" value="waste" style="position: relative; display: none;">
       <a href="">
-        <span class="checkk" style="display: none"></span>
+        <span class="checkk"></span>
         <span style="margin-left:28px">
         Показывать отработанные мероприятия
         </span>

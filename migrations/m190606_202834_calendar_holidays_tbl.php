@@ -5,9 +5,9 @@ use yii\db\Migration;
 /**
  * Class m190606_202834_scheduler_holidays_tbl
  */
-class m190606_202834_scheduler_holidays_tbl extends Migration
+class m190606_202834_calendar_holidays_tbl extends Migration
 {
-  const TABLE_NAME = '{{%scheduler_holidays_tbl}}';
+  const TABLE_NAME = '{{%calendar_holidays_tbl}}';
 
   public function up()
   {

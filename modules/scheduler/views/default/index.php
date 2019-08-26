@@ -431,14 +431,14 @@ BootstrapYearCalendarAsset::register($this);
       $('#left-custom-data-ex').html('');
     } else if (viewType == 'holidays') {
       var holidays = calendar.getEventSourceById('333333');
-      window.t = holidays;
-      console.log(holidays);
-      console.log(ee);
       if (holidays == null) {
         calendar.addEventSource(ee[3]);
+        $('#holidays-view .checkk').show();
         return;
       }
       holidays.remove();
+      console.log($('#holidays-view .checkk'));
+      $('#holidays-view .checkk').hide();
       return;
     } else if (viewType == 'waste') {
       var wasteEvents = calendar.getEventSourceById('333333');
@@ -498,7 +498,7 @@ BootstrapYearCalendarAsset::register($this);
   $(document).on('click', '.fc-day-number', function (e) {
     $('#view-menu-btn > #title').text('День');
   });
-  $(document).on('click', '.fc-day-number, .fc-day-header, .fc-list-heading-main', function (e) {
+  $(document).on('click', '.fc-day-number, .fc-list-heading-main', function (e) {
     $('#view-menu-btn > #title').text('День');
   });
 

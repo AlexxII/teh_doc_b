@@ -187,7 +187,6 @@ class EventsController extends Controller
       ->all();
 
     foreach ($tos as $key => $to) {
-      $result[$count]['id'] = "1111";
       $result[$count]['title'] = "Проведение ТО";
       $result[$count]['start'] = $to->plan_date;
       $result[$count]['exUrl'] = 'to/' . $to->plan_date;
@@ -236,26 +235,13 @@ class EventsController extends Controller
     return json_encode($result);
   }
 
+  public function actionWasteEvents()
+  {
+
+  }
+
   public function actionCalendarsArray()
   {
     return $this->renderAjax('_calendars_form');
   }
-
-  public function actionTrash()
-  {
-    $this->layout = '@app/views/layouts/main_ex.php';
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'Корзина';
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
-    return [
-      'data' => [
-        'success' => true,
-        'data' => $this->render('trash'),
-        'message' => 'Page load.',
-      ],
-      'code' => 1,
-    ];
-
-  }
-
 }
