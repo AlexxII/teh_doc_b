@@ -42,8 +42,8 @@
         <div id="collapseOne" class="panel-collapse collapse in">
           <!-- Содержимое 1 панели -->
           <div class="panel-body">
-            <p><a id="subscribe-calendar">Подписаться на календарь</a></p>
-            <p><a id="create-calendar">Создать новый календарь</a></p>
+            <p><a class="ext" data-url="/control/settings/subscribe-calendar">Подписаться на календарь</a></p>
+            <p><a class="ext" data-url="/control/settings/create-calendar">Создать новый календарь</a></p>
           </div>
         </div>
       </div>
@@ -87,8 +87,8 @@
 </div>
 
 <script>
-  $('#create-calendar').on('click', function () {
-    var url = 'scheduler/control/settings/create-calendar';
+  $('.ext').on('click', function () {
+    var url = 'scheduler' + $(this).data('url');
     $.ajax({
       url: url,
       method: 'get'

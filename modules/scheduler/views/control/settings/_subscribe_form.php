@@ -3,10 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-use app\assets\ColorPickerAsset;
-
-ColorPickerAsset::register($this);
-
 ?>
 <style>
   h2 {
@@ -24,22 +20,9 @@ ColorPickerAsset::register($this);
 </style>
 
 <div class="col-lg-6 col-md-6">
-  <h2>Создать календарь</h2>
+  <h2>Добавить календарь</h2>
   <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-  <div class="form-group">
-    <?= $form->field($model, 'title')->textInput([
-      'class' => 'form-control',
-      'id' => 'event-title'
-    ])->hint(' ', ['class' => ' w3-label-under']); ?>
-  </div>
-  <div class="form-group">
-    <?= $form->field($model, 'description')->textArea([
-      'style' => 'resize:vertical',
-      'rows' => '2',
-      'id' => 'event-description'
-    ]) ?>
-  </div>
   <div class="form-group">
     <?= $form->field($model, 'color', [
       'template' => '{label} {input}{hint}'
@@ -48,16 +31,12 @@ ColorPickerAsset::register($this);
     ])->hint('', ['class' => ' w3-label-under']);
     ?>
   </div>
-  <?= Html::submitButton('Создать календарь', ['class' => 'btn btn-primary create-calendar']) ?>
+  <?= Html::submitButton('Подписаться', ['class' => 'btn btn-primary create-calendar']) ?>
 
   <?php ActiveForm::end(); ?>
 </div>
 
 
 <script>
-  $(document).ready(function () {
-
-    $('#colorpicker').simplecolorpicker();
-  });
 
 </script>

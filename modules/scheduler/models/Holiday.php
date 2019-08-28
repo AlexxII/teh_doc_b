@@ -8,7 +8,7 @@ class Holiday extends \yii\db\ActiveRecord
 {
   public static function tableName()
   {
-    return 'scheduler_holidays_tbl';
+    return 'calendar_holidays_tbl';
   }
 
   public function __construct()
