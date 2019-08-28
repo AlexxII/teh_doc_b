@@ -21,22 +21,14 @@ use yii\widgets\ActiveForm;
 
 <div class="col-lg-6 col-md-6">
   <h2>Добавить календарь</h2>
-  <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-
-  <div class="form-group">
-    <?= $form->field($model, 'color', [
-      'template' => '{label} {input}{hint}'
-    ])->dropDownList($model->colorList, [
-      'id' => 'colorpicker'
-    ])->hint('', ['class' => ' w3-label-under']);
-    ?>
-  </div>
-  <?= Html::submitButton('Подписаться', ['class' => 'btn btn-primary create-calendar']) ?>
-
-  <?php ActiveForm::end(); ?>
+  <p>Системные</p>
+  <br>
+  <p>Других пользователей</p>
+  <br>
 </div>
 
 
 <script>
+
 
 </script>

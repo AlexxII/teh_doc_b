@@ -184,7 +184,6 @@ class SessionsController extends Controller
     if ($model->load(Yii::$app->request->post())) {
       Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       $date = date('Y-m-d H:i:s');
-      $result = false;
       $model->vks_record_create = $date;
       $model->vks_record_update = $date;
       $model->vks_upcoming_session = 1;

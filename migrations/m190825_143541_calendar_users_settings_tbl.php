@@ -18,7 +18,7 @@ class m190825_143541_calendar_users_settings_tbl extends Migration
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->bigInteger()->notNull(),
       'user_id' => $this->bigInteger()->notNull(),
-      'calendars' => $this->string(255),
+      'calendar' => $this->bigInteger(),
       'is_deleted' => $this->boolean()->defaultValue(0),
     ], $tableOptions);
 

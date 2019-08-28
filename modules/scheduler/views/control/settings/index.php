@@ -42,7 +42,7 @@
         <div id="collapseOne" class="panel-collapse collapse in">
           <!-- Содержимое 1 панели -->
           <div class="panel-body">
-            <p><a class="ext" data-url="/control/settings/subscribe-calendar">Подписаться на календарь</a></p>
+            <p><a class="ext" data-url="/control/settings/calendars-for-subscribe">Подписаться на календарь</a></p>
             <p><a class="ext" data-url="/control/settings/create-calendar">Создать новый календарь</a></p>
           </div>
         </div>
@@ -97,6 +97,18 @@
     }).fail(function () {
       console.log('Что-то пошло не так');
     });
+  });
 
-  })
+  $(document).ready(function () {
+    var url = 'scheduler/control/settings/user-calendars';
+    $.ajax({
+      url: url,
+      method: 'get'
+    }).done(function (response) {
+      // $('#setting-content').html(response.data.data);
+    }).fail(function () {
+      console.log('Что-то пошло не так');
+    });
+  });
+
 </script>

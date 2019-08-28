@@ -31,7 +31,7 @@ class Calendars extends \yii\db\ActiveRecord
   {
     return [
       [['title'], 'required'],
-      [['description'], 'string'],
+      [['description', 'color'], 'string'],
     ];
   }
 

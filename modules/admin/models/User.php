@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\models;
 
+use app\modules\scheduler\models\UserSettings;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -204,6 +205,11 @@ class User extends ActiveRecord implements IdentityInterface
     ];
   }
 
+  public function getCalendarsSettings()
+  {
+    return $this->hasMany(UserSettings::class, ['user_id' => 'id']);
+  }
+
   public function getColorList()
   {
     return [
@@ -222,6 +228,5 @@ class User extends ActiveRecord implements IdentityInterface
     ];
 
   }
-
 
 }
