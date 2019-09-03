@@ -20,12 +20,14 @@ class UserSettings extends \yii\db\ActiveRecord
     $this->id = MHelper::generateId();
   }
 
-  public function attributeLabels()
+/*
+public function attributeLabels()
   {
     return [
-      'calendars' => 'Пользователь',
+      'calendar' => 'Пользователь',
     ];
   }
+*/
 
   public function rules()
   {

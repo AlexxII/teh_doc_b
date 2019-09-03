@@ -8,7 +8,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
 use app\modules\admin\models\User;
-use app\modules\tehdoc\modules\to\models\ToAdmins;
+use app\modules\to\models\ToAdmins;
 
 
 class ToAdminsController extends Controller

@@ -2,7 +2,7 @@
 
 namespace app\modules\to\controllers\control;
 
-use app\modules\tehdoc\modules\to\models\ToType;
+use app\modules\to\models\ToType;
 use Yii;
 use yii\web\Controller;
 

@@ -7,9 +7,9 @@ use yii\web\Controller;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
-use app\modules\tehdoc\modules\to\models\ToEquipment;
-use app\modules\tehdoc\modules\equipment\models\Tools;
-use app\modules\tehdoc\modules\equipment\models\ToolSettings;
+use app\modules\to\models\ToEquipment;
+use app\modules\equipment\models\Tools;
+use app\modules\equipment\models\ToolSettings;
 
 
 class ToEquipmentController extends Controller

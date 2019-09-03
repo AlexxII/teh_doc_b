@@ -2,12 +2,12 @@
 
 namespace app\modules\to\controllers;
 
-use app\modules\tehdoc\modules\to\models\ToEquipment;
-use app\modules\tehdoc\modules\to\models\ToSchedule;
 use Yii;
 use yii\web\Controller;
 
-use app\modules\tehdoc\modules\to\models\ToAdmins;
+use app\modules\to\models\ToEquipment;
+use app\modules\to\models\ToSchedule;
+use app\modules\to\models\ToAdmins;
 
 class ToAuditController extends Controller
 {
@@ -41,7 +41,7 @@ class ToAuditController extends Controller
     $auId = $_POST['auditorId'];
     $query = new yii\db\Query();
     $data = $query->select(['plan_date', 'eq_id'])
-      ->from('teh_to_schedule_tbl')
+      ->from('to_schedule_tbl')
       ->where('auditor_id=:auditor', [':auditor' => $auId])
       ->groupBy(['plan_date'])
       ->all();
@@ -49,7 +49,7 @@ class ToAuditController extends Controller
     $parents = array();
     foreach ($data as $key => $d) {
       $eqId = $d['eq_id'];
-      $sql = "SELECT parent.name FROM teh_to_equipment_tbl as parent
+      $sql = "SELECT parent.name FROM to_equipment_tbl as parent
                    LEFT JOIN teh_to_equipment_tbl as child
                      ON child.parent_id = parent.id WHERE child.id=:id GROUP BY child.parent_id";
       $data = ToEquipment::findBySql($sql, ['id' => $eqId])->asArray()->all();

@@ -6,17 +6,17 @@ use Yii;
 use yii\web\Controller;
 
 use app\base\Model;
-use app\modules\tehdoc\modules\to\models\ToEquipment;
-use app\modules\tehdoc\modules\to\models\ToSchedule;
+use app\modules\to\models\ToEquipment;
+use app\modules\to\models\ToSchedule;
 
 
 class MonthScheduleController extends Controller
 {
 
-  const TO_TABLE = 'teh_to_schedule_tbl';
-  const TO_YEAR_TABLE = 'teh_to_year_schedule_tbl';
-  const ADMINS_TABLE = 'teh_to_admins_tbl';
-  const TOTYPE_TABLE = 'teh_to_type_tbl';
+  const TO_TABLE = 'to_schedule_tbl';
+  const TO_YEAR_TABLE = 'to_year_schedule_tbl';
+  const ADMINS_TABLE = 'to_admins_tbl';
+  const TOTYPE_TABLE = 'to_type_tbl';
 
   public function actionIndex()
   {

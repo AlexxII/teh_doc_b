@@ -6,10 +6,10 @@ use Yii;
 use yii\web\Controller;
 
 use app\base\Model;
-use app\modules\tehdoc\modules\to\models\ToEquipment;
-use app\modules\tehdoc\modules\to\models\ToSchedule;
-use app\modules\tehdoc\modules\to\models\ToType;
-use app\modules\tehdoc\modules\to\models\ToYearSchedule;
+use app\modules\to\models\ToEquipment;
+use app\modules\to\models\ToSchedule;
+use app\modules\to\models\ToType;
+use app\modules\to\models\ToYearSchedule;
 
 class YearScheduleController extends Controller
 {

@@ -6,16 +6,16 @@ use Yii;
 use yii\web\Controller;
 
 use app\base\Model;
-use app\modules\tehdoc\modules\to\models\ToEquipment;
-use app\modules\tehdoc\modules\to\models\ToSchedule;
+use app\modules\to\models\ToEquipment;
+use app\modules\to\models\ToSchedule;
 
 
 class ScheduleController extends Controller
 {
 
-  const TO_TABLE = 'teh_to_schedule_tbl';
+  const TO_TABLE = 'to_schedule_tbl';
   const USERS_TABLE = 'user';
-  const TOTYPE_TABLE = 'teh_to_type_tbl';
+  const TOTYPE_TABLE = 'to_type_tbl';
 
 
   public function actionIndex()
