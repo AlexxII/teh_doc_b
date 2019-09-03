@@ -22,7 +22,7 @@ class ToTypeController extends Controller
 
   public function actionIndex()
   {
-    return $this->render('index');
+    return $this->renderAjax('index');
   }
 
   public function actionCreateNode($title)

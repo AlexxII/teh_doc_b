@@ -7,10 +7,9 @@ use yii\web\AssetBundle;
 class ToAsset extends AssetBundle
 {
 
-  public $sourcePath = '@app/modules/tehdoc/modules/to/lib';
+  public $sourcePath = '@app/modules/to/lib';
 
   public $css = [
-    'css/bootstrap-datepicker.min.css',
   ];
 
   public $js = [

@@ -28,7 +28,7 @@ class ToAdminsController extends Controller
   public function actionIndex()
   {
     $model = new ToAdmins();
-    return $this->render('index', [
+    return $this->renderAjax('index', [
       'model' => $model
     ]);
   }

@@ -46,6 +46,17 @@
       <h4 class="text-muted">Перечень оборудования</h4>
     </div>
   </div>
+  <div class="col-lg-4 col-md-4 about" data-url="/to" style="text-align:center; cursor: pointer">
+    <div class="row" id="header">
+      <h2>ТО</h2>
+    </div>
+    <div class="" id="main">
+      <i class="fa fa-microchip" aria-hidden="true" style="font-size: 150px"></i>
+    </div>
+    <div class="row" id="footer">
+      <h4 class="text-muted">Техническое обслуживание</h4>
+    </div>
+  </div>
   <div class="body-content">
 
   </div>

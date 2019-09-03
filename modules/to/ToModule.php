@@ -6,11 +6,12 @@ use yii\filters\AccessControl;
 
 class ToModule extends \yii\base\Module
 {
-  public $layout = 'to_layout.php';
-  public $defaultRoute = '/default';
+
+  public $layout = '@app/views/layouts/main.php';
 
   public function init()
   {
+    \Yii::$app->view->title = 'ТО';
     parent::init();
   }
 

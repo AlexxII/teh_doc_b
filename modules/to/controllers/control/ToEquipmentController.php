@@ -9,7 +9,6 @@ use yii\web\NotFoundHttpException;
 
 use app\modules\to\models\ToEquipment;
 use app\modules\equipment\models\Tools;
-use app\modules\equipment\models\ToolSettings;
 
 
 class ToEquipmentController extends Controller
@@ -29,7 +28,7 @@ class ToEquipmentController extends Controller
 
   public function actionIndex()
   {
-    return $this->render('index');
+    return $this->renderAjax('index');
   }
 
   public function actionToolsSerials($id)

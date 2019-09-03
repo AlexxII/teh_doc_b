@@ -5,10 +5,6 @@ use app\assets\FancytreeAsset;
 
 FancytreeAsset::register($this);
 
-$this->title = 'Виды ТО';
-$this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to']];
-$this->params['breadcrumbs'][] = $this->title;
-
 $about = "Панель управления видами технического обслуживания.";
 $add_hint = 'Добавить новый тип';
 $refresh_hint = 'Перезапустить форму';
@@ -43,14 +39,7 @@ $del_hint = 'Удалить';
 
 </style>
 
-<div class="admin-category-pannel">
-
-  <h3><?= Html::encode('Виды ТО') ?>
-    <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-  </h3>
-</div>
-<div class="row">
+<div class="">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
       <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
@@ -75,7 +64,7 @@ $del_hint = 'Удалить';
 
   </div>
 
-  <div class="col-lg-7 col-md-7" style="padding-bottom: 10px">
+  <div class="col-lg-12 col-md-12" style="padding-bottom: 10px">
     <div style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
@@ -92,15 +81,6 @@ $del_hint = 'Удалить';
         <div id="fancyree_w0" class="ui-draggable-handle"></div>
       </div>
     </div>
-  </div>
-
-
-  <div class="col-lg-5 col-md-5">
-    <div class="alert alert-warning" style="margin-bottom: 10px">
-      <a href="#" class="close" data-dismiss="alert">&times;</a>
-      <strong>Внимание!</strong> Будьте внимательны!
-    </div>
-    <div class="about-info"></div>
   </div>
 
 </div>
@@ -310,14 +290,14 @@ $del_hint = 'Удалить';
 
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/tehdoc/to/control/to-type/all-types';
-    var move_url = '/tehdoc/to/control/to-type/move-node';
-    var create_url = '/tehdoc/to/control/to-type/create-node';
-    var update_url = '/tehdoc/to/control/to-type/update-node';
+    var main_url = '/to/control/to-type/all-types';
+    var move_url = '/to/control/to-type/move-node';
+    var create_url = '/to/control/to-type/create-node';
+    var update_url = '/to/control/to-type/update-node';
 
     $("#fancyree_w0").fancytree({
       source: {
-        url: main_url,
+        url: main_url
       },
       extensions: ['dnd', 'edit', 'filter'],
       quicksearch: true,

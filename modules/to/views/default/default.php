@@ -1,13 +1,3 @@
-<?php
-
-$this->title = 'ТО';
-$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = $this->title;
-
-$about = "ВКС";
-
-?>
-
 <!--
 <div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/month-schedule" style="text-align:center; cursor: pointer">
   <div class="row" id="header">
@@ -22,7 +12,7 @@ $about = "ВКС";
 </div>
 -->
 
-<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/month-schedule/archive"
+<div class="col-lg-4 col-md-6 about" data-url="/to/month-schedule/archive"
      style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Архив графиков</h2>
@@ -35,7 +25,7 @@ $about = "ВКС";
   </div>
 </div>
 
-<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/month-schedule/create"
+<div class="col-lg-4 col-md-6 about" data-url="/to/month-schedule/create"
      style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Добавить график</h2>
@@ -48,7 +38,7 @@ $about = "ВКС";
   </div>
 </div>
 
-<div class="col-lg-4 col-md-6 about" data-url="/tehdoc/to/year-schedule/create"
+<div class="col-lg-4 col-md-6 about" data-url="/to/year-schedule/create"
      style="text-align: center; cursor: pointer">
   <div class="row" id="header">
     <h2>Годовые планы ТО</h2>
@@ -74,8 +64,17 @@ $about = "ВКС";
 </div>
 
 <script>
-  $(".about").on('click', function (e) {
-    var url = $(this).data('url');
-    location.href = url;
-  })
+
+    $(document).ready(function () {
+        $('#push-it').removeClass('hidden');
+        $('#app-control').removeClass('hidden');
+
+        initLeftMenu('/to/menu/left-side');
+        initAppConfig('/to/menu/app-config');
+    });
+
+    $(".about").on('click', function (e) {
+        var url = $(this).data('url');
+        location.href = url;
+    })
 </script>

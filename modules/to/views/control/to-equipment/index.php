@@ -5,11 +5,6 @@ use app\assets\FancytreeAsset;
 
 FancytreeAsset::register($this);
 
-$this->title = 'Оборудование';
-$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to']];
-$this->params['breadcrumbs'][] = $this->title;
-
 $about = "Панель управления оборудованием, добавленным в графики проведения ТО.";
 $add_hint = 'Добавить обертку';
 $del_hint = 'Удалить обертку';
@@ -46,13 +41,7 @@ $ref_hint = 'К оборудованию в основном перечне';
 
 </style>
 
-<div class="admin-category-pannel">
-  <h3><?= Html::encode('Оборудование в графике ТО') ?>
-    <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-         data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-  </h3>
-</div>
-<div class="row">
+<div class="">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
       <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm',
@@ -174,7 +163,7 @@ $ref_hint = 'К оборудованию в основном перечне';
     var nodeId = window.nodeId;
     var serial = $('#serial-number').val();
     $.ajax({
-      url: "/tehdoc/to/control/to-equipment/tool-serial-save",
+      url: "/to/control/to-equipment/tool-serial-save",
       type: "post",
       data: {
         serial: serial,
@@ -322,7 +311,7 @@ $ref_hint = 'К оборудованию в основном перечне';
       event.preventDefault();
       var node = $(".ui-draggable-handle").fancytree("getActiveNode");
       var toolId = node.data.eq_id;
-      var prefix = '/tehdoc/equipment/tool/';
+      var prefix = '/equipment/tool/';
       var href = prefix + toolId + '/info/index';
       if (event.ctrlKey) {
         window.open(href);
@@ -409,10 +398,10 @@ $ref_hint = 'К оборудованию в основном перечне';
   var serialVal;
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/tehdoc/to/control/to-equipment/all-tools';
-    var move_url = '/tehdoc/to/control/to-equipment/move-node';
-    var create_url = '/tehdoc/to/control/to-equipment/create-node';
-    var update_url = '/tehdoc/to/control/to-equipment/update-node';
+    var main_url = '/to/control/to-equipment/all-tools';
+    var move_url = '/to/control/to-equipment/move-node';
+    var create_url = '/to/control/to-equipment/create-node';
+    var update_url = '/to/control/to-equipment/update-node';
 
     $("#fancyree_w0").fancytree({
       source: {
@@ -559,7 +548,7 @@ $ref_hint = 'К оборудованию в основном перечне';
             $('#serial-number').val('');
           }
           $.ajax({
-            url: '/tehdoc/to/control/to-equipment/tools-serials',
+            url: '/to/control/to-equipment/tools-serials',
             data: {
               id: node.data.eq_id
             }
