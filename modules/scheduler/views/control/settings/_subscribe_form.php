@@ -21,6 +21,7 @@ use yii\widgets\ActiveForm;
 
 <div class="col-lg-6 col-md-6">
   <h2>Добавить календарь</h2>
+  <br>
   <p>Системные</p>
   <br>
   <p>Других пользователей</p>

@@ -38,7 +38,7 @@ class SettingsController extends Controller
     foreach ($userSettings as $key => $setting) {
       $calendarId = $setting->calendar;
       $calendar = Calendars::findOne($calendarId);
-      $calendars[$key] = $calendar->title;
+      $calendars[$calendar->id] = $calendar->title;
     }
     return [
       'data' => [
@@ -115,10 +115,11 @@ class SettingsController extends Controller
         $userSettings->calendar = $model->id;
         $userSettings->user_id = $userId;
         if ($userSettings->save()) {                                  // TODO добавить еще обработчик!!!??????
+          $data[$model->id] = $model->title;
           return [
             'data' => [
               'success' => true,
-              'data' => 'Calendar created',
+              'data' => $data,
               'message' => 'Calendar created and add to settings',
             ],
             'code' => 1,
@@ -145,5 +146,26 @@ class SettingsController extends Controller
     ];
   }
 
+  public function actionCalendarSettings($id)
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $model = new Calendars();
+    $model = Calendars::findOne($id);
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('_calendar_settings', [
+          'model' => $model
+        ]),
+        'message' => 'Page load',
+      ],
+      'code' => 1,
+    ];
+  }
+
+  public function actionCalendarColor()
+  {
+
+  }
 
 }

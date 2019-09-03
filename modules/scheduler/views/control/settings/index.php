@@ -1,3 +1,5 @@
+
+
 <style>
   #main-content {
     width: 100% !important;
@@ -15,11 +17,12 @@
     font-size: 13px;
     font-weight: 600;
   }
-  #settings-leftside h4 a{
-    text-decoration: none ;
+  #settings-leftside h4 a {
+    text-decoration: none;
   }
   .panel-body p {
     font-size: 12px;
+    cursor: pointer;
   }
   .panel-body a {
     text-decoration: none;
@@ -48,7 +51,7 @@
         </div>
       </div>
       <!-- 2 панель -->
-      <div class="panel panel-default">
+      <div class="panel panel-default" id="users-calendars">
         <!-- Заголовок 2 панели -->
         <div class="panel-heading">
           <h4 class="panel-title">
@@ -58,7 +61,6 @@
         <div id="collapseTwo" class="panel-collapse collapse">
           <!-- Содержимое 2 панели -->
           <div class="panel-body">
-            <p>Игнатенко А.М.</p>
           </div>
         </div>
       </div>
@@ -105,10 +107,59 @@
       url: url,
       method: 'get'
     }).done(function (response) {
-      // $('#setting-content').html(response.data.data);
+      var calendars = response.data.data;
+      for (var key in calendars) {
+        $('#users-calendars .panel-body').append('<p class="calendar" data-id="' + key + '">' + calendars[key] + '</p>');
+      }
     }).fail(function () {
       console.log('Что-то пошло не так');
     });
+  });
+
+  /* For calendar creation */
+  $(document).on('click', '#save-new-calendar', function (e) {
+    var url = '/scheduler/control/settings/save-calendar';
+    var $form = $("#new-calendar"),
+      data = $form.data("yiiActiveForm");
+    $.each(data.attributes, function () {
+      this.status = 3;
+    });
+    $form.yiiActiveForm("validate");
+    if ($("#new-calendar").find(".has-error").length) {
+      return false;
+    } else {
+      $.ajax({
+        type: 'POST',
+        url: url,
+        dataType: 'json',
+        data: $form.serialize(),
+        success: function (response) {
+          $form[0].reset();
+          var calendar = response.data.data;
+          for (var key in calendar) {
+            $('#users-calendars .panel-body').append('<p class="calendar" data-id="' + key + '">' + calendar[key] + '</p>');
+          }
+          console.log('Calendar created');
+        },
+        error: function (response) {
+          console.log(response.data.data);
+        }
+      });
+    }
+  });
+
+  $(document).on('click', '.calendar', function (e) {
+    var id = $(this).data('id');
+    var url = '/scheduler/control/settings/calendar-settings?id=' + id;
+    $.ajax({
+      url: url,
+      method: 'get'
+    }).done(function (response) {
+      $('#setting-content').html(response.data.data);
+    }).fail(function () {
+      console.log('Что-то пошло не так');
+    });
+
   });
 
 </script>
