@@ -9,6 +9,8 @@ use app\base\Model;
 use app\modules\to\models\ToEquipment;
 use app\modules\to\models\ToSchedule;
 
+use app\modules\to\models\SSP;
+
 
 class ScheduleController extends Controller
 {
@@ -16,6 +18,66 @@ class ScheduleController extends Controller
   const TO_TABLE = 'to_schedule_tbl';
   const USERS_TABLE = 'user';
   const TOTYPE_TABLE = 'to_type_tbl';
+
+
+
+  public function actionServerSide($index)
+  {
+    $table = 'to_schedule_tbl';
+    $primaryKey = 'id';
+    $columns = array(
+      array('db' => 'id', 'dt' => 0),
+      array(
+        'db' => 'plan_date',
+        'dt' => 1,
+        'formatter' => function ($d, $row) { //TODO разобраться с форматом отображения даты
+          if ($d != null) {
+            return date('d.m.Y', strtotime($d));
+          } else {
+            return '-';
+          }
+        }
+      ),
+      array(
+        'db' => 'fact_date',
+        'dt' => 2,
+        'formatter' => function ($d, $row) { //TODO разобраться с форматом отображения даты
+          if ($d != null) {
+            $month = date('m', strtotime($d));
+            $year = date('Y г.', strtotime($d));
+            $dates = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+            return $dates[$month - 1] . ' ' . $year;
+          } else {
+            return '-';
+          }
+        }
+      ),
+      array(
+        'db' => 'eq_id',
+        'dt' => 4
+      )
+    );
+    $sql_details = \Yii::$app->params['sql_details'];
+
+
+//    $where = 'vks_upcoming_session = 1 AND vks_cancel = ' . $index;
+//    $where = ' ' . $table . '.vks_upcoming_session = 1 AND Date(vks_date) >= "' . $startDate . '" AND Date(vks_date) <= "' . $endDate . '" AND vks_cancel = ' . $index;
+
+//    return json_encode(
+//      SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, $where)
+//    );
+    return var_dump(SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, NULL)['data']);
+    return json_encode(
+      SSP::complex($_GET, $sql_details, $table, $primaryKey, $columns, NULL, NULL)
+    );
+  }
+
+
+
+
+
+
+
 
 
   public function actionIndex()
@@ -45,8 +107,16 @@ class ScheduleController extends Controller
   }
 
 
+
+
+
   public function actionArchive()
   {
+    $this->layout = '@app/views/layouts/main_ex.php';
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Архив';
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
+
     $schTable = self::TO_TABLE;
     $usersTable = self::USERS_TABLE;
     $toTable = self::TOTYPE_TABLE;
@@ -60,10 +130,17 @@ class ScheduleController extends Controller
               LEFT JOIN {$usersTable} as t2 on {$schTable}.auditor_id = t2.id
               LEFT JOIN {$toTable} as t3 on {$schTable}.to_type = t3.id
             GROUP BY schedule_id";
-    return $this->render('archive', [
-      'tos' => ToSchedule::findBySql($sql)->asArray()->all(),
-      'month' => 1
-    ]);
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('archive', [
+          'tos' => ToSchedule::findBySql($sql)->asArray()->all(),
+          'month' => 1
+        ]),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
   }
 
 

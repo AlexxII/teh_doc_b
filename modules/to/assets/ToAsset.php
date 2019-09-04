@@ -10,11 +10,11 @@ class ToAsset extends AssetBundle
   public $sourcePath = '@app/modules/to/lib';
 
   public $css = [
+    'css/to_style.css'
   ];
 
   public $js = [
-    'js/bootstrap-datepicker.min.js',
-    'js/bootstrap-datepicker.ru.min.js',
+    'js/to.js',
   ];
 
 }

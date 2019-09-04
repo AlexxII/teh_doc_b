@@ -1,11 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+use app\assets\FancytreeAsset;
 
 $this->title = 'График TО';
-$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to']];
-$this->params['breadcrumbs'][] = $this->title;
+
+FancytreeAsset::register($this);
 
 ?>
 

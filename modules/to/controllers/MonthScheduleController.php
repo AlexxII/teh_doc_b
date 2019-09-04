@@ -47,6 +47,11 @@ class MonthScheduleController extends Controller
 
   public function actionArchive()
   {
+    $this->layout = '@app/views/layouts/main_ex.php';
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Архив';
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
+
     $schTable = self::TO_TABLE;
     $usersTable = self::ADMINS_TABLE;
     $toTable = self::TOTYPE_TABLE;
@@ -60,10 +65,17 @@ class MonthScheduleController extends Controller
               LEFT JOIN {$usersTable} as t2 on {$schTable}.auditor_id = t2.id
               LEFT JOIN {$toTable} as t3 on {$schTable}.to_type = t3.id
             GROUP BY schedule_id";
-    return $this->render('archive', [
-      'tos' => ToSchedule::findBySql($sql)->asArray()->all(),
-      'month' => 1
-    ]);
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('archive', [
+          'tos' => ToSchedule::findBySql($sql)->asArray()->all(),
+          'month' => 1
+        ]),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
   }
 
 

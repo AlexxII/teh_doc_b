@@ -2,11 +2,6 @@
 
 use yii\helpers\Html;
 
-$this->title = 'Графики ТО';
-$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'ТО', 'url' => ['/tehdoc/to']];
-$this->params['breadcrumbs'][] = $this->title;
-
 $about = "Графики технического обслуживания.";
 
 ?>

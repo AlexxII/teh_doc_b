@@ -5,10 +5,10 @@ use \yii\widgets\ActiveForm;
 
 use app\assets\FancytreeAsset;
 use app\assets\BootstrapDatepickerAsset;
+use app\assets\TableBaseAsset;
 
-FancytreeAsset::register($this);
 BootstrapDatepickerAsset::register($this);
-
+TableBaseAsset::register($this);
 
 ?>
 
