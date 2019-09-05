@@ -30,6 +30,7 @@ class DefaultController extends Controller
               LEFT JOIN {$usersTable} as t2 on {$schTable}.auditor_id = t2.id
               LEFT JOIN {$toTable} as t3 on {$schTable}.to_type = t3.id
             GROUP BY schedule_id";
+
     return $this->render('default', [
       'tos' => ToSchedule::findBySql($sql)->asArray()->all(),
       'month' => 1

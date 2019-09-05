@@ -1,52 +1,75 @@
+/* круглая клавиша добавления графика */
 [class*="fab"] {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-    -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  -webkit-tap-highlight-color: transparent;
 }
 .fab-button {
-    width: 54px;
-    height: 54px;
-    border-radius: 100%;
-    display: table;
-    background: #2196f3;
-    /*background: #28a745;*/
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-    position: relative;
-    transition: box-shadow 0.2s;
+  width: 54px;
+  height: 54px;
+  border-radius: 100%;
+  display: table;
+  background: #2196f3;
+  /*background: #28a745;*/
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  position: relative;
+  transition: box-shadow 0.2s;
 }
 .fab-button:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
 }
 .fab-button:focus {
-    z-index: 450;
-    pointer-events: none;
+  z-index: 450;
+  pointer-events: none;
 }
 .fab-button:focus ~ .fab-shadow {
-    width: 100%;
-    opacity: 1;
-    transition: opacity 0.5s, width 0s;
+  width: 100%;
+  opacity: 1;
+  transition: opacity 0.5s, width 0s;
 }
 .fab-button div {
-    width: 6px;
-    height: 6px;
-    background: #fff;
-    margin: 29px;
-    border-radius: 100%;
-    box-shadow: 0 -11px #fff, 0 11px #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
-    transition: all 0.5s cubic-bezier(0.5, 2, 0.5, 1);
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  margin: 29px;
+  border-radius: 100%;
+  box-shadow: 0 -11px #fff, 0 11px #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
+  transition: all 0.5s cubic-bezier(0.5, 2, 0.5, 1);
 }
 .fab-button .plus {
-    width: 4px;
-    height: 4px;
-    margin: 25px;
-    border-radius: 0;
-    box-shadow: 0 0 #fff, 0 0 #fff, 0 -3px #fff, 0 3px #fff, -3px 0 #fff, 3px 0 #fff, 0 -6px #fff, 0 6px #fff, -6px 0 #fff, 6px 0 #fff, 0 -9px #fff, 0 9px #fff, -9px 0 #fff, 9px 0 #fff, 0 -12px #fff, 0 12px #fff, -12px 0 #fff, 12px 0 #fff;
+  width: 4px;
+  height: 4px;
+  margin: 25px;
+  border-radius: 0;
+  box-shadow: 0 0 #fff, 0 0 #fff, 0 -3px #fff, 0 3px #fff, -3px 0 #fff, 3px 0 #fff, 0 -6px #fff, 0 6px #fff, -6px 0 #fff, 6px 0 #fff, 0 -9px #fff, 0 9px #fff, -9px 0 #fff, 9px 0 #fff, 0 -12px #fff, 0 12px #fff, -12px 0 #fff, 12px 0 #fff;
 }
 .fab-button:focus .plus {
-    transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+#add-scheduler {
+  cursor: pointer;
+}
+#add-scheduler-wrap {
+  position: absolute;
+  top: 10px;
+  left:-60px;
+}
+/* месячные графики ТО на основной странице */
+#to-mscheduler-table td {
+  text-align: center;
+}
+#to-mscheduler-table td .fa {
+  font-size: 25px;
+  text-decoration: none;
+}
+#to-mscheduler-table tbody td {
+  font-size: 12px;
+}
+#to-mscheduler-table tr {
+  font-size: 12px;
 }
