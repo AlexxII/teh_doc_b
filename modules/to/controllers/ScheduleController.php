@@ -27,7 +27,8 @@ class ScheduleController extends Controller
     $schTable = self::TO_TABLE;
     $usersTable = self::ADMINS_TABLE;
     $toTable = self::TOTYPE_TABLE;
-    $sql = "SELECT {$schTable}.id, {$schTable}.plan_date, {$schTable}.schedule_id,
+    $sql = "SELECT {$schTable}.id, {$schTable}.plan_date, {$schTable}.schedule_id, 
+              YEAR({$schTable}.plan_date) as year,
               GROUP_CONCAT(DISTINCT {$schTable}.checkmark ORDER BY {$schTable}.checkmark ASC SEPARATOR ', ') as checkmark,
               GROUP_CONCAT(DISTINCT t1.name ORDER BY t1.name ASC SEPARATOR ',<br> ') as admins,
               GROUP_CONCAT(DISTINCT t2.name ORDER BY t2.name ASC SEPARATOR ',<br> ') as auditors,

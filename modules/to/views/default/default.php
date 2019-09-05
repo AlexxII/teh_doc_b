@@ -55,12 +55,29 @@ $this->title = "Графики ТО";
     initLeftMenu('/to/menu/left-side');
     initAppConfig('/to/menu/app-config');
 
+    var monthNames = [
+      'Январь',
+      'Февраль',
+      'Март',
+      'Апрель',
+      'Май',
+      'Июнь',
+      'Июль',
+      'Август',
+      'Сентябрь',
+      'Октябрь',
+      'Ноябрь',
+      'Декабрь'
+    ];
 
     // ************************* Работа таблицы **************************************
 
     table = $('#to-mscheduler-table').DataTable({
       "processing": true,
       "responsive": true,
+      "ajax": {
+        'url': '/to/schedule/month-schedules'
+      },
       "columns": [
         { "data": "id" },
         { "data": "id" },
@@ -73,51 +90,59 @@ $this->title = "Графики ТО";
         { "data": "" },
         { "data": "" }
       ],
-      "ajax": {
-        'url': '/to/schedule/month-schedules'
-      },
+      "searching": false,
       "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-        var today = new Date();
-        console.log(nRow);
-        console.log(aData);
+        var date = aData.plan_date;
+        // var today = new Date();
+        var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+        var dDate = new Date(date.replace(pattern, '$3-$2-$1'));
+        $('td:nth-child(2)', nRow).text(monthNames[dDate.getMonth()]);
+      },
+      orderFixed: [[4, 'desc']],
+      order: [[1, 'desc']],
+      rowGroup: {
+        dataSrc: 'year',
       },
       "columnDefs": [
         {
+          "targets": -2,                    // предпоследний столбец
           "orderable": false,
-          "targets": -2,
           "data": null,
           "width": '70px',
           "defaultContent":
             "<a href='#' id='edit' class='fa fa-edit' style='padding-right: 5px' title='Обновить'></a>" +
             "<a href='#' id='view' class='fa fa-info ' title='Подробности' style='padding-right: 5px'></a>"
         }, {
-          "orderable": false,
-          "className": 'select-checkbox',
-          "targets": -1,
-          "defaultContent": ""
-        },
-        {
-          "targets": 0,
-          "data": null,
-          "visible": false
-        }
-/*
-        {
-          "targets": 3,
-          "width": '80px',
-          "render": function (data, type, row) {
-            if (row[3] == '') {
-              return '<strong>' + row[4] + '</strong>' + ' / <strong>Р</strong>';
-            } else if (row[4] == '') {
-              return '<strong>' + row[3] + '</strong>' + ' / <strong>Т</strong>';
+          'targets': -1,                    // последний столбец
+          'orderable': false,
+          'className': 'select-checkbox',
+          'defaultContent': ''
+        }, {
+          'targets': 0,
+          'data': null,
+          'visible': false
+        }, {
+          'targets': 1,
+          'data': null
+        }, {
+          'targets': 2,
+          'render': function (data) {
+            return moment(data).format('MMMM');
+          }
+        }, {
+          'targets': 3,
+          'render': function (data) {
+            if (data.length == 1) {
+              if (data == '1') {
+                return '<strong>ТО проведено</strong>';
+              } else {
+                return '<strong>ТО не проведено</strong>';
+              }
             } else {
-              return '<strong>' + row[3] + '</strong>' +
-                ' / <strong>Т</strong>' + "<br> " +
-                '<strong>' + row[4] + '</strong>' + ' / <strong>Р</strong>';
+              return '<strong>Проведено не полность</strong>';
             }
           }
-        },
-*/
+        }
       ],
       select: {
         style: 'os',

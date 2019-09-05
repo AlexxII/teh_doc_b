@@ -61,7 +61,10 @@
 }
 /* месячные графики ТО на основной странице */
 #to-mscheduler-table td {
-  text-align: center;
+  text-align: center; !important;
+}
+#to-mscheduler-table th {
+  text-align: center; !important;
 }
 #to-mscheduler-table td .fa {
   font-size: 25px;
