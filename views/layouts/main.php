@@ -120,6 +120,12 @@ $this->beginPage() ?>
                 <p class="list-group-item-text">Перечень оборудования</p>
               </a>
             </div>
+            <div class="list-group">
+              <a href="/to" class="list-group-item">
+                <h4 class="list-group-item-heading">ТО</h4>
+                <p class="list-group-item-text">Техническое обслуживание</p>
+              </a>
+            </div>
           </ul>
         </li>
         <li id="accounts" class="dropdown">
