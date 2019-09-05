@@ -85,23 +85,18 @@ class MonthScheduleController extends Controller
       ]);
     }
     $scheduleRand = rand();
-    foreach ($toEq as $i => $eq) {
-      $toss[] = new ToSchedule();
-      $toss[$i]->scenario = ToSchedule::SCENARIO_CREATE;
-      $toss[$i]->eq_id = $eq->id;
-      $toss[$i]->schedule_id = $scheduleRand;
-    }
+    $toss = new ToSchedule();
+    $toss->scenario = ToSchedule::SCENARIO_CREATE;
     return [
       'data' => [
         'success' => true,
-        'data' => $this->render('_form', [
-          'tos' => $toss
+        'data' => $this->render('_form_', [
+          'to' => $toss
         ]),
         'message' => 'Page load.',
       ],
       'code' => 1,
     ];
-
 
 
     if (ToSchedule::loadMultiple($toss, Yii::$app->request->post())) {
@@ -138,37 +133,43 @@ class MonthScheduleController extends Controller
   }
 
 
-
-
-
-
-
-/*
-  public function actionIndex()
+  public function actionTest()
   {
-    $month = date("Y-m-") . '01';
-    $idReq = ToSchedule::find()->select('schedule_id')->where(['to_month' => $month])->distinct()->asArray()->all();
-    if (!$idReq) {
-      $month = ToSchedule::find()->max('to_month');
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $toEq['data'] = ToEquipment::find()
+      ->where(['valid' => 1])
+      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->asArray()->all();
+
+    return $toEq;
+  }
+
+
+  /*
+    public function actionIndex()
+    {
+      $month = date("Y-m-") . '01';
       $idReq = ToSchedule::find()->select('schedule_id')->where(['to_month' => $month])->distinct()->asArray()->all();
-      Yii::$app->session->setFlash('info', "На текущий месяц график не найден. Выбран график ТО из БД на последний месяц.");
       if (!$idReq) {
-        return $this->render();
+        $month = ToSchedule::find()->max('to_month');
+        $idReq = ToSchedule::find()->select('schedule_id')->where(['to_month' => $month])->distinct()->asArray()->all();
+        Yii::$app->session->setFlash('info', "На текущий месяц график не найден. Выбран график ТО из БД на последний месяц.");
+        if (!$idReq) {
+          return $this->render();
+        }
+        $id = $idReq[0]['schedule_id'];
+        $model = ToSchedule::find()
+          ->with(['admin', 'auditor', 'toType', 'toEq'])
+          ->where(['schedule_id' => $id]);
+        $month = $model->max('plan_date');
+        setlocale(LC_ALL, 'ru_RU');
+        $month = strftime("%B %Y", strtotime($month));
+        return $this->render('index', [
+          'tos' => $model->all(),
+          'month' => $month,
+          'id' => $id
+        ]);
       }
-      $id = $idReq[0]['schedule_id'];
-      $model = ToSchedule::find()
-        ->with(['admin', 'auditor', 'toType', 'toEq'])
-        ->where(['schedule_id' => $id]);
-      $month = $model->max('plan_date');
-      setlocale(LC_ALL, 'ru_RU');
-      $month = strftime("%B %Y", strtotime($month));
-      return $this->render('index', [
-        'tos' => $model->all(),
-        'month' => $month,
-        'id' => $id
-      ]);
-    }
-  }*/
+    }*/
 
 
   public function actionArchive()
@@ -222,48 +223,48 @@ class MonthScheduleController extends Controller
 
 
   // создание нового графика ТО на основе оборудования в таблице toequip_tbl;
-/*
-  public function actionCreate()
-  {
-    $toEq = ToEquipment::find()
-      ->where(['valid' => 1])
-      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
-    if (empty($toEq)) {
-      Yii::$app->session->setFlash('error', "Не добавлено ни одного оборудования в график ТО.");
-      return $this->render('create', [
-        'tos' => $toEq,
-      ]);
-    }
-    $scheduleRand = rand();
-    foreach ($toEq as $i => $eq) {
-      $toss[] = new ToSchedule();
-      $toss[$i]->scenario = ToSchedule::SCENARIO_CREATE;
-      $toss[$i]->eq_id = $eq->id;
-      $toss[$i]->schedule_id = $scheduleRand;
-    }
-    if (ToSchedule::loadMultiple($toss, Yii::$app->request->post())) {
-      if (!$to_month = Yii::$app->request->post('month')) {
-        Yii::$app->session->setFlash('error', "Введите месяц проведения ТО");
-        return $this->render('create', ['tos' => $toss]);
+  /*
+    public function actionCreate()
+    {
+      $toEq = ToEquipment::find()
+        ->where(['valid' => 1])
+        ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
+      if (empty($toEq)) {
+        Yii::$app->session->setFlash('error', "Не добавлено ни одного оборудования в график ТО.");
+        return $this->render('create', [
+          'tos' => $toEq,
+        ]);
       }
-      if (ToSchedule::validateMultiple($toss)) {
-        foreach ($toss as $t) {
-          $t->to_month = $to_month;
-          $t->save();
+      $scheduleRand = rand();
+      foreach ($toEq as $i => $eq) {
+        $toss[] = new ToSchedule();
+        $toss[$i]->scenario = ToSchedule::SCENARIO_CREATE;
+        $toss[$i]->eq_id = $eq->id;
+        $toss[$i]->schedule_id = $scheduleRand;
+      }
+      if (ToSchedule::loadMultiple($toss, Yii::$app->request->post())) {
+        if (!$to_month = Yii::$app->request->post('month')) {
+          Yii::$app->session->setFlash('error', "Введите месяц проведения ТО");
+          return $this->render('create', ['tos' => $toss]);
         }
+        if (ToSchedule::validateMultiple($toss)) {
+          foreach ($toss as $t) {
+            $t->to_month = $to_month;
+            $t->save();
+          }
+        } else {
+          Yii::$app->session->setFlash('error', "Ошибка валидации данных");
+          return $this->render('create', ['tos' => $toss]);
+        }
+        Yii::$app->session->setFlash('success', "Новый график ТО создан успешно");
+        return $this->redirect('archive'); // redirect to your next desired page
       } else {
-        Yii::$app->session->setFlash('error', "Ошибка валидации данных");
-        return $this->render('create', ['tos' => $toss]);
+        return $this->render('create', [
+          'tos' => $toss,
+        ]);
       }
-      Yii::$app->session->setFlash('success', "Новый график ТО создан успешно");
-      return $this->redirect('archive'); // redirect to your next desired page
-    } else {
-      return $this->render('create', [
-        'tos' => $toss,
-      ]);
     }
-  }
-*/
+  */
 
   public function actionView($id)
   {
@@ -375,23 +376,23 @@ class MonthScheduleController extends Controller
     return false;
   }
 
-/*
-  public function actionDelete()
-  {
-    if (!empty($_POST['scheduleId'])) {
-      $result = false;
-      $id = $_POST['scheduleId'];
-      $models = ToSchedule::find()->where(['schedule_id' => $id])->all();
-      foreach ($models as $m) {
-        $result = $m->delete();
-      }
-      if ($result) {
-        return true;
+  /*
+    public function actionDelete()
+    {
+      if (!empty($_POST['scheduleId'])) {
+        $result = false;
+        $id = $_POST['scheduleId'];
+        $models = ToSchedule::find()->where(['schedule_id' => $id])->all();
+        foreach ($models as $m) {
+          $result = $m->delete();
+        }
+        if ($result) {
+          return true;
+        }
+        return false;
       }
       return false;
     }
-    return false;
-  }
-*/
+  */
 
 }

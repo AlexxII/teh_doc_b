@@ -35,20 +35,6 @@ TableBaseAsset::register($this);
   .to-list {
     width: 170px
   }
-  .loading {
-    background-color: #ffffff;
-    background-image: url("/lib/3.gif");
-    background-size: 20px 20px;
-    background-position: right center;
-    background-repeat: no-repeat;
-  }
-  .loading-ex {
-    background-color: #ffffff;
-    background-image: url("/lib/3.gif");
-    background-size: 20px 20px;
-    background-position: right 20px center;
-    background-repeat: no-repeat;
-  }
 </style>
 
 <?php
@@ -59,7 +45,22 @@ $form = ActiveForm::begin([
       'class' => 'userform',
     ],
   ],
+  'id' => 'schedule-creation'
 ]); ?>
+
+<?= $form->field($to, "to_type", ['template' => "<div >{input}</div>"])->dropDownList($to->toList,
+  [
+    'prompt' => [
+      'text' => 'Выберите',
+      'options' => [
+        'value' => 'none',
+        'disabled' => 'true',
+        'selected' => 'true'
+      ]
+    ],
+    'class' => 'form-control to-list m-select',
+    'id' => 'test-form'
+  ])->label(false); ?>
 
 <div class="row">
   <div class="col-lg-10 col-md-8">
@@ -74,56 +75,7 @@ $form = ActiveForm::begin([
   </div>
 </div>
 
-<script>
-  $(document).ready(function () {
-    var table = $('#main-table').DataTable({
-      "columnDefs": [
-        {"visible": false, "targets": 3},
-        {"width": "180px", "targets": 4},
-        {"width": "150px", "targets": 5},
-        {"width": "150px", "targets": 6},
-        {"width": "150px", "targets": 7},
-        {"orderable": false, "className": 'select-checkbox', "targets": 8}
-      ],
-      dom: 'Bfrtip',
-      select: {
-        style: 'os',
-        selector: 'td:last-child'
-      },
-      paging: false,
-      // orderFixed: [[3, 'desc']],
-      rowGroup: {
-        startRender: function (row, group) {
-          if (group == '') {
-            return '';
-          }
-          return group;
-        },
-        dataSrc: 3
-      },
-      buttons: [
-        'selectAll',
-        'selectNone'
-      ],
-      responsive: true,
-      language: {
-        url: "/lib/ru.json",
-        "buttons": {
-          "selectAll": "Выделить все",
-          "selectNone": "Снять выделение"
-        }
-      }
-    });
-    table.on('order.dt search.dt', function () {
-      table.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
-        cell.innerHTML = i + 1;
-      });
-    }).draw();
-
-  });
-</script>
-
-<table id="main-table" class="display no-wrap cell-border" style="width:100%">
+<table id="schedule-create-tbl" class="display no-wrap cell-border" style="width:100%">
   <thead>
   <tr>
     <th data-priority="1">№</th>
@@ -137,102 +89,88 @@ $form = ActiveForm::begin([
     <th data-priority="2"></th>
   </tr>
   </thead>
-  <tbody>
-  <?php
-  foreach ($tos as $e => $to): ?>
-    <tr>
-      <td></td>
-      <td>
-        <?php
-        if (!empty($to->toEq)) {
-          echo $to->toEq->name;
-        } else {
-          echo '-';
-        }; ?>
-      </td>
-      <td>
-        <?php
-        if (!empty($to->toEq)) {
-          echo $to->toEq->eq_serial;
-        } else {
-          echo '-';
-        }; ?>
-      </td>
-      <td>
-        <?php
-        if (!empty($to->toEq->groupName)) {
-          echo $to->toEq->groupName->name;
-        } else {
-          echo '';
-        }; ?>
-      </td>
-      <td>
-        <?= $form->field($to, "[$e]to_type", ['template' => "<div >{input}</div>"])->dropDownList($to->toList,
-          [
-            'prompt' => [
-              'text' => 'Выберите',
-              'options' => [
-                'value' => 'none',
-                'disabled' => 'true',
-                'selected' => 'true'
-              ]
-            ],
-            'class' => 'form-control to-list m-select',
-            'id' => $to->eq_id
-          ])->label(false); ?>
-      </td>
-      <td>
-        <?= $form->field($to, "[$e]plan_date", ['template' => "<div >{input}</div>"])->textInput(
-          [
-            'class' => 'to-date form-control'
-          ])->label(false) ?>
-      </td>
-      <td>
-        <?= $form->field($to, "[$e]admin_id", ['template' => "<div>{input}</div>"])->dropDownList($to->adminList,
-          [
-            'prompt' => [
-              'text' => 'Выберите',
-              'options' => [
-                'value' => 'none',
-                'disabled' => 'true',
-                'selected' => 'true'
-              ]
-            ],
-            'class' => 'form-control admin-list',
-            'data-toggle' => 'to-admin-tooltip',
-            'data-placement' => 'top',
-            'title' => 'Необходимо выбрать ответственного'
-          ])->label(false); ?>
-      </td>
-      <td>
-        <?= $form->field($to, "[$e]auditor_id", ['template' => "<div>{input}</div>"])->dropDownList($to->auditorList,
-          [
-            'prompt' => [
-              'text' => 'Выберите',
-              'options' => [
-                'value' => 'none',
-                'disabled' => 'true',
-                'selected' => 'true'
-              ]
-            ],
-            'class' => 'form-control audit-list m-select',
-          ])->label(false); ?>
-      </td>
-      <td></td>
-    </tr>
-  <?php endforeach; ?>
-  </tbody>
 </table>
 <br>
-<div class="form-group">
-  <?= Html::submitButton($tos[1]->isNewRecord ? 'Создать график' : 'Обновить', ['class' => 'btn btn-primary']) ?>
-</div>
 <?php ActiveForm::end(); ?>
 
 
 <script>
 
   //=============================== Работа с календарями =====================================
+
+  var toTypeForm = '<input class="form-control" style="max-width: 170px">';
+
+  $(document).ready(function () {
+
+    var tt = $('#test-form');
+    console.log(tt);
+
+    var table = $('#schedule-create-tbl').DataTable({
+      'processing': true,
+      'ajax': {
+        'url': '/to/month-schedule/test'
+      },
+      'columns': [
+        {'defaultContent': ''},
+        {'data': 'name'},
+        {'data': 'eq_serial'},
+        {'data': 'parent_id'},
+        {'defaultContent': tt},
+        {'defaultContent': '2'},
+        {'defaultContent': '3'},
+        {'defaultContent': '4'},
+        {'defaultContent': ''}
+      ],
+      dom: 'Bfrtip',
+      buttons: [
+        'selectAll',
+        'selectNone'
+      ],
+      paging: false,
+      select: {
+        style: 'os',
+        selector: 'td:last-child'
+      },
+      columnDefs: [
+        {
+          'targets': -2,                    // предпоследний столбец
+          'orderable': false,
+          'data': null,
+          'width': '70px',
+          'defaultContent':
+            '<a href="#" id="edit" class="fa fa-edit" style="padding-right: 5px" title="Обновить"></a>' +
+            '<a href="#" id="view" class="fa fa-info" title="Подробности" style="padding-right: 5px"></a>'
+        }, {
+          'targets': -1,                    // последний столбец
+          'orderable': false,
+          'className': 'select-checkbox',
+          'defaultContent': ''
+        }, {
+          'targets': 2,
+          'render': function (data) {
+            return data;
+          }
+        }, {
+          'targets': 3,
+          'data': null,
+          'visible': false
+        }
+      ],
+      responsive: true,
+      language: {
+        url: '/lib/ru.json',
+        'buttons': {
+          'selectAll': 'Выделить все',
+          'selectNone': 'Снять выделение'
+        }
+      }
+    });
+    table.on('order.dt search.dt', function () {
+      table.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+        cell.innerHTML = i + 1;
+      });
+    }).draw();
+  });
 
   var freeDays = new Array();
   var busyDays = new Array(); // глобальный массив хранения
@@ -281,13 +219,13 @@ $form = ActiveForm::begin([
         $.ajax({
           url: url,
           type: "post",
-          data: {year: year, month: month,_csrf: csrf}
+          data: {year: year, month: month, _csrf: csrf}
         }).done(function (response) {
           if (response != false) {
             var result = JSON.parse(response);
             result.forEach(function (item, i, ar) {
               if (item.month == null) return;
-              $('#'+item.eq_id).val(item.month);
+              $('#' + item.eq_id).val(item.month);
             });
             getMonthBorders();
             setMonth();
@@ -373,7 +311,7 @@ $form = ActiveForm::begin([
     var end_date = year + '-' + nMonth[month] + '-' + mDays[month];
 
     startDayBorder = '01-' + nMonth[month] + '-' + year;
-    endDayBorder =  mDays[month] + '-' + nMonth[month] + '-' + year;
+    endDayBorder = mDays[month] + '-' + nMonth[month] + '-' + year;
 
     startDay = '01.' + nMonth[month] + '.' + year;
     endDay = mDays[month] + '.' + nMonth[month] + '.' + year;
@@ -418,8 +356,6 @@ $form = ActiveForm::begin([
       });
     }
   });
-
-
 
 
   // функция копирования дат проведения ТО
