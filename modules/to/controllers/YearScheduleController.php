@@ -61,6 +61,18 @@ class YearScheduleController extends Controller
 
   public function actionIndex()
   {
+    $this->layout = '@app/views/layouts/main_ex.php';
+
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Годовый планы ТО';
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
+    $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
+    $toTypeArray = array();
+    foreach ($toTypes as $toType) {
+//      $toTypeArray[$toType['id']] = mb_substr($toType['name'], 0, 1);
+      $toTypeArray[$toType['id']] = $toType['name'];
+    }
+
     $toEq = ToEquipment::find()
       ->where(['valid' => 1])
       ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
@@ -76,6 +88,22 @@ class YearScheduleController extends Controller
       $toss[$i]->eq_id = $eq->id;
     }
     $to = new ToYearSchedule();
+
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('_form', [
+          'tos' => $toss,
+          'list' => $toTypeArray
+
+        ]),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
+
+
+
     if (ToYearSchedule::loadMultiple($toss, Yii::$app->request->post())) {
       if (!$to_month = Yii::$app->request->post('month')) {
         Yii::$app->session->setFlash('error', "Введите месяц проведения ТО");

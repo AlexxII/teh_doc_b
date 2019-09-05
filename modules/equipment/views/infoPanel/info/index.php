@@ -4,7 +4,6 @@ use yii\helpers\Html;
 
 ?>
 
-
 <div class="row d-flex flex-items-center" style="position: relative">
   <div class="col-lg-11 col-md-11 cos-xs-11">
     <h2>

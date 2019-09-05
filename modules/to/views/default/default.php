@@ -3,30 +3,34 @@
 use yii\helpers\Html;
 use app\assets\TableBaseAsset;
 use app\modules\to\assets\ToAsset;
+use app\assets\BootstrapDatepickerAsset;
+use app\assets\FancytreeAsset;
 
-ToAsset::register($this);        // регистрация ресурсов модуля
-TableBaseAsset::register($this);        // регистрация ресурсов таблиц datatables
+FancytreeAsset::register($this);
+
+BootstrapDatepickerAsset::register($this);
+ToAsset::register($this);                       // регистрация ресурсов модуля
+TableBaseAsset::register($this);                // регистрация ресурсов таблиц datatables
 
 $this->title = "Графики ТО - в разработке";
 
 ?>
 
 <div class="tool-task">
-
-  <div class="row">
+  <div class="" style="position: relative" >
     <div class="container-fluid" style="position: relative">
       <div id="add-scheduler-wrap">
         <a id="add-scheduler" class="fab-button ex-click"
-           data-url="/to/month-schedule/archive" data-back-url="/to" title="Добавить график ТО">
+           data-url="/to/month-schedule/create" data-back-url="/to" title="Добавить график ТО">
           <div class="plus"></div>
         </a>
       </div>
     </div>
 
-    <div id="delete-wrap" style="position: absolute; top: 70px; right:-60px;display: none">
+    <div id="delete-wrap" style="position: absolute; top: 10px; right:-60px;display: none;fill: white">
       <a id="del-session-ex" class="fab-button" title="Удалить выделенный(е) сеанс(ы)"
          style="cursor: pointer; background-color: red">
-        <svg width="50" height="50" viewBox="0 0 24 24">
+        <svg width="50" height="50" viewBox="-1 -1 24 24">
           <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
           <path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>
         </svg>
@@ -86,10 +90,10 @@ $this->title = "Графики ТО - в разработке";
             "processing": true,
             "responsive": true,
             "ajax": {
-                'url': '/to/schedule/month-schedules'
+                'url': '/to/month-schedule'
             },
             "columns": [
-                {"data": "id"},
+                {"data": "schedule_id"},
                 {"data": "id"},
                 {"data": "plan_date"},
                 {"data": "checkmark"},
@@ -194,6 +198,37 @@ $this->title = "Графики ТО - в разработке";
 
         table.on('draw.dt', function (e, settings, len) {
             $('#delete-wrap').hide();
+        });
+
+        $('#delete-wrap').click(function (event) {
+            event.preventDefault();
+            var csrf = $('meta[name=csrf-token]').attr("content");
+            var url = "/to/month-schedule/delete";
+            if ($(this).attr('disabled')) {
+                return;
+            }
+            jc = $.confirm({
+                icon: 'fa fa-question',
+                title: 'Вы уверены?',
+                content: 'Вы действительно хотите удалить выделенное?',
+                type: 'red',
+                closeIcon: false,
+                autoClose: 'cancel|9000',
+                buttons: {
+                    ok: {
+                        btnClass: 'btn-danger',
+                        action: function () {
+                            jc.close();
+                            deleteRestoreProcess(url, table, csrf);
+                        }
+                    },
+                    cancel: {
+                        action: function () {
+                            return;
+                        }
+                    }
+                }
+            });
         });
 
     });

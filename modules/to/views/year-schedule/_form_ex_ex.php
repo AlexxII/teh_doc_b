@@ -56,7 +56,6 @@ $form = ActiveForm::begin([
 
 <div class="row">
   <div class="col-lg-10 col-md-8">
-    <h3 style="float: left; padding-right: 15px"><?= $header; ?></h3>
     <div style="float: left; padding-top: 18px; padding-bottom: 15px; max-width: 290px">
       <div class="input-group date to-month-tooltip" data-toggle='tooltip' data-placement='top'>
         <input type="text" class="form-control" id="to-month" title="Необходимо ввести месяц"

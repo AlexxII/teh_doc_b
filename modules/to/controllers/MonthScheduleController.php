@@ -18,6 +18,132 @@ class MonthScheduleController extends Controller
   const ADMINS_TABLE = 'to_admins_tbl';
   const TOTYPE_TABLE = 'to_type_tbl';
 
+
+  public function actionIndex()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $schTable = self::TO_TABLE;
+    $usersTable = self::ADMINS_TABLE;
+    $toTable = self::TOTYPE_TABLE;
+    $sql = "SELECT {$schTable}.id, {$schTable}.plan_date, {$schTable}.schedule_id, 
+              YEAR({$schTable}.plan_date) as year,
+              GROUP_CONCAT(DISTINCT {$schTable}.checkmark ORDER BY {$schTable}.checkmark ASC SEPARATOR ', ') as checkmark,
+              GROUP_CONCAT(DISTINCT t1.name ORDER BY t1.name ASC SEPARATOR ',<br> ') as admins,
+              GROUP_CONCAT(DISTINCT t2.name ORDER BY t2.name ASC SEPARATOR ',<br> ') as auditors,
+              GROUP_CONCAT(DISTINCT t3.name ORDER BY t3.name ASC SEPARATOR ',<br> ') as to_type
+            from {$schTable}
+              LEFT JOIN {$usersTable} as t1 on {$schTable}.admin_id = t1.id
+              LEFT JOIN {$usersTable} as t2 on {$schTable}.auditor_id = t2.id
+              LEFT JOIN {$toTable} as t3 on {$schTable}.to_type = t3.id
+            GROUP BY schedule_id";
+    $data["data"] = ToSchedule::findBySql($sql)->asArray()->all();
+    return $data;
+  }
+
+  public function actionDelete()
+  {
+    $report = true;
+    foreach ($_POST['jsonData'] as $scheduleId) {
+      $models = ToSchedule::find()->where(['schedule_id' => $scheduleId])->all();
+      foreach ($models as $m) {
+        $result = $m->delete();
+      }
+    }
+    if ($report) {
+      return true;
+    }
+    return false;
+  }
+
+
+  protected function findModel($id)
+  {
+    $model = ToSchedule::findOne(['id' => $id]);
+    if (!empty($model)) {
+      return $model;
+    }
+    throw new NotFoundHttpException('The requested page does not exist.');
+  }
+
+//  public $layout = '@app/views/layouts/main_ex.php';
+
+  public function actionCreate()
+  {
+    $this->layout = '@app/views/layouts/main_ex.php';
+
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Создать график';
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
+
+    $toEq = ToEquipment::find()
+      ->where(['valid' => 1])
+      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
+    if (empty($toEq)) {
+      Yii::$app->session->setFlash('error', "Не добавлено ни одного оборудования в график ТО.");
+      return $this->render('create', [
+        'tos' => $toEq,
+      ]);
+    }
+    $scheduleRand = rand();
+    foreach ($toEq as $i => $eq) {
+      $toss[] = new ToSchedule();
+      $toss[$i]->scenario = ToSchedule::SCENARIO_CREATE;
+      $toss[$i]->eq_id = $eq->id;
+      $toss[$i]->schedule_id = $scheduleRand;
+    }
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('_form', [
+          'tos' => $toss
+        ]),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
+
+
+
+    if (ToSchedule::loadMultiple($toss, Yii::$app->request->post())) {
+      if (!$to_month = Yii::$app->request->post('month')) {
+        Yii::$app->session->setFlash('error', "Введите месяц проведения ТО");
+        return $this->render('create', ['tos' => $toss]);
+      }
+      if (ToSchedule::validateMultiple($toss)) {
+        foreach ($toss as $t) {
+          $t->to_month = $to_month;
+          $t->save();
+        }
+      } else {
+        Yii::$app->session->setFlash('error', "Ошибка валидации данных");
+        return $this->render('create', ['tos' => $toss]);
+      }
+      Yii::$app->session->setFlash('success', "Новый график ТО создан успешно");
+      return $this->redirect('archive'); // redirect to your next desired page
+    } else {
+      return $this->render('create', [
+        'tos' => $toss,
+      ]);
+    }
+
+
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('_form'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
+  }
+
+
+
+
+
+
+
+/*
   public function actionIndex()
   {
     $month = date("Y-m-") . '01';
@@ -42,7 +168,7 @@ class MonthScheduleController extends Controller
         'id' => $id
       ]);
     }
-  }
+  }*/
 
 
   public function actionArchive()
@@ -96,6 +222,7 @@ class MonthScheduleController extends Controller
 
 
   // создание нового графика ТО на основе оборудования в таблице toequip_tbl;
+/*
   public function actionCreate()
   {
     $toEq = ToEquipment::find()
@@ -136,6 +263,7 @@ class MonthScheduleController extends Controller
       ]);
     }
   }
+*/
 
   public function actionView($id)
   {
@@ -247,6 +375,7 @@ class MonthScheduleController extends Controller
     return false;
   }
 
+/*
   public function actionDelete()
   {
     if (!empty($_POST['scheduleId'])) {
@@ -263,6 +392,6 @@ class MonthScheduleController extends Controller
     }
     return false;
   }
-
+*/
 
 }

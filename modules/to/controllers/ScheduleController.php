@@ -21,26 +21,6 @@ class ScheduleController extends Controller
   const TOTYPE_TABLE = 'to_type_tbl';
 
 
-  public function actionMonthSchedules()
-  {
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    $schTable = self::TO_TABLE;
-    $usersTable = self::ADMINS_TABLE;
-    $toTable = self::TOTYPE_TABLE;
-    $sql = "SELECT {$schTable}.id, {$schTable}.plan_date, {$schTable}.schedule_id, 
-              YEAR({$schTable}.plan_date) as year,
-              GROUP_CONCAT(DISTINCT {$schTable}.checkmark ORDER BY {$schTable}.checkmark ASC SEPARATOR ', ') as checkmark,
-              GROUP_CONCAT(DISTINCT t1.name ORDER BY t1.name ASC SEPARATOR ',<br> ') as admins,
-              GROUP_CONCAT(DISTINCT t2.name ORDER BY t2.name ASC SEPARATOR ',<br> ') as auditors,
-              GROUP_CONCAT(DISTINCT t3.name ORDER BY t3.name ASC SEPARATOR ',<br> ') as to_type
-            from {$schTable}
-              LEFT JOIN {$usersTable} as t1 on {$schTable}.admin_id = t1.id
-              LEFT JOIN {$usersTable} as t2 on {$schTable}.auditor_id = t2.id
-              LEFT JOIN {$toTable} as t3 on {$schTable}.to_type = t3.id
-            GROUP BY schedule_id";
-    $data["data"] = ToSchedule::findBySql($sql)->asArray()->all();
-    return $data;
-  }
 
 
   public function actionServerSide($index)

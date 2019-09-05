@@ -208,9 +208,17 @@ $this->beginPage() ?>
 
     $(document).on('click', '.ex-click', function (e) {
         e.preventDefault();
+        jc = $.confirm({
+            icon: 'fa fa-cog fa-spin',
+            title: 'Подождите!',
+            content: 'Ваш запрос выполняется!',
+            buttons: false,
+            closeIcon: false,
+            confirmButtonClass: 'hide'
+        });
         var url = $(this).data('url');
         var bUrl = $(this).data('backUrl');
-        loadExContent(url, bUrl);
+        loadExContent(url, bUrl, jc);
     });
 
 </script>

@@ -289,7 +289,7 @@ $collapse_hint = 'Скрыть все';
       var year = $(this).data('datepicker').getFormattedDate('yyyy');
       var tree = $("#tree").fancytree("getTree");
       if (year) {
-        monthProcess('create-year-schedule', year, obj);
+        monthProcess('/to/year-schedule/create-year-schedule', year, obj);
       }
       tree.reload();
     });
@@ -516,7 +516,7 @@ $collapse_hint = 'Скрыть все';
     $("#tree").fancytree({
       checkbox: true,
       quicksearch: true,        // Jump to nodes when pressing first character
-      source: {url: '/tehdoc/to/control/to-equipment/all-tools'},
+      source: {url: '/to/control/to-equipment/all-tools'},
       extensions: ["table"],
       minExpandLevel: 2,
       selectMode: 3,

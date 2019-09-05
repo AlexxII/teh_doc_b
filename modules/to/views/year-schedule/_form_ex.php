@@ -220,7 +220,7 @@ $ref_hint = 'К оборудованию в основном перечне';
 
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/tehdoc/to/control/to-equipment/all-tools';
+    var main_url = '/to/control/to-equipment/all-tools';
 
     $("#fancyree_w0").fancytree({
       source: {

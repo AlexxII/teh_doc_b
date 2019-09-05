@@ -3,9 +3,8 @@
 use \yii\helpers\Html;
 use \yii\widgets\ActiveForm;
 
-use app\assets\FancytreeAsset;
-use app\assets\BootstrapDatepickerAsset;
 use app\assets\TableBaseAsset;
+use app\assets\BootstrapDatepickerAsset;
 
 BootstrapDatepickerAsset::register($this);
 TableBaseAsset::register($this);
@@ -64,7 +63,6 @@ $form = ActiveForm::begin([
 
 <div class="row">
   <div class="col-lg-10 col-md-8">
-    <h3 style="float: left; padding-right: 15px"><?= $header; ?></h3>
     <div style="float: left; padding-top: 18px; padding-bottom: 15px; max-width: 290px">
       <div class="input-group date to-month-tooltip" data-toggle='tooltip' data-placement='top'>
         <input type="text" class="form-control" id="to-month" title="Необходимо ввести месяц"
@@ -107,10 +105,6 @@ $form = ActiveForm::begin([
         'selectAll',
         'selectNone'
       ],
-      fixedHeader: {
-        header: true,
-        headerOffset: $('#topnav').height()
-      },
       responsive: true,
       language: {
         url: "/lib/ru.json",
@@ -283,7 +277,7 @@ $form = ActiveForm::begin([
         var toMonth = $('#to-month').datepicker('getDate');
         var year = toMonth.getFullYear();
         var month = toMonth.getMonth();
-        var url = 'get-types';
+        var url = '/to/month-schedule/get-types';
         $.ajax({
           url: url,
           type: "post",
