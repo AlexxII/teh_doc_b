@@ -180,7 +180,6 @@ class MonthScheduleController extends Controller
     ];
   }
 
-
   public function actionYear()
   {
     $toEq = ToEquipment::find()->where(['valid' => 1])->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
