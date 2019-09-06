@@ -41,7 +41,10 @@ TableBaseAsset::register($this);
   </thead>
 </table>
 <br>
-
+<button class="btn btn-ml" id="create-new-schedule" style="background-color: #2196f3; color: #fff*">Создать</button>
+<br>
+<br>
+<br>
 <script>
 
   //=============================== Работа с календарями =====================================
@@ -64,9 +67,7 @@ TableBaseAsset::register($this);
   var toDateInput = '<input class="to-date form-control" style="max-width: 170px">';
 
 
-
   $(document).ready(function () {
-
 
     var table = $('#schedule-create-tbl').DataTable({
       'processing': true,
@@ -99,10 +100,7 @@ TableBaseAsset::register($this);
         dataSrc: 'parent'
       },
       fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-        // console.log(nRow.cells[3].childNodes[0]);
         $('select.to-list', nRow).attr('id', aData.id);
-        // console.log();
-        // console.log(aData);
       },
       columnDefs: [
         {
@@ -159,7 +157,7 @@ TableBaseAsset::register($this);
     $.fn.datepicker.defaults.language = "ru";
     $.fn.datepicker.defaults.daysOfWeekDisabled = "0,6";
 
-    $('.admin-list').prop('disabled', true);
+    // $('.admin-list').prop('disabled', true);
     // $('.to-date').prop('disabled', true);
 
     // инициализация календаря месяца проведения ТО
@@ -171,9 +169,7 @@ TableBaseAsset::register($this);
       minViewMode: "months",
       clearBtn: true
     })
-  });
 
-  $(document).ready(function () {
     // обработчик события - выбрать месяц проведения ТО
     // и формирование массива выходных дней
 
