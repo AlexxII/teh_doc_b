@@ -26,6 +26,8 @@ $this->beginPage() ?>
 </head>
 
 <?php $this->beginBody() ?>
+<div id="wait-modal" style="background-color: white;
+                opacity: .7; height: 100%; width: 100%; position: fixed; top: 0; left: 0;display: none;z-index: 99"></div>
 
 <!--  Меню на маленьких экранах -->
 
@@ -179,6 +181,7 @@ $this->beginPage() ?>
 
     </div>
     <div id="main-content" class="container">
+
       <?= $content ?>
     </div>
   </div>

@@ -135,6 +135,7 @@ class MonthScheduleController extends Controller
 
   public function actionTest()
   {
+    sleep(2);
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     $toEq['data'] = ToEquipment::find()
       ->where(['valid' => 1])
