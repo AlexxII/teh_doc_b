@@ -98,7 +98,19 @@ $form = ActiveForm::begin([
 
   //=============================== Работа с календарями =====================================
 
-  var toTypeForm = '<input class="form-control" style="max-width: 170px">';
+  var toTypeSelect = '<select class="form-control" style="max-width: 170px">' +
+          '<option>ТО-1</option>' +
+          '<option>ТО-2</option>' +
+    '</select>';
+  var toAdminsSelect = '<select class="form-control" style="max-width: 170px">' +
+          '<option>Лесин С.Н.</option>' +
+          '<option>Игнатенко А.М.</option>' +
+    '</select>';
+  var toAuditorsSelect = '<select class="form-control" style="max-width: 170px">' +
+          '<option>Малышев В.Ю.</option>' +
+          '<option>Врачев Д.С.</option>' +
+    '</select>';
+  var toDateInput = '<input class="form-control" style="max-width: 170px">';
 
   $(document).ready(function () {
 
@@ -115,10 +127,10 @@ $form = ActiveForm::begin([
         {'data': 'name'},
         {'data': 'eq_serial'},
         {'data': 'parent_id'},
-        {'defaultContent': tt},
-        {'defaultContent': '2'},
-        {'defaultContent': '3'},
-        {'defaultContent': '4'},
+        {'defaultContent': toTypeSelect},
+        {'defaultContent': toDateInput},
+        {'defaultContent': toAdminsSelect},
+        {'defaultContent': toAuditorsSelect},
         {'defaultContent': ''}
       ],
       dom: 'Bfrtip',
