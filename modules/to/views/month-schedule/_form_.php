@@ -44,7 +44,6 @@ TableBaseAsset::register($this);
 <button class="btn btn-ml" id="create-new-schedule" style="background-color: #2196f3; color: #fff*">Создать</button>
 <br>
 <br>
-<br>
 <script>
 
   //=============================== Работа с календарями =====================================
