@@ -12,12 +12,13 @@ use app\modules\to\models\ToSchedule;
 
 class MonthScheduleController extends Controller
 {
+//  public $layout = '@app/views/layouts/main_ex.php';
 
   const TO_TABLE = 'to_schedule_tbl';
   const TO_YEAR_TABLE = 'to_year_schedule_tbl';
   const ADMINS_TABLE = 'to_admins_tbl';
   const TOTYPE_TABLE = 'to_type_tbl';
-
+  const TOEQUIPMENT_TABLE = 'to_equipment_tbl';
 
   public function actionIndex()
   {
@@ -55,7 +56,6 @@ class MonthScheduleController extends Controller
     return false;
   }
 
-
   protected function findModel($id)
   {
     $model = ToSchedule::findOne(['id' => $id]);
@@ -65,7 +65,6 @@ class MonthScheduleController extends Controller
     throw new NotFoundHttpException('The requested page does not exist.');
   }
 
-//  public $layout = '@app/views/layouts/main_ex.php';
 
   public function actionCreate()
   {
@@ -74,58 +73,10 @@ class MonthScheduleController extends Controller
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     Yii::$app->view->params['title'] = 'Создать график';
     Yii::$app->view->params['bUrl'] = $_GET['back-url'];
-
-    $toEq = ToEquipment::find()
-      ->where(['valid' => 1])
-      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
-    if (empty($toEq)) {
-      Yii::$app->session->setFlash('error', "Не добавлено ни одного оборудования в график ТО.");
-      return $this->render('create', [
-        'tos' => $toEq,
-      ]);
-    }
-    $scheduleRand = rand();
-    $toss = new ToSchedule();
-    $toss->scenario = ToSchedule::SCENARIO_CREATE;
     return [
       'data' => [
         'success' => true,
-        'data' => $this->render('_form_', [
-          'to' => $toss
-        ]),
-        'message' => 'Page load.',
-      ],
-      'code' => 1,
-    ];
-
-
-    if (ToSchedule::loadMultiple($toss, Yii::$app->request->post())) {
-      if (!$to_month = Yii::$app->request->post('month')) {
-        Yii::$app->session->setFlash('error', "Введите месяц проведения ТО");
-        return $this->render('create', ['tos' => $toss]);
-      }
-      if (ToSchedule::validateMultiple($toss)) {
-        foreach ($toss as $t) {
-          $t->to_month = $to_month;
-          $t->save();
-        }
-      } else {
-        Yii::$app->session->setFlash('error', "Ошибка валидации данных");
-        return $this->render('create', ['tos' => $toss]);
-      }
-      Yii::$app->session->setFlash('success', "Новый график ТО создан успешно");
-      return $this->redirect('archive'); // redirect to your next desired page
-    } else {
-      return $this->render('create', [
-        'tos' => $toss,
-      ]);
-    }
-
-
-    return [
-      'data' => [
-        'success' => true,
-        'data' => $this->render('_form'),
+        'data' => $this->render('_form_'),
         'message' => 'Page load.',
       ],
       'code' => 1,
@@ -133,16 +84,39 @@ class MonthScheduleController extends Controller
   }
 
 
+  public function actionEquipment()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $equipmentTable = self::TOEQUIPMENT_TABLE;
+    $sql = "SELECT {$equipmentTable}.id, {$equipmentTable}.name, {$equipmentTable}.eq_serial,
+              parent.name as parent
+            from {$equipmentTable}
+              LEFT JOIN {$equipmentTable} as parent on {$equipmentTable}.parent_id = parent.id
+              WHERE {$equipmentTable}.valid = 1 AND {$equipmentTable}.eq_id != 0
+              ORDER BY {$equipmentTable}.lft ASC";
+    $data["data"] = ToEquipment::findBySql($sql)->asArray()->all();
+    return $data;
+  }
+
+  /*
   public function actionTest()
   {
     sleep(2);
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     $toEq['data'] = ToEquipment::find()
-      ->where(['valid' => 1])
-      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->asArray()->all();
+      ->select(['equipment.id', 'equipment.name', 'equipment.eq_serial', 'parent.name as parent'])
+      ->joinWith('parents')
+      ->where(['equipment.valid' => 1])
+      ->andWhere(['!=', 'equipment.eq_id', '0'])
+      ->orderby(['equipment.lft' => SORT_ASC])
+      ->from(ToEquipment::tableName().' equipment')
+      ->with('parents')
+      ->asArray()
+      ->all();
 
     return $toEq;
   }
+  */
 
 
   /*
@@ -267,7 +241,29 @@ class MonthScheduleController extends Controller
     }
   */
 
-  public function actionView($id)
+  public function actionView()
+  {
+    $this->layout = '@app/views/layouts/main_ex.php';
+
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Просмотр Графика ТО';
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('view_'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
+  }
+
+  public function actionScheduleView()
+  {
+
+  }
+
+  public function actionViewE($id)
   {
     $model = ToSchedule::find()
       ->with(['admin', 'auditor', 'toType', 'toEq'])
@@ -275,7 +271,7 @@ class MonthScheduleController extends Controller
     $month = $model->max('plan_date');
     setlocale(LC_ALL, 'ru_RU');
     $month = strftime("%B %Y", strtotime($month));
-    return $this->render('view', [
+    return $this->render('view_', [
       'tos' => $model->all(),
       'month' => $month,
       'id' => $id

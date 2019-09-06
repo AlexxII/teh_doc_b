@@ -76,3 +76,25 @@
 #to-mscheduler-table tr {
   font-size: 12px;
 }
+/* таблица создания графика ТО*/
+#schedule-create-tbl tr input, select {
+  min-height: 20px;
+}
+#schedule-create-tbl tbody td {
+  font-size: 12px;
+}
+#schedule-create-tbl tbody tr select {
+  font-size: 12px;
+}
+#schedule-create-tbl tr {
+  font-size: 12px;
+}
+#schedule-create-tbl th {
+  text-align: center;
+}
+#schedule-create-tbl .form-control {
+  width: 140px
+}
+#schedule-create-tbl .to-list {
+  width: 170px
+}

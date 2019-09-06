@@ -38,6 +38,11 @@ class ToEquipment extends \yii\db\ActiveRecord
     $this->id = MHelper::generateId();
   }
 
+  public function getParents()
+  {
+    return $this->hasOne(ToEquipment::class, ['parent_id' => 'id'])->alias('parent');
+  }
+
   public function getGroupName()
   {
     $parentCount = $this->parents()->count();
