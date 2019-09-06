@@ -54,6 +54,7 @@ class ToSchedule extends \yii\db\ActiveRecord
     return $this->hasOne(ToType::class, ['id' => 'to_type']);
   }
 
+
   public function getToList()
   {
     return ArrayHelper::map(ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all(), 'id', 'name');

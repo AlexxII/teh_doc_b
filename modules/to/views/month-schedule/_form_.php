@@ -11,57 +11,6 @@ TableBaseAsset::register($this);
 
 ?>
 
-<style>
-  tr input, select {
-    min-height: 20px;
-  }
-  #main-table tbody td {
-    font-size: 12px;
-  }
-  #main-table tbody tr select {
-    font-size: 12px;
-  }
-  #main-table tr {
-    font-size: 12px;
-  }
-  .highlight {
-    /*background-color: #b2dba1;*/
-    color: #CC0000;
-    font-weight: 700;
-  }
-  .form-control {
-    width: 140px
-  }
-  .to-list {
-    width: 170px
-  }
-</style>
-
-<?php
-$form = ActiveForm::begin([
-  'fieldConfig' => [
-    'options' => [
-      'tag' => false,
-      'class' => 'userform',
-    ],
-  ],
-  'id' => 'schedule-creation'
-]); ?>
-
-<?= $form->field($to, "to_type", ['template' => "<div >{input}</div>"])->dropDownList($to->toList,
-  [
-    'prompt' => [
-      'text' => 'Выберите',
-      'options' => [
-        'value' => 'none',
-        'disabled' => 'true',
-        'selected' => 'true'
-      ]
-    ],
-    'class' => 'form-control to-list m-select',
-    'id' => 'test-form'
-  ])->label(false); ?>
-
 <div class="row">
   <div class="col-lg-10 col-md-8">
     <div style="float: left; padding-top: 18px; padding-bottom: 15px; max-width: 290px">
@@ -78,6 +27,7 @@ $form = ActiveForm::begin([
 <table id="schedule-create-tbl" class="display no-wrap cell-border" style="width:100%">
   <thead>
   <tr>
+    <th></th>
     <th data-priority="1">№</th>
     <th data-priority="2">Наименование</th>
     <th>s/n</th>
@@ -91,42 +41,44 @@ $form = ActiveForm::begin([
   </thead>
 </table>
 <br>
-<?php ActiveForm::end(); ?>
-
 
 <script>
 
   //=============================== Работа с календарями =====================================
 
-  var toTypeSelect = '<select class="form-control" style="max-width: 170px">' +
-          '<option>ТО-1</option>' +
-          '<option>ТО-2</option>' +
+  var toTypeSelect = '<select class="form-control to-list m-select" style="max-width: 120px">' +
+    '<option value="none" selected="true" disabled="true">Выберите</option>' +
+    '<option value="2117077616">ТО-1</option>' +
+    '<option value="1497463421">ТО-2</option>' +
     '</select>';
-  var toAdminsSelect = '<select class="form-control" style="max-width: 170px">' +
-          '<option>Лесин С.Н.</option>' +
-          '<option>Игнатенко А.М.</option>' +
+  var toAdminsSelect = '<select class="form-control admin-list" style="width: 170px">' +
+    '<option value="none" selected="true" disabled="true">Выберите</option>' +
+    '<option>Лесин С.Н.</option>' +
+    '<option>Игнатенко А.М.</option>' +
     '</select>';
-  var toAuditorsSelect = '<select class="form-control" style="max-width: 170px">' +
-          '<option>Малышев В.Ю.</option>' +
-          '<option>Врачев Д.С.</option>' +
+  var toAuditorsSelect = '<select class="form-control audit-list m-select" style="width: 170px">' +
+    '<option value="none" selected="true" disabled="true">Выберите</option>' +
+    '<option>Малышев В.Ю.</option>' +
+    '<option>Врачев Д.С.</option>' +
     '</select>';
-  var toDateInput = '<input class="form-control" style="max-width: 170px">';
+  var toDateInput = '<input class="to-date form-control" style="max-width: 170px">';
+
+
 
   $(document).ready(function () {
 
-    var tt = $('#test-form');
-    console.log(tt);
 
     var table = $('#schedule-create-tbl').DataTable({
       'processing': true,
       'ajax': {
-        'url': '/to/month-schedule/test'
+        'url': '/to/month-schedule/equipment'
       },
       'columns': [
+        {'defaultContent': 'id'},
         {'defaultContent': ''},
         {'data': 'name'},
         {'data': 'eq_serial'},
-        {'data': 'parent_id'},
+        {'data': 'parent'},
         {'defaultContent': toTypeSelect},
         {'defaultContent': toDateInput},
         {'defaultContent': toAdminsSelect},
@@ -143,6 +95,15 @@ $form = ActiveForm::begin([
         style: 'os',
         selector: 'td:last-child'
       },
+      rowGroup: {
+        dataSrc: 'parent'
+      },
+      fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        // console.log(nRow.cells[3].childNodes[0]);
+        $('select.to-list', nRow).attr('id', aData.id);
+        // console.log();
+        // console.log(aData);
+      },
       columnDefs: [
         {
           'targets': -2,                    // предпоследний столбец
@@ -158,15 +119,12 @@ $form = ActiveForm::begin([
           'className': 'select-checkbox',
           'defaultContent': ''
         }, {
-          'targets': 2,
-          'render': function (data) {
-            return data;
-          }
-        }, {
-          'targets': 3,
-          'data': null,
+          'targets': 0,
           'visible': false
-        }
+        }, {
+          'targets': 4,
+          'visible': false
+        },
       ],
       responsive: true,
       language: {
@@ -178,10 +136,16 @@ $form = ActiveForm::begin([
       }
     });
     table.on('order.dt search.dt', function () {
-      table.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+      table.column(1, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
         cell.innerHTML = i + 1;
       });
     }).draw();
+
+    $('#schedule-create-tbl')
+      .on('processing.dt', function (e, settings, processing) {
+        $('#processingIndicator').css('display', processing ? 'block' : 'none');
+
+      }).dataTable();
   });
 
   var freeDays = new Array();
@@ -196,7 +160,7 @@ $form = ActiveForm::begin([
     $.fn.datepicker.defaults.daysOfWeekDisabled = "0,6";
 
     $('.admin-list').prop('disabled', true);
-    $('.to-date').prop('disabled', true);
+    // $('.to-date').prop('disabled', true);
 
     // инициализация календаря месяца проведения ТО
     $('#to-month').datepicker({
@@ -242,7 +206,7 @@ $form = ActiveForm::begin([
             getMonthBorders();
             setMonth();
             $('.to-date').val('');
-            $('.to-date').prop('disabled', true);
+            // $('.to-date').prop('disabled', true);
             $('.admin-list').val('none');
             $('.admin-list').prop('disabled', false);
             jc.close();
@@ -345,21 +309,9 @@ $form = ActiveForm::begin([
     return;
   }
 
-
-  // обработка выбора ответственного за проведение ТО
-  $('.admin-list').on('change', function (e) {
-    var val = e.target.value;
-    $(this).closest('tr').find('.to-date').prop('disabled', false);
-    if ($(this).closest('tr').hasClass('selected')) {
-      $('.selected').each(function () {
-        $(this).find('.admin-list').val(val);
-        $(this).find('.to-date').prop('disabled', false);
-      });
-    }
-  });
-
   // копирование селектов в выделенные ячейки
-  $('.m-select').on('change', function (e) {
+
+  $(document).on('change', '.m-select', function (e) {
     var i = $(this).closest('td').index();
     var val = e.target.value;
     if ($(this).closest('tr').hasClass('selected')) {
@@ -369,6 +321,18 @@ $form = ActiveForm::begin([
     }
   });
 
+  // обработка выбора ответственного за проведение ТО
+
+  $(document).on('change', '.admin-list', function (e) {
+    var val = e.target.value;
+    $(this).closest('tr').find('.to-date').prop('disabled', false);
+    if ($(this).closest('tr').hasClass('selected')) {
+      $('.selected').each(function () {
+        $(this).find('.admin-list').val(val);
+        $(this).find('.to-date').prop('disabled', false);
+      });
+    }
+  });
 
   // функция копирования дат проведения ТО
   function copySl(e) {

@@ -12,12 +12,13 @@ use app\modules\to\models\ToSchedule;
 
 class MonthScheduleController extends Controller
 {
+//  public $layout = '@app/views/layouts/main_ex.php';
 
   const TO_TABLE = 'to_schedule_tbl';
   const TO_YEAR_TABLE = 'to_year_schedule_tbl';
   const ADMINS_TABLE = 'to_admins_tbl';
   const TOTYPE_TABLE = 'to_type_tbl';
-
+  const TOEQUIPMENT_TABLE = 'to_equipment_tbl';
 
   public function actionIndex()
   {
@@ -55,7 +56,6 @@ class MonthScheduleController extends Controller
     return false;
   }
 
-
   protected function findModel($id)
   {
     $model = ToSchedule::findOne(['id' => $id]);
@@ -65,7 +65,6 @@ class MonthScheduleController extends Controller
     throw new NotFoundHttpException('The requested page does not exist.');
   }
 
-//  public $layout = '@app/views/layouts/main_ex.php';
 
   public function actionCreate()
   {
@@ -132,16 +131,38 @@ class MonthScheduleController extends Controller
     ];
   }
 
+  public function actionEquipment()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $equipmentTable = self::TOEQUIPMENT_TABLE;
+    $sql = "SELECT {$equipmentTable}.id, {$equipmentTable}.name, {$equipmentTable}.eq_serial,
+              parent.name as parent
+            from {$equipmentTable}
+              LEFT JOIN {$equipmentTable} as parent on {$equipmentTable}.parent_id = parent.id
+              WHERE {$equipmentTable}.valid = 1 AND {$equipmentTable}.eq_id != 0
+              ORDER BY {$equipmentTable}.lft ASC";
+    $data["data"] = ToEquipment::findBySql($sql)->asArray()->all();
+    return $data;
+  }
 
+  /*
   public function actionTest()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     $toEq['data'] = ToEquipment::find()
-      ->where(['valid' => 1])
-      ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->asArray()->all();
+      ->select(['equipment.id', 'equipment.name', 'equipment.eq_serial', 'parent.name as parent'])
+      ->joinWith('parents')
+      ->where(['equipment.valid' => 1])
+      ->andWhere(['!=', 'equipment.eq_id', '0'])
+      ->orderby(['equipment.lft' => SORT_ASC])
+      ->from(ToEquipment::tableName().' equipment')
+      ->with('parents')
+      ->asArray()
+      ->all();
 
     return $toEq;
   }
+  */
 
 
   /*
