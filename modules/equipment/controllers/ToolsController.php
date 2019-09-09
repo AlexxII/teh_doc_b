@@ -14,7 +14,7 @@ use app\modules\equipment\models\ToolSettings;
 class ToolsController extends Controller
 {
 
-  public $layout = '@app/modules/equipment/views/layouts/equipment_ex_layout.php';
+  public $layout = '@app/views/layouts/main_ex.php';
 
   public function actionAllTools()
   {
@@ -98,6 +98,7 @@ class ToolsController extends Controller
   public function actionTask()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     $models = Tools::find()
       ->where(['settings_table.eq_task' => 1])
       ->joinWith('settings settings_table')
@@ -149,6 +150,7 @@ class ToolsController extends Controller
   public function actionCategories()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     Yii::$app->view->params['title'] = 'По категориям';
     return [
       'data' => [
@@ -163,6 +165,7 @@ class ToolsController extends Controller
   public function actionPlacement()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     Yii::$app->view->params['title'] = 'По размещению';
     return [
       'data' => [

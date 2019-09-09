@@ -28,7 +28,7 @@ $this->title = "Графики ТО - в разработке";
     </div>
 
     <div id="delete-wrap" style="position: absolute; top: 10px; right:-60px;display: none;fill: white">
-      <a id="del-session-ex" class="fab-button" title="Удалить выделенный(е) сеанс(ы)"
+      <a id="del-session-ex" class="fab-button" title="Удалить выделенный(е) график(и)"
          style="cursor: pointer; background-color: red">
         <svg width="50" height="50" viewBox="-1 -1 24 24">
           <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
