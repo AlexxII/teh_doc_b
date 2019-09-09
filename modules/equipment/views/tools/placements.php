@@ -438,14 +438,14 @@ $classif_hint = 'Присвоить выделенному оборудован�
       "responsive": true,
       "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
       "ajax": $.fn.dataTable.pipeline({
-        url: 'server-side',
+        url: '/equipment/tools/server-side',
         pages: 2, // number of pages to cache
         data: function () {
           var root = $(".root").text();
           var lft = $(".lft").text();
           var rgt = $(".rgt").text();
           return {
-            'db_tbl': 'teh_placement_tbl',
+            'db_tbl': 'equipment_placement_tbl',
             'identifier': 'place_id',
             'root': root,
             'lft': lft,
