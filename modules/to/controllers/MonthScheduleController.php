@@ -69,14 +69,16 @@ class MonthScheduleController extends Controller
   public function actionCreate()
   {
     $this->layout = '@app/views/layouts/main_ex.php';
-
+    $model = new ToSchedule();
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     Yii::$app->view->params['title'] = 'Создать график';
     Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     return [
       'data' => [
         'success' => true,
-        'data' => $this->render('create'),
+        'data' => $this->render('create', [
+          'to' => $model
+        ]),
         'message' => 'Page load.',
       ],
       'code' => 1,
