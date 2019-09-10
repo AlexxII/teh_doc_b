@@ -69,16 +69,13 @@ class MonthScheduleController extends Controller
   public function actionCreate()
   {
     $this->layout = '@app/views/layouts/main_ex.php';
-    $model = new ToSchedule();
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     Yii::$app->view->params['title'] = 'Создать график';
     Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     return [
       'data' => [
         'success' => true,
-        'data' => $this->render('create', [
-          'to' => $model
-        ]),
+        'data' => $this->render('create'),
         'message' => 'Page load.',
       ],
       'code' => 1,
@@ -97,6 +94,9 @@ class MonthScheduleController extends Controller
               WHERE {$equipmentTable}.valid = 1 AND {$equipmentTable}.eq_id != 0
               ORDER BY {$equipmentTable}.lft ASC";
     $data["data"] = ToEquipment::findBySql($sql)->asArray()->all();
+    foreach ($data["data"] as $key => $d) {
+      $d["id"] = "<select></select>";
+    }
     return $data;
   }
 

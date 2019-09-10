@@ -23,15 +23,6 @@ TableBaseAsset::register($this);
     </div>
   </div>
 </div>
-<?php
-$form = ActiveForm::begin([
-  'fieldConfig' => [
-    'options' => [
-      'tag' => false,
-      'class' => 'userform',
-    ],
-  ],
-]); ?>
 
 <table id="schedule-create-tbl" class="display no-wrap cell-border" style="width:100%">
   <thead>
@@ -80,7 +71,6 @@ $form = ActiveForm::begin([
         method: 'get',
         dataType: "JSON"
     }).done(function (response) {
-        
 
     }).fail(function () {
         console.log('fail')
@@ -102,7 +92,7 @@ $form = ActiveForm::begin([
                 {'data': 'name'},
                 {'data': 'eq_serial'},
                 {'data': 'parent'},
-                {'defaultContent': ''},
+                {'defaultContent': toTypeSelect},
                 {'defaultContent': toDateInput},
                 {'defaultContent': toAdminsSelect},
                 {'defaultContent': toAuditorsSelect},
