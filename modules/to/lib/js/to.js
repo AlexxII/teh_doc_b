@@ -5,7 +5,6 @@ function deleteRestoreProcess(url, table, csrf) {
     for (var i = 0; i < count; i++) {
         ar[i] = data[i].schedule_id;
     }
-    console.log(ar);
     jc = $.confirm({
         icon: 'fa fa-cog fa-spin',
         title: 'Подождите!',

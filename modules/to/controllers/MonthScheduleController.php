@@ -76,7 +76,7 @@ class MonthScheduleController extends Controller
     return [
       'data' => [
         'success' => true,
-        'data' => $this->render('_form_'),
+        'data' => $this->render('create'),
         'message' => 'Page load.',
       ],
       'code' => 1,

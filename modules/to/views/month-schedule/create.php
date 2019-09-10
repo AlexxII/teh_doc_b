@@ -53,7 +53,7 @@ TableBaseAsset::register($this);
     '<option value="2117077616">ТО-1</option>' +
     '<option value="1497463421">ТО-2</option>' +
     '</select>';
-  var toAdminsSelect = '<select class="form-control admin-list" style="width: 170px">' +
+  var toAdminsSelect = '<select class="form-control admin-list" disabled style="width: 170px">' +
     '<option value="none" selected="true" disabled="true">Выберите</option>' +
     '<option>Лесин С.Н.</option>' +
     '<option>Игнатенко А.М.</option>' +
@@ -63,12 +63,24 @@ TableBaseAsset::register($this);
     '<option>Малышев В.Ю.</option>' +
     '<option>Врачев Д.С.</option>' +
     '</select>';
-  var toDateInput = '<input class="to-date form-control" style="max-width: 170px">';
+  var toDateInput = '<input class="to-date form-control" disabled style="max-width: 170px;">';
 
 
+  $.ajax({
+    url: '/to/settings/select-data',
+    method: 'get',
+    dataType: "JSON",
+  }).done(function (response) {
+
+  }).fail(function () {
+    console.log('fail')
+  });
+
+
+  var table;
   $(document).ready(function () {
 
-    var table = $('#schedule-create-tbl').DataTable({
+    table = $('#schedule-create-tbl').DataTable({
       'processing': true,
       'ajax': {
         'url': '/to/month-schedule/equipment'
@@ -156,8 +168,8 @@ TableBaseAsset::register($this);
     $.fn.datepicker.defaults.language = "ru";
     $.fn.datepicker.defaults.daysOfWeekDisabled = "0,6";
 
-    // $('.admin-list').prop('disabled', true);
-    // $('.to-date').prop('disabled', true);
+    $('.admin-list').prop('disabled', true);
+    $('.to-date').prop('disabled', true);
 
     // инициализация календаря месяца проведения ТО
     $('#to-month').datepicker({
@@ -167,82 +179,66 @@ TableBaseAsset::register($this);
       startView: "months",
       minViewMode: "months",
       clearBtn: true
-    })
+    });
 
     // обработчик события - выбрать месяц проведения ТО
     // и формирование массива выходных дней
 
-    $('#to-month').on('change', function (e) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      if (e.target.value != '') {
-        jc = $.confirm({
-          icon: 'fa fa-cog fa-spin',
-          title: 'Подождите!',
-          content: 'Формируются необходимые данные на выбранный месяц!',
-          buttons: false,
-          closeIcon: false,
-          confirmButtonClass: 'hide'
-        });
-        var toMonth = $('#to-month').datepicker('getDate');
-        var year = toMonth.getFullYear();
-        var month = toMonth.getMonth();
-        var url = '/to/month-schedule/get-types';
-        $.ajax({
-          url: url,
-          type: "post",
-          data: {year: year, month: month, _csrf: csrf}
-        }).done(function (response) {
-          if (response != false) {
-            var result = JSON.parse(response);
-            result.forEach(function (item, i, ar) {
-              if (item.month == null) return;
-              $('#' + item.eq_id).val(item.month);
-            });
-            getMonthBorders();
-            setMonth();
-            $('.to-date').val('');
-            // $('.to-date').prop('disabled', true);
-            $('.admin-list').val('none');
-            $('.admin-list').prop('disabled', false);
-            jc.close();
-            jc = $.confirm({
-              icon: 'fa fa-thumbs-up',
-              title: 'Успех!',
-              content: 'Данные сформированы',
-              type: 'green',
-              buttons: false,
-              closeIcon: false,
-              autoClose: 'ok|8000',
-              confirmButtonClass: 'hide',
-              buttons: {
-                ok: {
-                  btnClass: 'btn-success',
-                  action: function () {
-                  }
+  });
+
+  $(document).on('change', '#to-month', function (e) {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    if (e.target.value != '') {
+      var table = $('#schedule-create-tbl').DataTable();
+      table.rows('.selected').deselect();
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Формируются необходимые данные на выбранный месяц!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
+      var toMonth = $('#to-month').datepicker('getDate');
+      var year = toMonth.getFullYear();
+      var month = toMonth.getMonth();
+      var url = '/to/month-schedule/get-types';
+      $.ajax({
+        url: url,
+        type: "post",
+        data: {year: year, month: month, _csrf: csrf}
+      }).done(function (response) {
+        if (response != false) {
+          var result = JSON.parse(response);
+          result.forEach(function (item, i, ar) {
+            if (item.month == null) return;
+            $('#' + item.eq_id).val(item.month);
+          });
+          getMonthBorders();
+          setMonth();
+          $('.to-date').val('');
+          $('.to-date').prop('disabled', true);
+          $('.admin-list').val('none');
+          $('.admin-list').prop('disabled', false);
+          jc.close();
+          jc = $.confirm({
+            icon: 'fa fa-thumbs-up',
+            title: 'Успех!',
+            content: 'Данные сформированы',
+            type: 'green',
+            buttons: false,
+            closeIcon: false,
+            autoClose: 'ok|8000',
+            confirmButtonClass: 'hide',
+            buttons: {
+              ok: {
+                btnClass: 'btn-success',
+                action: function () {
                 }
               }
-            });
-          } else {
-            jc.close();
-            jc = $.confirm({
-              icon: 'fa fa-exclamation-triangle',
-              title: 'Неудача!',
-              content: 'Запрос не выполнен. Что-то пошло не так.',
-              type: 'red',
-              buttons: false,
-              closeIcon: false,
-              autoClose: 'ok|8000',
-              confirmButtonClass: 'hide',
-              buttons: {
-                ok: {
-                  btnClass: 'btn-danger',
-                  action: function () {
-                  }
-                }
-              }
-            });
-          }
-        }).fail(function () {
+            }
+          });
+        } else {
           jc.close();
           jc = $.confirm({
             icon: 'fa fa-exclamation-triangle',
@@ -251,7 +247,7 @@ TableBaseAsset::register($this);
             type: 'red',
             buttons: false,
             closeIcon: false,
-            autoClose: 'ok|4000',
+            autoClose: 'ok|8000',
             confirmButtonClass: 'hide',
             buttons: {
               ok: {
@@ -261,16 +257,34 @@ TableBaseAsset::register($this);
               }
             }
           });
+        }
+      }).fail(function () {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|4000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
         });
-      } else {
-        $('.to-date').val('');
-        $('.to-date').prop('disabled', true);
-        $('.admin-list').prop('disabled', true);
-        $('.admin-list').val('none');
-      }
-    });
+      });
+    } else {
+      $('.to-date').val('');
+      $('.to-date').prop('disabled', true);
+      $('.admin-list').prop('disabled', true);
+      $('.admin-list').val('none');
+    }
   });
-
 
   function getMonthBorders() {
     var toMonth = $('#to-month').datepicker('getDate');
@@ -360,53 +374,46 @@ TableBaseAsset::register($this);
 
   // ======================= Обработка подсказки ("Необходимо ввести месяц")==== ===================
 
-  $(document).ready(function () {
-    $('#to-month').mouseover(function () {
-      if ($(this).val() == "") {
+  $(document).on('mouseover', '#to-month', function (e) {
+    if ($(this).val() == "") {
+      $('#to-month').tooltip('enable');
+      $('#to-month').tooltip('show');
+    } else {
+      $('#to-month').prop('title', '');
+      $('#to-month-tooltip').tooltip('disable');
+    }
+  });
+
+  $(document).on('mouseover', '.admin-list', function (e) {
+    if ($(this).prop('disabled')) {
+      $('#to-month').tooltip('enable');
+      $('#to-month').tooltip('show');
+    }
+  });
+
+
+  $(document).on('mouseover', '.to-date', function (e) {
+    if ($(this).prop('disabled')) {
+      if ($('#to-month').val() == '') {
+        $('#to-month').prop('title', 'Необходимо выбрать месяц');
         $('#to-month').tooltip('enable');
         $('#to-month').tooltip('show');
       } else {
-        $('#to-month').prop('title', '');
-        $('#to-month-tooltip').tooltip('disable');
+        var adminList = $(this).closest('tr').find('.admin-list');
+        adminList.tooltip('enable');
+        adminList.tooltip('show');
       }
-    })
+    }
   });
 
-  $(document).ready(function () {
-    $('.admin-list').mouseover(function () {
-      if ($(this).prop('disabled')) {
-        $('#to-month').tooltip('enable');
-        $('#to-month').tooltip('show');
-      }
-    })
-  });
-
-  $(document).ready(function () {
-    $('.to-date').mouseover(function () {
-      if ($(this).prop('disabled')) {
-        if ($('#to-month').val() == '') {
-          $('#to-month').prop('title', 'Необходимо выбрать месяц');
-          $('#to-month').tooltip('enable');
-          $('#to-month').tooltip('show');
-        } else {
-          var adminList = $(this).closest('tr').find('.admin-list');
-          adminList.tooltip('enable');
-          adminList.tooltip('show');
-        }
-      }
-    })
-  });
-
-
-  $('.to-date').mouseleave(function () {
+  $(document).on('mouseleave', '.to-date', function (e) {
     $('#to-month').tooltip('hide');
     $('#to-month').tooltip('disable');
-  });
-  $('.to-date').mouseleave(function () {
     $('.admin-list').tooltip('hide');
     $('.admin-list').tooltip('disable');
   });
-  $('.admin-list').mouseleave(function () {
+
+  $(document).on('mouseleave', '.admin-list', function (e) {
     $('#to-month').tooltip('hide');
     $('#to-month').tooltip('disable');
   });
