@@ -163,12 +163,20 @@ TableBaseAsset::register($this);
 
 
     $(document).on('click', '#create-new-schedule', function (e) {
+        var $table = $('#schedule-create-tbl').dataTable();
+//        console.log($table);
         var table = $('#schedule-create-tbl').DataTable();
-        console.log(table);
-        var rows = table.rows();
-        rows.forEach(function (value, index, array) {
-            console.log(value);
+//        console.log(table);
+//        table.cells().eq(3).each(function () {
+//            console.log(this.data());
+//        });
+        table.columns().eq(0).each(function (index) {
+            console.log(this.data());
         });
+
+//        table.rows().every(function () {
+//            console.log(this.data());
+//        })
     });
 
     $(document).on('change', '#to-month', function (e) {
