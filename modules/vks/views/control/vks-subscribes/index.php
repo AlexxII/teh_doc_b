@@ -1,9 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use app\assets\FancytreeAsset;
-
-FancytreeAsset::register($this);
 
 $about = "Панель управления абонента ВКС. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $add_hint = 'Добавить новый узел';
@@ -20,25 +17,35 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'style' => ['margin-top' => '5px'],
         'title' => $add_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-container' => 'body',
+        'data-placement' => 'top',
+        'data-tree' => 'fancyree_vks_subscribes'
       ]) ?>
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
         'style' => ['margin-top' => '5px'],
         'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-container' => 'body',
+        'data-placement' => 'top',
+        'data-tree' => 'fancyree_vks_subscribes'
       ]) ?>
       <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-container' => 'body',
+        'data-placement' => 'top',
+        'data-tree' => 'fancyree_vks_subscribes',
+        'data-delete' => '/vks/control/vks-subscribes/delete'
       ]) ?>
       <?= Html::a('<i class="fa fa-object-group" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-multi-nodes',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_multi_nodes,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-container' => 'body',
+        'data-placement' => 'top',
+        'data-tree' => 'fancyree_vks_subscribes',
+        'data-delete' => '/vks/control/vks-subscribes/delete-root'
       ]) ?>
     </div>
 
@@ -50,7 +57,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
       </div>
       <div style="padding-top: 8px; right: 10px; position: absolute">
-        <a href="" id="btnResetSearch">
+        <a href="" class="btnResetSearch" data-tree="fancyree_vks_subscribes">
           <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
         </a>
       </div>
@@ -58,7 +65,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
     <div class="row" style="padding: 0 15px">
       <div style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_w0" class="ui-draggable-handle"></div>
+        <div id="fancyree_vks_subscribes" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
@@ -369,7 +376,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
     var update_url = '/vks/control/vks-subscribes/update';
     var surnames_url = '/vks/control/vks-subscribes/surnames';
 
-    $("#fancyree_w0").fancytree({
+    $("#fancyree_vks_subscribes").fancytree({
       source: {
         url: main_url,
       },

@@ -4,11 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 
-use app\assets\FancytreeAsset;
-
-FancytreeAsset::register($this);
-
-
 $add_hint = 'Добавить запись';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить';
@@ -18,36 +13,6 @@ $role_hint = 'Выберите роль пользователя при пров
 
 ?>
 
-<style>
-  .h-title {
-    font-size: 18px;
-    color: #1e6887;
-  }
-  .fa {
-    font-size: 15px;
-  }
-  ul.fancytree-container {
-    font-size: 14px;
-  }
-  .ui-fancytree {
-    overflow: auto;
-  }
-  input {
-    color: black;
-  }
-  .fancytree-custom-icon {
-    color: #1e6887;
-    font-size: 18px;
-  }
-  .t {
-    font-size: 14px;
-  }
-  .result {
-    /*font-size: 18px;*/
-  }
-
-</style>
-
 <div class="">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
@@ -56,6 +21,7 @@ $role_hint = 'Выберите роль пользователя при пров
         'title' => $add_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top',
+        'data-container' => 'body',
         'id' => 'add-subcategory'
 
       ]) ?>
@@ -64,6 +30,7 @@ $role_hint = 'Выберите роль пользователя при пров
         'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top',
+        'data-container' => 'body',
         'id' => 'refresh'
       ]) ?>
       <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', [''], ['class' => 'btn btn-danger btn-sm',
@@ -71,6 +38,7 @@ $role_hint = 'Выберите роль пользователя при пров
         'title' => $del_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top',
+        'data-container' => 'body',
         'id' => 'del-node'
       ]) ?>
     </div>
@@ -103,7 +71,7 @@ $role_hint = 'Выберите роль пользователя при пров
       <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'id' => 'user-form']]); ?>
       <label> Пользователь системы:
         <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-             data-toggle="tooltip" data-placement="top" title="<?= $user_hint ?>"></sup>
+             data-toggle="tooltip" data-placement="top" data-container="body" title="<?= $user_hint ?>"></sup>
       </label>
       <?= $form->field($model, 'name', [
         'template' => '{input}{hint}'])
@@ -116,7 +84,7 @@ $role_hint = 'Выберите роль пользователя при пров
       ?>
       <label> Роль:
         <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-             data-toggle="tooltip" data-placement="top" title="<?= $role_hint ?>"></sup>
+             data-toggle="tooltip" data-placement="top" data-container="body" title="<?= $role_hint ?>"></sup>
       </label>
       <?= $form->field($model, 'name', [
         'template' => '{input}{hint}'])
@@ -306,7 +274,7 @@ $role_hint = 'Выберите роль пользователя при пров
     });
 
     $('#submit').click(function (e) {
-      var url = '/tehdoc/to/control/to-admins/save-settings';
+      var url = '/to/control/to-admins/save-settings';
       var csrf = $('meta[name=csrf-token]').attr("content");
       var node = $(".ui-draggable-handle").fancytree("getActiveNode");
       $('#result').html(waiting);

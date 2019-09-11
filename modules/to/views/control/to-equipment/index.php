@@ -1,9 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use app\assets\FancytreeAsset;
-
-FancytreeAsset::register($this);
 
 $about = "Панель управления оборудованием, добавленным в графики проведения ТО.";
 $add_hint = 'Добавить обертку';
@@ -14,33 +11,6 @@ $ref_hint = 'К оборудованию в основном перечне';
 
 ?>
 
-<style>
-  .h-title {
-    font-size: 18px;
-    color: #1e6887;
-  }
-  .fa {
-    font-size: 15px;
-  }
-  ul.fancytree-container {
-    font-size: 14px;
-  }
-  .ui-fancytree {
-    overflow: auto;
-  }
-  input {
-    color: black;
-  }
-  .fancytree-custom-icon {
-    color: #1e6887;
-    font-size: 18px;
-  }
-  .t {
-    font-size: 14px;
-  }
-
-</style>
-
 <div class="">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
@@ -49,6 +19,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         'title' => $add_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top',
+        'data-container' => 'body',
         'id' => 'add-subcategory'
       ]) ?>
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm',
@@ -56,6 +27,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top',
+        'data-container' => 'body',
         'id' => 'refresh'
       ]) ?>
       <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm',
@@ -63,6 +35,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         'title' => $del_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top',
+        'data-container' => 'body',
         'id' => 'del-node'
       ]) ?>
       <?= Html::a('<i class="fa fa-level-up" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-info btn-sm',
@@ -70,6 +43,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         'title' => $ref_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top',
+        'data-container' => 'body',
         'id' => 'tool-ref'
       ]) ?>
     </div>

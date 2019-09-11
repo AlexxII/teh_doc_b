@@ -5,17 +5,12 @@ namespace app\modules\opros\controllers;
 use Yii;
 use yii\web\Controller;
 
-class DefaultController extends Controller
+class AnaliticController extends Controller
 {
 
   public function actionIndex()
   {
     return $this->render('index');
-  }
-
-  public function actionExtended()
-  {
-    return $this->render('extended');
   }
 
 }

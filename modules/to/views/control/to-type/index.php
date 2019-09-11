@@ -1,9 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use app\assets\FancytreeAsset;
-
-FancytreeAsset::register($this);
 
 $about = "Панель управления видами технического обслуживания.";
 $add_hint = 'Добавить новый тип';
@@ -11,34 +8,6 @@ $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить';
 
 ?>
-
-<style>
-  .h-title {
-    font-size: 18px;
-    color: #1e6887;
-  }
-  .fa {
-    font-size: 15px;
-  }
-  ul.fancytree-container {
-    font-size: 14px;
-  }
-  .ui-fancytree {
-    overflow: auto;
-  }
-  input {
-    color: black;
-  }
-  .fancytree-custom-icon {
-    color: #1e6887;
-    font-size: 18px;
-  }
-  .t {
-    font-size: 14px;
-  }
-
-</style>
-
 <div class="">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
@@ -46,19 +15,22 @@ $del_hint = 'Удалить';
         'style' => ['margin-top' => '5px'],
         'title' => $add_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'data-container'=> 'body'
       ]) ?>
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
         'style' => ['margin-top' => '5px'],
         'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'data-container'=> 'body'
       ]) ?>
       <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_hint,
         'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'data-container'=> 'body'
       ]) ?>
     </div>
 
@@ -78,7 +50,7 @@ $del_hint = 'Удалить';
 
     <div class="row" style="padding: 0 15px">
       <div style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_w0" class="ui-draggable-handle"></div>
+        <div id="fancyree_to_types" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
@@ -131,7 +103,7 @@ $del_hint = 'Удалить';
 
   $(document).ready(function () {
     $('.del-node').click(function (event) {
-      var url = 'to-type/delete';
+      var url = '/to/control/to-type/delete';
       event.preventDefault();
       jc = $.confirm({
         icon: 'fa fa-question',
@@ -295,7 +267,7 @@ $del_hint = 'Удалить';
     var create_url = '/to/control/to-type/create-node';
     var update_url = '/to/control/to-type/update-node';
 
-    $("#fancyree_w0").fancytree({
+    $("#fancyree_to_types").fancytree({
       source: {
         url: main_url
       },

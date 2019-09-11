@@ -98,3 +98,6 @@
 #schedule-create-tbl .to-list {
   width: 170px
 }
+.jconfirm {
+  z-index: 9 !important;
+}

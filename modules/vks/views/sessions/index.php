@@ -68,6 +68,7 @@ BootstrapDatepickerAsset::register($this);
 
     $('[data-toggle="tooltip"]').tooltip();
 
+
     initLeftMenu('/vks/menu/left-side');
     initAppConfig('/vks/menu/app-config');
     initRightCustomData('/vks/menu/right-side-data');

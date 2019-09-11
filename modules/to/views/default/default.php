@@ -17,7 +17,7 @@ $this->title = "Графики ТО - в разработке";
 ?>
 
 <div class="tool-task">
-  <div class="" style="position: relative" >
+  <div class="" style="position: relative">
     <div class="container-fluid" style="position: relative">
       <div id="add-scheduler-wrap">
         <a id="add-scheduler" class="fab-button ex-click"
@@ -59,177 +59,230 @@ $this->title = "Графики ТО - в разработке";
 </div>
 
 <script>
-    $(document).ready(function () {
+  $(document).ready(function () {
 
-        $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
 
-        $('#push-it').removeClass('hidden');
-        $('#app-control').removeClass('hidden');
+    $('#push-it').removeClass('hidden');
+    $('#app-control').removeClass('hidden');
 
-        initLeftMenu('/to/menu/left-side');
-        initAppConfig('/to/menu/app-config');
+    initLeftMenu('/to/menu/left-side');
+    initAppConfig('/to/menu/app-config');
 
-        var monthNames = [
-            'Январь',
-            'Февраль',
-            'Март',
-            'Апрель',
-            'Май',
-            'Июнь',
-            'Июль',
-            'Август',
-            'Сентябрь',
-            'Октябрь',
-            'Ноябрь',
-            'Декабрь'
-        ];
+    controlListsInit();                                       // загрузка списков ТО
 
-        // ************************* Работа таблицы **************************************
+    // процедуры возврата из модальных окон
+    controlCallback = function () {
+      controlListsInit();
+    };
+    // процедуры возврата из второстепенного
+    returnCallback = function () {
+      return;
+    };
 
-        table = $('#to-mscheduler-table').DataTable({
-            "processing": true,
-            "responsive": true,
-            "ajax": {
-                'url': '/to/month-schedule'
-            },
-            "columns": [
-                {"data": "schedule_id"},
-                {"data": "id"},
-                {"data": "plan_date"},
-                {"data": "checkmark"},
-                {"data": "plan_date"},
-                {"data": "to_type"},
-                {"data": "admins"},
-                {"data": "auditors"},
-                {"data": ""},
-                {"data": ""}
-            ],
-            "searching": false,
-            "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                var date = aData.plan_date;
-                // var today = new Date();
-                var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-                var dDate = new Date(date.replace(pattern, '$3-$2-$1'));
-                $('td:nth-child(2)', nRow).text(monthNames[dDate.getMonth()]);
-            },
-            orderFixed: [[4, 'desc']],
-            order: [[1, 'desc']],
-            rowGroup: {
-                dataSrc: 'year'
-            },
-            "columnDefs": [
-                {
-                    "targets": -2,                    // предпоследний столбец
-                    "orderable": false,
-                    "data": null,
-                    "width": '70px',
-                    "defaultContent":
-                    "<a href='#' id='edit' class='fa fa-edit' style='padding-right: 5px' title='Обновить'></a>" +
-                    "<a href='#' id='view' class='fa fa-info ' title='Подробности' style='padding-right: 5px'></a>"
-                }, {
-                    'targets': -1,                    // последний столбец
-                    'orderable': false,
-                    'className': 'select-checkbox',
-                    'defaultContent': ''
-                }, {
-                    'targets': 0,
-                    'data': null,
-                    'visible': false
-                }, {
-                    'targets': 1,
-                    'data': null
-                }, {
-                    'targets': 2,
-                    'render': function (data) {
-                        return moment(data).format('MMMM');
-                    }
-                }, {
-                    'targets': 3,
-                    'render': function (data) {
-                        if (data.length == 1) {
-                            if (data == '1') {
-                                return '<strong>ТО проведено</strong>';
-                            } else {
-                                return '<strong>ТО не проведено</strong>';
-                            }
-                        } else {
-                            return '<strong>Проведено не полность</strong>';
-                        }
-                    }
-                }, {
-                    'targets': 4,
-                    'data': null,
-                    'visible': false
-                }
-            ],
-            select: {
-                style: 'os',
-                selector: 'td:last-child'
-            },
-            language: {
-                url: "/lib/ru.json"
+    var monthNames = [
+      'Январь',
+      'Февраль',
+      'Март',
+      'Апрель',
+      'Май',
+      'Июнь',
+      'Июль',
+      'Август',
+      'Сентябрь',
+      'Октябрь',
+      'Ноябрь',
+      'Декабрь'
+    ];
+
+    // ************************* Работа таблицы **************************************
+
+    table = $('#to-mscheduler-table').DataTable({
+      "processing": true,
+      "responsive": true,
+      "ajax": {
+        'url': '/to/month-schedule'
+      },
+      "columns": [
+        {"data": "schedule_id"},
+        {"data": "id"},
+        {"data": "plan_date"},
+        {"data": "checkmark"},
+        {"data": "plan_date"},
+        {"data": "to_type"},
+        {"data": "admins"},
+        {"data": "auditors"},
+        {"data": ""},
+        {"data": ""}
+      ],
+      "searching": false,
+      "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        var date = aData.plan_date;
+        // var today = new Date();
+        var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+        var dDate = new Date(date.replace(pattern, '$3-$2-$1'));
+        $('td:nth-child(2)', nRow).text(monthNames[dDate.getMonth()]);
+      },
+      orderFixed: [[4, 'desc']],
+      order: [[1, 'desc']],
+      rowGroup: {
+        dataSrc: 'year'
+      },
+      "columnDefs": [
+        {
+          "targets": -2,                    // предпоследний столбец
+          "orderable": false,
+          "data": null,
+          "width": '70px',
+          "defaultContent":
+            "<a href='#' id='edit' class='fa fa-edit' style='padding-right: 5px' title='Обновить'></a>" +
+            "<a href='#' id='view' class='fa fa-info ' title='Подробности' style='padding-right: 5px'></a>"
+        }, {
+          'targets': -1,                    // последний столбец
+          'orderable': false,
+          'className': 'select-checkbox',
+          'defaultContent': ''
+        }, {
+          'targets': 0,
+          'data': null,
+          'visible': false
+        }, {
+          'targets': 1,
+          'data': null
+        }, {
+          'targets': 2,
+          'render': function (data) {
+            return moment(data).format('MMMM');
+          }
+        }, {
+          'targets': 3,
+          'render': function (data) {
+            if (data.length == 1) {
+              if (data == '1') {
+                return '<strong>ТО проведено</strong>';
+              } else {
+                return '<strong>ТО не проведено</strong>';
+              }
+            } else {
+              return '<strong>Проведено не полность</strong>';
             }
-        });
-        table.on('order.dt search.dt', function () {
-            table.column(1, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
-                cell.innerHTML = i + 1;
-            });
-        }).draw();
-
-        // Работа таблицы -> событие выделения и снятия выделения
-
-        table.on('select', function (e, dt, type, indexes) {
-            if (type === 'row') {
-                $('#delete-wrap').show();
-            }
-        });
-        table.on('deselect', function (e, dt, type, indexes) {
-            if (type === 'row') {
-                if (table.rows({selected: true}).count() > 0) return;
-                $('#delete-wrap').hide();
-            }
-        });
-
-        // Работа таблицы -> перерисовка или изменение размера страницы
-
-        table.on('length.dt', function (e, settings, len) {
-            $('#delete-wrap').hide();
-        });
-
-        table.on('draw.dt', function (e, settings, len) {
-            $('#delete-wrap').hide();
-        });
-
-        $('#delete-wrap').click(function (event) {
-            event.preventDefault();
-            var csrf = $('meta[name=csrf-token]').attr("content");
-            var url = "/to/month-schedule/delete";
-            if ($(this).attr('disabled')) {
-                return;
-            }
-            jc = $.confirm({
-                icon: 'fa fa-question',
-                title: 'Вы уверены?',
-                content: 'Вы действительно хотите удалить выделенное?',
-                type: 'red',
-                closeIcon: false,
-                autoClose: 'cancel|9000',
-                buttons: {
-                    ok: {
-                        btnClass: 'btn-danger',
-                        action: function () {
-                            jc.close();
-                            deleteRestoreProcess(url, table, csrf);
-                        }
-                    },
-                    cancel: {
-                        action: function () {
-                            return;
-                        }
-                    }
-                }
-            });
-        });
-
+          }
+        }, {
+          'targets': 4,
+          'data': null,
+          'visible': false
+        }
+      ],
+      select: {
+        style: 'os',
+        selector: 'td:last-child'
+      },
+      language: {
+        url: "/lib/ru.json"
+      }
     });
+    table.on('order.dt search.dt', function () {
+      table.column(1, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+        cell.innerHTML = i + 1;
+      });
+    }).draw();
+
+    // Работа таблицы -> событие выделения и снятия выделения
+
+    table.on('select', function (e, dt, type, indexes) {
+      if (type === 'row') {
+        $('#delete-wrap').show();
+      }
+    });
+    table.on('deselect', function (e, dt, type, indexes) {
+      if (type === 'row') {
+        if (table.rows({selected: true}).count() > 0) return;
+        $('#delete-wrap').hide();
+      }
+    });
+
+    // Работа таблицы -> перерисовка или изменение размера страницы
+
+    table.on('length.dt', function (e, settings, len) {
+      $('#delete-wrap').hide();
+    });
+
+    table.on('draw.dt', function (e, settings, len) {
+      $('#delete-wrap').hide();
+    });
+
+    $('#delete-wrap').click(function (event) {
+      event.preventDefault();
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var url = "/to/month-schedule/delete";
+      if ($(this).attr('disabled')) {
+        return;
+      }
+      jc = $.confirm({
+        icon: 'fa fa-question',
+        title: 'Вы уверены?',
+        content: 'Вы действительно хотите удалить выделенное?',
+        type: 'red',
+        closeIcon: false,
+        autoClose: 'cancel|9000',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+              jc.close();
+              deleteRestoreProcess(url, table, csrf);
+            }
+          },
+          cancel: {
+            action: function () {
+              return;
+            }
+          }
+        }
+      });
+    });
+
+  });
+
+  var toTypeSelect, toAdminsSelect, toAuditorsSelect;
+  function controlListsInit() {
+    console.log(1111111111);
+    // инициализация списков для создания графика ТО
+    toTypeSelect = '<select class="form-control to-list m-select" style="max-width: 120px">' +
+      '<option value="none" selected="true" disabled="true">Выберите</option>';
+    toAdminsSelect = '<select class="form-control admin-list m-select" style="max-width: 170px">' +
+      '<option value="none" selected="true" disabled="true">Выберите</option>';
+    toAuditorsSelect = '<select class="form-control audit-list m-select" style="max-width: 170px">' +
+      '<option value="none" selected="true" disabled="true">Выберите</option>';
+    $.ajax({
+      url: '/to/settings/select-data',
+      method: 'get',
+      dataType: "JSON"
+    }).done(function (response) {
+      // types
+      var types = response.types;
+      types.forEach(function (value, index, array) {
+        toTypeSelect += '<option value="' + value.id + '">' + value.name + '</option>';
+      });
+      toTypeSelect += '</select>';
+      // admins
+      var admins = response.admins;
+      admins.forEach(function (value, index, array) {
+        toAdminsSelect += '<option value="' + value.id + '">' + value.name + '</option>';
+      });
+      toAdminsSelect += '</select>';
+      // auditors
+      var auditors = response.auditors;
+      auditors.forEach(function (value, index, array) {
+        toAuditorsSelect += '<option value="' + value.id + '">' + value.name + '</option>';
+      });
+      toAuditorsSelect += '</select>';
+    }).fail(function () {
+      console.log('Не удалось загрузить служебные списки');
+      toTypeSelect += '</select>';
+      toAdminsSelect += '</select>';
+      toAuditorsSelect += '</select>';
+    });
+  }
+
 </script>
