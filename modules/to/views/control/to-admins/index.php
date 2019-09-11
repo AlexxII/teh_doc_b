@@ -16,30 +16,30 @@ $role_hint = 'Выберите роль пользователя при пров
 <div class="">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
-      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm',
+      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm add-subcategory',
         'style' => ['margin-top' => '5px'],
         'title' => $add_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top',
         'data-container' => 'body',
-        'id' => 'add-subcategory'
-
+        'data-tree' => 'fancytree_to_admins'
       ]) ?>
-      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm',
+      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm refresh',
         'style' => ['margin-top' => '5px'],
         'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top',
         'data-container' => 'body',
-        'id' => 'refresh'
+        'data-tree' => 'fancytree_to_admins'
       ]) ?>
-      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', [''], ['class' => 'btn btn-danger btn-sm',
+      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', [''], ['class' => 'btn btn-danger btn-sm del-node',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_hint,
         'data-toggle' => 'tooltip',
         'data-placement' => 'top',
         'data-container' => 'body',
-        'id' => 'del-node'
+        'data-tree' => 'fancytree_to_admins',
+        'data-delete' => '/to/control/to-admins/delete'
       ]) ?>
     </div>
 
@@ -51,7 +51,7 @@ $role_hint = 'Выберите роль пользователя при пров
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
       </div>
       <div style="padding-top: 8px; right: 10px; position: absolute">
-        <a href="" id="btnResetSearch">
+        <a href="" class="btnResetSearch" data-tree="fancytree_to_admins">
           <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
         </a>
       </div>
@@ -59,7 +59,7 @@ $role_hint = 'Выберите роль пользователя при пров
 
     <div class="row" style="padding: 0 15px">
       <div style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_w0" class="ui-draggable-handle"></div>
+        <div id="fancytree_to_admins" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
@@ -134,137 +134,8 @@ $role_hint = 'Выберите роль пользователя при пров
     return div;
   }
 
-  $(document).ready(function () {
-    $('#add-subcategory').click(function (event) {
-      event.preventDefault();
-      var tree = $(".ui-draggable-handle").fancytree('getTree');
-      var root = tree.findFirst('Сотрудники, участвующие в ТО');
-      root.editCreateNode("child", " ");
-    });
-
-
-    $('#refresh').click(function (event) {
-      event.preventDefault();
-      var tree = $(".ui-draggable-handle").fancytree("getTree");
-      tree.reload();
-      $("#del-node").hide();
-      $('.c-select').prop('disabled', true);
-      $('.c-select').val('none');
-      $('#submit').prop('disabled', true);
-      $('#result').html('');
-      $('#result-info').html('');
-    })
-  });
 
   $(document).ready(function () {
-    $('#del-node').click(function (event) {
-      var url = 'delete';
-      event.preventDefault();
-      jc = $.confirm({
-        icon: 'fa fa-question',
-        title: 'Вы уверены?',
-        content: 'Вы действительно хотите удалить выделенное?',
-        type: 'red',
-        closeIcon: false,
-        autoClose: 'cancel|9000',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-              var node = $(".ui-draggable-handle").fancytree("getActiveNode");
-              jc.close();
-              deleteProcess(url, node);
-            }
-          },
-          cancel: {
-            action: function () {
-              return;
-            }
-          }
-        }
-      });
-    });
-
-    function deleteProcess(url, node) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Ваш запрос выполняется!',
-        buttons: false,
-        closeIcon: false,
-        confirmButtonClass: 'hide'
-      });
-      $.ajax({
-        url: url,
-        type: "post",
-        data: {id: node.data.id, _csrf: csrf}
-      }).done(function (response) {
-        if (response != false) {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-thumbs-up',
-            title: 'Успех!',
-            content: 'Ваш запрос выполнен.',
-            type: 'green',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-success',
-                action: function () {
-                  node.remove();
-                  $('#del-node').hide();
-                  $('.c-select').prop('disabled', true);
-                  $('.c-select').val('none');
-                  $('#submit').prop('disabled', true);
-                }
-              }
-            }
-          });
-        } else {
-          jc.close();
-          jc = $.confirm({
-            icon: 'fa fa-exclamation-triangle',
-            title: 'Неудача!',
-            content: 'Запрос не выполнен. Что-то пошло не так.',
-            type: 'red',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|8000',
-            confirmButtonClass: 'hide',
-            buttons: {
-              ok: {
-                btnClass: 'btn-danger',
-                action: function () {
-                }
-              }
-            }
-          });
-        }
-      }).fail(function () {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-exclamation-triangle',
-          title: 'Неудача!',
-          content: 'Запрос не выполнен. Что-то пошло не так.',
-          type: 'red',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|4000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-danger',
-              action: function () {
-              }
-            }
-          }
-        });
-      });
-    }
 
     $('#submit').prop("disabled", true);
     $('.c-select').prop('disabled', true);
@@ -300,55 +171,7 @@ $role_hint = 'Выберите роль пользователя при пров
 
   });
 
-
-  $("input[name=search]").keyup(function (e) {
-    var n,
-      tree = $.ui.fancytree.getTree(),
-      args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-      opts = {},
-      filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-      match = $(this).val();
-
-    $.each(args, function (i, o) {
-      opts[o] = $("#" + o).is(":checked");
-    });
-    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
-
-    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-      $("button#btnResetSearch").click();
-      return;
-    }
-    if ($("#regex").is(":checked")) {
-      // Pass function to perform match
-      n = filterFunc.call(tree, function (node) {
-        return new RegExp(match, "i").test(node.title);
-      }, opts);
-    } else {
-      // Pass a string to perform case insensitive matching
-      n = filterFunc.call(tree, match, opts);
-    }
-    $("#btnResetSearch").attr("disabled", false);
-  }).focus();
-
-
-  $("#btnResetSearch").click(function (e) {
-    e.preventDefault();
-    $("input[name=search]").val("");
-    $("span#matches").text("");
-    var tree = $(".ui-draggable-handle").fancytree("getTree");
-    tree.clearFilter();
-  }).attr("disabled", true);
-
-  $(document).ready(function () {
-    $("input[name=search]").keyup(function (e) {
-      if ($(this).val() == '') {
-        var tree = $(".ui-draggable-handle").fancytree("getTree");
-        tree.clearFilter();
-      }
-    })
-  });
-
-  var parent;
+    var parent;
   // отображение и логика работа дерева
   jQuery(function ($) {
     var main_url = '/to/control/to-admins/all-admins';
@@ -356,7 +179,7 @@ $role_hint = 'Выберите роль пользователя при пров
     var create_url = '/to/control/to-admins/create-node';
     var update_url = '/to/control/to-admins/update-node';
 
-    $("#fancyree_w0").fancytree({
+    $("#fancytree_to_admins").fancytree({
       source: {
         url: main_url
       },

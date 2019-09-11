@@ -246,13 +246,12 @@ $this->title = "Графики ТО - в разработке";
 
   var toTypeSelect, toAdminsSelect, toAuditorsSelect;
   function controlListsInit() {
-    console.log(1111111111);
     // инициализация списков для создания графика ТО
-    toTypeSelect = '<select class="form-control to-list m-select" style="max-width: 120px">' +
+    toTypeSelect = '<select class="form-control to-list m-select" style="width: 120px">' +
       '<option value="none" selected="true" disabled="true">Выберите</option>';
-    toAdminsSelect = '<select class="form-control admin-list m-select" style="max-width: 170px">' +
+    toAdminsSelect = '<select class="form-control admin-list m-select" style="width: 100% !important;">' +
       '<option value="none" selected="true" disabled="true">Выберите</option>';
-    toAuditorsSelect = '<select class="form-control audit-list m-select" style="max-width: 170px">' +
+    toAuditorsSelect = '<select class="form-control audit-list m-select" style="width: 100% !important;">' +
       '<option value="none" selected="true" disabled="true">Выберите</option>';
     $.ajax({
       url: '/to/settings/select-data',
