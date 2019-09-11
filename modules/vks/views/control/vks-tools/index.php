@@ -18,28 +18,34 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'title' => $add_hint,
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'data-tree' => 'fancyree_vks_employee'
       ]) ?>
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
         'style' => ['margin-top' => '5px'],
         'title' => $refresh_hint,
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'data-tree' => 'fancyree_vks_employee'
       ]) ?>
       <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_hint,
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'data-tree' => 'fancyree_vks_employee',
+        'data-delete' => '/vks/control/vks-employee/delete'
       ]) ?>
       <?= Html::a('<i class="fa fa-object-group" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-multi-nodes',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $del_multi_nodes,
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
-        'data-placement' => 'top'
+        'data-placement' => 'top',
+        'data-tree' => 'fancyree_vks_employee',
+        'data-delete' => '/vks/control/vks-employee/delete-root'
       ]) ?>
     </div>
 
