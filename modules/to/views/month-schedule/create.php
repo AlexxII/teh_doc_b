@@ -170,7 +170,10 @@ TableBaseAsset::register($this);
                 if (rows[key].attributes.class != undefined && rows[key].attributes.class.value != 'group group-start') {
                     if (rows[key].cells[3].firstChild.value == 'none') {
                         console.log('Есть пустые поля.');
-                        $(rows[key].cells[3].firstChild).focus();
+                        $('html, body').animate({
+                            scrollTop: $(rows[key].cells[3].firstChild).offset().top
+                        }, 1400);
+//                        $(rows[key].cells[3].firstChild).focus();
                         return ;
                     }
                     if (rows[key].cells[4].firstChild.value == '') {
