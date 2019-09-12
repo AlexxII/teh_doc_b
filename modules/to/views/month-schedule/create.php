@@ -163,20 +163,37 @@ TableBaseAsset::register($this);
 
 
     $(document).on('click', '#create-new-schedule', function (e) {
-        var $table = $('#schedule-create-tbl').dataTable();
-//        console.log($table);
-        var table = $('#schedule-create-tbl').DataTable();
-//        console.log(table);
-//        table.cells().eq(3).each(function () {
-//            console.log(this.data());
-//        });
-        table.columns().eq(0).each(function (index) {
-            console.log(this.data());
-        });
-
-//        table.rows().every(function () {
-//            console.log(this.data());
-//        })
+        var $table = $('#schedule-create-tbl');
+        var rows = $table[0].rows;
+        for (var key in rows) {
+            if (rows[key].localName == 'tr') {
+                if (rows[key].attributes.class != undefined && rows[key].attributes.class.value != 'group group-start') {
+                    if (rows[key].cells[3].firstChild.value == 'none') {
+                        console.log('Есть пустые поля.');
+                        $(rows[key].cells[3].firstChild).focus();
+                        return ;
+                    }
+                    if (rows[key].cells[4].firstChild.value == '') {
+                        var state = rows[key].cells[4].firstChild.disabled;
+                        rows[key].cells[4].firstChild.disabled = false;
+                        $(rows[key].cells[4].firstChild).focus();
+                        rows[key].cells[4].firstChild.disabled = state;
+                        console.log('Есть пустые поля.');
+                        return ;
+                    }
+                    if (rows[key].cells[5].firstChild.value == 'none') {
+                        console.log('Есть пустые поля.');
+                        $(rows[key].cells[5].firstChild).focus();
+                        return ;
+                    }
+                    if (rows[key].cells[6].firstChild.value == 'none') {
+                        console.log('Есть пустые поля.');
+                        $(rows[key].cells[6].firstChild).focus();
+                        return ;
+                    }
+                }
+            }
+        }
     });
 
     $(document).on('change', '#to-month', function (e) {
