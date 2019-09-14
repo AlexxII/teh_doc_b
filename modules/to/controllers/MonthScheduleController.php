@@ -82,6 +82,25 @@ class MonthScheduleController extends Controller
     ];
   }
 
+  public function actionSaveSchedule()
+  {
+    if ($_POST) {
+      $data = $_POST;
+      foreach ($data['data'] as $key => $schedule) {
+//    = new ToSchedule(['scenario' => ToSchedule::SCENARIO_CREATE]);
+
+      }
+    }
+    return [
+      'data' => [
+        'success' => false,
+        'data' => 'No data in $_POST',
+        'message' => 'FAILED to save schedule',
+      ],
+      'code' => 0,
+    ];
+  }
+
 
   public function actionEquipment()
   {

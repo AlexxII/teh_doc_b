@@ -209,14 +209,30 @@ TableBaseAsset::register($this);
           }
           tempArray['auditor'] = rows[key].cells[6].firstChild.value;
           scheduleData[id] = tempArray;
+          scheduleData['to-month'] = scheduleMonth;
+          scheduleData['to-year'] = scheduleYear;
         }
       }
     }
-    console.log(scheduleData);
-//        console.log($('#schedule-create').serialize());
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    var url = '/to/month-schedule/save-schedule';
+    $.ajax({
+      url: url,
+      type: "post",
+      format: 'JSON',
+      data: {data: scheduleData, _csrf: csrf}
+    }).done(function (response) {
+      console.log('111111');
+    }).fail(function (error) {
+      console.log('Error - saving schedule');
+    });
+
+
+
     return;
   });
 
+  var scheduleYear, scheduleMonth, scheduleDate;
   $(document).on('change', '#to-month', function (e) {
     var csrf = $('meta[name=csrf-token]').attr("content");
     if (e.target.value != '') {
@@ -230,14 +246,14 @@ TableBaseAsset::register($this);
         closeIcon: false,
         confirmButtonClass: 'hide'
       });
-      var toMonth = $('#to-month').datepicker('getDate');
-      var year = toMonth.getFullYear();
-      var month = toMonth.getMonth();
+      scheduleDate = $('#to-month').datepicker('getDate');
+      scheduleYear = scheduleDate.getFullYear();
+      scheduleMonth = scheduleDate.getMonth();
       var url = '/to/month-schedule/get-types';
       $.ajax({
         url: url,
         type: "post",
-        data: {year: year, month: month, _csrf: csrf}
+        data: {year: scheduleYear, month: scheduleMonth, _csrf: csrf}
       }).done(function (response) {
         if (response != false) {
           var result = JSON.parse(response);
