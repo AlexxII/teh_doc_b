@@ -2,15 +2,22 @@
 
 use yii\helpers\Html;
 
-$about = "Панель управления типами ВКС. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
+$about = "Регионы России";
 $add_hint = 'Добавить новый узел';
 $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить БЕЗ вложений';
 $del_multi_nodes = 'Удвлить С вложениями';
 
+$rNumberTitle = 'Номер субъекта согласно конституции';
+$rTempTitle = 'Среднегодоваая температура';
 ?>
+<style>
+  .region-info {
 
-<div class="type-control">
+  }
+</style>
+
+<div class="employee-control">
   <div class="fancytree-control-panel">
     <div class="container-fluid" style="margin-bottom: 10px">
       <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
@@ -19,8 +26,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancyree_vks_type'
-
+        'data-tree' => 'fancytree_maps_regions'
       ]) ?>
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
         'style' => ['margin-top' => '5px'],
@@ -28,8 +34,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancyree_vks_type'
-
+        'data-tree' => 'fancytree_maps_regions'
       ]) ?>
       <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
@@ -37,9 +42,8 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancyree_vks_type',
-        'data-delete' => '/vks/control/vks-type/delete'
-
+        'data-tree' => 'fancytree_maps_regions',
+        'data-delete' => '/maps/control/regions/delete'
       ]) ?>
       <?= Html::a('<i class="fa fa-object-group" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-multi-nodes',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
@@ -47,20 +51,20 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancyree_vks_type',
-        'data-delete' => '/vks/control/vks-type/delete-root'
+        'data-tree' => 'fancytree_maps_regions',
+        'data-delete' => '/maps/control/regions/delete-root'
       ]) ?>
     </div>
 
   </div>
 
-  <div class="col-lg-12 col-md-12" style="padding-bottom: 10px">
+  <div class="col-lg-7 col-md-7" style="padding-bottom: 10px">
     <div style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
       </div>
       <div style="padding-top: 8px; right: 10px; position: absolute">
-        <a href="" class="btnResetSearch" data-tree="fancyree_vks_type">
+        <a href="" class="btnResetSearch" data-tree="fancytree_maps_regions">
           <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
         </a>
       </div>
@@ -68,39 +72,90 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
     <div class="row" style="padding: 0 15px">
       <div style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_vks_type" class="ui-draggable-handle"></div>
+        <div id="fancytree_maps_regions" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
+  <div class="col-lg-5 col-md-5 about">
+    <div class="row form-group">
+      <div class="col-md-12 col-lg-12">
+        <label for="city">Административный центр:</label>
+        <input class="form-control region-info" disabled id="city" data-input="region_center">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-6 col-lg-6">
+        <label for="area">Площадь:</label>
+        <div class="input-group">
+          <input type="text" class="form-control region-info" disabled id="area" data-input="region_area">
+          <span class="input-group-addon">кв.км</span>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-6">
+        <label for="area-place">Место по стране:</label>
+        <input class="form-control region-info" disabled id="area-place" data-input="region_area_place">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-6 col-lg-6">
+        <label for="population">Население:</label>
+        <div class="input-group">
+          <input type="text" class="form-control region-info" disabled id="population" data-input="region_population">
+          <span class="input-group-addon">чел.</span>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-6">
+        <label for="population-place">Место по стране:</label>
+        <input class="form-control region-info" disabled id="population-place" data-input="region_population_place">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-4 col-lg-4">
+        <label for="number">Номер:</label>
+        <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+             data-toggle="tooltip" data-container="body" data-placement="top" title="<?= $rNumberTitle ?>"></sup>
+        <input class="form-control region-info" type="text" disabled id="number" data-input="region_number">
+      </div>
+      <div class="col-md-8 col-lg-8">
+        <label for="temp">Температура:</label>
+        <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+             data-toggle="tooltip" data-container="body" data-placement="top" title="<?= $rTempTitle ?>"></sup>
+        <input class="form-control region-info" disabled id="temp" data-input="region_temp">
+      </div>
+    </div>
+  </div>
+
 
 </div>
 
 
 <script>
-  $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
 
-  });
+  $('[data-toggle="tooltip"]').tooltip();
 
   // отображение и логика работа дерева
   jQuery(function ($) {
-    var main_url = '/vks/control/vks-type/types';
-    var move_url = '/vks/control/vks-type/move';
-    var create_url = '/vks/control/vks-type/vks-type-create';
-    var update_url = '/vks/control/vks-type/update';
+    var main_url = '/maps/control/regions/regions';
+    var move_url = "/maps/control/regions/move";
+    var create_url = '/maps/control/regions/regions-create';
+    var update_url = '/maps/control/regions/update';
+    var detail_url = '/maps/control/regions/details';
 
-    $("#fancyree_vks_type").fancytree({
+    $("#fancytree_maps_regions").fancytree({
       source: {
-        url: main_url,
+        url: main_url
       },
       extensions: ['dnd', 'edit', 'filter'],
       quicksearch: true,
-      minExpandLevel: 2,
+      minExpandLevel: 1,
       dnd: {
         preventVoidMoves: true,
         preventRecursiveMoves: true,
         autoCollapse: true,
         dragStart: function (node, data) {
+          if (data.node.data.lvl == 0) {
+            return false;
+          }
           return true;
         },
         dragEnter: function (node, data) {
@@ -218,7 +273,6 @@ $del_multi_nodes = 'Удвлить С вложениями';
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               node.setTitle(data.orgTitle);
             }).always(function () {
-              // data.input.removeClass("pending")
             });
           }
           return true;
@@ -230,31 +284,43 @@ $del_multi_nodes = 'Удвлить С вложениями';
           }
         }
       },
+
       activate: function (node, data) {
         $('.about-info').html('');
         var node = data.node;
         var lvl = node.data.lvl;
-        if (node.key == -999) {
-          $(".add-subcategory").hide();
-          return;
-        } else {
-          $(".add-subcategory").show();
-        }
-        if (lvl > 1) {                            // ограничение на вложенность
+        var id = node.data.id;
+        if (lvl > 1) {
           $(".add-subcategory").hide();
         }
         if (lvl == 0) {
-          $(".del-root").show();
           $(".del-node").hide();
           $(".del-multi-nodes").hide();
+          $('.region-info').val('');
+          $('.about label').css('color', '#000');
+          $('.region-info').prop("disabled", true);
         } else {
           if (node.hasChildren()) {
             $(".del-multi-nodes").show();
           } else {
             $(".del-multi-nodes").hide();
           }
-          $(".del-root").hide();
+          $('.about label').css('color', '#000');
+          $('.region-info').val('');
           $(".del-node").show();
+          var url = detail_url;
+          $('.region-info').prop("disabled", false);
+          $.get(url, {
+            id: id
+          }, function (data) {
+            if (data) {
+              for (key in data) {
+                if (data[key]) {
+                  $('#' + key).val(data[key]);
+                }
+              }
+            }
+          })
         }
       },
       renderNode: function (node, data) {
@@ -264,6 +330,32 @@ $del_multi_nodes = 'Удвлить С вложениями';
         }
       }
     });
+
+    $('.region-info').on('change', function () {
+      var url = '/maps/control/regions/save-details';
+      var csrf = $('meta[name=csrf-token]').attr("content");
+      var node = $('#fancytree_maps_regions').fancytree("getActiveNode");
+      var val = $(this).val();
+      var input = $(this).data('input');
+      var id = $(this).attr('id');
+      var label = $('label[for="' + id + '"]');
+      $.ajax({
+        url: url,
+        method: 'post',
+        data: {
+          _csrf: csrf,
+          id: node.data.id,
+          input: input,
+          val: val
+        }
+      }).done(function (response) {
+        label.css('color', 'green');
+      }).fail(function (response) {
+        console.log(response);
+        label.css('color', 'red');
+      });
+    });
+
   })
 
 </script>

@@ -84,12 +84,39 @@ class MonthScheduleController extends Controller
 
   public function actionSaveSchedule()
   {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if ($_POST) {
       $data = $_POST;
+      $schId = rand();
+      $result = false;
       foreach ($data['data'] as $key => $schedule) {
-//    = new ToSchedule(['scenario' => ToSchedule::SCENARIO_CREATE]);
-
+        $model = new ToSchedule(['scenario' => ToSchedule::SCENARIO_CREATE]);
+        $model->eq_id = $key;
+        $model->schedule_id = $schId;
+        $model->to_type = $schedule['type'];
+        $model->plan_date = $schedule['date'];
+        $model->admin_id = $schedule['admin'];
+        $model->auditor_id = $schedule['auditor'];
+        $result = $model->save();
       }
+      if ($result) {
+        return [
+          'data' => [
+            'success' => true,
+            'data' => 'Success',
+            'message' => 'Good work',
+          ],
+          'code' => 1,
+        ];
+      }
+      return [
+        'data' => [
+          'success' => false,
+          'data' => $model->errors,
+          'message' => 'FAILED to save schedule',
+        ],
+        'code' => 0,
+      ];
     }
     return [
       'data' => [

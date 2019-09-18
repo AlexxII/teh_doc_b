@@ -78,12 +78,15 @@
     $('[data-toggle="tooltip"]').tooltip();
 
     $('#go-back').click(function (e) {
-      $('#ex-wrap').detach();
-      var url = $(this).data('backUrl');
-      window.history.pushState("object or string", "Title", url);
-      returnCallback();
+      goBack();
     });
 
   });
+  function goBack() {
+    $('#ex-wrap').detach();
+    var url = $(this).data('backUrl');
+    window.history.pushState("object or string", "Title", url);
+    returnCallback();
+  }
 </script>
 

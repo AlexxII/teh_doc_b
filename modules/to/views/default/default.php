@@ -77,7 +77,7 @@ $this->title = "Графики ТО - в разработке";
     };
     // процедуры возврата из второстепенного
     returnCallback = function () {
-      return;
+      archiveTable.ajax.reload();
     };
 
     var monthNames = [
@@ -97,7 +97,7 @@ $this->title = "Графики ТО - в разработке";
 
     // ************************* Работа таблицы **************************************
 
-    table = $('#to-mscheduler-table').DataTable({
+    archiveTable = $('#to-mscheduler-table').DataTable({
       "processing": true,
       "responsive": true,
       "ajax": {
@@ -181,33 +181,33 @@ $this->title = "Графики ТО - в разработке";
         url: "/lib/ru.json"
       }
     });
-    table.on('order.dt search.dt', function () {
-      table.column(1, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+    archiveTable.on('order.dt search.dt', function () {
+      archiveTable.column(1, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
         cell.innerHTML = i + 1;
       });
     }).draw();
 
     // Работа таблицы -> событие выделения и снятия выделения
 
-    table.on('select', function (e, dt, type, indexes) {
+    archiveTable.on('select', function (e, dt, type, indexes) {
       if (type === 'row') {
         $('#delete-wrap').show();
       }
     });
-    table.on('deselect', function (e, dt, type, indexes) {
+    archiveTable.on('deselect', function (e, dt, type, indexes) {
       if (type === 'row') {
-        if (table.rows({selected: true}).count() > 0) return;
+        if (archiveTable.rows({selected: true}).count() > 0) return;
         $('#delete-wrap').hide();
       }
     });
 
     // Работа таблицы -> перерисовка или изменение размера страницы
 
-    table.on('length.dt', function (e, settings, len) {
+    archiveTable.on('length.dt', function (e, settings, len) {
       $('#delete-wrap').hide();
     });
 
-    table.on('draw.dt', function (e, settings, len) {
+    archiveTable.on('draw.dt', function (e, settings, len) {
       $('#delete-wrap').hide();
     });
 
@@ -230,7 +230,7 @@ $this->title = "Графики ТО - в разработке";
             btnClass: 'btn-danger',
             action: function () {
               jc.close();
-              deleteRestoreProcess(url, table, csrf);
+              deleteRestoreProcess(url, archiveTable, csrf);
             }
           },
           cancel: {
@@ -247,11 +247,11 @@ $this->title = "Графики ТО - в разработке";
   var toTypeSelect, toAdminsSelect, toAuditorsSelect;
   function controlListsInit() {
     // инициализация списков для создания графика ТО
-    toTypeSelect = '<select class="form-control to-list m-select" name="to-type" style="width: 120px">' +
+    toTypeSelect = '<select class="form-control to-list m-select" style="width: 120px">' +
       '<option value="none" selected="true" disabled="true">Выберите</option>';
-    toAdminsSelect = '<select class="form-control admin-list m-select" name="admin" style="width: 100% !important;">' +
+    toAdminsSelect = '<select class="form-control admin-list m-select" style="width: 100% !important;">' +
       '<option value="none" selected="true" disabled="true">Выберите</option>';
-    toAuditorsSelect = '<select class="form-control audit-list m-select" name="auditor" style="width: 100% !important;">' +
+    toAuditorsSelect = '<select class="form-control audit-list m-select" style="width: 100% !important;">' +
       '<option value="none" selected="true" disabled="true">Выберите</option>';
     $.ajax({
       url: '/to/settings/select-data',

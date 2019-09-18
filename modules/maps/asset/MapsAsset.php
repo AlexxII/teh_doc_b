@@ -13,6 +13,7 @@ class MapsAsset extends AssetBundle
   ];
 
   public $js = [
+    'js/maps.js'
   ];
 
   public $depends = [

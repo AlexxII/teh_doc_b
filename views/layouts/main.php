@@ -128,6 +128,12 @@ $this->beginPage() ?>
                 <p class="list-group-item-text">Техническое обслуживание</p>
               </a>
             </div>
+            <div class="list-group">
+              <a href="/maps" class="list-group-item">
+                <h4 class="list-group-item-heading">Карты</h4>
+                <p class="list-group-item-text">Карта России</p>
+              </a>
+            </div>
           </ul>
         </li>
         <li id="accounts" class="dropdown">

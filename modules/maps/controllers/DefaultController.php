@@ -10,6 +10,7 @@ class DefaultController extends Controller
 
   public function actionIndex()
   {
+    \Yii::$app->view->title = 'Карты';
     return $this->render('index');
   }
 

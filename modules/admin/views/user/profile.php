@@ -4,6 +4,8 @@
 
 use yii\helpers\Html;
 
+Yii::$app->cache->flush();
+
 ?>
 
 <div class="admin-category-pannel row">
