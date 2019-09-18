@@ -117,6 +117,8 @@ $(document).on('click', '.add-subcategory', function (e) {
   }
 });
 
+//Fancytree control
+
 $(document).on('click', '.refresh', function (e) {
   e.preventDefault();
   var id = $(e.currentTarget).data('tree');
@@ -307,4 +309,53 @@ function deleteProcess(url, node) {
     });
   });
 }
+
+// fancytree - subscribes
+$(document).on('keyup mouseclick', '#surnames-control', function (e) {
+  $(".save-btn").prop("disabled", this.value.length == "" ? true : false);
+});
+
+function saveClick(e) {
+  e.preventDefault();
+  var csrf = $('meta[name=csrf-token]').attr("content");
+  var nodeId = window.nodeId;
+  var surnames = $("textarea").val();
+  $.ajax({
+    url: "/vks/control/vks-subscribes/surnames-save",
+    type: "post",
+    data: {Data: surnames, _csrf: csrf, id: nodeId},
+    success: function (result) {
+      if (result) {
+        $('.about-info').hide().html(goodAlert('Записи добавлены в БД.')).fadeIn('slow');
+      } else {
+        $('.about-info').hide().html(badAlert('Записи не сохранены в БД. Попробуйте перезагрузить страницу и попробовать' +
+          'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+      }
+    },
+    error: function () {
+      $('.about-info').hide().html(badAlert('Записи не сохранены в БД. Попробуйте перезагрузить страницу и попробовать' +
+        'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+    }
+  });
+}
+
+function goodAlert(text) {
+  var div = '' +
+    '<div id="w3-success-0" class="alert-success alert fade in">' +
+    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+    text +
+    '</div>';
+  return div;
+}
+
+function badAlert(text) {
+  var div = '' +
+    '<div id="w3-success-0" class="alert-danger alert fade in">' +
+    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+    text +
+    '</div>';
+  return div;
+}
+
+
 

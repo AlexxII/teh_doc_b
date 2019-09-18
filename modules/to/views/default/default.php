@@ -75,7 +75,7 @@ $this->title = "Графики ТО - в разработке";
     controlCallback = function () {
       controlListsInit();
     };
-    // процедуры возврата из второстепенного
+    // процедуры возврата из второстепенного контента
     returnCallback = function () {
       archiveTable.ajax.reload();
     };
@@ -96,6 +96,7 @@ $this->title = "Графики ТО - в разработке";
     ];
 
     // ************************* Работа таблицы **************************************
+    var toTypeSelect, toAdminsSelect, toAuditorsSelect;
 
     archiveTable = $('#to-mscheduler-table').DataTable({
       "processing": true,
@@ -187,6 +188,7 @@ $this->title = "Графики ТО - в разработке";
       });
     }).draw();
 
+
     // Работа таблицы -> событие выделения и снятия выделения
 
     archiveTable.on('select', function (e, dt, type, indexes) {
@@ -244,44 +246,5 @@ $this->title = "Графики ТО - в разработке";
 
   });
 
-  var toTypeSelect, toAdminsSelect, toAuditorsSelect;
-  function controlListsInit() {
-    // инициализация списков для создания графика ТО
-    toTypeSelect = '<select class="form-control to-list m-select" style="width: 120px">' +
-      '<option value="none" selected="true" disabled="true">Выберите</option>';
-    toAdminsSelect = '<select class="form-control admin-list m-select" style="width: 100% !important;">' +
-      '<option value="none" selected="true" disabled="true">Выберите</option>';
-    toAuditorsSelect = '<select class="form-control audit-list m-select" style="width: 100% !important;">' +
-      '<option value="none" selected="true" disabled="true">Выберите</option>';
-    $.ajax({
-      url: '/to/settings/select-data',
-      method: 'get',
-      dataType: "JSON"
-    }).done(function (response) {
-      // types
-      var types = response.types;
-      types.forEach(function (value, index, array) {
-        toTypeSelect += '<option value="' + value.id + '">' + value.name + '</option>';
-      });
-      toTypeSelect += '</select>';
-      // admins
-      var admins = response.admins;
-      admins.forEach(function (value, index, array) {
-        toAdminsSelect += '<option value="' + value.id + '">' + value.name + '</option>';
-      });
-      toAdminsSelect += '</select>';
-      // auditors
-      var auditors = response.auditors;
-      auditors.forEach(function (value, index, array) {
-        toAuditorsSelect += '<option value="' + value.id + '">' + value.name + '</option>';
-      });
-      toAuditorsSelect += '</select>';
-    }).fail(function () {
-      console.log('Не удалось загрузить служебные списки');
-      toTypeSelect += '</select>';
-      toAdminsSelect += '</select>';
-      toAuditorsSelect += '</select>';
-    });
-  }
 
 </script>

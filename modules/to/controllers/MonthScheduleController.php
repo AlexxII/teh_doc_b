@@ -65,6 +65,22 @@ class MonthScheduleController extends Controller
     throw new NotFoundHttpException('The requested page does not exist.');
   }
 
+  public function actionEquipment()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $equipmentTable = self::TOEQUIPMENT_TABLE;
+    $sql = "SELECT {$equipmentTable}.id, {$equipmentTable}.name, {$equipmentTable}.eq_serial,
+              parent.name as parent
+            from {$equipmentTable}
+              LEFT JOIN {$equipmentTable} as parent on {$equipmentTable}.parent_id = parent.id
+              WHERE {$equipmentTable}.valid = 1 AND {$equipmentTable}.eq_id != 0
+              ORDER BY {$equipmentTable}.lft ASC";
+    $data["data"] = ToEquipment::findBySql($sql)->asArray()->all();
+    foreach ($data["data"] as $key => $d) {
+      $d["id"] = "<select></select>";
+    }
+    return $data;
+  }
 
   public function actionCreate()
   {
@@ -81,6 +97,7 @@ class MonthScheduleController extends Controller
       'code' => 1,
     ];
   }
+
 
   public function actionSaveSchedule()
   {
@@ -128,165 +145,24 @@ class MonthScheduleController extends Controller
     ];
   }
 
-
-  public function actionEquipment()
+  public function actionGetTypes()
   {
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    $equipmentTable = self::TOEQUIPMENT_TABLE;
-    $sql = "SELECT {$equipmentTable}.id, {$equipmentTable}.name, {$equipmentTable}.eq_serial,
-              parent.name as parent
-            from {$equipmentTable}
-              LEFT JOIN {$equipmentTable} as parent on {$equipmentTable}.parent_id = parent.id
-              WHERE {$equipmentTable}.valid = 1 AND {$equipmentTable}.eq_id != 0
-              ORDER BY {$equipmentTable}.lft ASC";
-    $data["data"] = ToEquipment::findBySql($sql)->asArray()->all();
-    foreach ($data["data"] as $key => $d) {
-      $d["id"] = "<select></select>";
+    sleep(1);
+    if ($_POST) {
+      $year = $_POST['year'];
+      $monthNumber = $_POST['month'];
+      $month = 'm' . $monthNumber;
+      $table = self::TO_YEAR_TABLE;
+      $sql = "SELECT eq_id, {$month} as month FROM {$table} WHERE schedule_year = :year";
+      $req = Yii::$app->db->createCommand($sql)
+        ->bindValue(':year', $year)
+        ->queryAll();
+      return json_encode($req);
     }
-    return $data;
+    return false;
   }
 
-  /*
-  public function actionTest()
-  {
-    sleep(2);
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    $toEq['data'] = ToEquipment::find()
-      ->select(['equipment.id', 'equipment.name', 'equipment.eq_serial', 'parent.name as parent'])
-      ->joinWith('parents')
-      ->where(['equipment.valid' => 1])
-      ->andWhere(['!=', 'equipment.eq_id', '0'])
-      ->orderby(['equipment.lft' => SORT_ASC])
-      ->from(ToEquipment::tableName().' equipment')
-      ->with('parents')
-      ->asArray()
-      ->all();
-
-    return $toEq;
-  }
-  */
-
-
-  /*
-    public function actionIndex()
-    {
-      $month = date("Y-m-") . '01';
-      $idReq = ToSchedule::find()->select('schedule_id')->where(['to_month' => $month])->distinct()->asArray()->all();
-      if (!$idReq) {
-        $month = ToSchedule::find()->max('to_month');
-        $idReq = ToSchedule::find()->select('schedule_id')->where(['to_month' => $month])->distinct()->asArray()->all();
-        Yii::$app->session->setFlash('info', "На текущий месяц график не найден. Выбран график ТО из БД на последний месяц.");
-        if (!$idReq) {
-          return $this->render();
-        }
-        $id = $idReq[0]['schedule_id'];
-        $model = ToSchedule::find()
-          ->with(['admin', 'auditor', 'toType', 'toEq'])
-          ->where(['schedule_id' => $id]);
-        $month = $model->max('plan_date');
-        setlocale(LC_ALL, 'ru_RU');
-        $month = strftime("%B %Y", strtotime($month));
-        return $this->render('index', [
-          'tos' => $model->all(),
-          'month' => $month,
-          'id' => $id
-        ]);
-      }
-    }*/
-
-
-  public function actionArchive()
-  {
-    $this->layout = '@app/views/layouts/main_ex.php';
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'Архив';
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
-
-    $schTable = self::TO_TABLE;
-    $usersTable = self::ADMINS_TABLE;
-    $toTable = self::TOTYPE_TABLE;
-    $sql = "SELECT {$schTable}.id, {$schTable}.plan_date, {$schTable}.schedule_id,
-              GROUP_CONCAT(DISTINCT {$schTable}.checkmark ORDER BY {$schTable}.checkmark ASC SEPARATOR ', ') as checkmark,
-              GROUP_CONCAT(DISTINCT t1.name ORDER BY t1.name ASC SEPARATOR ',<br> ') as admins,
-              GROUP_CONCAT(DISTINCT t2.name ORDER BY t2.name ASC SEPARATOR ',<br> ') as auditors,
-              GROUP_CONCAT(DISTINCT t3.name ORDER BY t3.name ASC SEPARATOR ',<br> ') as to_type
-            from {$schTable}
-              LEFT JOIN {$usersTable} as t1 on {$schTable}.admin_id = t1.id
-              LEFT JOIN {$usersTable} as t2 on {$schTable}.auditor_id = t2.id
-              LEFT JOIN {$toTable} as t3 on {$schTable}.to_type = t3.id
-            GROUP BY schedule_id";
-    return [
-      'data' => [
-        'success' => true,
-        'data' => $this->render('archive', [
-          'tos' => ToSchedule::findBySql($sql)->asArray()->all(),
-          'month' => 1
-        ]),
-        'message' => 'Page load.',
-      ],
-      'code' => 1,
-    ];
-  }
-
-  public function actionYear()
-  {
-    $toEq = ToEquipment::find()->where(['valid' => 1])->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
-    $scheduleRand = rand();
-    foreach ($toEq as $i => $eq) {
-      $toss[] = new ToSchedule(['scenario' => ToSchedule::SCENARIO_CREATE]);
-      $toss[$i]->eq_id = $eq->id;
-      $toss[$i]->schedule_id = $scheduleRand;
-    }
-    return $this->render('year', [
-      'header' => 'Составление графика ТО на',
-      'tos' => $toss,
-    ]);
-  }
-
-
-  // создание нового графика ТО на основе оборудования в таблице toequip_tbl;
-  /*
-    public function actionCreate()
-    {
-      $toEq = ToEquipment::find()
-        ->where(['valid' => 1])
-        ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->all();
-      if (empty($toEq)) {
-        Yii::$app->session->setFlash('error', "Не добавлено ни одного оборудования в график ТО.");
-        return $this->render('create', [
-          'tos' => $toEq,
-        ]);
-      }
-      $scheduleRand = rand();
-      foreach ($toEq as $i => $eq) {
-        $toss[] = new ToSchedule();
-        $toss[$i]->scenario = ToSchedule::SCENARIO_CREATE;
-        $toss[$i]->eq_id = $eq->id;
-        $toss[$i]->schedule_id = $scheduleRand;
-      }
-      if (ToSchedule::loadMultiple($toss, Yii::$app->request->post())) {
-        if (!$to_month = Yii::$app->request->post('month')) {
-          Yii::$app->session->setFlash('error', "Введите месяц проведения ТО");
-          return $this->render('create', ['tos' => $toss]);
-        }
-        if (ToSchedule::validateMultiple($toss)) {
-          foreach ($toss as $t) {
-            $t->to_month = $to_month;
-            $t->save();
-          }
-        } else {
-          Yii::$app->session->setFlash('error', "Ошибка валидации данных");
-          return $this->render('create', ['tos' => $toss]);
-        }
-        Yii::$app->session->setFlash('success', "Новый график ТО создан успешно");
-        return $this->redirect('archive'); // redirect to your next desired page
-      } else {
-        return $this->render('create', [
-          'tos' => $toss,
-        ]);
-      }
-    }
-  */
+  // Наработки
 
   public function actionView()
   {
@@ -403,22 +279,6 @@ class MonthScheduleController extends Controller
     return json_encode($ar);
   }
 
-  public function actionGetTypes()
-  {
-    sleep(1);
-    if ($_POST) {
-      $year = $_POST['year'];
-      $monthNumber = $_POST['month'];
-      $month = 'm' . $monthNumber;
-      $table = self::TO_YEAR_TABLE;
-      $sql = "SELECT eq_id, {$month} as month FROM {$table} WHERE schedule_year = :year";
-      $req = Yii::$app->db->createCommand($sql)
-        ->bindValue(':year', $year)
-        ->queryAll();
-      return json_encode($req);
-    }
-    return false;
-  }
 
   /*
     public function actionDelete()

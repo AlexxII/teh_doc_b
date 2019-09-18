@@ -1,295 +1,315 @@
 function deleteRestoreProcess(url, table, csrf) {
-    var data = table.rows({selected: true}).data();
-    var ar = [];
-    var count = data.length;
-    for (var i = 0; i < count; i++) {
-        ar[i] = data[i].schedule_id;
-    }
-    jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Ваш запрос выполняется!',
+  var data = table.rows({selected: true}).data();
+  var ar = [];
+  var count = data.length;
+  for (var i = 0; i < count; i++) {
+    ar[i] = data[i].schedule_id;
+  }
+  jc = $.confirm({
+    icon: 'fa fa-cog fa-spin',
+    title: 'Подождите!',
+    content: 'Ваш запрос выполняется!',
+    buttons: false,
+    closeIcon: false,
+    confirmButtonClass: 'hide'
+  });
+  $.ajax({
+    url: url,
+    method: 'post',
+    dataType: "JSON",
+    data: {jsonData: ar, _csrf: csrf}
+  }).done(function (response) {
+    if (response != false) {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-thumbs-up',
+        title: 'Успех!',
+        content: 'Ваш запрос выполнен.',
+        type: 'green',
         buttons: false,
         closeIcon: false,
-        confirmButtonClass: 'hide'
-    });
-    $.ajax({
-        url: url,
-        method: 'post',
-        dataType: "JSON",
-        data: {jsonData: ar, _csrf: csrf}
-    }).done(function (response) {
-        if (response != false) {
-            jc.close();
-            jc = $.confirm({
-                icon: 'fa fa-thumbs-up',
-                title: 'Успех!',
-                content: 'Ваш запрос выполнен.',
-                type: 'green',
-                buttons: false,
-                closeIcon: false,
-                autoClose: 'ok|8000',
-                confirmButtonClass: 'hide',
-                buttons: {
-                    ok: {
-                        btnClass: 'btn-success',
-                        action: function () {
-                            table.ajax.reload();
-                        }
-                    }
-                }
-            });
-        } else {
-            jc.close();
-            jc = $.confirm({
-                icon: 'fa fa-exclamation-triangle',
-                title: 'Неудача!',
-                content: 'Запрос не выполнен. Что-то пошло не так.',
-                type: 'red',
-                buttons: false,
-                closeIcon: false,
-                autoClose: 'ok|8000',
-                confirmButtonClass: 'hide',
-                buttons: {
-                    ok: {
-                        btnClass: 'btn-danger',
-                        action: function () {
-                        }
-                    }
-                }
-            });
-        }
-    }).fail(function () {
-        jc.close();
-        jc = $.confirm({
-            icon: 'fa fa-exclamation-triangle',
-            title: 'Неудача!',
-            content: 'Запрос не выполнен. Что-то пошло не так.',
-            type: 'red',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|4000',
-            confirmButtonClass: 'hide',
-            buttons: {
-                ok: {
-                    btnClass: 'btn-danger',
-                    action: function () {
-                    }
-                }
+        autoClose: 'ok|8000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-success',
+            action: function () {
+              table.ajax.reload();
             }
-        });
+          }
+        }
+      });
+    } else {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-exclamation-triangle',
+        title: 'Неудача!',
+        content: 'Запрос не выполнен. Что-то пошло не так.',
+        type: 'red',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|8000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+            }
+          }
+        }
+      });
+    }
+  }).fail(function () {
+    jc.close();
+    jc = $.confirm({
+      icon: 'fa fa-exclamation-triangle',
+      title: 'Неудача!',
+      content: 'Запрос не выполнен. Что-то пошло не так.',
+      type: 'red',
+      buttons: false,
+      closeIcon: false,
+      autoClose: 'ok|4000',
+      confirmButtonClass: 'hide',
+      buttons: {
+        ok: {
+          btnClass: 'btn-danger',
+          action: function () {
+          }
+        }
+      }
     });
+  });
 }
 
 //=============================================================================//
-// jconfirm btns
 $(document).on('click', '.add-subcategory', function (e) {
-    e.preventDefault();
-    var id = $(e.currentTarget).data('tree');
-    var node = $("#" + id).fancytree("getActiveNode");
-    if (!node) {
-        alert("Выберите родительскую категорию");
-        return;
-    }
-    if (node.data.lvl <= 1) {
-        node.editCreateNode("child", " ");
-    } else {
-        alert("Нельзя создавать вложенность более 3х");
-        return;
-    }
+  e.preventDefault();
+  var rootTitle = $(this).data('root');
+  var id = $(e.currentTarget).data('tree');
+  var tree = $("#" + id).fancytree("getTree");
+  var root = tree.findFirst(rootTitle);
+  root.editCreateNode("child", " ");
 });
 //=============================================================================//
 //tree
 $(document).on('click', '.refresh', function (e) {
-    e.preventDefault();
-    var id = $(e.currentTarget).data('tree');
-    var tree = $("#" + id).fancytree("getTree");
-    tree.reload();
-    $(".del-root").hide();
-    $(".del-node").hide();
-    $(".del-multi-nodes").hide();
-    $('.about-info').html('');
+  e.preventDefault();
+  var id = $(e.currentTarget).data('tree');
+  var tree = $("#" + id).fancytree("getTree");
+  tree.reload();
+  $(".del-root").hide();
+  $(".del-node").hide();
+  $(".del-multi-nodes").hide();
+  $('.about-info').html('');
 });
 
 $(document).on('click', '.del-node', function (e) {
-    var id = $(e.currentTarget).data('tree');
-    var node = $("#" + id).fancytree("getActiveNode");
-    var url = $(e.currentTarget).data('delete');
-    e.preventDefault();
-    jc = $.confirm({
-        icon: 'fa fa-question',
-        title: 'Вы уверены?',
-        content: 'Вы действительно хотите удалить выделенное?',
-        type: 'red',
-        closeIcon: false,
-        autoClose: 'cancel|9000',
-        buttons: {
-            ok: {
-                btnClass: 'btn-danger',
-                action: function () {
-                    jc.close();
-                    deleteProcess(url, node);
-                }
-            },
-            cancel: {
-                action: function () {
-                    return;
-                }
-            }
+  var id = $(e.currentTarget).data('tree');
+  var node = $("#" + id).fancytree("getActiveNode");
+  var url = $(e.currentTarget).data('delete');
+  e.preventDefault();
+  jc = $.confirm({
+    icon: 'fa fa-question',
+    title: 'Вы уверены?',
+    content: 'Вы действительно хотите удалить выделенное?',
+    type: 'red',
+    closeIcon: false,
+    autoClose: 'cancel|9000',
+    buttons: {
+      ok: {
+        btnClass: 'btn-danger',
+        action: function () {
+          jc.close();
+          deleteProcess(url, node);
         }
-    });
+      },
+      cancel: {
+        action: function () {
+          return;
+        }
+      }
+    }
+  });
 });
 
 $(document).on('click', '.del-multi-nodes', function (e) {
-    e.preventDefault();
-    var id = $(e.currentTarget).data('tree');
-    var node = $("#" + id).fancytree("getActiveNode");
-    var url = $(e.currentTarget).data('delete');
-    jc = $.confirm({
-        icon: 'fa fa-question',
-        title: 'Вы уверены?',
-        content: 'Вы действительно хотите удалить выделенное С вложениями?',
-        type: 'red',
-        closeIcon: false,
-        autoClose: 'cancel|9000',
-        buttons: {
-            ok: {
-                btnClass: 'btn-danger',
-                action: function () {
-                    jc.close();
-                    deleteProcess(url, node);
-                }
-            },
-            cancel: {
-                action: function () {
-                    return;
-                }
-            }
+  e.preventDefault();
+  var id = $(e.currentTarget).data('tree');
+  var node = $("#" + id).fancytree("getActiveNode");
+  var url = $(e.currentTarget).data('delete');
+  jc = $.confirm({
+    icon: 'fa fa-question',
+    title: 'Вы уверены?',
+    content: 'Вы действительно хотите удалить выделенное С вложениями?',
+    type: 'red',
+    closeIcon: false,
+    autoClose: 'cancel|9000',
+    buttons: {
+      ok: {
+        btnClass: 'btn-danger',
+        action: function () {
+          jc.close();
+          deleteProcess(url, node);
         }
-    });
+      },
+      cancel: {
+        action: function () {
+          return;
+        }
+      }
+    }
+  });
 });
 
 $(document).on('click', '.btnResetSearch', function (e) {
-    e.preventDefault();
-    var id = $(e.currentTarget).data('tree');
-    var tree = $("#" + id).fancytree("getTree");
-    $("input[name=search]").val("");
-    $("span#matches").text("");
-    tree.clearFilter();
+  e.preventDefault();
+  var id = $(e.currentTarget).data('tree');
+  var tree = $("#" + id).fancytree("getTree");
+  $("input[name=search]").val("");
+  $("span#matches").text("");
+  tree.clearFilter();
 }).attr("disabled", true);
 
 $(document).on('keyup', 'input[name=search]', function (e) {
-    if ($(this).val() == '') {
-        var tree = $(".ui-draggable-handle").fancytree("getTree");
-        tree.clearFilter();
-    }
-    var n,
-        tree = $.ui.fancytree.getTree(),
-        args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-        opts = {},
-        filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-        match = $(this).val();
+  if ($(this).val() == '') {
+    var tree = $(".ui-draggable-handle").fancytree("getTree");
+    tree.clearFilter();
+  }
+  var n,
+    tree = $.ui.fancytree.getTree(),
+    args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+    opts = {},
+    filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+    match = $(this).val();
 
-    $.each(args, function (i, o) {
-        opts[o] = $("#" + o).is(":checked");
-    });
-    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
+  $.each(args, function (i, o) {
+    opts[o] = $("#" + o).is(":checked");
+  });
+  opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
 
-    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-        $("button#btnResetSearch").click();
-        return;
-    }
-    if ($("#regex").is(":checked")) {
-        // Pass function to perform match
-        n = filterFunc.call(tree, function (node) {
-            return new RegExp(match, "i").test(node.title);
-        }, opts);
-    } else {
-        // Pass a string to perform case insensitive matching
-        n = filterFunc.call(tree, match, opts);
-    }
-    $("#btnResetSearch").attr("disabled", false);
+  if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+    $("button#btnResetSearch").click();
+    return;
+  }
+  if ($("#regex").is(":checked")) {
+    // Pass function to perform match
+    n = filterFunc.call(tree, function (node) {
+      return new RegExp(match, "i").test(node.title);
+    }, opts);
+  } else {
+    // Pass a string to perform case insensitive matching
+    n = filterFunc.call(tree, match, opts);
+  }
+  $("#btnResetSearch").attr("disabled", false);
 });
 
 function deleteProcess(url, node) {
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    jc = $.confirm({
-        icon: 'fa fa-cog fa-spin',
-        title: 'Подождите!',
-        content: 'Ваш запрос выполняется!',
+  var csrf = $('meta[name=csrf-token]').attr("content");
+  jc = $.confirm({
+    icon: 'fa fa-cog fa-spin',
+    title: 'Подождите!',
+    content: 'Ваш запрос выполняется!',
+    buttons: false,
+    closeIcon: false,
+    confirmButtonClass: 'hide'
+  });
+  $.ajax({
+    url: url,
+    type: "post",
+    data: {id: node.data.id, _csrf: csrf}
+  }).done(function (response) {
+    if (response != false) {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-thumbs-up',
+        title: 'Успех!',
+        content: 'Ваш запрос выполнен.',
+        type: 'green',
         buttons: false,
         closeIcon: false,
-        confirmButtonClass: 'hide'
-    });
-    $.ajax({
-        url: url,
-        type: "post",
-        data: {id: node.data.id, _csrf: csrf}
-    }).done(function (response) {
-        if (response != false) {
-            jc.close();
-            jc = $.confirm({
-                icon: 'fa fa-thumbs-up',
-                title: 'Успех!',
-                content: 'Ваш запрос выполнен.',
-                type: 'green',
-                buttons: false,
-                closeIcon: false,
-                autoClose: 'ok|8000',
-                confirmButtonClass: 'hide',
-                buttons: {
-                    ok: {
-                        btnClass: 'btn-success',
-                        action: function () {
-                            node.remove();
-                            $('.about-info').html('');
-                            $('.del-node').hide();
-                            $(".del-multi-nodes").hide();
-                        }
-                    }
-                }
-            });
-        } else {
-            jc.close();
-            jc = $.confirm({
-                icon: 'fa fa-exclamation-triangle',
-                title: 'Неудача!',
-                content: 'Запрос не выполнен. Что-то пошло не так.',
-                type: 'red',
-                buttons: false,
-                closeIcon: false,
-                autoClose: 'ok|8000',
-                confirmButtonClass: 'hide',
-                buttons: {
-                    ok: {
-                        btnClass: 'btn-danger',
-                        action: function () {
-                        }
-                    }
-                }
-            });
-        }
-    }).fail(function () {
-        jc.close();
-        jc = $.confirm({
-            icon: 'fa fa-exclamation-triangle',
-            title: 'Неудача!',
-            content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
-            type: 'red',
-            buttons: false,
-            closeIcon: false,
-            autoClose: 'ok|4000',
-            confirmButtonClass: 'hide',
-            buttons: {
-                ok: {
-                    btnClass: 'btn-danger',
-                    action: function () {
-                    }
-                }
+        autoClose: 'ok|8000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-success',
+            action: function () {
+              node.remove();
+              $('.about-info').html('');
+              $('.del-node').hide();
+              $(".del-multi-nodes").hide();
             }
-        });
+          }
+        }
+      });
+    } else {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-exclamation-triangle',
+        title: 'Неудача!',
+        content: 'Запрос не выполнен. Что-то пошло не так.',
+        type: 'red',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|8000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+            }
+          }
+        }
+      });
+    }
+  }).fail(function () {
+    jc.close();
+    jc = $.confirm({
+      icon: 'fa fa-exclamation-triangle',
+      title: 'Неудача!',
+      content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
+      type: 'red',
+      buttons: false,
+      closeIcon: false,
+      autoClose: 'ok|4000',
+      confirmButtonClass: 'hide',
+      buttons: {
+        ok: {
+          btnClass: 'btn-danger',
+          action: function () {
+          }
+        }
+      }
     });
+  });
 }
+
+function goodAlert(text) {
+  var div = '' +
+    '<div id="w3-success-0" class="alert-success alert fade in">' +
+    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+    text +
+    '</div>';
+  return div;
+}
+
+function badAlert(text) {
+  var div = '' +
+    '<div id="w3-success-0" class="alert-danger alert fade in">' +
+    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+    text +
+    '</div>';
+  return div;
+}
+
+function warningAlert(text) {
+  var div = '' +
+    '<div id="w3-success-0" class="alert-warning alert fade in">' +
+    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+    text +
+    '</div>';
+  return div;
+}
+
 //=============================================================================//
 // create schedule
 $(document).on('click', '#create-new-schedule', function (e) {
@@ -460,6 +480,45 @@ $(document).on('change', '#to-month', function (e) {
   }
 });
 
+function controlListsInit() {
+  // инициализация списков для создания графика ТО
+  toTypeSelect = '<select class="form-control to-list m-select" style="width: 120px">' +
+    '<option value="none" selected="true" disabled="true">Выберите</option>';
+  toAdminsSelect = '<select class="form-control admin-list m-select" style="width: 100% !important;">' +
+    '<option value="none" selected="true" disabled="true">Выберите</option>';
+  toAuditorsSelect = '<select class="form-control audit-list m-select" style="width: 100% !important;">' +
+    '<option value="none" selected="true" disabled="true">Выберите</option>';
+  $.ajax({
+    url: '/to/settings/select-data',
+    method: 'get',
+    dataType: "JSON"
+  }).done(function (response) {
+    // types
+    var types = response.types;
+    types.forEach(function (value, index, array) {
+      toTypeSelect += '<option value="' + value.id + '">' + value.name + '</option>';
+    });
+    toTypeSelect += '</select>';
+    // admins
+    var admins = response.admins;
+    admins.forEach(function (value, index, array) {
+      toAdminsSelect += '<option value="' + value.id + '">' + value.name + '</option>';
+    });
+    toAdminsSelect += '</select>';
+    // auditors
+    var auditors = response.auditors;
+    auditors.forEach(function (value, index, array) {
+      toAuditorsSelect += '<option value="' + value.id + '">' + value.name + '</option>';
+    });
+    toAuditorsSelect += '</select>';
+  }).fail(function () {
+    console.log('Не удалось загрузить служебные списки');
+    toTypeSelect += '</select>';
+    toAdminsSelect += '</select>';
+    toAuditorsSelect += '</select>';
+  });
+}
+
 function getMonthBorders() {
   var toMonth = $('#to-month').datepicker('getDate');
   var month = toMonth.getMonth();
@@ -513,6 +572,7 @@ $(document).on('change', '.admin-list', function (e) {
     });
   }
 });
+
 // функция копирования дат проведения ТО
 function copySl(e) {
   if ($(this).closest('tr').hasClass('selected')) {
@@ -526,6 +586,7 @@ function copySl(e) {
     });
   }
 }
+
 // ======================= Обработка подсказки ("Необходимо ввести месяц")==== ===================
 $(document).on('mouseover', '#to-month', function (e) {
   if ($(this).val() == "") {
@@ -565,3 +626,5 @@ $(document).on('mouseleave', '.admin-list', function (e) {
   $('#to-month').tooltip('hide');
   $('#to-month').tooltip('disable');
 });
+
+//====================================================================

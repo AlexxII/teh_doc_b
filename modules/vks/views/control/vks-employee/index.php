@@ -75,11 +75,10 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
 
 <script>
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
 
-  $('[data-toggle="tooltip"]').tooltip();
-
-  // отображение и логика работа дерева
-  jQuery(function ($) {
+    // отображение и логика работа дерева
     var main_url = '/vks/control/vks-employee/employees';
     var move_url = "/vks/control/vks-employee/move";
     var create_url = '/vks/control/vks-employee/vks-employee-create';

@@ -19,7 +19,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancyree_vks_type'
+        'data-tree' => 'fancytree_vks_type'
 
       ]) ?>
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
@@ -28,7 +28,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancyree_vks_type'
+        'data-tree' => 'fancytree_vks_type'
 
       ]) ?>
       <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
@@ -37,7 +37,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancyree_vks_type',
+        'data-tree' => 'fancytree_vks_type',
         'data-delete' => '/vks/control/vks-type/delete'
 
       ]) ?>
@@ -47,7 +47,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancyree_vks_type',
+        'data-tree' => 'fancytree_vks_type',
         'data-delete' => '/vks/control/vks-type/delete-root'
       ]) ?>
     </div>
@@ -60,7 +60,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
       </div>
       <div style="padding-top: 8px; right: 10px; position: absolute">
-        <a href="" class="btnResetSearch" data-tree="fancyree_vks_type">
+        <a href="" class="btnResetSearch" data-tree="fancytree_vks_type">
           <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
         </a>
       </div>
@@ -68,7 +68,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
     <div class="row" style="padding: 0 15px">
       <div style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_vks_type" class="ui-draggable-handle"></div>
+        <div id="fancytree_vks_type" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
@@ -80,16 +80,13 @@ $del_multi_nodes = 'Удвлить С вложениями';
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-  });
-
-  // отображение и логика работа дерева
-  jQuery(function ($) {
+    // отображение и логика работа дерева
     var main_url = '/vks/control/vks-type/types';
     var move_url = '/vks/control/vks-type/move';
     var create_url = '/vks/control/vks-type/vks-type-create';
     var update_url = '/vks/control/vks-type/update';
 
-    $("#fancyree_vks_type").fancytree({
+    $("#fancytree_vks_type").fancytree({
       source: {
         url: main_url,
       },
