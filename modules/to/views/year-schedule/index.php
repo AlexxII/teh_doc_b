@@ -459,7 +459,6 @@ $collapse_hint = 'Скрыть все';
             } else {
               for (var c = 0; c < 12; c++) {
                 var tVal = $($tdList.eq(3 + c)[0].children[0].selectedOptions).val();
-                console.log(tVal);
                 if (tVal !== undefined) {
                   temp.push(tVal);
                 } else {
@@ -480,8 +479,6 @@ $collapse_hint = 'Скрыть все';
             var temp = [];
             for (var c = 0; c < 12; c++) {
               var tVal = $($tdList.eq(3 + c)[0].children[0].selectedOptions).val();
-              console.log(tVal);
-
               if (tVal !== undefined) {
                 temp.push(tVal);
               } else {
@@ -496,7 +493,7 @@ $collapse_hint = 'Скрыть все';
         result.push(o);
       });
 
-      var url = 'save-types';
+      var url = '/to/year-schedule/save-types';
       var csrf = $('meta[name=csrf-token]').attr("content");
       $.ajax({
         url: url,

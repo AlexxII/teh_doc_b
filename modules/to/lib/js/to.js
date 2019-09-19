@@ -378,6 +378,8 @@ $(document).on('click', '#create-new-schedule', function (e) {
     initNoty(yText, 'success');
     goBack();
   }).fail(function (error) {
+    var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>График ТО не создан';
+    initNoty(nText, 'error');
     console.log('Error - saving schedule');
   });
 });

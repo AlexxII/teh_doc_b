@@ -65,6 +65,7 @@ class MonthScheduleController extends Controller
     throw new NotFoundHttpException('The requested page does not exist.');
   }
 
+  //оборудование для создания графика
   public function actionEquipment()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -97,7 +98,6 @@ class MonthScheduleController extends Controller
       'code' => 1,
     ];
   }
-
 
   public function actionSaveSchedule()
   {
@@ -169,12 +169,12 @@ class MonthScheduleController extends Controller
     $this->layout = '@app/views/layouts/main_ex.php';
 
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'Просмотр Графика ТО';
+    Yii::$app->view->params['title'] = 'График на сентябрь 2019 г.';
     Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     return [
       'data' => [
         'success' => true,
-        'data' => $this->render('view_'),
+        'data' => $this->render('view'),
         'message' => 'Page load.',
       ],
       'code' => 1,
@@ -278,25 +278,5 @@ class MonthScheduleController extends Controller
       ->queryAll();
     return json_encode($ar);
   }
-
-
-  /*
-    public function actionDelete()
-    {
-      if (!empty($_POST['scheduleId'])) {
-        $result = false;
-        $id = $_POST['scheduleId'];
-        $models = ToSchedule::find()->where(['schedule_id' => $id])->all();
-        foreach ($models as $m) {
-          $result = $m->delete();
-        }
-        if ($result) {
-          return true;
-        }
-        return false;
-      }
-      return false;
-    }
-  */
 
 }

@@ -18,147 +18,22 @@ use yii\helpers\Html;
 </style>
 
 
-<div class="row">
-  <div class="w3-col l8">
-    <div class="container-fluid" style="margin-bottom: 20px">
-
-      <h3>
-        <?php
-        if ($month) {
-          echo Html::encode($this->title) . ' на ' . $month;
-        } else {
-          echo Html::encode($this->title);
-        }
-        ?>
-      </h3>
-      <?= Html::a(' Отметить', ["perform?id=" . $id], [
-        'class' => 'btn btn-success btn-sm fa fa-check-square-o ',
-        'style' => [
-          'margin-top' => '5px',
-          'font-size' => '18px'
-        ],
-        'title' => 'Отметить выполнение графика',
-        'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
-      ]);
-      ?>
-
-    </div>
-  </div>
-
-  <div class="w3-row">
-    <div class="w3-twothird" style="padding-top: 10px">
-      <div class="w3-col l8 m7" id="edit-block" style="display:none">
-        <button type="button" id="table-editor" class="btn btn-primary btn-sm">Редактировать</button>
-        <button type="button" id="table-del" class="btn btn-danger btn-sm">Удалить</button>
-        <P></P>
-      </div>
-    </div>
-  </div>
-
-  <div class="container-fluid">
-
-    <table id="main-table" class="display no-wrap cell-border" style="width:100%">
-      <thead>
-      <tr>
-        <th>id</th>
-        <th data-priority="1">№ п.п.</th>
-        <th data-priority="2">Наименование оборудования</th>
-        <th data-priority="7">s/n</th>
-        <th>ПАК</th>
-        <th>Check</th>
-        <th data-priority="4">Вид ТО</th>
-        <th>Дата проведения (план.)</th>
-        <th data-priority="5">Дата проведения (факт.)</th>
-        <th>Ответственный за проведение</th>
-        <th>Ответственный за контроль</th>
-        <th>Отметка о проведении</th>
-      </tr>
-      </thead>
-      <tbody>
-      <?php if ($tos) : ?>
-        <?php foreach ($tos as $to) : ?>
-          <tr>
-            <td>
-              <?= $to->id ?>
-            </td>
-            <td></td>
-            <td>
-              <?php if (!empty($to->toEq)) {
-                echo $to->toEq->name;
-              } else {
-                echo '<span style="color:#CC0000">Вероятно оборудование удалено</span>';
-              }; ?>
-            </td>
-            <td style="word-break:break-all;min-width: 100px;">
-              <?php if (!empty($to->toEq)) {
-                echo $to->toEq->eq_serial;
-              } else {
-                echo '<span style="color:#CC0000">Вероятно оборудование удалено</span>';
-              }; ?>
-            </td>
-            <td>
-              <?php
-              if (!empty($to->toEq->groupName)) {
-                echo $to->toEq->groupName->name;
-              } else {
-                echo '';
-              }; ?>
-            </td>
-            <td>
-              <?= $to->checkmark; ?>
-            </td>
-            <td>
-              <?php if (!empty($to->toType)) {
-                echo $to->toType->name;
-              } else {
-                echo '<span style="color:#CC0000">-</span>';
-              }; ?>
-            </td>
-            <td>
-              <?= date("d.m.Y г.", strtotime($to->plan_date)) ?>
-            </td>
-            <td>
-              <?php
-              if ($to->fact_date != null) {
-                echo date("d.m.Y г.", strtotime($to->fact_date));
-              } else {
-                echo '-';
-              } ?>
-            </td>
-            <td>
-              <?php if (!empty($to->admin)) {
-                echo $to->admin->name;
-              } else {
-                echo '<span style="color:#CC0000">-</span>';
-              }; ?>
-            </td>
-            <td>
-              <?php if (!empty($to->auditor)) {
-                echo $to->auditor->name;
-              } else {
-                echo '<span style="color:#CC0000">-</span>';
-              }; ?>
-            </td>
-            <td>
-              <?php
-              if ($to->checkmark == 1) {
-                echo '<span style="color:#4CAF50"><strong>ТО проведено</strong></span>';
-              } else {
-                if (date('Y-m-d') < $to->plan_date) {
-                  echo '<span style="color:#4349cc"><strong>ТО не проведено</strong></span>';
-                } else {
-                  echo '<span style="color:#CC0000"><strong>ТО не проведено</strong></span>';
-                }
-              } ?>
-            </td>
-          </tr>
-        <?php endforeach; ?>
-      <?php endif; ?>
-      </tbody>
-    </table>
-  </div>
-</div>
+<table id="view-schedule-tbl" class="display no-wrap cell-border" style="width:100%">
+  <thead>
+  <tr>
+    <th></th>
+    <th data-priority="1">№</th>
+    <th data-priority="2">Наименование</th>
+    <th>s/n</th>
+    <th>ПАК</th>
+    <th data-priority="2">Вид ТО</th>
+    <th data-priority="2">Дата проведения</th>
+    <th data-priority="2">Ответственный за проведение</th>
+    <th data-priority="2">Ответственный за контроль</th>
+    <th data-priority="2"></th>
+  </tr>
+  </thead>
+</table>
 
 
 <script>
@@ -167,30 +42,68 @@ use yii\helpers\Html;
   });
 
   $(document).ready(function () {
-    var table = $('#main-table').DataTable({
-      "columnDefs": [
-        {"visible": false, "targets": 0},
-        {"visible": false, "targets": 4},
-        {"visible": false, "targets": 5}
+
+    var table = $('#view-schedule-tbl').DataTable({
+      'processing': true,
+      'ajax': {
+        'url': '/to/month-schedule/equipment'
+      },
+      'columns': [
+        {'defaultContent': 'id'},
+        {'defaultContent': ''},
+        {'data': 'name'},
+        {'data': 'eq_serial'},
+        {'data': 'parent'},
+        {'defaultContent': ''},
+        {'defaultContent': ''},
+        {'defaultContent': ''},
+        {'defaultContent': ''}
       ],
+      dom: 'Bfrtip',
+      buttons: [
+        'selectAll',
+        'selectNone'
+      ],
+      paging: false,
+      select: {
+        style: 'os',
+        selector: 'td:last-child'
+      },
       rowGroup: {
-        startRender: function (row, group) {
-          if (group == ''){
-            return '';
-          }
-          return group;
+        dataSrc: 'parent'
+      },
+      fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        $('select.to-list', nRow).attr('id', aData.id);
+      },
+      columnDefs: [
+        {
+          'targets': -2,                    // предпоследний столбец
+          'orderable': false,
+          'data': null,
+          'width': '70px',
+          'defaultContent':
+            '<a href="#" id="edit" class="fa fa-edit" style="padding-right: 5px" title="Обновить"></a>' +
+            '<a href="#" id="view" class="fa fa-info" title="Подробности" style="padding-right: 5px"></a>'
+        }, {
+          'targets': -1,                    // последний столбец
+          'orderable': false,
+          'className': 'select-checkbox',
+          'defaultContent': ''
+        }, {
+          'targets': 0,
+          'visible': false
+        }, {
+          'targets': 4,
+          'visible': false
         },
-        dataSrc: 4
-      },
-      iDisplayLength: 50,
-      select: false,
+      ],
       responsive: true,
-      fixedHeader: {
-        header: true,
-        headerOffset: $('#topnav').height()
-      },
       language: {
-        url: "/lib/ru.json"
+        url: '/lib/ru.json',
+        'buttons': {
+          'selectAll': 'Выделить все',
+          'selectNone': 'Снять выделение'
+        }
       }
     });
     table.on('order.dt search.dt', function () {
@@ -199,7 +112,14 @@ use yii\helpers\Html;
       });
     }).draw();
 
+    $('#schedule-create-tbl')
+      .on('processing.dt', function (e, settings, processing) {
+        $('#processingIndicator').css('display', processing ? 'block' : 'none');
+
+      }).dataTable();
   });
+
+
 
 </script>
 

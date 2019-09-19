@@ -10,7 +10,6 @@ BootstrapDatepickerAsset::register($this);
 TableBaseAsset::register($this);
 
 ?>
-
 <div class="row">
   <div class="col-lg-10 col-md-8">
     <div style="float: left; padding-top: 18px; padding-bottom: 15px; max-width: 290px">

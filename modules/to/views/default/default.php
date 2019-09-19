@@ -14,7 +14,7 @@ BootstrapDatepickerAsset::register($this);
 ToAsset::register($this);                       // регистрация ресурсов модуля
 TableBaseAsset::register($this);                // регистрация ресурсов таблиц datatables
 
-$this->title = "Графики ТО - в разработке";
+$this->title = "Графики ТО";
 
 ?>
 
@@ -97,7 +97,15 @@ $this->title = "Графики ТО - в разработке";
       'Декабрь'
     ];
 
+
     // ************************* Работа таблицы **************************************
+
+    var editBtn = '<a href="#" id="edit" class="fa fa-edit" style="padding-right: 5px" title="Обновить"></a>';
+    var infoBtn = '<a href="#" id="view" class="fa fa-info ex-click" ' +
+    ' title="Подробности" data-url="/to/month-schedule/view" data-back-url="/to" style="padding-right: 5px"></a>';
+    var cfrmBtn = '<a href="#" id="confirm-schedule" class="fa fa-calendar-check-o" ' +
+      'title="Подтвердить выполнение" style="padding-right: 5px"></a>';
+
     var toTypeSelect, toAdminsSelect, toAuditorsSelect;
 
     archiveTable = $('#to-mscheduler-table').DataTable({
@@ -125,21 +133,26 @@ $this->title = "Графики ТО - в разработке";
         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
         var dDate = new Date(date.replace(pattern, '$3-$2-$1'));
         $('td:nth-child(2)', nRow).text(monthNames[dDate.getMonth()]);
+        // $('td:nth-child(7)', nRow).html(editBtn + infoBtn + cfrmBtn);
+        if (aData.checkmark == 0) {
+          $('td:nth-child(7)', nRow).html(editBtn + infoBtn);
+          $('td:nth-child(3)', nRow).css({color: 'red'});
+        } else {
+          $('td:nth-child(7)', nRow).html(editBtn + infoBtn + cfrmBtn);
+        }
       },
       orderFixed: [[4, 'desc']],
       order: [[1, 'desc']],
       rowGroup: {
         dataSrc: 'year'
       },
-      "columnDefs": [
+      'columnDefs': [
         {
-          "targets": -2,                    // предпоследний столбец
-          "orderable": false,
-          "data": null,
-          "width": '70px',
-          "defaultContent":
-            "<a href='#' id='edit' class='fa fa-edit' style='padding-right: 5px' title='Обновить'></a>" +
-            "<a href='#' id='view' class='fa fa-info ' title='Подробности' style='padding-right: 5px'></a>"
+          'targets': -2,                    // предпоследний столбец
+          'orderable': false,
+          'data': null,
+          'width': '70px',
+          'defaultContent': ''
         }, {
           'targets': -1,                    // последний столбец
           'orderable': false,
@@ -214,6 +227,38 @@ $this->title = "Графики ТО - в разработке";
     archiveTable.on('draw.dt', function (e, settings, len) {
       $('#delete-wrap').hide();
     });
+
+    archiveTable.on('click', '#view', function (e) {
+      e.preventDefault();
+      var data = archiveTable.row($(this).parents('tr')).data();
+      var url = "/to/month-schedule/view?id=" + data['schedule_id'];
+      console.log(data);
+      console.log(url);
+      return;
+      c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: url,
+            method: 'get'
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        type: 'blue',
+        columnClass: 'xlarge',
+        title: 'Подробности',
+        buttons: {
+          cancel: {
+            text: 'НАЗАД'
+          }
+        }
+      });
+    });
+
 
     $('#delete-wrap').click(function (event) {
       event.preventDefault();

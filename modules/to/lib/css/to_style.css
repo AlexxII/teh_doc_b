@@ -1,3 +1,6 @@
+body {
+  overflow: auto !important;
+}
 /* круглая клавиша добавления графика */
 [class*="fab"] {
   -webkit-touch-callout: none;
@@ -100,7 +103,4 @@
 }
 .jconfirm {
   z-index: 9 !important;
-}
-.fancytree-title .fancytree-edit-input {
-  color: #000;
 }
