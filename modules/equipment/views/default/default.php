@@ -31,16 +31,22 @@ BootstrapPluginAsset::register($this);
 
 $about = "Перечень оборудования";
 ?>
+<style>
+  #tools-tree {
+    position: relative;
+  }
+
+</style>
 
 <div id="main-content" class="container">
-  <div class="tools-pannel">
-    <h3><?= Html::encode($this->title) ?>
-      <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-           data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
-    </h3>
-  </div>
   <div class="row">
     <div id="tools-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
+      <div id="add-session-wrap" style="position: absolute; top: 10px; left:-60px">
+        <a id="add-session" class="fab-button" title="Добавить предстоящий сеанс" style="cursor: pointer">
+          <div class="plus"></div>
+        </a>
+      </div>
+
       <div style="position: relative">
         <div class="container-fuid" style="float:left; width: 100%">
           <input class="form-control form-control-sm" autocomplete="off" name="search"
