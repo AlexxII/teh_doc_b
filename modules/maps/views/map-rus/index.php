@@ -28,7 +28,7 @@
     text-align: center;
   }
 </style>
-<div class="popup"></div>
+<!--<div class="popup"></div>-->
 <div id="map-rus-high-wrap">
   <svg version="1.1" width="100%" height="100%" viewBox="10 30 1350 760">>
 

@@ -5,8 +5,10 @@ use app\assets\TableBaseAsset;
 use app\modules\to\assets\ToAsset;
 use app\assets\BootstrapDatepickerAsset;
 use app\assets\FancytreeAsset;
+use app\assets\NotyAsset;
 
 FancytreeAsset::register($this);
+NotyAsset::register($this);
 
 BootstrapDatepickerAsset::register($this);
 ToAsset::register($this);                       // регистрация ресурсов модуля

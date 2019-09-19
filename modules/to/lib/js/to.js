@@ -374,6 +374,8 @@ $(document).on('click', '#create-new-schedule', function (e) {
       month: scheduleMonth
     }
   }).done(function (response) {
+    var yText = '<span style="font-weight: 600">Успех!</span><br>График ТО создан';
+    initNoty(yText, 'success');
     goBack();
   }).fail(function (error) {
     console.log('Error - saving schedule');
