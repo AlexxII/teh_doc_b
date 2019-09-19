@@ -42,11 +42,6 @@ class SessionsController extends Controller
     ];
   }
 
-  public function actionIndex()
-  {
-    return $this->render('index');
-  }
-
   public function actionServerSide($index)
   {
     $table = 'vks_sessions_tbl';

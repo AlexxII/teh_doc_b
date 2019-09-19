@@ -9,7 +9,7 @@ class VksModule extends \yii\base\Module
 
   public $layout = '@app/views/layouts/main.php';
 //  public $layout = 'vks_layout.php';
-  public $defaultRoute = '/sessions';
+//  public $defaultRoute = '/sessions';
 
   public function init()
   {
