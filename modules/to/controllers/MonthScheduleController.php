@@ -162,22 +162,23 @@ class MonthScheduleController extends Controller
     return false;
   }
 
-  // Наработки
-
   public function actionView()
   {
     $this->layout = '@app/views/layouts/main_ex.php';
 
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'График на сентябрь 2019 г.';
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
+    $data = $_POST["data"];
+    $year = $data["year"];
+    $month = 'сентябрь';
+    Yii::$app->view->params["title"] = "График на " . $month . ' ' . $year  . " г.";
+    Yii::$app->view->params["bUrl"] = $_POST["back-url"];
     return [
-      'data' => [
-        'success' => true,
-        'data' => $this->render('view'),
-        'message' => 'Page load.',
+      "data" => [
+        "success" => true,
+        "data" => $this->render("view"),
+        "message" => "Page load.",
       ],
-      'code' => 1,
+      "code" => 1,
     ];
   }
 

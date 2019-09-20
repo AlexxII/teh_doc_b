@@ -101,8 +101,8 @@ $this->title = "Графики ТО";
     // ************************* Работа таблицы **************************************
 
     var editBtn = '<a href="#" id="edit" class="fa fa-edit" style="padding-right: 5px" title="Обновить"></a>';
-    var infoBtn = '<a href="#" id="view" class="fa fa-info ex-click" ' +
-    ' title="Подробности" data-url="/to/month-schedule/view" data-back-url="/to" style="padding-right: 5px"></a>';
+    var infoBtn = '<a href="#" id="view" class="fa fa-info" ' +
+      ' title="Подробности" data-url="/to/month-schedule/view" data-back-url="/to" style="padding-right: 5px"></a>';
     var cfrmBtn = '<a href="#" id="confirm-schedule" class="fa fa-calendar-check-o" ' +
       'title="Подтвердить выполнение" style="padding-right: 5px"></a>';
 
@@ -231,32 +231,25 @@ $this->title = "Графики ТО";
     archiveTable.on('click', '#view', function (e) {
       e.preventDefault();
       var data = archiveTable.row($(this).parents('tr')).data();
-      var url = "/to/month-schedule/view?id=" + data['schedule_id'];
       console.log(data);
-      console.log(url);
-      return;
-      c = $.confirm({
-        content: function () {
-          var self = this;
-          return $.ajax({
-            url: url,
-            method: 'get'
-          }).fail(function () {
-            self.setContentAppend('<div>Что-то пошло не так!</div>');
-          });
-        },
-        contentLoaded: function (data, status, xhr) {
-          this.setContentAppend('<div>' + data + '</div>');
-        },
-        type: 'blue',
-        columnClass: 'xlarge',
-        title: 'Подробности',
-        buttons: {
-          cancel: {
-            text: 'НАЗАД'
-          }
-        }
+      var id = data.schedule_id;
+      var year = data.year;
+      var sData = {
+        'id' : id,
+        'year': year
+      };
+      console.log(sData);
+      var url = '/to/month-schedule/view';
+      var backUrl = '/to';
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Ваш запрос выполняется!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
       });
+      loadExContent(url, backUrl, jc, sData);
     });
 
 
@@ -293,5 +286,23 @@ $this->title = "Графики ТО";
 
   });
 
+  function loadExContent(url, backUrl, jc, data) {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    $.ajax({
+      url: url,
+      method: 'POST',
+      data: {
+        '_csrf': csrf,
+        'data': data,
+        'back-url': backUrl,
+      }
+    }).done(function (response) {
+      $('#app-wrap').append('<div id="ex-wrap">' + response.data.data + '</div>');
+      jc.close();
+    }).fail(function () {
+      jc.close();
+      console.log('fail');
+    });
+  }
 
 </script>
