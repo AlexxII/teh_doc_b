@@ -316,7 +316,7 @@ $(document).on('click', '#create-new-schedule', function (e) {
   e.preventDefault();
   var $createTable = $('#schedule-create-tbl');
   var rows = $createTable[0].rows;
-  var scheduleData = new Object();
+  var scheduleData = {};
   var createTableData = createTable.rows().data();
 
   for (var key in rows) {
@@ -404,7 +404,11 @@ $(document).on('change', '#to-month', function (e) {
     $.ajax({
       url: url,
       type: "post",
-      data: {year: scheduleYear, month: scheduleMonth, _csrf: csrf}
+      data: {
+        year: scheduleYear,
+        month: scheduleMonth,
+        _csrf: csrf
+      }
     }).done(function (response) {
       if (response != false) {
         var result = JSON.parse(response);
@@ -412,8 +416,8 @@ $(document).on('change', '#to-month', function (e) {
           if (item.month == null) return;
           $('#' + item.eq_id).val(item.month);
         });
-        getMonthBorders();
-        setMonth();
+        var dates = getMonthBorders('to-month');
+        setMonth(dates);
         $('.to-date').val('');
         $('.to-date').prop('disabled', true);
         $('.admin-list').val('none');
@@ -523,8 +527,9 @@ function controlListsInit() {
   });
 }
 
-function getMonthBorders() {
-  var toMonth = $('#to-month').datepicker('getDate');
+function getMonthBorders(id) {
+  var toMonth = $('#' + id).datepicker('getDate');
+  console.log(toMonth);
   var month = toMonth.getMonth();
   var year = toMonth.getFullYear();
   var mDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -537,21 +542,32 @@ function getMonthBorders() {
 
   startDay = '01.' + nMonth[month] + '.' + year;
   endDay = mDays[month] + '.' + nMonth[month] + '.' + year;
+
+  return {
+    'startDay': startDay,
+    'endDay': endDay
+  };
 }
 
 
-function setMonth() {
-  var m = $('#to-month');
-  if (m.val() != '') {
-    var fullDate = new Date(m.val());
-    var year = fullDate.getFullYear();
-    var month = fullDate.getMonth();
-    var nMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+function setMonth(date) {
+  if (date != null) {
     $('.to-date').prop('disabled', false);
-    $('.to-date').datepicker('setStartDate', startDay);
-    $('.to-date').datepicker('update', startDay);
+    $('.to-date').datepicker('setStartDate', date.startDay);
+    $('.to-date').datepicker('update', date.startDay);
     $('.to-date').on('change', copySl);                    // обработчик события 'change'
   }
+  // var m = $('#to-month');
+  // if (m.val() != '') {
+  //   var fullDate = new Date(m.val());
+  //   var year = fullDate.getFullYear();
+  //   var month = fullDate.getMonth();
+  //   var nMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+  //   $('.to-date').prop('disabled', false);
+  //   $('.to-date').datepicker('setStartDate', startDay);
+  //   $('.to-date').datepicker('update', startDay);
+  //   $('.to-date').on('change', copySl);                    // обработчик события 'change'
+  // }
   return;
 }
 

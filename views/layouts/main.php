@@ -226,7 +226,7 @@ $this->beginPage() ?>
             confirmButtonClass: 'hide'
         });
         var url = $(this).data('url');
-        var bUrl = $(this).data('backUrl');
+        var bUrl = $(this).data('back-url');
         loadExContent(url, bUrl, jc);
     });
 

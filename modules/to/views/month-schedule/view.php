@@ -4,21 +4,8 @@ use yii\helpers\Html;
 
 ?>
 
-<style>
-  td .fa {
-    font-size: 25px;
-  }
-  #main-table tbody td {
-    font-size: 12px;
-  }
-  #main-table tr {
-    font-size: 12px;
-  }
 
-</style>
-
-
-<table id="view-schedule-tbl" class="display no-wrap cell-border" style="width:100%">
+<table id="view-schedule-tbl" data-id="<?= $scheduleId?>" class="display no-wrap cell-border" style="width:100%">
   <thead>
   <tr>
     <th></th>
@@ -28,9 +15,9 @@ use yii\helpers\Html;
     <th>ПАК</th>
     <th data-priority="2">Вид ТО</th>
     <th data-priority="2">Дата проведения</th>
+    <th data-priority="2">Дата проведения</th>
     <th data-priority="2">Ответственный за проведение</th>
     <th data-priority="2">Ответственный за контроль</th>
-    <th data-priority="2"></th>
   </tr>
   </thead>
 </table>
@@ -42,54 +29,47 @@ use yii\helpers\Html;
   });
 
   $(document).ready(function () {
-
+    var id = $('#view-schedule-tbl').data('id');
     var table = $('#view-schedule-tbl').DataTable({
       'processing': true,
       'ajax': {
-        'url': '/to/month-schedule/equipment'
+        'url': '/to/month-schedule/schedule-view?id=' + id
       },
       'columns': [
-        {'defaultContent': 'id'},
         {'defaultContent': ''},
-        {'data': 'name'},
-        {'data': 'eq_serial'},
+        {'defaultContent': ''},
+        {'data': 'equipment'},
+        {'data': 's/n'},
         {'data': 'parent'},
-        {'defaultContent': ''},
-        {'defaultContent': ''},
-        {'defaultContent': ''},
-        {'defaultContent': ''}
-      ],
-      dom: 'Bfrtip',
-      buttons: [
-        'selectAll',
-        'selectNone'
+        {'data': 'toType'},
+        {'data': 'plan_date'},
+        {'data': 'fact_date'},
+        {'data': 'admin'},
+        {'data': 'auditor'}
       ],
       paging: false,
-      select: {
-        style: 'os',
-        selector: 'td:last-child'
-      },
       rowGroup: {
         dataSrc: 'parent'
       },
       fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
         $('select.to-list', nRow).attr('id', aData.id);
+        console.log(aData);
+        var pDate = aData.plan_date;
+        var fDate = aData.fact_date;
+        var pattern = /(\d{4})\-(\d{2})\-(\d{2})/;
+        if (pDate != null) {
+          $('td:nth-child(5)', nRow).text(pDate.replace(pattern, '$3.$2.$1'));
+        } else {
+          $('td:nth-child(5)', nRow).text('-');
+        }
+        if (fDate != null) {
+          $('td:nth-child(6)', nRow).text(fDate.replace(pattern, '$3.$2.$1'));
+        } else {
+          $('td:nth-child(6)', nRow).text('-');
+        }
       },
       columnDefs: [
         {
-          'targets': -2,                    // предпоследний столбец
-          'orderable': false,
-          'data': null,
-          'width': '70px',
-          'defaultContent':
-            '<a href="#" id="edit" class="fa fa-edit" style="padding-right: 5px" title="Обновить"></a>' +
-            '<a href="#" id="view" class="fa fa-info" title="Подробности" style="padding-right: 5px"></a>'
-        }, {
-          'targets': -1,                    // последний столбец
-          'orderable': false,
-          'className': 'select-checkbox',
-          'defaultContent': ''
-        }, {
           'targets': 0,
           'visible': false
         }, {
@@ -100,10 +80,6 @@ use yii\helpers\Html;
       responsive: true,
       language: {
         url: '/lib/ru.json',
-        'buttons': {
-          'selectAll': 'Выделить все',
-          'selectNone': 'Снять выделение'
-        }
       }
     });
     table.on('order.dt search.dt', function () {

@@ -79,6 +79,40 @@ body {
 #to-mscheduler-table tr {
   font-size: 12px;
 }
+/* просмотр месячных графиков ТО*/
+#view-schedule-tbl td {
+  text-align: center; !important;
+}
+#view-schedule-tbl th {
+  text-align: center; !important;
+}
+#view-schedule-tbl td .fa {
+  font-size: 25px;
+  text-decoration: none;
+}
+#view-schedule-tbl tbody td {
+  font-size: 12px;
+}
+#view-schedule-tbl tr {
+  font-size: 12px;
+}
+/* выполнение месячных графиков ТО*/
+#perform-schedule-tbl td {
+  text-align: center; !important;
+}
+#perform-schedule-tbl th {
+  text-align: center; !important;
+}
+#perform-schedule-tbl td .fa {
+  font-size: 25px;
+  text-decoration: none;
+}
+#perform-schedule-tbl tbody td {
+  font-size: 12px;
+}
+#perform-schedule-tbl tr {
+  font-size: 12px;
+}
 /* таблица создания графика ТО*/
 #schedule-create-tbl tr input, select {
   min-height: 20px;

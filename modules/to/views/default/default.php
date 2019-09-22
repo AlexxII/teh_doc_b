@@ -48,7 +48,7 @@ $this->title = "Графики ТО";
           <th data-priority="1">Месяц</th>
           <th data-priority="7">Отметки</th>
           <th>Год</th>
-          <th>Объем ТО</th>
+          <th>Вид ТО</th>
           <th>Ответственный за проведение</th>
           <th>Ответственный за контроль</th>
           <th data-priority="3">Action</th>
@@ -103,7 +103,7 @@ $this->title = "Графики ТО";
     var editBtn = '<a href="#" id="edit" class="fa fa-edit" style="padding-right: 5px" title="Обновить"></a>';
     var infoBtn = '<a href="#" id="view" class="fa fa-info" ' +
       ' title="Подробности" data-url="/to/month-schedule/view" data-back-url="/to" style="padding-right: 5px"></a>';
-    var cfrmBtn = '<a href="#" id="confirm-schedule" class="fa fa-calendar-check-o" ' +
+    var cfrmBtn = '<a href="#" id="perform" class="fa fa-calendar-check-o" ' +
       'title="Подтвердить выполнение" style="padding-right: 5px"></a>';
 
     var toTypeSelect, toAdminsSelect, toAuditorsSelect;
@@ -132,10 +132,13 @@ $this->title = "Графики ТО";
         // var today = new Date();
         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
         var dDate = new Date(date.replace(pattern, '$3-$2-$1'));
-        $('td:nth-child(2)', nRow).text(monthNames[dDate.getMonth()]);
+        var month = monthNames[dDate.getMonth()];
+        $('td:nth-child(2)', nRow).text(month);
+        aData['monthText'] = month;
+        aData['monthVal'] = ("0" + (dDate.getMonth() + 1)).slice(-2);
         // $('td:nth-child(7)', nRow).html(editBtn + infoBtn + cfrmBtn);
         if (aData.checkmark == 0) {
-          $('td:nth-child(7)', nRow).html(editBtn + infoBtn);
+          $('td:nth-child(7)', nRow).html(editBtn + infoBtn + cfrmBtn);
           $('td:nth-child(3)', nRow).css({color: 'red'});
         } else {
           $('td:nth-child(7)', nRow).html(editBtn + infoBtn + cfrmBtn);
@@ -231,14 +234,15 @@ $this->title = "Графики ТО";
     archiveTable.on('click', '#view', function (e) {
       e.preventDefault();
       var data = archiveTable.row($(this).parents('tr')).data();
-      console.log(data);
       var id = data.schedule_id;
       var year = data.year;
+      var date = data.plan_date;
+      var month = data.monthText;
       var sData = {
         'id' : id,
-        'year': year
+        'year': year,
+        'month': month
       };
-      console.log(sData);
       var url = '/to/month-schedule/view';
       var backUrl = '/to';
       jc = $.confirm({
@@ -249,7 +253,34 @@ $this->title = "Графики ТО";
         closeIcon: false,
         confirmButtonClass: 'hide'
       });
-      loadExContent(url, backUrl, jc, sData);
+      loadContent(url, backUrl, jc, sData);
+    });
+
+    archiveTable.on('click', '#perform', function (e) {
+      e.preventDefault();
+      var data = archiveTable.row($(this).parents('tr')).data();
+      var id = data.schedule_id;
+      var year = data.year;
+      var date = data.plan_date;
+      var monthText = data.monthText;
+      var monthVal = data.monthVal;
+      var sData = {
+        'id' : id,
+        'year': year,
+        'monthText': monthText,
+        'monthVal' : monthVal
+      };
+      var url = '/to/month-schedule/perform';
+      var backUrl = '/to';
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Ваш запрос выполняется!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
+      loadContent(url, backUrl, jc, sData);
     });
 
 
@@ -286,7 +317,7 @@ $this->title = "Графики ТО";
 
   });
 
-  function loadExContent(url, backUrl, jc, data) {
+  function loadContent(url, backUrl, jc, data) {
     var csrf = $('meta[name=csrf-token]').attr("content");
     $.ajax({
       url: url,

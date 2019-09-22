@@ -12,7 +12,7 @@ use app\modules\to\models\ToSchedule;
 
 class MonthScheduleController extends Controller
 {
-//  public $layout = '@app/views/layouts/main_ex.php';
+  public $layout = '@app/views/layouts/main_ex.php';
 
   const TO_TABLE = 'to_schedule_tbl';
   const TO_YEAR_TABLE = 'to_year_schedule_tbl';
@@ -164,77 +164,134 @@ class MonthScheduleController extends Controller
 
   public function actionView()
   {
-    $this->layout = '@app/views/layouts/main_ex.php';
+//    $this->layout = '@app/views/layouts/main_ex.php';
 
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params["bUrl"] = $_POST["back-url"];
     $data = $_POST["data"];
     $year = $data["year"];
-    $month = 'сентябрь';
-    Yii::$app->view->params["title"] = "График на " . $month . ' ' . $year  . " г.";
-    Yii::$app->view->params["bUrl"] = $_POST["back-url"];
+    $month = $data["month"];
+    $schedule = $data["id"];
+    Yii::$app->view->params["title"] = "График на " . $month . ' ' . $year . " г.";
     return [
       "data" => [
         "success" => true,
-        "data" => $this->render("view"),
+        "data" => $this->render("view", [
+          'scheduleId' => $schedule
+        ]),
         "message" => "Page load.",
       ],
       "code" => 1,
     ];
   }
 
-  public function actionScheduleView()
+  public function actionScheduleView($id)
   {
-
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $schTable = self::TO_TABLE;
+    $usersTable = self::ADMINS_TABLE;
+    $toTable = self::TOTYPE_TABLE;
+    $equipmentTable = self::TOEQUIPMENT_TABLE;
+    $sql = "SELECT {$schTable}.id, 
+              {$schTable}.plan_date, 
+              {$schTable}.fact_date, 
+              {$schTable}.schedule_id, 
+              YEAR({$schTable}.plan_date) as year, 
+              {$schTable}.eq_id as equipment,
+              t1.name as admin, 
+              t2.name as auditor,
+              t3.name as toType,
+              t4.name as equipment,
+              t4.eq_serial as 's/n',
+              t5.name as parent,
+              {$schTable}.checkmark
+            from {$schTable}
+              LEFT JOIN {$usersTable} as t1 on {$schTable}.admin_id = t1.id
+              LEFT JOIN {$usersTable} as t2 on {$schTable}.auditor_id = t2.id
+              LEFT JOIN {$toTable} as t3 on {$schTable}.to_type = t3.id
+              LEFT JOIN {$equipmentTable} as t4 on {$schTable}.eq_id = t4.id
+              LEFT JOIN {$equipmentTable} as t5 on t4.parent_id = t5.id
+              WHERE {$schTable}.schedule_id = {$id}
+              ORDER BY t4.lft ASC";
+    $data["data"] = ToSchedule::findBySql($sql)->asArray()->all();
+    return $data;
   }
 
-  public function actionViewE($id)
+  /*
+    public function actionViewE($id)
+    {
+      $model = ToSchedule::find()
+        ->with(['admin', 'auditor', 'toType', 'toEq'])
+        ->where(['schedule_id' => $id]);
+      $month = $model->max('plan_date');
+      setlocale(LC_ALL, 'ru_RU');
+      $month = strftime("%B %Y", strtotime($month));
+      return $this->render('view_', [
+        'tos' => $model->all(),
+        'month' => $month,
+        'id' => $id
+      ]);
+    }
+  */
+
+  public function actionPerform()
   {
-    $model = ToSchedule::find()
-      ->with(['admin', 'auditor', 'toType', 'toEq'])
-      ->where(['schedule_id' => $id]);
-    $month = $model->max('plan_date');
-    setlocale(LC_ALL, 'ru_RU');
-    $month = strftime("%B %Y", strtotime($month));
-    return $this->render('view_', [
-      'tos' => $model->all(),
-      'month' => $month,
-      'id' => $id
-    ]);
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params["bUrl"] = $_POST["back-url"];
+    $data = $_POST["data"];
+    $year = $data["year"];
+    $monthText = $data["monthText"];
+    $monthVal = $data['monthVal'];
+    $schedule = $data["id"];
+    Yii::$app->view->params["title"] = "Выполнение графика на " . $monthText . ' ' . $year . " г.";
+    return [
+      "data" => [
+        "success" => true,
+        "data" => $this->render("perform", [
+          "scheduleId" => $schedule,
+          "toDate" => "01." . $monthVal . "." . $year
+        ]),
+        "message" => "Page load.",
+      ],
+      "code" => 1,
+    ];
   }
 
   // Отметка о выполнении графика ТО на выбранный месяц
+  /*
   public function actionPerform($id)
-  {
-    $models = ToSchedule::find()
-      ->with(['admin', 'auditor', 'toType', 'toEq'])
-      ->where(['schedule_id' => $id]);
-    $month = $models->max('plan_date');
-    $to = $models->all();
-    if (ToSchedule::loadMultiple($to, Yii::$app->request->post())) {
-      if (ToSchedule::validateMultiple($to)) {
-        foreach ($to as $t) {
-          if ($t->fact_date != null) {
-            $t->checkmark = '1';
-          } else {
-            $t->checkmark = '0';
+    {
+      $models = ToSchedule::find()
+        ->with(['admin', 'auditor', 'toType', 'toEq'])
+        ->where(['schedule_id' => $id]);
+      $month = $models->max('plan_date');
+      $to = $models->all();
+      if (ToSchedule::loadMultiple($to, Yii::$app->request->post())) {
+        if (ToSchedule::validateMultiple($to)) {
+          foreach ($to as $t) {
+            if ($t->fact_date != null) {
+              $t->checkmark = '1';
+            } else {
+              $t->checkmark = '0';
+            }
+            $t->save();
           }
-          $t->save();
+        } else {
+          Yii::$app->session->setFlash('error', "Ошибка валидации данных");
+          return $this->render('perform', [
+            'tos' => $to,
+            'month' => $month,
+          ]);
         }
-      } else {
-        Yii::$app->session->setFlash('error', "Ошибка валидации данных");
-        return $this->render('perform', [
-          'tos' => $to,
-          'month' => $month,
-        ]);
+        Yii::$app->session->setFlash('success', "Отметки о проведении ТО проставлены");
+        return $this->redirect('archive');
       }
-      Yii::$app->session->setFlash('success', "Отметки о проведении ТО проставлены");
-      return $this->redirect('archive');
+      return $this->render('perform', [
+        'tos' => $models->all(),
+        'month' => $month,
+      ]);
     }
-    return $this->render('perform', [
-      'tos' => $models->all(),
-      'month' => $month,
-    ]);
-  }
+  */
 
 
   public function actionUpdate($id)

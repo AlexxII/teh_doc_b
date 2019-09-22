@@ -136,7 +136,6 @@ TableBaseAsset::register($this);
 
   var freeDays = new Array();
   var busyDays = new Array(); // глобальный массив хранения
-  var startDay, endDay, startDayBorder, endDayBorder; // глобальные переменных хранения дат
 
   $(document).ready(function () {
     //первичные настройки интерфейса и календаря
