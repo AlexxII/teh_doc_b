@@ -20,8 +20,12 @@ class MonthScheduleController extends Controller
   const TOTYPE_TABLE = 'to_type_tbl';
   const TOEQUIPMENT_TABLE = 'to_equipment_tbl';
 
+
+  // Все графики ТО с основной таблицы
   public function actionIndex()
   {
+    //    $this->layout = '@app/views/layouts/main_ex.php';
+
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     $schTable = self::TO_TABLE;
     $usersTable = self::ADMINS_TABLE;
@@ -65,7 +69,25 @@ class MonthScheduleController extends Controller
     throw new NotFoundHttpException('The requested page does not exist.');
   }
 
-  //оборудование для создания графика
+
+  // Инициализация страницы создания графика ТО
+  public function actionCreate()
+  {
+    $this->layout = '@app/views/layouts/main_ex.php';
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Создать график';
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('create'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
+  }
+
+  //оборудование для создания графика - формирование списка для страницы создания графика ТО
   public function actionEquipment()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -83,22 +105,25 @@ class MonthScheduleController extends Controller
     return $data;
   }
 
-  public function actionCreate()
+  // Получение списка видов ТО на выбранный месяц (из плана-графика ТО на год)
+  public function actionGetTypes()
   {
-    $this->layout = '@app/views/layouts/main_ex.php';
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'Создать график';
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
-    return [
-      'data' => [
-        'success' => true,
-        'data' => $this->render('create'),
-        'message' => 'Page load.',
-      ],
-      'code' => 1,
-    ];
+    sleep(1);
+    if ($_POST) {
+      $year = $_POST['year'];
+      $monthNumber = $_POST['month'];
+      $month = 'm' . $monthNumber;
+      $table = self::TO_YEAR_TABLE;
+      $sql = "SELECT eq_id, {$month} as month FROM {$table} WHERE schedule_year = :year";
+      $req = Yii::$app->db->createCommand($sql)
+        ->bindValue(':year', $year)
+        ->queryAll();
+      return json_encode($req);
+    }
+    return false;
   }
 
+  // Сохрание созданного графика ТО
   public function actionSaveSchedule()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -145,27 +170,10 @@ class MonthScheduleController extends Controller
     ];
   }
 
-  public function actionGetTypes()
-  {
-    sleep(1);
-    if ($_POST) {
-      $year = $_POST['year'];
-      $monthNumber = $_POST['month'];
-      $month = 'm' . $monthNumber;
-      $table = self::TO_YEAR_TABLE;
-      $sql = "SELECT eq_id, {$month} as month FROM {$table} WHERE schedule_year = :year";
-      $req = Yii::$app->db->createCommand($sql)
-        ->bindValue(':year', $year)
-        ->queryAll();
-      return json_encode($req);
-    }
-    return false;
-  }
+
 
   public function actionView()
   {
-//    $this->layout = '@app/views/layouts/main_ex.php';
-
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     Yii::$app->view->params["bUrl"] = $_POST["back-url"];
     $data = $_POST["data"];
@@ -217,23 +225,7 @@ class MonthScheduleController extends Controller
     return $data;
   }
 
-  /*
-    public function actionViewE($id)
-    {
-      $model = ToSchedule::find()
-        ->with(['admin', 'auditor', 'toType', 'toEq'])
-        ->where(['schedule_id' => $id]);
-      $month = $model->max('plan_date');
-      setlocale(LC_ALL, 'ru_RU');
-      $month = strftime("%B %Y", strtotime($month));
-      return $this->render('view_', [
-        'tos' => $model->all(),
-        'month' => $month,
-        'id' => $id
-      ]);
-    }
-  */
-
+  // Отметка о выполнении графика ТО на выбранный месяц - формирование страницы
   public function actionPerform()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -241,15 +233,13 @@ class MonthScheduleController extends Controller
     $data = $_POST["data"];
     $year = $data["year"];
     $monthText = $data["monthText"];
-    $monthVal = $data['monthVal'];
     $schedule = $data["id"];
     Yii::$app->view->params["title"] = "Выполнение графика на " . $monthText . ' ' . $year . " г.";
     return [
       "data" => [
         "success" => true,
         "data" => $this->render("perform", [
-          "scheduleId" => $schedule,
-          "toDate" => "01." . $monthVal . "." . $year
+          "scheduleId" => $schedule
         ]),
         "message" => "Page load.",
       ],
@@ -257,67 +247,130 @@ class MonthScheduleController extends Controller
     ];
   }
 
-  // Отметка о выполнении графика ТО на выбранный месяц
-  /*
-  public function actionPerform($id)
-    {
-      $models = ToSchedule::find()
-        ->with(['admin', 'auditor', 'toType', 'toEq'])
-        ->where(['schedule_id' => $id]);
-      $month = $models->max('plan_date');
-      $to = $models->all();
-      if (ToSchedule::loadMultiple($to, Yii::$app->request->post())) {
-        if (ToSchedule::validateMultiple($to)) {
-          foreach ($to as $t) {
-            if ($t->fact_date != null) {
-              $t->checkmark = '1';
-            } else {
-              $t->checkmark = '0';
-            }
-            $t->save();
-          }
-        } else {
-          Yii::$app->session->setFlash('error', "Ошибка валидации данных");
-          return $this->render('perform', [
-            'tos' => $to,
-            'month' => $month,
-          ]);
-        }
-        Yii::$app->session->setFlash('success', "Отметки о проведении ТО проставлены");
-        return $this->redirect('archive');
-      }
-      return $this->render('perform', [
-        'tos' => $models->all(),
-        'month' => $month,
-      ]);
-    }
-  */
-
-
-  public function actionUpdate($id)
+  // Отметка о выполнении графика ТО на выбранный месяц - сохранение результатов
+  public function actionPerformSchedule()
   {
-    $models = ToSchedule::findModel($id)->all();
-    if (Model::loadMultiple($models, Yii::$app->request->post())) {
-      if (\yii\base\Model::validateMultiple($models)) {
-        $count = 0;
-        foreach ($models as $model) {
-          if ($model->save()) {
-            $count++;
-          }
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if ($_POST["data"]){
+      $data = $_POST["data"];
+      $result = false;
+      foreach ($data as $key => $scheduleDate) {
+        $model = ToSchedule::findOne($key);
+        if ($model) {
+          $model->checkmark = 1;
+          $model->fact_date = $scheduleDate;
+          $result = $model->save();
+          continue;
         }
-        Yii::$app->session->setFlash('success', "Обновлено {$count} записей.");
-        return $this->redirect(['index']);
-      } else {
-        Yii::$app->session->setFlash('error', "Данные не прошли валидацию");
-        return $this->render('update', [
-          'tos' => $models,
-        ]);
+        return [
+          "data" => [
+            "success" => false,
+            "data" => "Model wasn`t find",
+            "message" => "Model wasn`t find",
+          ],
+          "code" => 0,
+        ];
       }
-    } else {
-      return $this->render('update', [
-        'tos' => $models,
-      ]);
+      if ($result) {
+        return [
+          "data" => [
+            "success" => true,
+            "data" => "Schedules was saved",
+            "message" => "Schedules was saved",
+          ],
+          "code" => 1,
+        ];
+      }
+      return [
+        "data" => [
+          "success" => false,
+          "data" => $model->errors,
+          "message" => "Failed to save data",
+        ],
+        "code" => 0,
+      ];
     }
+    return [
+      "data" => [
+        "success" => false,
+        "data" => "$_POST is empty",
+        "message" => "$_POST is empty",
+      ],
+      "code" => 0,
+    ];
+  }
+
+  public function actionEdit()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params["bUrl"] = $_POST["back-url"];
+    $data = $_POST["data"];
+    $year = $data["year"];
+    $monthText = $data["monthText"];
+    $schedule = $data["id"];
+    Yii::$app->view->params["title"] = "Обновить график на " . $monthText . ' ' . $year . " г.";
+    return [
+      "data" => [
+        "success" => true,
+        "data" => $this->render("edit", [
+          "scheduleId" => $schedule
+        ]),
+        "message" => "Page load.",
+      ],
+      "code" => 1,
+    ];
+  }
+
+  public function actionEditSave()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if ($_POST["data"]){
+      $data = $_POST["data"];
+      $result = false;
+      foreach ($data as $key => $scheduleDate) {
+        $model = ToSchedule::findOne($key);
+        if ($model) {
+          $model->plan_date = $scheduleDate;
+          $result = $model->save();
+          continue;
+        }
+        return [
+          "data" => [
+            "success" => false,
+            "data" => "Model wasn`t find",
+            "message" => "Model wasn`t find",
+          ],
+          "code" => 0,
+        ];
+      }
+      if ($result) {
+        return [
+          "data" => [
+            "success" => true,
+            "data" => "Schedules was saved",
+            "message" => "Schedules was saved",
+          ],
+          "code" => 1,
+        ];
+      }
+      return [
+        "data" => [
+          "success" => false,
+          "data" => $model->errors,
+          "message" => "Failed to save data",
+        ],
+        "code" => 0,
+      ];
+    }
+    return [
+      "data" => [
+        "success" => false,
+        "data" => "$_POST is empty",
+        "message" => "$_POST is empty",
+      ],
+      "code" => 0,
+    ];
+
   }
 
   public function actionFreeDays($start_date, $end_date)
@@ -336,5 +389,25 @@ class MonthScheduleController extends Controller
       ->queryAll();
     return json_encode($ar);
   }
+
+
+  /*
+  public function actionViewE($id)
+  {
+    $model = ToSchedule::find()
+      ->with(['admin', 'auditor', 'toType', 'toEq'])
+      ->where(['schedule_id' => $id]);
+    $month = $model->max('plan_date');
+    setlocale(LC_ALL, 'ru_RU');
+    $month = strftime("%B %Y", strtotime($month));
+    return $this->render('view_', [
+      'tos' => $model->all(),
+      'month' => $month,
+      'id' => $id
+    ]);
+  }
+*/
+
+
 
 }

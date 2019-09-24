@@ -19,7 +19,7 @@ class YearScheduleController extends Controller
     $this->layout = '@app/views/layouts/main_ex.php';
 
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'Годовый планы ТО';
+    Yii::$app->view->params['title'] = 'Годовые планы ТО';
     Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     $toTypes = ToType::find()->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
     $toTypeArray = array();

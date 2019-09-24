@@ -9,9 +9,6 @@ FancytreeAsset::register($this);
 BootstrapDatepickerAsset::register($this);
 FloatTheadAsset::register($this);
 
-
-$this->title = 'График ТО на год';
-
 $about = "Панель формирования графика ТО на год.";
 $refresh_hint = 'Перезапустить форму';
 $ref_hint = 'К оборудованию в основном перечне';
@@ -76,7 +73,7 @@ $collapse_hint = 'Скрыть все';
 </style>
 
 <div class="admin-category-pannel">
-  <h3 style="float: left; padding-right: 15px;padding-bottom: 0px">График то на - </h3>
+  <h3 style="float: left; padding-right: 15px;padding-bottom: 0px">План ТО на - </h3>
   <div style="float: left; padding-top: 18px; max-width: 200px">
     <div class="input-group date to-month-tooltip" data-toggle='tooltip' data-placement='top'>
       <input type="text" class="form-control" readonly id="to-year" title="Необходимо ввести год"

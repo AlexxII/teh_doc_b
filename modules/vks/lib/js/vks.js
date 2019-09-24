@@ -104,15 +104,15 @@ function deleteRestoreProcess(url, table, csrf) {
 $(document).on('click', '.add-subcategory', function (e) {
   e.preventDefault();
   var id = $(e.currentTarget).data('tree');
-  var node = $("#" + id).fancytree("getActiveNode");
+  var node = $('#' + id).fancytree('getActiveNode');
   if (!node) {
-    alert("Выберите родительскую категорию");
+    alert('Выберите родительскую категорию');
     return;
   }
   if (node.data.lvl <= 1) {
-    node.editCreateNode("child", " ");
+    node.editCreateNode('child', ' ');
   } else {
-    alert("Нельзя создавать вложенность более 3х");
+    alert('Нельзя создавать вложенность более 3х');
     return;
   }
 });

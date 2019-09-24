@@ -8,15 +8,7 @@
         <h5>Годовые планы ТО</h5>
       </div>
     </div>
-    <div class="menu-list-about ex-click" data-url="/to/month-schedule/view" data-back-url="/to">
-      <div>
-        <i class="fa fa-calendar" aria-hidden="true"></i>
-      </div>
-      <div class="menu-point-footer">
-        <h5>Просмотр</h5>
-      </div>
-    </div>
-    <div class="menu-list-about ex-click" data-url="/vks/analytics/index" data-back-url="/to">
+    <div class="menu-list-about ex-click" data-url="/to/operating-hours/index" data-back-url="/to">
       <div>
         <i class="fa fa-calculator" aria-hidden="true"></i>
       </div>

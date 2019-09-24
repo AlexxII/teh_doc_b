@@ -5,7 +5,7 @@ use yii\helpers\Html;
 ?>
 
 
-<table id="view-schedule-tbl" data-id="<?= $scheduleId?>" class="display no-wrap cell-border" style="width:100%">
+<table id="view-schedule-tbl" data-id="<?= $scheduleId?>" class="display no-wrap cell-border toTable" style="width:100%">
   <thead>
   <tr>
     <th></th>
@@ -48,6 +48,8 @@ use yii\helpers\Html;
         {'data': 'auditor'}
       ],
       paging: false,
+      ordering: false,
+      orderFixed: [[4, 'desc']],
       rowGroup: {
         dataSrc: 'parent'
       },

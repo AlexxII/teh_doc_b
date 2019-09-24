@@ -10,7 +10,7 @@ use yii\helpers\Html;
   }
 </style>
 
-<table id="perform-schedule-tbl" data-id="<?= $scheduleId ?>" class="display no-wrap cell-border toTable" style="width:100%">
+<table id="edit-schedule-tbl" data-id="<?= $scheduleId ?>" class="display no-wrap cell-border toTable" style="width:100%">
   <thead>
   <tr>
     <th></th>
@@ -28,23 +28,24 @@ use yii\helpers\Html;
   </thead>
 </table>
 <br>
-<button class="btn btn-ml" id="perform-schedule" style="background-color: #2196f3; color: #fff" title="Подтвердить выполнение ТО">Подтвердить</button>
+<button class="btn btn-ml" id="save-edit" style="background-color: #2196f3; color: #fff" title="Обновить график">Обновить</button>
 <br>
 <br>
 
 <script>
-  var toDateInput = '<input class="to-date form-control" name="to-date" style="max-width: 170px;" readonly>';
+  var toPlanDateInput = '<input class="to-date plan-date form-control" name="palan-date" style="max-width: 170px;" readonly>';
+  var toFactDateInput = '<input class="to-date fact-date form-control" name="fact-date" style="max-width: 170px;" readonly>';
 
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-    $.fn.datepicker.defaults.format = "dd.mm.yyyy";
-    $.fn.datepicker.defaults.language = "ru";
+    $.fn.datepicker.defaults.format = 'dd.mm.yyyy';
+    $.fn.datepicker.defaults.language = 'ru';
     $.fn.datepicker.defaults.autoclose = 'true';
-    $.fn.datepicker.defaults.daysOfWeekDisabled = "0,6";
+    $.fn.datepicker.defaults.daysOfWeekDisabled = '0,6';
 
-    var id = $('#perform-schedule-tbl').data('id');
-    var table = $('#perform-schedule-tbl').DataTable({
+    var id = $('#edit-schedule-tbl').data('id');
+    var table = $('#edit-schedule-tbl').DataTable({
       'processing': true,
       'ajax': {
         'url': '/to/month-schedule/schedule-view?id=' + id
@@ -56,8 +57,8 @@ use yii\helpers\Html;
         {'data': 's/n'},
         {'data': 'parent'},
         {'data': 'toType'},
-        {'data': 'plan_date'},
-        {'defaultContent': toDateInput},
+        {'defaultContent': toPlanDateInput},
+        {'defaultContent': '-'},
         {'data': 'admin'},
         {'data': 'auditor'},
         {'defaultContent': ''}
@@ -74,25 +75,15 @@ use yii\helpers\Html;
         var fDate = aData.fact_date;
         var pattern = /(\d{4})\-(\d{2})\-(\d{2})/;
         // console.log(aData);
-        if (fDate != null) {
-          $('.to-date', nRow).datepicker('setStartDate', pDate.replace(pattern, '$3.$2.$1'));
-          $('.to-date', nRow).datepicker('setDate', fDate.replace(pattern, '$3.$2.$1'));
-          $('.to-date', nRow).datepicker('update', fDate.replace(pattern, '$3.$2.$1'));
-          $('.to-date', nRow).on('change', copySl);                                      // обработчик события 'change'
-        } else {
-          if (pDate != null) {
-            $('.to-date', nRow).datepicker('setStartDate', pDate.replace(pattern, '$3.$2.$1'));
-            $('.to-date', nRow).datepicker('update', pDate.replace(pattern, '$3.$2.$1'));
-            $('.to-date', nRow).val('');
-            $('.to-date', nRow).on('change', copySl);                                      // обработчик события 'change'
-          } else {
-            $('td:nth-child(5)', nRow).text('-');
-          }
-        }
         if (pDate != null) {
-          $('td:nth-child(5)', nRow).text(pDate.replace(pattern, '$3.$2.$1'));
-        } else {
-          $('td:nth-child(5)', nRow).text('-');
+          $('.plan-date', nRow).datepicker('update', pDate.replace(pattern, '$3.$2.$1'));
+          $('.plan-date', nRow).on('change', copySl);                                      // обработчик события 'change'
+        }
+        if (fDate != null) {
+          $('.fact-date', nRow).datepicker('setStartDate', pDate.replace(pattern, '$3.$2.$1'));
+          $('.fact-date', nRow).datepicker('setDate', fDate.replace(pattern, '$3.$2.$1'));
+          $('.fact-date', nRow).datepicker('update', fDate.replace(pattern, '$3.$2.$1'));
+          $('.fact-date', nRow).on('change', copySl);                                      // обработчик события 'change'
         }
       },
       columnDefs: [
@@ -124,13 +115,17 @@ use yii\helpers\Html;
       });
     }).draw();
 
-    $('#perform-schedule-tbl')
+    $('#edit-schedule-tbl')
       .on('processing.dt', function (e, settings, processing) {
         $('#processingIndicator').css('display', processing ? 'block' : 'none');
+        if (!processing) {
+          $('.plan-date').datepicker()
+            .on('changeDate', function(e) {
+              var input = e.currentTarget;
+              input.dataset.new = 1;
+            });
+        }
       }).dataTable();
-
-
-
   });
 
 

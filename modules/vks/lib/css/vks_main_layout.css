@@ -198,4 +198,9 @@ td.align-center {
 .ui-front {
   z-index: 300 !important;
 }
+/*===============================================================*/
+/* Выравнивание всех таблиц*/
+table td {
+  text-align: center !important;
+}
 

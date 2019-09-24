@@ -40,7 +40,7 @@ $this->title = "Графики ТО";
     </div>
 
     <div class="container-fluid">
-      <table id="to-mscheduler-table" class="display no-wrap cell-border" style="width:100%">
+      <table id="to-mscheduler-table" class="display no-wrap cell-border toTable" style="width:100%">
         <thead>
         <tr>
           <th></th>
@@ -141,7 +141,13 @@ $this->title = "Графики ТО";
           $('td:nth-child(7)', nRow).html(editBtn + infoBtn + cfrmBtn);
           $('td:nth-child(3)', nRow).css({color: 'red'});
         } else {
-          $('td:nth-child(7)', nRow).html(editBtn + infoBtn + cfrmBtn);
+          if (aData.checkmark.length > 1){
+            $('td:nth-child(7)', nRow).html(infoBtn + cfrmBtn);
+            $('td:nth-child(3)', nRow).css({color: 'blue'});
+          } else {
+            $('td:nth-child(7)', nRow).html(infoBtn);
+            $('td:nth-child(3)', nRow).css({color: 'green'});
+          }
         }
       },
       orderFixed: [[4, 'desc']],
@@ -271,6 +277,33 @@ $this->title = "Графики ТО";
         'monthVal' : monthVal
       };
       var url = '/to/month-schedule/perform';
+      var backUrl = '/to';
+      jc = $.confirm({
+        icon: 'fa fa-cog fa-spin',
+        title: 'Подождите!',
+        content: 'Ваш запрос выполняется!',
+        buttons: false,
+        closeIcon: false,
+        confirmButtonClass: 'hide'
+      });
+      loadContent(url, backUrl, jc, sData);
+    });
+
+    archiveTable.on('click', '#edit', function (e) {
+      e.preventDefault();
+      var data = archiveTable.row($(this).parents('tr')).data();
+      var id = data.schedule_id;
+      var year = data.year;
+      var date = data.plan_date;
+      var monthText = data.monthText;
+      var monthVal = data.monthVal;
+      var sData = {
+        'id' : id,
+        'year': year,
+        'monthText': monthText,
+        'monthVal' : monthVal
+      };
+      var url = '/to/month-schedule/edit';
       var backUrl = '/to';
       jc = $.confirm({
         icon: 'fa fa-cog fa-spin',

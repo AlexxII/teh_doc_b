@@ -6,14 +6,15 @@ use yii\web\AssetBundle;
 
 class CalendarCoreAsset extends AssetBundle
 {
-  public $sourcePath = '@bower/fullcalendar/dist/core';
+//  public $sourcePath = '@bower/fullcalendar/dist/core';
+  public $sourcePath = '@bower/fullcalendar/packages/core/src';
 
   public $css = [
-    'main.min.css',
+    'main.scss',
   ];
 
   public $js = [
-    'main.min.js',
+    'main.ts',
     'locales/ru.js'
   ];
 

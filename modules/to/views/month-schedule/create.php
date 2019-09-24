@@ -24,7 +24,7 @@ TableBaseAsset::register($this);
 </div>
 <form id="schedule-create">
 
-  <table id="schedule-create-tbl" class="display no-wrap cell-border" style="width:100%">
+  <table id="schedule-create-tbl" class="display no-wrap cell-border toTable" style="width:100%">
     <thead>
     <tr>
       <th></th>
@@ -78,6 +78,7 @@ TableBaseAsset::register($this);
         'selectNone'
       ],
       ordering: false,
+      orderFixed: [[4, 'desc']],
       paging: false,
       select: {
         style: 'os',
@@ -91,6 +92,9 @@ TableBaseAsset::register($this);
       },
       columnDefs: [
         {
+          'targets': -3,
+          'width': '150px'
+        }, {
           'targets': -2,                    // предпоследний столбец
           'orderable': false,
           'data': null,
@@ -142,6 +146,7 @@ TableBaseAsset::register($this);
 
     $.fn.datepicker.defaults.format = "dd.mm.yyyy";
     $.fn.datepicker.defaults.language = "ru";
+    $.fn.datepicker.defaults.autoclose = 'true';
     $.fn.datepicker.defaults.daysOfWeekDisabled = "0,6";
 
     $('.admin-list').prop('disabled', true);

@@ -317,7 +317,6 @@ $(document).on('click', '#create-new-schedule', function (e) {
   var $createTable = $('#schedule-create-tbl');
   var rows = $createTable[0].rows;
   var scheduleData = {};
-  var createTableData = createTable.rows().data();
 
   for (var key in rows) {
     if (rows[key].localName == 'tr') {
@@ -490,7 +489,7 @@ $(document).on('change', '#to-month', function (e) {
 
 function controlListsInit() {
   // инициализация списков для создания графика ТО
-  toTypeSelect = '<select class="form-control to-list m-select" style="width: 120px">' +
+  toTypeSelect = '<select class="form-control to-list m-select">' +
     '<option value="none" selected="true" disabled="true">Выберите</option>';
   toAdminsSelect = '<select class="form-control admin-list m-select" style="width: 100% !important;">' +
     '<option value="none" selected="true" disabled="true">Выберите</option>';
@@ -537,8 +536,8 @@ function getMonthBorders(id) {
   var start_date = year + '-' + nMonth[month] + '-01';
   var end_date = year + '-' + nMonth[month] + '-' + mDays[month];
 
-  startDayBorder = '01-' + nMonth[month] + '-' + year;
-  endDayBorder = mDays[month] + '-' + nMonth[month] + '-' + year;
+  // startDayBorder = '01-' + nMonth[month] + '-' + year;
+  // endDayBorder = mDays[month] + '-' + nMonth[month] + '-' + year;
 
   startDay = '01.' + nMonth[month] + '.' + year;
   endDay = mDays[month] + '.' + nMonth[month] + '.' + year;
@@ -557,17 +556,6 @@ function setMonth(date) {
     $('.to-date').datepicker('update', date.startDay);
     $('.to-date').on('change', copySl);                    // обработчик события 'change'
   }
-  // var m = $('#to-month');
-  // if (m.val() != '') {
-  //   var fullDate = new Date(m.val());
-  //   var year = fullDate.getFullYear();
-  //   var month = fullDate.getMonth();
-  //   var nMonth = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-  //   $('.to-date').prop('disabled', false);
-  //   $('.to-date').datepicker('setStartDate', startDay);
-  //   $('.to-date').datepicker('update', startDay);
-  //   $('.to-date').on('change', copySl);                    // обработчик события 'change'
-  // }
   return;
 }
 
@@ -592,6 +580,7 @@ $(document).on('change', '.admin-list', function (e) {
     });
   }
 });
+
 
 // функция копирования дат проведения ТО
 function copySl(e) {
@@ -648,3 +637,80 @@ $(document).on('mouseleave', '.admin-list', function (e) {
 });
 
 //====================================================================
+// проставление отметок о проведении ТО
+$(document).on('click', '#perform-schedule', function (e) {
+  e.preventDefault();
+  var $createTable = $('#perform-schedule-tbl');
+  var rows = $createTable[0].rows;
+  var scheduleData = {};
+  var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+  for (var key in rows) {
+    if (rows[key].localName == 'tr') {
+      if (rows[key].attributes.class != undefined && rows[key].attributes.class.value != 'group group-start') {
+        var id = rows[key].cells[5].firstChild.attributes.id.value;
+        if (rows[key].cells[5].firstChild.value !== '') {
+          var fDate = rows[key].cells[5].firstChild.value;
+          scheduleData[id] = fDate.replace(pattern, '$3-$2-$1');
+        }
+      }
+    }
+  }
+  var csrf = $('meta[name=csrf-token]').attr("content");
+  var url = '/to/month-schedule/perform-schedule';
+  $.ajax({
+    url: url,
+    type: "post",
+    format: 'JSON',
+    data: {
+      _csrf: csrf,
+      data: scheduleData
+    }
+  }).done(function (response) {
+    var yText = '<span style="font-weight: 600">Успех!</span><br>Проведение ТО потверждено';
+    initNoty(yText, 'success');
+    goBack();
+  }).fail(function (error) {
+    var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Подтвердить не удалось';
+    initNoty(nText, 'error');
+    console.log('Error - saving schedule');
+  });
+});
+$(document).on('click', '#save-edit', function (e) {
+  e.preventDefault();
+  var $createTable = $('#edit-schedule-tbl');
+  var rows = $createTable[0].rows;
+  var scheduleData = {};
+  var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+  for (var key in rows) {
+    if (rows[key].localName == 'tr') {
+      if (rows[key].attributes.class != undefined && rows[key].attributes.class.value != 'group group-start') {
+        // console.log(rows[key].cells[4].firstChild.value);
+        // console.log(rows[key].cells[4].firstChild.dataset.new);
+        var id = rows[key].cells[4].firstChild.attributes.id.value;
+        if (rows[key].cells[4].firstChild.dataset.new !== undefined) {
+          var fDate = rows[key].cells[4].firstChild.value;
+          scheduleData[id] = fDate.replace(pattern, '$3-$2-$1');
+        }
+      }
+    }
+  }
+  var csrf = $('meta[name=csrf-token]').attr("content");
+  var url = '/to/month-schedule/edit-save';
+  $.ajax({
+    url: url,
+    type: "post",
+    format: 'JSON',
+    data: {
+      _csrf: csrf,
+      data: scheduleData
+    }
+  }).done(function (response) {
+    var yText = '<span style="font-weight: 600">Успех!</span><br>График ТО обновлен';
+    initNoty(yText, 'success');
+    goBack();
+  }).fail(function (error) {
+    var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
+    initNoty(nText, 'error');
+    console.log('Error - saving schedule');
+  });
+});

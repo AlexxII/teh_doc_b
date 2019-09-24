@@ -10,10 +10,12 @@ use app\assets\fullcalendar\CalendarInteractionAsset;
 use app\assets\fullcalendar\CalendarBootstrapAsset;
 use app\assets\fullcalendar\CalendarListAsset;
 use app\assets\BootstrapYearCalendarAsset;
+use app\assets\fullcalendar\CalendarCoreAsset;
 
 SchedulerAppAsset::register($this);
 
 NotyAsset::register($this);
+CalendarCoreAsset::register($this);
 CalendarDaygridAsset::register($this);
 CalendarTimegridAsset::register($this);
 CalendarInteractionAsset::register($this);
