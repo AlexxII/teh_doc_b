@@ -3,12 +3,8 @@
 use yii\helpers\Html;
 use app\assets\FancytreeAsset;
 
-FancytreeAsset::register($this);
 
 $this->title = 'Оборудование по местам размещения';
-$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'Перечень оборудования', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = $this->title;
 
 $about = "Панель отображения оборудования по местам размещения. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $refresh_hint = 'Перезапустить форму';
@@ -82,7 +78,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
     </div>
 
     <div style="position: relative">
-      <div class="hideMenu-button hidden-sm hidden-xs" style="position: absolute;top: 5px;right: -20px">
+      <div class="hideMenu-button hidden-sm hidden-xs">
         <a href="#" class="fa fa-reply-all" data-placement="top" data-toggle="tooltip" title="Свернуть"
            aria-hidden="true"></a>
       </div>
@@ -99,7 +95,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
     <div class="row" style="padding: 0 15px">
       <div style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_w0" class="ui-draggable-handle"></div>
+        <div id="fancyree_placement_show" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
@@ -277,7 +273,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
   //************************* Управление деревом ***************************************
 
-  window.treeId = "#fancyree_w0";
+  window.treeId = "#fancyree_placement_show";
 
   $(document).ready(function () {
     $('.refresh').click(function (event) {
@@ -442,14 +438,14 @@ $classif_hint = 'Присвоить выделенному оборудован�
       "responsive": true,
       "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
       "ajax": $.fn.dataTable.pipeline({
-        url: 'server-side',
+        url: '/equipment/tools/server-side',
         pages: 2, // number of pages to cache
         data: function () {
           var root = $(".root").text();
           var lft = $(".lft").text();
           var rgt = $(".rgt").text();
           return {
-            'db_tbl': 'teh_placement_tbl',
+            'db_tbl': 'equipment_placement_tbl',
             'identifier': 'place_id',
             'root': root,
             'lft': lft,
@@ -490,33 +486,26 @@ $classif_hint = 'Присвоить выделенному оборудован�
         url: "/lib/ru.json"
       }
     });
+
     $('#main-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
+      var href = "/tehdoc/equipment/control-panel/" + data[0] + "/info/index";
       if (e.ctrlKey) {
-        var href = "/tehdoc/kernel/equipment/update?id=" + data[0];
         window.open(href);
       } else {
-        location.href = "/tehdoc/kernel/equipment/update?id=" + data[0];
+        location.href = href;
       }
-
     });
     $('#main-table tbody').on('click', '.view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
-      var id = data['0'];
-      $.ajax({
-        url: "/tehdoc/kernel/equipment/about?id=" + id,
-        type: "GET",
-        success: function (result) {
-          $(".modal-body").html(result);
-          $("#exampleModalCenter").modal("show");
-        },
-        error: function () {
-          alert('Ошибка! Обратитесь к разработчику.');
-        }
-      });
-
+      var href = "/tehdoc/equipment/tool/" + data[0] + "/info/index";
+      if (e.ctrlKey) {
+        window.open(href);
+      } else {
+        location.href = href;
+      }
     });
   });
 
@@ -638,11 +627,11 @@ $classif_hint = 'Присвоить выделенному оборудован�
   });
 
   jQuery(function ($) {
-    var main_url = '/tehdoc/control/placement/placements';
+    var main_url = '/equipment/control/placement/placements';
 
-    $("#fancyree_w0").fancytree({
+    $("#fancyree_placement_show").fancytree({
       source: {
-        url: main_url,
+        url: main_url
       },
       extensions: ['filter'],
       quicksearch: true,

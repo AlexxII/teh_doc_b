@@ -5,24 +5,6 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use kartik\file\FileInput;
-use app\modules\equipment\asset\EquipmentFormsAsset;
-
-// TODO Добавить checkbox - возвращаться в данную форму после сохранения.
-
-?>
-
-<style>
-  .nonreq {
-    font-size: 15px;
-    color: #1e6887;
-  }
-  .select-selected {
-    padding-left: 40px;
-  }
-</style>
-
-<?php
-EquipmentFormsAsset::register($this);
 
 // текст к подсказкам
 $cat_hint = 'Обязательное! Необходима для классификации оборудования.';
@@ -39,6 +21,8 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
 
 ?>
 
+<span><small><?= $model->toolParents(0) ?></small></span>
+
 <div class="tool-update-form">
   <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <div class="customer-form">
@@ -49,7 +33,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
           <?php
           echo $form->field($model, 'category_id', [
             'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $cat_hint . '"></sup>{input}{hint}'])
+                data-toggle="tooltip" data-container="body" data-placement="top" title="' . $cat_hint . '"></sup>{input}{hint}'])
             ->dropDownList($model->toolCategoryList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
               'options' => [
                 'value' => 'none',
@@ -61,7 +45,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         <div class="col-md-6 col-lg-6">
           <?= $form->field($model, 'eq_title', [
             'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-                data-toggle="tooltip"  
+                data-toggle="tooltip" data-container="body"
                 data-placement="top" title="' . $title_hint . '"></sup>{input}{hint}'])
             ->textInput(['data-name' => $model->eq_title])->hint('Например: Коммутатор с автоопределителем', ['class' => ' w3-label-under']); ?>
         </div>
@@ -80,13 +64,13 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         <div class="col-md-6 col-lg-6">
           <?= $form->field($model, 'eq_serial', [
             'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $serial_hint . '"></sup>{input}{hint}'
+                data-toggle="tooltip" data-container="body" data-placement="top" title="' . $serial_hint . '"></sup>{input}{hint}'
           ])->textInput()->hint('Например: HRUEO139UI92', ['class' => ' w3-label-under']); ?>
         </div>
         <div class="col-md-6 col-lg-6">
           <?= $form->field($model, 'invent_number', [
             'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $invent_hint . '"></sup>{input}{hint}'
+                data-toggle="tooltip" data-container="body" data-placement="top" title="' . $invent_hint . '"></sup>{input}{hint}'
           ])->textInput()->hint('Например: 20205147', ['class' => ' w3-label-under']); ?>
         </div>
       </div>
@@ -94,15 +78,15 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         <div class="col-md-6 col-lg-6">
           <?= $form->field($model, 'eq_factdate', [
             'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $date_hint . '"></sup>{input}{hint}'
+                data-toggle="tooltip" data-container="body" data-placement="top" title="' . $date_hint . '"></sup>{input}{hint}'
           ])->textInput([
-            'class' => 'fact-date form-control'
+            'class' => 'fact-date form-control', 'readonly'=> true
           ])->hint('Введите или выберите дату', ['class' => ' w3-label-under']); ?>
         </div>
         <div class="form-group col-md-6 col-lg-6">
           <?= $form->field($model, 'eq_operating_time', [
             'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $oTime_hint . '"></sup>{input}{hint}'
+                data-toggle="tooltip" data-container="body" data-placement="top" title="' . $oTime_hint . '"></sup>{input}{hint}'
           ])->textInput()->hint('Например: 124948', ['class' => ' w3-label-under']); ?>
         </div>
       </div>
@@ -111,7 +95,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
           <?php
           echo $form->field($model, 'place_id', [
             'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $place_hint . '"></sup>{input}{hint}'
+                data-toggle="tooltip" data-container="body" data-placement="top" title="' . $place_hint . '"></sup>{input}{hint}'
           ])->dropDownList($model->toolPlacesList, ['data-name' => 'vks_type', 'prompt' => ['text' => 'Выберите',
             'options' => [
               'value' => 'none',
@@ -123,7 +107,7 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         <div class="col-md-4">
           <?= $form->field($model, 'quantity', [
             'template' => '{label} <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-                data-toggle="tooltip" data-placement="top" title="' . $quantity_hint . '"></sup>{input}{hint}'])
+                data-toggle="tooltip" data-container="body" data-placement="top" title="' . $quantity_hint . '"></sup>{input}{hint}'])
             ->textInput()->hint('Введите количество', ['class' => ' w3-label-under']); ?>
         </div>
       </div>
@@ -134,9 +118,9 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
           $allImages[] = "<img src='" . $photo->getImageUrl() . "' class='file-preview-image'
                           style='max-width:100%;max-height:100%'>";
           $previewImagesConfig[] = [
-            'url' => Url::toRoute(ArrayHelper::merge(['/tehdoc/kernel/tools/remove-image'], [
-              'id' => $photo->id,
-              '_csrf' => Html::csrfMetaTags()
+            'url' => Url::toRoute(ArrayHelper::merge(['/equipment/tool/images/delete-from-task'], [
+              '_csrf' => Html::csrfMetaTags(),
+              'id' => $photo->id
             ])),
             'key' => $photo->id
           ];
@@ -153,9 +137,9 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
             'options' => ['multiple' => true],
             'pluginOptions' => [
               'maxFileCount' => 15,
-              'uploadUrl' => Url::to(['file-upload']),
+              'uploadUrl' => '/equipment/tool/images/upload-images',
               'uploadExtraData' => [
-                'eqId' => $model->tempId,
+                'eqId' => $model->id,
               ],
               'showUpload' => false,
               'previewFileType' => 'any',
@@ -170,29 +154,6 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
         <div class="col-md-12 col-lg-12">
           <?= $form->field($model, 'eq_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '2')) ?>
         </div>
-      </div>
-
-      <div class="row">
-        <div class="form-group col-md-4 col-lg-4">
-          <label style="font-size:18px"><input type="checkbox" name="stay" style="width:20px;height:20px">
-            Остаться в форме</label>
-        </div>
-        <?php if (!$model->isNewRecord) : ?>
-          <div class="form-group col-md-8 col-lg-8">
-            <li class="list-group-item" style="margin-bottom: 15px">
-              <div class="form-checkbox js-complex-option">
-                <input class="ch" id="consolidated-feature" type="checkbox" data-check='consolidated-check'
-                       data-id="<?= $model->id ?>" <?php if ($model->settings->eq_task) echo 'checked' ?> >
-                <label for="consolidated-feature" style="font-weight: 500">В задании на обновление</label>
-                <span class="status-indicator" id="consolidated-check"></span>
-              </div>
-            </li>
-          </div>
-        <?php endif; ?>
-
-      </div>
-      <div class="form`-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Обновить', ['class' => 'btn btn-primary']) ?>
       </div>
     </div>
   </div>
@@ -224,14 +185,6 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
       minViewMode: "months",
       clearBtn: true
     })
-  });
-
-  //преобразование дат перед отправкой
-  $(document).ready(function () {
-    $('#w0').submit(function () {
-      var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
-      $('.fact-date').val(d);
-    });
   });
 
   function contains(arr, elem) {
@@ -282,35 +235,5 @@ $quantity_hint = 'Внимание! Указывайте отличную от 1
       }
     });
   });
-
-  $(document).ready(function () {
-    var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
-    var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
-    var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
-    $('.ch').change(function (e) {
-      var checkId = $(this).data('check');
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      $('#' + checkId).html(waiting);
-      var url = '/tehdoc/equipment/control-panel/settings/task-set';
-      var nodeId = $(this).data('id');
-      var result = $(this).is(':checked');
-      console.log(result);
-      $.ajax({
-        url: url,
-        type: "post",
-        data: {
-          toolId: nodeId,
-          _csrf: csrf,
-          bool: result
-        },
-        success: function (data) {
-          $('#' + checkId).html(successCheck);
-        },
-        error: function (data) {
-          $('#' + checkId).html(warningCheck);
-        }
-      });
-    })
-  })
 
 </script>

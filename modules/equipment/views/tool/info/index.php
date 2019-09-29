@@ -23,14 +23,15 @@ use yii\helpers\Html;
     </h2>
   </div>
   <div class="text-right control" style="position: absolute;top: 15px; right: 15px;" title="Обновить">
-    <button id="tool-edit" type="button" class="btn btn-default btn-circle btn-xl">
+    <button id="tool-edit" type="button" data-tree="tools-main-tree" class="btn btn-default btn-circle btn-xl">
       <svg width="25" height="25" viewBox="0 0 25 25">
         <path fill="none" d="M0 0h24v24H0V0z"></path>
         <path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75
         1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"></path>
       </svg>
     </button>
-    <button id="tool-settings" type="button" class="btn btn-default btn-circle btn-xl" title="Настройки">
+    <button id="tool-settings" type="button" data-tree="tools-main-tree" class="btn btn-default btn-circle btn-xl"
+            title="Настройки">
       <svg width="25" height="25" viewBox="0 0 25 25" focusable="false">
         <path d="M13.85 22.25h-3.7c-.74 0-1.36-.54-1.45-1.27l-.27-1.89c-.27-.14-.53-.29-.79-.46l-1.8.72c-.7.26-1.47-.03-1.81-.65L2.2
         15.53c-.35-.66-.2-1.44.36-1.88l1.53-1.19c-.01-.15-.02-.3-.02-.46 0-.15.01-.31.02-.46l-1.52-1.19c-.59-.45-.74-1.26-.37-1.88l1.85-3.19c.34-.62
@@ -42,11 +43,14 @@ use yii\helpers\Html;
         <circle cx="12" cy="12" r="3.5"></circle>
       </svg>
     </button>
-    <button id="tool-task" type="button" data-task="<?= $model->task?>" class="btn btn-default btn-circle btn-xl" title="Задание на обновление" style="background-color: <?php if ($model->task) echo '#fef7e0' ?>; fill: <?php if ($model->task) echo '#fbbc04' ?>;">
-      <svg width="25" height="25" viewBox="0 0 25 25">
-        <path fill="none" d="M0 0h24v24H0V0z"></path>
-        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0
-        14H5.17l-.59.59-.58.58V4h16v12zm-9-4h2v2h-2zm0-6h2v4h-2z"></path>
+    <button id="tool-task" type="button" data-task="<?= $model->task ?>" data-tree="tools-main-tree"
+            class="btn btn-default btn-circle btn-xl" title="Задание на обновление"
+            style="background-color: <?php if ($model->task) echo '#fef7e0' ?>; fill: <?php if ($model->task) echo '#fbbc04' ?>;">
+      <svg viewBox="0 0 24 24" focusable="false" style="pointer-events: none; display: block">
+          <path d="M11.9 3.75c-4.55 0-8.23 3.7-8.23 8.25H.92l3.57 3.57.04.13 3.7-3.7H5.5c0-3.54 2.87-6.42 6.42-6.42
+          3.54 0 6.4 2.88 6.4 6.42s-2.86 6.42-6.4 6.42c-1.78 0-3.38-.73-4.54-1.9l-1.3 1.3c1.5 1.5 3.55 2.43 5.83 2.43
+          4.58 0 8.28-3.7 8.28-8.25 0-4.56-3.7-8.25-8.26-8.25zM11 8.33v4.6l3.92 2.3.66-1.1-3.2-1.9v-3.9H11z">
+          </path>
       </svg>
     </button>
   </div>
@@ -64,11 +68,6 @@ echo $this->renderAjax($view, [
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-    $('#tool-edit').on('click', toolUpdate);
-
-    $('#tool-settings').on('click', toolSettings);
-
-    $('#tool-task').on('click', toolTask);
 
   });
 

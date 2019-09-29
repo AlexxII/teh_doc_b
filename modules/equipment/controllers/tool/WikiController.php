@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\equipment\controllers\infoPanel;
+namespace app\modules\equipment\controllers\tool;
 
 use Yii;
 use yii\web\Controller;
@@ -8,7 +8,6 @@ use yii\web\NotFoundHttpException;
 
 use app\modules\equipment\models\Tools;
 use app\modules\equipment\models\Wiki;
-
 
 class WikiController extends Controller
 {

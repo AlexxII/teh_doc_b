@@ -2,14 +2,9 @@
 
 use yii\helpers\Html;
 
-$this->title = 'Задание на обновление';
-
-$about = "Данный раздел позволяет планировать работу по обновлению сведений об оборудовании с мобильных устройств. Оборудование 
-появляется в данном перечне после соответствующих настроек";
-
 ?>
 <style>
-  .app-settings  {
+  .app-settings {
     font-weight: 400 !important;
     margin: 12px 0px 0px 30px !important;
   }
@@ -22,72 +17,32 @@ $about = "Данный раздел позволяет планировать р
 </style>
 
 
-<div id="app-wrap">
-  <nav class="navigation navigation-default">
-    <div class="container-fluid">
-      <ul class="nav navbar-nav">
-        <button id="go-back" type="button" class="btn btn-default btn-circle btn-ml">
-          <svg focusable="false" viewBox="0 0 24 24">
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" ></path>
-          </svg>
-        </button>
-        <li id="app-name" class="app-settings">
-          <?= $this->params['title']; ?>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle fa fa-user-secret" data-toggle="dropdown" role="button"
-             aria-haspopup="true" aria-expanded="false"></a>
-          <ul class="dropdown-menu">
-            <li><a href="#" target="_blank"><span class="fa fa-cog" aria-hidden="true"></span>
-                Профиль</a></li>
-            <li><a href="/logout"><span class="fa fa-sign-out" aria-hidden="true"></span> Выход</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div><!-- /.container-fluid -->
-  </nav>
-
-  <div id="main-wrap">
-    <div id="main-content" class="container">
-      <div class="tool-task">
-
-        <h3><?= Html::encode($this->title) ?>
-          <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
-               data-toggle="tooltip" data-placement="bottom" title="<?php echo $about ?>"></sup>
-        </h3>
-        <div class="row">
-          <?php foreach ($models as $model): ?>
-            <div class="col-sm-6 col-md-4 col-lg-4 task-wrap">
-              <div class="thumbnail">
-                <div class="caption">
-                  <span><small><?= $model->toolParents(0) ?></small></span>
-                  <h4><?= $model->eq_title ?>
-                    <span class="counter" title="Кол-во изображений" data-toggle="tooltip" data-placement="top">
+<div class="row">
+  <?php foreach ($models as $model): ?>
+    <div class="col-sm-6 col-md-4 col-lg-4 task-wrap">
+      <div class="thumbnail">
+        <div class="caption">
+          <span><small><?= $model->toolParents(0) ?></small></span>
+          <h4><?= $model->eq_title ?>
+            <span class="counter" id="<?= $model->id ?>" title="Кол-во изображений" data-toggle="tooltip" data-placement="top">
                 <?= $model->countImages ?>
               </span>
-                  </h4>
-                  <p><a href="update-ex?id=<?= $model->id ?>" class="btn btn-sm btn-default" role="button">Обновить</a></p>
-                  <li class="list-group-item" style="margin-bottom: 15px">
-                    <div class="form-checkbox js-complex-option">
-                      <label style="font-weight: 500">
-                        <input class="ch" id="consolidated-feature" type="checkbox" data-check='consolidated-check'
-                               data-id="<?= $model->id ?>" <?php if ($model->settings->eq_task) echo 'checked' ?> > В задании на
-                        обновление
-                      </label>
-                      <span class="status-indicator"></span>
-                    </div>
-                  </li>
-                </div>
-              </div>
+          </h4>
+          <p><a href="" data-tool-id="<?= $model->id ?>" class="btn btn-sm btn-default update-task-tool" role="button">Обновить</a></p>
+          <li class="list-group-item" style="margin-bottom: 15px">
+            <div class="form-checkbox js-complex-option">
+              <label style="font-weight: 500">
+                <input class="ch" id="consolidated-feature" type="checkbox" data-check='consolidated-check'
+                       data-id="<?= $model->id ?>" <?php if ($model->settings->eq_task) echo 'checked' ?> > В задании на
+                обновление
+              </label>
+              <span class="status-indicator"></span>
             </div>
-          <?php endforeach; ?>
+          </li>
         </div>
-
       </div>
     </div>
-  </div>
+  <?php endforeach; ?>
 </div>
 
 
@@ -96,47 +51,75 @@ $about = "Данный раздел позволяет планировать р
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
-    $('#go-back').click(function (e) {
-      var url = '/equipment/tools';
-      $.ajax({
-        url: url,
-        method: 'get'
-      }).done(function (response) {
-        $('body').html(response);
-        window.history.pushState("object or string", "Title", "/equipment/tools");
-      }).fail(function () {
-        console.log('fail');
-      });
-    });
-
     var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
     var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
     var waiting = '<i class="fa fa-cog fa-spin" aria-hidden="true"></i>';
-    $('.ch').change(function (e) {
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var nodeId = $(this).data('id');
-      var result = $(this).is(':checked');
-      var parentDiv = $(this).closest('.task-wrap');
-      var url = '/equipment/control-panel/settings/task-set';
-      var checkId = parentDiv.find('.status-indicator');
-      checkId.html(waiting);
-      $.ajax({
-        url: url,
-        type: "post",
-        data: {
-          _csrf: csrf,
-          toolId: nodeId,
-          bool: result
+
+    $('.update-task-tool').on('click', function (e) {
+      e.preventDefault();
+      var toolId = $(this).data('toolId');
+      var taskDiv = $(this).closest('.task-wrap');
+      var url = '/equipment/task/update-task-tool?id=' + toolId;
+      c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: url,
+            method: 'get'
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так</div>');
+          });
         },
-        success: function (data) {
-          checkId.html(successCheck);
-          parentDiv.fadeOut();
+        contentLoaded: function (response, status, xhr) {
+          this.setContentAppend('<div>' + response.data.data + '</div>');
         },
-        error: function (data) {
-          checkId.html(warningCheck);
+        type: 'blue',
+        columnClass: 'large',
+        title: 'Редактровать данные',
+        buttons: {
+          ok: {
+            btnClass: 'btn-blue',
+            text: 'Обновить',
+            action: function () {
+              var $form = $("#w0"),
+                data = $form.data("yiiActiveForm");
+              $.each(data.attributes, function () {
+                this.status = 3;
+              });
+              $form.yiiActiveForm("validate");
+              if ($("#w0").find(".has-error").length) {
+                return false;
+              } else {
+                //преобразование дат перед отправкой
+                var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                $('.fact-date').val(d);
+                $.ajax({
+                  type: 'POST',
+                  url: url,
+                  dataType: 'json',
+                  data: $form.serialize(),
+                  success: function (response) {
+                    var tText = '<span style="font-weight: 600">Успех!</span><br>Данные обновлены';
+                    initNoty(tText, 'success');
+                    $('#tool-info-view').html(response.data.data);
+                    taskDiv.fadeOut();
+                  },
+                  error: function (response) {
+                    console.log(response.data.data);
+                    var tText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
+                    initNoty(tText, 'error');
+                  }
+                });
+              }
+            }
+          },
+          cancel: {
+            text: 'НАЗАД'
+          }
         }
       });
-    })
+
+    });
   })
 
 </script>

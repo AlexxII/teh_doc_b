@@ -82,40 +82,6 @@ class ToolsController extends Controller
     ]);
   }
 
-  public function actionFileUpload()
-  {
-    $fUpload = new Images();
-    if (Yii::$app->request->post()) {
-      $eqId = Yii::$app->request->post('eqId');
-      $fUpload->imageFiles = UploadedFile::getInstances($fUpload, 'imageFiles');
-      if ($fUpload->uploadImage($eqId)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public function actionTask()
-  {
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
-    $models = Tools::find()
-      ->where(['settings_table.eq_task' => 1])
-      ->joinWith('settings settings_table')
-      ->orderBy('lft')
-      ->all();
-    Yii::$app->view->params['title'] = 'Задание';
-    return [
-      'data' => [
-        'success' => true,
-        'data' => $this->render('task', [
-          'models' => $models,
-        ]),
-        'message' => 'Page load',
-      ],
-      'code' => 1,
-    ];
-  }
 
   public function actionUpdateEx($id)
   {
@@ -147,35 +113,6 @@ class ToolsController extends Controller
     ]);
   }
 
-  public function actionCategories()
-  {
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
-    Yii::$app->view->params['title'] = 'По категориям';
-    return [
-      'data' => [
-        'success' => true,
-        'data' => $this->render('categories'),
-        'message' => 'Page load',
-      ],
-      'code' => 1,
-    ];
-  }
-
-  public function actionPlacement()
-  {
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
-    Yii::$app->view->params['title'] = 'По размещению';
-    return [
-      'data' => [
-        'success' => true,
-        'data' => $this->render('placements'),
-        'message' => 'Page load',
-      ],
-      'code' => 1,
-    ];
-  }
 
   public function actionOth()
   {

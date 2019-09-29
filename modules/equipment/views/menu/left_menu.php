@@ -1,6 +1,6 @@
 <div id="left-menu">
   <div class="menu-list">
-    <div class="menu-list-about ex-click" data-url="/equipment/tools/task" data-back-url="/equipment">
+    <div class="menu-list-about ex-click" data-url="/equipment/task" data-back-url="/equipment">
       <div>
         <svg width="50" height="50" viewBox="0 0 25 25">
           <path fill="none" d="M0 0h24v24H0V0z"></path>
@@ -12,7 +12,7 @@
         <h5>Задание на обновление</h5>
       </div>
     </div>
-    <div class="menu-list-about ex-click" data-url="/equipment/tools/categories" data-back-url="/equipment">
+    <div class="menu-list-about ex-click" data-url="/equipment/show/categories" data-back-url="/equipment">
       <div>
         <svg width="50" height="50" viewBox="0 0 25 25">
           <path d="M18 21H4V7H2v14c0 1.1.9 2 2 2h14v-2zm3-4V3c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2
@@ -23,7 +23,7 @@
         <h5>Классификация по категориям</h5>
       </div>
     </div>
-    <div class="menu-list-about ex-click" data-url="/equipment/tools/placement" data-back-url="/equipment">
+    <div class="menu-list-about ex-click" data-url="/equipment/show/placement" data-back-url="/equipment">
       <div>
         <svg width="50" height="50" viewBox="0 0 25 25">
           <path fill="none" d="M0 0h24v24H0V0z"></path>

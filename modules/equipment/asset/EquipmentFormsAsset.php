@@ -13,6 +13,5 @@ class EquipmentFormsAsset extends AssetBundle
 
     public $js = [
         'js/jquery.maskedinput.js',
-        'js/jquery-ui.min.js',
     ];
 }

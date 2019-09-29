@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\equipment\controllers\infoPanel;
+namespace app\modules\equipment\controllers\tool;
 
 use Yii;
 use yii\web\Controller;
@@ -83,10 +83,10 @@ class DocsController extends Controller
 
   public function actionDeleteDocs()
   {
-    if (!empty($_POST['docsArray'])){
+    if (!empty($_POST['data'])){
       Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       $counter = 0;
-      foreach ($_POST['docsArray'] as $docId){
+      foreach ($_POST['data'] as $docId){
         $doc = Docs::findModel($docId);
         $fileName = Yii::$app->params['uploadDocs'] . $doc->doc_path;
         if (is_file($fileName)) {
@@ -117,7 +117,7 @@ class DocsController extends Controller
       'data' => [
         'success' => false,
         'data' => null,
-        'message' => '$_POST["docsArray"] - empty',
+        'message' => '$_POST["data"] - empty',
       ],
       'code' => 0,
     ];

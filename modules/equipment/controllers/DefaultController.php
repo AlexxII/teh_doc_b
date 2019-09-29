@@ -17,6 +17,18 @@ class DefaultController extends Controller
 
   //=============================================== working with tree =================================================
 
+  public function actionAllTools()
+  {
+    $id = Tools::find()->select('id')->all();
+    if (!$id) {
+      $data = array();
+      $data = [['title' => 'База данных пуста', 'key' => -999]];
+      return json_encode($data);
+    }
+    $roots = Tools::findModel($id)->tree();
+    return json_encode($roots);
+  }
+
   public function actionCreateNode($parentId, $title)
   {
     $data = [];

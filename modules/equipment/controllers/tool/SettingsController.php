@@ -1,12 +1,10 @@
 <?php
 
-namespace app\modules\equipment\controllers\controlPanel;
+namespace app\modules\equipment\controllers\tool;
 
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-
-
 
 use app\modules\to\models\ToEquipment;
 use app\modules\equipment\models\Oth;
@@ -251,78 +249,6 @@ class SettingsController extends Controller
     return false;
   }
 
-  // серверная часть установки флажка "В задании на обновление"
-  public function actionTaskSet()
-  {
-    if (isset($_POST['toolId'])) {
-      $toolId = $_POST['toolId'];
-      $model = ToolSettings::findModel($toolId);
-      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-      if (isset($_POST['bool'])) {
-        if ($_POST['bool'] === '1') {
-          $model->eq_task = 1;
-        } else {
-          $model->eq_task = 0;
-        }
-      } else {
-        return [
-          'data' => [
-            'success' => false,
-            'model' => null,
-            'message' => '$_POST["bool"] empty'
-          ],
-          'code' => 0
-        ];
-      }
-      if ($model->save()) {
-        return [
-          'data' => [
-            'success' => true,
-            'data' => $model->eq_task,
-            'message' => 'Done'
-          ],
-          'code' => 1
-        ];
-      }
-      return [
-        'data' => [
-          'success' => false,
-          'data' => $model->errors,
-          'message' => 'Model error occured'
-        ],
-        'code' => 0
-      ];
-    }
-    return [
-      'data' => [
-        'success' => false,
-        'model' => null,
-        'message' => '$_POST["toolId"] empty'
-      ],
-      'code' => 0
-    ];
-  }
-
-// серверная часть установки флажка "В задании на обновление" - пакетная обработка
-  public function actionTaskSetPckg()
-  {
-    sleep(1);
-    if (isset($_POST['jsonData']) && isset($_POST['bool'])) {
-      if ($_POST['bool'] === 'true') {
-        $bool = 1;
-      } else {
-        $bool = 0;
-      }
-      $result = false;
-      foreach ($_POST['jsonData'] as $toolId) {
-        $model = ToolSettings::findModel($toolId);
-        $model->eq_task = $bool;
-        $result = $model->save();
-      }
-      return $result;
-    }
-    return false;
-  }
 
   // ТО
   public function actionMaintenance()

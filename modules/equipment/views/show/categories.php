@@ -2,18 +2,8 @@
 //
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\bootstrap\Modal;
-use kartik\tree\TreeViewInput;
-use app\modules\admin\models\ClassifierTbl;
-use app\assets\FancytreeAsset;
-
-FancytreeAsset::register($this);
 
 $this->title = 'Оборудование по категориям';
-$this->params['breadcrumbs'][] = ['label' => 'Тех.документация', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = ['label' => 'Перечень оборудования', 'url' => ['/tehdoc']];
-$this->params['breadcrumbs'][] = $this->title;
-
 $about = "Панель отображения оборудования по категориям. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $refresh_hint = 'Перезапустить форму';
 $dell_hint = 'Удалить выделенное оборудование из ОСНОВНОЙ таблицы. БУДЬТЕ ВНИМАТЕЛЬНЫ, данные будут удалены безвозвратно.';
@@ -63,7 +53,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
 </style>
 
-<div class="eq-category-pannel">
+<div class="eq-categories-pannel">
   <h3><?= Html::encode($this->title) ?>
     <sup class="h-title fa fa-question-circle-o" aria-hidden="true"
          data-toggle="tooltip" data-placement="right" title="<?php echo $about ?>"></sup>
@@ -82,7 +72,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
     </div>
 
     <div style="position: relative">
-      <div class="hideMenu-button hidden-sm hidden-xs" style="position: absolute;top: 5px;right: -20px">
+      <div class="hideMenu-button hidden-sm hidden-xs">
         <a href="#" class="fa fa-reply-all" data-placement="top" data-toggle="tooltip" title="Свернуть"
            aria-hidden="true"></a>
       </div>
@@ -99,7 +89,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
     <div class="row" style="padding: 0 15px">
       <div style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_w0" class="ui-draggable-handle"></div>
+        <div id="fancyree_categories_show" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
@@ -158,14 +148,12 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
 </div>
 
-
 <script>
 
   // Глобальные переменные
 
   var nodeid;
   var treeId;
-
 
   //************************ Работа над стилем ****************************
 
@@ -286,7 +274,7 @@ $classif_hint = 'Присвоить выделенному оборудован�
 
   //************************* Управление деревом ***************************************
 
-  window.treeId = "#fancyree_w0";
+  window.treeId = "#fancyree_categories_show";
 
   $(document).ready(function () {
     $('.refresh').click(function (event) {
@@ -452,14 +440,14 @@ $classif_hint = 'Присвоить выделенному оборудован�
       "responsive": true,
       "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
       "ajax": $.fn.dataTable.pipeline({
-        url: 'server-side',
+        url: '/equipment/tools/server-side',
         pages: 2, // number of pages to cache
         data: function () {
           var root = $(".root").text();
           var lft = $(".lft").text();
           var rgt = $(".rgt").text();
           return {
-            'db_tbl': 'teh_category_tbl',
+            'db_tbl': 'equipment_category_tbl',
             'identifier': 'category_id',
             'root': root,
             'lft': lft,
@@ -470,7 +458,8 @@ $classif_hint = 'Присвоить выделенному оборудован�
       "columnDefs": [{
         "targets": -2,
         "data": null,
-        "defaultContent": "<a href='#' class='fa fa-edit edit' style='padding-right: 5px'></a>" +
+        "defaultContent":
+          "<a href='#' class='fa fa-edit edit' style='padding-right: 5px'></a>" +
           "<a href='#' class='fa fa-eye view'></a>",
         "orderable": false
       }, {
@@ -503,21 +492,21 @@ $classif_hint = 'Присвоить выделенному оборудован�
     $('#main-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
+      var href = "/equipment/control-panel/" + data[0] + "/info/index";
       if (e.ctrlKey) {
-        var href = "/tehdoc/equipment/update?id=" + data[0];
         window.open(href);
       } else {
-        location.href = "/tehdoc/equipment/update?id=" + data[0];
+        location.href = href;
       }
     });
     $('#main-table tbody').on('click', '.view', function (e) {
       e.preventDefault();
       var data = table.row($(this).parents('tr')).data();
+      var href = "/equipment/tool/" + data[0] + "/info/index";
       if (e.ctrlKey) {
-        var href = "/tehdoc/equipment/view?id=" + data[0];
         window.open(href);
       } else {
-        location.href = "/tehdoc/equipment/view?id=" + data[0];
+        location.href = href;
       }
     });
   });
@@ -689,12 +678,14 @@ $classif_hint = 'Присвоить выделенному оборудован�
     };
   })(jQuery);
 
+  ///////////// -============================ tree ======================================
+  
   jQuery(function ($) {
-    var main_url = '/tehdoc/control/category/categories';
+    var main_url = '/equipment/control/category/categories';
 
-    $("#fancyree_w0").fancytree({
+    $("#fancyree_categories_show").fancytree({
       source: {
-        url: main_url,
+        url: main_url
       },
       extensions: ['filter'],
       quicksearch: true,

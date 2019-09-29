@@ -115,6 +115,23 @@ td .fa {
 .tool-task .form-checkbox {
   margin: 0 !important;
 }
+/* task page */
+/*form*/
+.nonreq {
+  font-size: 15px;
+  color: #1e6887;
+}
+.select-selected {
+  padding-left: 40px;
+}
+.w3-label-under {
+  font-size: 10px;
+  padding-left: 5px;
+}
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+  background-color: #fff;
+}
+
 /* buttons */
 .btn-circle.btn-xl {
   width: 40px;
