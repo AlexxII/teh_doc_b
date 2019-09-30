@@ -19,7 +19,8 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancytree_placement'
+        'data-tree' => 'fancytree_placement',
+        'data-root' => 'Места размещения оборудования'
       ]) ?>
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
         'style' => ['margin-top' => '5px'],
@@ -77,182 +78,185 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
 
 <script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-    });
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
 
-    // отображение и логика работа дерева
-    jQuery(function ($) {
-        var main_url = '/equipment/control/placement/placements';
-        var move_url = '/equipment/control/placement/move';
-        var create_url = '/equipment/control/placement/create';
-        var update_url = '/equipment/control/placement/update';
+  // отображение и логика работа дерева
+  jQuery(function ($) {
+    var main_url = '/equipment/control/placement/placements';
+    var move_url = '/equipment/control/placement/move';
+    var create_url = '/equipment/control/placement/create';
+    var update_url = '/equipment/control/placement/update';
 
-        $("#fancytree_placement").fancytree({
-            source: {
-                url: main_url
-            },
-            extensions: ['dnd', 'edit', 'filter'],
-            quicksearch: true,
-            minExpandLevel: 2,
-            dnd: {
-                preventVoidMoves: true,
-                preventRecursiveMoves: true,
-                autoCollapse: true,
-                dragStart: function (node, data) {
-                    return true;
-                },
-                dragEnter: function (node, data) {
-                    return true;
-                },
-                dragDrop: function (node, data) {
-                    var pId;
-                    if (data.hitMode == 'over') {
-                        if (data.node.data.lvl >= 2 || data.otherNode.isFolder()) {             // Ограничение на вложенность
-                            jc = $.confirm({
-                                icon: 'fa fa-exclamation-triangle',
-                                title: 'Запрещено!',
-                                content: 'Суммарная глубина вложенности данного дерева не должна превышать 3х уровней!',
-                                type: 'red',
-                                buttons: false,
-                                closeIcon: false,
-                                autoClose: 'ok|4000',
-                                confirmButtonClass: 'hide',
-                                buttons: {
-                                    ok: {
-                                        btnClass: 'btn-danger',
-                                        action: function () {
-                                        }
-                                    }
-                                }
-                            });
-                            return false;
-                        }
-                        pId = data.node.data.id;
-                    } else {
-                        pId = data.node.parent.data.id;
+    $("#fancytree_placement").fancytree({
+      source: {
+        url: main_url
+      },
+      extensions: ['dnd', 'edit', 'filter'],
+      quicksearch: true,
+      minExpandLevel: 2,
+      dnd: {
+        preventVoidMoves: true,
+        preventRecursiveMoves: true,
+        autoCollapse: true,
+        dragStart: function (node, data) {
+          return true;
+        },
+        dragEnter: function (node, data) {
+          return true;
+        },
+        dragDrop: function (node, data) {
+          var pId;
+          if (data.hitMode == 'over') {
+            if (data.node.data.lvl >= 2 || data.otherNode.isFolder()) {             // Ограничение на вложенность
+              jc = $.confirm({
+                icon: 'fa fa-exclamation-triangle',
+                title: 'Запрещено!',
+                content: 'Суммарная глубина вложенности данного дерева не должна превышать 3х уровней!',
+                type: 'red',
+                buttons: false,
+                closeIcon: false,
+                autoClose: 'ok|4000',
+                confirmButtonClass: 'hide',
+                buttons: {
+                  ok: {
+                    btnClass: 'btn-danger',
+                    action: function () {
                     }
-                    $.get(move_url, {
-                        item: data.otherNode.data.id,
-                        action: data.hitMode,
-                        second: node.data.id,
-                        parentId: pId
-                    }, function () {
-                        data.otherNode.moveTo(node, data.hitMode);
-                    })
+                  }
                 }
-            },
-            filter: {
-                autoApply: true,                                    // Re-apply last filter if lazy data is loaded
-                autoExpand: true,                                   // Expand all branches that contain matches while filtered
-                counter: true,                                      // Show a badge with number of matching child nodes near parent icons
-                fuzzy: false,                                       // Match single characters in order, e.g. 'fb' will match 'FooBar'
-                hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
-                hideExpanders: true,                                // Hide expanders if all child nodes are hidden by filter
-                highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
-                leavesOnly: true,                                   // Match end nodes only
-                nodata: true,                                       // Display a 'no data' status node if result is empty
-                mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
-            },
-            edit: {
-                inputCss: {
-                    minWidth: '10em'
-                },
-                triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
-                beforeEdit: function (event, data) {
-                    return true;
-                },
-                edit: function (event, data) {
-                    return true;
-                },
-                beforeClose: function (event, data) {
-                    data.save
-                },
-                save: function (event, data) {
-                    var node = data.node;
-                    if (data.isNew) {
-                        $.ajax({
-                            url: create_url,
-                            data: {
-                                parentId: node.parent.data.id,
-                                title: data.input.val()
-                            }
-                        }).done(function (result) {
-                            if (result) {
-                                result = JSON.parse(result);
-                                node.data.id = result.acceptedId;
-                                node.setTitle(result.acceptedTitle);
-                                node.data.lvl = result.lvl;
-                            } else {
-                                node.setTitle(data.orgTitle);
-                            }
-                        }).fail(function (result) {
-                            node.setTitle(data.orgTitle);
-                        });
-                    } else {
-                        $.ajax({
-                            url: update_url,
-                            data: {
-                                id: node.data.id,
-                                title: data.input.val()
-                            }
-                        }).done(function (result) {
-                            if (result) {
-                                result = JSON.parse(result);
-                                node.setTitle(result.acceptedTitle);
-                            } else {
-                                node.setTitle(data.orgTitle);
-                            }
-                        }).fail(function (result) {
-                            node.setTitle(data.orgTitle);
-                        });
-                    }
-                    return true;
-                },
-                close: function (event, data) {
-                    if (data.save) {
-                        // Since we started an async request, mark the node as preliminary
-                        $(data.node.span).addClass("pending")
-                    }
-                }
-            },
-            activate: function (node, data) {
-                var node = data.node;
-                var lvl = node.data.lvl;
-                if (node.key == -999) {
-                    $(".add-subcategory").hide();
-                    return;
-                } else {
-                    $(".add-subcategory").show();
-                }
-                if (lvl > 1) {                                                  // ограничение на вложенность
-                    $(".add-subcategory").hide();
-                }
-                if (lvl == 0) {
-                    $(".del-node").hide();
-                    $(".del-multi-nodes").hide();
-                } else {
-                    if (node.hasChildren()) {
-                        $(".del-multi-nodes").show();
-                    } else {
-                        $(".del-multi-nodes").hide();
-                    }
-                    $(".del-node").show();
-                }
-            },
-            icon: function (event, data) {
-                var icon = data.node.data.icon;
-                if (icon) {
-                    return icon;
-                }
-            },
-            renderNode: function (node, data) {
-                if (data.node.key == -999) {
-                    $(".add-category").show();
-                    $(".add-subcategory").hide();
-                }
+              });
+              return false;
             }
-        });
-    })
+            pId = data.node.data.id;
+          } else {
+            pId = data.node.parent.data.id;
+          }
+          $.get(move_url, {
+            item: data.otherNode.data.id,
+            action: data.hitMode,
+            second: node.data.id,
+            parentId: pId
+          }, function () {
+            data.otherNode.moveTo(node, data.hitMode);
+          })
+        }
+      },
+      filter: {
+        autoApply: true,                                    // Re-apply last filter if lazy data is loaded
+        autoExpand: true,                                   // Expand all branches that contain matches while filtered
+        counter: true,                                      // Show a badge with number of matching child nodes near parent icons
+        fuzzy: false,                                       // Match single characters in order, e.g. 'fb' will match 'FooBar'
+        hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
+        hideExpanders: true,                                // Hide expanders if all child nodes are hidden by filter
+        highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
+        leavesOnly: true,                                   // Match end nodes only
+        nodata: true,                                       // Display a 'no data' status node if result is empty
+        mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
+      },
+      edit: {
+        inputCss: {
+          minWidth: '10em'
+        },
+        triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
+        beforeEdit: function (event, data) {
+          if (data.node.data.lvl === '0') {
+            return false;
+          }
+          return true;
+        },
+        edit: function (event, data) {
+          return true;
+        },
+        beforeClose: function (event, data) {
+          data.save
+        },
+        save: function (event, data) {
+          var node = data.node;
+          if (data.isNew) {
+            $.ajax({
+              url: create_url,
+              data: {
+                parentId: node.parent.data.id,
+                title: data.input.val()
+              }
+            }).done(function (result) {
+              if (result) {
+                result = JSON.parse(result);
+                node.data.id = result.acceptedId;
+                node.setTitle(result.acceptedTitle);
+                node.data.lvl = result.lvl;
+              } else {
+                node.setTitle(data.orgTitle);
+              }
+            }).fail(function (result) {
+              node.setTitle(data.orgTitle);
+            });
+          } else {
+            $.ajax({
+              url: update_url,
+              data: {
+                id: node.data.id,
+                title: data.input.val()
+              }
+            }).done(function (result) {
+              if (result) {
+                result = JSON.parse(result);
+                node.setTitle(result.acceptedTitle);
+              } else {
+                node.setTitle(data.orgTitle);
+              }
+            }).fail(function (result) {
+              node.setTitle(data.orgTitle);
+            });
+          }
+          return true;
+        },
+        close: function (event, data) {
+          if (data.save) {
+            // Since we started an async request, mark the node as preliminary
+            $(data.node.span).addClass("pending")
+          }
+        }
+      },
+      activate: function (node, data) {
+        var node = data.node;
+        var lvl = node.data.lvl;
+        if (node.key == -999) {
+          $(".add-subcategory").hide();
+          return;
+        } else {
+          $(".add-subcategory").show();
+        }
+        if (lvl > 1) {                                                  // ограничение на вложенность
+          $(".add-subcategory").hide();
+        }
+        if (lvl == 0) {
+          $(".del-node").hide();
+          $(".del-multi-nodes").hide();
+        } else {
+          if (node.hasChildren()) {
+            $(".del-multi-nodes").show();
+          } else {
+            $(".del-multi-nodes").hide();
+          }
+          $(".del-node").show();
+        }
+      },
+      icon: function (event, data) {
+        var icon = data.node.data.icon;
+        if (icon) {
+          return icon;
+        }
+      },
+      renderNode: function (node, data) {
+        if (data.node.key == -999) {
+          $(".add-category").show();
+          $(".add-subcategory").hide();
+        }
+      }
+    });
+  })
 
 </script>

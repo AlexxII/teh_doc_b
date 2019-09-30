@@ -167,7 +167,7 @@ $about = "Перечень оборудования";
   })
   ;
 
-  var tId, toolInfo;
+  var tId, toolInfo, tree;
   // отображение и логика работа дерева
   jQuery(function ($) {
     var main_url = '/equipment/default/all-tools';
@@ -175,7 +175,7 @@ $about = "Перечень оборудования";
     var create_url = '/equipment/default/create-node';
     var update_url = '/equipment/default/update-node';
 
-    $("#tools-main-tree").fancytree({
+    tree = $("#tools-main-tree").fancytree({
       source: {
         url: main_url
       },
@@ -197,6 +197,10 @@ $about = "Перечень оборудования";
         preventRecursiveMoves: true,
         autoCollapse: true,
         dragStart: function (node, data) {
+          if (node.data.lvl === '0') {
+            return false;
+          }
+          pparent = node.parent;
           return true;
         },
         dragEnter: function (node, data) {
@@ -216,7 +220,9 @@ $about = "Перечень оборудования";
             parentId: pId
           }, function () {
             data.otherNode.moveTo(node, data.hitMode);
-          })
+            returnCallback();
+          });
+          node.folder = true;
         }
       },
       filter: {
@@ -238,17 +244,17 @@ $about = "Перечень оборудования";
         triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
         beforeEdit: function (event, data) {
           var node = data.node;
-          if (node.data.lvl == 0) {
+          if (node.data.lvl === '0') {
             return false;
           }
-          node.icon = 't fa fa-file-o';
+          // node.icon = 't fa fa-file-o';
           return true;
         },
         edit: function (event, data) {
           return true;
         },
         beforeClose: function (event, data) {
-          data.save
+          return true;
         },
         save: function (event, data) {
           var node = data.node;
@@ -263,22 +269,17 @@ $about = "Перечень оборудования";
               if (result) {
                 var parent = node.parent;
                 parent.folder = true;
+                parent.renderTitle();
                 result = JSON.parse(result);
                 node.data.id = result.acceptedId;
                 node.key = result.acceptedId;
                 node.setTitle(result.acceptedTitle);
-                $('#status-info').hide().html(goodAlert('Запись успешно сохранена в БД.')).fadeIn('slow');
+                returnCallback();
               } else {
                 node.setTitle(data.orgTitle);
-                $('#status-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
               node.setTitle(data.orgTitle);
-              $('#status-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-            }).always(function () {
-              // data.input.removeClass("pending")
             });
           } else {
             $.ajax({
@@ -291,18 +292,18 @@ $about = "Перечень оборудования";
               if (result) {
                 result = JSON.parse(result);
                 node.setTitle(result.acceptedTitle);
-                $('#status-info').hide().html(goodAlert('Запись успешно изменена в БД.')).fadeIn('slow');
+                //=========================
+
+                node.folder = true;
+                node.renderTitle();
+
+                //=========================
+                returnCallback();
               } else {
                 node.setTitle(data.orgTitle);
-                $('#status-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               }
             }).fail(function (result) {
-              $('#status-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               node.setTitle(data.orgTitle);
-            }).always(function () {
-              // data.input.removeClass("pending")
             });
           }
           return true;
@@ -317,27 +318,25 @@ $about = "Перечень оборудования";
       init: function (event, data) {
         if (tId != undefined) {
           // getCounters(tId);
+          // $('#tool-info').fadeIn(500);
           data.tree.activateKey(tId);
-          $('#tool-info').fadeIn(500);
         }
       },
       activate: function (event, data) {
         var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
-        if (target === 'title' || target === 'icon') {
-          console.log(target);
-        }
-        $('#tool-info').fadeIn(500);
+        // if (target === 'title' || target === 'icon') {
+        //   console.log(target);
+        // }
         var node = data.node;
         var toolId = node.data.id;
-        tId = toolId;
-        var ref = $('ul#main-teh-tab').find('li.active').data('tabName');
-        getCounters(toolId);
-        loadTabsData(ref, toolId);
-      },
-      icon: function (event, data) {
-        var icon = data.node.data.icon;
-        if (icon) {
-          return icon;
+        if (node.data.lvl !== '0') {
+          $('#tool-info').fadeIn(500);
+          tId = toolId;
+          var ref = $('ul#main-teh-tab').find('li.active').data('tabName');
+          getCounters(toolId);
+          loadTabsData(ref, toolId);
+        } else {
+          $('#tool-info').fadeOut(10);
         }
       }
     });
@@ -355,39 +354,6 @@ $about = "Перечень оборудования";
     })
   });
 
-  function getCounters(toolId) {
-    var url = '/equipment/tool/info/counters?id=' + toolId;
-    $.ajax({
-      url: url,
-      method: 'get'
-    }).done(function (response) {
-      var counters = JSON.parse(response);
-      if (counters != false) {
-        $('#docs-tab .counter').html(counters.docsCount);
-        $('#images-tab .counter').html(counters.imagesCount);
-        $('#wiki-tab .counter').html(counters.wikiCount);
-      }
-      return;
-    }).fail(function () {
-      console.log('Что-то пошло не так');
-    });
-  }
-
-  function loadTabsData(ref, toolId) {
-    if (ref != undefined) {
-      url = '/equipment/tool/' + ref + '/index?id=' + toolId;
-    } else {
-      url = '/equipment/tool/info/index?id=' + toolId;
-    }
-    $.ajax({
-      url: url,
-      method: 'get'
-    }).done(function (response) {
-      $('#tool-info-view').html(response.data.data);
-    }).fail(function () {
-      self.setContentAppend('<div>Что-то пошло не так!</div>');
-    });
-  }
 
   function getNodeId() {
     var node = $("#tools-main-tree").fancytree("getActiveNode");
@@ -400,10 +366,11 @@ $about = "Перечень оборудования";
 
   function returnCallback() {
     var node = $("#tools-main-tree").fancytree("getActiveNode");
-    var ref = $(this).data("tabName");
+    var ref = $("#main-teh-tab li.active").data('tabName');
     if (node != null) {
       var toolId = node.data.id;
       loadTabsData(ref, toolId);
+      getCounters(toolId);
     }
   }
 

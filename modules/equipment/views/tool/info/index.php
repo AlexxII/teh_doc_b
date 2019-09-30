@@ -5,11 +5,11 @@ use yii\helpers\Html;
 ?>
 
 <div class="row d-flex flex-items-center" style="position: relative">
-  <div class="col-lg-11 col-md-11 cos-xs-11">
+  <div class="col-lg-9 col-md-9 cos-xs-9">
     <h2>
         <span style="position: relative">
-        <?= Html::encode($model->name);
-        if ($model->specialStatus) {
+        <span id="info-tool-title"><?= Html::encode($model->name); ?></span>
+        <?php if ($model->specialStatus) {
           echo '
           <i class="fa fa-shield" aria-hidden="true" style="font-size: 18px;position: absolute;top:-5px;right:-10px"
              data-toggle="tooltip" data-placement="right" title="Проведены Специальные работы"></i>';
@@ -45,8 +45,8 @@ use yii\helpers\Html;
     </button>
     <button id="tool-task" type="button" data-task="<?= $model->task ?>" data-tree="tools-main-tree"
             class="btn btn-default btn-circle btn-xl" title="Задание на обновление"
-            style="background-color: <?php if ($model->task) echo '#fef7e0' ?>; fill: <?php if ($model->task) echo '#fbbc04' ?>;">
-      <svg viewBox="0 0 24 24" focusable="false" style="pointer-events: none; display: block">
+            style="background-color: <?php if ($model->task) echo '#fef7e0' ?>; fill: <?php if ($model->task) echo '#fbbc04' ?>; padding-top: 3px; padding-left: 4px">
+      <svg viewBox="0 0 26 26" focusable="false" style="pointer-events: none; display: block">
           <path d="M11.9 3.75c-4.55 0-8.23 3.7-8.23 8.25H.92l3.57 3.57.04.13 3.7-3.7H5.5c0-3.54 2.87-6.42 6.42-6.42
           3.54 0 6.4 2.88 6.4 6.42s-2.86 6.42-6.4 6.42c-1.78 0-3.38-.73-4.54-1.9l-1.3 1.3c1.5 1.5 3.55 2.43 5.83 2.43
           4.58 0 8.28-3.7 8.28-8.25 0-4.56-3.7-8.25-8.26-8.25zM11 8.33v4.6l3.92 2.3.66-1.1-3.2-1.9v-3.9H11z">

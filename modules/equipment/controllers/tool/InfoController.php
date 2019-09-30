@@ -66,6 +66,7 @@ class InfoController extends Controller
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if (Yii::$app->request->isAjax) {
       if ($tool->load(Yii::$app->request->post())) {
+        $tool->name = $tool->eq_title;
         if ($tool->save()) {
           $children = $tool->children(1)->all();
           if ($tool->complex) {
@@ -81,7 +82,7 @@ class InfoController extends Controller
                 'view' => $view,
                 'children' => $children
               ]),
-              'message' => 'Update done'
+              'message' => $tool->eq_title
             ],
             'code' => 1
           ];

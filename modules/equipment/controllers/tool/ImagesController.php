@@ -73,8 +73,8 @@ class ImagesController extends Controller
 
   public function actionDeleteImages()
   {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if (!empty($_POST['data'])) {
-      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       foreach ($_POST['data'] as $photoId) {
         $photo = Images::findModel($photoId);
         $fileName = Yii::$app->params['uploadImg'] . $photo->image_path;
@@ -124,8 +124,9 @@ class ImagesController extends Controller
 
   public function actionDeleteFromTask()
   {
-    if (!empty($_POST['id'])) {
-      $photoId = $_POST['id'];
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (!empty($_POST['key'])) {
+      $photoId = $_POST['key'];
       $photo = Images::findModel($photoId);
       $fileName = Yii::$app->params['uploadImg'] . $photo->image_path;
       if (is_file($fileName)) {

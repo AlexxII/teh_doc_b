@@ -50,6 +50,7 @@ $(document).on('click', '#tool-edit', function (e) {
                 var tText = '<span style="font-weight: 600">Успех!</span><br>Данные обновлены';
                 initNoty(tText, 'success');
                 $('#tool-info-view').html(response.data.data);
+                node.setTitle(response.data.message);
               },
               error: function (response) {
                 console.log(response.data.data);
@@ -211,15 +212,31 @@ function initNoty(text, type) {
     }
   }).show();
 }
-
-//=============================================================================//
-// fancyTree btns
+//===========================================================
+// Добавлние оборудования
 $(document).on('click', '#add-equipment', function (e) {
   e.preventDefault();
   var id = $(e.currentTarget).data('tree');
   var node = $('#' + id).fancytree('getActiveNode');
   if (!node) {
     var rootTitle = 'Необработанное';
+    var tree = $('#' + id).fancytree('getTree');
+    var root = tree.findFirst(rootTitle);
+    root.editCreateNode('child', '');
+  } else {
+    node.editCreateNode('child', ' ');
+  }
+});
+
+
+//=============================================================================//
+// Control btns
+$(document).on('click', '.add-subcategory', function (e) {
+  e.preventDefault();
+  var id = $(e.currentTarget).data('tree');
+  var rootTitle = $(e.currentTarget).data('root');
+  var node = $('#' + id).fancytree('getActiveNode');
+  if (!node) {
     var tree = $('#' + id).fancytree('getTree');
     var root = tree.findFirst(rootTitle);
     root.editCreateNode('child', '');
@@ -757,24 +774,6 @@ $(document).on('change', '#wrap', function (e) {
     },
     success: function (data) {
       $('#' + checkId).html(successCheck);
-      jc = $.confirm({
-        icon: 'fa fa-thumbs-up',
-        title: 'Успех!',
-        content: 'Данный узел объявлен как обертка. Страница перезагрузится!',
-        type: 'green',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|8000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-success',
-            action: function () {
-              window.location.href = 'wrap-config';
-            }
-          }
-        }
-      });
     },
     error: function (data) {
       $('#' + checkId).html(warningCheck);
@@ -809,3 +808,37 @@ $(document).on('change', '.ch', function (e) {
     }
   });
 });
+
+function getCounters(toolId) {
+  var url = '/equipment/tool/info/counters?id=' + toolId;
+  $.ajax({
+    url: url,
+    method: 'get'
+  }).done(function (response) {
+    var counters = JSON.parse(response);
+    if (counters != false) {
+      $('#docs-tab .counter').html(counters.docsCount);
+      $('#images-tab .counter').html(counters.imagesCount);
+      $('#wiki-tab .counter').html(counters.wikiCount);
+    }
+    return;
+  }).fail(function () {
+    console.log('Что-то пошло не так');
+  });
+}
+
+function loadTabsData(ref, toolId) {
+  if (ref != undefined) {
+    url = '/equipment/tool/' + ref + '/index?id=' + toolId;
+  } else {
+    url = '/equipment/tool/info/index?id=' + toolId;
+  }
+  $.ajax({
+    url: url,
+    method: 'get'
+  }).done(function (response) {
+    $('#tool-info-view').html(response.data.data);
+  }).fail(function () {
+    self.setContentAppend('<div>Что-то пошло не так!</div>');
+  });
+}

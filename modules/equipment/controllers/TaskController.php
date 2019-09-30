@@ -128,11 +128,10 @@ class TaskController extends Controller
           return [
             'data' => [
               'success' => true,
-              'data' => $this->renderAjax('index', [
-                'model' => $tool,
-                'view' => $view,
-                'children' => $children
-              ]),
+              'data' => [
+                'image' => $tool->countImages,
+                'title' => $tool->eq_title
+              ],
               'message' => 'Update done'
             ],
             'code' => 1
@@ -159,6 +158,31 @@ class TaskController extends Controller
         'message' => 'Update done'
       ],
       'code' => 1
+    ];
+  }
+
+  public function actionUpdateImageCount()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (!empty($_GET['id'])){
+      $id = $_GET['id'];
+      $tool = Tools::findModel($id);
+      return [
+        'data' => [
+          'success' => true,
+          'data' => $tool->countImages,
+          'message' => 'Images was count'
+        ],
+        'code' => 1
+      ];
+    }
+    return [
+      'data' => [
+        'success' => false,
+        'data' => null,
+        'message' => 'Empty $_GET["id"]'
+      ],
+      'code' => 0
     ];
   }
 

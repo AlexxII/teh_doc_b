@@ -21,7 +21,8 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancytree_category'
+        'data-tree' => 'fancytree_category',
+        'data-root' => 'Категории'
 
       ]) ?>
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
@@ -168,6 +169,9 @@ $del_multi_nodes = 'Удвлить С вложениями';
         },
         triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
         beforeEdit: function (event, data) {
+          if (data.node.data.lvl === '0') {
+            return false;
+          }
           return true;
         },
         edit: function (event, data) {

@@ -65,21 +65,7 @@
             <p class="note">Отображать как комплект.</p>
           </div>
         </li>
-
-        <li class="list-group-item">
-          <div class="form-checkbox js-complex-option">
-            <label>
-              <input id="wrap" type="checkbox"
-                     data-id="<?= $model->id ?>"
-                     data-check='wrap-check' data-url='wrap' <?php if ($model->wrap) echo 'checked' ?>>
-              Обертка
-            </label>
-            <span class="status-indicator" id="wrap-check"></span>
-            <p class="note">Отображать данный объект как обертку вокруг других объектов.</p>
-          </div>
-        </li>
       </ul>
-
 
       <div class="subhead">
         <h3 class="setting-header">Специальные работы

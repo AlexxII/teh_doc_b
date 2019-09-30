@@ -23,12 +23,15 @@ use yii\helpers\Html;
       <div class="thumbnail">
         <div class="caption">
           <span><small><?= $model->toolParents(0) ?></small></span>
-          <h4><?= $model->eq_title ?>
-            <span class="counter" id="<?= $model->id ?>" title="Кол-во изображений" data-toggle="tooltip" data-placement="top">
+          <h4>
+            <span class="tool-title"><?= $model->eq_title ?></span>
+            <span class="counter" id="<?= $model->id ?>" title="Кол-во изображений" data-toggle="tooltip"
+                  data-placement="top">
                 <?= $model->countImages ?>
               </span>
           </h4>
-          <p><a href="" data-tool-id="<?= $model->id ?>" class="btn btn-sm btn-default update-task-tool" role="button">Обновить</a></p>
+          <p><a href="" data-tool-id="<?= $model->id ?>" class="btn btn-sm btn-default update-task-tool" role="button">Обновить</a>
+          </p>
           <li class="list-group-item" style="margin-bottom: 15px">
             <div class="form-checkbox js-complex-option">
               <label style="font-weight: 500">
@@ -101,8 +104,11 @@ use yii\helpers\Html;
                   success: function (response) {
                     var tText = '<span style="font-weight: 600">Успех!</span><br>Данные обновлены';
                     initNoty(tText, 'success');
-                    $('#tool-info-view').html(response.data.data);
-                    taskDiv.fadeOut();
+                    var imagesCount = response.data.data.image;
+                    var toolTitle = response.data.data.title;
+                    $(taskDiv).find('.counter').html(imagesCount);
+                    $(taskDiv).find('.tool-title').html(toolTitle);
+                    // taskDiv.fadeOut();
                   },
                   error: function (response) {
                     console.log(response.data.data);
@@ -114,11 +120,28 @@ use yii\helpers\Html;
             }
           },
           cancel: {
-            text: 'НАЗАД'
+            text: 'НАЗАД',
+            action: function () {
+              var url = '/equipment/task/update-image-count';
+              $.ajax({
+                type: 'GET',
+                url: url,
+                dataType: 'json',
+                data: {
+                  'id' :toolId
+                },
+                success: function (response) {
+                  var imagesCount = response.data.data;
+                  $(taskDiv).find('.counter').html(imagesCount);
+                },
+                error: function (response) {
+                  console.log(response.data.data);
+                }
+              })
+            }
           }
         }
       });
-
     });
   })
 
