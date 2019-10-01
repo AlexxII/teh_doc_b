@@ -14,16 +14,30 @@ class WikiController extends Controller
 
   public function actionIndex()
   {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('index', [
+        ]),
+        'message' => 'Page load',
+      ],
+      'code' => 1,
+    ];
+  }
+
+  public function actionContent()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     $id = $_GET['id'];
     $model = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->limit(1)->all();
     $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if (!empty($model)) {
       $indexModel = $model[0];
       return [
         'data' => [
           'success' => true,
-          'data' => $this->renderAjax('index', [
+          'data' => $this->renderAjax('content-list', [
             'model' => $indexModel,
             'list' => $list,
           ]),
@@ -35,7 +49,7 @@ class WikiController extends Controller
     return [
       'data' => [
         'success' => true,
-        'data' => $this->renderAjax('_index', [
+        'data' => $this->renderAjax('empty-list', [
         ]),
         'message' => 'Page load',
       ],
@@ -46,30 +60,36 @@ class WikiController extends Controller
 
   public function actionCreate()
   {
-    $model = new Wiki();
-    $id = $_GET['id'];
-    $toolModel = Tools::findModel($id);
+    $wikiPage = new Wiki();
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    if ($model->load(Yii::$app->request->post())) {
+    if ($wikiPage->load(Yii::$app->request->post())) {
       $date = date('Y-m-d H:i:s');
-      $model->eq_id = $_GET['id'];
-      $model->wiki_record_create = $date;
-      $model->wiki_record_update = $date;
-      $model->wiki_created_user = Yii::$app->user->identity->id;
-      if ($model->save()) {
+      $wikiPage->eq_id = $_GET['id'];
+      $wikiPage->wiki_record_create = $date;
+      $wikiPage->wiki_record_update = $date;
+      $wikiPage->wiki_created_user = Yii::$app->user->identity->id;
+      if ($wikiPage->save()) {
         $id = $_GET['id'];
         $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
-        return $this->renderAjax('index', [
-          'model' => $model,
-          'list' => $list,
-        ]);
+        return [
+          'data' => [
+            'success' => true,
+            'data' => $this->renderAjax('content-list', [
+              'model' => $wikiPage,
+              'list' => $list,
+            ]),
+            'message' => 'Page load',
+          ],
+          'code' => 1,
+        ];
       }
     }
     return [
       'data' => [
         'success' => true,
         'data' => $this->renderAjax('_form', [
-          'model' => $model,
+          'model' => $wikiPage,
+          'title' => 'Новая страница'
         ]),
         'message' => 'Page load',
       ],
@@ -79,59 +99,110 @@ class WikiController extends Controller
 
   public function actionUpdate($page)
   {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     $model = Wiki::findModel($page);
-    $id = $_GET['id'];
-    $toolModel = Tools::findModel($id);
-
     if ($model->load(Yii::$app->request->post())) {
       $date = date('Y-m-d H:i:s');
       $model->wiki_record_update = $date;
       if ($model->save()) {
         $id = $_GET['id'];
         $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
-        return $this->render('header', [
-          'model' => $model,
-          'list' => $list,
-        ]);
+        $wikiPage = Wiki::findOne($page);
+        return [
+          'data' => [
+            'success' => true,
+            'data' => $this->renderAjax('content-list', [
+              'model' => $wikiPage,
+              'list' => $list,
+            ]),
+            'message' => 'Page load',
+          ],
+          'code' => 1,
+        ];
       }
-    }
-    return $this->renderAjax('update', [
-      'model' => $model,
-    ]);
+    }    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('_form', [
+          'model' => $model,
+          'title' => 'Обновить'
+        ]),
+        'message' => 'Page load',
+      ],
+      'code' => 1,
+    ];
   }
 
   public function actionView($page)
   {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if ($page) {
       $id = $_GET['id'];
-      $toolModel = Tools::findModel($id);
       $wikiPage = Wiki::findOne($page);
-      $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
-      return $this->renderAjax('header', [
-        'model' => $wikiPage,
-        'list' => $list,
-      ]);
-    }
-    return false;
-  }
-
-
-  public function actionDeletePage($page)
-  {
-    $toolId = $_GET['id'];
-    if ($page) {
-      $wiki = Wiki::findModel($page);
-      if ($wiki->delete()) {
-        Yii::$app->session->setFlash('success', 'Страница удалена');
-        return $this->redirect(['tool/' . $toolId . '/wiki/index']);
+      if ($wikiPage !== null) {
+        $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
+        return [
+          'data' => [
+            'success' => true,
+            'data' => $this->renderAjax('content-list', [
+              'model' => $wikiPage,
+              'list' => $list,
+            ]),
+            'message' => 'Page load',
+          ],
+          'code' => 1,
+        ];
       }
-      Yii::$app->session->setFlash('error', 'Удалить страницу не удалось');
-      return $this->redirect(['tool/' . $toolId . '/wiki/index']);
-
     }
-    return false;
+    return [
+      'data' => [
+        'success' => false,
+        'data' => $this->renderAjax('index'),
+        'message' => 'Page failed to load',
+      ],
+      'code' => 0,
+    ];
   }
 
+
+  public function actionDelete($page)
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $id = $_GET['id'];
+    if ($page) {
+      $wikiPage = Wiki::findModel($page);
+      $list = Wiki::find()->where(['eq_id' => $id])->orderBy('wiki_title')->asArray()->all();
+      if ($wikiPage->delete()) {
+        return [
+          'data' => [
+            'success' => true,
+            'data' => $this->renderAjax('index'),
+            'message' => 'Page failed to load',
+          ],
+          'code' => 1,
+        ];
+      }
+      return [
+        'data' => [
+          'success' => false,
+          'data' => $this->renderAjax('content-list', [
+            'model' => $wikiPage,
+            'list' => $list,
+          ]),
+          'message' => 'Page failed to load',
+        ],
+        'code' => 0,
+      ];
+    }
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('index'),
+        'message' => 'Page load',
+      ],
+      'code' => 1,
+    ];
+  }
 
 
 }

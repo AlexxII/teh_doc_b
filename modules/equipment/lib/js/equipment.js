@@ -1,4 +1,82 @@
-/*==================== tool/doc ===================== */
+//===========================================================
+// Добавление оборудования
+/*
+$(document).on('click', '#add-equipment', function (e) {
+
+  e.preventDefault();
+  var id = $(e.currentTarget).data('tree');
+  var node = $('#' + id).fancytree('getActiveNode');
+  if (!node) {
+    var rootTitle = 'Необработанное';
+    var tree = $('#' + id).fancytree('getTree');
+    var root = tree.findFirst(rootTitle);
+    root.editCreateNode('child', '');
+  } else {
+    node.editCreateNode('child', ' ');
+  }
+});
+*/
+var toolsTreeIdAttr = 'tools-main-tree';
+
+
+$(document).on('click', '#refresh-tree', function (e) {
+  e.preventDefault();
+  var tree = $("#" + toolsTreeIdAttr).fancytree("getTree");
+  tree.reload();
+  $("#delete-tool-wrap").hide();
+  $('#tool-info').hide();
+});
+
+
+function simpleEquipmentAdd(tree, node, rootTitle)
+{
+  if (!node) {
+    var root = tree.findFirst(rootTitle);
+    root.editCreateNode('child', ' ');
+  } else {
+    node.editCreateNode('child', ' ');
+  }
+}
+
+$(document).on('keyup', 'input[name=search]', function (e) {
+  var n,
+    tree = $.ui.fancytree.getTree(),
+    args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
+    opts = {},
+    filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
+    match = $(this).val();
+
+  $.each(args, function (i, o) {
+    opts[o] = $("#" + o).is(":checked");
+  });
+  opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
+
+  if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+    $("button#btnResetSearch").click();
+    return;
+  }
+  if ($("#regex").is(":checked")) {
+    // Pass function to perform match
+    n = filterFunc.call(tree, function (node) {
+      return new RegExp(match, "i").test(node.title);
+    }, opts);
+  } else {
+    // Pass a string to perform case insensitive matching
+    n = filterFunc.call(tree, match, opts);
+  }
+  $("#btnResetSearch").attr("disabled", false);
+}).focus();
+
+$(document).on('click', '.btnResetSearch', function (e) {
+  e.preventDefault();
+  var id = $(e.currentTarget).data('tree');
+  var tree = $("#" + id).fancytree("getTree");
+  $("input[name=search]").val("");
+  $("span#matches").text("");
+  tree.clearFilter();
+}).attr("disabled", true);
+
+/*==================== tool/info ===================== */
 /* Обновить сведения об оборудовании на главной странице */
 $(document).on('click', '#tool-edit', function (e) {
   e.preventDefault();
@@ -12,8 +90,6 @@ $(document).on('click', '#tool-edit', function (e) {
       return $.ajax({
         url: url,
         method: 'get'
-      }).done(function (response) {
-
       }).fail(function () {
         self.setContentAppend('<div>Что-то пошло не так</div>');
       });
@@ -158,7 +234,6 @@ $(document).on('click', '#tool-task', function (e) {
 });
 
 // функционал улучшения интерфейса формы
-
 function loadManufacturers() {
   $.ajax({
     type: 'get',
@@ -197,40 +272,17 @@ function loadModels() {
   });
 }
 
-function initNoty(text, type) {
-  new Noty({
-    type: type,
-    theme: 'mint',
-    text: text,
-    progressBar: true,
-    timeout: '4000',
-    closeWith: ['click'],
-    killer: true,
-    animation: {
-      open: 'animated noty_effects_open noty_anim_out', // Animate.css class names
-      close: 'animated noty_effects_close noty_anim_in' // Animate.css class names
-    }
-  }).show();
-}
-//===========================================================
-// Добавлние оборудования
-$(document).on('click', '#add-equipment', function (e) {
+// ссылки на оборудование в предствлении 'Комплекс' (view_complex)
+$(document).on('click', '.tool-ref', function (e) {
   e.preventDefault();
-  var id = $(e.currentTarget).data('tree');
-  var node = $('#' + id).fancytree('getActiveNode');
-  if (!node) {
-    var rootTitle = 'Необработанное';
-    var tree = $('#' + id).fancytree('getTree');
-    var root = tree.findFirst(rootTitle);
-    root.editCreateNode('child', '');
-  } else {
-    node.editCreateNode('child', ' ');
-  }
+  var toolId = $(this).data('toolId');
+  var tree = $('#tools-main-tree').fancytree('getTree');
+  tree.getNodeByKey(toolId.toString()).setActive();
 });
-
 
 //=============================================================================//
 // Control btns
+
 $(document).on('click', '.add-subcategory', function (e) {
   e.preventDefault();
   var id = $(e.currentTarget).data('tree');
@@ -257,7 +309,7 @@ $(document).on('click', '.refresh', function (e) {
   $('.about-info').html('');
 });
 
-$(document).on('click', '#delete-equipment', function (e) {
+$(document).on('click', '.delete-node', function (e) {
   var id = $(e.currentTarget).data('tree');
   var node = $("#" + id).fancytree("getActiveNode");
   var url = $(e.currentTarget).data('delete');
@@ -656,7 +708,7 @@ function deleteProcess(url, toolId, data) {
   });
 }
 
-/*==================== tool/wiki ===================== */
+/*==================== tool/settings ===================== */
 var successCheck = '<i class="fa fa-check" id="consolidated-check" aria-hidden="true" style="color: #4eb305"></i>';
 var warningCheck = '<i class="fa fa-times" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
 var infoCheck = '<i class="fa fa-exclamation" id="consolidated-check" aria-hidden="true" style="color: #cc0000"></i>';
@@ -809,6 +861,177 @@ $(document).on('change', '.ch', function (e) {
   });
 });
 
+/*==================== tool/wiki ===================== */
+// загрузка страницы создания wiki
+$(document).on('click', '#new-wiki-page', function (e) {
+  e.preventDefault();
+  var treeId = $(this).data('tree');
+  var node = $('#' + treeId).fancytree("getActiveNode");
+  var toolId = node.data.id;
+  var url = '/equipment/tool/wiki/create?id=' + toolId;
+  $.ajax({
+    url: url,
+    method: 'get'
+  }).done(function (response) {
+    getCounters(toolId);
+    $('#wiki-content').html(response.data.data);
+  }).fail(function (response) {
+    console.log(response.data.message);
+  });
+});
+// загрузка страницы обновления wiki
+$(document).on('click', '#update-wikipage', function (e) {
+  e.preventDefault();
+  var wikiId = $(this).data('id');
+  var url = '/equipment/tool/wiki/update';
+  $.ajax({
+    url: url,
+    method: 'get',
+    data: {
+      'page': wikiId
+    }
+  }).done(function (response) {
+    $('#wiki-content').html(response.data.data);
+  }).fail(function (response) {
+    console.log(response.data.message);
+  });
+});
+
+// процесс содание и обновление страницы wiki -> отсюда небольшие костыли
+$(document).on('submit', 'form#wiki-create-form', function (e) {
+  e.preventDefault();
+  var treeId = 'tools-main-tree';
+  var node = $('#' + treeId).fancytree("getActiveNode");
+  var toolId = node.data.id;
+  var uri = $('#wiki-submit-btn').data('uri');
+  var url, notyYText, notyNText;
+  if (uri === 'create') {
+    url = '/equipment/tool/wiki/' + uri + '?id=' + toolId;
+    notyYText = 'Страница wiki создана';
+    notyNText = 'Страница wiki не создана';
+  } else {
+    url = '/equipment/tool/wiki/' + uri + '&id=' + toolId;
+    notyYText = 'Страница wiki обновлена';
+    notyNText = 'Страница wiki не обновлена';
+  }
+  var form = $('form')[0];
+  var formData = new FormData(form);
+  $.ajax({
+    type: 'POST',
+    url: url,
+    processData: false,
+    contentType: false,
+    data: formData,
+    success: function (response) {
+      var tText = '<span style="font-weight: 600">Отлично!</span><br>' + notyYText;
+      initNoty(tText, 'success');
+      getCounters(toolId);
+      $('#wiki-content').html(response.data.data);
+    },
+    error: function (response) {
+      var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>' + notyNText;
+      initNoty(tText, 'warning');
+      console.log(response.data.message);
+    }
+  });
+});
+
+// Просмотр wiki страниц
+$(document).on('click', '#cancel-wiki-form', function (e) {
+  e.preventDefault();
+  var node = $("#tools-main-tree").fancytree("getActiveNode");
+  var toolId = node.data.id;
+  var wikiId = $(this).data('wikiId');
+  var url = '/equipment/tool/wiki/view';
+  $.ajax({
+    type: 'GET',
+    url: url,
+    data: {
+      'page': wikiId,
+      'id': toolId
+    },
+    success: function (response) {
+      $('#wiki-content').html(response.data.data);
+    },
+    error: function (response) {
+      console.log(response);
+    }
+  });
+});
+
+// Просмотр wiki страницы
+$(document).on('click', '.show-wiki', function (e) {
+  e.preventDefault();
+  var node = $("#tools-main-tree").fancytree("getActiveNode");
+  var toolId = node.data.id;
+  var url = 'equipment/tool/wiki/view';
+  var wikiId = $(this).data('wikiId');
+  $.ajax({
+    url: url,
+    method: 'GET',
+    data: {
+      'page': wikiId,
+      'id': toolId
+    }
+  }).done(function (response) {
+    $('#wiki-content').html(response.data.data);
+  }).fail(function (response) {
+    console.log(response.data.message);
+  });
+});
+
+// Удаление wiki страницы
+$(document).on('click', '#delete-wiki-page', function (e) {
+  e.preventDefault();
+  var node = $("#tools-main-tree").fancytree("getActiveNode");
+  var toolId = node.data.id;
+  jc = $.confirm({
+    icon: 'fa fa-question',
+    title: 'Вы уверены?',
+    content: 'Вы действительно хотите удалить страницу?',
+    type: 'red',
+    closeIcon: false,
+    autoClose: 'cancel|9000',
+    buttons: {
+      ok: {
+        btnClass: 'btn-danger',
+        action: function () {
+          var wikiId = $('#delete-wiki-page').data('wikiId');
+          console.log(wikiId);
+          var url = '/equipment/tool/wiki/delete';
+          $.ajax({
+            type: 'GET',
+            url: url,
+            data: {
+              'page': wikiId,
+              'id': toolId
+            },
+            success: function (response) {
+              var tText = '<span style="font-weight: 600">Отлично!</span><br>Страница удалена';
+              initNoty(tText, 'success');
+              getCounters(toolId);
+              $('#wiki-content').html(response.data.data);
+            },
+            error: function (response) {
+              var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Удалить не удалось';
+              initNoty(tText, 'warning');
+              console.log(response);
+            }
+          });
+          jc.close();
+        }
+      },
+      cancel: {
+        action: function () {
+          return;
+        }
+      }
+    }
+  });
+});
+
+
+// Общие функции модуля
 function getCounters(toolId) {
   var url = '/equipment/tool/info/counters?id=' + toolId;
   $.ajax({
@@ -841,4 +1064,20 @@ function loadTabsData(ref, toolId) {
   }).fail(function () {
     self.setContentAppend('<div>Что-то пошло не так!</div>');
   });
+}
+
+function initNoty(text, type) {
+  new Noty({
+    type: type,
+    theme: 'mint',
+    text: text,
+    progressBar: true,
+    timeout: '4000',
+    closeWith: ['click'],
+    killer: true,
+    animation: {
+      open: 'animated noty_effects_open noty_anim_out', // Animate.css class names
+      close: 'animated noty_effects_close noty_anim_in' // Animate.css class names
+    }
+  }).show();
 }

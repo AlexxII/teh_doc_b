@@ -131,7 +131,6 @@ td .fa {
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
   background-color: #fff;
 }
-
 /* buttons */
 .btn-circle.btn-xl {
   width: 40px;
@@ -295,7 +294,7 @@ td .fa {
   margin-top: 0;
 }
 .dw-panel__content {
-  padding: 20px!important;
+  padding: 20px !important;
 }
 /* wiki */
 .complex-wiki-update {
@@ -305,7 +304,7 @@ td .fa {
   margin-top: 0;
 }
 #wiki-body {
-  padding-left:0;
+  padding-left: 0;
 }
 #wiki-rightbar {
   padding: 0;
@@ -316,27 +315,28 @@ td .fa {
 .complex-wiki-default {
   margin-top: 15px;
 }
-.complex-wiki-default div {
-  text-align: center
+.complex-wiki-default .fa-book {
+  font-size: 24px;
 }
-.complex-wiki-default .fa {
-  font-size: 28px
-}
-#complex-wiki-form > div{
-  border-radius:2px;
-  padding-top:10px;
+#complex-wiki-form > div {
+  border-radius: 2px;
+  padding-top: 10px;
 }
 #complex-wiki-form h3 {
   margin-top: 0 !important;
 }
-
+#wiki-pages li {
+  cursor: pointer;
+  color: blue;
+  word-wrap: break-word;
+}
 /* adding-page */
 #go-back {
   width: 40px !important;
   height: 40px !important;
   font-size: 0;
 }
-.hideMenu-button a{
+.hideMenu-button a {
   text-decoration: none;
   color: #000 !important;
   position: absolute;
@@ -405,4 +405,17 @@ td .fa {
 .fab-button svg {
   fill: #fff;
   padding: 5px 3px 0 5px;
+}
+/* info */
+table.detail-view th {
+  width: 25%;
+}
+table.detail-view td {
+  width: 75%;
+}
+
+#refresh-tree {
+  width: 42px !important;
+  height: 42px !important;
+  padding-left: .1em;
 }

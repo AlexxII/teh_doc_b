@@ -67,8 +67,6 @@ echo $this->renderAjax($view, [
 <script>
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-
-
   });
 
 </script>

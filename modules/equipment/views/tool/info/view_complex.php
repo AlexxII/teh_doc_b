@@ -45,7 +45,7 @@ $attributes = [
       ];
     }
 
-    echo '<h3>
+    echo '<h3 class="tool-ref" style="cursor: pointer" data-tool-id="' . $child->id . '">
         <span style="position: relative">';
     echo Html::encode($child->name);
     if ($child->specialChildrenStatus || $child->specialStatus) {
@@ -67,8 +67,12 @@ $attributes = [
 
 <script>
   $(document).ready(function () {
+
     $('[data-toggle="tooltip"]').tooltip();
+
+
   });
+
 </script>
 
 

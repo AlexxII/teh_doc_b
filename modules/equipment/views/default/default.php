@@ -41,16 +41,27 @@ $about = "Перечень оборудования";
 <div id="main-content" class="container">
   <div class="row">
     <div id="tools-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
-      <div id="add-equipment-wrap" style="position: absolute; top: 10px; left:-60px">
-        <a id="add-equipment" data-tree="tools-main-tree" class="fab-button" title="Добавить оборудование"
-           style="cursor: pointer">
+      <div id="refresh-tree-wrap" style="position: absolute; top: 0px; left:-55px">
+        <a id="refresh-tree" class="fab-button" title="Обновить"
+           style="cursor: pointer; background-color: green">
+          <svg width="37" height="37" viewBox="0 0 24 24">
+            <path d="M9 12l-4.463 4.969-4.537-4.969h3c0-4.97 4.03-9 9-9 2.395 0 4.565.942 6.179
+        2.468l-2.004 2.231c-1.081-1.05-2.553-1.699-4.175-1.699-3.309 0-6 2.691-6 6h3zm10.463-4.969l-4.463 4.969h3c0
+        3.309-2.691 6-6 6-1.623 0-3.094-.65-4.175-1.699l-2.004 2.231c1.613 1.526 3.784 2.468 6.179 2.468 4.97 0 9-4.03
+        9-9h3l-4.537-4.969z"/>
+          </svg>
+        </a>
+      </div>
+      <div id="add-equipment-wrap" style="position: absolute; top: 50px; left:-60px">
+        <a id="add-equipment" data-tree="tools-main-tree" data-root="Необработанное" class="fab-button"
+           title="Добавить оборудование" style="cursor: pointer">
           <div class="plus"></div>
         </a>
       </div>
 
       <!-- Deleting!!!! !-->
-      <div id="delete-equipment-wrap" style="position: absolute; top: 70px; left:-60px;display: none">
-        <a id="delete-equipment" class="fab-button" title="Удалить"
+      <div id="delete-tool-wrap" style="position: absolute; top: 115px; left:-60px;display: none">
+        <a id="delete-tool" class="fab-button" title="Удалить"
            style="cursor: pointer; background-color: red">
           <svg width="50" height="50" viewBox="0 0 24 24">
             <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
@@ -65,12 +76,13 @@ $about = "Перечень оборудования";
                  placeholder="Поиск по названию...">
         </div>
         <div style="padding-top: 8px; right: 10px; position: absolute">
-          <a href="" id="btnResetSearch">
+          <a href="" class="btnResetSearch" data-tree="tools-main-tree">
             <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color:#9d9d9d"></i>
           </a>
         </div>
       </div>
 
+      <!-- дерево оборудования -->
       <div class="row" style="padding: 0 15px">
         <div style="border-radius:2px;padding-top:40px">
           <div id="tools-main-tree" class="ui-draggable-handle"></div>
@@ -117,65 +129,19 @@ $about = "Перечень оборудования";
   initLeftMenu('/equipment/menu/left-side');
   initAppConfig('/equipment/menu/app-config');
 
+  var tId, toolInfo;
+
   $(document).ready(function () {
 
     $('[data-toggle="tooltip"]').tooltip();
 
-    $("input[name=search]").keyup(function (e) {
-      var n,
-        tree = $.ui.fancytree.getTree(),
-        args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-        opts = {},
-        filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-        match = $(this).val();
-
-      $.each(args, function (i, o) {
-        opts[o] = $("#" + o).is(":checked");
-      });
-      opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
-
-      if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-        $("button#btnResetSearch").click();
-        return;
-      }
-      if ($("#regex").is(":checked")) {
-        // Pass function to perform match
-        n = filterFunc.call(tree, function (node) {
-          return new RegExp(match, "i").test(node.title);
-        }, opts);
-      } else {
-        // Pass a string to perform case insensitive matching
-        n = filterFunc.call(tree, match, opts);
-      }
-      $("#btnResetSearch").attr("disabled", false);
-    }).focus();
-
-    $("#btnResetSearch").click(function (e) {
-      e.preventDefault();
-      $("input[name=search]").val("");
-      $("span#matches").text("");
-      var tree = $(".ui-draggable-handle").fancytree("getTree");
-      tree.clearFilter();
-    }).attr("disabled", true);
-
-    $("input[name=search]").keyup(function (e) {
-      if ($(this).val() == '') {
-        var tree = $(".ui-draggable-handle").fancytree("getTree");
-        tree.clearFilter();
-      }
-    })
-  })
-  ;
-
-  var tId, toolInfo, tree;
-  // отображение и логика работа дерева
-  jQuery(function ($) {
+    // отображение и логика работа дерева
     var main_url = '/equipment/default/all-tools';
     var move_url = '/equipment/default/move-node';
     var create_url = '/equipment/default/create-node';
     var update_url = '/equipment/default/update-node';
 
-    tree = $("#tools-main-tree").fancytree({
+    $("#tools-main-tree").fancytree({
       source: {
         url: main_url
       },
@@ -200,7 +166,6 @@ $about = "Перечень оборудования";
           if (node.data.lvl === '0') {
             return false;
           }
-          pparent = node.parent;
           return true;
         },
         dragEnter: function (node, data) {
@@ -294,8 +259,8 @@ $about = "Перечень оборудования";
                 node.setTitle(result.acceptedTitle);
                 //=========================
 
-                node.folder = true;
-                node.renderTitle();
+                // node.folder = true;
+                // node.renderTitle();
 
                 //=========================
                 returnCallback();
@@ -320,18 +285,22 @@ $about = "Перечень оборудования";
           // getCounters(tId);
           // $('#tool-info').fadeIn(500);
           data.tree.activateKey(tId);
+          tId = undefined;
         }
       },
       activate: function (event, data) {
-        var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
+        // var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
         // if (target === 'title' || target === 'icon') {
-        //   console.log(target);
-        // }
         var node = data.node;
+          // console.log(node);
+        if (node.data.lvl !== '0') {
+          $('#delete-tool-wrap').show();
+        } else {
+          $('#delete-tool-wrap').hide();
+        }
         var toolId = node.data.id;
         if (node.data.lvl !== '0') {
           $('#tool-info').fadeIn(500);
-          tId = toolId;
           var ref = $('ul#main-teh-tab').find('li.active').data('tabName');
           getCounters(toolId);
           loadTabsData(ref, toolId);
@@ -354,7 +323,6 @@ $about = "Перечень оборудования";
     })
   });
 
-
   function getNodeId() {
     var node = $("#tools-main-tree").fancytree("getActiveNode");
     if (node) {
@@ -372,6 +340,215 @@ $about = "Перечень оборудования";
       loadTabsData(ref, toolId);
       getCounters(toolId);
     }
+  }
+
+  var toolsTreeIdAttr = 'tools-main-tree';
+
+  $(document).on('click', '#add-equipment', function (e) {
+    e.preventDefault();
+    var tree = $('#' + toolsTreeIdAttr).fancytree('getTree');
+    var node = $('#' + toolsTreeIdAttr).fancytree('getActiveNode');
+    var rootTitle = $(e.currentTarget).data('root');
+    if (!e.ctrlKey) {
+      createWindow(tree, node, rootTitle);
+    } else {
+      simpleEquipmentAdd(tree, node, rootTitle);
+    }
+  });
+
+
+  $(document).on('click', '#delete-tool', function (e) {
+    e.preventDefault();
+    var tree = $('#' + toolsTreeIdAttr).fancytree('getTree');
+    var node = $('#' + toolsTreeIdAttr).fancytree('getActiveNode');
+    var url = '/equipment/tool/info/delete';
+    var dArray = {};
+    var children = node.children;
+    if (children && e.ctrlKey) {
+      var index = 0;
+      children.forEach(function (val, i, ar) {
+        dArray[i] = val.key;
+        index++;
+      });
+      dArray[index] = node.data.id;
+    } else {
+      dArray['0'] = node.data.id;
+    }
+    jc = $.confirm({
+      icon: 'fa fa-question',
+      title: 'Вы уверены?',
+      content: 'Вы действительно хотите удалить выделенное?',
+      type: 'red',
+      closeIcon: false,
+      autoClose: 'cancel|9000',
+      buttons: {
+        ok: {
+          btnClass: 'btn-danger',
+          action: function () {
+            jc.close();
+            deleteTool(url, dArray, tree);
+          }
+        },
+        cancel: {
+          text: 'Отмена'
+        }
+      }
+    });
+  });
+
+  function deleteTool(url, data, tree) {
+    var csrf = $('meta[name=csrf-token]').attr("content");
+    jc = $.confirm({
+      icon: 'fa fa-cog fa-spin',
+      title: 'Подождите!',
+      content: 'Ваш запрос выполняется!',
+      buttons: false,
+      closeIcon: false,
+      confirmButtonClass: 'hide'
+    });
+    $.ajax({
+      url: url,
+      method: 'post',
+      data: {
+        _csrf: csrf,
+        data: data
+      }
+    }).done(function (response) {
+      if (response != false) {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-thumbs-up',
+          title: 'Успех!',
+          content: 'Ваш запрос выполнен.',
+          type: 'green',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-success',
+              action: function () {
+                tree.reload();
+                $('#tool-info').fadeOut(10);
+              }
+            }
+          }
+        });
+      } else {
+        jc.close();
+        jc = $.confirm({
+          icon: 'fa fa-exclamation-triangle',
+          title: 'Неудача!',
+          content: 'Запрос не выполнен. Что-то пошло не так.',
+          type: 'red',
+          buttons: false,
+          closeIcon: false,
+          autoClose: 'ok|8000',
+          confirmButtonClass: 'hide',
+          buttons: {
+            ok: {
+              btnClass: 'btn-danger',
+              action: function () {
+              }
+            }
+          }
+        });
+      }
+    }).fail(function () {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-exclamation-triangle',
+        title: 'Неудача!',
+        content: 'Запрос не выполнен. Что-то пошло не так.',
+        type: 'red',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|4000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+            }
+          }
+        }
+      });
+    });
+  }
+
+
+  function createWindow(tree, node, rootTitle) {
+    if (node) {
+      var url = '/equipment/tool/info/create?root=' + node.data.id;
+    } else {
+      var url = '/equipment/tool/info/create';
+    }
+    c = $.confirm({
+      content: function () {
+        var self = this;
+        return $.ajax({
+          url: url,
+          method: 'get'
+        }).fail(function () {
+          self.setContentAppend('<div>Что-то пошло не так</div>');
+        });
+      },
+      contentLoaded: function (response, status, xhr) {
+        this.setContentAppend('<div>' + response.data.data + '</div>');
+      },
+      type: 'blue',
+      columnClass: 'large',
+      title: 'Редактровать данные',
+      buttons: {
+        ok: {
+          btnClass: 'btn-blue',
+          text: 'Сохранить',
+          action: function () {
+            var $form = $("#w0"),
+              data = $form.data("yiiActiveForm");
+            $.each(data.attributes, function () {
+              this.status = 3;
+            });
+            $form.yiiActiveForm("validate");
+            if ($("#w0").find(".has-error").length) {
+              return false;
+            } else {
+              //преобразование дат перед отправкой
+              var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+              $('.fact-date').val(d);
+              $.ajax({
+                type: 'POST',
+                url: url,
+                dataType: 'json',
+                data: $form.serialize(),
+                success: function (response) {
+                  var tText = '<span style="font-weight: 600">Успех!</span><br>Оборудование добавлено';
+                  initNoty(tText, 'success');
+                  // var root = tree.findFirst(rootTitle);
+                  // root.addChildren({
+                  //   titile: response.data.message
+                  // });
+                  // $('#tool-info-view').html(response.data.data);
+                  tId = response.data.data;
+                  tree.reload();
+                  // tree.getNodeByKey(toolId.toString()).setActive();
+                  // node.setTitle(response.data.message);
+                },
+                error: function (response) {
+                  console.log(response.data.data);
+                  var tText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить оборудование не удалось';
+                  initNoty(tText, 'error');
+                }
+              });
+            }
+          }
+        },
+        cancel: {
+          text: 'НАЗАД',
+        }
+      }
+    });
   }
 
 

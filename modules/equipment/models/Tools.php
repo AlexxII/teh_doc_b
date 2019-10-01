@@ -75,10 +75,10 @@ class Tools extends \yii\db\ActiveRecord
   {
     $scenarios = parent::scenarios();
     $scenarios[self::SCENARIO_UPDATE] = [
-      'category_id', 'eq_title', 'place_id', 'quantity', 'eq_manufact', 'eq_model', 'eq_serial', 'eq_factdate'
+      'category_id', 'eq_title', 'place_id', 'quantity', 'eq_manufact', 'eq_model', 'eq_serial', 'eq_factdate', 'eq_comments'
     ];
     $scenarios[self::SCENARIO_CREATE] = [
-      'category_id', 'eq_title', 'place_id', 'quantity', 'eq_manufact', 'eq_model', 'eq_serial', 'eq_factdate'
+      'category_id', 'eq_title', 'place_id', 'quantity', 'eq_manufact', 'eq_model', 'eq_serial', 'eq_factdate', 'eq_comments'
     ];
     return $scenarios;
   }
@@ -92,8 +92,9 @@ class Tools extends \yii\db\ActiveRecord
       [['category_id', 'eq_title', 'place_id', 'quantity'], 'required', 'on' => self::SCENARIO_UPDATE],
       [['category_id', 'eq_title', 'place_id', 'quantity'], 'required', 'on' => self::SCENARIO_CREATE],
       [['category_id', 'place_id', 'quantity'], 'integer'],
-      [['eq_factdate', 'eq_comments'], 'safe'],
+      [['eq_factdate'], 'safe'],
       [['eq_title', 'eq_manufact', 'eq_model', 'eq_serial'], 'string', 'max' => 250],
+      [['eq_comments'], 'string', 'max' => 1024]
     ];
   }
 
