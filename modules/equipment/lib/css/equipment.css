@@ -413,9 +413,28 @@ table.detail-view th {
 table.detail-view td {
   width: 75%;
 }
-
-#refresh-tree {
+.refresh-button {
   width: 42px !important;
   height: 42px !important;
   padding-left: .1em;
+}
+/* show data */
+.d-table {
+  font-size: 12px;
+  text-align: center;
+}
+.d-table th {
+  text-align: center;
+}
+.show-menu-button {
+  position: absolute;
+  background-color: #f5f7f8;
+  top: 0;
+  left: -20px;
+  width: 15px;
+  height: 100%;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 25px;
+  border-radius: 1px;
 }

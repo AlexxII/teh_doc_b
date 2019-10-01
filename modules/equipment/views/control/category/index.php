@@ -21,7 +21,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancytree_category',
+        'data-tree' => 'tools_category_tree',
         'data-root' => 'Категории'
 
       ]) ?>
@@ -31,7 +31,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancytree_category'
+        'data-tree' => 'tools_category_tree'
 
       ]) ?>
       <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
@@ -40,7 +40,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancytree_category',
+        'data-tree' => 'tools_category_tree',
         'data-delete' => '/equipment/control/category/delete'
 
       ]) ?>
@@ -50,7 +50,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         'data-toggle' => 'tooltip',
         'data-container' => 'body',
         'data-placement' => 'top',
-        'data-tree' => 'fancytree_category',
+        'data-tree' => 'tools_category_tree',
         'data-delete' => '/equipment/control/category/delete-root'
 
       ]) ?>
@@ -64,7 +64,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
       </div>
       <div style="padding-top: 8px; right: 10px; position: absolute">
-        <a href="" class="btnResetSearch" data-tree="fancytree_category">
+        <a href="" class="btnResetSearch" data-tree="tools_category_tree">
           <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
         </a>
       </div>
@@ -72,7 +72,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
 
     <div class="row" style="padding: 0 15px">
       <div style="border-radius:2px;padding-top:40px">
-        <div id="fancytree_category" class="ui-draggable-handle"></div>
+        <div id="tools_category_tree" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
@@ -93,7 +93,7 @@ $del_multi_nodes = 'Удвлить С вложениями';
     var create_url = '/equipment/control/category/create';
     var update_url = '/equipment/control/category/update';
 
-    $("#fancytree_category").fancytree({
+    $("#tools_category_tree").fancytree({
       source: {
         url: main_url
       },

@@ -42,7 +42,7 @@ $about = "Перечень оборудования";
   <div class="row">
     <div id="tools-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
       <div id="refresh-tree-wrap" style="position: absolute; top: 0px; left:-55px">
-        <a id="refresh-tree" class="fab-button" title="Обновить"
+        <a id="refresh-tree" class="fab-button refresh-button" title="Обновить"
            style="cursor: pointer; background-color: green">
           <svg width="37" height="37" viewBox="0 0 24 24">
             <path d="M9 12l-4.463 4.969-4.537-4.969h3c0-4.97 4.03-9 9-9 2.395 0 4.565.942 6.179
@@ -129,7 +129,6 @@ $about = "Перечень оборудования";
   initLeftMenu('/equipment/menu/left-side');
   initAppConfig('/equipment/menu/app-config');
 
-  var tId, toolInfo;
 
   $(document).ready(function () {
 
@@ -283,7 +282,6 @@ $about = "Перечень оборудования";
       init: function (event, data) {
         if (tId != undefined) {
           // getCounters(tId);
-          // $('#tool-info').fadeIn(500);
           data.tree.activateKey(tId);
           tId = undefined;
         }
@@ -292,7 +290,7 @@ $about = "Перечень оборудования";
         // var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
         // if (target === 'title' || target === 'icon') {
         var node = data.node;
-          // console.log(node);
+        // console.log(node);
         if (node.data.lvl !== '0') {
           $('#delete-tool-wrap').show();
         } else {
@@ -341,215 +339,5 @@ $about = "Перечень оборудования";
       getCounters(toolId);
     }
   }
-
-  var toolsTreeIdAttr = 'tools-main-tree';
-
-  $(document).on('click', '#add-equipment', function (e) {
-    e.preventDefault();
-    var tree = $('#' + toolsTreeIdAttr).fancytree('getTree');
-    var node = $('#' + toolsTreeIdAttr).fancytree('getActiveNode');
-    var rootTitle = $(e.currentTarget).data('root');
-    if (!e.ctrlKey) {
-      createWindow(tree, node, rootTitle);
-    } else {
-      simpleEquipmentAdd(tree, node, rootTitle);
-    }
-  });
-
-
-  $(document).on('click', '#delete-tool', function (e) {
-    e.preventDefault();
-    var tree = $('#' + toolsTreeIdAttr).fancytree('getTree');
-    var node = $('#' + toolsTreeIdAttr).fancytree('getActiveNode');
-    var url = '/equipment/tool/info/delete';
-    var dArray = {};
-    var children = node.children;
-    if (children && e.ctrlKey) {
-      var index = 0;
-      children.forEach(function (val, i, ar) {
-        dArray[i] = val.key;
-        index++;
-      });
-      dArray[index] = node.data.id;
-    } else {
-      dArray['0'] = node.data.id;
-    }
-    jc = $.confirm({
-      icon: 'fa fa-question',
-      title: 'Вы уверены?',
-      content: 'Вы действительно хотите удалить выделенное?',
-      type: 'red',
-      closeIcon: false,
-      autoClose: 'cancel|9000',
-      buttons: {
-        ok: {
-          btnClass: 'btn-danger',
-          action: function () {
-            jc.close();
-            deleteTool(url, dArray, tree);
-          }
-        },
-        cancel: {
-          text: 'Отмена'
-        }
-      }
-    });
-  });
-
-  function deleteTool(url, data, tree) {
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    jc = $.confirm({
-      icon: 'fa fa-cog fa-spin',
-      title: 'Подождите!',
-      content: 'Ваш запрос выполняется!',
-      buttons: false,
-      closeIcon: false,
-      confirmButtonClass: 'hide'
-    });
-    $.ajax({
-      url: url,
-      method: 'post',
-      data: {
-        _csrf: csrf,
-        data: data
-      }
-    }).done(function (response) {
-      if (response != false) {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-thumbs-up',
-          title: 'Успех!',
-          content: 'Ваш запрос выполнен.',
-          type: 'green',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-success',
-              action: function () {
-                tree.reload();
-                $('#tool-info').fadeOut(10);
-              }
-            }
-          }
-        });
-      } else {
-        jc.close();
-        jc = $.confirm({
-          icon: 'fa fa-exclamation-triangle',
-          title: 'Неудача!',
-          content: 'Запрос не выполнен. Что-то пошло не так.',
-          type: 'red',
-          buttons: false,
-          closeIcon: false,
-          autoClose: 'ok|8000',
-          confirmButtonClass: 'hide',
-          buttons: {
-            ok: {
-              btnClass: 'btn-danger',
-              action: function () {
-              }
-            }
-          }
-        });
-      }
-    }).fail(function () {
-      jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-exclamation-triangle',
-        title: 'Неудача!',
-        content: 'Запрос не выполнен. Что-то пошло не так.',
-        type: 'red',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|4000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-            }
-          }
-        }
-      });
-    });
-  }
-
-
-  function createWindow(tree, node, rootTitle) {
-    if (node) {
-      var url = '/equipment/tool/info/create?root=' + node.data.id;
-    } else {
-      var url = '/equipment/tool/info/create';
-    }
-    c = $.confirm({
-      content: function () {
-        var self = this;
-        return $.ajax({
-          url: url,
-          method: 'get'
-        }).fail(function () {
-          self.setContentAppend('<div>Что-то пошло не так</div>');
-        });
-      },
-      contentLoaded: function (response, status, xhr) {
-        this.setContentAppend('<div>' + response.data.data + '</div>');
-      },
-      type: 'blue',
-      columnClass: 'large',
-      title: 'Редактровать данные',
-      buttons: {
-        ok: {
-          btnClass: 'btn-blue',
-          text: 'Сохранить',
-          action: function () {
-            var $form = $("#w0"),
-              data = $form.data("yiiActiveForm");
-            $.each(data.attributes, function () {
-              this.status = 3;
-            });
-            $form.yiiActiveForm("validate");
-            if ($("#w0").find(".has-error").length) {
-              return false;
-            } else {
-              //преобразование дат перед отправкой
-              var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
-              $('.fact-date').val(d);
-              $.ajax({
-                type: 'POST',
-                url: url,
-                dataType: 'json',
-                data: $form.serialize(),
-                success: function (response) {
-                  var tText = '<span style="font-weight: 600">Успех!</span><br>Оборудование добавлено';
-                  initNoty(tText, 'success');
-                  // var root = tree.findFirst(rootTitle);
-                  // root.addChildren({
-                  //   titile: response.data.message
-                  // });
-                  // $('#tool-info-view').html(response.data.data);
-                  tId = response.data.data;
-                  tree.reload();
-                  // tree.getNodeByKey(toolId.toString()).setActive();
-                  // node.setTitle(response.data.message);
-                },
-                error: function (response) {
-                  console.log(response.data.data);
-                  var tText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить оборудование не удалось';
-                  initNoty(tText, 'error');
-                }
-              });
-            }
-          }
-        },
-        cancel: {
-          text: 'НАЗАД',
-        }
-      }
-    });
-  }
-
 
 </script>

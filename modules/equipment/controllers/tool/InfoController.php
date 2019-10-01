@@ -203,6 +203,13 @@ class InfoController extends Controller
         $image->delete();
         unlink(\Yii::$app->params['uploadImg'] . $image->image_path);
       }
+      $docs = $model->docs;
+      foreach ($docs as $doc) {
+        $doc->delete();
+        unlink(\Yii::$app->params['uploadDocs'] . $doc->doc_path);
+      }
+      $setting = $model->settings;
+      $setting->delete();
       $report = $model->delete();
     }
     if ($report) {

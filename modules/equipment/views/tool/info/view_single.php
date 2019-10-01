@@ -16,6 +16,7 @@ $attr = [
     'label' => 'Место размещения:',
     'value' => $model->placementTitle,
   ],
+  'eq_comments'
 ];
 
 if ($model->specialStatus) {

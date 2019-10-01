@@ -1,23 +1,171 @@
 //===========================================================
 // Добавление оборудования
-/*
-$(document).on('click', '#add-equipment', function (e) {
+var tId,
+  toolsTreeIdAttr = 'tools-main-tree';
 
+$(document).on('click', '#add-equipment', function (e) {
   e.preventDefault();
-  var id = $(e.currentTarget).data('tree');
-  var node = $('#' + id).fancytree('getActiveNode');
+  var tree = $('#' + toolsTreeIdAttr).fancytree('getTree');
+  var node = $('#' + toolsTreeIdAttr).fancytree('getActiveNode');
+  var rootTitle = $(e.currentTarget).data('root');
+  if (!e.ctrlKey) {
+    createWindow(tree, node, rootTitle);
+  } else {
+    simpleEquipmentAdd(tree, node, rootTitle);
+  }
+});
+
+function createWindow(tree, node, rootTitle) {
+  if (node) {
+    var url = '/equipment/tool/info/create?root=' + node.data.id;
+  } else {
+    var url = '/equipment/tool/info/create';
+  }
+  c = $.confirm({
+    content: function () {
+      var self = this;
+      return $.ajax({
+        url: url,
+        method: 'get'
+      }).fail(function () {
+        self.setContentAppend('<div>Что-то пошло не так</div>');
+      });
+    },
+    contentLoaded: function (response, status, xhr) {
+      this.setContentAppend('<div>' + response.data.data + '</div>');
+    },
+    type: 'blue',
+    columnClass: 'large',
+    title: 'Редактровать данные',
+    buttons: {
+      ok: {
+        btnClass: 'btn-blue',
+        text: 'Сохранить',
+        action: function () {
+          var $form = $("#w0"),
+            data = $form.data("yiiActiveForm");
+          $.each(data.attributes, function () {
+            this.status = 3;
+          });
+          $form.yiiActiveForm("validate");
+          if ($("#w0").find(".has-error").length) {
+            return false;
+          } else {
+            //преобразование дат перед отправкой
+            var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+            $('.fact-date').val(d);
+            $.ajax({
+              type: 'POST',
+              url: url,
+              dataType: 'json',
+              data: $form.serialize(),
+              success: function (response) {
+                var tText = '<span style="font-weight: 600">Успех!</span><br>Оборудование добавлено';
+                initNoty(tText, 'success');
+                tId = response.data.data;                 // запись в глобальную переменную для инициализации дерева
+                tree.reload();
+              },
+              error: function (response) {
+                console.log(response.data.data);
+                var tText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить оборудование не удалось';
+                initNoty(tText, 'error');
+              }
+            });
+          }
+        }
+      },
+      cancel: {
+        text: 'НАЗАД',
+      }
+    }
+  });
+}
+
+function simpleEquipmentAdd(tree, node, rootTitle) {
   if (!node) {
-    var rootTitle = 'Необработанное';
-    var tree = $('#' + id).fancytree('getTree');
     var root = tree.findFirst(rootTitle);
-    root.editCreateNode('child', '');
+    root.editCreateNode('child', ' ');
   } else {
     node.editCreateNode('child', ' ');
   }
-});
-*/
-var toolsTreeIdAttr = 'tools-main-tree';
+}
 
+$(document).on('click', '#delete-tool', function (e) {
+  e.preventDefault();
+  var tree = $('#' + toolsTreeIdAttr).fancytree('getTree');
+  var node = $('#' + toolsTreeIdAttr).fancytree('getActiveNode');
+  var parent = node.parent.key;
+  var url = '/equipment/tool/info/delete';
+  var text, dArray = {};
+  var children = node.children;
+  if (children && e.ctrlKey) {
+    var index = 0;
+    children.forEach(function (val, i, ar) {
+      dArray[i] = val.key;
+      index++;
+    });
+    dArray[index] = node.data.id;
+    text = 'Вы действительно хотите удалить выделенное С вложениями?';
+  } else {
+    dArray['0'] = node.data.id;
+    text = 'Вы действительно хотите удалить выделенное?';
+  }
+  jc = $.confirm({
+    icon: 'fa fa-question',
+    title: 'Вы уверены?',
+    content: text,
+    type: 'red',
+    closeIcon: false,
+    autoClose: 'cancel|9000',
+    buttons: {
+      ok: {
+        btnClass: 'btn-danger',
+        action: function () {
+          jc.close();
+          deleteTool(url, dArray, tree, parent, jc);
+        }
+      },
+      cancel: {
+        text: 'Отмена'
+      }
+    }
+  });
+});
+
+function deleteTool(url, data, tree, parent) {
+  var csrf = $('meta[name=csrf-token]').attr("content");
+  jc = $.confirm({
+    icon: 'fa fa-cog fa-spin',
+    title: 'Подождите!',
+    content: 'Ваш запрос выполняется!',
+    buttons: false,
+    closeIcon: false,
+    confirmButtonClass: 'hide'
+  });
+  $.ajax({
+    url: url,
+    method: 'post',
+    data: {
+      _csrf: csrf,
+      data: data
+    }
+  }).done(function (response) {
+    if (response != false) {
+      tId = parent;
+      var tText = '<span style="font-weight: 600">Успех!</span><br>Оборудование удалено';
+      initNoty(tText, 'success');
+      tree.reload();
+    } else {
+      var tText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Удалить не удалось';
+      initNoty(tText, 'error');
+    }
+    jc.close();
+  }).fail(function () {
+    jc.close();
+    var tText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Удалить не удалось';
+    initNoty(tText, 'error');
+  });
+}
 
 $(document).on('click', '#refresh-tree', function (e) {
   e.preventDefault();
@@ -27,20 +175,9 @@ $(document).on('click', '#refresh-tree', function (e) {
   $('#tool-info').hide();
 });
 
-
-function simpleEquipmentAdd(tree, node, rootTitle)
-{
-  if (!node) {
-    var root = tree.findFirst(rootTitle);
-    root.editCreateNode('child', ' ');
-  } else {
-    node.editCreateNode('child', ' ');
-  }
-}
-
 $(document).on('keyup', 'input[name=search]', function (e) {
   var n,
-    tree = $.ui.fancytree.getTree(),
+    tree = $("#" + toolsTreeIdAttr).fancytree("getTree"),
     args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
     opts = {},
     filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
@@ -69,8 +206,7 @@ $(document).on('keyup', 'input[name=search]', function (e) {
 
 $(document).on('click', '.btnResetSearch', function (e) {
   e.preventDefault();
-  var id = $(e.currentTarget).data('tree');
-  var tree = $("#" + id).fancytree("getTree");
+  var tree = $("#" + toolsTreeIdAttr).fancytree("getTree");
   $("input[name=search]").val("");
   $("span#matches").text("");
   tree.clearFilter();
@@ -80,8 +216,7 @@ $(document).on('click', '.btnResetSearch', function (e) {
 /* Обновить сведения об оборудовании на главной странице */
 $(document).on('click', '#tool-edit', function (e) {
   e.preventDefault();
-  var treeId = $(this).data('tree');
-  var node = $('#' + treeId).fancytree("getActiveNode");
+  var node = $('#' + toolsTreeIdAttr).fancytree("getActiveNode");
   var toolId = node.data.id;
   var url = '/equipment/tool/info/update?id=' + toolId;
   c = $.confirm({
@@ -146,8 +281,7 @@ $(document).on('click', '#tool-edit', function (e) {
 /* Настройка оборудования */
 $(document).on('click', '#tool-settings', function (e) {
   e.preventDefault();
-  var treeId = $(this).data('tree');
-  var node = $('#' + treeId).fancytree("getActiveNode");
+  var node = $('#' + toolsTreeIdAttr).fancytree("getActiveNode");
   var toolId = node.data.id;
   var url = '/equipment/tool/settings/index?id=' + toolId;
   c = $.confirm({
@@ -189,8 +323,7 @@ $(document).on('click', '#tool-settings', function (e) {
 $(document).on('click', '#tool-task', function (e) {
   e.preventDefault();
   var btn = $(this);
-  var treeId = btn.data('tree');
-  var node = $('#' + treeId).fancytree('getActiveNode');
+  var node = $('#' + toolsTreeIdAttr).fancytree('getActiveNode');
   var toolId = node.data.id;
   var url = '/equipment/task/set';
   var csrf = $('meta[name=csrf-token]').attr('content');
@@ -276,20 +409,19 @@ function loadModels() {
 $(document).on('click', '.tool-ref', function (e) {
   e.preventDefault();
   var toolId = $(this).data('toolId');
-  var tree = $('#tools-main-tree').fancytree('getTree');
+  var tree = $('#' + toolsTreeIdAttr).fancytree('getTree');
   tree.getNodeByKey(toolId.toString()).setActive();
 });
 
 //=============================================================================//
-// Control btns
-
+// Классификаторы - управление деревьями
 $(document).on('click', '.add-subcategory', function (e) {
   e.preventDefault();
-  var id = $(e.currentTarget).data('tree');
   var rootTitle = $(e.currentTarget).data('root');
-  var node = $('#' + id).fancytree('getActiveNode');
+  var treeId = $(e.currentTarget).data('tree');
+  var node = $('#' + treeId).fancytree('getActiveNode');
   if (!node) {
-    var tree = $('#' + id).fancytree('getTree');
+    var tree = $('#' + treeId).fancytree('getTree');
     var root = tree.findFirst(rootTitle);
     root.editCreateNode('child', '');
   } else {
@@ -297,11 +429,10 @@ $(document).on('click', '.add-subcategory', function (e) {
   }
 });
 
-
 $(document).on('click', '.refresh', function (e) {
   e.preventDefault();
-  var id = $(e.currentTarget).data('tree');
-  var tree = $("#" + id).fancytree("getTree");
+  var treeId = $(e.currentTarget).data('tree');
+  var tree = $("#" + treeId).fancytree("getTree");
   tree.reload();
   $(".del-root").hide();
   $(".del-node").hide();
@@ -309,10 +440,10 @@ $(document).on('click', '.refresh', function (e) {
   $('.about-info').html('');
 });
 
-$(document).on('click', '.delete-node', function (e) {
-  var id = $(e.currentTarget).data('tree');
-  var node = $("#" + id).fancytree("getActiveNode");
+$(document).on('click', '.del-node', function (e) {
   var url = $(e.currentTarget).data('delete');
+  var treeId = $(e.currentTarget).data('tree');
+  var node = $("#" + treeId).fancytree("getActiveNode");
   e.preventDefault();
   jc = $.confirm({
     icon: 'fa fa-question',
@@ -326,7 +457,7 @@ $(document).on('click', '.delete-node', function (e) {
         btnClass: 'btn-danger',
         action: function () {
           jc.close();
-          deleteProcess(url, node);
+          deleteToolSettingsNodes(url, node);
         }
       },
       cancel: {
@@ -340,8 +471,8 @@ $(document).on('click', '.delete-node', function (e) {
 
 $(document).on('click', '.del-multi-nodes', function (e) {
   e.preventDefault();
-  var id = $(e.currentTarget).data('tree');
-  var node = $("#" + id).fancytree("getActiveNode");
+  var treeId = $(e.currentTarget).data('tree');
+  var node = $("#" + treeId).fancytree("getActiveNode");
   var url = $(e.currentTarget).data('delete');
   jc = $.confirm({
     icon: 'fa fa-question',
@@ -355,7 +486,7 @@ $(document).on('click', '.del-multi-nodes', function (e) {
         btnClass: 'btn-danger',
         action: function () {
           jc.close();
-          deleteProcess(url, node);
+          deleteToolSettingsNodes(url, node);
         }
       },
       cancel: {
@@ -369,20 +500,21 @@ $(document).on('click', '.del-multi-nodes', function (e) {
 
 $(document).on('click', '.btnResetSearch', function (e) {
   e.preventDefault();
-  var id = $(e.currentTarget).data('tree');
-  var tree = $("#" + id).fancytree("getTree");
+  var treeId = $(e.currentTarget).data('tree');
+  var tree = $("#" + treeId).fancytree("getTree");
   $("input[name=search]").val("");
   $("span#matches").text("");
   tree.clearFilter();
 }).attr("disabled", true);
 
 $(document).on('keyup', 'input[name=search]', function (e) {
+  var treeId = $(e.currentTarget).data('tree');
   if ($(this).val() == '') {
-    var tree = $(".ui-draggable-handle").fancytree("getTree");
+    var tree = $('#' + treeId).fancytree("getTree");
     tree.clearFilter();
   }
   var n,
-    tree = $.ui.fancytree.getTree(),
+    tree = $('#' + treeId).fancytree("getTree"),
     args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
     opts = {},
     filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
@@ -409,12 +541,94 @@ $(document).on('keyup', 'input[name=search]', function (e) {
   $("#btnResetSearch").attr("disabled", false);
 });
 
+function deleteToolSettingsNodes(url, node) {
+  var csrf = $('meta[name=csrf-token]').attr("content");
+  jc = $.confirm({
+    icon: 'fa fa-cog fa-spin',
+    title: 'Подождите!',
+    content: 'Ваш запрос выполняется!',
+    buttons: false,
+    closeIcon: false,
+    confirmButtonClass: 'hide'
+  });
+  $.ajax({
+    url: url,
+    type: "post",
+    data: {
+      _csrf: csrf,
+      id: node.data.id
+    }
+  }).done(function (response) {
+    if (response != false) {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-thumbs-up',
+        title: 'Успех!',
+        content: 'Ваш запрос выполнен.',
+        type: 'green',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|8000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-success',
+            action: function () {
+              node.remove();
+              $('.about-info').html('');
+              $('.del-node').hide();
+              $(".del-multi-nodes").hide();
+            }
+          }
+        }
+      });
+    } else {
+      jc.close();
+      jc = $.confirm({
+        icon: 'fa fa-exclamation-triangle',
+        title: 'Неудача!',
+        content: 'Запрос не выполнен. Что-то пошло не так.',
+        type: 'red',
+        buttons: false,
+        closeIcon: false,
+        autoClose: 'ok|8000',
+        confirmButtonClass: 'hide',
+        buttons: {
+          ok: {
+            btnClass: 'btn-danger',
+            action: function () {
+            }
+          }
+        }
+      });
+    }
+  }).fail(function () {
+    jc.close();
+    jc = $.confirm({
+      icon: 'fa fa-exclamation-triangle',
+      title: 'Неудача!',
+      content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
+      type: 'red',
+      buttons: false,
+      closeIcon: false,
+      autoClose: 'ok|4000',
+      confirmButtonClass: 'hide',
+      buttons: {
+        ok: {
+          btnClass: 'btn-danger',
+          action: function () {
+          }
+        }
+      }
+    });
+  });
+}
+
 /*==================== tool/doc ===================== */
 /* Добавить документ */
 $(document).on('click', '#add-doc', function (e) {
   e.preventDefault();
-  var treeId = $(this).data('tree');
-  var node = $('#' + treeId).fancytree("getActiveNode");
+  var node = $('#' + toolsTreeIdAttr).fancytree("getActiveNode");
   var toolId = node.data.id;
   var url = '/equipment/tool/docs/create-ajax?id=' + toolId;
   c = $.confirm({
@@ -486,8 +700,7 @@ $(document).on('click', '#delete-doc', function (e) {
   if ($(this).attr('disabled')) {
     return;
   }
-  var treeId = $(this).data('tree');
-  var node = $('#' + treeId).fancytree("getActiveNode");
+  var node = $('#' + toolsTreeIdAttr).fancytree("getActiveNode");
   var toolId = node.data.id;
   var url = '/equipment/tool/docs/delete-docs';
   var selected = [];
@@ -522,8 +735,7 @@ $(document).on('click', '#delete-doc', function (e) {
 /* Добавить изображение */
 $(document).on('click', '#add-image', function (e) {
   e.preventDefault();
-  var treeId = $(this).data('tree');
-  var node = $('#' + treeId).fancytree("getActiveNode");
+  var node = $('#' + toolsTreeIdAttr).fancytree("getActiveNode");
   var toolId = node.data.id;
   var url = '/equipment/tool/images/create?id=' + toolId;
   c = $.confirm({
@@ -593,8 +805,7 @@ $(document).on('click', '#delete-image', function (e) {
   if ($(this).attr('disabled')) {
     return;
   }
-  var treeId = $(this).data('tree');
-  var node = $('#' + treeId).fancytree("getActiveNode");
+  var node = $('#' + toolsTreeIdAttr).fancytree("getActiveNode");
   var toolId = node.data.id;
   var url = '/equipment/tool/images/delete-images';
   var selected = [];
@@ -865,8 +1076,7 @@ $(document).on('change', '.ch', function (e) {
 // загрузка страницы создания wiki
 $(document).on('click', '#new-wiki-page', function (e) {
   e.preventDefault();
-  var treeId = $(this).data('tree');
-  var node = $('#' + treeId).fancytree("getActiveNode");
+  var node = $('#' + toolsTreeIdAttr).fancytree("getActiveNode");
   var toolId = node.data.id;
   var url = '/equipment/tool/wiki/create?id=' + toolId;
   $.ajax({
@@ -900,8 +1110,7 @@ $(document).on('click', '#update-wikipage', function (e) {
 // процесс содание и обновление страницы wiki -> отсюда небольшие костыли
 $(document).on('submit', 'form#wiki-create-form', function (e) {
   e.preventDefault();
-  var treeId = 'tools-main-tree';
-  var node = $('#' + treeId).fancytree("getActiveNode");
+  var node = $('#' + toolsTreeIdAttr).fancytree("getActiveNode");
   var toolId = node.data.id;
   var uri = $('#wiki-submit-btn').data('uri');
   var url, notyYText, notyNText;
@@ -939,7 +1148,7 @@ $(document).on('submit', 'form#wiki-create-form', function (e) {
 // Просмотр wiki страниц
 $(document).on('click', '#cancel-wiki-form', function (e) {
   e.preventDefault();
-  var node = $("#tools-main-tree").fancytree("getActiveNode");
+  var node = $('#' + toolsTreeIdAttr).fancytree('getActiveNode');
   var toolId = node.data.id;
   var wikiId = $(this).data('wikiId');
   var url = '/equipment/tool/wiki/view';
@@ -962,7 +1171,7 @@ $(document).on('click', '#cancel-wiki-form', function (e) {
 // Просмотр wiki страницы
 $(document).on('click', '.show-wiki', function (e) {
   e.preventDefault();
-  var node = $("#tools-main-tree").fancytree("getActiveNode");
+  var node = $('#' + toolsTreeIdAttr).fancytree('getActiveNode');
   var toolId = node.data.id;
   var url = 'equipment/tool/wiki/view';
   var wikiId = $(this).data('wikiId');
@@ -983,7 +1192,7 @@ $(document).on('click', '.show-wiki', function (e) {
 // Удаление wiki страницы
 $(document).on('click', '#delete-wiki-page', function (e) {
   e.preventDefault();
-  var node = $("#tools-main-tree").fancytree("getActiveNode");
+  var node = $('#' + toolsTreeIdAttr).fancytree('getActiveNode');
   var toolId = node.data.id;
   jc = $.confirm({
     icon: 'fa fa-question',
