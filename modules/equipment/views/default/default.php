@@ -38,7 +38,7 @@ $about = "Перечень оборудования";
 
 </style>
 
-<div id="main-content" class="container">
+<div id="equipment-main-wrap" class="container">
   <div class="row">
     <div id="tools-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
       <div id="refresh-tree-wrap" style="position: absolute; top: 0px; left:-55px">
@@ -72,7 +72,7 @@ $about = "Перечень оборудования";
 
       <div style="position: relative">
         <div class="container-fuid" style="float:left; width: 100%">
-          <input class="form-control form-control-sm" autocomplete="off" name="search"
+          <input class="form-control form-control-sm" autocomplete="off" name="search" data-tree="tools-main-tree"
                  placeholder="Поиск по названию...">
         </div>
         <div style="padding-top: 8px; right: 10px; position: absolute">

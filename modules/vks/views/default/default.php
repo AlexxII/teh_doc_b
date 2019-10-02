@@ -443,7 +443,6 @@ BootstrapDatepickerAsset::register($this);
     table.on('length.dt', function (e, settings, len) {
       $('#delete-wrap').hide();
     });
-
     table.on('draw.dt', function (e, settings, len) {
       $('#delete-wrap').hide();
     });

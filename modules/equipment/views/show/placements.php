@@ -12,26 +12,31 @@ $send_hint = 'Передать выделенные строки в подроб
 
 <div class="row">
   <div class="col-lg-4 col-md-4 fancy-tree" style="padding-bottom: 5px">
-    <div class="row" style="margin-bottom: 10px;padding-left: 15px">
-      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
-        'style' => ['margin-top' => '5px'],
-        'title' => $refresh_hint,
-        'data-toggle' => 'tooltip',
-        'data-placement' => 'top'
-      ]) ?>
+    <div id="refresh-tree-wrap" style="position: absolute; top: 0px; left:-40px">
+      <a class="fab-button refresh-button" title="Обновить"
+         style="cursor: pointer; background-color: green" data-tree="fancytree_placement_show">
+        <svg width="37" height="37" viewBox="0 0 24 24">
+          <path d="M9 12l-4.463 4.969-4.537-4.969h3c0-4.97 4.03-9 9-9 2.395 0 4.565.942 6.179
+        2.468l-2.004 2.231c-1.081-1.05-2.553-1.699-4.175-1.699-3.309 0-6 2.691-6 6h3zm10.463-4.969l-4.463 4.969h3c0
+        3.309-2.691 6-6 6-1.623 0-3.094-.65-4.175-1.699l-2.004 2.231c1.613 1.526 3.784 2.468 6.179 2.468 4.97 0 9-4.03
+        9-9h3l-4.537-4.969z"/>
+        </svg>
+      </a>
     </div>
 
     <div style="position: relative">
       <div class="hideMenu-button hidden-sm hidden-xs">
-        <a href="#" class="fa fa-reply-all" data-placement="top" data-toggle="tooltip" title="Свернуть"
+        <a href="#" class="fa fa-reply-all" data-placement="top" data-tree="fancytree_placement_show"
+           data-toggle="tooltip" title="Свернуть"
            aria-hidden="true"></a>
       </div>
 
       <div class="container-fuid" style="float:left; width: 100%">
-        <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
+        <input class="form-control form-control-sm" data-tree="fancytree_placement_show"
+               autocomplete="off" name="search" placeholder="Поиск...">
       </div>
       <div style="padding-top: 8px; right: 10px; position: absolute">
-        <a href="" id="btnResetSearch">
+        <a href="" class="btnResetSearch" data-tree="fancytree_placement_show">
           <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
         </a>
       </div>
@@ -39,31 +44,20 @@ $send_hint = 'Передать выделенные строки в подроб
 
     <div class="row" style="padding: 0 15px">
       <div style="border-radius:2px;padding-top:40px">
-        <div id="fancyree_placement_show" class="ui-draggable-handle"></div>
+        <div id="fancytree_placement_show" class="ui-draggable-handle"></div>
       </div>
     </div>
   </div>
 
   <div class="col-lg-8 col-md-8 about about-padding" style="position: relative;">
-    <div class="control-buttons-wrap" style="position: absolute;top: 0px;width: 300px">
-      <?= Html::a('Задание',
-        [''], [
-          'class' => 'btn btn-success btn-sm hiddendel',
-          'style' => ['margin-top' => '5px', 'display' => 'none'],
-          'data-toggle' => "tooltip",
-          'data-placement' => "bottom",
-          'title' => $task_hint,
-        ]) ?>
-      <?= Html::a('Передать->',
-        [''], [
-          'class' => 'btn btn-primary btn-sm sendbtn',
-          'style' => ['margin-top' => '5px', 'display' => 'none'],
-          'data-toggle' => "tooltip",
-          'data-placement' => "bottom",
-          'title' => $send_hint,
-        ]) ?>
+    <div class="control-buttons-wrap" style="position:absolute;top:0;width:300px">
+      <button class="btn btn-primary btn-sm task-it" style="margin-top:5px;display:none" data-toggle="tooltip"
+              data-placement="bottom" title="<?= $task_hint ?>">Задание
+      </button>
+      <button class="btn btn-primary btn-sm sendbtn" style="margin-top:5px;display:none" data-toggle="tooltip"
+              data-placement="bottom" title="<?= $send_hint ?>">Передать->
+      </button>
     </div>
-
     <input class="root" style="display: none">
     <input class="lft" style="display: none">
     <input class="rgt" style="display: none">
@@ -95,183 +89,18 @@ $send_hint = 'Передать выделенные строки в подроб
   var treeId;
 
   //************************ Работа над стилем ****************************
-
-  var showMenuBtn =
-    '<div class="show-menu-button" data-placement="top" data-toggle="tooltip" title="Развернуть" onclick="onClick()">' +
-    '<i class="fa fa-chevron-right" aria-hidden="true"></i>' +
-    '</div>';
-
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-
-    $('.hideMenu-button').click(function (e) {
-      var indexes;
-      e.preventDefault();
-      $('.fancy-tree').animate({
-          width: "0%"
-        },
-        {
-          duration: 1000,
-          start: indexes = rememberSelectedRows(),
-          complete: function () {
-            $('#main-table_wrapper').css('margin-left', '20px');
-            $('.about').css('width', '');
-            $('.about').removeClass('col-lg-9 col-md-9').addClass('col-lg-12 col-md-12');
-            redrawTable();
-            restoreSelectedRows(indexes);
-            $('.fancy-tree').hide();
-            $('[data-toggle="tooltip"]').tooltip();
-            if ($('.show-menu-button').length === 0) {
-              $('#main-table_wrapper').append(showMenuBtn);
-            }
-            $('.show-menu-button').show();
-          },
-          step: function (now, fx) {
-            if (now <= 25) {
-              $('.about').removeClass('col-lg-8 col-md-8').addClass('col-lg-9 col-md-9');
-            }
-            if (now <= 11 && now >= 5) {
-              $('.fancy-tree').hide();
-              $('#main-table_wrapper').css('position', 'relative');
-              $('[data-toggle="tooltip"]').tooltip();
-              if ($('.show-menu-button').length === 0) {
-                $('#main-table_wrapper').append(showMenuBtn);
-              }
-              $('.show-menu-button').show();
-            }
-          }
-        }
-      );
-    });
   });
-
-  function rememberSelectedRows() {
-    var table = $('#main-table').DataTable();
-    var indexes = table.rows({selected: true}).indexes();
-    return indexes;
-  }
 
   $('#main-table').on('length.dt', function (e, settings, len) {
-    $('.hiddendel').hide();
+    $('.task-it').hide();
   });
 
-  function restoreSelectedRows(indexes) {
-    var table = $('#main-table').DataTable();
-    var count = indexes.count();
-    for (var i = 0; i < count; i++) {
-      table.rows(indexes[i]).select();
-    }
-  }
-
-  function redrawTable() {
-    var table = $('#main-table').DataTable();
-    table.draw();
-    return true;
-  }
-
-  function onClick() {
-    var width = '33%';
-    var indexes;
-    if ($(document).width() < 600) {
-      width = '100%';
-    }
-    $('.show-menu-button').hide();
-    $('.fancy-tree').animate({
-        width: width
-      },
-      {
-        duration: 1000,
-        start: indexes = rememberSelectedRows(),
-        complete: function () {
-          $('.about').css('width', '');
-          $('#main-table_wrapper').css('margin-left', '0px');
-          $('#main-table_wrapper').css('position', 'inherit');
-          redrawTable();
-          restoreSelectedRows(indexes);
-          $('[data-toggle="tooltip"]').tooltip();
-          $('.fancy-tree').css('width', '');
-        },
-        step: function (now, fx) {
-          if (now > 5 && now < 14) {
-            $('.fancy-tree').show();
-            $('.about').removeClass('col-lg-12 col-md-12').addClass('col-lg-10 col-md-10');
-          } else if (now > 16) {
-            $('.about').removeClass('col-lg-10 col-md-10').addClass('col-lg-8 col-md-8');
-          }
-        }
-      }
-    );
-  }
 
   //************************* Управление деревом ***************************************
 
-  var treePlacementShowId = "fancyree_placement_show";
-
-  $(document).ready(function () {
-    $('.refresh').click(function (event) {
-      event.preventDefault();
-      var tree = $('#' + treePlacementShowId).fancytree("getTree");
-      tree.reload();
-      $(".about-header").text("");
-      $(".about-main").html('');
-      $(".del-node").hide();
-      $(".del-multi-nodes").hide();
-      $(".root").text('');
-      $(".lft").text('');
-      $(".rgt").text('');
-      $('.hiddendel').hide();
-      $('.sendbtn').hide();
-      $("#main-table").DataTable().clearPipeline().draw();
-    })
-  });
-
-  $("input[name=search]").keyup(function (e) {
-    var n,
-      tree = $('#' + treePlacementShowId).fancytree("getTree"),
-      args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
-      opts = {},
-      filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
-      match = $(this).val();
-
-    $.each(args, function (i, o) {
-      opts[o] = $("#" + o).is(":checked");
-    });
-    opts.mode = $("#hideMode").is(":checked") ? "hide" : "dimm";
-
-    if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
-      $("button#btnResetSearch").click();
-      return;
-    }
-    if ($("#regex").is(":checked")) {
-      // Pass function to perform match
-      n = filterFunc.call(tree, function (node) {
-        return new RegExp(match, "i").test(node.title);
-      }, opts);
-    } else {
-      // Pass a string to perform case insensitive matching
-      n = filterFunc.call(tree, match, opts);
-    }
-    $("#btnResetSearch").attr("disabled", false);
-  }).focus();
-
-
-  $("#btnResetSearch").click(function (e) {
-    e.preventDefault();
-    $("input[name=search]").val("");
-    $("span#matches").text("");
-    var tree = $('#' + treePlacementShowId).fancytree("getTree");
-    tree.clearFilter();
-  }).attr("disabled", true);
-
-
-  $(document).ready(function () {
-    $("input[name=search]").keyup(function (e) {
-      if ($(this).val() == '') {
-        var tree = $('#' + treePlacementShowId).fancytree("getTree");
-        tree.clearFilter();
-      }
-    })
-  });
+  var treePlacementShowId = "fancytree_placement_show";
 
   // ************************* Работа таблицы **************************************
 
@@ -367,7 +196,7 @@ $send_hint = 'Передать выделенные строки в подроб
       "processing": true,
       "serverSide": true,
       "responsive": true,
-      "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+      "lengthMenu": [[10, 25, 50, 100, 200], [10, 25, 50, 100, 200]],
       "ajax": $.fn.dataTable.pipeline({
         url: '/equipment/show/server-side',
         pages: 2, // number of pages to cache
@@ -407,27 +236,6 @@ $send_hint = 'Передать выделенные строки в подроб
         url: "/lib/ru.json"
       }
     });
-
-    $('#main-table tbody').on('click', '.edit', function (e) {
-      e.preventDefault();
-      var data = table.row($(this).parents('tr')).data();
-      var href = "/tehdoc/equipment/control-panel/" + data[0] + "/info/index";
-      if (e.ctrlKey) {
-        window.open(href);
-      } else {
-        location.href = href;
-      }
-    });
-    $('#main-table tbody').on('click', '.view', function (e) {
-      e.preventDefault();
-      var data = table.row($(this).parents('tr')).data();
-      var href = "/tehdoc/equipment/tool/" + data[0] + "/info/index";
-      if (e.ctrlKey) {
-        window.open(href);
-      } else {
-        location.href = href;
-      }
-    });
   });
 
   // Работа таблицы -> событие выделения и снятия выделения
@@ -436,61 +244,23 @@ $send_hint = 'Передать выделенные строки в подроб
     var table = $('#main-table').DataTable();
     table.on('select', function (e, dt, type) {
       if (type === 'row') {
-        $('.hiddendel').show();
+        $('.task-it').show();
         $('.sendbtn').show();
       }
     });
     table.on('deselect', function (e, dt, type) {
       var i = table.rows({selected: true}).indexes();
       if (type === 'row' && i.count() == 0) {
-        $('.hiddendel').hide();
+        $('.task-it').hide();
         $('.sendbtn').hide();
       }
     });
   });
 
-  //********************** Удаление записей ***********************************
-
-  $(document).ready(function () {
-    $('.hiddendel').click(function (event) {
-      event.preventDefault();
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var table = $('#main-table').DataTable();
-      var data = table.rows({selected: true}).data();
-      var ar = [];
-      var count = data.length;
-      for (var i = 0; i < count; i++) {
-        ar[i] = data[i][0];
-      }
-      if (confirm('Вы действительно хотите удалить выделенное оборудование? Выделено ' + data.length + '!!!  ')) {
-        $(".modal").modal("show");
-        $.ajax({
-          url: "/tehdoc/kernel/equipment/delete",
-          type: "post",
-          dataType: "JSON",
-          data: {jsonData: ar, _csrf: csrf},
-          success: function (result) {
-            $("#main-table").DataTable().clearPipeline().draw();
-            $(".modal").modal('hide');
-            $('.hiddendel').hide();
-            $('.sendbtn').hide();
-          },
-          error: function () {
-            alert('Ошибка! Обратитесь к разработчику.');
-            $(".modal").modal('hide');
-          }
-        });
-      }
-    })
-  });
-
-  //************************** Добавление классификатора **********************************
-
-
   jQuery(function ($) {
     var main_url = '/equipment/control/placement/placements';
 
-    $("#fancyree_placement_show").fancytree({
+    $("#fancytree_placement_show").fancytree({
       source: {
         url: main_url
       },
@@ -510,7 +280,7 @@ $send_hint = 'Передать выделенные строки в подроб
         mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
       },
       activate: function (node, data) {
-        $(".hiddendel").hide();
+        $(".task-it").hide();
         $(".sendbtn").hide();
         var node = data.node;
         if (node.key == -999) {

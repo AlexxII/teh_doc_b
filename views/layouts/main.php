@@ -202,33 +202,32 @@ $this->beginPage() ?>
 
 
 <script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
 
-        $('#push-it').bind('click', clickMenu);
+    $('#push-it').bind('click', clickMenu);
 
-        $('#logout').on('click', function (e) {
-            var url = $(this).data('href');
-            $.post(url);
-        })
+    $('#logout').on('click', function (e) {
+      var url = $(this).data('href');
+      $.post(url);
+    })
+  });
+
+  $(document).on('click', '.jclick', loadControls);
+
+  $(document).on('click', '.ex-click', function (e) {
+    e.preventDefault();
+    jc = $.confirm({
+      icon: 'fa fa-cog fa-spin',
+      title: 'Подождите!',
+      content: 'Ваш запрос выполняется!',
+      buttons: false,
+      closeIcon: false,
+      confirmButtonClass: 'hide'
     });
-
-    $(document).on('click', '.jclick', loadControls);
-
-    $(document).on('click', '.ex-click', function (e) {
-        e.preventDefault();
-        jc = $.confirm({
-            icon: 'fa fa-cog fa-spin',
-            title: 'Подождите!',
-            content: 'Ваш запрос выполняется!',
-            buttons: false,
-            closeIcon: false,
-            confirmButtonClass: 'hide'
-        });
-        var url = $(this).data('url');
-        var bUrl = $(this).data('back-url');
-        loadExContent(url, bUrl, jc);
-    });
+    var url = $(this).data('url');
+    var bUrl = $(this).data('back-url');
+    loadExContent(url, bUrl, jc);
+  });
 
 </script>
-

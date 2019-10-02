@@ -90,6 +90,7 @@ function simpleEquipmentAdd(tree, node, rootTitle) {
   }
 }
 
+// Удаление оборудования
 $(document).on('click', '#delete-tool', function (e) {
   e.preventDefault();
   var tree = $('#' + toolsTreeIdAttr).fancytree('getTree');
@@ -167,17 +168,11 @@ function deleteTool(url, data, tree, parent) {
   });
 }
 
-$(document).on('click', '#refresh-tree', function (e) {
-  e.preventDefault();
-  var tree = $("#" + toolsTreeIdAttr).fancytree("getTree");
-  tree.reload();
-  $("#delete-tool-wrap").hide();
-  $('#tool-info').hide();
-});
-
+/*================= Управление деревьями (tools_tree, category_tree, placement_tree) ===============*/
 $(document).on('keyup', 'input[name=search]', function (e) {
   var n,
-    tree = $("#" + toolsTreeIdAttr).fancytree("getTree"),
+    treeId = $(e.currentTarget).data('tree'),
+    tree = $("#" + treeId).fancytree("getTree"),
     args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
     opts = {},
     filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,
@@ -204,13 +199,32 @@ $(document).on('keyup', 'input[name=search]', function (e) {
   $("#btnResetSearch").attr("disabled", false);
 }).focus();
 
+$(document).on('keyup', 'input[name=search]', function (e) {
+  if ($(this).val() == '') {
+    var treeId = $(e.currentTarget).data('tree');
+    var tree = $('#' + treeId).fancytree("getTree");
+    tree.clearFilter();
+  }
+});
+
 $(document).on('click', '.btnResetSearch', function (e) {
   e.preventDefault();
-  var tree = $("#" + toolsTreeIdAttr).fancytree("getTree");
-  $("input[name=search]").val("");
-  $("span#matches").text("");
+  var treeId = $(e.currentTarget).data('tree');
+  var tree = $('#' + treeId).fancytree('getTree');
+  $('input[name=search]').val('');
+  $('span#matches').text('');
   tree.clearFilter();
-}).attr("disabled", true);
+}).attr('disabled', true);
+
+// Обновление дерева (только tools_tree)
+$(document).on('click', '#refresh-tree', function (e) {
+  e.preventDefault();
+  var tree = $("#" + toolsTreeIdAttr).fancytree("getTree");
+  tree.reload();
+  $("#delete-tool-wrap").hide();
+  $('#tool-info').hide();
+});
+
 
 /*==================== tool/info ===================== */
 /* Обновить сведения об оборудовании на главной странице */
@@ -1239,8 +1253,129 @@ $(document).on('click', '#delete-wiki-page', function (e) {
   });
 });
 
+/*======================= equipment/show ========================= */
+//
+var treeCategoryShowId = "fancytree_categories_show";
 
-// Общие функции модуля
+// Обновление дерева (category_tree, placement_tree)
+$(document).on('click', '.refresh-button', function (e) {
+  e.preventDefault();
+  var treeId = $(e.currentTarget).data('tree');
+  var tree = $("#" + treeId).fancytree("getTree");
+  tree.reload();
+  $('.task-it').hide();
+  $('.sendbtn').hide();
+  $(".root").text('');
+  $(".lft").text('');
+  $(".rgt").text('');
+  $("#main-table").DataTable().clearPipeline().draw();
+});
+
+
+//отработка сворачивания дерева
+
+var showMenuBtn =
+  '<div class="show-menu-button" data-placement="top" data-toggle="tooltip" title="Развернуть" onclick="chageView()">' +
+  '<i class="fa fa-chevron-right" aria-hidden="true"></i>' +
+  '</div>';
+
+function rememberSelectedRows() {
+  var table = $('#main-table').DataTable();
+  var indexes = table.rows({selected: true}).indexes();
+  return indexes;
+}
+
+function restoreSelectedRows(indexes) {
+  var table = $('#main-table').DataTable();
+  var count = indexes.count();
+  for (var i = 0; i < count; i++) {
+    table.rows(indexes[i]).select();
+  }
+}
+
+function redrawTable() {
+  var table = $('#main-table').DataTable();
+  table.draw();
+  return true;
+}
+
+function chageView() {
+  var width = '33%';
+  var indexes;
+  if ($(document).width() < 600) {
+    width = '100%';
+  }
+  $('.show-menu-button').hide();
+  $('.fancy-tree').animate({
+      width: width
+    },
+    {
+      duration: 1000,
+      start: indexes = rememberSelectedRows(),
+      complete: function () {
+        $('.about').css('width', '');
+        $('#main-table_wrapper').css('margin-left', '0px');
+        $('#main-table_wrapper').css('position', 'inherit');
+        redrawTable();
+        restoreSelectedRows(indexes);
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.fancy-tree').css('width', '');
+      },
+      step: function (now, fx) {
+        if (now > 5 && now < 14) {
+          $('.fancy-tree').show();
+          $('.about').removeClass('col-lg-12 col-md-12').addClass('col-lg-10 col-md-10');
+        } else if (now > 16) {
+          $('.about').removeClass('col-lg-10 col-md-10').addClass('col-lg-8 col-md-8');
+        }
+      }
+    }
+  );
+}
+
+$(document).on('click', '.hideMenu-button', function (e) {
+  var indexes;
+  var treeId = $(e.currentTarget).data('tree');
+  e.preventDefault();
+  $('.fancy-tree').animate({
+      width: "0%"
+    },
+    {
+      duration: 1000,
+      start: indexes = rememberSelectedRows(),
+      complete: function () {
+        $('#main-table_wrapper').css('margin-left', '20px');
+        $('.about').css('width', '');
+        $('.about').removeClass('col-lg-9 col-md-9').addClass('col-lg-12 col-md-12');
+        redrawTable();
+        restoreSelectedRows(indexes);
+        $('.fancy-tree').hide();
+        $('[data-toggle="tooltip"]').tooltip();
+        if ($('.show-menu-button').length === 0) {
+          $('#main-table_wrapper').append(showMenuBtn);
+        }
+        $('.show-menu-button').show();
+      },
+      step: function (now, fx) {
+        if (now <= 25) {
+          $('.about').removeClass('col-lg-8 col-md-8').addClass('col-lg-9 col-md-9');
+        }
+        if (now <= 11 && now >= 5) {
+          $('.fancy-tree').hide();
+          $('#main-table_wrapper').css('position', 'relative');
+          $('[data-toggle="tooltip"]').tooltip();
+          if ($('.show-menu-button').length === 0) {
+            $('#main-table_wrapper').append(showMenuBtn);
+          }
+          $('.show-menu-button').show();
+        }
+      }
+    }
+  );
+});
+
+
+/*======================== Общие функции модуля ========================= */
 function getCounters(toolId) {
   var url = '/equipment/tool/info/counters?id=' + toolId;
   $.ajax({
