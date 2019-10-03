@@ -28,4 +28,9 @@ class MenuController extends Controller
   {
     return $this->renderAjax('right_data');
   }
+
+  public function actionSmallMenu()
+  {
+    return $this->renderAjax('small_menu');
+  }
 }

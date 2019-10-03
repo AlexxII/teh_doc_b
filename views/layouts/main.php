@@ -8,7 +8,7 @@ use app\assets\JConfirmAsset;
 
 AppAsset::register($this);    // регистрация ресурсов всего приложения
 JConfirmAsset::register($this);
-SlidebarsAsset::register($this);
+//SlidebarsAsset::register($this);
 BootstrapPluginAsset::register($this);
 
 $this->beginPage() ?>
@@ -31,7 +31,7 @@ $this->beginPage() ?>
 
 <!--  Меню на маленьких экранах -->
 
-<div id='left-menu' off-canvas="main-menu left overlay">
+<div id='small-menu' off-canvas="main-menu left overlay">
 
 </div>
 
@@ -41,6 +41,18 @@ $this->beginPage() ?>
   <nav class="navigation navigation-default">
     <div class="container-fluid">
       <ul class="navig navigation-nav" id="left">
+        <li id="apps" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+             aria-expanded="false">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+            </svg>
+          </a>
+          <ul class="dropdown-menu mobile-navigation">
+
+          </ul>
+        </li>
+
         <li><span id="push-it" class="btn btn-default btn-circle btn-ml hidden" aria-hidden="true">
             <svg focusable="false" width="24" height="24" viewBox="0 0 24 24">
               <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
@@ -182,7 +194,6 @@ $this->beginPage() ?>
   <div id="main-wrap">
 
     <!--  Основное навигационное меню слева -->
-
     <div id="left-side">
 
     </div>

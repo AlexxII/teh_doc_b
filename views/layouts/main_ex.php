@@ -82,11 +82,11 @@
     });
 
   });
-  function goBack() {
+  function goBack(data = null) {
     $('#ex-wrap').detach();
     var url = $(this).data('backUrl');
     window.history.pushState("object or string", "Title", url);
-    returnCallback();
+    returnCallback(data);
   }
 </script>
 

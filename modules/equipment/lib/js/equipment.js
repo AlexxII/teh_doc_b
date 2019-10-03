@@ -217,10 +217,11 @@ $(document).on('click', '.btnResetSearch', function (e) {
 }).attr('disabled', true);
 
 // Обновление дерева (только tools_tree)
-$(document).on('click', '#refresh-tree', function (e) {
+$(document).on('click', '#refresh-tools-tree', function (e) {
   e.preventDefault();
   var tree = $("#" + toolsTreeIdAttr).fancytree("getTree");
   tree.reload();
+  tree.clearFilter();
   $("#delete-tool-wrap").hide();
   $('#tool-info').hide();
 });
@@ -1220,7 +1221,6 @@ $(document).on('click', '#delete-wiki-page', function (e) {
         btnClass: 'btn-danger',
         action: function () {
           var wikiId = $('#delete-wiki-page').data('wikiId');
-          console.log(wikiId);
           var url = '/equipment/tool/wiki/delete';
           $.ajax({
             type: 'GET',
@@ -1258,7 +1258,7 @@ $(document).on('click', '#delete-wiki-page', function (e) {
 var treeCategoryShowId = "fancytree_categories_show";
 
 // Обновление дерева (category_tree, placement_tree)
-$(document).on('click', '.refresh-button', function (e) {
+$(document).on('click', '.refresh-tree', function (e) {
   e.preventDefault();
   var treeId = $(e.currentTarget).data('tree');
   var tree = $("#" + treeId).fancytree("getTree");
@@ -1425,3 +1425,27 @@ function initNoty(text, type) {
     }
   }).show();
 }
+
+
+$(document).on('click', '.tool-send', function (e) {
+  e.preventDefault();
+  var toolId = $(e.currentTarget).data('id');
+  tId = toolId;
+  goBack();
+});
+
+
+$(document).on('click', '.sendbtn', function (e) {
+  e.preventDefault();
+  var treeIdAttr = $(this).closest('.page-data').data('tree');
+  var tableIdAttr = $(this).closest('.page-data').data('table');
+  var table = $('#' + tableIdAttr).DataTable();
+  var data = table.rows({selected: true}).data();
+  var url = '/equipment/show/extended-info';
+  var ar = {};
+  var count = data.length;
+  for (var i = 0; i < count; i++) {
+    ar[data[i][0]] = 1;
+  }
+  goBack(ar);
+});

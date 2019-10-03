@@ -16,6 +16,9 @@ html body {
 .fancytree-container {
   overflow-x: auto;
 }
+#tools-tree {
+  position: relative;
+}
 h3 > .fa {
   font-size: 16px;
 }
@@ -437,4 +440,8 @@ table.detail-view td {
   text-align: center;
   padding-top: 25px;
   border-radius: 1px;
+}
+/* в таблице по категориям и размещению */
+table .tool-send {
+  cursor: pointer;
 }

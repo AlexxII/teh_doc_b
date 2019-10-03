@@ -6,13 +6,16 @@ use yii\widgets\ActiveForm;
 $about = "Панель отображения оборудования по категориям. При сбое, перезапустите форму, воспользовавшись соответствующей клавишей.";
 $refresh_hint = 'Перезапустить форму';
 $task_hint = 'Добавить в задание на обновление';
-$send_hint = 'Передать выделенные строки в подробную версию таблицы';
+$send_hint = 'Передать выделенные строки в основное дерево';
 
 ?>
-<div class="row">
+
+<div id="category-show" class="row">
+    <span class="page-data" data-tree="fancytree_categories_show" data-table="main-table">
+
   <div class="col-lg-4 col-md-4 fancy-tree" style="padding-bottom: 5px; position: relative">
     <div id="refresh-tree-wrap" style="position: absolute; top: 0px; left:-40px">
-      <a class="fab-button refresh-button" title="Обновить"
+      <a class="fab-button refresh-button refresh-tree" title="Обновить"
          style="cursor: pointer; background-color: green" data-tree="fancytree_categories_show">
         <svg width="37" height="37" viewBox="0 0 24 24">
           <path d="M9 12l-4.463 4.969-4.537-4.969h3c0-4.97 4.03-9 9-9 2.395 0 4.565.942 6.179
@@ -50,10 +53,7 @@ $send_hint = 'Передать выделенные строки в подроб
 
   <div class="col-lg-8 col-md-8 about about-padding" style="position: relative;">
     <div class="control-buttons-wrap" style="position: absolute;top:0;width:300px">
-      <button class="btn btn-primary btn-sm task-it" style="margin-top:5px;display:none" data-toggle="tooltip"
-              data-placement="bottom" title="<?= $task_hint ?>">Задание
-      </button>
-      <button class="btn btn-primary btn-sm sendbtn" style="margin-top:5px;display:none" data-toggle="tooltip"
+      <button class="btn btn-primary btn-sm sendbtn" style="display:none" data-toggle="tooltip"
               data-placement="bottom" title="<?= $send_hint ?>">Передать
       </button>
     </div>
@@ -86,21 +86,9 @@ $send_hint = 'Передать выделенные строки в подроб
   var nodeid;
   var treeCategoryShowId;
 
-  $(document).on('click', '.sendbtn', function (e) {
-    var table = $('#main-table').DataTable();
-    var data = table.rows({selected: true}).data();
-    var ar = [];
-    var count = data.length;
-    for (var i = 0; i < count; i++) {
-      ar[i] = data[i][0];
-    }
-    console.log(ar);
-  });
-
 
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-
   });
 
   $('#main-table').on('length.dt', function (e, settings, len) {
@@ -239,7 +227,7 @@ $send_hint = 'Передать выделенные строки в подроб
       }, {
         'targets': 1,
         'render': function (data, type, row) {
-          return '<strong>' + row[1] + '</strong>';
+          return '<span class="tool-send" data-id="' + row[0] + '"><strong>' + row[1] + '</strong></span>';
         }
       }],
       select: {

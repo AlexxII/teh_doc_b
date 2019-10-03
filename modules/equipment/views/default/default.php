@@ -12,7 +12,6 @@ use app\assets\FancytreeAsset;
 use app\assets\PhotoswipeAsset;
 use app\assets\JConfirmAsset;
 use app\assets\BootstrapDatepickerAsset;
-use app\assets\SlidebarsAsset;
 use app\assets\NotyAsset;
 use app\assets\TableBaseAsset;
 
@@ -25,24 +24,21 @@ FancytreeAsset::register($this);
 MdeAsset::register($this);
 JConfirmAsset::register($this);
 BootstrapDatepickerAsset::register($this);
-SlidebarsAsset::register($this);
 TableBaseAsset::register($this);
 BootstrapPluginAsset::register($this);
 
-$about = "Перечень оборудования";
 ?>
 <style>
-  #tools-tree {
-    position: relative;
-  }
 
 </style>
 
 <div id="equipment-main-wrap" class="container">
+      <span class="page-data" data-tree="tools-main-tree" data-table="">
+
   <div class="row">
     <div id="tools-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
-      <div id="refresh-tree-wrap" style="position: absolute; top: 0px; left:-55px">
-        <a id="refresh-tree" class="fab-button refresh-button" title="Обновить"
+      <div id="refresh-tree-wrap" style="position: absolute;top:0;left:-55px">
+        <a id="refresh-tools-tree" class="fab-button refresh-button" title="Обновить"
            style="cursor: pointer; background-color: green">
           <svg width="37" height="37" viewBox="0 0 24 24">
             <path d="M9 12l-4.463 4.969-4.537-4.969h3c0-4.97 4.03-9 9-9 2.395 0 4.565.942 6.179
@@ -91,32 +87,34 @@ $about = "Перечень оборудования";
     </div>
 
     <div id="tool-info" class="col-lg-8 col-md-8" style="height: 100%;display: none">
-      <ul class="nav nav-tabs" id="main-teh-tab">
-        <li id="info-tab" data-tab-name="info" class="active">
-          <a href="">
-            Инфо
-          </a>
-        </li>
-        <li id="docs-tab" data-tab-name="docs">
-          <a href="">
-            Docs
-            <span class="counter">0</span>
-          </a>
-        </li>
-        <li id="images-tab" data-tab-name="images">
-          <a href="">
-            Photo
-            <span class="counter">0</span>
-          </a>
-        </li>
-        <li id="wiki-tab" data-tab-name="wiki">
-          <a href="">
-            Wiki
-            <span class="counter">0</span>
-          </a>
-        </li>
-      </ul>
-      <div id="tool-info-view">
+      <div class="mobile-wrap">
+        <ul class="nav nav-tabs" id="main-teh-tab">
+          <li id="info-tab" data-tab-name="info" class="active">
+            <a href="">
+              Инфо
+            </a>
+          </li>
+          <li id="docs-tab" data-tab-name="docs">
+            <a href="">
+              Docs
+              <span class="counter">0</span>
+            </a>
+          </li>
+          <li id="images-tab" data-tab-name="images">
+            <a href="">
+              Photo
+              <span class="counter">0</span>
+            </a>
+          </li>
+          <li id="wiki-tab" data-tab-name="wiki">
+            <a href="">
+              Wiki
+              <span class="counter">0</span>
+            </a>
+          </li>
+        </ul>
+        <div id="tool-info-view">
+        </div>
       </div>
     </div>
 
@@ -127,6 +125,7 @@ $about = "Перечень оборудования";
   //    initLeftCustomData('/equipment/menu/left-side-data');
   //    initRightCustomData('/equipment/menu/right-side-data');
   initLeftMenu('/equipment/menu/left-side');
+  initSmallMenu('/equipment/menu/small-menu');
   initAppConfig('/equipment/menu/app-config');
 
 
@@ -140,7 +139,7 @@ $about = "Перечень оборудования";
     var create_url = '/equipment/default/create-node';
     var update_url = '/equipment/default/update-node';
 
-    $("#tools-main-tree").fancytree({
+    tree = $("#tools-main-tree").fancytree({
       source: {
         url: main_url
       },
@@ -197,9 +196,9 @@ $about = "Перечень оборудования";
         hideExpandedCounter: true,                          // Hide counter badge if parent is expanded
         hideExpanders: true,                                // Hide expanders if all child nodes are hidden by filter
         highlight: true,                                    // Highlight matches by wrapping inside <mark> tags
-        leavesOnly: true,                                   // Match end nodes only
+        leavesOnly: false,                                   // Match end nodes only
         nodata: true,                                       // Display a 'no data' status node if result is empty
-        mode: 'hide'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
+        mode: 'dimm'                                        // Grayout unmatched nodes (pass "hide" to remove unmatched node instead)
       },
       edit: {
         inputCss: {
@@ -280,7 +279,7 @@ $about = "Перечень оборудования";
         }
       },
       init: function (event, data) {
-        if (tId != undefined) {
+        if (tId !== undefined) {
           // getCounters(tId);
           data.tree.activateKey(tId);
           tId = undefined;
@@ -290,7 +289,7 @@ $about = "Перечень оборудования";
         // var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
         // if (target === 'title' || target === 'icon') {
         var node = data.node;
-        // console.log(node);
+        console.log(node);
         if (node.data.lvl !== '0') {
           $('#delete-tool-wrap').show();
         } else {
@@ -330,13 +329,31 @@ $about = "Перечень оборудования";
     }
   }
 
-  function returnCallback() {
-    var node = $("#tools-main-tree").fancytree("getActiveNode");
-    var ref = $("#main-teh-tab li.active").data('tabName');
-    if (node != null) {
-      var toolId = node.data.id;
-      loadTabsData(ref, toolId);
-      getCounters(toolId);
+  function filterTree(tree, data) {
+    var cc = 0;
+    tree.filterBranches(function (node) {
+      if (data[node.key] === 1) {
+        return true;
+      }
+    });
+  }
+
+  function returnCallback(data = null) {
+    var tree = $('#tools-main-tree').fancytree('getTree');
+    closeSlider();
+    if (tId == undefined) {
+      var node = $('#tools-main-tree').fancytree('getActiveNode');
+      var ref = $('#main-teh-tab li.active').data('tabName');
+      if (node != null) {
+        var toolId = node.data.id;
+        loadTabsData(ref, toolId);
+        getCounters(toolId);
+      }
+    } else {
+      tree.getNodeByKey(tId.toString()).setActive();
+    }
+    if (data != null) {
+      filterTree(tree, data);
     }
   }
 

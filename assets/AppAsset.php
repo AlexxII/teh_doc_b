@@ -36,6 +36,7 @@ class AppAsset extends AssetBundle
     'yii\web\YiiAsset',
     'yii\bootstrap\BootstrapAsset',
     'app\assets\TetherAsset',
-    'app\assets\MomentJSAsset'
+    'app\assets\MomentJSAsset',
+    'app\assets\SlidebarsAsset'
   ];
 }

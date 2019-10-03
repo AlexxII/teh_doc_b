@@ -5,7 +5,7 @@ use yii\helpers\Html;
 ?>
 
 <div class="row d-flex flex-items-center" style="position: relative">
-  <div class="col-lg-9 col-md-9 cos-xs-9">
+  <div class="col-lg-9 col-md-9 cos-xs-10">
     <h2>
         <span style="position: relative">
         <span id="info-tool-title"><?= Html::encode($model->name); ?></span>
