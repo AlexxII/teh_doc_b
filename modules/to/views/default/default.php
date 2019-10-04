@@ -21,7 +21,7 @@ $this->title = "Графики ТО";
 <div class="tool-task">
   <div class="" style="position: relative">
     <div class="container-fluid" style="position: relative">
-      <div id="add-scheduler-wrap">
+      <div id="add-scheduler-wrap" class="hidden-xs hidden-sm">
         <a id="add-scheduler" class="fab-button ex-click"
            data-url="/to/month-schedule/create" data-back-url="/to" title="Добавить график ТО">
           <div class="plus"></div>
@@ -69,6 +69,7 @@ $this->title = "Графики ТО";
     $('#app-control').removeClass('hidden');
 
     initLeftMenu('/to/menu/left-side');
+    initSmallMenu('/to/menu/small-menu');
     initAppConfig('/to/menu/app-config');
 
     controlListsInit();                                       // загрузка списков ТО

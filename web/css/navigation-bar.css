@@ -106,7 +106,7 @@ body {
 }
 #left-menu {
   text-align: left;
-  /*width: 150px;*/
+  width: 150px;
   background-color: #fff;
   color: #000 !important;
 }

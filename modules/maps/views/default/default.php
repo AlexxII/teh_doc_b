@@ -10,9 +10,9 @@ FancytreeAsset::register($this);
 ?>
 
 <div id="map-rus-light-wrap">
-  <div id="region-legend">
+  <div id="region-legend" class="hidden-xs hidden-sm">
   </div>
-  <div id="district-legend">
+  <div id="district-legend" class="hidden-xs hidden-sm">
     <div class="district-color"><span class="color" data-color="#ffff81"></span><span class="district">ЦФО</span></div>
     <div class="district-color"><span class="color" data-color="#62d2c5"></span><span class="district">СЗФО</span></div>
     <div class="district-color"><span class="color" data-color="#fc8b8b"></span><span class="district">ЮФО</span></div>
@@ -22,8 +22,7 @@ FancytreeAsset::register($this);
     <div class="district-color"><span class="color" data-color="#01bee7"></span><span class="district">СФО</span></div>
     <div class="district-color"><span class="color" data-color="#fece2c"></span><span class="district">ДФО</span></div>
   </div>
-  <svg id="map-svg" viewBox="10 0 620 420" width="100%" height=""
-       style="width:70vw; height:530px; max-width:848px; min-width:720px;">
+  <svg id="map-svg" viewBox="10 0 620 420" >
     <g>
       <path class="land"
             d="M575.354,370.615c-0.355-0.235-0.078-1.102,1.063-3.268c0.866-1.616,1.575-3.151,1.575-3.428c0-0.274-1.143-2.323-2.561-4.568c-1.772-2.874-3.19-4.569-4.727-5.791c-1.181-0.944-2.167-2.008-2.167-2.363c0-0.787,1.183-4.371,1.655-4.961c0.196-0.237,1.537-0.632,2.993-0.907c3.151-0.512,4.806-1.103,4.806-1.733c0-0.235-0.235-1.142-0.552-2.008c-0.315-0.867-0.669-3.467-0.827-5.711c-0.196-3.112-0.512-4.688-1.221-6.263c-0.984-2.206-1.181-3.19-0.63-3.19c0.196,0,0.63-0.237,1.024-0.551c0.708-0.474,0.708-0.593,0.078-1.497c-0.59-0.945-0.59-1.064,0.394-2.836l1.024-1.813h3.032h3.033l2.168-1.93l2.125-1.932l-1.063-2.204l-1.063-2.166l1.457-0.118c1.142-0.117,1.496-0.315,1.691-1.103c0.436-1.536,0.396-5.437-0.038-5.711c-0.197-0.158-1.023-0.08-1.813,0.156c-1.102,0.316-1.692,0.238-2.56-0.195c-0.631-0.316-1.143-0.71-1.143-0.907c0-0.158,0.71-1.339,1.615-2.56l1.614-2.246l1.813,1.3c1.3,0.946,1.891,1.656,1.97,2.401c0.117,0.789,0.472,1.223,1.417,1.616c1.065,0.435,1.34,0.786,1.536,2.048c0.158,0.828,0.63,3.032,1.063,4.885c0.788,3.033,0.865,4.765,1.064,19.694l0.196,16.347l-2.521,5.513l-2.521,5.475l-4.844,1.458c-2.641,0.827-5.043,1.654-5.319,1.89c-0.314,0.237-0.59,1.617-0.707,3.151c-0.118,1.498-0.552,3.506-0.946,4.529c-0.592,1.457-0.945,1.812-1.733,1.812C576.259,370.892,575.63,370.773,575.354,370.615z"
@@ -285,7 +284,10 @@ FancytreeAsset::register($this);
             stroke="none" id="99" name="Байконур"></path>
 -->    </g>
   </svg>
+  <div class="visible-xs visible-sm"></div>
+
 </div>
+
 
 <script>
   initRusMap();
@@ -308,7 +310,7 @@ FancytreeAsset::register($this);
            number: number
           }
         }).done(function (response) {
-          $('#region-legend').html(response.data.data);
+          $('.region-legend').html(response.data.data);
         }).fail(function () {
           console.log('fail');
         });

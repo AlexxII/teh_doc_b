@@ -41,7 +41,7 @@ $this->beginPage() ?>
   <nav class="navigation navigation-default">
     <div class="container-fluid">
       <ul class="navig navigation-nav" id="left">
-        <li id="apps" class="dropdown">
+        <li class="dropdown visible-xs visible-sm">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
              aria-expanded="false">
             <svg width="24" height="24" viewBox="0 0 24 24">
@@ -53,26 +53,26 @@ $this->beginPage() ?>
           </ul>
         </li>
 
-        <li><span id="push-it" class="btn btn-default btn-circle btn-ml hidden" aria-hidden="true">
+        <li><span id="push-it" class="btn btn-default btn-circle btn-ml hidden hidden-xs hidden-sm" aria-hidden="true">
             <svg focusable="false" width="24" height="24" viewBox="0 0 24 24">
               <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
             </svg>
           </span></li>
-        <li id="app-logo" class="navigation-brand">
+        <li id="app-logo" class="navigation-brand hidden-xs hidden-sm">
           <img src="/images/logo.png" style="display:inline">
         </li>
         <li id="app-name">
           <?= $this->title ?>
         </li>
-        <li id="left-custom-data">
+        <li id="left-custom-data" class="hidden-xs hidden-sm">
         </li>
-        <li id="left-custom-data-ex">
+        <li id="left-custom-data-ex" class="hidden-xs hidden-sm">
         </li>
       </ul>
       <ul id="right" class="navig navigation-nav navigation-right">
-        <li id="right-custom-data-ex">
+        <li id="right-custom-data-ex" class="hidden-xs hidden-sm">
         </li>
-        <li id="right-custom-data">
+        <li id="right-custom-data" class="hidden-xs hidden-sm">
         </li>
 
         <li id="app-control" class="dropdown hidden">
@@ -94,7 +94,7 @@ $this->beginPage() ?>
 
           </ul>
         </li>
-        <li id="app-notification">
+        <li id="app-notification" class="hidden-xs hidden-sm">
           <a href="#" role="button" class="dropdown-toggle" aria-hidden="true">
             <svg viewBox="0 0 16 16" width="24" height="24" aria-hidden="true">
               <path fill-rule="evenodd" d="M14 12v1H0v-1l.73-.58c.77-.77.81-2.55 1.19-4.42C2.69 3.23 6 2 6 2c0-.55.45-1

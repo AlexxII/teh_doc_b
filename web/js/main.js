@@ -73,10 +73,23 @@ function clickMenu() {
     } else {
       openSlider();
     }
+  }
+}
+
+
+/*
+function clickMenu() {
+  if ($(window).width() >= 900) {
+    if ($('#left-side').css('left') == '0px') {
+      closeSlider();
+    } else {
+      openSlider();
+    }
   } else {
     openMenu();
   }
 }
+*/
 
 function openSlider() {
   $('#add-session-wrap').hide();

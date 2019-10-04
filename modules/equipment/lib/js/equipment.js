@@ -36,7 +36,7 @@ function createWindow(tree, node, rootTitle) {
     },
     type: 'blue',
     columnClass: 'large',
-    title: 'Редактровать данные',
+    title: 'Добавить оборудование',
     buttons: {
       ok: {
         btnClass: 'btn-blue',
@@ -91,7 +91,7 @@ function simpleEquipmentAdd(tree, node, rootTitle) {
 }
 
 // Удаление оборудования
-$(document).on('click', '#delete-tool', function (e) {
+$(document).on('click', '.delete-tool', function (e) {
   e.preventDefault();
   var tree = $('#' + toolsTreeIdAttr).fancytree('getTree');
   var node = $('#' + toolsTreeIdAttr).fancytree('getActiveNode');
@@ -222,7 +222,7 @@ $(document).on('click', '#refresh-tools-tree', function (e) {
   var tree = $("#" + toolsTreeIdAttr).fancytree("getTree");
   tree.reload();
   tree.clearFilter();
-  $("#delete-tool-wrap").hide();
+  $(".delete-tool-wrap").hide();
   $('#tool-info').hide();
 });
 

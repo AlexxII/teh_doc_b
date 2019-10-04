@@ -1,3 +1,7 @@
+body {
+  overflow: auto;
+}
+
 #ex-wrap {
   position: absolute;
   top: 0;

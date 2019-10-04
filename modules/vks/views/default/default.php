@@ -17,13 +17,13 @@ BootstrapDatepickerAsset::register($this);
 
 <div class="row">
   <div class="container-fluid" style="position: relative">
-    <div id="add-session-wrap" style="position: absolute; top: 10px; left:-60px">
+    <div id="add-session-wrap" style="position: absolute; top: 10px; left:-60px" class="hidden-xs hidden-sm">
       <a id="add-session" class="fab-button" title="Добавить предстоящий сеанс" style="cursor: pointer">
         <div class="plus"></div>
       </a>
     </div>
 
-    <div id="add-session-wrap-ex" style="position: absolute; top: 10px; right:-60px">
+    <div id="add-session-wrap-ex" style="position: absolute; top: 10px; right:-60px" class="hidden-xs hidden-sm">
       <a id="add-session-ex" class="fab-button" title="Добавить прошедший сеанс"
          style="cursor: pointer; background-color: #4CAF50">
         <i class='check'></i>
@@ -68,8 +68,8 @@ BootstrapDatepickerAsset::register($this);
 
     $('[data-toggle="tooltip"]').tooltip();
 
-
     initLeftMenu('/vks/menu/left-side');
+    initSmallMenu('/vks/menu/small-menu');
     initAppConfig('/vks/menu/app-config');
     initRightCustomData('/vks/menu/right-side-data');
 

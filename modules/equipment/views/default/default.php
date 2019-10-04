@@ -29,7 +29,9 @@ BootstrapPluginAsset::register($this);
 
 ?>
 <style>
-
+  .small-nidden-btns {
+    margin-bottom: 10px;
+  }
 </style>
 
 <div id="equipment-main-wrap" class="container">
@@ -37,7 +39,7 @@ BootstrapPluginAsset::register($this);
 
   <div class="row">
     <div id="tools-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
-      <div id="refresh-tree-wrap" style="position: absolute;top:0;left:-55px">
+      <div id="refresh-tree-wrap" style="position: absolute;top:0;left:-55px" class="hidden-xs hidden-sm">
         <a id="refresh-tools-tree" class="fab-button refresh-button" title="Обновить"
            style="cursor: pointer; background-color: green">
           <svg width="37" height="37" viewBox="0 0 24 24">
@@ -48,7 +50,7 @@ BootstrapPluginAsset::register($this);
           </svg>
         </a>
       </div>
-      <div id="add-equipment-wrap" style="position: absolute; top: 50px; left:-60px">
+      <div id="add-equipment-wrap" style="position: absolute; top: 50px; left:-60px" class="hidden-xs hidden-sm">
         <a id="add-equipment" data-tree="tools-main-tree" data-root="Необработанное" class="fab-button"
            title="Добавить оборудование" style="cursor: pointer">
           <div class="plus"></div>
@@ -56,8 +58,8 @@ BootstrapPluginAsset::register($this);
       </div>
 
       <!-- Deleting!!!! !-->
-      <div id="delete-tool-wrap" style="position: absolute; top: 115px; left:-60px;display: none">
-        <a id="delete-tool" class="fab-button" title="Удалить"
+      <div class="delete-tool-wrap hidden-xs hidden-sm" style="position:absolute;top:115px;left:-60px;display:none">
+        <a class="fab-button delete-tool" title="Удалить"
            style="cursor: pointer; background-color: red">
           <svg width="50" height="50" viewBox="0 0 24 24">
             <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
@@ -67,6 +69,10 @@ BootstrapPluginAsset::register($this);
       </div>
 
       <div style="position: relative">
+        <div class="small-nidden-btns visible-xs visible-sm">
+          <button id="refresh-tools-tree" class="btn btn-sm btn-success">Обновить</button>
+          <button class="btn btn-sm btn-danger delete-tool delete-tool-wrap" style="display:none">Удалить</button>
+        </div>
         <div class="container-fuid" style="float:left; width: 100%">
           <input class="form-control form-control-sm" autocomplete="off" name="search" data-tree="tools-main-tree"
                  placeholder="Поиск по названию...">
@@ -289,11 +295,11 @@ BootstrapPluginAsset::register($this);
         // var target = $.ui.fancytree.getEventTargetType(event.originalEvent);
         // if (target === 'title' || target === 'icon') {
         var node = data.node;
-        console.log(node);
+        // console.log(node);
         if (node.data.lvl !== '0') {
-          $('#delete-tool-wrap').show();
+          $('.delete-tool-wrap').show();
         } else {
-          $('#delete-tool-wrap').hide();
+          $('.delete-tool-wrap').hide();
         }
         var toolId = node.data.id;
         if (node.data.lvl !== '0') {
