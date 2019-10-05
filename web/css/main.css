@@ -1,7 +1,9 @@
 body {
   overflow: auto;
 }
-
+#left-menu h5 {
+  margin-top: 0;
+}
 #ex-wrap {
   position: absolute;
   top: 0;

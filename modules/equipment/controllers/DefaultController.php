@@ -15,6 +15,12 @@ class DefaultController extends Controller
     return $this->render('default');
   }
 
+  public function actionIndexEx()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    return $this->renderAjax('default');
+  }
+
   //=============================================== working with tree =================================================
 
   public function actionAllTools()

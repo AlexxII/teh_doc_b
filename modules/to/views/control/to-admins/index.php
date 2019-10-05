@@ -16,32 +16,20 @@ $role_hint = 'Выберите роль пользователя при пров
 <div class="">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
-      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm add-subcategory',
-        'style' => ['margin-top' => '5px'],
-        'title' => $add_hint,
-        'data-toggle' => 'tooltip',
-        'data-placement' => 'top',
-        'data-container' => 'body',
-        'data-tree' => 'fancytree_to_admins',
-        'data-root' => 'Сотрудники, участвующие в ТО'
-      ]) ?>
-      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', [''], ['class' => 'btn btn-success btn-sm refresh',
-        'style' => ['margin-top' => '5px'],
-        'title' => $refresh_hint,
-        'data-toggle' => 'tooltip',
-        'data-placement' => 'top',
-        'data-container' => 'body',
-        'data-tree' => 'fancytree_to_admins'
-      ]) ?>
-      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', [''], ['class' => 'btn btn-danger btn-sm del-node',
-        'style' => ['margin-top' => '5px', 'display' => 'none'],
-        'title' => $del_hint,
-        'data-toggle' => 'tooltip',
-        'data-placement' => 'top',
-        'data-container' => 'body',
-        'data-tree' => 'fancytree_to_admins',
-        'data-delete' => '/to/control/to-admins/delete'
-      ]) ?>
+      <button class="btn btn-success btn-sm add-subcategory" title="<?= $add_hint ?>" data-toggle="tooltip"
+              data-placement="top" data-container="body" data-tree="fancytree_to_admins"
+              data-root="Сотрудники, участвующие в ТО">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-success btn-sm refresh" title="<?= $refresh_hint ?>" data-toggle="tooltip"
+              data-placement="top" data-container="body" data-tree="fancytree_to_admins">
+        <i class="fa fa-refresh" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-danger btn-sm del-node" title="<?= $del_hint ?>" data-toggle="tooltip"
+              data-placement="top" data-container="body" data-tree="fancytree_to_admins"
+              data-delete="/to/control/to-admins/delete" style="display: none">
+        <i class="fa fa-trash" aria-hidden="true"></i>
+      </button>
     </div>
 
   </div>
