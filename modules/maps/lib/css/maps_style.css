@@ -16,7 +16,7 @@ body {
   text-align: center;
   position: relative;
 }
-#region-legend {
+.region-legend {
   width: 360px;
   height: 195px;
   background-color: #fff;

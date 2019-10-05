@@ -10,7 +10,7 @@ FancytreeAsset::register($this);
 ?>
 
 <div id="map-rus-light-wrap">
-  <div id="region-legend" class="hidden-xs hidden-sm">
+  <div class="hidden-xs hidden-sm region-legend">
   </div>
   <div id="district-legend" class="hidden-xs hidden-sm">
     <div class="district-color"><span class="color" data-color="#ffff81"></span><span class="district">ЦФО</span></div>
@@ -300,7 +300,6 @@ FancytreeAsset::register($this);
 
     $('.land').on({
       mouseenter: function () {
-        console.log($(this).attr('name') + ' - ' + $(this).attr('id'));
         var url = '/maps/map-rus/detail';
         var number = $(this).attr('id');
         $.ajax({
