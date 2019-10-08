@@ -1,25 +1,22 @@
 <?php
 
 use yii\helpers\Html;
+
 use app\assets\NotyAsset;
+use app\assets\PdfmakeAsset;
 use app\modules\vks\assets\VksAppAsset;
 use app\assets\TableBaseAsset;
 use app\assets\FancytreeAsset;
 use app\assets\BootstrapDatepickerAsset;
 
 VksAppAsset::register($this);
+PdfmakeAsset::register($this);
 NotyAsset::register($this);
 TableBaseAsset::register($this);
 FancytreeAsset::register($this);
 BootstrapDatepickerAsset::register($this);
 
 ?>
-
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.60/pdfmake.js"></script>
-<script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.60/vfs_fonts.js"></script>
-
 <div class="row">
   <div class="container-fluid" style="position: relative">
     <div id="add-session-wrap" style="position: absolute; top: 10px; left:-60px" class="hidden-xs hidden-sm">

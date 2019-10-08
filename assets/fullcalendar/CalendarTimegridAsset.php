@@ -6,15 +6,15 @@ use yii\web\AssetBundle;
 
 class CalendarTimegridAsset extends AssetBundle
 {
-//  public $sourcePath = '@bower/fullcalendar/dist/timegrid';
-  public $sourcePath = '@bower/fullcalendar/packages/timegrid/src';
+  public $sourcePath = '@bower/fullcalendar/dist/timegrid';
+//  public $sourcePath = '@bower/fullcalendar/packages/timegrid/src';
 
   public $css = [
-    'main.scss',
+    'main.css',
   ];
 
   public $js = [
-    'main.ts'
+    'main.min.js'
   ];
 
   public $depends = [

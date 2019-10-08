@@ -39,7 +39,9 @@
         "bower-asset/jquery-simplecolorpicker": "^0.3.1",
         "bower-asset/select2": "^4.0",
         "bower-asset/slidebars": "^2.0",
-        "bower-asset/toolbar": "^1.0"
+        "bower-asset/toolbar": "^1.0",
+        "bower-asset/pdfmake": "^0.1.60",
+        "bower-asset/fullcalendar": "4.2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

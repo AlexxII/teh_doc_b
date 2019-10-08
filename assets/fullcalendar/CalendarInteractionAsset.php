@@ -6,16 +6,16 @@ use yii\web\AssetBundle;
 
 class CalendarInteractionAsset extends AssetBundle
 {
-//  public $sourcePath = '@bower/fullcalendar/dist/interaction';
-  public $sourcePath = '@bower/fullcalendar/packages/interaction/src';
+  public $sourcePath = '@bower/fullcalendar/dist/interaction';
+//  public $sourcePath = '@bower/fullcalendar/packages/interaction/src';
 
 
   public $css = [
-    'main.scss',
+    'main.css',
   ];
 
   public $js = [
-    'main.ts'
+    'main.js'
   ];
 
   public $depends = [
