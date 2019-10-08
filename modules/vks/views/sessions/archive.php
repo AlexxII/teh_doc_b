@@ -24,7 +24,21 @@ $dell_hint = 'Удалить выделенные сеансы';
         </svg>
       </a>
     </div>
-    <table id="main-table" class="display no-wrap cell-border" style="width:100%">
+    <div class="get-archive-pdf" style="position: absolute; top: 130px; right:-60px;display: none"
+         data-pdf-header="Перечень прошедших сеансов видеосвязи" data-table="archive-table">
+      <a class="fab-button" title="Передать в PDF" style="cursor: pointer; background-color: blue" >
+        <svg width="50" height="50" viewBox="0 0 24 24" style="padding-left: 10px">
+          <path d="M11.363 2c4.155 0 2.637 6 2.637 6s6-1.65 6 2.457v11.543h-16v-20h7.363zm.826-2h-10.189v24h20v-14.386c0-2.391-6.648-9.614-9.811-9.614zm4.811
+           13h-2.628v3.686h.907v-1.472h1.49v-.732h-1.49v-.698h1.721v-.784zm-4.9 0h-1.599v3.686h1.599c.537 0 .961-.181
+            1.262-.535.555-.658.587-2.034-.062-2.692-.298-.3-.712-.459-1.2-.459zm-.692.783h.496c.473
+            0 .802.173.915.644.064.267.077.679-.021.948-.128.351-.381.528-.754.528h-.637v-2.12zm-2.74-.783h-1.668v3.686h.907v-1.277h.761c.619
+            0 1.064-.277 1.224-.763.095-.291.095-.597 0-.885-.16-.484-.606-.761-1.224-.761zm-.761.732h.546c.235
+            0 .467.028.576.228.067.123.067.366 0 .489-.109.199-.341.227-.576.227h-.546v-.944z"/>
+        </svg>
+      </a>
+    </div>
+
+    <table id="archive-table" class="display no-wrap cell-border dtable" style="width:100%">
       <thead>
       <tr>
         <th></th>
@@ -137,17 +151,18 @@ $dell_hint = 'Удалить выделенные сеансы';
       });
     });
 
-    archTable = $('#main-table').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "responsive": true,
-      "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+    archTable = $('#archive-table').DataTable({
+      'processing': true,
+      'serverSide': true,
+      'responsive': true,
+      'lengthMenu': [[10, 25, 50, 100, 300], [10, 25, 50, 100, 300]],
+      'fnRowCallback': function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
         if ((aData[19] <= 0 && aData[15] != '') || (aData[20] <= 0 && aData[17] != '')) {
           $('td', nRow).css('background-color', '#fff1ef');
           $('td:eq(1)', nRow).append('<br>' + '<strong>Проверьте <i class="fa fa-clock-o" aria-hidden="true"></i></strong>');
         }
       },
-      "ajax": $.fn.dataTable.pipeline({
+      'ajax': $.fn.dataTable.pipeline({
         url: '/vks/sessions/server-side-ex?index=0',
         pages: 2 // number of pages to cache
       }),
@@ -155,39 +170,39 @@ $dell_hint = 'Удалить выделенные сеансы';
       rowGroup: {
         dataSrc: 2
       },
-      "columnDefs": [
+      'columnDefs': [
         {
-          "orderable": false,
-          "targets": -2,
-          "data": null,
-          "width": '45px',
-          "defaultContent":
-            "<a href='#' class='fa fa-edit edit' style='padding-right: 5px' title='Обновить'></a>" +
-            "<a href='#' class='fa fa-info view' style='padding-right: 5px' title='Подробности'></a>"
+          'orderable': false,
+          'targets': -2,
+          'data': null,
+          'width': '45px',
+          'defaultContent':
+            '<a href="#" class="fa fa-edit edit" style="padding-right: 5px" title="Обновить"></a>' +
+            '<a href="#" class="fa fa-info view" style="padding-right: 5px" title="Подробности"></a>'
         }, {
-          "orderable": false,
-          "className": 'select-checkbox',
-          "targets": -1,
-          "defaultContent": ""
+          'orderable': false,
+          'className': 'select-checkbox',
+          'targets': -1,
+          'defaultContent': ''
         }, {
-          "targets": 0,
-          "data": null,
-          "visible": false
+          'targets': 0,
+          'data': null,
+          'visible': false
         }, {
-          "targets": 2,
-          "visible": false
+          'targets': 2,
+          'visible': false
         },
         {
-          "targets": 3,
-          "width": '105px',
-          "render": function (data, type, row) {
-            return row[15] + ' - ' + row[16] + ' /т' + "<br> " + row[17] + ' - ' + row[18] + ' /р';
+          'targets': 3,
+          'width': '105px',
+          'render': function (data, type, row) {
+            return row[15] + ' - ' + row[16] + ' /т' + '<br>' + row[17] + ' - ' + row[18] + ' /р';
           }
         },
         {
-          "targets": 6,
-          "render": function (data, type, row) {
-            return row[6] + "<br> " + row[14];
+          'targets': 6,
+          'render': function (data, type, row) {
+            return row[6] + '<br>' + row[14];
           }
         },
       ],
@@ -196,14 +211,14 @@ $dell_hint = 'Удалить выделенные сеансы';
         selector: 'td:last-child'
       },
       language: {
-        url: "/lib/ru.json"
+        url: '/lib/ru.json'
       }
     });
 
-    $('#main-table tbody').on('click', '.edit', function (e) {
+    $('#archive-table tbody').on('click', '.edit', function (e) {
       e.preventDefault();
       var data = archTable.row($(this).parents('tr')).data();
-      var url = "/vks/sessions/update-session-ajax?id=" + data[0];
+      var url = '/vks/sessions/update-session-ajax?id=' + data[0];
       c = $.confirm({
         content: function () {
           var self = this;
@@ -225,13 +240,13 @@ $dell_hint = 'Удалить выделенные сеансы';
             btnClass: 'btn-blue',
             text: 'Обновить',
             action: function () {
-              var $form = $("#w0"),
-                data = $form.data("yiiActiveForm");
+              var $form = $('#w0'),
+                data = $form.data('yiiActiveForm');
               $.each(data.attributes, function () {
                 this.status = 3;
               });
-              $form.yiiActiveForm("validate");
-              if ($("#w0").find(".has-error").length) {
+              $form.yiiActiveForm('validate');
+              if ($('#w0').find(".has-error").length) {
                 return false;
               } else {
                 var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
@@ -266,10 +281,10 @@ $dell_hint = 'Удалить выделенные сеансы';
         }
       });
     });
-    $('#main-table tbody').on('click', '.view', function (e) {
+    $('#archive-table tbody').on('click', '.view', function (e) {
       e.preventDefault();
       var data = archTable.row($(this).parents('tr')).data();
-      var url = "/vks/sessions/view-session-ajax?id=" + data[0];
+      var url = '/vks/sessions/view-session-ajax?id=' + data[0];
       c = $.confirm({
         content: function () {
           var self = this;
@@ -299,12 +314,14 @@ $dell_hint = 'Удалить выделенные сеансы';
     archTable.on('select', function (e, dt, type, indexes) {
       if (type === 'row') {
         $('#delete').show();
+        $('.get-archive-pdf').show();
       }
     });
     archTable.on('deselect', function (e, dt, type, indexes) {
       if (type === 'row') {
         if (archTable.rows({selected: true}).count() > 0) return;
         $('#delete').hide();
+        $('.get-archive-pdf').hide();
       }
     });
 
@@ -312,10 +329,13 @@ $dell_hint = 'Удалить выделенные сеансы';
 
     archTable.on('length.dt', function (e, settings, len) {
       $('#delete').hide();
+      $('.get-archive-pdf').hide();
+
     });
 
     archTable.on('draw.dt', function (e, settings, len) {
       $('#delete').hide();
+      $('.get-archive-pdf').hide();
     });
 
     //********************** Удаление записей ***********************************
@@ -323,7 +343,7 @@ $dell_hint = 'Удалить выделенные сеансы';
     $('#delete').click(function (event) {
       event.preventDefault();
       var csrf = $('meta[name=csrf-token]').attr("content");
-      var url = "/vks/sessions/delete";
+      var url = '/vks/sessions/delete';
       if ($(this).attr('disabled')) {
         return;
       }

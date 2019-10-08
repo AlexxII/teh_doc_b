@@ -137,20 +137,10 @@ function closeSmallMenu(e) {
   controller.toggle('main-menu');
 }
 
-// $(window).resize(function () {
-//   var divPosition = $('#add-session-wrap').offset();
-//   if (divPosition.left <= 0) {
-//     $('#add-session').hide();
-//   } else {
-//     $('#add-session').show();
-//   }
-//
-//   if ($(window).width() >= 900) {
-//     return;
-//   } else {
-//     closeSlider();
-//   }
-// });
+
+$(window).resize(function () {
+    closeSlider();
+})
 
 function loadExContent(url, backUrl, jc) {
   $.ajax({

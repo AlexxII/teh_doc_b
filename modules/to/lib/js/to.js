@@ -171,12 +171,13 @@ $(document).on('click', '.btnResetSearch', function (e) {
 }).attr("disabled", true);
 
 $(document).on('keyup', 'input[name=search]', function (e) {
+  var id = $(e.currentTarget).data('tree');
   if ($(this).val() == '') {
-    var tree = $(".ui-draggable-handle").fancytree("getTree");
+    var tree = $("#" + id).fancytree("getTree");
     tree.clearFilter();
   }
   var n,
-    tree = $.ui.fancytree.getTree(),
+    tree = $("#" + id).fancytree("getTree"),
     args = "autoApply autoExpand fuzzy hideExpanders highlight leavesOnly nodata".split(" "),
     opts = {},
     filterFunc = $("#branchMode").is(":checked") ? tree.filterBranches : tree.filterNodes,

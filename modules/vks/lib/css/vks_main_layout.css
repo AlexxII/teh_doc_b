@@ -169,17 +169,17 @@ td.align-center {
 #up-sessions-table tbody td {
   font-size: 12px;
 }
-#main-table .inline-wrap {
+.dtable .inline-wrap {
   display: inline-flex;
 }
-#main-table .up-mark {
+.dtable .up-mark {
   padding: 1px 0 0 5px;
 }
-#main-table strong {
+.dtable strong {
   font-size: 14px;
   font-weight: 700;
 }
-#main-table tbody td {
+.dtable tbody td {
   font-size: 12px;
 }
 #vks-period-input {

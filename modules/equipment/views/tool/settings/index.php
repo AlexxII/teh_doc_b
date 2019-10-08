@@ -84,27 +84,6 @@
             <label for="maintenance-work-feature">Наработка</label>
             <span class="status-indicator" id="work-count-check"></span>
             <p class="note">Вести учет наработанного времени.</p>
-            <div class="d-blue border">
-              <div class="form-checkbox js-complex-option">
-                <label>Шаблон учета времени</label>
-                <p class="note pr-6">Учет наработанного времени будет вычислятся по указанному шаблону (по умолчанию -
-                  8ми
-                  часовой рабочий день).</p>
-              </div>
-              <div class="form-checkbox">
-                <div class="input-group">
-                  <span class="input-group-addon">
-                    <input type="checkbox" style="margin: 0">
-                  </span>
-                  <select class="form-control">
-                    <option value="0" disabled selected>Выберите</option>
-                    <option value="1">Круглосуточное</option>
-                    <option value="2">Рабочий день</option>
-                    <option value="3">Шаблон 2</option>
-                  </select>
-                </div>
-              </div>
-            </div>
           </div>
         </li>
       </ul>

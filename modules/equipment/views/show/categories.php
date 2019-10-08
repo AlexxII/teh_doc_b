@@ -14,7 +14,7 @@ $send_hint = 'Передать выделенные строки в основн
     <span class="page-data" data-tree="fancytree_categories_show" data-table="main-table">
 
   <div class="col-lg-4 col-md-4 fancy-tree" style="padding-bottom: 5px; position: relative">
-    <div id="refresh-tree-wrap" style="position: absolute; top: 0px; left:-40px">
+    <div id="refresh-tree-wrap" class="hidden-xs hidden-sm" style="position: absolute; top: 0px; left:-40px">
       <a class="fab-button refresh-button refresh-tree" title="Обновить"
          style="cursor: pointer; background-color: green" data-tree="fancytree_categories_show">
         <svg width="37" height="37" viewBox="0 0 24 24">
@@ -27,9 +27,8 @@ $send_hint = 'Передать выделенные строки в основн
     </div>
 
     <div style="position: relative">
-      <div class="hideMenu-button hidden-sm hidden-xs" data-tree="fancytree_categories_show">
-        <a href="#" class="fa fa-reply-all" data-placement="top" data-toggle="tooltip" title="Свернуть"
-           aria-hidden="true"></a>
+      <div class="small-nidden-btns visible-xs visible-sm">
+        <button class="btn btn-sm btn-success refresh-tree" data-tree="fancytree_categories_show">Обновить</button>
       </div>
 
       <div class="container-fuid" style="float:left; width: 100%">

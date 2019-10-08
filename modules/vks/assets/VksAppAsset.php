@@ -18,6 +18,9 @@ class VksAppAsset extends AssetBundle
   ];
 
   public $js = [
-    'js/vks.js'
+    'js/vks.js',
+    'js/default_page.js',
+    'js/archive_page.js',
+    'js/analytics_page.js'
   ];
 }

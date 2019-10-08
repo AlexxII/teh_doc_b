@@ -41,7 +41,7 @@ class Docs extends \yii\db\ActiveRecord
       [['doc_path', 'eq_id'], 'safe'],
       [['doc_title'], 'string', 'max' => 255],
       [['docFiles'], 'file',
-        'extensions' => 'docx, doc, ppt, pdf',
+        'extensions' => 'docx, doc, ppt, pdf, txt, odf, rtf',
         'maxFiles' => 30,
       ]
     ];

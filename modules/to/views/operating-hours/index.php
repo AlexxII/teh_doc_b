@@ -75,25 +75,9 @@ $ref_hint = 'К оборудованию в основном перечне';
   <div class="col-lg-7 col-md-7">
     <div class="alert alert-warning" style="margin-bottom: 10px">
       <a href="#" class="close" data-dismiss="alert">&times;</a>
-      <strong>Внимание!</strong> Выберите оборудование серийный номер которого будет использоваться в графике ТО. Если
-      выпадающий список не активен, значит у объекта отсутствуют дочерние элементы.
+      <strong>Внимание!</strong> Данное оборудование
     </div>
 
-    <div id="result-info" style="margin-bottom: 10px"></div>
-    <form action="create" method="post" class="input-add">
-      <div class="about-main">
-        <label>Серийный номер:
-          <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-               data-toggle="tooltip" data-placement="top" title="<?= $serial_hint ?>"></sup>
-        </label>
-        <input id="serial-number" class="form-control c-input" disabled>
-        <label>Оборудование:</label>
-        <select type="text" id="serial-control" class="c-input form-control" name="sn" disabled></select>
-        <label style="font-weight:400;font-size: 10px">Выберите оборудование.</label>
-      </div>
-      <div class="about-footer"></div>
-      <button type="submit" id="save-btn" onclick="saveClick(event)" class="btn btn-primary" disabled>Сохранить</button>
-    </form>
   </div>
 
 

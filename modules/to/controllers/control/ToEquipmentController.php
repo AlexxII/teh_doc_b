@@ -28,7 +28,20 @@ class ToEquipmentController extends Controller
 
   public function actionIndex()
   {
-    return $this->renderAjax('index');
+    $this->layout = '@app/views/layouts/main_ex.php';
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Оборудование';
+    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('index'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
+
+//    return $this->renderAjax('index');
   }
 
   public function actionToolsSerials($id)

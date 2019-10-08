@@ -145,7 +145,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         var treeIdAttr = $(e.currentTarget).data('tree');
         var node = $("#" + treeIdAttr).fancytree("getActiveNode");
         var toolId = node.data.eq_id;
-        var windowSize = 'xlarge';
+        var windowSize = 'larges';
         var title = 'Оборудование';
         var url = '/equipment/default/index-ex';
         c = $.confirm({
@@ -153,7 +153,10 @@ $ref_hint = 'К оборудованию в основном перечне';
             var self = this;
             return $.ajax({
               url: url,
-              method: 'get'
+              method: 'get',
+              data: {
+                'id': toolId
+              }
             }).fail(function () {
               self.setContentAppend('<div>Что-то пошло не так!</div>');
             });
@@ -167,9 +170,6 @@ $ref_hint = 'К оборудованию в основном перечне';
             cancel: {
               text: 'НАЗАД'
             }
-          },
-          onDestroy: function () {
-            console.log('Destroyed');
           }
         });
       });
@@ -393,7 +393,7 @@ $ref_hint = 'К оборудованию в основном перечне';
           var lvl = node.data.lvl;
           $("#save-btn").prop("disabled", true);
           if (node.key == -999) {
-            $("#add-subcategory").hide();
+            $(".add-subcategory").hide();
             return;
           }
           if (lvl == 0) {
@@ -410,7 +410,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         },
         renderNode: function (node, data) {
           if (data.node.key == -999) {
-            $("#add-subcategory").hide();
+            $(".add-subcategory").hide();
           }
         }
       })

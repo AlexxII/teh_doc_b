@@ -87,6 +87,11 @@ $collapse_hint = 'Скрыть все';
 <div class="row" style="clear: both">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
+      <button class="btn btn-success btn-sm refresh" title="<?= $refresh_hint ?>" data-toggle="tooltip"
+              data-placement="top" data-container="body" data-tree="fancytree_to_equipment">
+        <i class="fa fa-refresh" aria-hidden="true"></i>
+      </button>
+
       <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm',
         'style' => ['margin-top' => '5px'],
         'title' => $refresh_hint,
@@ -110,9 +115,7 @@ $collapse_hint = 'Скрыть все';
       ]) ?>
 
     </div>
-
   </div>
-
   <div class="col-lg-4 col-md-4" style="padding-bottom: 10px">
     <div style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
@@ -125,7 +128,6 @@ $collapse_hint = 'Скрыть все';
       </div>
     </div>
   </div>
-
 </div>
 
 <table id="tree">
@@ -244,7 +246,7 @@ $collapse_hint = 'Скрыть все';
       });
     });
 
-    $('#refresh').click(function (event) {
+    $('.refresh').click(function (event) {
       event.preventDefault();
       var tree = $("#tree").fancytree("getTree");
       tree.reload();
@@ -258,6 +260,41 @@ $collapse_hint = 'Скрыть все';
       event.preventDefault();
       $("#tree").fancytree("getTree").expandAll();
     });
+
+    $('#tool-ref').click(function (e) {
+      e.preventDefault();
+      var treeIdAttr = $(e.currentTarget).data('tree');
+      var node = $("#" + treeIdAttr).fancytree("getActiveNode");
+      var toolId = node.data.eq_id;
+      var windowSize = 'larges';
+      var title = 'Оборудование';
+      var url = '/equipment/default/index-ex';
+      c = $.confirm({
+        content: function () {
+          var self = this;
+          return $.ajax({
+            url: url,
+            method: 'get',
+            data: {
+              'id': toolId
+            }
+          }).fail(function () {
+            self.setContentAppend('<div>Что-то пошло не так!</div>');
+          });
+        },
+        contentLoaded: function (data, status, xhr) {
+          this.setContentAppend('<div>' + data + '</div>');
+        },
+        columnClass: windowSize,
+        title: title,
+        buttons: {
+          cancel: {
+            text: 'НАЗАД'
+          }
+        }
+      });
+    });
+
 
     $('#tool-ref').click(function (event) {
       event.preventDefault();

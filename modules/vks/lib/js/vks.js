@@ -357,5 +357,52 @@ function badAlert(text) {
   return div;
 }
 
+// PDFMake функции
+// создание таблицы
+function buildTable(data, columns, witdhsDef, showHeaders, headers, layoutDef) {
+  return {
+    table: {
+      headerRows: 1,
+      widths: witdhsDef,
+      body: buildTableBody(data, columns, showHeaders, headers)
+    },
+    layout: layoutDef
+  };
+}
+// создание тела таблицы
+function buildTableBody(data, columns, showHeaders, headers) {
+  var body = [];
+  if (showHeaders) {
+    body.push(headers);
+  }
+  data.forEach(function (row) {
+    var dataRow = [];
+    var i = 0;
+    columns.forEach(function (column) {
+      dataRow.push({text: Object.byString(row, column), style: headers[i].cellsStyle, });
+      i++;
+    });
+    body.push(dataRow);
+  });
+  return body;
+}
+
+Object.byString = function (o, s) {
+  s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+  s = s.replace(/^\./, '');           // strip a leading dot
+  var a = s.split('.');
+  for (var i = 0, n = a.length; i < n; ++i) {
+    var k = a[i];
+    if (k in o) {
+      o = o[k];
+    } else {
+      return;
+    }
+  }
+  return o;
+};
+
+
+
 
 

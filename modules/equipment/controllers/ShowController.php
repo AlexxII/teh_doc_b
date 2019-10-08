@@ -103,22 +103,4 @@ class ShowController extends Controller
 
     return json_encode($result);
   }
-
-  public function actionExtendedInfo()
-  {
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-//    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
-//    Yii::$app->view->params['title'] = 'По категориям';
-    Yii::$app->view->params['bUrl'] = '/test';
-    Yii::$app->view->params['title'] = 'ТЕСТ';
-    return [
-      'data' => [
-        'success' => true,
-        'data' => $this->render('extended'),
-        'message' => 'Page load',
-      ],
-      'code' => 1,
-    ];
-  }
-
 }

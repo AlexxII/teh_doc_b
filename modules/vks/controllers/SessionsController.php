@@ -155,7 +155,9 @@ class SessionsController extends Controller
       array('db' => 'vks_work_time_start', 'dt' => 17),
       array('db' => 'vks_work_time_end', 'dt' => 18),
       array('db' => 'vks_duration_teh', 'dt' => 19),
-      array('db' => 'vks_duration_work', 'dt' => 20)
+      array('db' => 'vks_duration_work', 'dt' => 20),
+      array('db' => 'vks_subscriber_reg_office_text', 'dt' => 21),
+      array('db' => 'vks_subscriber_reg_name', 'dt' => 22)
     );
     $sql_details = \Yii::$app->params['sql_details'];
 
