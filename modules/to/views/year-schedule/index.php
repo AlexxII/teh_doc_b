@@ -91,21 +91,10 @@ $collapse_hint = 'Скрыть все';
               data-placement="top" data-container="body" data-tree="fancytree_to_equipment">
         <i class="fa fa-refresh" aria-hidden="true"></i>
       </button>
-
-      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm',
-        'style' => ['margin-top' => '5px'],
-        'title' => $refresh_hint,
-        'data-toggle' => 'tooltip',
-        'data-placement' => 'top',
-        'id' => 'refresh'
-      ]) ?>
-      <?= Html::a('<i class="fa fa-expand" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm',
-        'style' => ['margin-top' => '5px'],
-        'title' => $expand_hint,
-        'data-toggle' => 'tooltip',
-        'data-placement' => 'top',
-        'id' => 'expand-all'
-      ]) ?>
+      <button class="btn btn-success btn-sm expand-all" title="<?= $refresh_hint ?>" data-toggle="tooltip"
+              data-placement="top" data-container="body" data-tree="fancytree_to_equipment">
+        <i class="fa fa-expand" aria-hidden="true"></i>
+      </button>
       <?= Html::a('<i class="fa fa-level-up" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-info btn-sm',
         'style' => ['margin-top' => '5px', 'display' => 'none'],
         'title' => $ref_hint,
@@ -256,7 +245,7 @@ $collapse_hint = 'Скрыть все';
       $('#tool-ref').hide();
     });
 
-    $('#expand-all').click(function (event) {
+    $('.expand-all').click(function (event) {
       event.preventDefault();
       $("#tree").fancytree("getTree").expandAll();
     });

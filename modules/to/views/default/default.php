@@ -6,9 +6,11 @@ use app\modules\to\assets\ToAsset;
 use app\assets\BootstrapDatepickerAsset;
 use app\assets\FancytreeAsset;
 use app\assets\NotyAsset;
+use app\assets\PdfmakeAsset;
 
 FancytreeAsset::register($this);
 NotyAsset::register($this);
+PdfmakeAsset::register($this);
 
 BootstrapDatepickerAsset::register($this);
 ToAsset::register($this);                       // регистрация ресурсов модуля
@@ -82,22 +84,6 @@ $this->title = "Графики ТО";
     returnCallback = function () {
       archiveTable.ajax.reload();
     };
-
-    var monthNames = [
-      'Январь',
-      'Февраль',
-      'Март',
-      'Апрель',
-      'Май',
-      'Июнь',
-      'Июль',
-      'Август',
-      'Сентябрь',
-      'Октябрь',
-      'Ноябрь',
-      'Декабрь'
-    ];
-
 
     // ************************* Работа таблицы **************************************
 
@@ -245,10 +231,12 @@ $this->title = "Графики ТО";
       var year = data.year;
       var date = data.plan_date;
       var month = data.monthText;
+      console.log(data);
       var sData = {
         'id' : id,
         'year': year,
-        'month': month
+        'month': month,
+        'monthVal': data.monthVal
       };
       var url = '/to/month-schedule/view';
       var backUrl = '/to';

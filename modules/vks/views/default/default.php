@@ -624,14 +624,6 @@ BootstrapDatepickerAsset::register($this);
     $("#up-sessions-table").DataTable().clearPipeline().draw();
   });
 
-  $(document).on('click', '#take-pdf', function (e) {
-    var table = $('#up-sessions-table').dataTable();
-    // console.log(table.fnGetData());
-    // table.fnGetData();
-
-  });
-
-
   function returnCallback() {
     table.clearPipeline().draw();
   }

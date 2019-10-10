@@ -5,6 +5,7 @@ $(document).on('click', '.get-pdf', function (e) {
   };
   var mTable = $('#' + tableIdAttr).DataTable();
   var selectedData = mTable.rows({selected: true}).data();
+  console.log(selectedData);
   var count = selectedData.length;
   var vksData = [];
   for (var i = 0; i < count; i++) {
@@ -12,7 +13,7 @@ $(document).on('click', '.get-pdf', function (e) {
       if (selectedData[i][3] == '' && selectedData[i][4] != '') {
         return selectedData[i][4] + ' / р';
       } else if (selectedData[i][3] != '' && selectedData[i][4] != '') {
-        return selectedData[i][3] + ' / т            ' + selectedData[i][4] + ' / р';
+        return selectedData[i][3] + ' / т \n' + selectedData[i][4] + ' / р';
       } else if (selectedData[i][4] == '' && selectedData[i][3] != '') {
         return selectedData[i][3] + ' / т';
       } else {

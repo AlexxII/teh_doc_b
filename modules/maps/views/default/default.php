@@ -10,18 +10,6 @@ FancytreeAsset::register($this);
 ?>
 
 <div id="map-rus-light-wrap">
-  <div class="hidden-xs hidden-sm region-legend">
-  </div>
-  <div id="district-legend" class="hidden-xs hidden-sm">
-    <div class="district-color"><span class="color" data-color="#ffff81"></span><span class="district">ЦФО</span></div>
-    <div class="district-color"><span class="color" data-color="#62d2c5"></span><span class="district">СЗФО</span></div>
-    <div class="district-color"><span class="color" data-color="#fc8b8b"></span><span class="district">ЮФО</span></div>
-    <div class="district-color"><span class="color" data-color="#aa6ca6"></span><span class="district">СКФО</span></div>
-    <div class="district-color"><span class="color" data-color="#37ce04"></span><span class="district">ПФО</span></div>
-    <div class="district-color"><span class="color" data-color="#c7cb8f"></span><span class="district">УФО</span></div>
-    <div class="district-color"><span class="color" data-color="#01bee7"></span><span class="district">СФО</span></div>
-    <div class="district-color"><span class="color" data-color="#fece2c"></span><span class="district">ДФО</span></div>
-  </div>
   <svg id="map-svg" viewBox="10 0 620 420" >
     <g>
       <path class="land"

@@ -179,13 +179,16 @@ class MonthScheduleController extends Controller
     $data = $_POST["data"];
     $year = $data["year"];
     $month = $data["month"];
+    $monthVal = $data["monthVal"];
     $schedule = $data["id"];
     Yii::$app->view->params["title"] = "График на " . $month . ' ' . $year . " г.";
     return [
       "data" => [
         "success" => true,
         "data" => $this->render("view", [
-          'scheduleId' => $schedule
+          'scheduleId' => $schedule,
+          'month' => $monthVal,
+          'year' => $year
         ]),
         "message" => "Page load.",
       ],
@@ -327,10 +330,13 @@ class MonthScheduleController extends Controller
     if ($_POST["data"]){
       $data = $_POST["data"];
       $result = false;
-      foreach ($data as $key => $scheduleDate) {
+      foreach ($data as $key => $schedule) {
         $model = ToSchedule::findOne($key);
         if ($model) {
-          $model->plan_date = $scheduleDate;
+          $model->to_type = $schedule['type'];
+          $model->plan_date = $schedule['date'];
+          $model->admin_id = $schedule['admin'];
+          $model->auditor_id = $schedule['auditor'];
           $result = $model->save();
           continue;
         }

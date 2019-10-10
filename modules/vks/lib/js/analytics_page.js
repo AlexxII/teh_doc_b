@@ -10,7 +10,7 @@ $(document).on('click', '.get-analytics-pdf', function (e) {
   var vksData = [];
   for (var i = 0; i < count; i++) {
     var time = function () {
-      return selectedData[i][12] + ' - ' + selectedData[i][13] +  '/ т           ' +
+      return selectedData[i][12] + ' - ' + selectedData[i][13] +  '/ т \n' +
         selectedData[i][14] + ' - ' + selectedData[i][15] +  '/ р';
     };
     var obj = {};
@@ -19,8 +19,8 @@ $(document).on('click', '.get-analytics-pdf', function (e) {
     obj['Время'] = time();
     obj['Тип ВКС'] = selectedData[i][4];
     obj['Студии'] = selectedData[i][5];
-    obj['Абонент'] = selectedData[i][6] + '                                            ' + selectedData[i][16];
-    obj['Абонент субъекта'] = selectedData[i][21] + '                                  ' + selectedData[i][22];
+    obj['Абонент'] = selectedData[i][6] + '\n' + selectedData[i][16];
+    obj['Абонент субъекта'] = selectedData[i][21] + '\n' + selectedData[i][22];
     obj['Распоряжение'] = selectedData[i][20];
     vksData.push(obj);
   }

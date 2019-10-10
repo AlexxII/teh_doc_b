@@ -15,6 +15,7 @@ class ToAsset extends AssetBundle
 
   public $js = [
     'js/to.js',
+    'js/default_page.js'
   ];
 
 }

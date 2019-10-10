@@ -685,13 +685,17 @@ $(document).on('click', '#save-edit', function (e) {
   for (var key in rows) {
     if (rows[key].localName == 'tr') {
       if (rows[key].attributes.class != undefined && rows[key].attributes.class.value != 'group group-start') {
-        // console.log(rows[key].cells[4].firstChild.value);
         // console.log(rows[key].cells[4].firstChild.dataset.new);
+        // console.log(rows[key].cells[4].firstChild.value);
+        var tempArray = {};
         var id = rows[key].cells[4].firstChild.attributes.id.value;
-        if (rows[key].cells[4].firstChild.dataset.new !== undefined) {
-          var fDate = rows[key].cells[4].firstChild.value;
-          scheduleData[id] = fDate.replace(pattern, '$3-$2-$1');
-        }
+
+        tempArray['type'] = rows[key].cells[3].firstChild.value;              // Вид ТО
+        var fDate = rows[key].cells[4].firstChild.value;                      // ->
+        tempArray['date'] = fDate.replace(pattern, '$3-$2-$1');               // Дата проведения
+        tempArray['admin'] = rows[key].cells[5].firstChild.value;             // Ответственный за проведение
+        tempArray['auditor'] = rows[key].cells[6].firstChild.value;             // Ответственный за контроль
+        scheduleData[id] = tempArray;
       }
     }
   }
