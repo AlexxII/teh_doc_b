@@ -290,9 +290,9 @@ $rTempTitle = 'Среднегодоваая температура';
         var node = data.node;
         var lvl = node.data.lvl;
         var id = node.data.id;
-        if (lvl > 1) {
-          $(".add-subcategory").hide();
-        }
+        // if (lvl > 1) {
+        //   $(".add-subcategory").hide();
+        // }
         if (lvl == 0) {
           $(".del-node").hide();
           $(".del-multi-nodes").hide();
@@ -324,10 +324,7 @@ $rTempTitle = 'Среднегодоваая температура';
         }
       },
       renderNode: function (node, data) {
-        if (data.node.key == -999) {
-          $(".add-category").show();
-          $(".add-subcategory").hide();
-        }
+        return;
       }
     });
 

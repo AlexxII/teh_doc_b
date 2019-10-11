@@ -52,7 +52,7 @@ body {
   margin: 0 10px 5px 5px;
 }
 #map-svg {
-  margin-top: 40px;
+  /*margin-top: 40px;*/
 }
 .jconfirm {
   z-index: 200 !important;
