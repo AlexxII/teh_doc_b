@@ -35,7 +35,7 @@ function deleteRestoreProcess(url, table, csrf) {
     url: url,
     method: 'post',
     dataType: "JSON",
-    data: {jsonData: ar, _csrf: csrf},
+    data: {jsonData: ar, _csrf: csrf}
   }).done(function (response) {
     if (response != false) {
       jc.close();

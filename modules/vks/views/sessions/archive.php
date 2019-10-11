@@ -16,7 +16,7 @@ $dell_hint = 'Удалить выделенные сеансы';
 <div class="row">
   <div class="container-fluid" style="position: relative">
     <div id="delete" style="position: absolute; top: 70px; right:-60px;display: none">
-      <a id="del-session-ex" class="fab-button" title="Удалить выделенный(е) сеанс(ы)"
+      <a class="fab-button" title="Удалить выделенный(е) сеанс(ы)"
          style="cursor: pointer; background-color: red">
         <svg width="50" height="50" viewBox="0 0 24 24">
           <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
@@ -155,7 +155,7 @@ $dell_hint = 'Удалить выделенные сеансы';
       'processing': true,
       'serverSide': true,
       'responsive': true,
-      'lengthMenu': [[10, 25, 50, 100, 300], [10, 25, 50, 100, 300]],
+      'lengthMenu': [[10, 25, 50, 100, 300, 1000], [10, 25, 50, 100, 300, 1000]],
       'fnRowCallback': function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
         if ((aData[19] <= 0 && aData[15] != '') || (aData[20] <= 0 && aData[17] != '')) {
           $('td', nRow).css('background-color', '#fff1ef');
@@ -359,7 +359,7 @@ $dell_hint = 'Удалить выделенные сеансы';
             btnClass: 'btn-danger',
             action: function () {
               jc.close();
-              deleteProcess(url, archTable, csrf)
+                deleteRestoreProcess(url, archTable, csrf)
             }
           },
           cancel: {
