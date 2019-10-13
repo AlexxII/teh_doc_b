@@ -10,6 +10,9 @@ FancytreeAsset::register($this);
 ?>
 
 <div id="map-rus-light-wrap">
+  <div class="region-legend">
+    
+  </div>
   <svg id="map-svg" viewBox="10 0 620 420" >
     <g>
       <path class="land"

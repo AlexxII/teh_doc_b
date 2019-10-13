@@ -1,3 +1,18 @@
+$(document).keydown(function(e) {
+  if (e.keyCode == 65 && e.ctrlKey) {
+    e.preventDefault();
+    var treeIdAttr = 'fancytree_maps_regions';
+    var node = $("#" + treeIdAttr).fancytree("getActiveNode");
+    if (!node) {
+      alert("Выберите родительскую категорию");
+      return;
+    }
+    node.editCreateNode("child", " ");
+
+  }
+});
+
+
 //=============================================================================//
 // jconfirm btns
 $(document).on('click', '.add-subcategory', function (e) {
@@ -8,12 +23,7 @@ $(document).on('click', '.add-subcategory', function (e) {
     alert("Выберите родительскую категорию");
     return;
   }
-  if (node.data.lvl <= 1) {
-    node.editCreateNode("child", " ");
-  } else {
-    alert("Нельзя создавать вложенность более 3х");
-    return;
-  }
+  node.editCreateNode("child", " ");
 });
 
 $(document).on('click', '.refresh', function (e) {
