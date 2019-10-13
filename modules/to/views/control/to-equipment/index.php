@@ -78,9 +78,8 @@ $ref_hint = 'К оборудованию в основном перечне';
         </button>
       </form>
     </div>
-
-
   </div>
+</div>
 
 
   <script>

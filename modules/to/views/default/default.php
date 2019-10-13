@@ -82,7 +82,8 @@ $this->title = "Графики ТО";
     };
     // процедуры возврата из второстепенного контента
     returnCallback = function () {
-      archiveTable.ajax.reload();
+      archiveTable.ajax.reload();                              
+      controlListsInit();                                         // загрузка списков ТО при возврате (возможно произошли изменения)
     };
 
     // ************************* Работа таблицы **************************************
@@ -128,7 +129,7 @@ $this->title = "Графики ТО";
           $('td:nth-child(7)', nRow).html(editBtn + infoBtn + cfrmBtn);
           $('td:nth-child(3)', nRow).css({color: 'red'});
         } else {
-          if (aData.checkmark.length > 1){
+          if (aData.checkmark.length > 1) {
             $('td:nth-child(7)', nRow).html(infoBtn + cfrmBtn);
             $('td:nth-child(3)', nRow).css({color: 'blue'});
           } else {
@@ -233,7 +234,7 @@ $this->title = "Графики ТО";
       var month = data.monthText;
       console.log(data);
       var sData = {
-        'id' : id,
+        'id': id,
         'year': year,
         'month': month,
         'monthVal': data.monthVal
@@ -260,10 +261,10 @@ $this->title = "Графики ТО";
       var monthText = data.monthText;
       var monthVal = data.monthVal;
       var sData = {
-        'id' : id,
+        'id': id,
         'year': year,
         'monthText': monthText,
-        'monthVal' : monthVal
+        'monthVal': monthVal
       };
       var url = '/to/month-schedule/perform';
       var backUrl = '/to';
@@ -287,10 +288,10 @@ $this->title = "Графики ТО";
       var monthText = data.monthText;
       var monthVal = data.monthVal;
       var sData = {
-        'id' : id,
+        'id': id,
         'year': year,
         'monthText': monthText,
-        'monthVal' : monthVal
+        'monthVal': monthVal
       };
       var url = '/to/month-schedule/edit';
       var backUrl = '/to';

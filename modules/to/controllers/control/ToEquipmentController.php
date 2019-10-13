@@ -35,7 +35,7 @@ class ToEquipmentController extends Controller
     return [
       'data' => [
         'success' => true,
-        'data' => $this->render('index'),
+        'data' => $this->renderAjax('index'),
         'message' => 'Page load.',
       ],
       'code' => 1,

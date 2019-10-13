@@ -22,8 +22,17 @@ class ToTypeController extends Controller
 
   public function actionIndex()
   {
-    return $this->renderAjax('index');
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('index'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
   }
+
 
   public function actionCreateNode($title)
   {

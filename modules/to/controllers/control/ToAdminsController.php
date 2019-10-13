@@ -27,10 +27,18 @@ class ToAdminsController extends Controller
 
   public function actionIndex()
   {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     $model = new ToAdmins();
-    return $this->renderAjax('index', [
-      'model' => $model
-    ]);
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('index', [
+          'model' => $model
+        ]),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
   }
 
   public function actionCreateNode($title)

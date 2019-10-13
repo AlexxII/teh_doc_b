@@ -8,7 +8,7 @@ $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить';
 
 ?>
-<div class="">
+<div class="col-lg-8 col-md-8">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
       <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
