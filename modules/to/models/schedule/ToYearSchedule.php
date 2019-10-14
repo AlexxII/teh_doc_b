@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\to\models;
+namespace app\modules\to\models\schedule;
 
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;

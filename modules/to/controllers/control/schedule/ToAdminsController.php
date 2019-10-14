@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\to\controllers\control;
+namespace app\modules\to\controllers\control\schedule;
 
 use Yii;
 use yii\web\Controller;
@@ -8,8 +8,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
 use app\modules\admin\models\User;
-use app\modules\to\models\ToAdmins;
-
+use app\modules\to\models\schedule\ToAdmins;
 
 class ToAdminsController extends Controller
 {

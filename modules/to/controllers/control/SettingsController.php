@@ -2,10 +2,12 @@
 
 namespace app\modules\to\controllers\control;
 
-use app\modules\scheduler\models\Calendars;
+use app\modules\to\models\schedule\ToAdmins;
+use app\modules\to\models\schedule\ToType;
 use Yii;
 use yii\web\Controller;
 use app\modules\admin\models\User;
+use app\modules\scheduler\models\Calendars;
 use app\modules\scheduler\models\UserSettings;
 
 class SettingsController extends Controller
@@ -163,9 +165,18 @@ class SettingsController extends Controller
     ];
   }
 
-  public function actionCalendarColor()
+  public function actionSelectData()
   {
-
+    $result = [
+      'types' => [],
+      'admins' => [],
+      'auditors' => []
+    ];
+    $result['types'] = ToType::find()->select(['id', 'name'])->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
+    $result['admins'] = ToAdmins::find()->select(['id', 'name'])->where(['admin' => 1])->orderBy('lft')->asArray()->all();
+    $result['auditors'] = ToAdmins::find()->select(['id', 'name'])->where(['admin' => 0])->orderBy('lft')->asArray()->all();
+    return json_encode($result);
   }
+
 
 }

@@ -35,7 +35,7 @@ $del_hint = 'Удалить';
         'data-placement' => 'top',
         'data-container' => 'body',
         'data-tree' => 'fancytree_to_types',
-        'data-delete' => '/to/control/to-type/delete'
+        'data-delete' => '/to/control/schedule/to-type/delete'
       ]) ?>
     </div>
 
@@ -68,10 +68,10 @@ $del_hint = 'Удалить';
     $('[data-toggle="tooltip"]').tooltip();
 
     // отображение и логика работа дерева
-    var main_url = '/to/control/to-type/all-types';
-    var move_url = '/to/control/to-type/move-node';
-    var create_url = '/to/control/to-type/create-node';
-    var update_url = '/to/control/to-type/update-node';
+    var main_url = '/to/control/schedule/to-type/all-types';
+    var move_url = '/to/control/schedule/to-type/move-node';
+    var create_url = '/to/control/schedule/to-type/create-node';
+    var update_url = '/to/control/schedule/to-type/update-node';
 
     $("#fancytree_to_types").fancytree({
       source: {

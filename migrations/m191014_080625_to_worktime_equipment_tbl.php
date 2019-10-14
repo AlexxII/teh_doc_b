@@ -3,13 +3,13 @@
 use yii\db\Migration;
 use app\base\MHelper;
 
-/**
- * Class m190404_101323_teh_to_admins_tbl
- */
-class m190404_101323_to_admins_tbl extends Migration
-{
 
-  const TABLE_NAME = '{{%to_admins_tbl}}';
+/**
+ * Class m191014_080625_to_worktime_equipment_tbl
+ */
+class m191014_080625_to_worktime_equipment_tbl extends Migration
+{
+  const TABLE_NAME = '{{%to_worktime_equipment_tbl}}';
 
   public function up()
   {
@@ -19,22 +19,22 @@ class m190404_101323_to_admins_tbl extends Migration
     }
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->bigInteger()->notNull(),
-      'root' => $this->bigInteger(),
+      'eq_id' => $this->bigInteger()->notNull(),
+      'root' => $this->integer(),
       'lft' => $this->integer()->notNull(),
       'rgt' => $this->integer()->notNull(),
       'lvl' => $this->smallInteger(5)->notNull(),
       'name' => $this->string(120)->notNull(),
-      'user_id' => $this->bigInteger(),
-      'admin' => $this->boolean(),
+      'count_template' => $this->bigInteger(),
       'parent_id' => $this->bigInteger(),
-      'valid' => $this->boolean()->defaultValue(1)
+      'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);
 
     $this->addPrimaryKey('id', self::TABLE_NAME, 'id');
 
     $defaultId = MHelper::genDefaultId();
-    $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, root, lft, rgt, lvl, name) 
-                VALUES (' . $defaultId . ', ' . $defaultId . ', 1, 2, 0, "Сотрудники, участвующие в ТО")';
+    $sql = 'INSERT INTO ' . self::TABLE_NAME . '(id, eq_id, root, lft, rgt, lvl, name, parent_id) 
+                VALUES (' . $defaultId . ',  0, ' . $defaultId . ', 1, 2, 0, "Оборудование",' . $defaultId . ')';
     \Yii::$app->db->createCommand($sql)->execute();
 
   }
@@ -44,5 +44,4 @@ class m190404_101323_to_admins_tbl extends Migration
     $this->dropTable(self::TABLE_NAME);
     return false;
   }
-
 }

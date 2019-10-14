@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 
-$about = "Панель управления оборудованием, добавленным в графики проведения ТО.";
+$about = "Панель управления оборудованием, для которого ведется подсчет наработанного времени.";
 $add_hint = 'Добавить обертку';
 $del_hint = 'Удалить обертку';
 $refresh_hint = 'Перезапустить форму';
@@ -15,20 +15,20 @@ $ref_hint = 'К оборудованию в основном перечне';
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
       <button class="btn btn-success btn-sm add-subcategory" title="<?= $add_hint ?>" data-toggle="tooltip"
-              data-placement="top" data-container="body" data-tree="fancytree_to_equipment" data-root="Оборудование">
+              data-placement="top" data-container="body" data-tree="fancytree_to_worktime_equipment" data-root="Оборудование">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </button>
       <button class="btn btn-success btn-sm refresh" title="<?= $refresh_hint ?>" data-toggle="tooltip"
-              data-placement="top" data-container="body" data-tree="fancytree_to_equipment">
+              data-placement="top" data-container="body" data-tree="fancytree_to_worktime_equipment">
         <i class="fa fa-refresh" aria-hidden="true"></i>
       </button>
       <button class="btn btn-danger btn-sm del-node" title="<?= $del_hint ?>" data-toggle="tooltip"
-              data-placement="top" data-container="body" data-tree="fancytree_to_equipment"
+              data-placement="top" data-container="body" data-tree="fancytree_to_worktime_equipment"
               data-delete="/to/control/to-equipment/delete" style="display: none">
         <i class="fa fa-trash" aria-hidden="true"></i>
       </button>
       <button id="tool-ref" class="btn btn-info btn-sm" title="<?= $ref_hint ?>" data-toggle="tooltip"
-              data-placement="top" data-container="body" data-tree="fancytree_to_equipment"
+              data-placement="top" data-container="body" data-tree="fancytree_to_worktime_equipment"
               data-delete="/to/control/to-equipment/delete" style="display: none">
         <i class="fa fa-level-up" aria-hidden="true"></i>
       </button>
@@ -40,7 +40,7 @@ $ref_hint = 'К оборудованию в основном перечне';
           <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
         </div>
         <div style="padding-top: 8px; right: 10px; position: absolute">
-          <a href="" class="btnResetSearch" data-tree="fancytree_to_equipment">
+          <a href="" class="btnResetSearch" data-tree="fancytree_to_worktime_equipment">
             <i class="fa fa-times-circle" aria-hidden="true" style="font-size:20px; color: #9d9d9d"></i>
           </a>
         </div>
@@ -48,7 +48,7 @@ $ref_hint = 'К оборудованию в основном перечне';
 
       <div class="row" style="padding: 0 15px">
         <div style="border-radius:2px;padding-top:40px">
-          <div id="fancytree_to_equipment" class="ui-draggable-handle"></div>
+          <div id="fancytree_to_worktime_equipment" class="ui-draggable-handle"></div>
         </div>
       </div>
     </div>
@@ -57,21 +57,16 @@ $ref_hint = 'К оборудованию в основном перечне';
     <div class="col-lg-5 col-md-5">
       <div class="alert alert-warning" style="margin-bottom: 10px">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
-        <strong>Внимание!</strong> Выберите оборудование серийный номер которого будет использоваться в графике ТО. Если
-        выпадающий список не активен, значит у объекта отсутствуют дочерние элементы.
+        <strong>Внимание!</strong> В данном разделе представлено оборудование, которое настроено на подсчет наработанного
+        времени.
       </div>
 
       <div id="result-info" style="margin-bottom: 10px"></div>
       <form action="create" method="post" class="input-add">
         <div class="about-main">
-          <label>Серийный номер:
-            <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
-                 data-toggle="tooltip" data-placement="top" title="<?= $serial_hint ?>"></sup>
-          </label>
-          <input id="serial-number" class="form-control c-input" disabled>
-          <label>Оборудование:</label>
+          <label>Шаблон подсчета:</label>
           <select type="text" id="serial-control" class="c-input form-control" name="sn" disabled></select>
-          <label style="font-weight:400;font-size: 10px">Выберите оборудование.</label>
+          <label style="font-weight:400;font-size: 10px">Выберите шаблон.</label>
         </div>
         <div class="about-footer"></div>
         <button type="submit" id="save-btn" onclick="saveClick(event)" class="btn btn-primary" disabled>Сохранить
@@ -174,12 +169,12 @@ $ref_hint = 'К оборудованию в основном перечне';
       });
 
       // отображение и логика работа дерева
-      var main_url = '/to/control/to-equipment/all-tools';
-      var move_url = '/to/control/to-equipment/move-node';
-      var create_url = '/to/control/to-equipment/create-node';
-      var update_url = '/to/control/to-equipment/update-node';
+      var main_url = '/to/control/count/equipment/all-tools';
+      var move_url = '/to/control/count/equipment/move-node';
+      var create_url = '/to/control/count/equipment/create-node';
+      var update_url = '/to/control/count/equipment/update-node';
 
-      $("#fancytree_to_equipment").fancytree({
+      $("#fancytree_to_worktime_equipment").fancytree({
         source: {
           url: main_url
         },
@@ -324,7 +319,7 @@ $ref_hint = 'К оборудованию в основном перечне';
               $('#serial-number').val('');
             }
             $.ajax({
-              url: '/to/control/to-equipment/tools-serials',
+              url: '/to/control//to-equipment/tools-serials',
               data: {
                 id: node.data.eq_id
               }

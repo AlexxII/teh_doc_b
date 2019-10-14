@@ -9,7 +9,7 @@ use app\base\MHelper;
 class m190317_162413_to_type_tbl extends Migration
 {
 
-  const TABLE_NAME = '{{%teh_to_type_tbl}}';
+  const TABLE_NAME = '{{%to_type_tbl}}';
 
   public function up()
   {

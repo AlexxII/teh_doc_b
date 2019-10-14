@@ -7,7 +7,7 @@ use yii\db\Migration;
  */
 class m190316_201504_to_schedule_tbl extends Migration
 {
-  const TABLE_NAME = '{{%teh_to_schedule_tbl}}';
+  const TABLE_NAME = '{{%to_schedule_tbl}}';
 
   public function up()
   {

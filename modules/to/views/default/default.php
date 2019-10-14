@@ -82,7 +82,7 @@ $this->title = "Графики ТО";
     };
     // процедуры возврата из второстепенного контента
     returnCallback = function () {
-      archiveTable.ajax.reload();                              
+      archiveTable.ajax.reload();
       controlListsInit();                                         // загрузка списков ТО при возврате (возможно произошли изменения)
     };
 

@@ -1,19 +1,17 @@
 <?php
 
-namespace app\modules\to\controllers\control;
+namespace app\modules\to\controllers\control\schedule;
 
 use Yii;
 use yii\web\Controller;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
-use app\modules\to\models\ToEquipment;
+use app\modules\to\models\schedule\ToEquipment;
 use app\modules\equipment\models\Tools;
-
 
 class ToEquipmentController extends Controller
 {
-
   public function actionAllTools()
   {
     $id = ToEquipment::find()->select('id')->all();
@@ -28,10 +26,7 @@ class ToEquipmentController extends Controller
 
   public function actionIndex()
   {
-    $this->layout = '@app/views/layouts/main_ex.php';
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'Оборудование';
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     return [
       'data' => [
         'success' => true,

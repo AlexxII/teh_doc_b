@@ -4,8 +4,7 @@ namespace app\modules\to\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\modules\to\models\ToEquipment;
-use app\modules\to\models\ToSchedule;
+use app\modules\to\models\schedule\ToSchedule;
 
 
 class DefaultController extends Controller

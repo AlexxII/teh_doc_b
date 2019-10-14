@@ -27,7 +27,7 @@ $role_hint = 'Выберите роль пользователя при пров
       </button>
       <button class="btn btn-danger btn-sm del-node" title="<?= $del_hint ?>" data-toggle="tooltip"
               data-placement="top" data-container="body" data-tree="fancytree_to_admins"
-              data-delete="/to/control/to-admins/delete" style="display: none">
+              data-delete="/to/control/schedule/to-admins/delete" style="display: none">
         <i class="fa fa-trash" aria-hidden="true"></i>
       </button>
     </div>
@@ -127,7 +127,7 @@ $role_hint = 'Выберите роль пользователя при пров
     });
 
     $('#submit').click(function (e) {
-      var url = '/to/control/to-admins/save-settings';
+      var url = '/to/control/schedule/to-admins/save-settings';
       var csrf = $('meta[name=csrf-token]').attr("content");
       var node = $(".ui-draggable-handle").fancytree("getActiveNode");
       $('#result').html(waiting);
@@ -152,10 +152,10 @@ $role_hint = 'Выберите роль пользователя при пров
     });
 
     // отображение и логика работа дерева
-    var main_url = '/to/control/to-admins/all-admins';
-    var move_url = '/to/control/to-admins/move-node';
-    var create_url = '/to/control/to-admins/create-node';
-    var update_url = '/to/control/to-admins/update-node';
+    var main_url = '/to/control/schedule/to-admins/all-admins';
+    var move_url = '/to/control/schedule/to-admins/move-node';
+    var create_url = '/to/control/schedule/to-admins/create-node';
+    var update_url = '/to/control/schedule/to-admins/update-node';
 
     $("#fancytree_to_admins").fancytree({
       source: {

@@ -497,7 +497,7 @@ function controlListsInit() {
   toAuditorsSelect = '<select class="form-control audit-list m-select" style="width: 100% !important;">' +
     '<option value="none" selected="true" disabled="true">Выберите</option>';
   $.ajax({
-    url: '/to/settings/select-data',
+    url: '/to/control/settings/select-data',
     method: 'get',
     dataType: "JSON"
   }).done(function (response) {

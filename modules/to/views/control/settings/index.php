@@ -2,11 +2,6 @@
   #main-content {
     width: 100% !important;
   }
-  /*#settings-leftside {*/
-    /*width: 256px;*/
-    /*height: 100%;*/
-    /*padding: 0 10px 0 10px;*/
-  /*}*/
   #settings-rightside {
     height: 100%;
     width: 100%
@@ -44,9 +39,9 @@
           <div id="collapseOne" class="panel-collapse collapse in">
             <!-- Содержимое 1 панели -->
             <div class="panel-body">
-              <p><a class="ext" data-url="/control/to-equipment">Оборудование</a></p>
-              <p><a class="ext" data-url="/control/to-type">Виды ТО</a></p>
-              <p><a class="ext" data-url="/control/to-admins">Сотрудники</a></p>
+              <p><a class="ext" data-url="/control/schedule/to-equipment">Оборудование</a></p>
+              <p><a class="ext" data-url="/control/schedule/to-type">Виды ТО</a></p>
+              <p><a class="ext" data-url="/control/schedule/to-admins">Сотрудники</a></p>
             </div>
           </div>
         </div>
@@ -61,8 +56,8 @@
           <div id="collapseTwo" class="panel-collapse collapse">
             <!-- Содержимое 2 панели -->
             <div class="panel-body">
-              <p><a class="ext" data-url="/control/settings/calendars-for-subscribe">Оборудование</a></p>
-              <p><a class="ext" data-url="/control/settings/create-calendar"></a></p>
+              <p><a class="ext" data-url="/control/count/equipment">Оборудование</a></p>
+              <p><a class="ext" data-url="/control/count/settings/create-calendar"></a>Шаблоны подсчета</p>
             </div>
           </div>
         </div>

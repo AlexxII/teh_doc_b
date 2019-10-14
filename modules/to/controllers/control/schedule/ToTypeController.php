@@ -1,10 +1,11 @@
 <?php
 
-namespace app\modules\to\controllers\control;
+namespace app\modules\to\controllers\control\schedule;
 
-use app\modules\to\models\ToType;
 use Yii;
 use yii\web\Controller;
+
+use app\modules\to\models\schedule\ToType;
 
 class ToTypeController extends Controller
 {

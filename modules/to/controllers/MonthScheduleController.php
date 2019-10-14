@@ -6,8 +6,8 @@ use Yii;
 use yii\web\Controller;
 
 use app\base\Model;
-use app\modules\to\models\ToEquipment;
-use app\modules\to\models\ToSchedule;
+use app\modules\to\models\schedule\ToEquipment;
+use app\modules\to\models\schedule\ToSchedule;
 
 
 class MonthScheduleController extends Controller

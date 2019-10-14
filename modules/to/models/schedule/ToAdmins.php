@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\to\models;
+namespace app\modules\to\models\schedule;
 
 use app\modules\admin\models\User;
 use yii\web\NotFoundHttpException;

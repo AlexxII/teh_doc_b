@@ -6,14 +6,14 @@ use yii\web\NotFoundHttpException;
 
 use app\base\MHelper;
 use creocoder\nestedsets\NestedSetsBehavior;
-use app\modules\to\base\NestedSetsTreeBehaviorExX;
+use app\modules\to\base\NestedSetsTreeBehaviorExWktm;
 
-class ToEquipment extends \yii\db\ActiveRecord
+class CountEquipment extends \yii\db\ActiveRecord
 {
 
   public static function tableName()
   {
-    return 'to_equipment_tbl';
+    return 'to_worktime_equipment_tbl';
   }
 
   public function behaviors()
@@ -27,7 +27,7 @@ class ToEquipment extends \yii\db\ActiveRecord
         'depthAttribute' => 'lvl',
       ],
       'htmlTree' => [
-        'class' => NestedSetsTreeBehaviorExX::className(),
+        'class' => NestedSetsTreeBehaviorExWktm::className(),
         'depthAttribute' => 'lvl'
       ]
     ];
@@ -40,7 +40,7 @@ class ToEquipment extends \yii\db\ActiveRecord
 
   public function getParents()
   {
-    return $this->hasOne(ToEquipment::class, ['parent_id' => 'id'])->alias('parent');
+    return $this->hasOne(CountEquipment::class, ['parent_id' => 'id'])->alias('parent');
   }
 
   public function getGroupName()
@@ -57,7 +57,7 @@ class ToEquipment extends \yii\db\ActiveRecord
 
   public static function findModel($id)
   {
-    if (($model = ToEquipment::findOne($id)) !== null) {
+    if (($model = CountEquipment::findOne($id)) !== null) {
       return $model;
     }
     throw new NotFoundHttpException('Запрошенная страница не существует.');
