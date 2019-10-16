@@ -6,7 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
-use app\modules\to\models\ToEquipment;
+use app\modules\to\models\schedule\ToEquipment;
 use app\modules\equipment\models\Oth;
 use app\modules\equipment\models\Special;
 use app\modules\equipment\models\Tools;

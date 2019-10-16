@@ -12,7 +12,7 @@ use app\modules\equipment\models\Placement;
 use app\modules\equipment\models\Category;
 use app\modules\equipment\models\Images;
 
-use app\modules\to\models\ToEquipment;
+use app\modules\to\models\schedule\ToEquipment;
 
 /**
  * This is the model class for table "equipment_tbl".
