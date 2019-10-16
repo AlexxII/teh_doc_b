@@ -61,13 +61,3 @@ foreach ($time_2 as $key => $result) {
   echo $result;
   echo "<br>";
 }
-
-/*
- echo "<hr>";
-echo $user;
-echo '<br>';
-foreach ($results as $key => $result) {
-  echo $result;
-  echo "<br>";
-}*/
-
