@@ -15,6 +15,7 @@ $(document).on('click', '#add-equipment', function (e) {
   }
 });
 
+// добавление оборудования с присвоением ему данных
 function createWindow(tree, node, rootTitle) {
   if (node) {
     var url = '/equipment/tool/info/create?root=' + node.data.id;
@@ -81,6 +82,7 @@ function createWindow(tree, node, rootTitle) {
   });
 }
 
+// добавление оборудования в дереве (без присвоения определенных данных - кроме названия)
 function simpleEquipmentAdd(tree, node, rootTitle) {
   if (!node) {
     var root = tree.findFirst(rootTitle);
@@ -133,6 +135,7 @@ $(document).on('click', '.delete-tool', function (e) {
   });
 });
 
+// процесс удаления оборудования
 function deleteTool(url, data, tree, parent) {
   var csrf = $('meta[name=csrf-token]').attr("content");
   jc = $.confirm({
@@ -225,7 +228,6 @@ $(document).on('click', '#refresh-tools-tree', function (e) {
   $(".delete-tool-wrap").hide();
   $('#tool-info').hide();
 });
-
 
 /*==================== tool/info ===================== */
 /* Обновить сведения об оборудовании на главной странице */
@@ -429,7 +431,7 @@ $(document).on('click', '.tool-ref', function (e) {
 });
 
 //=============================================================================//
-// Классификаторы - управление деревьями
+// Классификаторы (категории/места размещения) - управление деревьями
 $(document).on('click', '.add-subcategory', function (e) {
   e.preventDefault();
   var rootTitle = $(e.currentTarget).data('root');
@@ -575,67 +577,22 @@ function deleteToolSettingsNodes(url, node) {
     }
   }).done(function (response) {
     if (response != false) {
+      node.remove();
+      $('.about-info').html('');
+      $('.del-node').hide();
+      $(".del-multi-nodes").hide();
       jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-thumbs-up',
-        title: 'Успех!',
-        content: 'Ваш запрос выполнен.',
-        type: 'green',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|8000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-success',
-            action: function () {
-              node.remove();
-              $('.about-info').html('');
-              $('.del-node').hide();
-              $(".del-multi-nodes").hide();
-            }
-          }
-        }
-      });
+      var yText = '<span style="font-weight: 600">Успех!</span><br>Узел удален';
+      initNoty(yText, 'success');
     } else {
       jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-exclamation-triangle',
-        title: 'Неудача!',
-        content: 'Запрос не выполнен. Что-то пошло не так.',
-        type: 'red',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|8000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-            }
-          }
-        }
-      });
+      var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Запрос не выполнен';
+      initNoty(nText, 'error');
     }
   }).fail(function () {
     jc.close();
-    jc = $.confirm({
-      icon: 'fa fa-exclamation-triangle',
-      title: 'Неудача!',
-      content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
-      type: 'red',
-      buttons: false,
-      closeIcon: false,
-      autoClose: 'ok|4000',
-      confirmButtonClass: 'hide',
-      buttons: {
-        ok: {
-          btnClass: 'btn-danger',
-          action: function () {
-          }
-        }
-      }
-    });
+    var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Запрос не выполнен';
+    initNoty(nText, 'error');
   });
 }
 
@@ -676,6 +633,7 @@ $(document).on('click', '#add-doc', function (e) {
           if ($("#w0").find(".has-error").length) {
             return false;
           } else {
+
             var d = $('.doc-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
             $('.doc-date').val(d);
             var form = $('form')[0];
@@ -687,7 +645,7 @@ $(document).on('click', '#add-doc', function (e) {
               contentType: false,
               data: formData,
               success: function (response) {
-                var tText = '<span style="font-weight: 600">Отлично!</span><br>Документ добавлен';
+                var tText = '<span style="font-weight: 600">Успех!</span><br>Документ добавлен';
                 initNoty(tText, 'success');
                 getCounters(toolId);
                 $('#tool-info-view').html(response.data.data);
@@ -715,13 +673,19 @@ $(document).on('click', '#delete-doc', function (e) {
   if ($(this).attr('disabled')) {
     return;
   }
+  var url = '/equipment/tool/docs/delete-docs';
   var node = $('#' + toolsTreeIdAttr).fancytree("getActiveNode");
   var toolId = node.data.id;
-  var url = '/equipment/tool/docs/delete-docs';
   var selected = [];
   $('.doc-select:checked').each(function () {
     selected.push($(this).data('docid'));
   });
+  var text = '';
+  if (selected.length > 1) {
+    text = 'Документы удалены';
+  } else {
+    text = 'Документ удален';
+  }
   jc = $.confirm({
     icon: 'fa fa-question',
     title: 'Вы уверены?',
@@ -734,7 +698,7 @@ $(document).on('click', '#delete-doc', function (e) {
         btnClass: 'btn-danger',
         action: function () {
           jc.close();
-          deleteProcess(url, toolId, selected);
+          deleteProcess(url, toolId, selected, text);
         }
       },
       cancel: {
@@ -780,31 +744,55 @@ $(document).on('click', '#add-image', function (e) {
             this.status = 3;
           });
           $form.yiiActiveForm("validate");
-          if ($("#w0").find(".has-error").length) {
-            return false;
-          } else {
-            var form = $('form')[0];
-            var formData = new FormData(form);
-            $.ajax({
-              type: 'POST',
-              url: url,
-              processData: false,
-              contentType: false,
-              data: formData,
-              success: function (response) {
-                var tText = '<span style="font-weight: 600">Отлично!</span><br>Изображения добавлены';
-                initNoty(tText, 'success');
-                getCounters(toolId);
-                $('#tool-info-view').html(response.data.data);
-
-              },
-              error: function (response) {
-                var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Изображения не добавлены';
-                initNoty(tText, 'warning');
-                console.log(response.data.data);
+          var files = $form.find('#images-imagefiles')[0].files;
+          if ($form.find('#images-imagefiles')[0].files.length) {
+            if ($("#w0").find(".has-error").length) {
+              return false;
+            } else {
+              var size = 0;
+              for (var i = 0; files.length > i; i++) {
+                size += parseInt(files[i].size, 10);
               }
-            });
+              var serverMaxPost = $('#max-post-size').data('size');
+              if (size >= serverMaxPost) {
+                var tText = '<span style="font-weight: 600">Ошибка! Тяжелые изображения</span>' +
+                  '<br>Максимум за раз - ' + serverMaxPost + ' байт';
+                initNoty(tText, 'warning');
+                return;
+              }
+              var form = $('form')[0];
+              var formData = new FormData(form);
+              jc = $.confirm({
+                icon: 'fa fa-cog fa-spin',
+                title: 'Подождите!',
+                content: 'Ваш запрос выполняется!',
+                buttons: false,
+                closeIcon: false,
+                confirmButtonClass: 'hide'
+              });
+              $.ajax({
+                type: 'POST',
+                url: url,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (response) {
+                  jc.close();
+                  var tText = '<span style="font-weight: 600">Успех!</span><br>Изображения добавлены';
+                  initNoty(tText, 'success');
+                  getCounters(toolId);
+                  $('#tool-info-view').html(response.data.data);
+                },
+                error: function (response) {
+                  jc.close();
+                  var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Изображения не добавлены';
+                  initNoty(tText, 'warning');
+                  console.log(response.data.data);
+                }
+              });
+            }
           }
+          return;
         }
       },
       cancel: {
@@ -821,12 +809,18 @@ $(document).on('click', '#delete-image', function (e) {
     return;
   }
   var node = $('#' + toolsTreeIdAttr).fancytree("getActiveNode");
-  var toolId = node.data.id;
   var url = '/equipment/tool/images/delete-images';
+  var toolId = node.data.id;
   var selected = [];
   $('.foto-select:checked').each(function () {
     selected.push($(this).data('docid'));
   });
+  var text = '';
+  if (selected.length > 1) {
+    text = 'Изображения удалены';
+  } else {
+    text = 'Изображение удалено';
+  }
   jc = $.confirm({
     icon: 'fa fa-question',
     title: 'Вы уверены?',
@@ -839,7 +833,7 @@ $(document).on('click', '#delete-image', function (e) {
         btnClass: 'btn-danger',
         action: function () {
           jc.close();
-          deleteProcess(url, toolId, selected);
+          deleteProcess(url, toolId, selected, text);
         }
       },
       cancel: {
@@ -852,7 +846,7 @@ $(document).on('click', '#delete-image', function (e) {
 });
 
 /* Процесс удаления (документов/изображений)*/
-function deleteProcess(url, toolId, data) {
+function deleteProcess(url, toolId, data, text) {
   var csrf = $('meta[name=csrf-token]').attr("content");
   jc = $.confirm({
     icon: 'fa fa-cog fa-spin',
@@ -873,64 +867,19 @@ function deleteProcess(url, toolId, data) {
   }).done(function (response) {
     if (response != false) {
       jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-thumbs-up',
-        title: 'Успех!',
-        content: 'Ваш запрос выполнен.',
-        type: 'green',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|8000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-success',
-            action: function () {
-              getCounters(toolId);
-              $('#tool-info-view').html(response.data.data);
-            }
-          }
-        }
-      });
+      var yText = '<span style="font-weight: 600">Успех!</span><br>' + text;
+      initNoty(yText, 'success');
+      getCounters(toolId);
+      $('#tool-info-view').html(response.data.data);
     } else {
+      var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Запрос не выполнен';
+      initNoty(tText, 'warning');
       jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-exclamation-triangle',
-        title: 'Неудача!',
-        content: 'Запрос не выполнен. Что-то пошло не так.',
-        type: 'red',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|8000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-            }
-          }
-        }
-      });
     }
   }).fail(function () {
     jc.close();
-    jc = $.confirm({
-      icon: 'fa fa-exclamation-triangle',
-      title: 'Неудача!',
-      content: 'Запрос не выполнен. Что-то пошло не так.',
-      type: 'red',
-      buttons: false,
-      closeIcon: false,
-      autoClose: 'ok|4000',
-      confirmButtonClass: 'hide',
-      buttons: {
-        ok: {
-          btnClass: 'btn-danger',
-          action: function () {
-          }
-        }
-      }
-    });
+    var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Запрос не выполнен';
+    initNoty(tText, 'warning');
   });
 }
 
@@ -1147,7 +1096,7 @@ $(document).on('submit', 'form#wiki-create-form', function (e) {
     contentType: false,
     data: formData,
     success: function (response) {
-      var tText = '<span style="font-weight: 600">Отлично!</span><br>' + notyYText;
+      var tText = '<span style="font-weight: 600">Успех!</span><br>' + notyYText;
       initNoty(tText, 'success');
       getCounters(toolId);
       $('#wiki-content').html(response.data.data);
@@ -1230,7 +1179,7 @@ $(document).on('click', '#delete-wiki-page', function (e) {
               'id': toolId
             },
             success: function (response) {
-              var tText = '<span style="font-weight: 600">Отлично!</span><br>Страница удалена';
+              var tText = '<span style="font-weight: 600">Успех!</span><br>Страница удалена';
               initNoty(tText, 'success');
               getCounters(toolId);
               $('#wiki-content').html(response.data.data);
@@ -1448,4 +1397,15 @@ $(document).on('click', '.sendbtn', function (e) {
     ar[data[i][0]] = 1;
   }
   goBack(ar);
+});
+
+
+$(document).on('change', '#images-imagefiles', function () {
+  var files = $(this).files;
+  var size = 0;
+  // console.log(this);
+  for (var i = 0; files.length > i; i++) {
+    size += files[i];
+  }
+  console.log(files);
 });

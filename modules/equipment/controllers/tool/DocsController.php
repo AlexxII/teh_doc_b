@@ -10,7 +10,6 @@ use yii\web\UploadedFile;
 use app\modules\equipment\models\Docs;
 use app\modules\equipment\models\Tools;
 
-
 class DocsController extends Controller
 {
   public $defaultAction = 'index';
@@ -51,7 +50,6 @@ class DocsController extends Controller
       $model->year = $year;
       $model->doc_date = $docModel->doc_date;
       $model->save();
-      return  $model->errors;
       if ($model) {
         $docModels = $tool->docsOrder;
         $yearArray = $tool->yearArrayDocs;

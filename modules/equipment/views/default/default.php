@@ -36,6 +36,7 @@ BootstrapPluginAsset::register($this);
 
 <div id="equipment-main-wrap" class="container">
       <span class="page-data" data-tree="tools-main-tree" data-table="">
+      <span id="max-post-size" data-size="<?= $postSize ?>"></span>
 
   <div class="row">
     <div id="tools-tree" class="col-lg-4 col-md-4" style="padding-bottom: 10px">
