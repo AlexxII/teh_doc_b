@@ -5,33 +5,34 @@ use yii\widgets\DetailView;
 
 $attr = [
   [
-    'label' => 'Категория:',
-    'value' => $model->categoryTitle,
+    "label" => "Категория:",
+    "value" => $model->categoryTitle,
   ],
-  'eq_title',
-  'eq_manufact',
-  'eq_model',
-  'eq_serial',
+  "eq_title",
+  "eq_manufact",
+  "eq_model",
+  "eq_serial",
   [
-    'label' => 'Место размещения:',
-    'value' => $model->placementTitle,
+    "label" => "Место размещения:",
+    "value" => $model->placementTitle,
   ],
-  'eq_comments'
+  "quantity",
+  "eq_comments"
 ];
 
 if ($model->specialStatus) {
   $attr[] = [
-    'label' => 'Спецпроверка:',
-    'value' => $model->specialStickerNumber,
+    "label" => "Спецпроверка:",
+    "value" => $model->specialStickerNumber,
   ];
 }
 ?>
 
 <div id="complex-info" style="padding-top: 10px">
   <?= DetailView::widget([
-    'id' => 'tool-detail',
-    'model' => $model,
-    'attributes' => $attr
+    "id" => "tool-detail",
+    "model" => $model,
+    "attributes" => $attr
   ]) ?>
 </div>
 <br>

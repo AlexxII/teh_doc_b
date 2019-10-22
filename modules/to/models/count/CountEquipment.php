@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\to\models;
+namespace app\modules\to\models\count;
 
 use yii\web\NotFoundHttpException;
 

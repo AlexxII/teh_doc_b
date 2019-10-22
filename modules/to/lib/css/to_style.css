@@ -105,3 +105,6 @@ body {
 .ui-fancytree {
   overflow: auto;
 }
+.fancytree-edit-input {
+  color: #000;
+}

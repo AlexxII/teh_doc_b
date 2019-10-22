@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 use app\modules\to\models\schedule\ToEquipment;
+use app\modules\to\models\count\CountEquipment;
 use app\modules\equipment\models\Oth;
 use app\modules\equipment\models\Special;
 use app\modules\equipment\models\Tools;
@@ -250,7 +251,8 @@ class SettingsController extends Controller
   }
 
 
-  // ТО
+  // =================== ТО ==============================
+  // В графике ТО
   public function actionMaintenance()
   {
     if (isset($_POST['toolId'])) {
@@ -280,6 +282,45 @@ class SettingsController extends Controller
       }
       if ($toolSettings->save()) {
         if ($to->save()) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  // Подсчет наработанного времени
+  public function actionWorkCount()
+  {
+    if (isset($_POST['toolId'])) {
+      $toolId = $_POST['toolId'];
+      $toolSettings = ToolSettings::findModel($toolId);
+      $model = Tools::findModel($toolId);
+      if ($model->wCount) {
+        $workCount = $model->wCount;
+      } else {
+        $workCount = new CountEquipment();
+        $workCount->eq_id = $model->id;
+        $workCount->name = $model->eq_title;
+        $parent = CountEquipment::findOne(['lvl' => 0]);            // TODO !!есть вероятность ошибки
+        $workCount->parent_id = $parent->id;
+        $workCount->appendTo($parent);
+      }
+      if (isset($_POST['bool'])) {
+        if ($_POST['bool'] === 'true') {
+          $toolSettings->eq_wcount = 1;
+          $workCount->valid = 1;
+        } else {
+          $toolSettings->eq_wcount = 0;
+          $workCount->valid = 0;
+        }
+      } else {
+        return false;
+      }
+      if ($toolSettings->save()) {
+        if ($workCount->save()) {
           return true;
         }
         return false;

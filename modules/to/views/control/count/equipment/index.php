@@ -2,11 +2,9 @@
 
 use yii\helpers\Html;
 
-$about = "Панель управления оборудованием, для которого ведется подсчет наработанного времени.";
 $add_hint = 'Добавить обертку';
 $del_hint = 'Удалить обертку';
 $refresh_hint = 'Перезапустить форму';
-$serial_hint = 'Внимание! Серийный номер, присвоенный в данной форме отображается только в пределах раздела ТО';
 $ref_hint = 'К оборудованию в основном перечне';
 
 ?>
@@ -24,7 +22,7 @@ $ref_hint = 'К оборудованию в основном перечне';
       </button>
       <button class="btn btn-danger btn-sm del-node" title="<?= $del_hint ?>" data-toggle="tooltip"
               data-placement="top" data-container="body" data-tree="fancytree_to_worktime_equipment"
-              data-delete="/to/control/to-equipment/delete" style="display: none">
+              data-delete="/to/control/count/equipment/delete" style="display: none">
         <i class="fa fa-trash" aria-hidden="true"></i>
       </button>
       <button id="tool-ref" class="btn btn-info btn-sm" title="<?= $ref_hint ?>" data-toggle="tooltip"
@@ -230,6 +228,8 @@ $ref_hint = 'К оборудованию в основном перечне';
           },
           triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
           beforeEdit: function (event, data) {
+            console.log(data.node.data.lvl);
+            if (data.node.data.lvl == '0') return false;
             parent = data.node.parent;
             parent.folder = true;
             return true;

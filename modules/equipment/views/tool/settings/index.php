@@ -80,7 +80,9 @@
         <li class="list-group-item">
           <div class="form-checkbox js-complex-option">
             <input class="check-it" id="maintenance-work-feature" type="checkbox" data-check='work-count-check'
-                   data-url='work-count'>
+                   data-url='work-count'
+                   data-id="<?= $model->id ?>"
+                   data-url='maintenance' <?php if ($model->wcStatus) echo 'checked' ?>>
             <label for="maintenance-work-feature">Наработка</label>
             <span class="status-indicator" id="work-count-check"></span>
             <p class="note">Вести учет наработанного времени.</p>

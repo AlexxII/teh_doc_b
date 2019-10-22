@@ -13,6 +13,7 @@ use app\modules\equipment\models\Category;
 use app\modules\equipment\models\Images;
 
 use app\modules\to\models\schedule\ToEquipment;
+use app\modules\to\models\count\CountEquipment;
 
 /**
  * This is the model class for table "equipment_tbl".
@@ -221,6 +222,20 @@ class Tools extends \yii\db\ActiveRecord
   {
     if ($this->to) {
       return $this->to->valid;
+    }
+    return false;
+  }
+
+  //Tool Work count
+  public function getWCount()
+  {
+    return $this->hasOne(CountEquipment::class, ['eq_id' => 'id']);
+  }
+
+  public function getWcStatus()
+  {
+    if ($this->wCount) {
+      return $this->wCount->valid;
     }
     return false;
   }

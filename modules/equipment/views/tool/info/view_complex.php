@@ -26,22 +26,23 @@ $attributes = [
 
     $attr = [
       [
-        'label' => 'Категория:',
-        'value' => $child->categoryTitle,
+        "label" => "Категория:",
+        "value" => $child->categoryTitle,
       ],
-      'eq_manufact',
-      'eq_model',
-      'eq_serial',
+      "eq_manufact",
+      "eq_model",
+      "eq_serial",
       [
-        'label' => 'Место размещения:',
-        'value' => $child->placementTitle,
+        "label" => "Место размещения:",
+        "value" => $child->placementTitle,
       ],
+      "quantity"
     ];
 
     if ($child->specialStatus) {
       $attr[] = [
-        'label' => 'Спецпроверка:',
-        'value' => $child->specialStickerNumber,
+        "label" => "Спецпроверка:",
+        "value" => $child->specialStickerNumber,
       ];
     }
 
@@ -52,13 +53,13 @@ $attributes = [
       echo '<i class="fa fa-shield" aria-hidden="true" style="font-size: 18px; position: absolute;top:-5px;right:-15px"
              title="Проведены Специальные работы"></i>';
     }
-    echo '</span>';
-    echo '</h3>';
+    echo "</span>";
+    echo "</h3>";
 
     echo DetailView::widget([
-      'id' => 'tool-detail',
-      'model' => $child,
-      'attributes' => $attr
+      "id" => "tool-detail",
+      "model" => $child,
+      "attributes" => $attr
     ]);
   }
 
