@@ -4,7 +4,7 @@ namespace app\modules\scheduler\controllers;
 
 use app\modules\scheduler\models\Event;
 use app\modules\scheduler\models\Holiday;
-use app\modules\to\models\ToSchedule;
+use app\modules\to\models\schedule\ToSchedule;
 use app\modules\vks\models\VksSessions;
 use Yii;
 use yii\web\Controller;
