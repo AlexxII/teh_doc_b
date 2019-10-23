@@ -21,63 +21,19 @@ function deleteRestoreProcess(url, table, csrf) {
   }).done(function (response) {
     if (response != false) {
       jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-thumbs-up',
-        title: 'Успех!',
-        content: 'Ваш запрос выполнен.',
-        type: 'green',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|8000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-success',
-            action: function () {
-              table.ajax.reload();
-            }
-          }
-        }
-      });
+      var text = 'Выш запрос выполнен!';
+      var yText = '<span style="font-weight: 600">Успех!</span><br>' + text;
+      initNoty(yText, 'success');
+      table.ajax.reload();
     } else {
       jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-exclamation-triangle',
-        title: 'Неудача!',
-        content: 'Запрос не выполнен. Что-то пошло не так.',
-        type: 'red',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|8000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-            }
-          }
-        }
-      });
+      var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Запрос не выполнен';
+      initNoty(tText, 'warning');
     }
   }).fail(function () {
     jc.close();
-    jc = $.confirm({
-      icon: 'fa fa-exclamation-triangle',
-      title: 'Неудача!',
-      content: 'Запрос не выполнен. Что-то пошло не так.',
-      type: 'red',
-      buttons: false,
-      closeIcon: false,
-      autoClose: 'ok|4000',
-      confirmButtonClass: 'hide',
-      buttons: {
-        ok: {
-          btnClass: 'btn-danger',
-          action: function () {
-          }
-        }
-      }
-    });
+    var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Запрос не выполнен';
+    initNoty(tText, 'warning');
   });
 }
 
@@ -221,66 +177,21 @@ function deleteProcess(url, node) {
   }).done(function (response) {
     if (response != false) {
       jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-thumbs-up',
-        title: 'Успех!',
-        content: 'Ваш запрос выполнен.',
-        type: 'green',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|8000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-success',
-            action: function () {
-              node.remove();
-              $('.about-info').html('');
-              $('.del-node').hide();
-              $(".del-multi-nodes").hide();
-            }
-          }
-        }
-      });
+      node.remove();
+      $('.about-info').html('');
+      $('.del-node').hide();
+      $(".del-multi-nodes").hide();
+      var yText = '<span style="font-weight: 600">Успех!</span><br>Удаление выполнено';
+      initNoty(yText, 'success');
     } else {
       jc.close();
-      jc = $.confirm({
-        icon: 'fa fa-exclamation-triangle',
-        title: 'Неудача!',
-        content: 'Запрос не выполнен. Что-то пошло не так.',
-        type: 'red',
-        buttons: false,
-        closeIcon: false,
-        autoClose: 'ok|8000',
-        confirmButtonClass: 'hide',
-        buttons: {
-          ok: {
-            btnClass: 'btn-danger',
-            action: function () {
-            }
-          }
-        }
-      });
+      var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Удалить не удалось';
+      initNoty(nText, 'error');
     }
   }).fail(function () {
     jc.close();
-    jc = $.confirm({
-      icon: 'fa fa-exclamation-triangle',
-      title: 'Неудача!',
-      content: 'Запрос не вы!!!полнен. Что-то пошло не так.',
-      type: 'red',
-      buttons: false,
-      closeIcon: false,
-      autoClose: 'ok|4000',
-      confirmButtonClass: 'hide',
-      buttons: {
-        ok: {
-          btnClass: 'btn-danger',
-          action: function () {
-          }
-        }
-      }
-    });
+    var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Удалить не удалось';
+    initNoty(nText, 'error');
   });
 }
 
@@ -361,6 +272,14 @@ $(document).on('click', '#create-new-schedule', function (e) {
       }
     }
   }
+  jc = $.confirm({
+    icon: 'fa fa-cog fa-spin',
+    title: 'Подождите!',
+    content: 'Выполняется создание графика!',
+    buttons: false,
+    closeIcon: false,
+    confirmButtonClass: 'hide'
+  });
   var csrf = $('meta[name=csrf-token]').attr("content");
   var url = '/to/month-schedule/save-schedule';
   $.ajax({
@@ -374,10 +293,12 @@ $(document).on('click', '#create-new-schedule', function (e) {
       month: scheduleMonth
     }
   }).done(function (response) {
+    jc.close();
     var yText = '<span style="font-weight: 600">Успех!</span><br>График ТО создан';
     initNoty(yText, 'success');
     goBack();
   }).fail(function (error) {
+    jc.close();
     var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>График ТО не создан';
     initNoty(nText, 'error');
     console.log('Error - saving schedule');
@@ -656,6 +577,14 @@ $(document).on('click', '#perform-schedule', function (e) {
       }
     }
   }
+  jc = $.confirm({
+    icon: 'fa fa-cog fa-spin',
+    title: 'Подождите!',
+    content: 'Выполняется подтверждение в график!',
+    buttons: false,
+    closeIcon: false,
+    confirmButtonClass: 'hide'
+  });
   var csrf = $('meta[name=csrf-token]').attr("content");
   var url = '/to/month-schedule/perform-schedule';
   $.ajax({
@@ -667,10 +596,12 @@ $(document).on('click', '#perform-schedule', function (e) {
       data: scheduleData
     }
   }).done(function (response) {
+    jc.close();
     var yText = '<span style="font-weight: 600">Успех!</span><br>Проведение ТО потверждено';
     initNoty(yText, 'success');
     goBack();
   }).fail(function (error) {
+    jc.close();
     var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Подтвердить не удалось';
     initNoty(nText, 'error');
     console.log('Error - saving schedule');
@@ -699,6 +630,14 @@ $(document).on('click', '#save-edit', function (e) {
       }
     }
   }
+  jc = $.confirm({
+    icon: 'fa fa-cog fa-spin',
+    title: 'Подождите!',
+    content: 'Выполняется сохранение изменений в график!',
+    buttons: false,
+    closeIcon: false,
+    confirmButtonClass: 'hide'
+  });
   var csrf = $('meta[name=csrf-token]').attr("content");
   var url = '/to/month-schedule/edit-save';
   $.ajax({
@@ -712,8 +651,10 @@ $(document).on('click', '#save-edit', function (e) {
   }).done(function (response) {
     var yText = '<span style="font-weight: 600">Успех!</span><br>График ТО обновлен';
     initNoty(yText, 'success');
+    jc.close();
     goBack();
   }).fail(function (error) {
+    jc.close();
     var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
     initNoty(nText, 'error');
     console.log('Error - saving schedule');
