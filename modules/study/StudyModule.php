@@ -10,6 +10,7 @@ class StudyModule extends \yii\base\Module
 
   public function init()
   {
+    \Yii::$app->view->title = 'Полигон';
     parent::init();
   }
 

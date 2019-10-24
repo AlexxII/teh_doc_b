@@ -5,60 +5,136 @@ use app\assets\AppAsset;
 AppAsset::register($this);            // регистрация ресурсов всего приложения
 
 ?>
+<div>
+  <button id="test-it" class="btn btn-sm btm-success">Старт</button>
+  <div id="result">
 
-<div id="result">
 
-
+  </div>
 </div>
-
 <script>
 
-
-  // var tikUrl = 'http://www.murmansk.vybory.izbirkom.ru/region/murmansk?action=ikTree&region=51&vrn=9519012259884&onlyChildren=true&id=9519012259884';
-
-
-  function getTiksUrls(data) {
-    var urlPrefix = 'http://www.murmansk.vybory.izbirkom.ru/region/murmansk?action=ikTree&region=51&vrn=';
-    var urlPostfix = '&onlyChildren=true&id=';
-    var result = new Array();
-    for (key in data) {
-      result.push(data[key] + ' - ' + urlPrefix + key + urlPostfix + key);
+  var to = {
+    'title': {                          // Тип шаблона (int)
+      '1': 'Круглосуточный'
+    },
+    'days': {                           // день недели
+      '1': [1, 2, 3, 4, 5, 6, 7]
+    },
+    'hours': {                          // Сколько часов прибавлять (продолжительность рабочего дня)
+      '1': 24
+    },
+    'holidays': {                       // периоды или точки не подсчета
+      '1': {
+        'start': '12.12.2012',
+        'end': '13.01.2013'
+      },
+      '2': {
+        'start': '10.12.2012',
+        'end': '10.12.2012'
+      }
+    },
+    'sessions': {                       // id оборудования, которое участвует в сеансах связи
+      '1': {
+        'eq_id': '231242342143'
+      }
+    },
+    'to': {                             // Проведение ТО
+      'date': {
+        'eq_id': '12.03.2019'           // автоматически из графика ТО
+      },
+      'on': {
+        'duration': 2		                // продолжительность включения
+      },
+      'off': {
+        'duration': 1		                // продолжительность отключения
+      }
     }
-    return result;
-  }
+  };
 
-  function getIkData(url) {
+  var toAllday = {
+    'title': {                          // Тип шаблона (int)
+      '1': 'Круглосуточный'
+    },
+    'days': {                           // день недели
+      '1': [1, 2, 3, 4, 5, 6, 7]
+    },
+    'hours': {                          // Сколько часов прибавлять (продолжительность рабочего дня)
+      '1': 24
+    },
+    'to': {                             // Проведение ТО
+      'date': {
+        'eq_id': '12.03.2019'           // автоматически из графика ТО
+      },
+      'off': {
+        'duration': 1		                // продолжительность отключения
+      }
+    }
+  };
+
+  var toAlldayEx = {
+    'title': 'Круглосуточный',
+    'days': [1, 2, 3, 4, 5, 6, 7],
+    'hours': 24,
+    'to': {
+      'eq_id': 1234123412313,
+      'off': 1
+    },
+  };
+
+  var toWorkDay = {
+    'title': 'Рабочий день',
+    'days': [1, 2, 3, 4, 5],
+    'hours': 8,
+    'holidays': {
+      1: ['2019-11-12', '2019-12-13'],
+      2: ['2019-10-24', '2019-10-24']
+    },
+    'to': {
+      'eq_id': 34346245234,
+      'on': 2
+    }
+  };
+
+  var toSessions = {
+    'title': 'Сеансы',
+    'to': {
+      'eq_id': 34346245234,
+      'on': 1
+    },
+    'sessions': '231242342143'
+  };
+
+  $(document).on('click', '#test-it', function (e) {
+    testIt(toAlldayEx);
+    testIt(toWorkDay);
+    testIt(toSessions);
+    $('#result').html('');
+  });
+
+
+  function testIt(data) {
+    var url = '/study/default/count';
+    var csrf = $('meta[name=csrf-token]').attr("content");
     $.ajax({
-      type: 'GET',
-      url: '/study/default/parse-ik',
+      type: 'POST',
+      url: url,
       dataType: 'json',
       data: {
-        'url': url
+        _csrf: csrf,
+        data: data
       },
       success: function (response) {
-        var data = JSON.parse(response);
-        var ik = data[0];
-        var tiks = ik.children;
-        var result = {};
-        tiks.forEach(function (val, i, ar) {
-          result[val.id] = val.text;
-        });
-        var re = getTiksUrls(result);
-        console.log(re);
+        $('#result').append(response.data.data);
+        $('#result').append('<br>');
       },
       error: function (response) {
-        console.log('Error !!!!!!!');
-        return false;
+        var nTest = ' Что-то пошло не так';
+        console.log(response.data.data);
+        initNoty(nTest, 'error');
       }
     });
   }
-
-  var ikUrl = 'http://www.murmansk.vybory.izbirkom.ru/region/murmansk?action=ikTree&region=51&vrn=2512000478077&id=%23';
-  var data = getIkData(ikUrl);
-
-  // console.log();
-  // console.log(arrayOfTiks);
-  // getTiksData(arrayOfTiks);
 
 
 </script>
