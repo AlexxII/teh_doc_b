@@ -239,6 +239,11 @@ class VksSessions extends \yii\db\ActiveRecord
     return $this->hasOne(VksEmployees::class, ['id' => 'vks_employee']);
   }
 
+  public function getVksTools()
+  {
+    return $this->hasOne(VksTools::class, ['id' => 'vks_equipment']);
+  }
+
   public function getType()
   {
     $depth = 2; // сколько уровней

@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use app\modules\to\models\schedule\ToSchedule;
 use app\modules\vks\models\VksSessions;
+use app\modules\scheduler\models\Holiday;
 
 
 class DefaultController extends Controller
@@ -36,27 +37,37 @@ class DefaultController extends Controller
     foreach ($toData as $to) {
       $toArray[] = $to['toEq']['eq_id'];
     }
+
     // ***** *****
     //***** подготовка массива оборудования, которое участвовало в Сеансах связи в момент подсчета *****
-
     $vksData = VksSessions::find()
+      ->select([''])
       ->where(['vks_date' => $today])
+      ->with(['vksTools'])
       ->andWhere(['vks_upcoming_session' => 1])
       ->andWhere(['vks_cancel' => 0])
       ->asArray()->all();
 
-    return [
-      "data" => [
-        "success" => true,
-        "data" => $vksData,
-        "message" => "Page load",
-      ],
-      "code" => 1,
-    ];
+    // ***** *****
+    //***** подготовка даты календаря (праздничный день, предпраздничный)*****
+    $holiday = Holiday::find()
+      ->where('start_date' > $today)
+      ->andWhere(['<=', 'end_date', $today])
+      ->all();
+    // ***** *****
 
     // "Select eq_id from to_schedule_tbl where plan_date = $today"; => if (in_array) => count ["to"]
     // "Select From calendar_holidays_tbl where data = $today";
     // "Select eq_id, vks_duration_teh, vks_duration_work From vks_session where vks_date = $today and eq_id = id and vks_upcoming_session != 1";
+
+    return [
+      "data" => [
+        "success" => true,
+        "data" => $holiday,
+        "message" => "Page load",
+      ],
+      "code" => 1,
+    ];
 
     $template = $_POST["data"];
     $hours = 0;

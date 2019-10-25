@@ -36,7 +36,8 @@ $attributes = [
         "label" => "Место размещения:",
         "value" => $child->placementTitle,
       ],
-      "quantity"
+      "quantity",
+      "eq_comments"
     ];
 
     if ($child->specialStatus) {
