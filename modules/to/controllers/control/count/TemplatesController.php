@@ -7,21 +7,22 @@ use yii\web\Controller;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
-use app\modules\to\models\WorktimeEquipment;
+use app\modules\to\models\count\CountTemplates;
+use app\modules\to\models\count\CountEquipment;
 use app\modules\equipment\models\Tools;
 
-class CountTemplatesController extends Controller
+class TemplatesController extends Controller
 {
 
   public function actionAllTools()
   {
-    $id = WorktimeEquipment::find()->select('id')->all();
+    $id = CountTemplates::find()->select('id')->all();
     if (!$id) {
       $data = array();
       $data = [['title' => 'База данных пуста', 'key' => -999]];
       return json_encode($data);
     }
-    $roots = WorktimeEquipment::findModel($id)->tree();
+    $roots = CountTemplates::findModel($id)->tree();
     return json_encode($roots);
   }
 
@@ -36,49 +37,14 @@ class CountTemplatesController extends Controller
       ],
       'code' => 1,
     ];
-
-//    return $this->renderAjax('index');
   }
-
-  public function actionToolsSerials($id)
-  {
-    $root = Tools::findModel($id);
-    $children = $root->children()->select(['id', 'eq_serial', 'name'])
-      ->orderby(['lft' => SORT_ASC])
-      ->asArray()->all();
-    if (!empty($children)){
-      return json_encode($children);
-    } else {
-      if ($root->eq_serial){
-        return json_encode(['single' => $root->eq_serial]);
-      } else {
-        return -1;
-      }
-    }
-    return false;
-  }
-
-  public function actionToolSerialSave()
-  {
-    if (!empty($_POST)) {
-      $id = $_POST['id'];
-      $model = WorktimeEquipment::findModel($id);
-      $model->eq_serial = $_POST['serial'];
-      if ($model->save()) {
-        return true;
-      }
-      return false;
-    }
-    return false;
-  }
-
 
   public function actionCreateNode($title)
   {
     $parentId = 1;
-    $newGroup = new WorktimeEquipment();
+    $newGroup = new CountTemplates();
     $newGroup->name = $title;
-    $parentOrder = WorktimeEquipment::findModel(['name' => 'Оборудование']);
+    $parentOrder = CountTemplates::findModel(['name' => 'Шаблоны подсчета наработки']);
     $newGroup->parent_id = $parentOrder->id;
     $newGroup->eq_id = 0;
     if ($newGroup->appendTo($parentOrder)) {
@@ -92,7 +58,7 @@ class CountTemplatesController extends Controller
 
   public function actionUpdateNode($id, $title)
   {
-    $tool = WorktimeEquipment::findModel($id);
+    $tool = CountTemplates::findModel($id);
     $tool->name = $title;
     if ($tool->save()) {
       $data['acceptedTitle'] = $title;
@@ -103,8 +69,8 @@ class CountTemplatesController extends Controller
 
   public function actionMoveNode($item, $action, $second, $parentId)
   {
-    $item_model = WorktimeEquipment::findModel($item);
-    $second_model = WorktimeEquipment::findModel($second);
+    $item_model = CountTemplates::findModel($item);
+    $second_model = CountTemplates::findModel($second);
     switch ($action) {
       case 'after':
         $item_model->insertAfter($second_model);
@@ -116,7 +82,7 @@ class CountTemplatesController extends Controller
         $item_model->appendTo($second_model);
         break;
     }
-    $parent = WorktimeEquipment::findModel($parentId);
+    $parent = CountTemplates::findModel($parentId);
     $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
       return true;
@@ -130,9 +96,9 @@ class CountTemplatesController extends Controller
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $toWrap = WorktimeEquipment::findModel($id);
+      $toWrap = CountTemplates::findModel($id);
       if ($toWrap->eq_id == 0){
-        $parentOrder = WorktimeEquipment::findOne(['name' => 'Оборудование']);
+        $parentOrder = CountTemplates::findOne(['name' => 'Шаблоны подсчета наработки']);
         foreach ($toWrap->children()->all() as $child){
           $child->appendTo($parentOrder);
         }

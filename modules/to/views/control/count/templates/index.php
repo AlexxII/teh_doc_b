@@ -2,10 +2,9 @@
 
 use yii\helpers\Html;
 
-$add_hint = 'Добавить обертку';
-$del_hint = 'Удалить обертку';
+$add_hint = 'Добавить шаблон';
+$del_hint = 'Удалить шаблон';
 $refresh_hint = 'Перезапустить форму';
-$ref_hint = 'К оборудованию в основном перечне';
 
 ?>
 
@@ -13,22 +12,14 @@ $ref_hint = 'К оборудованию в основном перечне';
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
       <button class="btn btn-success btn-sm add-subcategory" title="<?= $add_hint ?>" data-toggle="tooltip"
-              data-placement="top" data-container="body" data-tree="fancytree_to_worktime_equipment" data-root="Оборудование">
+              data-placement="top" data-container="body" data-tree="fancytree_to_worktime_equipment"
+              data-root="Шаблоны подсчета наработки">
         <i class="fa fa-plus" aria-hidden="true"></i>
       </button>
       <button class="btn btn-success btn-sm refresh" title="<?= $refresh_hint ?>" data-toggle="tooltip"
-              data-placement="top" data-container="body" data-tree="fancytree_to_worktime_equipment">
+              data-placement="top" data-container="body"
+              data-tree="fancytree_to_worktime_equipment">
         <i class="fa fa-refresh" aria-hidden="true"></i>
-      </button>
-      <button class="btn btn-danger btn-sm del-node" title="<?= $del_hint ?>" data-toggle="tooltip"
-              data-placement="top" data-container="body" data-tree="fancytree_to_worktime_equipment"
-              data-delete="/to/control/count/equipment/delete" style="display: none">
-        <i class="fa fa-trash" aria-hidden="true"></i>
-      </button>
-      <button id="tool-ref" class="btn btn-info btn-sm" title="<?= $ref_hint ?>" data-toggle="tooltip"
-              data-placement="top" data-container="body" data-tree="fancytree_to_worktime_equipment"
-              data-delete="/to/control/to-equipment/delete" style="display: none">
-        <i class="fa fa-level-up" aria-hidden="true"></i>
       </button>
     </div>
 
@@ -53,23 +44,7 @@ $ref_hint = 'К оборудованию в основном перечне';
 
 
     <div class="col-lg-5 col-md-5">
-      <div class="alert alert-warning" style="margin-bottom: 10px">
-        <a href="#" class="close" data-dismiss="alert">&times;</a>
-        <strong>Внимание!</strong> В данном разделе представлено оборудование, которое настроено на подсчет наработанного
-        времени.
-      </div>
 
-      <div id="result-info" style="margin-bottom: 10px"></div>
-      <form action="create" method="post" class="input-add">
-        <div class="about-main">
-          <label>Шаблон подсчета:</label>
-          <select type="text" id="template-control" class="c-input form-control" name="sn" disabled></select>
-          <label style="font-weight:400;font-size: 10px">Выберите шаблон.</label>
-        </div>
-        <div class="about-footer"></div>
-        <button type="submit" id="save-btn" onclick="saveTemplate(event)" class="btn btn-primary" disabled>Сохранить
-        </button>
-      </form>
     </div>
   </div>
 </div>
@@ -80,116 +55,14 @@ $ref_hint = 'К оборудованию в основном перечне';
     var nodeId;
     var node$;
 
-    toCountTemplates = '<select class="form-control to-list m-select">' +
-      '<option value="none" selected="true" disabled="true">Выберите</option>';
-
-    $.ajax({
-      url: '/to/control/settings/count-templates',
-      method: 'get',
-      dataType: "JSON"
-    }).done(function (response) {
-      var templates = response.templates;
-      templates.forEach(function (value, index, array) {
-        toCountTemplates += '<option value="' + value.id + '">' + value.name + '</option>';
-      });
-      toCountTemplates += '</select>';
-      $('#template-control').html(toCountTemplates);
-    }).fail(function () {
-      console.log('Не удалось загрузить шаблоны подсчета наработки');
-      toCountTemplates += '</select>';
-    });
-
-      // сохрание оборудования, сереийный номер которого будет использоваться в графике ТО
-    function saveTemplate(e) {
-      e.preventDefault();
-      var csrf = $('meta[name=csrf-token]').attr("content");
-      var nodeId = window.nodeId;
-      var template = $('#template-control').val();
-      $.ajax({
-        url: "/to/control/count/equipment/save-template",
-        type: "post",
-        data: {
-          _csrf: csrf,
-          template: template,
-          id: nodeId
-        },
-        success: function (result) {
-          if (result) {
-            $('#result-info').hide().html(goodAlert('Запись добавлена в БД.')).fadeIn('slow');
-            node$.data.count_template = template;
-            $("#save-btn").prop("disabled", true);
-          } else {
-            $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-              'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-          }
-        },
-        error: function () {
-          $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
-            'снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-        }
-      });
-    }
-
-    function serialControl(el) {
-      var serial = $(el).find(':selected').data('serial');
-      if (serial == '' || serial == null) {
-        $("#save-btn").prop("disabled", true);
-        $('#serial-number').val('');
-      } else {
-        $('#serial-number').val(serial);
-        $("#save-btn").prop("disabled", false);
-      }
-      return;
-    }
-
-    var template;
-
     $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip();
 
-      $("#serial-number").on('keyup mouseclick', function () {
-        $("#save-btn").prop("disabled", this.value.length == "" ? true : false);
-      });
-
-      $('#tool-ref').click(function (e) {
-        e.preventDefault();
-        var treeIdAttr = $(e.currentTarget).data('tree');
-        var node = $("#" + treeIdAttr).fancytree("getActiveNode");
-        var toolId = node.data.eq_id;
-        var windowSize = 'larges';
-        var title = 'Оборудование';
-        var url = '/equipment/default/index-ex';
-        c = $.confirm({
-          content: function () {
-            var self = this;
-            return $.ajax({
-              url: url,
-              method: 'get',
-              data: {
-                'id': toolId
-              }
-            }).fail(function () {
-              self.setContentAppend('<div>Что-то пошло не так!</div>');
-            });
-          },
-          contentLoaded: function (data, status, xhr) {
-            this.setContentAppend('<div>' + data + '</div>');
-          },
-          columnClass: windowSize,
-          title: title,
-          buttons: {
-            cancel: {
-              text: 'НАЗАД'
-            }
-          }
-        });
-      });
-
       // отображение и логика работа дерева
-      var main_url = '/to/control/count/equipment/all-tools';
-      var move_url = '/to/control/count/equipment/move-node';
-      var create_url = '/to/control/count/equipment/create-node';
-      var update_url = '/to/control/count/equipment/update-node';
+      var main_url = '/to/control/count/templates/all-tools';
+      var move_url = '/to/control/count/templates/move-node';
+      var create_url = '/to/control/count/templates/create-node';
+      var update_url = '/to/control/count/templates/update-node';
 
       $("#fancytree_to_worktime_equipment").fancytree({
         source: {
@@ -247,6 +120,7 @@ $ref_hint = 'К оборудованию в основном перечне';
           },
           triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
           beforeEdit: function (event, data) {
+            console.log(data.node.data.lvl);
             if (data.node.data.lvl == '0') return false;
             parent = data.node.parent;
             parent.folder = true;
@@ -321,43 +195,113 @@ $ref_hint = 'К оборудованию в основном перечне';
           }
         },
         activate: function (node, data) {
+          $('#serial-number').val('');
+          $('#serial-control').val('none');
           var node = data.node;
           var lvl = node.data.lvl;
-          nodeId = node.data.id;
-          node$ = node;
-          $('#result-info').html('');
-          $('#template-control').val('none');
-          if (lvl == 0) {
-            $('.del-node').hide();
+          var eqId = node.data.eq_id;
+          window.node$ = node;
+          window.nodeId = node.data.id;
+          serialVal = node.data.eq_serial;
+          if (eqId != 0) {
+            $('#serial-number').prop("disabled", false);
+            if (serialVal) {
+              $('#serial-number').val(serialVal);
+            } else {
+              $('#serial-number').val('');
+            }
+            $.ajax({
+              url: '/to/control//to-equipment/tools-serials',
+              data: {
+                id: node.data.eq_id
+              }
+            }).done(function (result) {
+              if (result != -1) {
+                var serial = 0;
+                var result = JSON.parse(result, function (key, value) {
+                  if (key == 'single') serial = 1;
+                  return value;
+                });
+                if (serial) {
+                  if (result.single != '' && result.single != null) {
+                    $('#serial-number').val(result.single);
+                    if (node.data.eq_serial == null) {
+                      $("#save-btn").prop("disabled", false);
+                    }
+                  } else {
+                    $('#serial-number').val('');
+                    $("#save-btn").prop("disabled", true);
+                  }
+                } else {
+                  var optionsValues = '<select class="form-control input-sm c-input" id="serial-control" ' +
+                    'onchange=serialControl(this) style="margin-top: 5px">';
+                  optionsValues += '<option selected disabled>Выберите</option>';
+                  $.each(result, function (index, obj) {
+                    if (obj.eq_serial != '' && obj.eq_serial != null) {
+                      var serVal = 's/n: ' + obj.eq_serial;
+                    } else {
+                      serVal = 's/n: -';
+                    }
+                    optionsValues += '<option value="' + obj.id + '" ' +
+                      'data-serial="' + obj.eq_serial + '">' + obj.name + ' ' + serVal + '</option>';
+                  });
+                  optionsValues += '</select>';
+                  var options = $('#serial-control');
+                  options.replaceWith(optionsValues);
+                  if (serialVal) {
+                    $("#serial-control option[data-serial='" + serialVal + "']").attr("selected", "selected");
+                  }
+                }
+              } else if (result == -1) {
+                if ($('#serial-number').val() == '') {
+                  $('#result-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
+                    ' в поле ввода.')).fadeIn('slow');
+                }
+              } else {
+                $('#result-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
+                  ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+              }
+            }).fail(function (result) {
+              $('#result-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
+                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+            });
           } else {
-            $('.del-node').show();
-          }
-          if (node.data.eq_id != 0) {
-            $('#tool-ref').show();
-            $('.del-node').hide();
-            $('#template-control').prop('disabled', false);
-          } else {
-            $('#tool-ref').hide();
-            $('#template-control').prop('disabled', true);
-          }
-          if(node.data.template) {
-            $('#template-control').val(node.data.count_template);
+            $("#serial-control").prop("disabled", true);
+            $('#serial-number').prop("disabled", true);
+            $('#serial-number').val('');
           }
         },
         click: function (event, data) {
-
+          $('#result-info').html('');
+          $("#serial-control").children().remove();
+          $("#serial-control").prop("disabled", true);
+          var node = data.node;
+          var lvl = node.data.lvl;
+          $("#save-btn").prop("disabled", true);
+          if (node.key == -999) {
+            $(".add-subcategory").hide();
+            return;
+          }
+          if (lvl == 0) {
+            $(".del-node").hide();
+          } else {
+            $(".del-node").show();
+          }
+          if (node.data.eq_id != 0) {
+            $('#tool-ref').show();
+            $(".del-node").hide();
+          } else {
+            $('#tool-ref').hide();
+          }
         },
         renderNode: function (node, data) {
           if (data.node.key == -999) {
-            $('.add-subcategory').hide();
+            $(".add-subcategory").hide();
           }
         }
       })
       ;
     });
-    
-    $(document).on('change', '#template-control', function (e) {
-      $('#save-btn').prop('disabled', false);
-    })
+
 
   </script>

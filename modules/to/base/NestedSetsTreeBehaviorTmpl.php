@@ -4,7 +4,7 @@ namespace app\modules\to\base;
 
 use yii\base\Behavior;
 
-class NestedSetsTreeBehaviorExWktm extends Behavior
+class NestedSetsTreeBehaviorTmpl extends Behavior
 {
   /**
    * @var string
@@ -60,7 +60,7 @@ class NestedSetsTreeBehaviorExWktm extends Behavior
     // Trees mapped
     $trees = array();
     $collection = $this->owner->find()
-      ->select('id, eq_id, lft, rgt, root, lvl, name, count_template')
+      ->select('id, lft, rgt, root, lvl, name')
       ->where(['=', 'valid', 1])
       ->orderBy('root, lft')
       ->asArray()

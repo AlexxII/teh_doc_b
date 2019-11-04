@@ -2,6 +2,7 @@
 
 namespace app\modules\to\controllers\control\count;
 
+use app\modules\to\models\schedule\ToEquipment;
 use Yii;
 use yii\web\Controller;
 use yii\helpers\ArrayHelper;
@@ -9,7 +10,6 @@ use yii\web\NotFoundHttpException;
 
 use app\modules\to\models\count\CountEquipment;
 use app\modules\equipment\models\Tools;
-
 
 class EquipmentController extends Controller
 {
@@ -146,6 +146,25 @@ class EquipmentController extends Controller
         if ($toWrap->save()) {
           return true;
         }
+      }
+      return false;
+    }
+    return false;
+  }
+
+  public function actionSaveTemplate()
+  {
+    if($_POST) {
+      if ($_POST["template"] && $_POST["id"]){
+        $model = CountEquipment::findModel($_POST["id"]);
+        if ($model){
+          $model->count_template = $_POST["template"];
+          if ($model->save()) {
+            return true;
+          }
+          return false;
+        }
+        return false;
       }
       return false;
     }

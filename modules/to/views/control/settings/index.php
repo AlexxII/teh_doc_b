@@ -57,7 +57,7 @@
             <!-- Содержимое 2 панели -->
             <div class="panel-body">
               <p><a class="ext" data-url="/control/count/equipment">Оборудование</a></p>
-              <p><a class="ext" data-url="/control/count/settings/create-calendar"></a>Шаблоны подсчета</p>
+              <p><a class="ext" data-url="/control/count/templates">Шаблоны подсчета</a></p>
             </div>
           </div>
         </div>

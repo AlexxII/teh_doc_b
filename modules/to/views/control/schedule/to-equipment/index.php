@@ -392,10 +392,6 @@ $ref_hint = 'К оборудованию в основном перечне';
         var node = data.node;
         var lvl = node.data.lvl;
         $("#save-btn").prop("disabled", true);
-        if (node.key == -999) {
-          $(".add-subcategory").hide();
-          return;
-        }
         if (lvl == 0) {
           $(".del-node").hide();
         } else {
@@ -409,9 +405,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         }
       },
       renderNode: function (node, data) {
-        if (data.node.key == -999) {
-          $(".add-subcategory").hide();
-        }
+
       }
     })
     ;

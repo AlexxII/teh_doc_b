@@ -309,7 +309,7 @@ $role_hint = 'Выберите роль пользователя при пров
         if (userId) {
           $('#user-control').val(userId);
         }
-        if (roleId != null) {
+        if (roleId) {
           $('#role-control').val(roleId);
         }
       },

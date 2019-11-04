@@ -2,6 +2,7 @@
 
 namespace app\modules\to\controllers\control;
 
+use app\modules\to\models\count\CountTemplates;
 use app\modules\to\models\schedule\ToAdmins;
 use app\modules\to\models\schedule\ToType;
 use Yii;
@@ -175,6 +176,16 @@ class SettingsController extends Controller
     $result['types'] = ToType::find()->select(['id', 'name'])->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
     $result['admins'] = ToAdmins::find()->select(['id', 'name'])->where(['admin' => 1])->orderBy('lft')->asArray()->all();
     $result['auditors'] = ToAdmins::find()->select(['id', 'name'])->where(['admin' => 0])->orderBy('lft')->asArray()->all();
+    return json_encode($result);
+  }
+
+
+  public function actionCountTemplates()
+  {
+    $result = [
+      'templates' => []
+    ];
+    $result['templates'] = CountTemplates::find()->select(['id', 'name'])->where(['!=', 'lvl', '0'])->orderBy('lft')->asArray()->all();
     return json_encode($result);
   }
 

@@ -9,7 +9,6 @@ AppAsset::register($this);            // регистрация ресурсов
   <button id="test-it" class="btn btn-sm btm-success">Старт</button>
   <div id="result">
 
-
   </div>
 </div>
 <script>
@@ -72,8 +71,9 @@ AppAsset::register($this);            // регистрация ресурсов
     }
   };
 
+
+
   var toAlldayEx = {
-    'title': 'Круглосуточный',
     'days': [1, 2, 3, 4, 5, 6, 7],
     'hours': 24,
     'to': {
@@ -83,7 +83,6 @@ AppAsset::register($this);            // регистрация ресурсов
   };
 
   var toWorkDay = {
-    'title': 'Рабочий день',
     'days': [1, 2, 3, 4, 5],
     'hours': 8,
     'holidays': {
@@ -97,13 +96,15 @@ AppAsset::register($this);            // регистрация ресурсов
   };
 
   var toSessions = {
-    'title': 'Сеансы',
     'to': {
       'eq_id': 34346245234,
       'on': 1
     },
     'sessions': '231242342143'
   };
+
+
+
 
   $(document).on('click', '#test-it', function (e) {
     testIt(toAlldayEx);
