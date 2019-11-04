@@ -536,7 +536,7 @@ $collapse_hint = 'Скрыть все';
     $("#tree").fancytree({
       checkbox: true,
       quicksearch: true,        // Jump to nodes when pressing first character
-      source: {url: '/to/control/to-equipment/all-tools'},
+      source: {url: '/to/control/schedule/to-equipment/all-tools'},
       extensions: ["table"],
       minExpandLevel: 2,
       selectMode: 3,
