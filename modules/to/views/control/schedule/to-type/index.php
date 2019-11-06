@@ -8,40 +8,27 @@ $refresh_hint = 'Перезапустить форму';
 $del_hint = 'Удалить';
 
 ?>
-<div class="col-lg-8 col-md-8">
+<div class="">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
-      <?= Html::a('<i class="fa fa-plus" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm add-subcategory',
-        'style' => ['margin-top' => '5px'],
-        'title' => $add_hint,
-        'data-toggle' => 'tooltip',
-        'data-placement' => 'top',
-        'data-container' => 'body',
-        'data-tree' => 'fancytree_to_types',
-        'data-root' => 'Виды ТО'
-      ]) ?>
-      <?= Html::a('<i class="fa fa-refresh" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-success btn-sm refresh',
-        'style' => ['margin-top' => '5px'],
-        'title' => $refresh_hint,
-        'data-toggle' => 'tooltip',
-        'data-placement' => 'top',
-        'data-container' => 'body',
-        'data-tree' => 'fancytree_to_types'
-      ]) ?>
-      <?= Html::a('<i class="fa fa-trash" aria-hidden="true"></i>', ['#'], ['class' => 'btn btn-danger btn-sm del-node',
-        'style' => ['margin-top' => '5px', 'display' => 'none'],
-        'title' => $del_hint,
-        'data-toggle' => 'tooltip',
-        'data-placement' => 'top',
-        'data-container' => 'body',
-        'data-tree' => 'fancytree_to_types',
-        'data-delete' => '/to/control/schedule/to-type/delete'
-      ]) ?>
+      <button class="btn btn-success btn-sm add-subcategory" title="<?= $add_hint ?>" data-toggle="tooltip"
+              data-placement="top" data-container="body" data-tree="fancytree_to_types"
+              data-root="Виды ТО">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-success btn-sm refresh" title="<?= $refresh_hint ?>" data-toggle="tooltip"
+              data-placement="top" data-container="body" data-tree="fancytree_to_types">
+        <i class="fa fa-refresh" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-danger btn-sm del-node" title="<?= $del_hint ?>" data-toggle="tooltip"
+              data-placement="top" data-container="body" data-tree="fancytree_to_types"
+              data-delete="/to/control/schedule/to-type/delete" style="display: none">
+        <i class="fa fa-trash" aria-hidden="true"></i>
+      </button>
     </div>
-
   </div>
 
-  <div class="col-lg-12 col-md-12" style="padding-bottom: 10px">
+  <div class="col-lg-8 col-md-8" style="padding-bottom: 10px">
     <div style="position: relative">
       <div class="container-fuid" style="float:left; width: 100%">
         <input class="form-control form-control-sm" autocomplete="off" name="search" placeholder="Поиск...">
@@ -124,6 +111,12 @@ $del_hint = 'Удалить';
         },
         triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
         beforeEdit: function (event, data) {
+          parent = data.node.parent;
+          parent.folder = true;
+          var node = data.node;
+          if (node.data.lvl === '0' || node.key == '-999') {
+            return false;
+          }
           return true;
         },
         edit: function (event, data) {
@@ -197,15 +190,6 @@ $del_hint = 'Удалить';
         $('.about-info').html('');
         var node = data.node;
         var lvl = node.data.lvl;
-        if (node.key == -999) {
-          $(".add-subcategory").hide();
-          return;
-        } else {
-          $(".add-subcategory").show();
-        }
-        if (lvl > 0) {                            // ограничение на вложенность
-          $(".add-subcategory").hide();
-        }
         if (lvl == 0) {
           $(".del-node").hide();
           $(".del-multi-nodes").hide();
@@ -214,10 +198,6 @@ $del_hint = 'Удалить';
         }
       },
       renderNode: function (node, data) {
-        if (data.node.key == -999) {
-          $(".add-category").show();
-          $(".add-subcategory").hide();
-        }
       }
     });
   })

@@ -42,6 +42,7 @@
               <p><a class="ext" data-url="/control/schedule/to-equipment">Оборудование</a></p>
               <p><a class="ext" data-url="/control/schedule/to-type">Виды ТО</a></p>
               <p><a class="ext" data-url="/control/schedule/to-admins">Сотрудники</a></p>
+              <p><a class="ext" data-url="/control/schedule/to-equipment-trash">Удаленное из графика ТО</a></p>
             </div>
           </div>
         </div>

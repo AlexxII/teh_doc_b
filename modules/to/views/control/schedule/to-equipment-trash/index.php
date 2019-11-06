@@ -2,11 +2,10 @@
 
 use yii\helpers\Html;
 
-$about = "Панель управления оборудованием, добавленным в графики проведения ТО.";
-$add_hint = 'Добавить обертку';
+$about = "Панель управления оборудованием, удаленным из графика проведения ТО.";
 $del_hint = 'Удалить обертку';
 $refresh_hint = 'Перезапустить форму';
-$serial_hint = 'Внимание! Серийный номер, присвоенный в данной форме отображается только в пределах раздела ТО';
+$serial_hint = 'Серийный номер, который был указан при добавлении данного оборудования в график ТО';
 $ref_hint = 'К оборудованию в основном перечне';
 
 ?>
@@ -14,22 +13,18 @@ $ref_hint = 'К оборудованию в основном перечне';
 <div class="">
   <div class="">
     <div class="container-fluid" style="margin-bottom: 10px">
-      <button class="btn btn-success btn-sm add-subcategory" title="<?= $add_hint ?>" data-toggle="tooltip"
-              data-placement="top" data-container="body" data-tree="fancytree_to_equipment" data-root="Оборудование">
-        <i class="fa fa-plus" aria-hidden="true"></i>
-      </button>
       <button class="btn btn-success btn-sm refresh" title="<?= $refresh_hint ?>" data-toggle="tooltip"
               data-placement="top" data-container="body" data-tree="fancytree_to_equipment">
         <i class="fa fa-refresh" aria-hidden="true"></i>
       </button>
       <button class="btn btn-danger btn-sm del-node" title="<?= $del_hint ?>" data-toggle="tooltip"
               data-placement="top" data-container="body" data-tree="fancytree_to_equipment"
-              data-delete="/to/control/schedule/to-equipment/delete" style="display: none">
+              data-delete="/to/control/schedule/to-equipment-trash/delete" style="display: none">
         <i class="fa fa-trash" aria-hidden="true"></i>
       </button>
       <button id="tool-ref" class="btn btn-info btn-sm" title="<?= $ref_hint ?>" data-toggle="tooltip"
               data-placement="top" data-container="body" data-tree="fancytree_to_equipment"
-              data-delete="/to/control/schedule/to-equipment/delete" style="display: none">
+              data-delete="/to/control/schedule/to-equipment-trash/delete" style="display: none">
         <i class="fa fa-level-up" aria-hidden="true"></i>
       </button>
     </div>
@@ -57,8 +52,7 @@ $ref_hint = 'К оборудованию в основном перечне';
     <div class="col-lg-5 col-md-5">
       <div class="alert alert-warning" style="margin-bottom: 10px">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
-        <strong>Внимание!</strong> Выберите оборудование серийный номер которого будет использоваться в графике ТО. Если
-        выпадающий список не активен, значит у объекта отсутствуют дочерние элементы.
+        <strong>Внимание!</strong> Удаленное из графика ТО оборудование можно перепривязать к новому оборудованию.
       </div>
 
       <div id="result-info" style="margin-bottom: 10px"></div>
@@ -68,14 +62,8 @@ $ref_hint = 'К оборудованию в основном перечне';
             <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                  data-toggle="tooltip" data-placement="top" title="<?= $serial_hint ?>"></sup>
           </label>
-          <input id="serial-number" class="form-control c-input" disabled>
-          <label>Оборудование:</label>
-          <select type="text" id="serial-control" class="c-input form-control" name="sn" disabled></select>
-          <label style="font-weight:400;font-size: 10px">Выберите оборудование.</label>
+          <input id="serial-number" class="form-control c-input" readonly>
         </div>
-        <div class="about-footer"></div>
-        <button type="submit" id="save-btn" onclick="saveClick(event)" class="btn btn-primary" disabled>Сохранить
-        </button>
       </form>
     </div>
 
@@ -95,7 +83,7 @@ $ref_hint = 'К оборудованию в основном перечне';
     var nodeId = window.nodeId;
     var serial = $('#serial-number').val();
     $.ajax({
-      url: "/to/control/schedule/to-equipment/tool-serial-save",
+      url: "/to/control/schedule/to-equipment-trash/tool-serial-save",
       type: "post",
       data: {
         serial: serial,
@@ -175,10 +163,10 @@ $ref_hint = 'К оборудованию в основном перечне';
     });
 
     // отображение и логика работа дерева
-    var main_url = '/to/control/schedule/to-equipment/all-tools';
-    var move_url = '/to/control/schedule/to-equipment/move-node';
-    var create_url = '/to/control/schedule/to-equipment/create-node';
-    var update_url = '/to/control/schedule/to-equipment/update-node';
+    var main_url = '/to/control/schedule/to-equipment-trash/all-tools';
+    var move_url = '/to/control/schedule/to-equipment-trash/move-node';
+    var create_url = '/to/control/schedule/to-equipment-trash/create-node';
+    var update_url = '/to/control/schedule/to-equipment-trash/update-node';
 
     $("#fancytree_to_equipment").fancytree({
       source: {
@@ -239,12 +227,11 @@ $ref_hint = 'К оборудованию в основном перечне';
           parent = data.node.parent;
           parent.folder = true;
           var node = data.node;
-          if (node.data.lvl === '0' || node.data.key == -999) {
+          if (node.data.lvl === '0' || node.key == '-999') {
             return false;
           }
           return true;
         },
-
         edit: function (event, data) {
           return true;
         },
@@ -316,31 +303,20 @@ $ref_hint = 'К оборудованию в основном перечне';
       activate: function (node, data) {
         $('#serial-number').val('');
         $('#serial-control').val('none');
-        $("#serial-control").children().remove();
-        $("#serial-control").prop("disabled", true);
-        $('#result-info').html('');
-        $("#save-btn").prop("disabled", true);
         var node = data.node;
         var lvl = node.data.lvl;
         window.node$ = node;
         window.nodeId = node.data.id;
         serialVal = node.data.eq_serial;
-        if (node.data.lvl == 0) {
-          $(".del-node").hide();
-        } else {
-          $(".del-node").show();
-        }
         if (node.data.eq_id != 0) {
           $('#serial-number').prop("disabled", false);
-          $('#tool-ref').show();
-          $(".del-node").hide();
           if (serialVal) {
             $('#serial-number').val(serialVal);
           } else {
             $('#serial-number').val('');
           }
           $.ajax({
-            url: '/to/control/schedule/to-equipment/tools-serials',
+            url: '/to/control/schedule/to-equipment-trash/tools-serials',
             data: {
               id: node.data.eq_id
             }
@@ -398,11 +374,26 @@ $ref_hint = 'К оборудованию в основном перечне';
           $("#serial-control").prop("disabled", true);
           $('#serial-number').prop("disabled", true);
           $('#serial-number').val('');
-          $('#tool-ref').hide();
         }
       },
       click: function (event, data) {
-
+        $('#result-info').html('');
+        $("#serial-control").children().remove();
+        $("#serial-control").prop("disabled", true);
+        var node = data.node;
+        var lvl = node.data.lvl;
+        $("#save-btn").prop("disabled", true);
+        if (lvl == 0) {
+          $(".del-node").hide();
+        } else {
+          $(".del-node").show();
+        }
+        if (node.data.eq_id != 0) {
+          $('#tool-ref').show();
+          $(".del-node").hide();
+        } else {
+          $('#tool-ref').hide();
+        }
       },
       renderNode: function (node, data) {
 

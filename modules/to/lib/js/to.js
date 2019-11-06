@@ -54,6 +54,7 @@ $(document).on('click', '.refresh', function (e) {
   var tree = $("#" + id).fancytree("getTree");
   tree.reload();
   $(".del-root").hide();
+  $("#tool-ref").hide();
   $(".del-node").hide();
   $(".del-multi-nodes").hide();
   $('.about-info').html('');

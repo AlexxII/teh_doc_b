@@ -31,7 +31,6 @@ $role_hint = 'Выберите роль пользователя при пров
         <i class="fa fa-trash" aria-hidden="true"></i>
       </button>
     </div>
-
   </div>
 
   <div class="col-lg-7 col-md-7" style="padding-bottom: 10px">
@@ -211,6 +210,10 @@ $role_hint = 'Выберите роль пользователя при пров
         beforeEdit: function (event, data) {
           parent = data.node.parent;
           parent.folder = true;
+          var node = data.node;
+          if (node.data.lvl === '0' || node.key == '-999') {
+            return false;
+          }
           return true;
         },
         edit: function (event, data) {

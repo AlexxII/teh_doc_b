@@ -214,10 +214,9 @@ BootstrapPluginAsset::register($this);
         triggerStart: ['clickActive', 'dbclick', 'f2', 'mac+enter', 'shift+click'],
         beforeEdit: function (event, data) {
           var node = data.node;
-          if (node.data.lvl === '0') {
+          if (node.data.lvl === '0' || node.key == '-999') {
             return false;
           }
-          // node.icon = 't fa fa-file-o';
           return true;
         },
         edit: function (event, data) {

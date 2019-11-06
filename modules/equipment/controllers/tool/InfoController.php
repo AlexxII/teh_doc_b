@@ -211,6 +211,11 @@ class InfoController extends Controller
       $setting = $model->settings;
       $setting->delete();
       $report = $model->delete();
+      $to = $model->to;                 // найти оборудование в то
+      if ($to) {
+        $to->valid = 0;
+        $to->save();
+      }
     }
     if ($report) {
       return [
