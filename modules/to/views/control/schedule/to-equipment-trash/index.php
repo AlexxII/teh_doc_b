@@ -301,14 +301,19 @@ $ref_hint = 'К оборудованию в основном перечне';
         }
       },
       activate: function (node, data) {
-        $('#serial-number').val('');
-        $('#serial-control').val('none');
+        $('#result-info').html('');
+        $("#save-btn").prop("disabled", true);
         var node = data.node;
         var lvl = node.data.lvl;
         window.node$ = node;
         window.nodeId = node.data.id;
         serialVal = node.data.eq_serial;
-        if (node.data.eq_id != 0) {
+        if (node.data.lvl == 0 || node.key == '-999') {
+          $(".del-node").hide();
+        } else {
+          $(".del-node").show();
+        }
+        if (node.data.eq_id != 0 || node.key == '-999') {
           $('#serial-number').prop("disabled", false);
           if (serialVal) {
             $('#serial-number').val(serialVal);
@@ -321,85 +326,22 @@ $ref_hint = 'К оборудованию в основном перечне';
               id: node.data.eq_id
             }
           }).done(function (result) {
-            if (result != -1) {
-              var serial = 0;
-              var result = JSON.parse(result, function (key, value) {
-                if (key == 'single') serial = 1;
-                return value;
-              });
-              if (serial) {
-                if (result.single != '' && result.single != null) {
-                  $('#serial-number').val(result.single);
-                  if (node.data.eq_serial == null) {
-                    $("#save-btn").prop("disabled", false);
-                  }
-                } else {
-                  $('#serial-number').val('');
-                  $("#save-btn").prop("disabled", true);
-                }
-              } else {
-                var optionsValues = '<select class="form-control input-sm c-input" id="serial-control" ' +
-                  'onchange=serialControl(this) style="margin-top: 5px">';
-                optionsValues += '<option selected disabled>Выберите</option>';
-                $.each(result, function (index, obj) {
-                  if (obj.eq_serial != '' && obj.eq_serial != null) {
-                    var serVal = 's/n: ' + obj.eq_serial;
-                  } else {
-                    serVal = 's/n: -';
-                  }
-                  optionsValues += '<option value="' + obj.id + '" ' +
-                    'data-serial="' + obj.eq_serial + '">' + obj.name + ' ' + serVal + '</option>';
-                });
-                optionsValues += '</select>';
-                var options = $('#serial-control');
-                options.replaceWith(optionsValues);
-                if (serialVal) {
-                  $("#serial-control option[data-serial='" + serialVal + "']").attr("selected", "selected");
-                }
-              }
-            } else if (result == -1) {
-              if ($('#serial-number').val() == '') {
-                $('#result-info').hide().html(warningAlert('У объекта нет серийного номера, введите его самостоятельно' +
-                  ' в поле ввода.')).fadeIn('slow');
-              }
-            } else {
-              $('#result-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
-                ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-            }
+
           }).fail(function (result) {
             $('#result-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
               ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
           });
         } else {
-          $("#serial-control").prop("disabled", true);
-          $('#serial-number').prop("disabled", true);
-          $('#serial-number').val('');
+          $('#tool-ref').hide();
         }
       },
       click: function (event, data) {
-        $('#result-info').html('');
-        $("#serial-control").children().remove();
-        $("#serial-control").prop("disabled", true);
-        var node = data.node;
-        var lvl = node.data.lvl;
-        $("#save-btn").prop("disabled", true);
-        if (lvl == 0) {
-          $(".del-node").hide();
-        } else {
-          $(".del-node").show();
-        }
-        if (node.data.eq_id != 0) {
-          $('#tool-ref').show();
-          $(".del-node").hide();
-        } else {
-          $('#tool-ref').hide();
-        }
+
       },
       renderNode: function (node, data) {
 
       }
-    })
-    ;
+    });
   });
 
 
