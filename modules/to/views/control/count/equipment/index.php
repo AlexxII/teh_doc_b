@@ -340,7 +340,7 @@ $ref_hint = 'К оборудованию в основном перечне';
             $('#tool-ref').hide();
             $('#template-control').prop('disabled', true);
           }
-          if(node.data.template) {
+          if(node.data.count_template) {
             $('#template-control').val(node.data.count_template);
           }
         },
