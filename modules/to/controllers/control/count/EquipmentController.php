@@ -126,34 +126,6 @@ class EquipmentController extends Controller
   }
 
   // Удаляет только папки - агригаторы
-/*  public function actionDelete()
-  {
-    if (!empty($_POST)) {
-      // TODO: удаление или невидимый !!!!!!!
-      $id = $_POST['id'];
-      $parentId = $_POST['parent'];
-      $toWrap = CountEquipment::findModel($id);
-      if ($toWrap->eq_id == 0) {
-//        $parentOrder = CountEquipment::findOne(['name' => 'Оборудование']);
-        $parentOrder = CountEquipment::findModel($parentId);
-        foreach ($toWrap->children()->all() as $child) {
-          $child->appendTo($parentOrder);
-        }
-        if ($toWrap->delete()) {
-          return true;
-        }
-        return false;
-      } else {
-        $toWrap->valid = 0;
-        if ($toWrap->save()) {
-          return true;
-        }
-      }
-      return false;
-    }
-    return false;
-  }*/
-
   public function actionDelete()
   {
     if (!empty($_POST)) {

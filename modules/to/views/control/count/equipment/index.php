@@ -332,14 +332,19 @@ $ref_hint = 'К оборудованию в основном перечне';
         }
       },
       activate: function (node, data) {
+        $('#template-control').val('none');
         var node = data.node;
         var lvl = node.data.lvl;
         nodeId = node.data.id;
         console.log(node.data);
-
+        countTmpt = node.data.count_template;
+        if (countTmpt) {
+          $('#template-control').val(countTmpt);
+        } else {
+          $('#template-control').val('');
+        }
         node$ = node;
         $('#result-info').html('');
-        $('#template-control').val('none');
         if (lvl == 0) {
           $('.del-node').hide();
         } else {
