@@ -67,6 +67,16 @@ $ref_hint = 'К оборудованию в основном перечне';
           <label>Шаблон подсчета:</label>
           <select type="text" id="template-control" class="c-input form-control" name="sn" disabled></select>
           <label style="font-weight:400;font-size: 10px">Выберите шаблон.</label>
+          <br>
+          <br>
+          <label>
+            <input class="check-it" type="checkbox" id="special_works_feature"
+                   data-check='special-check'
+                   data-url='special-works'>
+            Не учитывать ТО</label>
+          <span class="status-indicator" id="special-check"></span>
+          <p class="note">При подсчете наработанного времени не учитывать время на проведение ТО</p>
+
         </div>
         <div class="about-footer" style="padding-bottom: 10px">
 
@@ -141,26 +151,10 @@ $ref_hint = 'К оборудованию в основном перечне';
     });
   }
 
-  function serialControl(el) {
-    var serial = $(el).find(':selected').data('serial');
-    if (serial == '' || serial == null) {
-      $("#save-btn").prop("disabled", true);
-      $('#serial-number').val('');
-    } else {
-      $('#serial-number').val(serial);
-      $("#save-btn").prop("disabled", false);
-    }
-    return;
-  }
-
   var template;
 
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-
-    $("#serial-number").on('keyup mouseclick', function () {
-      $("#save-btn").prop("disabled", this.value.length == "" ? true : false);
-    });
 
     $('#tool-ref').click(function (e) {
       e.preventDefault();

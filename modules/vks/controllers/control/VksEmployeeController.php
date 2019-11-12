@@ -104,5 +104,4 @@ class VksEmployeeController extends Controller
 
   }
 
-
 }

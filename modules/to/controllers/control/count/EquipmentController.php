@@ -142,7 +142,6 @@ class EquipmentController extends Controller
     return false;
   }
 
-
   public function actionSaveTemplate()
   {
     if ($_POST) {

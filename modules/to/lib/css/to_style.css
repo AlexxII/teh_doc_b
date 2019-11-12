@@ -108,3 +108,13 @@ body {
 .fancytree-edit-input {
   color: #000;
 }
+
+/* Настройки -> подсчет времени */
+.note {
+  color:
+          #586069;
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0 0 10px 0;
+}

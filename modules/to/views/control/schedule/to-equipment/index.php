@@ -3,11 +3,14 @@
 use yii\helpers\Html;
 
 $about = "Панель управления оборудованием, добавленным в графики проведения ТО.";
-$add_hint = 'Добавить обертку';
-$del_hint = 'Удалить обертку';
-$refresh_hint = 'Перезапустить форму';
-$serial_hint = 'Внимание! Серийный номер, присвоенный в данной форме отображается только в пределах раздела ТО';
-$ref_hint = 'К оборудованию в основном перечне';
+$add_hint = "Добавить обертку";
+$del_hint = "Удалить обертку";
+$refresh_hint = "Перезапустить форму";
+$serial_hint = "Внимание! Серийный номер, присвоенный в данной форме отображается только в пределах раздела ТО.";
+$duration_hint = "Данный параметр необходим для автоматизации формирования графика ТО.";
+$on_hint = "Длительность включения оборудования на ТО. Параметр необходим для точного подсчета наработанного времени. Может отсутствовать.";
+$off_hint = "Длительность отключения оборудования на ТО. Параметр необходим для точного подсчета наработанного времени. Может отсутствовать.";
+$ref_hint = "К оборудованию в основном перечне";
 
 ?>
 
@@ -62,19 +65,46 @@ $ref_hint = 'К оборудованию в основном перечне';
       </div>
 
       <div id="result-info" style="margin-bottom: 10px"></div>
-      <form action="create" method="post" class="input-add">
-        <div class="about-main">
+      <form action="create" method="post" class="input-add" id="to-data">
+        <div class="about-main tool-to-data">
           <label>Серийный номер:
             <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
                  data-toggle="tooltip" data-placement="top" title="<?= $serial_hint ?>"></sup>
           </label>
           <input id="serial-number" class="form-control c-input" disabled>
+          <br>
           <label>Оборудование:</label>
           <select type="text" id="serial-control" class="c-input form-control" name="sn" disabled></select>
           <label style="font-weight:400;font-size: 10px">Выберите оборудование.</label>
+          <br>
+          <label>t обслуживания:
+            <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+                 data-toggle="tooltip" data-placement="top" title="<?= $duration_hint ?>"></sup>
+          </label>
+          <input type="text" id="to-duration" class="c-input form-control" name="toDuration" disabled>
+          <label style="font-weight:400;font-size: 10px">В минутах.</label>
+          <br>
+          <div class="row">
+            <div class="col-md-6 col-lg-6 col-xs-6">
+              <label>t включения:
+                <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+                     data-toggle="tooltip" data-placement="top" title="<?= $on_hint ?>"></sup>
+              </label>
+              <input type="text" id="to-duration-on" class="c-input form-control" name="onTime" disabled>
+              <label style="font-weight:400;font-size: 10px">В минутах.</label>
+            </div>
+            <div class="col-md-6 col-lg-6 col-xs-6">
+              <label>t отключения:
+                <sup class="h-title fa fa-info-circle nonreq" aria-hidden="true"
+                     data-toggle="tooltip" data-placement="top" title="<?= $off_hint ?>"></sup>
+              </label>
+              <input type="text" id="to-duration-off" class="c-input form-control" name="blackOut" disabled>
+              <label style="font-weight:400;font-size: 10px">В минутах.</label>
+            </div>
+          </div>
         </div>
         <div class="about-footer"></div>
-        <button type="submit" id="save-btn" onclick="saveClick(event)" class="btn btn-primary" disabled>Сохранить
+        <button type="submit" id="save-btn" onclick="saveToData(event)" class="btn btn-primary" disabled>Сохранить
         </button>
       </form>
     </div>
@@ -89,17 +119,29 @@ $ref_hint = 'К оборудованию в основном перечне';
   var node$;
 
   // сохрание оборудования, сереийный номер которого будет использоваться в графике ТО
-  function saveClick(e) {
+  function saveToData(e) {
     e.preventDefault();
     var csrf = $('meta[name=csrf-token]').attr("content");
     var nodeId = window.nodeId;
+
     var serial = $('#serial-number').val();
+    var toDuration = $('#to-duration').val();
+    var onTime = $('#to-duration-on').val();
+    var blackOut = $('#to-duration-off').val();
+
+    var $form = $("#to-data");
+    var data = $form.serialize();
     $.ajax({
-      url: "/to/control/schedule/to-equipment/tool-serial-save",
+      url: "/to/control/schedule/to-equipment/to-data-save",
       type: "post",
       data: {
-        serial: serial,
         _csrf: csrf,
+        data: {
+          'serial': serial,
+          'toDuration': toDuration,
+          'onTime': onTime,
+          'blackOut': blackOut
+        },
         id: nodeId
       },
       success: function (result) {
@@ -318,6 +360,7 @@ $ref_hint = 'К оборудованию в основном перечне';
         $('#serial-control').val('none');
         $("#serial-control").children().remove();
         $("#serial-control").prop("disabled", true);
+        $('.tool-to-data input').prop("disabled", true);
         $('#result-info').html('');
         $("#save-btn").prop("disabled", true);
         var node = data.node;
@@ -339,6 +382,7 @@ $ref_hint = 'К оборудованию в основном перечне';
           } else {
             $('#serial-number').val('');
           }
+          $('.tool-to-data input').prop("disabled", false);
           $.ajax({
             url: '/to/control/schedule/to-equipment/tools-serials',
             data: {
@@ -395,6 +439,7 @@ $ref_hint = 'К оборудованию в основном перечне';
               ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
           });
         } else {
+          $('#serial-number').prop("disabled", true);
           $("#serial-control").prop("disabled", true);
           $('#serial-number').prop("disabled", true);
           $('#serial-number').val('');

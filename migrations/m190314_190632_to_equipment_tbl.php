@@ -26,6 +26,9 @@ class m190314_190632_to_equipment_tbl extends Migration
       'lvl' => $this->smallInteger(5)->notNull(),
       'name' => $this->string(120)->notNull(),
       'eq_serial' => $this->string(255),
+      'to_duration' => $this->integer(),
+      'on_time' => $this->integer(),
+      'shutdown_time' => $this->integer(),
       'parent_id' => $this->bigInteger(),
       'valid' => $this->boolean()->defaultValue(1),
     ], $tableOptions);

@@ -46,6 +46,11 @@ class ToEquipmentController extends Controller
       ->orderby(['lft' => SORT_ASC])
       ->asArray()->all();
     if (!empty($children)){
+      $rootTool = [];
+      $rootTool['id'] = $root->id;
+      $rootTool['eq_serial'] = $root->eq_serial;
+      $rootTool['name'] = $root->name;
+      array_unshift($children, $rootTool);
       return json_encode($children);
     } else {
       if ($root->eq_serial){
@@ -57,12 +62,16 @@ class ToEquipmentController extends Controller
     return false;
   }
 
-  public function actionToolSerialSave()
+  public function actionToDataSave()
   {
     if (!empty($_POST)) {
       $id = $_POST['id'];
+      $data = $_POST['data'];
       $model = ToEquipment::findModel($id);
-      $model->eq_serial = $_POST['serial'];
+      $model->eq_serial = $data['serial'];
+      $model->to_duration = $data['toDuration'];
+      $model->on_time = $data['onTime'];
+      $model->shutdown_time = $data['blackOut'];
       if ($model->save()) {
         return true;
       }
@@ -70,7 +79,6 @@ class ToEquipmentController extends Controller
     }
     return false;
   }
-
 
   public function actionCreateNode($title)
   {

@@ -32,6 +32,12 @@ BootstrapPluginAsset::register($this);
   .small-nidden-btns {
     margin-bottom: 10px;
   }
+  ul.fancytree-container {
+    width: 100%;
+    height: 500px;
+    overflow-y: auto;
+    position: relative;
+  }
 </style>
 
 <div id="equipment-main-wrap" class="container">
