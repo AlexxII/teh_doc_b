@@ -61,9 +61,11 @@ $(document).on('click', '.refresh', function (e) {
 });
 
 $(document).on('click', '.del-node', function (e) {
-  var id = $(e.currentTarget).data('tree');
-  var node = $("#" + id).fancytree("getActiveNode");
+  var idAttr = $(e.currentTarget).data('tree');
+  var node = $("#" + idAttr).fancytree("getActiveNode");
   var url = $(e.currentTarget).data('delete');
+  var tree = $("#" + idAttr).fancytree('getTree');
+  // var parentNode = node.getParentList()[0].key;
   e.preventDefault();
   jc = $.confirm({
     icon: 'fa fa-question',
@@ -77,7 +79,7 @@ $(document).on('click', '.del-node', function (e) {
         btnClass: 'btn-danger',
         action: function () {
           jc.close();
-          deleteProcess(url, node);
+          deleteProcess(url, node, tree);
         }
       },
       cancel: {
@@ -161,7 +163,7 @@ $(document).on('keyup', 'input[name=search]', function (e) {
   $("#btnResetSearch").attr("disabled", false);
 });
 
-function deleteProcess(url, node) {
+function deleteProcess(url, node, tree) {
   var csrf = $('meta[name=csrf-token]').attr("content");
   jc = $.confirm({
     icon: 'fa fa-cog fa-spin',
@@ -174,11 +176,15 @@ function deleteProcess(url, node) {
   $.ajax({
     url: url,
     type: "post",
-    data: {id: node.data.id, _csrf: csrf}
+    data: {
+      _csrf: csrf,
+      id: node.data.id
+    }
   }).done(function (response) {
     if (response != false) {
       jc.close();
       node.remove();
+      tree.reload();
       $('.about-info').html('');
       $('.del-node').hide();
       $(".del-multi-nodes").hide();

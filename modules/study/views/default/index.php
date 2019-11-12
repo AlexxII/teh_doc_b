@@ -71,8 +71,6 @@ AppAsset::register($this);            // регистрация ресурсов
     }
   };
 
-
-
   var toAlldayEx = {
     'days': [1, 2, 3, 4, 5, 6, 7],
     'hours': 24,

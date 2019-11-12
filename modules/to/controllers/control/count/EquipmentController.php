@@ -47,10 +47,10 @@ class EquipmentController extends Controller
     $children = $root->children()->select(['id', 'eq_serial', 'name'])
       ->orderby(['lft' => SORT_ASC])
       ->asArray()->all();
-    if (!empty($children)){
+    if (!empty($children)) {
       return json_encode($children);
     } else {
-      if ($root->eq_serial){
+      if ($root->eq_serial) {
         return json_encode(['single' => $root->eq_serial]);
       } else {
         return -1;
@@ -126,18 +126,20 @@ class EquipmentController extends Controller
   }
 
   // Удаляет только папки - агригаторы
-  public function actionDelete()
+/*  public function actionDelete()
   {
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
+      $parentId = $_POST['parent'];
       $toWrap = CountEquipment::findModel($id);
-      if ($toWrap->eq_id == 0){
-        $parentOrder = CountEquipment::findOne(['name' => 'Оборудование']);
-        foreach ($toWrap->children()->all() as $child){
+      if ($toWrap->eq_id == 0) {
+//        $parentOrder = CountEquipment::findOne(['name' => 'Оборудование']);
+        $parentOrder = CountEquipment::findModel($parentId);
+        foreach ($toWrap->children()->all() as $child) {
           $child->appendTo($parentOrder);
         }
-        if ($toWrap->delete()){
+        if ($toWrap->delete()) {
           return true;
         }
         return false;
@@ -150,14 +152,31 @@ class EquipmentController extends Controller
       return false;
     }
     return false;
+  }*/
+
+  public function actionDelete()
+  {
+    if (!empty($_POST)) {
+      // TODO: удаление или невидимый !!!!!!!
+      $id = $_POST['id'];
+      $toWrap = CountEquipment::findModel($id);
+      if ($toWrap->eq_id == 0) {
+        if ($toWrap->delete()) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return false;
   }
+
 
   public function actionSaveTemplate()
   {
-    if($_POST) {
-      if ($_POST["template"] && $_POST["id"]){
+    if ($_POST) {
+      if ($_POST["template"] && $_POST["id"]) {
         $model = CountEquipment::findModel($_POST["id"]);
-        if ($model){
+        if ($model) {
           $model->count_template = $_POST["template"];
           if ($model->save()) {
             return true;

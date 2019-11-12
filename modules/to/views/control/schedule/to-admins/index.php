@@ -20,7 +20,7 @@ $role_hint = 'Выберите роль пользователя при пров
               data-placement="top" data-container="body" data-tree="fancytree_to_admins"
               data-root="Сотрудники, участвующие в ТО">
         <i class="fa fa-plus" aria-hidden="true"></i>
-      </button>
+339      </button>
       <button class="btn btn-success btn-sm refresh" title="<?= $refresh_hint ?>" data-toggle="tooltip"
               data-placement="top" data-container="body" data-tree="fancytree_to_admins">
         <i class="fa fa-refresh" aria-hidden="true"></i>

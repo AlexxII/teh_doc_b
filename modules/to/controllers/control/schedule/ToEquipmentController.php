@@ -124,24 +124,15 @@ class ToEquipmentController extends Controller
   }
 
   // Удаляет только папки - агригаторы
+
   public function actionDelete()
   {
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
       $toWrap = ToEquipment::findModel($id);
-      if ($toWrap->eq_id == 0){
-        $parentOrder = ToEquipment::findOne(['name' => 'Оборудование']);
-        foreach ($toWrap->children()->all() as $child){
-          $child->appendTo($parentOrder);
-        }
-        if ($toWrap->delete()){
-          return true;
-        }
-        return false;
-      } else {
-        $toWrap->valid = 0;
-        if ($toWrap->save()) {
+      if ($toWrap->eq_id == 0) {
+        if ($toWrap->delete()) {
           return true;
         }
       }
