@@ -60,7 +60,8 @@ $ref_hint = "К оборудованию в основном перечне";
     <div class="col-lg-5 col-md-5">
       <div class="alert alert-warning" style="margin-bottom: 10px">
         <a href="#" class="close" data-dismiss="alert">&times;</a>
-        <strong>Внимание!</strong> Выберите оборудование серийный номер которого будет использоваться в графике ТО. Если
+        <strong>Внимание!</strong> Выберите оборудование, серийный номер которого будет использоваться в графике ТО.
+        Если
         выпадающий список не активен, значит у объекта отсутствуют дочерние элементы.
       </div>
 
@@ -160,26 +161,36 @@ $ref_hint = "К оборудованию в основном перечне";
     });
   }
 
-  function serialControl(el) {
-    var serial = $(el).find(':selected').data('serial');
+  var serialVal;
+
+  $(document).on('change', '#serial-control', function () {
+    var serial = $(this).find(':selected').data('serial');
     if (serial == '' || serial == null) {
-      $("#save-btn").prop("disabled", true);
       $('#serial-number').val('');
+      $("#save-btn").prop("disabled", true);
     } else {
       $('#serial-number').val(serial);
       $("#save-btn").prop("disabled", false);
     }
-    return;
-  }
+  });
 
-  var serialVal;
+  // $('.tool-to-data input').prop('disabled', true).val('');
+
+  $(document).on('keyup', '.tool-to-data input', function () {
+    $('.tool-to-data input').each(function () {
+      console.log($(this).val());
+    });
+/*
+    if ($('.tool-to-data input').val()){
+      // $("#save-btn").prop("disabled", this.value.length == "" ? true : false);
+      $("#save-btn").prop("disabled", false);
+    }
+*/
+  });
+
 
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
-
-    $("#serial-number").on('keyup mouseclick', function () {
-      $("#save-btn").prop("disabled", this.value.length == "" ? true : false);
-    });
 
     $('#tool-ref').click(function (e) {
       e.preventDefault();
@@ -318,8 +329,6 @@ $ref_hint = "К оборудованию в основном перечне";
               node.setTitle(data.orgTitle);
               $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
-            }).always(function () {
-              // data.input.removeClass("pending")
             });
           } else {
             $.ajax({
@@ -342,8 +351,6 @@ $ref_hint = "К оборудованию в основном перечне";
               $('#result-info').hide().html(badAlert('Запись не сохранена в БД. Попробуйте перезагрузить страницу и попробовать' +
                 ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
               node.setTitle(data.orgTitle);
-            }).always(function () {
-              // data.input.removeClass("pending")
             });
           }
           return true;
@@ -375,7 +382,27 @@ $ref_hint = "К оборудованию в основном перечне";
         if (node.data.eq_id != 0) {
           $('#tool-ref').show();
           $(".del-node").hide();
-          
+          loadToData(node.data.eq_id, function (result) {
+            var data = JSON.parse(result);
+            var selectData = data.selectData;
+            if (selectData != -1) {
+              $('#serial-control').append('<option value="null" disabled selected>Выберите</option>');
+              selectData.forEach(function (val, index, array) {
+                $('#serial-control').append('<option value=' + val.eq_serial + ' data-serial="' + val.eq_serial + '">' +
+                  val.name + ' - s/n: ' + val.eq_serial + '</option>');
+              });
+              $('#serial-control').prop('disabled', false);
+            } else {
+              if (!node.data.eq_serial) {
+                $('#result-info').hide().html(warningAlert('У выбранного оборудования не был указан серийный номер и ' +
+                  'отсутствуют вложенные элементы. ' +
+                  'Заполните их в модуле "Техника" или заполните поле "Серийный номер" вручную.')).fadeIn('slow');
+              }
+            }
+            $('#serial-number').prop('disabled', false).val(node.data.eq_serial);
+            $('#serial-control option[value="' + node.data.eq_serial + '"]').prop('selected', true);
+            fillToData(data.toData);
+          });
         } else {
           $('#tool-ref').hide();
         }
@@ -389,5 +416,25 @@ $ref_hint = "К оборудованию в основном перечне";
     });
   });
 
+  function loadToData(toolId, callback) {
+    var toDataUrl = '/to/control/schedule/to-equipment/to-data';
+    $.ajax({
+      url: toDataUrl,
+      data: {
+        id: toolId
+      }
+    }).done(function (result) {
+      callback(result);
+    }).fail(function (result) {
+      $('#result-info').hide().html(badAlert('Что-то пошло не так. Попробуйте перезагрузить страницу и попробовать' +
+        ' снова. При повторных ошибках обратитесь к разработчику.')).fadeIn('slow');
+    });
+  }
+
+  function fillToData(toData) {
+    $('#to-duration').prop('disabled', false).val(toData.toDuration);
+    $('#to-duration-on').prop('disabled', false).val(toData.onDuration);
+    $('#to-duration-off').prop('disabled', false).val(toData.offDuration);
+  }
 
 </script>

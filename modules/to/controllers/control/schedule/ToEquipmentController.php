@@ -39,7 +39,7 @@ class ToEquipmentController extends Controller
 //    return $this->renderAjax("index");
   }
 
-  public function actionToolsSerials($id)
+  public function actionToData($id)
   {
     $parent = Tools::findModel($id);
     $children = $parent->children()->select(["id", "eq_serial", "name"])
@@ -50,23 +50,23 @@ class ToEquipmentController extends Controller
     $toToolInfo["toDuration"] = $toTool->to_duration;
     $toToolInfo["onDuration"] = $toTool->on_time;
     $toToolInfo["offDuration"] = $toTool->shutdown_time;
+    $result = [];
     if (!empty($children)){                                     // есть вложенное оборудование
       $parentTool = [];
       $parentTool["id"] = $parent->id;
       $parentTool["eq_serial"] = $parent->eq_serial;
       $parentTool["name"] = $parent->name;
       array_unshift($children, $parentTool);
-      array_push($children, $toToolInfo);
-
-      return json_encode($children);
+      $result["selectData"] = $children;
     } else {                                                    // вложенного оборудования нет, подтягиваем номер ноды
       if ($parent->eq_serial){
-        return json_encode(["single" => $parent->eq_serial]);
+        $result["selectData"] = ["single" => $parent->eq_serial];
       } else {
-        return -1;
+        $result["selectData"] = -1;
       }
     }
-    return false;
+    $result["toData"] = $toToolInfo;
+    return json_encode($result);
   }
 
   public function actionToDataSave()
