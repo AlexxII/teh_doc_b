@@ -312,7 +312,9 @@ FancytreeAsset::register($this);
     });
 
     $('.land').on('click', function () {
-        window.location.href = 'maps/murm';
+        if (this.id == '51') {
+            window.location.href = 'maps/murm';
+        }
     });
 
     function initRusMap() {
