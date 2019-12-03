@@ -11,9 +11,9 @@ FancytreeAsset::register($this);
 
 <div id="map-rus-light-wrap">
   <div class="region-legend">
-    
+
   </div>
-  <svg id="map-svg" viewBox="10 0 620 420" >
+  <svg id="map-svg" viewBox="10 0 620 420">
     <g>
       <path class="land"
             d="M575.354,370.615c-0.355-0.235-0.078-1.102,1.063-3.268c0.866-1.616,1.575-3.151,1.575-3.428c0-0.274-1.143-2.323-2.561-4.568c-1.772-2.874-3.19-4.569-4.727-5.791c-1.181-0.944-2.167-2.008-2.167-2.363c0-0.787,1.183-4.371,1.655-4.961c0.196-0.237,1.537-0.632,2.993-0.907c3.151-0.512,4.806-1.103,4.806-1.733c0-0.235-0.235-1.142-0.552-2.008c-0.315-0.867-0.669-3.467-0.827-5.711c-0.196-3.112-0.512-4.688-1.221-6.263c-0.984-2.206-1.181-3.19-0.63-3.19c0.196,0,0.63-0.237,1.024-0.551c0.708-0.474,0.708-0.593,0.078-1.497c-0.59-0.945-0.59-1.064,0.394-2.836l1.024-1.813h3.032h3.033l2.168-1.93l2.125-1.932l-1.063-2.204l-1.063-2.166l1.457-0.118c1.142-0.117,1.496-0.315,1.691-1.103c0.436-1.536,0.396-5.437-0.038-5.711c-0.197-0.158-1.023-0.08-1.813,0.156c-1.102,0.316-1.692,0.238-2.56-0.195c-0.631-0.316-1.143-0.71-1.143-0.907c0-0.158,0.71-1.339,1.615-2.56l1.614-2.246l1.813,1.3c1.3,0.946,1.891,1.656,1.97,2.401c0.117,0.789,0.472,1.223,1.417,1.616c1.065,0.435,1.34,0.786,1.536,2.048c0.158,0.828,0.63,3.032,1.063,4.885c0.788,3.033,0.865,4.765,1.064,19.694l0.196,16.347l-2.521,5.513l-2.521,5.475l-4.844,1.458c-2.641,0.827-5.043,1.654-5.319,1.89c-0.314,0.237-0.59,1.617-0.707,3.151c-0.118,1.498-0.552,3.506-0.946,4.529c-0.592,1.457-0.945,1.812-1.733,1.812C576.259,370.892,575.63,370.773,575.354,370.615z"
@@ -270,10 +270,10 @@ FancytreeAsset::register($this);
       <path class="land"
             d="m -14.072743,287.36865 0.424152,0.66613 -0.144512,0.12218 -0.29746,-0.14883 -0.120003,0.51759 0.421767,0.17248 0.07633,0.21817 -0.626485,0.35392 0.141043,0.62999 -0.47832,1.1407 -0.41725,0.0682 -0.06169,-0.1037 -0.633784,-0.36621 0.07441,-0.3347 -0.205856,-0.25825 0.220525,-0.50292 -0.477982,-0.58775 0.04462,-0.95074 0.350589,0.10861 0.708107,0.59338 -0.219299,-0.4388 0.396764,-0.0972 0.824303,-0.8022 5e-6,-10e-6 2e-6,0 7e-6,0 2e-6,-1e-5 5e-6,0 3e-6,0 z"
             stroke="none" id="92" name="Севастополь"></path>
-<!--      <path class="land"
-            d="m160.927,365.28101c-0.11801,-0.47299 -0.23599,-1.418 -0.23599,-2.08801c0,-1.18298 0.11798,-1.25998 1.73199,-1.53699c2.246,-0.31299 2.60001,-0.078 2.60001,1.81299c0,1.73199 -0.078,1.77301 -2.24501,2.284c-1.49699,0.315 -1.65401,0.27603 -1.851,-0.47198z"
-            stroke="none" id="99" name="Байконур"></path>
--->    </g>
+      <!--      <path class="land"
+                  d="m160.927,365.28101c-0.11801,-0.47299 -0.23599,-1.418 -0.23599,-2.08801c0,-1.18298 0.11798,-1.25998 1.73199,-1.53699c2.246,-0.31299 2.60001,-0.078 2.60001,1.81299c0,1.73199 -0.078,1.77301 -2.24501,2.284c-1.49699,0.315 -1.65401,0.27603 -1.851,-0.47198z"
+                  stroke="none" id="99" name="Байконур"></path>
+      -->    </g>
   </svg>
   <div class="visible-xs visible-sm"></div>
 
@@ -281,57 +281,60 @@ FancytreeAsset::register($this);
 
 
 <script>
-  initRusMap();
+    initRusMap();
 
-  $(document).ready(function () {
+    $(document).ready(function () {
 
-    $('#app-control').removeClass('hidden');
+        $('#app-control').removeClass('hidden');
 
-    initAppConfig('/maps/menu/app-config');
+        initAppConfig('/maps/menu/app-config');
 
-    $('.land').on({
-      mouseenter: function () {
-        var url = '/maps/map-rus/detail';
-        var number = $(this).attr('id');
+        $('.land').on({
+            mouseenter: function () {
+                var url = '/maps/map-rus/detail';
+                var number = $(this).attr('id');
+                $.ajax({
+                    url: url,
+                    method: 'get',
+                    data: {
+                        number: number
+                    }
+                }).done(function (response) {
+                    $('.region-legend').html(response.data.data);
+                }).fail(function () {
+                    console.log('fail');
+                });
+            },
+            mouseleave: function (e) {
+                // $('#region-legend').html('');
+            }
+        })
+    });
+
+    $('.land').on('click', function () {
+        window.location.href = 'maps/murm';
+    });
+
+    function initRusMap() {
         $.ajax({
-          url: url,
-          method: 'get',
-          data: {
-           number: number
-          }
+            url: '/maps/map-rus/color',
+            method: 'get'
         }).done(function (response) {
-          $('.region-legend').html(response.data.data);
+            var data = response.data.data;
+            var regions = data.regions;
+            regions.forEach(function (val, i, ar) {
+                var id = val['region_number'];
+                if (id != null) {
+                    $('#' + id).css({fill: data.color[val['parent_id']]});
+                }
+            })
         }).fail(function () {
-          console.log('fail');
+            console.log('fail');
         });
-      },
-      mouseleave: function (e) {
-        // $('#region-legend').html('');
-      }
-    })
-  });
-
-  function initRusMap()
-  {
-    $.ajax({
-      url: '/maps/map-rus/color',
-      method: 'get'
-    }).done(function (response) {
-      var data = response.data.data;
-      var regions = data.regions;
-      regions.forEach(function (val, i, ar) {
-        var id = val['region_number'];
-        if(id != null) {
-          $('#' + id).css({fill: data.color[val['parent_id']]});
-        }
-      })
-    }).fail(function () {
-      console.log('fail');
-    });
-    $('.color').each(function () {
-      var color = $(this).data('color');
-      $(this).css({'background-color' : color});
-    });
-  }
+        $('.color').each(function () {
+            var color = $(this).data('color');
+            $(this).css({'background-color': color});
+        });
+    }
 
 </script>

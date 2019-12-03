@@ -41,7 +41,8 @@
         "bower-asset/slidebars": "^2.0",
         "bower-asset/toolbar": "^1.0",
         "bower-asset/pdfmake": "^0.1.60",
-        "bower-asset/fullcalendar": "4.2.0"
+        "bower-asset/fullcalendar": "4.2.0",
+        "bower-asset/leaflet": "^1.6"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
