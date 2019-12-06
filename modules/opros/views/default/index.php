@@ -13,14 +13,17 @@
   $(document).ready(function (e) {
     $('#xmlupload').on('change', function (e) {
       e.preventDefault();
+      var txt = '';
       var selectedFile = document.getElementById('xmlupload').files[0];
       var reader = new FileReader();
       reader.onload = function (e) {
         readXml = e.target.result;
-        console.log(readXml);
         var parser = new DOMParser();
         var doc = parser.parseFromString(readXml, "application/xml");
         x = doc.getElementsByTagName("vopros");
+        for (i = 0; i < x.length; i++) {
+            txt += x[i].childNodes[0]
+        }
         console.log(x);
       };
       reader.readAsText(selectedFile);
