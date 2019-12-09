@@ -1,10 +1,9 @@
 <div class="row">
   <div class="formField">
-    <label for="fileToUpload">Зашрузить XML файл</label><br/>
+    <label for="fileToUpload">Загрузить XML файл</label><br/>
     <input type="file" name="oprosxml" id="xmlupload"/>
   </div>
   <div id="result" style="padding-bottom: 20px">
-
   </div>
 </div>
 
