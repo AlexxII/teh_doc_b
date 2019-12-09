@@ -47,7 +47,7 @@ class ToYearSchedule extends \yii\db\ActiveRecord
 
   public static function findModel($year)
   {
-    if (($model = ToYearSchedule::find()->where(['schedule_year' => $year])) !== null) {
+    if (($model = Polls::find()->where(['schedule_year' => $year])) !== null) {
       return $model;
     }
     throw new NotFoundHttpException('Запрошенная страница не существует.');

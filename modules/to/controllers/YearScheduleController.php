@@ -8,7 +8,7 @@ use yii\web\Controller;
 use app\base\Model;
 use app\modules\to\models\schedule\ToEquipment;
 use app\modules\to\models\schedule\ToType;
-use app\modules\to\models\schedule\ToYearSchedule;
+use app\modules\to\models\schedule\Polls;
 
 class YearScheduleController extends Controller
 {
@@ -42,7 +42,7 @@ class YearScheduleController extends Controller
   {
     $year = $_POST['year'];
     $result = array();
-    $yearModel = ToYearSchedule::findAll(['schedule_year' => $year]);
+    $yearModel = Polls::findAll(['schedule_year' => $year]);
     $toEq = ToEquipment::find()
       ->where(['valid' => 1])
       ->andWhere(['!=', 'eq_id', '0'])->orderby(['lft' => SORT_ASC])->asArray()->all();
@@ -66,12 +66,12 @@ class YearScheduleController extends Controller
       return json_encode($result);
     } else {
       foreach ($toEq as $i => $eq) {
-        $toss[] = new ToYearSchedule();
+        $toss[] = new Polls();
         $toss[$i]->eq_id = $eq['id'];
         $toss[$i]->schedule_year = $year;
         $toss[$i]->save();
       }
-      $yearModel = ToYearSchedule::findAll(['schedule_year' => $year]);
+      $yearModel = Polls::findAll(['schedule_year' => $year]);
       $t = array();
       foreach ($yearModel as $model) {
         $temp = array();
@@ -95,7 +95,7 @@ class YearScheduleController extends Controller
     foreach ($array as $ar) {
       $eqId = $ar['eqId'];
       $types = $ar['types'];
-      $model = ToYearSchedule::find()->where(['eq_id' => $eqId])->andWhere(['schedule_year' => $year])->one();
+      $model = Polls::find()->where(['eq_id' => $eqId])->andWhere(['schedule_year' => $year])->one();
       for ($i = 0; $i < 12; $i++) {
         $month = 'm' . $i;
         $model->$month = $types[$i];

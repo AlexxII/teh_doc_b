@@ -56,7 +56,7 @@
       <h4 class="text-muted">Техническое обслуживание</h4>
     </div>
   </div>
-  <div class="col-lg-4 col-md-4 about" data-url="/opros" style="text-align:center; cursor: pointer">
+  <div class="col-lg-4 col-md-4 about" data-url="/polls" style="text-align:center; cursor: pointer">
     <div class="row" id="header">
       <h2>Опросы</h2>
     </div>

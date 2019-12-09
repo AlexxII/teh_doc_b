@@ -141,7 +141,7 @@ $this->beginPage() ?>
               </a>
             </div>
             <div class="list-group">
-              <a href="/opros" class="list-group-item">
+              <a href="/polls" class="list-group-item">
                 <h4 class="list-group-item-heading">Опрос</h4>
                 <p class="list-group-item-text">Социологические опросы</p>
               </a>

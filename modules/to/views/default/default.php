@@ -194,6 +194,7 @@ $this->title = "Графики ТО";
         url: "/lib/ru.json"
       }
     });
+
     archiveTable.on('order.dt search.dt', function () {
       archiveTable.column(1, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
         cell.innerHTML = i + 1;

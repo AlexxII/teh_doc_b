@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\maps\controllers;
+namespace app\modules\polls\controllers;
 
 use Yii;
 use yii\web\Controller;
@@ -17,15 +17,5 @@ class MenuController extends Controller
   public function actionAppConfig()
   {
     return $this->renderAjax('app_config_menu');
-  }
-
-  public function actionLeftSideData()
-  {
-    return $this->renderAjax('left_data');
-  }
-
-  public function actionRightSideData()
-  {
-    return $this->renderAjax('right_data');
   }
 }

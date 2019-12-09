@@ -281,62 +281,62 @@ FancytreeAsset::register($this);
 
 
 <script>
-    initRusMap();
+  initRusMap();
 
-    $(document).ready(function () {
+  $(document).ready(function () {
 
-        $('#app-control').removeClass('hidden');
+    $('#app-control').removeClass('hidden');
 
-        initAppConfig('/maps/menu/app-config');
+    initAppConfig('/maps/menu/app-config');
 
-        $('.land').on({
-            mouseenter: function () {
-                var url = '/maps/map-rus/detail';
-                var number = $(this).attr('id');
-                $.ajax({
-                    url: url,
-                    method: 'get',
-                    data: {
-                        number: number
-                    }
-                }).done(function (response) {
-                    $('.region-legend').html(response.data.data);
-                }).fail(function () {
-                    console.log('fail');
-                });
-            },
-            mouseleave: function (e) {
-                // $('#region-legend').html('');
-            }
-        })
-    });
-
-    $('.land').on('click', function () {
-        if (this.id == '51') {
-            window.location.href = 'maps/murm';
-        }
-    });
-
-    function initRusMap() {
+    $('.land').on({
+      mouseenter: function () {
+        var url = '/maps/map-rus/detail';
+        var number = $(this).attr('id');
         $.ajax({
-            url: '/maps/map-rus/color',
-            method: 'get'
+          url: url,
+          method: 'get',
+          data: {
+            number: number
+          }
         }).done(function (response) {
-            var data = response.data.data;
-            var regions = data.regions;
-            regions.forEach(function (val, i, ar) {
-                var id = val['region_number'];
-                if (id != null) {
-                    $('#' + id).css({fill: data.color[val['parent_id']]});
-                }
-            })
+          $('.region-legend').html(response.data.data);
         }).fail(function () {
-            console.log('fail');
+          console.log('fail');
         });
-        $('.color').each(function () {
-            var color = $(this).data('color');
-            $(this).css({'background-color': color});
-        });
+      },
+      mouseleave: function (e) {
+        // $('#region-legend').html('');
+      }
+    })
+  });
+
+  $('.land').on('click', function () {
+    if (this.id == '51') {
+      window.location.href = 'maps/murm';
     }
+  });
+
+  function initRusMap() {
+    $.ajax({
+      url: '/maps/map-rus/color',
+      method: 'get'
+    }).done(function (response) {
+      var data = response.data.data;
+      var regions = data.regions;
+      regions.forEach(function (val, i, ar) {
+        var id = val['region_number'];
+        if (id != null) {
+          $('#' + id).css({fill: data.color[val['parent_id']]});
+        }
+      })
+    }).fail(function () {
+      console.log('fail');
+    });
+    $('.color').each(function () {
+      var color = $(this).data('color');
+      $(this).css({'background-color': color});
+    });
+  }
 
 </script>

@@ -1,13 +1,14 @@
 <?php
 
-namespace app\modules\opros;
+namespace app\modules\polls;
 
-class OprosModule extends \yii\base\Module
+class PollsModule extends \yii\base\Module
 {
   public $layout = '@app/views/layouts/main.php';
 
   public function init()
   {
+    \Yii::$app->view->title = 'Опросы';
     parent::init();
   }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\opros\controllers;
+namespace app\modules\polls\controllers;
 
 use Yii;
 use yii\web\Controller;

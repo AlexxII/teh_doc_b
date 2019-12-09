@@ -69,7 +69,6 @@ $date_hint = 'Дата документа';
 
     $('[data-toggle="tooltip"]').tooltip();
 
-
     $('.doc-date').datepicker({
       format: 'dd MM yyyy г.',
       autoclose: true,

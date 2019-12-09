@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\opros\controllers;
+namespace app\modules\polls\controllers;
 
 use Yii;
 use yii\web\Controller;
@@ -10,7 +10,7 @@ class DefaultController extends Controller
 
   public function actionIndex()
   {
-    return $this->render('index');
+    return $this->render('default');
   }
 
 }
