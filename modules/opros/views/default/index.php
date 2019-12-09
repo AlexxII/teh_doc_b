@@ -31,7 +31,8 @@
             if (tempCode < 100) {
               tempCode = '0' + tempCode;
             }
-            txt += '- ' + tempCode + ' ' + children[ii].attributes.otvet_text.nodeValue + '<br>';
+            txt += '&#8195' + ' ' + tempCode + ' - ' + children[ii].attributes.otvet_text.nodeValue + '<br>';
+            // txt += '&nbsp;&nbsp;' + ' ' + tempCode + ' - ' + children[ii].attributes.otvet_text.nodeValue + '<br>';
           }
         }
         $('#result').html(txt);
