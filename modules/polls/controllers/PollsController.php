@@ -34,7 +34,6 @@ class PollsController extends Controller
       $currentTime = new \DateTime();
       $model->poll_record_create = date('Y-m-d H:i:s');
       $model->poll_record_update = $currentTime->format('Y-m-d H:i:s');
-      $model->vks_upcoming_session = 0;
       if ($model->save()) {
         $this->logVks($model->id, "info", "Добавил запись о прошедшем сеансе ВКС.");
         return [

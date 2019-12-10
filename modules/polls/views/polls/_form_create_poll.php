@@ -13,26 +13,12 @@ $poll_sample_hint = "Укажите выборку цифрами.";
 $poll_code_hint = "Укажите код данного опроса";
 $poll_election_hint = "Является ли данный опрос - выборный";
 
-$vks_date_hint = 'Обязательное поле! Укажите дату проведения сеанса ВКС';
-$vks_type_hint = 'Обязательное поле! Укажите ТИП сеанса ВКС (Напрмер: ЗВС-ОГВ, КВС и т.д.)';
-$vks_place_hint = 'Обязательное поле! Укажите место проведения сеанса видеосвязи';
-$vks_subscr_hint = 'Вводите фамилию абонента, при совпадении предложенного варианты выберите его. Ведомство определится автоматически';
-$vks_subscrof_hint = 'Обязательное поле! Укажите  должность старшего абонента';
-$vks_order_hint = 'Обязательное поле! Укажите распоряжение на проведение сеанса ВКС';
-$vks_employee_hint = 'Обязательное поле! Укажите сотрудника СпецСвязи, обеспечивающего сеанс ВКС';
-$vks_subscr_reg_hint = 'Вводите фамилию абонента, при совпадении предложенного варианты выберите его. Ведомство определится автоматически';
-$vks_subscr_regof_hint = 'Обязательное поле! Укажите должность абонента в регионе';
-$vks_tools_hint = 'Обязательное поле! Укажите оборудование ВКС'
-
 ?>
 <style>
-  .form-group {
-    margin-bottom: 5px;
-  }
 </style>
 
 
-<div class="form-confirm-session">
+<div class="form-create-poll">
   <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
 
@@ -47,9 +33,11 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
 
     <div class="row">
       <div class="form-group col-md-12 col-lg-12">
-        <?= $form->field($model, 'title')->textInput([
-          'class' => 'poll-title form-control'
-        ])->hint('', ['class' => ' w3-label-under']); ?>
+        <?= $form->field($model, 'title', [
+          'template' => '{label}{input}'])
+          ->textInput([
+            'class' => 'poll-title form-control'
+          ])->hint('', ['class' => ' w3-label-under']); ?>
       </div>
     </div>
 
@@ -58,16 +46,20 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
       <span class="text-muted"
             style="position: absolute;top:5px;right:10px;font-size: 10px">Время проведения опроса</span>
       <div class="col-md-6 col-lg-6">
-        <?= $form->field($model, 'start_date')->textInput([
-          'class' => 'fact-date form-control',
-          'readonly' => true
-        ])->hint('', ['class' => ' w3-label-under']); ?>
+        <?= $form->field($model, 'start_date', [
+          'template' => '{label}{input}'])
+          ->textInput([
+            'class' => 'fact-date form-control',
+            'readonly' => true
+          ])->hint('', ['class' => ' w3-label-under']); ?>
       </div>
       <div class="col-md-6 col-lg-6">
-        <?= $form->field($model, 'end_date')->textInput([
-          'class' => 'fact-date form-control',
-          'readonly' => true
-        ])->hint('', ['class' => ' w3-label-under']); ?>
+        <?= $form->field($model, 'end_date', [
+          'template' => '{label}{input}'])
+          ->textInput([
+            'class' => 'fact-date form-control',
+            'readonly' => true
+          ])->hint('', ['class' => ' w3-label-under']); ?>
       </div>
     </div>
 
@@ -100,7 +92,7 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
       </div>
     </div>
 
-    <div class="row" >
+    <div class="row">
       <div class="form-group col-md-12 col-lg-12">
         <?= $form->field($model, 'poll_comments')->textArea(array('style' => 'resize:vertical', 'rows' => '2')) ?>
       </div>
@@ -133,10 +125,10 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
       var txt = '';
       var selectedFile = document.getElementById('xmlupload').files[0];
       var reader = new FileReader();
+      moment.locale('ru');
 
       reader.onload = function (e) {
         readXml = e.target.result;
-        moment.locale('ru');
         var parser = new DOMParser();
         var doc = parser.parseFromString(readXml, "application/xml");
         var opros = doc.getElementsByTagName("opros")[0].attributes;
@@ -145,7 +137,6 @@ $vks_tools_hint = 'Обязательное поле! Укажите обору�
         var startDate = opros.start_date.nodeValue;
         var endDate = opros.end_date.nodeValue;
         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-        console.log(new Date(startDate.replace(pattern, '$3-$2-$1')));
         $('#polls-start_date').datepicker('update', new Date(startDate.replace(pattern, '$3-$2-$1')));
         $('#polls-end_date').datepicker('update', new Date(endDate.replace(pattern, '$3-$2-$1')));
       };

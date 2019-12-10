@@ -67,7 +67,7 @@ TableBaseAsset::register($this);                // регистрация рес
     };
     // процедуры возврата из второстепенного контента
     returnCallback = function () {
-      archiveTable.ajax.reload();
+      pollTable.ajax.reload();
     };
 
     // ************************* Работа таблицы **************************************
@@ -78,9 +78,9 @@ TableBaseAsset::register($this);                // регистрация рес
     var cfrmBtn = '<a href="#" id="perform" class="fa fa-calendar-check-o" ' +
       'title="Подтвердить выполнение" style="padding-right: 5px"></a>';
 
-    var toTypeSelect, toAdminsSelect, toAuditorsSelect;
+    var pollTable;
 
-    archiveTable = $('#poll-main-table').DataTable({
+    pollTable = $('#poll-main-table').DataTable({
       "processing": true,
       "responsive": true,
       "ajax": {
@@ -178,8 +178,8 @@ TableBaseAsset::register($this);                // регистрация рес
       }
     });
 
-    archiveTable.on('order.dt search.dt', function () {
-      archiveTable.column(1, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+    pollTable.on('order.dt search.dt', function () {
+      pollTable.column(1, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
         cell.innerHTML = i + 1;
       });
     }).draw();
@@ -218,28 +218,15 @@ TableBaseAsset::register($this);                // регистрация рес
               if ($("#w0").find(".has-error").length) {
                 return false;
               } else {
-                var d = $('.fact-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
-                $('.fact-date').val(d);
-                var tehStart = (moment($('#teh-start').val(), 'HH:mm'));
-                var tehEnd = (moment($('#teh-end').val(), 'HH:mm'));
-                var duration = moment.duration(tehEnd.diff(tehStart)).asMinutes();
-                if (duration > 0) {
-                  $('#vks-duration-teh').val(duration);
-                } else {
-                  $('#vks-duration-teh').val('');
-                }
-                var workStart = (moment($('#work-start').val(), 'HH:mm'));
-                var workEnd = (moment($('#work-end').val(), 'HH:mm'));
-                var duration = moment.duration(workEnd.diff(workStart)).asMinutes();
-                var label = $(this).parent().find('label');
-                if (duration > 0) {
-                  $('#vks-duration-work').val(duration);
-                } else {
-                  $('#vks-duration-work').val('');
-                }
-                var yText = '<span style="font-weight: 600">Успех!</span><br>Сеанс подтвержден';
-                var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
-                sendFormData(url, table, $form, yText, nText);
+                var startDate = $('#polls-start_date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                $('#polls-start_date').val(startDate);
+                var endDate = $('#polls-end_date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                $('#polls-end_date').val(endDate);
+                var pattern = /(\d{4})\-(\d{2})\-(\d{2})/;
+                var year = startDate.replace(pattern, '$1');
+                var yText = '<span style="font-weight: 600">Успех!</span><br>Новый опрос добавлен';
+                var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить опрос не удалось';
+                sendPollFormData(url, pollTable, $form, yText, nText);
               }
             }
           },
@@ -249,42 +236,6 @@ TableBaseAsset::register($this);                // регистрация рес
         }
       });
     });
-/*
-
-    $('#xmlupload').on('change', function (e) {
-      e.preventDefault();
-      var txt = '';
-      var selectedFile = document.getElementById('xmlupload').files[0];
-      var reader = new FileReader();
-
-      reader.onload = function (e) {
-        readXml = e.target.result;
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(readXml, "application/xml");
-        x = doc.getElementsByTagName("vopros");
-        for (i = 0; i < x.length; i++) {
-          // console.log(x[i]);
-          txt += i + 1 + ') - ' + x[i].attributes.text.nodeValue + ' | ' +
-            'limit - ' + x[i].attributes.limit.nodeValue + ' ' +
-            'type - ' + x[i].attributes.type_id.nodeValue +
-            '<br>';
-          var children = x[i].childNodes;
-          for (ii = 0; ii < children.length; ii++) {
-            var tempCode = children[ii].attributes.otvet_cod.nodeValue;
-            if (tempCode < 100) {
-              tempCode = '0' + tempCode;
-            }
-            txt += '&#8195' + ' ' + tempCode + ' - ' + children[ii].attributes.otvet_text.nodeValue + '<br>';
-            // txt += '&nbsp;&nbsp;' + ' ' + tempCode + ' - ' + children[isi].attributes.otvet_text.nodeValue + '<br>';
-          }
-        }
-        $('#result').html(txt);
-      };
-      reader.readAsText(selectedFile);
-    })
-*/
-
-
   });
 
 </script>

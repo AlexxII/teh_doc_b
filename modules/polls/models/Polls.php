@@ -17,22 +17,8 @@ class Polls extends \yii\db\ActiveRecord
 
   public function __construct()
   {
+    $this->id = MHelper::generateId();
     parent::__construct();
-  }
-
-/*
-  public function getAdminList()
-  {
-    return ArrayHelper::map(ToAdmins::find()->where(['admin' => 1])->orderBy('lft')->asArray()->all(), 'id', 'name');
-  }
-*/
-
-  public static function findModel($id)
-  {
-    if (($model = Polls::findOne($id)) !== null) {
-      return $model;
-    }
-    throw new NotFoundHttpException('Запрошенная страница не существует.');
   }
 
   public function attributeLabels()
@@ -49,6 +35,33 @@ class Polls extends \yii\db\ActiveRecord
 
     ];
   }
+
+  public function rules()
+  {
+    return [
+      [['title', 'start_date', 'end_date', 'code', 'sample'], 'required'],
+      [['sample'], 'integer'],
+      [['elections'], 'safe'],
+      [['title'], 'string', 'max' => 250],
+      [['poll_comments'], 'string', 'max' => 1024]
+    ];
+  }
+
+  /*
+    public function getAdminList()
+    {
+      return ArrayHelper::map(ToAdmins::find()->where(['admin' => 1])->orderBy('lft')->asArray()->all(), 'id', 'name');
+    }
+  */
+
+  public static function findModel($id)
+  {
+    if (($model = Polls::findOne($id)) !== null) {
+      return $model;
+    }
+    throw new NotFoundHttpException('Запрошенная страница не существует.');
+  }
+
 
   public static function log($sessionId, $status, $text)
   {

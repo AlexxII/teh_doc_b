@@ -1,6 +1,14 @@
 body {
   overflow: auto !important;
 }
+.form-create-poll .form-group {
+  margin-bottom: 5px; !important;
+}
+
+.form-create-poll .form-control[readonly] {
+  background-color: #fff;
+}
+
 /* круглая клавиша добавления графика */
 [class*="fab"] {
   -webkit-touch-callout: none;
