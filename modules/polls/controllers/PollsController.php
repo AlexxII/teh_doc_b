@@ -18,8 +18,9 @@ class PollsController extends Controller
   public function actionIndex()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    $schTable = self::POLLS_TABLE;
-    $sql = "SELECT * FROM {$schTable}";
+    $pollTable = self::POLLS_TABLE;
+    $sql = "SELECT {$pollTable}.id, {$pollTable}.start_date, {$pollTable}.end_date, {$pollTable}.title, 
+        {$pollTable}.code, {$pollTable}.sample, YEAR({$pollTable}.start_date) as year FROM {$pollTable}";
     $data["data"] = Polls::findBySql($sql)->asArray()->all();
     return $data;
   }
@@ -35,7 +36,7 @@ class PollsController extends Controller
       $model->poll_record_create = date('Y-m-d H:i:s');
       $model->poll_record_update = $currentTime->format('Y-m-d H:i:s');
       if ($model->save()) {
-        $this->logVks($model->id, "info", "Добавил запись о прошедшем сеансе ВКС.");
+        Polls::log($model->id, "info", "Добавил новый опрос.");
         return [
           'data' => [
             'success' => true,
@@ -64,7 +65,7 @@ class PollsController extends Controller
   public function actionIndexEx()
   {
 
-    $schTable = self::POLLS_TABLE;
+    $pollTable = self::POLLS_TABLE;
     $usersTable = self::ADMINS_TABLE;
     $toTable = self::TOTYPE_TABLE;
     $sql = "SELECT {$schTable}.id, {$schTable}.plan_date, {$schTable}.schedule_id,

@@ -9,6 +9,22 @@ body {
   background-color: #fff;
 }
 
+/* Таблица */
+.poll-table {
+  font-size: 12px;
+}
+.poll-table th {
+  text-align: center;
+}
+.poll-table td {
+  text-align: center;
+}
+.poll-table td .fa {
+  font-size: 25px;
+  text-decoration: none;
+}
+
+
 /* круглая клавиша добавления графика */
 [class*="fab"] {
   -webkit-touch-callout: none;

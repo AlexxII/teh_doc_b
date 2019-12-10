@@ -35,15 +35,15 @@ TableBaseAsset::register($this);                // регистрация рес
     </div>
 
     <div class="container-fluid">
-      <table id="poll-main-table" class="display no-wrap cell-border toTable" style="width:100%">
+      <table id="poll-main-table" class="display no-wrap cell-border poll-table" style="width:100%">
         <thead>
         <tr>
           <th></th>
           <th data-priority="1">№ п.п.</th>
           <th data-priority="1">Код</th>
           <th data-priority="7">Наименование</th>
-          <th>Год</th>
           <th>Период</th>
+          <th></th>
           <th>Выборка</th>
           <th data-priority="3">Action</th>
           <th></th>
@@ -81,48 +81,30 @@ TableBaseAsset::register($this);                // регистрация рес
     var pollTable;
 
     pollTable = $('#poll-main-table').DataTable({
-      "processing": true,
-      "responsive": true,
-      "ajax": {
+      'processing': true,
+      'responsive': true,
+      'ajax': {
         'url': '/polls/polls/index'
       },
-      "columns": [
-        {"data": "id"},
-        {"data": "plan_date"},
-        {"data": "checkmark"},
-        {"data": "plan_date"},
-        {"data": "to_type"},
-        {"data": "admins"},
-        {"data": "auditors"},
-        {"data": ""},
-        {"data": ""}
+      'columns': [
+        {'data': 'id'},
+        {'data': 'year'},
+        {'data': 'code'},
+        {'data': 'title'},
+        {'data': 'start_date'},
+        {'data': 'end_date'},
+        {'data': 'sample'},
+        {'data': ''},
+        {'data': ''}
       ],
-      "searching": false,
-      "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-        var date = aData.plan_date;
-        // var today = new Date();
+      'searching': false,
+      'fnRowCallback': function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+        var date = aData.start_date;
         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-        var dDate = new Date(date.replace(pattern, '$3-$2-$1'));
-        var month = monthNames[dDate.getMonth()];
-        $('td:nth-child(2)', nRow).text(month);
-        aData['monthText'] = month;
-        aData['monthVal'] = ("0" + (dDate.getMonth() + 1)).slice(-2);
-        // $('td:nth-child(7)', nRow).html(editBtn + infoBtn + cfrmBtn);
-        if (aData.checkmark == 0) {
-          $('td:nth-child(7)', nRow).html(editBtn + infoBtn + cfrmBtn);
-          $('td:nth-child(3)', nRow).css({color: 'red'});
-        } else {
-          if (aData.checkmark.length > 1) {
-            $('td:nth-child(7)', nRow).html(infoBtn + cfrmBtn);
-            $('td:nth-child(3)', nRow).css({color: 'blue'});
-          } else {
-            $('td:nth-child(7)', nRow).html(infoBtn);
-            $('td:nth-child(3)', nRow).css({color: 'green'});
-          }
-        }
+        $('td:nth-child(6)', nRow).html(editBtn + infoBtn + cfrmBtn);
       },
       orderFixed: [[4, 'desc']],
-      order: [[1, 'desc']],
+      order: [[3, 'desc']],
       rowGroup: {
         dataSrc: 'year'
       },
@@ -143,30 +125,17 @@ TableBaseAsset::register($this);                // регистрация рес
           'data': null,
           'visible': false
         }, {
-          'targets': 1,
-          'data': null
-        }, {
-          'targets': 2,
-          'render': function (data) {
-            return moment(data).format('MMMM');
-          }
-        }, {
-          'targets': 3,
-          'render': function (data) {
-            if (data.length == 1) {
-              if (data == '1') {
-                return '<strong>ТО проведено</strong>';
-              } else {
-                return '<strong>ТО не проведено</strong>';
-              }
-            } else {
-              return '<strong>Проведено не полность</strong>';
-            }
-          }
+          'targets': 5,
+          'visible': false
         }, {
           'targets': 4,
-          'data': null,
-          'visible': false
+          'render': function (data, type, row) {
+            var pattern = /(\d{4})\-(\d{2})\-(\d{2})/;
+
+            return row['start_date'].replace(pattern, '$3.$2.$1') +
+              "<br> " +
+              row['end_date'].replace(pattern, '$3.$2.$1');
+          }
         }
       ],
       select: {
@@ -174,7 +143,7 @@ TableBaseAsset::register($this);                // регистрация рес
         selector: 'td:last-child'
       },
       language: {
-        url: "/lib/ru.json"
+        url: '/lib/ru.json'
       }
     });
 
@@ -187,7 +156,7 @@ TableBaseAsset::register($this);                // регистрация рес
 
     $('#add-poll').click(function (event) {
       event.preventDefault();
-      var url = "/polls/polls/add-new-poll";
+      var url = '/polls/polls/add-new-poll';
       c = $.confirm({
         content: function () {
           var self = this;
@@ -209,13 +178,13 @@ TableBaseAsset::register($this);                // регистрация рес
             btnClass: 'btn-blue',
             text: 'Добавить',
             action: function () {
-              var $form = $("#w0"),
-                data = $form.data("yiiActiveForm");
+              var $form = $('#w0'),
+                data = $form.data('yiiActiveForm');
               $.each(data.attributes, function () {
                 this.status = 3;
               });
-              $form.yiiActiveForm("validate");
-              if ($("#w0").find(".has-error").length) {
+              $form.yiiActiveForm('validate');
+              if ($('#w0').find('.has-error').length) {
                 return false;
               } else {
                 var startDate = $('#polls-start_date').data('datepicker').getFormattedDate('yyyy-mm-dd');
