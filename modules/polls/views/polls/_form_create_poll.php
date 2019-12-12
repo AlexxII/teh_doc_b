@@ -49,7 +49,7 @@ $poll_election_hint = "Является ли данный опрос - выбо�
         <?= $form->field($model, 'start_date', [
           'template' => '{label}{input}'])
           ->textInput([
-            'class' => 'fact-date form-control',
+            'class' => 'start-date pool-dates form-control',
             'readonly' => true
           ])->hint('', ['class' => ' w3-label-under']); ?>
       </div>
@@ -57,7 +57,7 @@ $poll_election_hint = "Является ли данный опрос - выбо�
         <?= $form->field($model, 'end_date', [
           'template' => '{label}{input}'])
           ->textInput([
-            'class' => 'fact-date form-control',
+            'class' => 'end-date pool-dates form-control',
             'readonly' => true
           ])->hint('', ['class' => ' w3-label-under']); ?>
       </div>
@@ -104,47 +104,60 @@ $poll_election_hint = "Является ли данный опрос - выбо�
 <?php ActiveForm::end(); ?>
 
 <script>
-  $(document).ready(function () {
+    $(document).ready(function () {
 
-    $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip();
 
 
-    $('.fact-date').datepicker({
-      format: 'd MM yyyy г.',
-      autoclose: true,
-      language: "ru",
-      startView: "days",
-      minViewMode: "days",
-      clearBtn: true,
-      todayHighlight: true,
-      daysOfWeekHighlighted: [0, 6]
+        $('.pool-dates').datepicker({
+            format: 'd MM yyyy г.',
+            autoclose: true,
+            language: "ru",
+            startView: "days",
+            minViewMode: "days",
+            clearBtn: true,
+            todayHighlight: true,
+            daysOfWeekHighlighted: [0, 6]
+        });
+
+        if ($('.start-date').val()) {
+            moment.locale('ru');
+            var date = new Date($('.start-date').val());
+            console.log(date);
+            $('.start-date').datepicker('update', moment(date).format('D MM YYYY'));
+        }
+
+        if ($('.end-date').val()) {
+            moment.locale('ru');
+            var date = new Date($('.end-date').val());
+            $('.end-date').datepicker('update', moment(date).format('D MM YYYY'));
+        }
+
+        $('#xmlupload').on('change', function (e) {
+            e.preventDefault();
+            var txt = '';
+            var selectedFile = document.getElementById('xmlupload').files[0];
+            var reader = new FileReader();
+            moment.locale('ru');
+
+            reader.onload = function (e) {
+                readXml = e.target.result;
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(readXml, "application/xml");
+                var opros = doc.getElementsByTagName("opros")[0].attributes;
+                $('#polls-title').val(opros.name.nodeValue);
+                $('#poll-code').val(opros.cod.nodeValue);
+                var startDate = opros.start_date.nodeValue;
+                var endDate = opros.end_date.nodeValue;
+                var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+                $('.start-date').datepicker('update', new Date(startDate.replace(pattern, '$3-$2-$1')));
+                $('.end-date').datepicker('update', new Date(endDate.replace(pattern, '$3-$2-$1')));
+            };
+            reader.readAsText(selectedFile);
+        })
+
+
     });
-
-    $('#xmlupload').on('change', function (e) {
-      e.preventDefault();
-      var txt = '';
-      var selectedFile = document.getElementById('xmlupload').files[0];
-      var reader = new FileReader();
-      moment.locale('ru');
-
-      reader.onload = function (e) {
-        readXml = e.target.result;
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(readXml, "application/xml");
-        var opros = doc.getElementsByTagName("opros")[0].attributes;
-        $('#polls-title').val(opros.name.nodeValue);
-        $('#poll-code').val(opros.cod.nodeValue);
-        var startDate = opros.start_date.nodeValue;
-        var endDate = opros.end_date.nodeValue;
-        var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-        $('#polls-start_date').datepicker('update', new Date(startDate.replace(pattern, '$3-$2-$1')));
-        $('#polls-end_date').datepicker('update', new Date(endDate.replace(pattern, '$3-$2-$1')));
-      };
-      reader.readAsText(selectedFile);
-    })
-
-
-  });
 
 
 </script>

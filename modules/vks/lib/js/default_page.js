@@ -62,7 +62,7 @@ $(document).on('click', '.get-pdf', function (e) {
         margin: [0, 5, 0, 0]
       },
       commonCell: {
-        alignment: 'center',
+        alignment: 'center'
       },
       impCell: {
         fontSize: 10,

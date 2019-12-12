@@ -2,16 +2,14 @@
 
 use app\assets\TableBaseAsset;
 use app\modules\polls\asset\PollAsset;
+use app\assets\NotyAsset;
 
 PollAsset::register($this);
 TableBaseAsset::register($this);                // регистрация ресурсов таблиц datatables
+NotyAsset::register($this);
+
 
 ?>
-
-<div class="row">
-  <div id="result" style="padding-bottom: 20px">
-  </div>
-</div>
 
 <div class="tool-task">
   <div class="" style="position: relative">
@@ -25,7 +23,7 @@ TableBaseAsset::register($this);                // регистрация рес
     </div>
 
     <div id="delete-wrap" style="position: absolute; top: 10px; right:-60px;display: none;fill: white">
-      <a id="del-session-ex" class="fab-button" title="Удалить выделенный(е) график(и)"
+      <a id="del-wrap" class="fab-button" title="Удалить выделенный(е) опрос(ы)"
          style="cursor: pointer; background-color: red">
         <svg width="50" height="50" viewBox="-1 -1 24 24">
           <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
@@ -57,154 +55,257 @@ TableBaseAsset::register($this);                // регистрация рес
 
 <script>
 
-  $(document).ready(function (e) {
+    $(document).ready(function (e) {
 
-    initLeftMenu('/polls/menu/left-side');
-    initAppConfig('/polls/menu/app-config');
+        initLeftMenu('/polls/menu/left-side');
+        initAppConfig('/polls/menu/app-config');
 
-    controlCallback = function () {
-      return;
-    };
-    // процедуры возврата из второстепенного контента
-    returnCallback = function () {
-      pollTable.ajax.reload();
-    };
+        controlCallback = function () {
+            return;
+        };
+        // процедуры возврата из второстепенного контента
+        returnCallback = function () {
+            pollTable.ajax.reload();
+        };
 
-    // ************************* Работа таблицы **************************************
+        // ************************* Работа таблицы **************************************
 
-    var editBtn = '<a href="#" id="edit" class="fa fa-edit" style="padding-right: 5px" title="Обновить"></a>';
-    var infoBtn = '<a href="#" id="view" class="fa fa-info" ' +
-      ' title="Подробности" data-url="/to/month-schedule/view" data-back-url="/to" style="padding-right: 5px"></a>';
-    var cfrmBtn = '<a href="#" id="perform" class="fa fa-calendar-check-o" ' +
-      'title="Подтвердить выполнение" style="padding-right: 5px"></a>';
+        var editBtn = '<a href="#" id="edit" class="fa fa-edit" style="padding-right: 5px" title="Обновить"></a>';
+        var infoBtn = '<a href="#" id="view" class="fa fa-info" ' +
+            ' title="Подробности" data-url="/to/month-schedule/view" data-back-url="/to" style="padding-right: 5px"></a>';
+        var cfrmBtn = '<a href="#" id="perform" class="fa fa-calendar-check-o" ' +
+            'title="Подтвердить выполнение" style="padding-right: 5px"></a>';
 
-    var pollTable;
+        var pollTable;
 
-    pollTable = $('#poll-main-table').DataTable({
-      'processing': true,
-      'responsive': true,
-      'ajax': {
-        'url': '/polls/polls/index'
-      },
-      'columns': [
-        {'data': 'id'},
-        {'data': 'year'},
-        {'data': 'code'},
-        {'data': 'title'},
-        {'data': 'start_date'},
-        {'data': 'end_date'},
-        {'data': 'sample'},
-        {'data': ''},
-        {'data': ''}
-      ],
-      'searching': false,
-      'fnRowCallback': function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-        var date = aData.start_date;
-        var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-        $('td:nth-child(6)', nRow).html(editBtn + infoBtn + cfrmBtn);
-      },
-      orderFixed: [[4, 'desc']],
-      order: [[3, 'desc']],
-      rowGroup: {
-        dataSrc: 'year'
-      },
-      'columnDefs': [
-        {
-          'targets': -2,                    // предпоследний столбец
-          'orderable': false,
-          'data': null,
-          'width': '70px',
-          'defaultContent': ''
-        }, {
-          'targets': -1,                    // последний столбец
-          'orderable': false,
-          'className': 'select-checkbox',
-          'defaultContent': ''
-        }, {
-          'targets': 0,
-          'data': null,
-          'visible': false
-        }, {
-          'targets': 5,
-          'visible': false
-        }, {
-          'targets': 4,
-          'render': function (data, type, row) {
-            var pattern = /(\d{4})\-(\d{2})\-(\d{2})/;
+        pollTable = $('#poll-main-table').DataTable({
+            'processing': true,
+            'responsive': true,
+            'ajax': {
+                'url': '/polls/polls/index'
+            },
+            'columns': [
+                {'data': 'id'},
+                {'data': 'year'},
+                {'data': 'code'},
+                {'data': 'title'},
+                {'data': 'start_date'},
+                {'data': 'end_date'},
+                {'data': 'sample'},
+                {'data': ''},
+                {'data': ''}
+            ],
+            'searching': false,
+            'fnRowCallback': function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                var date = aData.start_date;
+                var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+                $('td:nth-child(6)', nRow).html(editBtn + infoBtn + cfrmBtn);
+            },
+            orderFixed: [[1, 'desc']],
+            order: [[1, 'desc']],
+            rowGroup: {
+                dataSrc: 'year'
+            },
+            'columnDefs': [
+                {
+                    'targets': -2,                    // предпоследний столбец
+                    'orderable': false,
+                    'data': null,
+                    'width': '70px',
+                    'defaultContent': ''
+                }, {
+                    'targets': -1,                    // последний столбец
+                    'orderable': false,
+                    'className': 'select-checkbox',
+                    'defaultContent': ''
+                }, {
+                    'targets': 0,
+                    'data': null,
+                    'visible': false
+                }, {
+                    'targets': 3,
+                    'render': function (data, type, row) {
+                        return '<span class="poll-in" data-id="' + row['id'] + '"><strong>' + row['title'] + '</strong></span>';
+                    }
+                }, {
+                    'targets': 5,
+                    'visible': false
+                }, {
+                    'targets': 4,
+                    'render': function (data, type, row) {
+                        var pattern = /(\d{4})\-(\d{2})\-(\d{2})/;
 
-            return row['start_date'].replace(pattern, '$3.$2.$1') +
-              "<br> " +
-              row['end_date'].replace(pattern, '$3.$2.$1');
-          }
-        }
-      ],
-      select: {
-        style: 'os',
-        selector: 'td:last-child'
-      },
-      language: {
-        url: '/lib/ru.json'
-      }
-    });
-
-    pollTable.on('order.dt search.dt', function () {
-      pollTable.column(1, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
-        cell.innerHTML = i + 1;
-      });
-    }).draw();
-
-
-    $('#add-poll').click(function (event) {
-      event.preventDefault();
-      var url = '/polls/polls/add-new-poll';
-      c = $.confirm({
-        content: function () {
-          var self = this;
-          return $.ajax({
-            url: url,
-            method: 'get'
-          }).fail(function () {
-            self.setContentAppend('<div>Что-то пошло не так!</div>');
-          });
-        },
-        contentLoaded: function (data, status, xhr) {
-          this.setContentAppend('<div>' + data + '</div>');
-        },
-        type: 'blue',
-        columnClass: 'large',
-        title: 'Добавить опрос',
-        buttons: {
-          ok: {
-            btnClass: 'btn-blue',
-            text: 'Добавить',
-            action: function () {
-              var $form = $('#w0'),
-                data = $form.data('yiiActiveForm');
-              $.each(data.attributes, function () {
-                this.status = 3;
-              });
-              $form.yiiActiveForm('validate');
-              if ($('#w0').find('.has-error').length) {
-                return false;
-              } else {
-                var startDate = $('#polls-start_date').data('datepicker').getFormattedDate('yyyy-mm-dd');
-                $('#polls-start_date').val(startDate);
-                var endDate = $('#polls-end_date').data('datepicker').getFormattedDate('yyyy-mm-dd');
-                $('#polls-end_date').val(endDate);
-                var pattern = /(\d{4})\-(\d{2})\-(\d{2})/;
-                var year = startDate.replace(pattern, '$1');
-                var yText = '<span style="font-weight: 600">Успех!</span><br>Новый опрос добавлен';
-                var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить опрос не удалось';
-                sendPollFormData(url, pollTable, $form, yText, nText);
-              }
+                        return row['start_date'].replace(pattern, '$3.$2.$1') +
+                            "<br> " +
+                            row['end_date'].replace(pattern, '$3.$2.$1');
+                    }
+                }
+            ],
+            select: {
+                style: 'os',
+                selector: 'td:last-child'
+            },
+            language: {
+                url: '/lib/ru.json'
             }
-          },
-          cancel: {
-            text: 'НАЗАД'
-          }
-        }
-      });
+        });
+
+        pollTable.on('order.dt search.dt', function () {
+            pollTable.column(1, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+        // Работа таблицы -> событие выделения и снятия выделения
+
+        pollTable.on('select', function (e, dt, type, indexes) {
+            if (type === 'row') {
+                $('#delete-wrap').show();
+            }
+        });
+        pollTable.on('deselect', function (e, dt, type, indexes) {
+            if (type === 'row') {
+                if (pollTable.rows({selected: true}).count() > 0) return;
+                $('#delete-wrap').hide();
+            }
+        });
+
+        // Работа таблицы -> перерисовка или изменение размера страницы
+
+        pollTable.on('length.dt', function (e, settings, len) {
+            pollTable.rows().deselect();
+            $('#delete-wrap').hide();
+        });
+
+        pollTable.on('draw.dt', function (e, settings, len) {
+            pollTable.rows().deselect();
+            $('#delete-wrap').hide();
+        });
+
+
+        $('#delete-wrap').click(function (event) {
+            event.preventDefault();
+            var csrf = $('meta[name=csrf-token]').attr("content");
+            var url = "/polls/polls/delete";
+            if ($(this).attr('disabled')) {
+                return;
+            }
+            jc = $.confirm({
+                icon: 'fa fa-question',
+                title: 'Вы уверены?',
+                content: 'Вы действительно хотите удалить выделенное?',
+                type: 'red',
+                closeIcon: false,
+                autoClose: 'cancel|9000',
+                buttons: {
+                    ok: {
+                        btnClass: 'btn-danger',
+                        action: function () {
+                            jc.close();
+                            deleteRestoreProcess(url, pollTable, csrf);
+                        }
+                    },
+                    cancel: {
+                        action: function () {
+                            return;
+                        }
+                    }
+                }
+            });
+        });
+
+        pollTable.on('click', '#edit', function (e) {
+            e.preventDefault();
+            var data = pollTable.row($(this).parents('tr')).data();
+            var url = "/polls/polls/update-poll?id=" + data['id'];
+            c = $.confirm({
+                content: function () {
+                    var self = this;
+                    return $.ajax({
+                        url: url,
+                        method: 'get'
+                    }).fail(function () {
+                        self.setContentAppend('<div>Что-то пошло не так!</div>');
+                    });
+                },
+                contentLoaded: function (data, status, xhr) {
+                    this.setContentAppend('<div>' + data + '</div>');
+                },
+                type: 'blue',
+                columnClass: 'large',
+                title: 'Обновить предстоящий сеанс',
+                buttons: {
+                    ok: {
+                        btnClass: 'btn-blue',
+                        text: 'Обновить',
+                        action: function () {
+                            var $form = $("#w0"),
+                                data = $form.data("yiiActiveForm");
+                            $.each(data.attributes, function () {
+                                this.status = 3;
+                            });
+                            $form.yiiActiveForm("validate");
+                            if ($("#w0").find(".has-error").length) {
+                                return false;
+                            } else {
+                                var startDate = $('.start-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                                $('.start-date').val(startDate);
+                                var endDate = $('.end-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+                                $('.end-date').val(endDate);
+                                var yText = '<span style="font-weight: 600">Успех!</span><br>Сведения об опросе обновлены';
+                                var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Обновить не удалось';
+                                sendPollFormData(url, pollTable, $form, yText, nText);
+                            }
+                        }
+                    },
+                    cancel: {
+                        text: 'НАЗАД'
+                    }
+                }
+            });
+        });
+
+
     });
-  });
+
+    function deleteRestoreProcess(url, table, csrf) {
+        var data = table.rows({selected: true}).data();
+        var ar = [];
+        var count = data.length;
+        for (var i = 0; i < count; i++) {
+            ar[i] = data[i].id;
+        }
+        jc = $.confirm({
+            icon: 'fa fa-cog fa-spin',
+            title: 'Подождите!',
+            content: 'Ваш запрос выполняется!',
+            buttons: false,
+            closeIcon: false,
+            confirmButtonClass: 'hide'
+        });
+        $.ajax({
+            url: url,
+            method: 'post',
+            dataType: "JSON",
+            data: {jsonData: ar, _csrf: csrf}
+        }).done(function (response) {
+            if (response != false) {
+                jc.close();
+                var text = 'Выш запрос выполнен!';
+                var yText = '<span style="font-weight: 600">Успех!</span><br>' + text;
+                initNoty(yText, 'success');
+                table.ajax.reload();
+            } else {
+                jc.close();
+                var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Запрос не выполнен';
+                initNoty(tText, 'warning');
+            }
+        }).fail(function () {
+            jc.close();
+            var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Запрос не выполнен';
+            initNoty(tText, 'warning');
+        });
+    }
+
 
 </script>

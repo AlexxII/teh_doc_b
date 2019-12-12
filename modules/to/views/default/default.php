@@ -349,7 +349,7 @@ $this->title = "Графики ТО";
       data: {
         '_csrf': csrf,
         'data': data,
-        'back-url': backUrl,
+        'back-url': backUrl
       }
     }).done(function (response) {
       $('#app-wrap').append('<div id="ex-wrap">' + response.data.data + '</div>');
