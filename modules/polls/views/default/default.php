@@ -54,6 +54,7 @@ NotyAsset::register($this);
 
 
 <script>
+    var pollTable;
 
     $(document).ready(function (e) {
 
@@ -76,7 +77,6 @@ NotyAsset::register($this);
         var cfrmBtn = '<a href="#" id="perform" class="fa fa-calendar-check-o" ' +
             'title="Подтвердить выполнение" style="padding-right: 5px"></a>';
 
-        var pollTable;
 
         pollTable = $('#poll-main-table').DataTable({
             'processing': true,
