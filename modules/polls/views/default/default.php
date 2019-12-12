@@ -292,9 +292,6 @@ NotyAsset::register($this);
                 }
             });
         });
-
-
-
     });
 
     function deleteRestoreProcess(url, table, csrf) {
