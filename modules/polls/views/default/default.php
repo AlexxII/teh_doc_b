@@ -265,6 +265,35 @@ NotyAsset::register($this);
             });
         });
 
+        pollTable.on('click', '#view', function (e) {
+            e.preventDefault();
+            var data = pollTable.row($(this).parents('tr')).data();
+            var url = "/polls/polls/view-poll?id=" + data['id'];
+            c = $.confirm({
+                content: function () {
+                    var self = this;
+                    return $.ajax({
+                        url: url,
+                        method: 'get'
+                    }).fail(function () {
+                        self.setContentAppend('<div>Что-то пошло не так!</div>');
+                    });
+                },
+                contentLoaded: function (data, status, xhr) {
+                    this.setContentAppend('<div>' + data + '</div>');
+                },
+                type: 'blue',
+                columnClass: 'xlarge',
+                title: 'Подробности',
+                buttons: {
+                    cancel: {
+                        text: 'НАЗАД'
+                    }
+                }
+            });
+        });
+
+
 
     });
 

@@ -24,14 +24,16 @@ class Polls extends \yii\db\ActiveRecord
   public function attributeLabels()
   {
     return [
-      'id' => 'ID',
-      'title' => 'Наименование опроса:',
-      'start_date' => 'Дата начала:',
-      'end_date' => 'Дата окончания:',
-      'code' => 'Код:',
-      'sample' => 'Выборка:',
-      'elections' => 'Выборный опрос',
-      'poll_comments' => 'Примечание:',
+      "id" => "ID",
+      "title" => "Наименование опроса:",
+      "start_date" => "Дата начала:",
+      "end_date" => "Дата окончания:",
+      "code" => "Код:",
+      "sample" => "Выборка:",
+      "elections" => "Выборный опрос",
+      "poll_comments" => "Примечание:",
+      "poll_record_create" => "Опрос создан:",
+      "poll_record_update" => "Опрос обновлен:",
 
     ];
   }

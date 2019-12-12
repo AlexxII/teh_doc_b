@@ -96,6 +96,14 @@ class PollsController extends Controller
     ]);
   }
 
+  public function actionViewPoll($id)
+  {
+//    $logs = VksLog::find()->where(['=', 'session_id', $id])->orderBy('log_time')->all();
+    return $this->renderAjax('view_poll', [
+      'model' => Polls::findModel($id)
+    ]);
+  }
+
   public function actionDelete()
   {
     $report = true;
