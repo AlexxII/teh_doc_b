@@ -4,8 +4,11 @@ namespace app\modules\polls\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\web\UploadedFile;
+use XMLReader;
 
 use app\modules\polls\models\Polls;
+use app\modules\polls\models\XmlFile;
 
 class PollsController extends Controller
 {
@@ -28,14 +31,34 @@ class PollsController extends Controller
   public function actionAddNewPoll()
   {
     $model = new Polls();
+    $xml = new XmlFile();
     if ($model->load(Yii::$app->request->post())) {
       Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
       $userId = Yii::$app->user->identity->id;
       $model->created_user = $userId;
       $currentTime = new \DateTime();
       $model->poll_record_create = date('Y-m-d H:i:s');
       $model->poll_record_update = $currentTime->format('Y-m-d H:i:s');
-      if ($model->save()) {
+
+      $xml->xmlFile = UploadedFile::getInstances($xml, 'xmlFile');
+      $name = $model->code . "_" . $model->id . ".xml";
+      $xml->upload($name);
+      $result = false;
+      if ($result = $xml->upload($name)) {
+        $result = $xml->parseAndLoadToDb();
+      } else {
+        return [
+          'data' => [
+            'success' => false,
+            'data' => $result,
+            'message' => 'Could`t save and parse config xml file. Check access rights to upload dir (@app/web/upload/polls/xml/) 
+              or file extension',
+          ],
+          'code' => 1,
+        ];
+      }
+      if ($model->save() && $result) {
 //        Polls::log($model->id, "info", "Добавил новый опрос.");
         return [
           'data' => [
@@ -50,16 +73,55 @@ class PollsController extends Controller
           'data' => [
             'success' => false,
             'data' => $model->getErrors(),
-            'message' => 'Page load',
+            'message' => 'Could`t save poll model',
           ],
           'code' => 0,
         ];
       }
     }
     return $this->renderAjax('_form_create_poll', [
-      'model' => $model
+      'model' => $model,
+      'xml' => $xml
     ]);
+  }
 
+  public function actionSavePoll()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (Yii::$app->request->isAjax && Yii::$app->request->isPost) {
+
+      $postData = Yii::$app->request->post("formData");
+      return $postData;
+      $model = new Polls();
+      $userId = Yii::$app->user->identity->id;
+      $model->created_user = $userId;
+      $model->title = $postData['Polls[title]'];
+      $model->start_date = $postData['Polls[start_date]'];
+      $model->end_date = $postData['Polls[end_date]'];
+      $model->code = $postData['Polls[code]'];
+      $model->sample = $postData['Polls[sample]'];
+      $model->elections = $postData['Polls[elections]'];
+      return $model;
+      $currentTime = new \DateTime();
+      $model->poll_record_create = date("Y-m-d H:i:s");
+      $model->poll_record_update = $currentTime->format("Y-m-d H:i:s");
+      return [
+        'data' => [
+          'success' => true,
+          'data' => 'Poll saved',
+          'message' => 'Poll saved',
+        ],
+        'code' => 1,
+      ];
+    }
+    return [
+      'data' => [
+        'success' => false,
+        'data' => 'Is not ajax',
+        'message' => 'An error occured',
+      ],
+      'code' => 0,
+    ];
   }
 
   public function actionUpdatePoll($id)
@@ -92,7 +154,8 @@ class PollsController extends Controller
       }
     }
     return $this->renderAjax('_form_create_poll', [
-      'model' => $model
+      'model' => $model,
+      'xml' => new XmlFile()
     ]);
   }
 

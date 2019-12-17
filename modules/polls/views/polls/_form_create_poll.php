@@ -24,10 +24,9 @@ $poll_election_hint = "Является ли данный опрос - выбо�
 
     <div class="row" style="padding-bottom: 10px">
       <div class="form-group col-md-12 col-lg-12">
-        <div class="formField">
-          <label for="fileToUpload">Загрузить XML файл</label><br/>
-          <input type="file" name="oprosxml" id="xmlupload"/>
-        </div>
+        <?= $form->field($xml, 'xmlFile')->fileInput([
+          'id' => 'xmlupload'
+        ]) ?>
       </div>
     </div>
 
@@ -104,60 +103,62 @@ $poll_election_hint = "Является ли данный опрос - выбо�
 <?php ActiveForm::end(); ?>
 
 <script>
-    $(document).ready(function () {
 
-        $('[data-toggle="tooltip"]').tooltip();
+  var xmlData = '';
 
+  $(document).ready(function () {
 
-        $('.pool-dates').datepicker({
-            format: 'd MM yyyy г.',
-            autoclose: true,
-            language: "ru",
-            startView: "days",
-            minViewMode: "days",
-            clearBtn: true,
-            todayHighlight: true,
-            daysOfWeekHighlighted: [0, 6]
-        });
+    $('[data-toggle="tooltip"]').tooltip();
 
-        if ($('.start-date').val()) {
-            moment.locale('ru');
-            var date = new Date($('.start-date').val());
-            console.log(date);
-            $('.start-date').datepicker('update', moment(date).format('D MM YYYY'));
-        }
-
-        if ($('.end-date').val()) {
-            moment.locale('ru');
-            var date = new Date($('.end-date').val());
-            $('.end-date').datepicker('update', moment(date).format('D MM YYYY'));
-        }
-
-        $('#xmlupload').on('change', function (e) {
-            e.preventDefault();
-            var txt = '';
-            var selectedFile = document.getElementById('xmlupload').files[0];
-            var reader = new FileReader();
-            moment.locale('ru');
-
-            reader.onload = function (e) {
-                readXml = e.target.result;
-                var parser = new DOMParser();
-                var doc = parser.parseFromString(readXml, "application/xml");
-                var opros = doc.getElementsByTagName("opros")[0].attributes;
-                $('#polls-title').val(opros.name.nodeValue);
-                $('#poll-code').val(opros.cod.nodeValue);
-                var startDate = opros.start_date.nodeValue;
-                var endDate = opros.end_date.nodeValue;
-                var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-                $('.start-date').datepicker('update', new Date(startDate.replace(pattern, '$3-$2-$1')));
-                $('.end-date').datepicker('update', new Date(endDate.replace(pattern, '$3-$2-$1')));
-            };
-            reader.readAsText(selectedFile);
-        })
-
-
+    $('.pool-dates').datepicker({
+      format: 'd MM yyyy г.',
+      autoclose: true,
+      language: "ru",
+      startView: "days",
+      minViewMode: "days",
+      clearBtn: true,
+      todayHighlight: true,
+      daysOfWeekHighlighted: [0, 6]
     });
+
+    if ($('.start-date').val()) {
+      moment.locale('ru');
+      var date = new Date($('.start-date').val());
+      console.log(date);
+      $('.start-date').datepicker('update', moment(date).format('D MM YYYY'));
+    }
+
+    if ($('.end-date').val()) {
+      moment.locale('ru');
+      var date = new Date($('.end-date').val());
+      $('.end-date').datepicker('update', moment(date).format('D MM YYYY'));
+    }
+
+    $('#xmlupload').on('change', function (e) {
+      // e.preventDefault();
+      var txt = '';
+      var selectedFile = document.getElementById('xmlupload').files[0];
+      var reader = new FileReader();
+      moment.locale('ru');
+
+      reader.onload = function (e) {
+        xmlData = e.target.result;
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(xmlData, "application/xml");
+        var opros = doc.getElementsByTagName("opros")[0].attributes;
+        $('#polls-title').val(opros.name.nodeValue);
+        $('#poll-code').val(opros.cod.nodeValue);
+        var startDate = opros.start_date.nodeValue;
+        var endDate = opros.end_date.nodeValue;
+        var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+        $('.start-date').datepicker('update', new Date(startDate.replace(pattern, '$3-$2-$1')));
+        $('.end-date').datepicker('update', new Date(endDate.replace(pattern, '$3-$2-$1')));
+      };
+      reader.readAsText(selectedFile);
+    })
+
+
+  });
 
 
 </script>
