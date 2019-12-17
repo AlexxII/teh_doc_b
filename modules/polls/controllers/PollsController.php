@@ -47,6 +47,7 @@ class PollsController extends Controller
       $result = false;
       if ($result = $xml->upload($name)) {
         $result = $xml->parseAndLoadToDb();
+        return $result;
       } else {
         return [
           'data' => [
@@ -58,7 +59,7 @@ class PollsController extends Controller
           'code' => 1,
         ];
       }
-      if ($model->save() && $result) {
+      if ($model->save()) {
 //        Polls::log($model->id, "info", "Добавил новый опрос.");
         return [
           'data' => [

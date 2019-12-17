@@ -53,26 +53,29 @@ class XmlFile extends Model
   {
     if ($reader = new XMLReader()) {
       $reader->open($this->xmlName);
-//      $reader->setParserProperty(XMLReader::VALIDATE, true);
-//      return var_dump($reader->isValid());
       $questionData = array();
       $answerData = array();
-      $count = 0;
+      $questionsCount = 0;
+      $answersCount = 0;
+      $tempCount = 0;
       while ($reader->read()) {
         if ($reader->nodeType == XMLReader::ELEMENT) {
           if ($reader->localName == 'vopros') {
-            $questionData[$count]['number'] = $reader->getAttribute('id');
-            $questionData[$count]['limit'] = $reader->getAttribute('limit');
-            $questionData[$count]['type_id'] = $reader->getAttribute('type_id');
-            $reader->read();
+            $questionData[$questionsCount]["number"] = $reader->getAttribute("id");
+            $questionData[$questionsCount]["limit"] = $reader->getAttribute("limit");
+            $questionData[$questionsCount]["type_id"] = $reader->getAttribute("type_id");
+            $tempCount = 0;
+//            $reader->read();
             if ($reader->nodeType == XMLReader::ELEMENT) {
-              if ($reader->localName == 'otvet') {
-                $answerData[$count]['code'] = $reader->getAttribute('otvet_cod');
+              if ($reader->localName == "otvet") {
+                $answerData[$questionsCount][$tempCount]["code"] = $reader->getAttribute("otvet_cod");
               }
             }
+            $tempCount++;
           }
         }
-        $count++;
+        $answersCount += $tempCount;
+        $questionsCount++;
       }
       return $answerData;
     }
