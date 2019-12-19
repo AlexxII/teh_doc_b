@@ -39,7 +39,6 @@ $('#add-poll').click(function (event) {
             var year = startDate.replace(pattern, '$1');
             var yText = '<span style="font-weight: 600">Успех!</span><br>Новый опрос добавлен';
             var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить опрос не удалось';
-            // var url = '/polls/polls/save-poll';
             sendPollFormData(url, pollTable, $form, xmlData, yText, nText);
           }
         }
@@ -54,6 +53,14 @@ $('#add-poll').click(function (event) {
 function sendPollFormData(url, table, form, xmlData, yTest, nTest) {
   var $input = $("#xmlupload");
   var formData = new FormData(form[0]);
+  jc = $.confirm({
+    icon: 'fa fa-cog fa-spin',
+    title: 'Подождите!',
+    content: 'Ваш запрос выполняется!',
+    buttons: false,
+    closeIcon: false,
+    confirmButtonClass: 'hide'
+  });
   $.ajax({
     type: 'POST',
     url: url,
@@ -62,18 +69,14 @@ function sendPollFormData(url, table, form, xmlData, yTest, nTest) {
     dataType: 'json',
     data: formData,
     success: function (response) {
+      jc.close();
       initNoty(yTest, 'success');
       table.ajax.reload();
     },
     error: function (response) {
+      jc.close();
       console.log(response.data.data);
       initNoty(nTest, 'error');
     }
   });
 }
-
-$(document).on('click', '.poll-in', function (e) {
-  e.preventDefault();
-  var pollId = $(e.currentTarget).data('id');
-  console.log(pollId);
-});

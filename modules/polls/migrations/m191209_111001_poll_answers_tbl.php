@@ -20,7 +20,7 @@ class m191209_111001_poll_answers_tbl extends Migration
       'title' => $this->string(500),
       'code' => $this->string(125),
       'order' => $this->integer(),                                       // порядок
-      'visible' => $this->boolean()->defaultValue(0),
+      'visible' => $this->boolean()->defaultValue(1),
       'isDeleted' => $this->boolean()->defaultValue(0)
     ], $tableOptions);
 

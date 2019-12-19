@@ -11,7 +11,7 @@ BootstrapDatepickerAsset::register($this);
 $poll_title_hint = "Укажите наименование опроса без кода.";
 $poll_sample_hint = "Укажите выборку цифрами.";
 $poll_code_hint = "Укажите код данного опроса";
-$poll_election_hint = "Является ли данный опрос - выборный";
+$poll_election_hint = "Является ли данный опрос - выборным";
 
 ?>
 <style>
@@ -22,13 +22,21 @@ $poll_election_hint = "Является ли данный опрос - выбо�
   <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>
 
-    <div class="row" style="padding-bottom: 10px">
-      <div class="form-group col-md-12 col-lg-12">
-        <?= $form->field($xml, 'xmlFile')->fileInput([
-          'id' => 'xmlupload'
-        ]) ?>
+    <?php if($create) : ?>
+      <div class="row" style="padding-bottom: 10px">
+        <div class="form-group col-md-12 col-lg-12">
+          <?= $form->field($xml, 'xmlFile')->fileInput([
+            'id' => 'xmlupload'
+          ]) ?>
+        </div>
       </div>
+    <?php else: ?>
+    <div class="row" style="padding-bottom:10px; top: -20px">
+      <span class="text-muted" style="font-size: 10px">
+        Чтобы обновить структуру опроса, выделите его в основной таблице и выбирите нужную клавишу
+      </span>
     </div>
+    <?php endif; ?>
 
     <div class="row">
       <div class="form-group col-md-12 col-lg-12">
@@ -124,7 +132,6 @@ $poll_election_hint = "Является ли данный опрос - выбо�
     if ($('.start-date').val()) {
       moment.locale('ru');
       var date = new Date($('.start-date').val());
-      console.log(date);
       $('.start-date').datepicker('update', moment(date).format('D MM YYYY'));
     }
 

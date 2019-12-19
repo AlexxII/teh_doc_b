@@ -2,6 +2,9 @@
 
 namespace app\modules\polls\controllers;
 
+use app\modules\polls\models\Answers;
+use app\modules\polls\models\Questions;
+use app\modules\polls\models\Xml;
 use Yii;
 use yii\web\Controller;
 use yii\web\UploadedFile;
@@ -31,156 +34,245 @@ class PollsController extends Controller
   public function actionAddNewPoll()
   {
     $model = new Polls();
-    $xml = new XmlFile();
+    $xmlF = new XmlFile();
+    $xmlM = new Xml();
     if ($model->load(Yii::$app->request->post())) {
       Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
       $userId = Yii::$app->user->identity->id;
       $model->created_user = $userId;
       $currentTime = new \DateTime();
       $model->poll_record_create = date('Y-m-d H:i:s');
       $model->poll_record_update = $currentTime->format('Y-m-d H:i:s');
 
-      $xml->xmlFile = UploadedFile::getInstances($xml, 'xmlFile');
+      $xmlF->xmlFile = UploadedFile::getInstances($xmlF, 'xmlFile');
       $name = $model->code . "_" . $model->id . ".xml";
-      $xml->upload($name);
-      $result = false;
-      if ($result = $xml->upload($name)) {
-        $result = $xml->parseAndLoadToDb();
-        return $result;
-      } else {
-        return [
-          'data' => [
-            'success' => false,
-            'data' => $result,
-            'message' => 'Could`t save and parse config xml file. Check access rights to upload dir (@app/web/upload/polls/xml/) 
-              or file extension',
-          ],
-          'code' => 1,
-        ];
-      }
-      if ($model->save()) {
+
+      $transaction = Yii::$app->db->beginTransaction();
 //        Polls::log($model->id, "info", "Добавил новый опрос.");
-        return [
-          'data' => [
-            'success' => true,
-            'data' => 'Model save',
-            'message' => 'Page load',
-          ],
-          'code' => 1,
-        ];
+      if ($model->save()) {
+        if ($xmlF->upload($name)) {
+          $xmlM->poll_id = $model->id;                              // запись в БД
+          $xmlM->title = $name;
+          if ($xmlM->save()) {
+            if ($xmlF->parseAndLoadToDb($model->id)) {              // XmlFile
+              $transaction->commit();
+              $resData = [
+                "questions" => $xmlF->questionsCount,
+                "answers" => $xmlF->answersCount
+              ];
+              $result = [
+                "data" => [
+                  "success" => true,
+                  "data" => $resData,
+                  "message" => "Seems to be FINE",
+                ],
+                "code" => 1
+              ];
+            } else {
+              $transaction->rollback();
+              $result = [
+                "data" => [
+                  "success" => false,
+                  "data" => $xmlF->error,
+                  "message" => "Could`t save OR parse config xml file",
+                ],
+                "code" => 0
+              ];
+            }
+          } else {
+            $transaction->rollback();
+            $result = [
+              "data" => [
+                "success" => false,
+                "data" => $xmlF->errors,
+                "message" => "Could`t save config xml file in DB"
+              ],
+              "code" => 0
+            ];
+          }
+        } else {
+          $transaction->rollback();
+          $result = [
+            "data" => [
+              "success" => false,
+              "data" => $xmlF->error,
+              "message" => "Could`t upload file",
+            ],
+            "code" => 0
+          ];
+        }
       } else {
-        return [
-          'data' => [
-            'success' => false,
-            'data' => $model->getErrors(),
-            'message' => 'Could`t save poll model',
+        $transaction->rollback();
+        $result = [
+          "data" => [
+            "success" => false,
+            "data" => $model->errors,
+            "message" => "Could`t save poll model",
           ],
-          'code' => 0,
+          "code" => 0
         ];
       }
+      return $result;
     }
-    return $this->renderAjax('_form_create_poll', [
-      'model' => $model,
-      'xml' => $xml
+    return $this->renderAjax("_form_create_poll", [
+      "model" => $model,
+      "xml" => $xmlF,
+      "create" => true
     ]);
-  }
-
-  public function actionSavePoll()
-  {
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    if (Yii::$app->request->isAjax && Yii::$app->request->isPost) {
-
-      $postData = Yii::$app->request->post("formData");
-      return $postData;
-      $model = new Polls();
-      $userId = Yii::$app->user->identity->id;
-      $model->created_user = $userId;
-      $model->title = $postData['Polls[title]'];
-      $model->start_date = $postData['Polls[start_date]'];
-      $model->end_date = $postData['Polls[end_date]'];
-      $model->code = $postData['Polls[code]'];
-      $model->sample = $postData['Polls[sample]'];
-      $model->elections = $postData['Polls[elections]'];
-      return $model;
-      $currentTime = new \DateTime();
-      $model->poll_record_create = date("Y-m-d H:i:s");
-      $model->poll_record_update = $currentTime->format("Y-m-d H:i:s");
-      return [
-        'data' => [
-          'success' => true,
-          'data' => 'Poll saved',
-          'message' => 'Poll saved',
-        ],
-        'code' => 1,
-      ];
-    }
-    return [
-      'data' => [
-        'success' => false,
-        'data' => 'Is not ajax',
-        'message' => 'An error occured',
-      ],
-      'code' => 0,
-    ];
   }
 
   public function actionUpdatePoll($id)
   {
-    $model = Polls::findOne(['id' => $id]);
+    $model = Polls::findOne(["id" => $id]);
 
     if ($model->load(Yii::$app->request->post())) {
       Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
       $currentTime = new \DateTime();
-      $model->poll_record_update = $currentTime->format('Y-m-d H:i:s');
+      $model->poll_record_update = $currentTime->format("Y-m-d H:i:s");
       if ($model->save()) {
 //        $this->logVks($model->id, "info","Обновил информацию о предстоящем сеансе ВКС");
         return [
-          'data' => [
-            'success' => true,
-            'data' => 'Model save',
-            'message' => 'Page load',
+          "data" => [
+            "success" => true,
+            "data" => "Model save",
+            "message" => "Page load",
           ],
-          'code' => 1,
+          "code" => 1,
         ];
       } else {
         return [
-          'data' => [
-            'success' => false,
-            'data' => $model->errors,
-            'message' => 'Page load',
+          "data" => [
+            "success" => false,
+            "data" => $model->errors,
+            "message" => "Page load",
           ],
-          'code' => 0,
+          "code" => 0,
         ];
       }
     }
-    return $this->renderAjax('_form_create_poll', [
-      'model' => $model,
-      'xml' => new XmlFile()
+    return $this->renderAjax("_form_create_poll", [
+      "model" => $model,
+      "create" => false
     ]);
   }
 
+  public function actionTestXmlReader()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if ($xml = new XmlFile()) {
+      $name = "ROS19-47_1917164898.xml";
+      return $xml->parseAndLoadToDb($name);
+    }
+    return [
+      "data" => [
+        "success" => false,
+        "data" => "FUCK",
+        "message" => "XML fault",
+      ],
+      "code" => 0,
+    ];
+  }
+
+
   public function actionViewPoll($id)
   {
-//    $logs = VksLog::find()->where(['=', 'session_id', $id])->orderBy('log_time')->all();
-    return $this->renderAjax('view_poll', [
-      'model' => Polls::findModel($id)
+//    $logs = VksLog::find()->where(["=", "session_id", $id])->orderBy("log_time")->all();
+    return $this->renderAjax("view_poll", [
+      "model" => Polls::findModel($id)
     ]);
   }
 
   public function actionDelete()
   {
-    $report = true;
-    foreach ($_POST['jsonData'] as $pollId) {
-      $models = Polls::findOne($pollId);
-      foreach ($models as $m) {
-        $result = $m->delete();
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $pollId = $_POST["pollId"];
+    $model = Polls::findOne($pollId);
+    if ($model) {
+      $transaction = Yii::$app->db->beginTransaction();
+      $pollQuestions = Questions::find()->where(["poll_id" => $model->id])->all();
+      foreach ($pollQuestions as $key => $pollQuestion) {
+        if (!$pollQuestion->delete()) {
+          $transaction->rollback();
+          return [
+            "data" => [
+              "success" => false,
+              "data" => "Question № " . $key . " id -" . $pollQuestion->id,
+              "message" => "Failed to delete question of the poll",
+            ],
+            "code" => 0,
+          ];
+        }
       }
+      $pollAnswers = Answers::find()->where(["poll_id" => $model->id])->all();
+      foreach ($pollAnswers as $key => $pollAnswer) {
+        if (!$pollAnswer->delete()) {
+          $transaction->rollback();
+          return [
+            "data" => [
+              "success" => false,
+              "data" => "Answer id " . $pollAnswer->id,
+              "message" => "Failed to delete answer of the poll",
+            ],
+            "code" => 0,
+          ];
+        }
+      }
+      $xmlFile = Xml::find()->where(["poll_id" => $model->id])->all();
+      $fileName = Yii::$app->params["uploadXml"] . $xmlFile[0]->title;
+      if (is_file($fileName)) {
+        try {
+          unlink($fileName);
+          $xmlRes = "Yes";
+        } catch (\Exception $e) {
+          $xmlRes = "NO. Could`t delete file. " . "Error - " . $e;
+        }
+      } else {
+        $xmlRes = "NO. Could`t find or not an common file";
+      }
+      if (!$xmlFile[0]->delete()) {
+        $transaction->rollback();
+        return [
+          "data" => [
+            "success" => false,
+            "data" => "Could`t delete xml in DB",
+            "message" => "Failed to delete Xml from DB",
+          ],
+          "code" => 0,
+        ];
+      }
+
+      if ($model->delete()) {
+        $transaction->commit();
+        return [
+          "data" => [
+            "success" => true,
+            "data" => "Xml file deleted - " . $xmlRes ,
+            "message" => "Seems to be FINE",
+          ],
+          "code" => 1,
+        ];
+      } else {
+        $transaction->rollback();
+        return [
+          "data" => [
+            "success" => true,
+            "data" => $model->errors,
+            "message" => "Failed. Could`t remove poll",
+          ],
+          "code" => 1,
+        ];
+      }
+
+    } else {
+      return [
+        "data" => [
+          "success" => false,
+          "data" => "Failed. Maybe pollId wrong",
+          "message" => "Model not found",
+        ],
+        "code" => 0,
+      ];
     }
-    if ($report) {
-      return true;
-    }
-    return false;
   }
 
   public function actionIndexEx()

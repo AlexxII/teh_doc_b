@@ -21,7 +21,7 @@ class m191209_110649_poll_questions_tbl extends Migration
       'limit' => $this->integer(),
       'input_type' => $this->integer(),
       'order' => $this->integer(),                                       // порядок
-      'visible' => $this->boolean()->defaultValue(0),
+      'visible' => $this->boolean()->defaultValue(1),
       'isDeleted' => $this->boolean()->defaultValue(0)
     ], $tableOptions);
 

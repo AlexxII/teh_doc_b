@@ -12,7 +12,7 @@ class Polls extends \yii\db\ActiveRecord
 
   public static function tableName()
   {
-    return 'poll_main_tbl';
+    return "poll_main_tbl";
   }
 
   public function __construct()
@@ -41,27 +41,33 @@ class Polls extends \yii\db\ActiveRecord
   public function rules()
   {
     return [
-      [['title', 'start_date', 'end_date', 'code', 'sample'], 'required'],
-      [['sample'], 'integer'],
-      [['elections'], 'safe'],
-      [['title'], 'string', 'max' => 250],
-      [['poll_comments'], 'string', 'max' => 1024]
+      [["title", "start_date", "end_date", "code", "sample"], "required"],
+      [["sample"], "integer"],
+      [["elections"], "safe"],
+      [["title"], "string", "max" => 250],
+      [["poll_comments"], "string", "max" => 1024]
     ];
   }
 
   /*
     public function getAdminList()
     {
-      return ArrayHelper::map(ToAdmins::find()->where(['admin' => 1])->orderBy('lft')->asArray()->all(), 'id', 'name');
+      return ArrayHelper::map(ToAdmins::find()->where(["admin" => 1])->orderBy("lft")->asArray()->all(), "id", "name");
     }
   */
+
+  public function getQuestions()
+  {
+    return $this->hasMany(Questions::class, ['poll_id' => 'id'])->orderBy('order');
+  }
+
 
   public static function findModel($id)
   {
     if (($model = Polls::findOne($id)) !== null) {
       return $model;
     }
-    throw new NotFoundHttpException('Запрошенная страница не существует.');
+    throw new NotFoundHttpException("Запрошенная страница не существует.");
   }
 
 

@@ -61,7 +61,7 @@ class SiteController extends Controller
   public function actionIndex()
   {
 //    \Yii::$app->view->params['appName'] = 'РИАЦi';
-    \Yii::$app->view->title = 'РИАЦi';
+    \Yii::$app->view->title = 'РИАЦd';
     return $this->render('index');
   }
 

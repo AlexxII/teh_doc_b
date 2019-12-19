@@ -28,7 +28,7 @@ class m191209_105522_poll_main_tbl extends Migration
       'poll_comments' => $this->text(),
       'poll_record_create' => $this->dateTime(),
       'poll_record_update' => $this->dateTime(),
-      'visible' => $this->boolean()->defaultValue(0),
+      'visible' => $this->boolean()->defaultValue(1),
       'isDeleted' => $this->boolean()->defaultValue(0)
     ], $tableOptions);
 
