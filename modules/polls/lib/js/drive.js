@@ -217,9 +217,9 @@ function pollLogic(event) {
       $input.data('mark', 1);
       inputs++;
       if (inputs >= answersLimit) {
-        if (curQuestionNum =! limit) {
-
-        }
+        // if (curQuestionNum =! limit) {
+        //
+        // }
         setTimeout(() => nextQuestion(++curQuestionNum), 200);
       }
     }
