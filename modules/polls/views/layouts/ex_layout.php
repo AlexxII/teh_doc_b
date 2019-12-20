@@ -11,7 +11,7 @@
         <li id="app-name" class="app-settings">
           <?= $this->params['title']; ?>
         </li>
-        <li id="poll-title" style="padding: 5px 0 0 15px;font-weight: bold">
+        <li id="poll-title" style="padding: 5px 0 0 15px;font-weight: bold; float: left">
         </li>
       </ul>
       <ul class="navig navigation-nav navigation-right">
@@ -87,6 +87,7 @@
     $('[data-toggle="tooltip"]').tooltip();
 
     $('#go-back').click(function (e) {
+      $('body').unbind();
       goBack();
     });
 

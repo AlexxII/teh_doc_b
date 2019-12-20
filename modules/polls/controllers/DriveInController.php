@@ -43,7 +43,7 @@ class DriveInController extends Controller
       ->with(['questions.answers'])
       ->asArray()
       ->all();
-    Yii::$app->view->params['title'] = 'Вколачивание опроса';
+    Yii::$app->view->params['title'] = 'Опрос';
     Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     return [
       'data' => [

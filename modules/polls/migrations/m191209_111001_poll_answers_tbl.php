@@ -18,6 +18,7 @@ class m191209_111001_poll_answers_tbl extends Migration
       'poll_id' => $this->bigInteger()->notNull(),
       'question_id' => $this->bigInteger()->notNull(),
       'title' => $this->string(500),
+      'title_ex' => $this->string(255),                                  // коротко
       'code' => $this->string(125),
       'order' => $this->integer(),                                       // порядок
       'visible' => $this->boolean()->defaultValue(1),

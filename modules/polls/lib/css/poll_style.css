@@ -91,3 +91,9 @@ body {
   margin: 12px 0 0 30px !important;
 }
 
+.answer-p {
+  /*border: dashe  d 1px #0c0c0c;*/
+  border-radius: 3px;
+  padding: 5px;
+  margin: 0 0 5px;
+}
