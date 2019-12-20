@@ -3,10 +3,12 @@
 use app\assets\TableBaseAsset;
 use app\modules\polls\asset\PollAsset;
 use app\assets\NotyAsset;
+use app\assets\SortableJSAsset;
 
 PollAsset::register($this);
 TableBaseAsset::register($this);                // регистрация ресурсов таблиц datatables
 NotyAsset::register($this);
+SortableJSAsset::register($this);
 
 
 ?>

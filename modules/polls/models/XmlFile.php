@@ -82,6 +82,7 @@ class XmlFile extends Model
               $a->title = $reader->getAttribute("otvet_text");
               $a->code = $reader->getAttribute("otvet_cod");
               $a->order = $reader->getAttribute("otvet_sort");
+              $a->input_type = $reader->getAttribute("otvet_type");
               if (!$a->save()) {
                 $transaction->rollback();
                 $this->error = "Error while saving answer № " . $reader->getAttribute("order") . " / question № " .

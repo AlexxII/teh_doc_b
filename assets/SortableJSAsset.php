@@ -9,7 +9,7 @@ class SortableJSAsset extends AssetBundle
   public $sourcePath = '@bower/sortablejs';
 
   public $js = [
-    'src',
+    'Sortable.min.js',
   ];
 
 }

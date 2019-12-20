@@ -130,9 +130,8 @@ var codes = {
   30: 'C'
 };
 
-var questions, poll, total, curQuestionNum, pollId, currentQuestion, inputs;
+var questions, poll, total, curQuestionNum, pollId, currentQuestion, inputs, answersLimit;
 var answersPool = {};
-
 
 $(document).on('click', '.poll-in', function (e) {
   e.preventDefault();
@@ -150,7 +149,6 @@ $(document).on('click', '.poll-in', function (e) {
   });
   loadExContent(url, bUrl, jc);
 });
-
 
 function goLeftRight(event) {
   if (event.originalEvent.keyCode == '37') {
@@ -170,11 +168,9 @@ function goLeftRight(event) {
 
 function nextQuestion(position) {
   if (questions[position].limit > 1) {
-    $('.panel').removeClass('panel-primary');
-    $('.panel').addClass('panel-danger')
+    $('.panel').removeClass('panel-primary').addClass('panel-danger');
   } else {
-    $('.panel').removeClass('panel-danger');
-    $('.panel').addClass('panel-primary')
+    $('.panel').removeClass('panel-danger').addClass('panel-primary');
   }
 
   verification();
@@ -188,7 +184,6 @@ function nextQuestion(position) {
   currentQuestion = questions[position];
   answersLimit = currentQuestion.limit;                                              // ограничение по вводу
   inputs = 0;                                                                        // счетчик ввода
-
   answers.forEach(function (el, index) {
     var q = "<p data-id='" + el.id + "' data-mark='0' class='answer-p'><strong>" + codes[index] +
       '. ' + "</strong>" + el.title + "</p>";
@@ -200,10 +195,9 @@ function nextQuestion(position) {
     } else {
       answersPool[temp] = [el.id, el.code];
     }
-
     $('.drive-content .panel-body').append(q);
   });
-  console.log(currentQuestion.limit);
+  // console.log(currentQuestion.limit);
 }
 
 function pollLogic(event) {
@@ -214,7 +208,6 @@ function pollLogic(event) {
     var code = answersPool[keyCode][1];
     var extended = answersPool[keyCode][2];                                         // свободный ответ
     var $input = $('[data-id=' + id + ']');
-
     if ($input.data('mark')) {
       $input.data('mark', 0);
       $input.css('background-color', '#fff');
@@ -224,6 +217,9 @@ function pollLogic(event) {
       $input.data('mark', 1);
       inputs++;
       if (inputs >= answersLimit) {
+        if (curQuestionNum =! limit) {
+
+        }
         setTimeout(() => nextQuestion(++curQuestionNum), 200);
       }
     }

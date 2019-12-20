@@ -34,7 +34,7 @@ class Answers extends \yii\db\ActiveRecord
   public function rules()
   {
     return [
-      [["id", "poll_id", "question_id", "title", "code", "order"], "safe"]
+      [["id", "poll_id", "question_id", "title", "code", "order", "input_type"], "safe"]
     ];
   }
 

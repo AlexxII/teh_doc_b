@@ -37,43 +37,33 @@
     </div>
   </div>
 </div>
-<script>
 
+<ul id="items">
+  <li>item 1</li>
+  <li>item 2</li>
+  <li>item 3</li>
+</ul>
+
+
+<script>
 
   // только первичная инициализация - логика в drive.js
   $(document).ready(function () {
     poll = exData[0];
-    pollId = poll.id;                                                               // ранить id опроса
+    $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
+    pollId = poll.id;
     questions = poll['questions'];
     total = questions.length;
-    $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
+    $('.total-questions').append(total);                                            // общее кол-во вопросов
 
-    $('.drive-content .panel-heading').append(questions[0].order + '. ');
-    $('.drive-content .panel-heading').append(questions[0].title);
-    $('.total-questions').append(total);
-    var answers = questions[0].answers;
-    answersPool = {};
-    currentQuestion = questions[0];
-    answersLimit = currentQuestion.limit;
-    inputs = 0;                                                           // количество ввода
-
-    // обновление при первичной инициализации
-    answers.forEach(function (el, index) {
-      var q = "<p data-id='" + el.id + "' data-mark='0' class='answer-p'><strong>" + codes[index] +
-        '. ' + "</strong>" + el.title + "</p>";
-      var temp = keyCodesRev[codes[index]];
-      if (temp.length > 1) {
-        temp.forEach(function (val, i) {
-          answersPool[val] =  [el.id, el.code];
-        });
-      }
-      $('.drive-content .panel-body').append(q);
-    });
-    curQuestionNum = 0;
+    nextQuestion(curQuestionNum = 0);
 
     $('body').bind('keydown', pollLogic);
 
     $('body').bind('keydown', goLeftRight);
+
+    var el = document.getElementById('items');
+    var sortable = Sortable.create(el);
 
   });
 

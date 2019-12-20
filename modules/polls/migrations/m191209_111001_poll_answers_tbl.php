@@ -21,6 +21,7 @@ class m191209_111001_poll_answers_tbl extends Migration
       'title_ex' => $this->string(255),                                  // коротко
       'code' => $this->string(125),
       'order' => $this->integer(),                                       // порядок
+      'input_type' => $this->integer(),                                  // тип ответа
       'visible' => $this->boolean()->defaultValue(1),
       'isDeleted' => $this->boolean()->defaultValue(0)
     ], $tableOptions);
