@@ -144,6 +144,21 @@ $(window).resize(function () {
 
 function loadExContent(url, backUrl, jc) {
   $.ajax({
+    url: url + '?back-url=' + backUrl,
+    method: 'get'
+  }).done(function (response) {
+    $('#app-wrap').append('<div id="ex-wrap">' + response.data.data + '</div>');
+    exData = response.data.message;
+    jc.close();
+    // window.history.pushState("object or string", "Title", uri);
+  }).fail(function () {
+    jc.close();
+    console.log('Failed to load ex-content. Main.js');
+  });
+}
+
+function loadExContentEx(url, backUrl, jc) {
+  $.ajax({
     url: url + '&back-url=' + backUrl,
     method: 'get'
   }).done(function (response) {

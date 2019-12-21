@@ -147,7 +147,7 @@ $(document).on('click', '.poll-in', function (e) {
     closeIcon: false,
     confirmButtonClass: 'hide'
   });
-  loadExContent(url, bUrl, jc);
+  loadExContentEx(url, bUrl, jc);
 });
 
 function goLeftRight(event) {

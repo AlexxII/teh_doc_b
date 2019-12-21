@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
 use XMLReader;
+use Exception;
 
 
 class XmlFile extends Model
@@ -41,7 +42,7 @@ class XmlFile extends Model
       $xml->saveAs($this->xmlName, false);
       return true;
     } catch (\Exception $e) {
-      $this->error = $e;
+      $this->error = $e->getMessage();
       return false;
     }
   }

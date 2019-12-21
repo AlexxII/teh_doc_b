@@ -35,9 +35,6 @@ SortableJSAsset::register($this);
     </div>
 
     <div class="container-fluid">
-      <div style="padding: 10px 10px 10px 0">
-        <button class="btn btn-ml" id="test-xml">XML-test</button>
-      </div>
       <table id="poll-main-table" class="display no-wrap cell-border poll-table" style="width:100%">
         <thead>
         <tr>

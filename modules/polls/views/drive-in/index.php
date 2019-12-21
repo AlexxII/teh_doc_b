@@ -38,13 +38,6 @@
   </div>
 </div>
 
-<ul id="items">
-  <li>item 1</li>
-  <li>item 2</li>
-  <li>item 3</li>
-</ul>
-
-
 <script>
 
   // только первичная инициализация - логика в drive.js

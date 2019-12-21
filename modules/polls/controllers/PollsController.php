@@ -84,7 +84,7 @@ class PollsController extends Controller
             $result = [
               "data" => [
                 "success" => false,
-                "data" => $xmlF->errors,
+                "data" => $xmlM->errors,
                 "message" => "Could`t save config xml file in DB"
               ],
               "code" => 0
