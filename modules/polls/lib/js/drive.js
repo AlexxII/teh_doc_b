@@ -132,6 +132,9 @@ var codes = {
 
 var questions, poll, total, curQuestionNum, pollId, currentQuestion, inputs, answersLimit;
 var answersPool = {};
+var serviceBtns = [9, 13, 16, 17, 18, 19, 20, 32, 33, 34, 37, 38, 39, 40, 106, 107, 109, 110, 112, 113, 114,
+  115, 116, 117, 118, 119, 120, 121, 122, 123, 144];
+var confirmBtns = [48, 96];
 
 $(document).on('click', '.poll-in', function (e) {
   e.preventDefault();
@@ -150,21 +153,6 @@ $(document).on('click', '.poll-in', function (e) {
   loadExContentEx(url, bUrl, jc);
 });
 
-function goLeftRight(event) {
-  if (event.originalEvent.keyCode == '37') {
-    curQuestionNum--;
-    if (curQuestionNum <= 0) {
-      curQuestionNum = 0;
-    }
-    nextQuestion(curQuestionNum);
-  } else if (event.originalEvent.keyCode == '39') {                                     // right
-    curQuestionNum++;
-    if (curQuestionNum >= total) {
-      curQuestionNum = total - 1;
-    }
-    nextQuestion(curQuestionNum);
-  }
-}
 
 function nextQuestion(position) {
   if (questions[position].limit > 1) {
@@ -172,12 +160,8 @@ function nextQuestion(position) {
   } else {
     $('.panel').removeClass('panel-danger').addClass('panel-primary');
   }
-
   verification();
-
-  $('.drive-content .panel-heading').html('');
-  $('.drive-content .panel-heading').append(questions[position].order + '. ');
-  $('.drive-content .panel-heading').append(questions[position].title);
+  $('.drive-content .panel-heading').html(questions[position].order + '. ' + questions[position].title);
   $('.drive-content .panel-body').html('');
   var answers = questions[position].answers;
   answersPool = {};
@@ -185,60 +169,177 @@ function nextQuestion(position) {
   answersLimit = currentQuestion.limit;                                              // ограничение по вводу
   inputs = 0;                                                                        // счетчик ввода
   answers.forEach(function (el, index) {
-    var q = "<p data-id='" + el.id + "' data-mark='0' class='answer-p'><strong>" + codes[index] +
-      '. ' + "</strong>" + el.title + "</p>";
+    var key;
     var temp = keyCodesRev[codes[index]];
     if (temp.length > 1) {
       temp.forEach(function (val, i) {
-        answersPool[val] = [el.id, el.code];
+        answersPool[val] = [el.id, el.code, 0, el.input_type];
+        key = val;
       });
     } else {
-      answersPool[temp] = [el.id, el.code];
+      answersPool[temp] = [el.id, el.code, 0, el.input_type];
+      key = temp;
     }
+    var q = "<p data-id='" + el.id + "' data-mark='0' data-key='" + key + "' class='answer-p'><strong>" + codes[index] +
+      '. ' + "</strong>" + el.title + "</p>";
     $('.drive-content .panel-body').append(q);
   });
-  // console.log(currentQuestion.limit);
 }
 
-function pollLogic(event) {
-  var serviceBtns = [9, 13, 16, 17, 18, 19, 20, 33, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123];
-  var keyCode = event.originalEvent.keyCode;
-  if (answersPool[keyCode] !== undefined) {
-    var id = answersPool[keyCode][0];
-    var code = answersPool[keyCode][1];
-    var extended = answersPool[keyCode][2];                                         // свободный ответ
-    var $input = $('[data-id=' + id + ']');
-    if ($input.data('mark')) {
-      $input.data('mark', 0);
-      $input.css('background-color', '#fff');
-      inputs--;
-    } else {
-      $input.css('background-color', '#e0e0e0');
-      $input.data('mark', 1);
-      inputs++;
-      if (inputs >= answersLimit) {
-        // if (curQuestionNum =! limit) {
-        //
-        // }
-        setTimeout(() => nextQuestion(++curQuestionNum), 200);
+
+//
+function getPrimaryLogic(keyCode) {
+  if (answersPool[keyCode] !== undefined) {                           // совпадает в кодом в перечне
+    return '101';
+  } else if (isInArray(keyCode, confirmBtns)) {                       // нажат 0 - подтверждение
+    return '102'
+  } else if (isInArray(keyCode, serviceBtns)) {
+    if (keyCode == '37') {
+      curQuestionNum--;
+      if (curQuestionNum <= 0) {
+        curQuestionNum = 0;
       }
+      return '202';
+    } else if (keyCode == '39') {
+      curQuestionNum++;
+      if (curQuestionNum >= total) {
+        curQuestionNum = total - 1;
+      }
+      return '203';
     }
+    return '201';
   } else {
-    if (keyCode != '37' && keyCode != '39') {
-      if (!isInArray(keyCode, serviceBtns)){
-        beep();
-      }
-    }
+    return '109';
   }
 }
+
+function pollLogic(keyCode) {
+  var logic = getPrimaryLogic(keyCode);
+  switch (logic) {
+    case '101':
+      var id = answersPool[keyCode][0];
+      var code = answersPool[keyCode][1];
+      var extended = answersPool[keyCode][2];                                         // свободный ответ
+      var type = answersPool[keyCode][3];
+      var $input = $('[data-id=' + id + ']');
+      if ($input.data('mark')) {
+        $input.data('mark', 0).css('background-color', '#fff');
+        inputs--;
+        $input.find('.free-answer-wrap').remove();
+      } else {
+        $input.data('mark', 1).css('background-color', '#e0e0e0');
+        inputs++;
+        if (type == 2) {
+          var input = "<input class='form-control free-answer'>";
+          var span = "<span class='free-answer-wrap'>" + input +
+            "<label class='w3-label-under'>Введите ответ.</label></span>";
+          $(span).appendTo($input).focus();
+        } else {
+          if (inputs >= answersLimit) {
+            // if (curQuestionNum =! limit) {
+            // }
+            if (curQuestionNum + 1 == total) {
+              respondentFinish();                                            // конец опросного листа
+            }
+            setTimeout(() => nextQuestion(++curQuestionNum), 200);
+          }
+        }
+      }
+      break;
+    case '102':
+      console.log(inputs);
+      if (!inputs) {
+        beep();
+        break;
+      }
+      setTimeout(() => nextQuestion(++curQuestionNum), 200);
+
+
+
+      break;
+    case '109':
+      beep();
+      break;
+    case '201':
+      break;
+    case '202':
+      // console.log('202 - ' + inputs);
+      nextQuestion(curQuestionNum);
+      break;
+    case '203':
+      // console.log('203 - ' + inputs);
+      nextQuestion(curQuestionNum);
+      break;
+  }
+}
+
+
+function motion() {
+
+}
+
+function saveAnswers()
+{
+
+}
+
+// снятие фокуса с inputa -> включает стандартную логику
+$(document).on('blur', '.free-answer', function () {
+  $('body').bind('keydown', keyCodeWrap);
+});
+
+// установка фокуса в input -> выключает стандартную логику
+$(document).on('focus', '.free-answer', function () {
+  $('body').unbind();
+});
+
+$(document).on('click', '.service-btn', keyCodeWrap);
+$(document).on('click', '.answer-p', keyCodeWrap);
+
+// функция обертка, для возможности работы с устройств
+function keyCodeWrap(event) {
+  var key, k;
+  if (event.type === 'click') {
+    var target = event.target;
+    if (k = $(target).data('key')) {
+      if (k === 1) {
+        key = 37;
+      } else if (k === 2) {
+        key = 39;
+      } else if (k === 3){                                            // клавиша Далее
+        key = 48;
+      } else {
+        key = $(target).data('key');
+      }
+      pollLogic(key);
+    }
+  } else {
+    key = event.originalEvent.keyCode;
+    pollLogic(key);
+  }
+}
+
+function respondentFinish() {
+  var finishNotice = '<p>КОНЕЦ!!!</p>';
+  $('.drive-content .panel').append(finishNotice);
+}
+
+// проверка логики опроса - возможно банить некеторые ответы!
+function verification() {
+  return;
+}
+
+
+// =================== вспомогательные функции =====================
 
 function isInArray(value, array) {
   return array.indexOf(value) > -1;
 }
 
 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
 function beep() {
-  var volume = 45 / 100;
+  var volume = 25 / 100;
   var frequency = 3020;
   var duration = 150;
   var type = 3;
@@ -256,9 +357,4 @@ function beep() {
     },
     duration
   );
-}
-
-// проверка логики опроса - возможно банить некеторые ответы!
-function verification() {
-  return;
 }

@@ -1,7 +1,7 @@
 <div id="app-wrap">
   <nav class="navigation navigation-default">
     <div class="container-fluid">
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav" id="left">
         <button id="go-back" type="button" class="btn btn-default btn-circle btn-ml"
                 data-back-url="<?= $this->params['bUrl']; ?>">
           <svg focusable="false" viewBox="0 0 24 24">

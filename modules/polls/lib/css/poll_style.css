@@ -96,4 +96,17 @@ body {
   border-radius: 3px;
   padding: 5px;
   margin: 0 0 5px;
+  cursor: pointer;
+}
+.answer-p:hover {
+  /*background-color: #f0f0f0;*/
+  background-color: #f1f3f4;
+}
+.w3-label-under {
+  font-size: 10px;
+  padding-left: 5px;
+  font-weight: 400;
+}
+.free-answer {
+  margin: 10px 0 0 0;
 }
