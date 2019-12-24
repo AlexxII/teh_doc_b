@@ -82,9 +82,12 @@ function sendPollFormData(url, table, form, xmlData, yTest, nTest) {
 }
 
 function Respondent() {
-
   this.name = name;
   this.isAdmin = false;
-
 }
 
+class Poll {
+  constructor() {
+
+  }
+}

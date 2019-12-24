@@ -58,10 +58,10 @@
         <div class="panel-body">
         </div>
         <div class="panel-footer panel-primary">
-          <button data-key=1 type="button"
+          <button data-key=1 type="button" style="display: none"
                   class="hidden-sm hidden-md hidden-xs previous-btn btn btn-info btn-sm service-btn">Назад
           </button>
-          <button data-key=2 type="button"
+          <button data-key=2 type="button" style="display: none"
                   class="hidden-sm hidden-md hidden-xs next-btn btn btn-info btn-sm service-btn">Вперед
           </button>
           <button data-key=3 type="button" class="btn btn-success btn-sm service-btn">Дальше</button>
@@ -99,9 +99,7 @@
 </div>
 
 <script>
-  NProgress.configure({showSpinner: false});
   NProgress.start();
-
   // только первичная инициализация - логика в drive.js
   $(document).ready(function () {
 
@@ -111,11 +109,12 @@
     questions = poll['questions'];
     total = questions.length;                                                       // общее кол-во вопросов
     $('.total-questions').append(total);
+    curQuestionNum = 0;
 
     setTimeout(() => nextQuestion(0, function () {
-      $('#drive-in-wrap').removeAttr('hidden');
+      $('.drive-in-wrap').removeAttr('hidden');
       NProgress.done();
-    }), 1400);
+    }), 100);
 
     $('body').bind('keydown', keyCodeWrap);
 
