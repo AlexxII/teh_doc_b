@@ -4,12 +4,15 @@ use app\assets\TableBaseAsset;
 use app\modules\polls\asset\PollAsset;
 use app\assets\NotyAsset;
 use app\assets\SortableJSAsset;
+use app\assets\NprogressAsset;
+use app\assets\Select2Asset;
 
 PollAsset::register($this);
 TableBaseAsset::register($this);                // регистрация ресурсов таблиц datatables
 NotyAsset::register($this);
 SortableJSAsset::register($this);
-
+NprogressAsset::register($this);
+Select2Asset::register($this);
 
 ?>
 
@@ -60,6 +63,11 @@ SortableJSAsset::register($this);
 
   $(document).ready(function (e) {
 
+    NProgress.configure({ showSpinner: false });
+    NProgress.start();
+    setTimeout(() => NProgress.done(), 1300);
+
+
     //*********************************************
     $('#test-xml').on('click', function () {
       var url = 'polls/polls/test-xml-reader';
@@ -92,10 +100,7 @@ SortableJSAsset::register($this);
 
     var editBtn = '<a href="#" id="edit" class="fa fa-edit" style="padding-right: 5px" title="Обновить"></a>';
     var infoBtn = '<a href="#" id="view" class="fa fa-info" ' +
-      ' title="Подробности" data-url="/to/month-schedule/view" data-back-url="/to" style="padding-right: 5px"></a>';
-    var cfrmBtn = '<a href="#" id="perform" class="fa fa-calendar-check-o" ' +
-      'title="Подтвердить выполнение" style="padding-right: 5px"></a>';
-
+      ' title="Подробности" data-url="/to/month-schedule/view" data-back-url="/to" style="padding-left: 5px"></a>';
 
     pollTable = $('#poll-main-table').DataTable({
       'processing': true,
@@ -118,7 +123,7 @@ SortableJSAsset::register($this);
       'fnRowCallback': function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
         var date = aData.start_date;
         var pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-        $('td:nth-child(6)', nRow).html(editBtn + infoBtn + cfrmBtn);
+        $('td:nth-child(6)', nRow).html(editBtn + infoBtn);
       },
       orderFixed: [[1, 'desc']],
       order: [[1, 'desc']],
@@ -141,6 +146,11 @@ SortableJSAsset::register($this);
           'targets': 0,
           'data': null,
           'visible': false
+        }, {
+          'targets': 2,
+          'render': function (data, type, row) {
+            return '<span class="poll-in" data-id="' + row['id'] + '"><strong>' + row['code'] + '</strong></span>';
+          }
         }, {
           'targets': 3,
           'render': function (data, type, row) {

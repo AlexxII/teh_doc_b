@@ -164,7 +164,6 @@ function loadExContentEx(url, backUrl, jc) {
   }).done(function (response) {
     $('#app-wrap').append('<div id="ex-wrap">' + response.data.data + '</div>');
     exData = response.data.message;
-    jc.close();
     // window.history.pushState("object or string", "Title", uri);
   }).fail(function () {
     jc.close();
