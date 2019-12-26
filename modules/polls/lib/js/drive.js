@@ -61,12 +61,10 @@ var codes = {
 };
 
 var questions, poll, pollId, total, curQuestionNum, currentQuestion, inputs, answersLimit;
-
 var answersPool = {};
 var serviceBtns = [9, 13, 16, 17, 18, 19, 20, 32, 33, 34, 37, 38, 39, 40, 106, 107, 109, 110, 112, 113, 114,
   115, 116, 117, 118, 119, 120, 121, 122, 123, 144];
 var confirmBtns = [48, 96];
-
 var stepDelayUsr = 200;
 var stepDelaySys = 0;
 
