@@ -166,6 +166,7 @@ class Poll {
   }
 
   incEntries() {
+    console.log('this._entriesNumber' + ' - ' + this._entriesNumber);
     this._entriesNumber += 1;
   }
 
@@ -189,6 +190,7 @@ class Poll {
   goToQuestion(number) {
     this.currentQuestion = number;
     this.renderQuestion(number);
+    this.restoreAnswers(this.currentQuestion);
   }
 
   saveToLocalDb(answer) {
@@ -196,8 +198,15 @@ class Poll {
     console.log(this.answersPool);
   }
 
+  deleteFromLocalDb() {
+    let obj = this.answersPool;
+    delete obj[this.currentQuestion];
+    console.log(obj);
+  }
+
   restoreAnswers(questionNum) {
     let p = this.answersPool[questionNum];
+    this.entriesNumber = 1;
     if (p !== undefined) {
       $('[data-id=' + p[0]+ ']').data('mark', 1).css('background-color', '#e0e0e0');
     }
@@ -217,8 +226,8 @@ class Poll {
     let answers = questions[questionNumber].answers;
     let answersPool = {};
     answers.forEach(function (el, index) {
-      var key;
-      var temp = keyCodesRev[codes[index]];
+      let key;
+      let temp = keyCodesRev[codes[index]];
       if (temp.length > 1) {
         temp.forEach(function (val, i) {
           answersPool[val] = [el.id, el.code, 0, el.input_type];
@@ -228,11 +237,11 @@ class Poll {
         answersPool[temp] = [el.id, el.code, 0, el.input_type];
         key = temp;
       }
-      var q = "<p data-id='" + el.id + "' data-mark='0' data-key='" + key + "' class='answer-p'><strong>" + codes[index] +
+      let q = "<p data-id='" + el.id + "' data-mark='0' data-key='" + key + "' class='answer-p'><strong>" + codes[index] +
         '. ' + "</strong>" + el.title + "</p>";
       $('.drive-content .panel-body').append(q);
     });
-    this.keyCodesPool = answersPool;
+    this.keyCodesPool = answersPool;                                // пул кодов клавиатуры, ассоциированных с параметрами ответов
     this.curQuestionAnswersLimit = limit;
     this.entriesNumber = 0;
   }

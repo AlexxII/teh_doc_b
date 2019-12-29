@@ -1,9 +1,9 @@
 var stepDelayUsr = 200;
 var stepDelaySys = 0;
 
-const dIntface = function () {
-  this.stepDelayUsr = 200;
-  this.stepDelaySys = 200
+const userInterface = {
+  stepDelayUsr :  200,                                                    // задержка при переходе на другой вопрос
+  answeredColor: '#e0e0e0'                                             // цвет выделение при ответе
 };
 
 // начало вколачивания опроса
@@ -90,16 +90,21 @@ function confirmAnswer(keyCode) {
   if ($input.data('mark')) {
     $input.data('mark', 0).css('background-color', '#fff');
     poll.decEntries();
+    poll.deleteFromLocalDb();
     $input.find('.free-answer-wrap').remove();
   } else {
-    $input.data('mark', 1).css('background-color', '#e0e0e0');
+    $input.data('mark', 1).css('background-color', userInterface.answeredColor);
     poll.incEntries();
+    console.log(type);
     if (type == 2) {
       let input = "<input class='form-control free-answer'>";
       let span = "<span class='free-answer-wrap'>" + input +
         "<label class='w3-label-under'>Введите ответ.</label></span>";
       $(span).appendTo($input);
     } else {
+      console.log('poll.entriesNumber' + ' - ' + poll.entriesNumber);
+      console.log('answersLimit' + ' - ' + answersLimit);
+
       if (poll.entriesNumber >= answersLimit) {
         // if (curQuestionNum =! limit) {
         // }
@@ -107,7 +112,7 @@ function confirmAnswer(keyCode) {
         //   respondentFinish();                                            // конец опросного листа
         // }
         poll.saveToLocalDb(codesPool[keyCode]);
-        setTimeout(() => poll.nextQuestion(), stepDelayUsr);
+        setTimeout(() => poll.nextQuestion(), userInterface.stepDelayUsr);
       }
     }
   }
