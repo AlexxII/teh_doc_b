@@ -44,7 +44,7 @@ class Polls extends \yii\db\ActiveRecord
       [["title", "start_date", "end_date", "code", "sample"], "required"],
       [["sample"], "integer"],
       [["elections"], "safe"],
-      [["title"], "string", "max" => 250],
+      [["title"], "string", "max" => 500],
       [["poll_comments"], "string", "max" => 1024]
     ];
   }

@@ -75,7 +75,7 @@ function sendPollFormData(url, table, form, xmlData, yTest, nTest) {
     },
     error: function (response) {
       jc.close();
-      console.log(response.data.data);
+      // console.log(response.data.data);
       initNoty(nTest, 'error');
     }
   });
@@ -86,8 +86,172 @@ function Respondent() {
   this.isAdmin = false;
 }
 
-class Poll {
-  constructor() {
+/*
+const poll = function (id) {
 
+};
+*/
+
+// опрос, который был выбран и остается в памяти пока на выберут другой опрос
+class Poll {
+  constructor(structure) {
+    if (this.verifyPollConfigStructure(structure)) {
+      let pollData = structure[0];
+      this._id = pollData.id;
+      this._title = pollData.title;
+      this._code = pollData.code;
+      this._questions = pollData.questions;
+      this.currentQuestion = 0;
+      this._totalNumberOfQuestions = this._questions.length;
+    }
+  }
+
+  set id(id) {
+    if (this.verifyIfIdValid(id)) {
+      this._id = id;
+    }
+  }
+
+  set currentQuestion(num) {
+    this._currentQuestion = num;
+  }
+
+  set curQuestionAnswersLimit(num) {
+    this._curQuestionAnswersLimit = num;
+  }
+
+  set keyCodesPool(answersPool) {
+    this._keyCodesPool = answersPool;
+  };
+
+  set entriesNumber(num) {
+    this._entriesNumber = num;
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  get code() {
+    return this._code;
+  }
+
+  get title() {
+    return this._title;
+  }
+
+  get currentQuestion() {
+    return this._currentQuestion;
+  }
+
+  get totalNumberOfQuestions() {
+    return this._totalNumberOfQuestions;
+  }
+
+  get questions() {
+    return this._questions;
+  }
+
+  get curQuestionAnswersLimit() {
+    return this._curQuestionAnswersLimit;
+  }
+
+  get keyCodesPool() {
+    return this._keyCodesPool;
+  }
+
+  get entriesNumber() {
+    return this._entriesNumber;
+  }
+
+  incEntries() {
+    this._entriesNumber += 1;
+  }
+
+  decEntries() {
+    this._entriesNumber -= 1;
+  }
+
+  nextQuestion() {
+    this.currentQuestion = this.currentQuestion + 1;
+    this.renderQuestion(this.currentQuestion);
+  }
+
+  previousQuestion() {
+    this.currentQuestion = this.currentQuestion - 1;
+    this.renderQuestion(this.currentQuestion);
+  }
+
+  goToQuestion(number) {
+    this.currentQuestion = number;
+    this.renderQuestion(number - 1);
+  }
+
+  renderQuestion(questionNumber) {
+    // console.log(questionNumber);
+    let questions = this.questions;
+    let limit = questions[questionNumber].limit;
+    if (limit > 1) {
+      $('.panel').removeClass('panel-primary').addClass('panel-danger');
+    } else {
+      $('.panel').removeClass('panel-danger').addClass('panel-primary');
+    }
+    $('.drive-content .panel-heading').html(questions[questionNumber].order + '. ' + questions[questionNumber].title);
+    $('.drive-content .panel-body').html('');
+    let answers = questions[questionNumber].answers;
+    let answersPool = {};
+    answers.forEach(function (el, index) {
+      var key;
+      var temp = keyCodesRev[codes[index]];
+      if (temp.length > 1) {
+        temp.forEach(function (val, i) {
+          answersPool[val] = [el.id, el.code, 0, el.input_type];
+          key = val;
+        });
+      } else {
+        answersPool[temp] = [el.id, el.code, 0, el.input_type];
+        key = temp;
+      }
+      var q = "<p data-id='" + el.id + "' data-mark='0' data-key='" + key + "' class='answer-p'><strong>" + codes[index] +
+        '. ' + "</strong>" + el.title + "</p>";
+      $('.drive-content .panel-body').append(q);
+    });
+    this.keyCodesPool = answersPool;
+    this.curQuestionAnswersLimit = limit;
+    this.entriesNumber = 0;
+  }
+
+  verifyPollConfigStructure(val) {
+    return val !== null;
+  }
+
+  verifyIfIdValid(val) {
+    return true;
+  }
+
+
+}
+
+
+class PollQuestion {
+  constructor(structure) {
+
+  }
+
+  get id() {
+    return this._id;
+  }
+
+}
+
+
+class PollUser {
+  constructor(id) {
+    this.stepDelay = 200;
+    this._id = id;
+  }
+
+  get id() {
+    return this._id;
   }
 }

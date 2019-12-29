@@ -34,8 +34,22 @@ class DriveInController extends Controller
   }*/
 
 
-  public function actionIndex($id)
+  public function actionIndex()
   {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Опрос';
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('index'),
+        'message' => 'Rendering',
+      ],
+      'code' => 1,
+    ];
+
+  }
+
+  public function actionGetPollInfo($id) {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     $data = Polls::find()
       ->select(["id", "title", "code"])
@@ -43,18 +57,15 @@ class DriveInController extends Controller
       ->with(['questions.answers'])
       ->asArray()
       ->all();
-    Yii::$app->view->params['title'] = 'Опрос';
-    Yii::$app->view->params['bUrl'] = $_GET['back-url'];
     return [
       'data' => [
         'success' => true,
-        'data' => $this->render('index'),
-        'message' => $data,
+        'data' => $data,
+        'message' => 'Poll info - take it',
       ],
       'code' => 1,
     ];
 
   }
-
 
 }

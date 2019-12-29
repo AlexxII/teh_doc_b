@@ -45,26 +45,26 @@
     padding: 15px;
   }
 </style>
-<div class="drive-in-wrap" hidden>
+<div class="drive-in-wrap">
   <div class="col-lg-8 col-ml-8 drive-in">
     <div class="drive-header">
     </div>
     <div class="drive-content">
       <div class="panel panel-primary" style="position: relative">
-        <div class="previous-btn mobile-btn service-btn hidden-lg" data-key=1></div>
-        <div class="next-btn mobile-btn service-btn hidden-lg" data-key=2></div>
+        <div class="previous-btn mobile-btn hidden-lg" data-key=1></div>
+        <div class="next-btn mobile-btn hidden-lg" data-key=2></div>
         <div class="panel-heading">
         </div>
         <div class="panel-body">
         </div>
         <div class="panel-footer panel-primary">
           <button data-key=1 type="button" style="display: none"
-                  class="hidden-sm hidden-md hidden-xs previous-btn btn btn-info btn-sm service-btn">Назад
+                  class="hidden-sm hidden-md hidden-xs previous-btn btn btn-info btn-sm">Назад
           </button>
           <button data-key=2 type="button" style="display: none"
-                  class="hidden-sm hidden-md hidden-xs next-btn btn btn-info btn-sm service-btn">Вперед
+                  class="hidden-sm hidden-md hidden-xs next-btn btn btn-info btn-sm">Вперед
           </button>
-          <button data-key=3 type="button" class="btn btn-success btn-sm service-btn">Дальше</button>
+          <button data-key=3 type="button" class="btn btn-success btn-sm confirm-next-btn">Дальше</button>
           <div class="total-questions">Всего:</div>
         </div>
       </div>
@@ -78,10 +78,10 @@
     <div>
       <select class="question-steps">
         <option disabled selected>Выберите</option>
-        <option data-key="0">Начало</option>
-        <option data-key="1">1</option>
+        <option data-key="1">Начало</option>
         <option data-key="5">5</option>
-        <option data-key="46">46</option>
+        <option data-key="12">12</option>
+        <option data-key="45">45</option>
         <option data-key="110">110</option>
         <option data-key="-1">Конец</option>
       </select>
@@ -97,27 +97,3 @@
     -->
   </div>
 </div>
-
-<script>
-  NProgress.start();
-  // только первичная инициализация - логика в drive.js
-  $(document).ready(function () {
-
-    poll = exData[0];
-    $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
-    pollId = poll.id;
-    questions = poll['questions'];
-    total = questions.length;                                                       // общее кол-во вопросов
-    $('.total-questions').append(total);
-    curQuestionNum = 0;
-
-    setTimeout(() => nextQuestion(0, function () {
-      $('.drive-in-wrap').removeAttr('hidden');
-      NProgress.done();
-    }), 100);
-
-    $('body').bind('keydown', keyCodeWrap);
-
-  });
-
-</script>

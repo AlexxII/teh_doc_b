@@ -18,7 +18,7 @@ class m191209_105522_poll_main_tbl extends Migration
     }
     $this->createTable(self::TABLE_NAME, [
       'id' => $this->bigInteger()->notNull(),
-      'title' => $this->string(255),
+      'title' => $this->string(500),
       'start_date' => $this->date(),
       'end_date' => $this->date(),
       'code' => $this->string(125),

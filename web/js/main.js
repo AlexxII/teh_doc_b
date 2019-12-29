@@ -157,16 +157,15 @@ function loadExContent(url, backUrl, jc) {
   });
 }
 
-function loadExContentEx(url, backUrl, jc) {
+function loadExContentEx(url, callback) {
   $.ajax({
-    url: url + '&back-url=' + backUrl,
+    url: url,
     method: 'get'
   }).done(function (response) {
     $('#app-wrap').append('<div id="ex-wrap">' + response.data.data + '</div>');
-    exData = response.data.message;
+    callback();
     // window.history.pushState("object or string", "Title", uri);
   }).fail(function () {
-    jc.close();
     console.log('Failed to load ex-content. Main.js');
   });
 }
