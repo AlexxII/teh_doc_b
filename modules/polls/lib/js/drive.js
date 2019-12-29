@@ -1,5 +1,3 @@
-var questions, pollId, total, curQuestionNum, currentQuestion, inputs, answersLimit;
-var answersPool = {};
 var stepDelayUsr = 200;
 var stepDelaySys = 0;
 
@@ -16,10 +14,7 @@ $(document).on('click', '.poll-in', function (e) {
   let url = '/polls/drive-in?id=';
   loadExContentEx(url, () => loadPollConfig(pollId, driveIn));
   $('body').bind('keydown', whatWeDoNext);
-  // $(document).on('click', '.confirm-next-btn', confirmAndNextQuestion);
-  // $(document).on('click', '.answer-p', confirmAnswer());
-  $('.confirm-next-btn').on('click', confirmAndNextQuestion);
-  $('.answer-p').on('click', confirmAnswer);
+
 });
 
 function loadPollConfig(id, callback) {
@@ -42,25 +37,8 @@ function driveIn(config) {
   poll = new Poll(config);
   $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
   $('.total-questions').append(poll.totalNumberOfQuestions);
-  poll.goToQuestion(1);
+  poll.goToQuestion(0);
   NProgress.done();
-}
-
-function getPrimaryLogic(keyCode) {
-  if (answersPool[keyCode] !== undefined) {                           // совпадает в кодом в перечне
-    return '101';
-  } else if (isInArray(keyCode, confirmBtns)) {                       // нажат 0 - подтверждение
-    return '102'
-  } else if (isInArray(keyCode, serviceBtns)) {
-    if (keyCode == '37') {
-      return '202';
-    } else if (keyCode == '39') {
-      return '203';
-    }
-    return '201';
-  } else {
-    return '109';
-  }
 }
 
 // снятие фокуса с inputa -> включает стандартную логику
@@ -71,6 +49,8 @@ $(document).on('blur', '.free-answer', function () {
 $(document).on('focus', '.free-answer', function () {
   $('body').unbind();
 });
+
+$(document).on('click', '.answer-p', clickOnTheAnswer);
 
 function whatWeDoNext(event) {
   let keyCode = event.originalEvent.keyCode;
@@ -89,6 +69,12 @@ function whatWeDoNext(event) {
   } else {
     beep();
   }
+}
+
+function clickOnTheAnswer(event) {
+  let $input = $(event.target);
+  let key = $input.data('key');
+  confirmAnswer(key);
 }
 
 function confirmAnswer(keyCode) {
@@ -120,6 +106,7 @@ function confirmAnswer(keyCode) {
         // if (curQuestionNum + 1 == total) {
         //   respondentFinish();                                            // конец опросного листа
         // }
+        poll.saveToLocalDb(codesPool[keyCode]);
         setTimeout(() => poll.nextQuestion(), stepDelayUsr);
       }
     }
@@ -149,8 +136,10 @@ function moveToNextQuestion() {
 $(document).on('keydown', '.previous-btn', moveToPreviousQuestion);
 $(document).on('keydown', '.next-btn', moveToNextQuestion);
 $(document).on('change', '.question-steps', goToQuestion);
+$(document).on('click', '.confirm-next-btn', confirmAndNextQuestion);
 
-// функция обертка, для возможности работы с устройств
+$(document).on('click', '.mobile-previous-btn', moveToPreviousQuestion);
+$(document).on('click', '.mobile-next-btn', moveToNextQuestion);
 
 function respondentFinish() {
   var finishNotice = '<p>КОНЕЦ!!!</p>';
@@ -159,11 +148,11 @@ function respondentFinish() {
 
 function goToQuestion(event) {
   let option = event.currentTarget.selectedOptions[0];
-  let question = $(option).data('key');
-  if (question === -1) {
-    question = poll.totalNumberOfQuestions;
+  let questionNum = $(option).data('key');
+  if (questionNum === -1) {
+    questionNum = poll.totalNumberOfQuestions - 1;
   }
-  poll.goToQuestion(question);
+  poll.goToQuestion(questionNum);
 }
 
 // =================== вспомогательные функции =====================

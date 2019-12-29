@@ -103,6 +103,7 @@ class Poll {
       this._questions = pollData.questions;
       this.currentQuestion = 0;
       this._totalNumberOfQuestions = this._questions.length;
+      this.answersPool = {};
     }
   }
 
@@ -174,17 +175,32 @@ class Poll {
 
   nextQuestion() {
     this.currentQuestion = this.currentQuestion + 1;
-    this.renderQuestion(this.currentQuestion);
+    this.goToQuestion(this.currentQuestion);
+    this.restoreAnswers(this.currentQuestion);
   }
 
   previousQuestion() {
     this.currentQuestion = this.currentQuestion - 1;
-    this.renderQuestion(this.currentQuestion);
+    this.goToQuestion(this.currentQuestion);
+    this.restoreAnswers(this.currentQuestion);
   }
 
+  // main wrap for logic
   goToQuestion(number) {
     this.currentQuestion = number;
-    this.renderQuestion(number - 1);
+    this.renderQuestion(number);
+  }
+
+  saveToLocalDb(answer) {
+    this.answersPool[this.currentQuestion] = answer;
+    console.log(this.answersPool);
+  }
+
+  restoreAnswers(questionNum) {
+    let p = this.answersPool[questionNum];
+    if (p !== undefined) {
+      $('[data-id=' + p[0]+ ']').data('mark', 1).css('background-color', '#e0e0e0');
+    }
   }
 
   renderQuestion(questionNumber) {

@@ -10,7 +10,7 @@
   .drive-in {
     position: relative;
   }
-  .next-btn.mobile-btn {
+  .mobile-next-btn {
     background-color: #8f8f8f;
     opacity: .8;
     height: 100%;
@@ -19,7 +19,7 @@
     top: 0;
     right: -23px;
   }
-  .previous-btn.mobile-btn {
+  .mobile-previous-btn {
     background-color: #8f8f8f;
     opacity: .8;
     height: 100%;
@@ -51,8 +51,8 @@
     </div>
     <div class="drive-content">
       <div class="panel panel-primary" style="position: relative">
-        <div class="previous-btn mobile-btn hidden-lg" data-key=1></div>
-        <div class="next-btn mobile-btn hidden-lg" data-key=2></div>
+        <div class="mobile-previous-btn mobile-btn hidden-lg" data-key=1></div>
+        <div class="mobile-next-btn mobile-btn hidden-lg" data-key=2></div>
         <div class="panel-heading">
         </div>
         <div class="panel-body">
@@ -78,11 +78,11 @@
     <div>
       <select class="question-steps">
         <option disabled selected>Выберите</option>
-        <option data-key="1">Начало</option>
-        <option data-key="5">5</option>
-        <option data-key="12">12</option>
-        <option data-key="45">45</option>
-        <option data-key="110">110</option>
+        <option data-key="0">Начало</option>
+        <option data-key="4">5</option>
+        <option data-key="11">12</option>
+        <option data-key="44">45</option>
+        <option data-key="109">110</option>
         <option data-key="-1">Конец</option>
       </select>
     </div>
