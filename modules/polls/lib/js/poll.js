@@ -104,6 +104,8 @@ class Poll {
       this.currentQuestion = 0;
       this._totalNumberOfQuestions = this._questions.length;
       this.answersPool = {};
+      this.outputPool = this.formingOutputPool();
+      // console.log(this.outputPool);
     }
   }
 
@@ -165,6 +167,19 @@ class Poll {
     return this._entriesNumber;
   }
 
+  formingOutputPool() {
+    let tempPoll = {};
+    let questions = this.questions;
+    questions.forEach(function(val) {
+      console.log(val);
+      tempPoll[val.id] = {
+
+      };
+    })
+    console.log(tempPoll);
+    return this.questions;
+  }
+
   incEntries() {
     console.log('this._entriesNumber' + ' - ' + this._entriesNumber);
     this._entriesNumber += 1;
@@ -194,6 +209,11 @@ class Poll {
   }
 
   saveToLocalDb(answer) {
+    // let tempObject = this.answersPool[this.currentQuestion]
+    // console.log(tempObject);
+    // if (tempObject !== underfind) {
+    // }
+    // if (this.answersPool[this.currentQuestion])
     this.answersPool[this.currentQuestion] = answer;
     console.log(this.answersPool);
   }
