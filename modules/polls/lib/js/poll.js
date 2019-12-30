@@ -97,14 +97,14 @@ class Poll {
   constructor(structure) {
     if (this.verifyPollConfigStructure(structure)) {
       let pollData = structure[0];
-      this._id = pollData.id;
+      this.id = pollData.id;
       this._title = pollData.title;
       this._code = pollData.code;
       this._questions = pollData.questions;
       this.currentQuestion = 0;
       this._totalNumberOfQuestions = this._questions.length;
-      this.answersPool = {};
-      this.outputPool = this.formingOutputPool();
+      this.outputPool = this.questions;
+      // this.outputPool = this.formingOutputPool();
       // console.log(this.outputPool);
     }
   }
@@ -123,12 +123,29 @@ class Poll {
     this._curQuestionAnswersLimit = num;
   }
 
-  set keyCodesPool(answersPool) {
-    this._keyCodesPool = answersPool;
+  set keyCodesPool(num) {
+    this._keyCodesPool = num;
   };
 
   set entriesNumber(num) {
     this._entriesNumber = num;
+  }
+
+  set outputPool(questions) {
+    let tempPoll = {};
+    questions.forEach(function (val, index) {
+      tempPoll[index] = {
+        'id': val.id,
+        'input_type': val.input_type,
+        'order': val.order,
+        'answers': {}
+      };
+    });
+    this._outputPool = tempPoll;
+  }
+
+  get cQuestion() {
+
   }
 
   get id() {
@@ -167,26 +184,20 @@ class Poll {
     return this._entriesNumber;
   }
 
-  formingOutputPool() {
-    let tempPoll = {};
-    let questions = this.questions;
-    questions.forEach(function(val) {
-      console.log(val);
-      tempPoll[val.id] = {
-
-      };
-    })
-    console.log(tempPoll);
-    return this.questions;
-  }
-
   incEntries() {
-    console.log('this._entriesNumber' + ' - ' + this._entriesNumber);
     this._entriesNumber += 1;
   }
 
   decEntries() {
     this._entriesNumber -= 1;
+  }
+
+  isFirstQuestion() {
+    return poll.currentQuestion === 0;
+  }
+
+  isLastQuestion() {
+    return poll.currentQuestion === (poll.totalNumberOfQuestions - 1);
   }
 
   nextQuestion() {
@@ -214,22 +225,24 @@ class Poll {
     // if (tempObject !== underfind) {
     // }
     // if (this.answersPool[this.currentQuestion])
-    this.answersPool[this.currentQuestion] = answer;
-    console.log(this.answersPool);
+    // this.answersPool[this.currentQuestion] = answer;
+    let currentQuestion = this.outputPool[this.currentQuestion];
+    currentQuestion.answers[answer[0]] = answer;
+    console.log(this.outputPool);
   }
 
   deleteFromLocalDb() {
     let obj = this.answersPool;
     delete obj[this.currentQuestion];
-    console.log(obj);
+    // console.log(obj);
   }
 
   restoreAnswers(questionNum) {
-    let p = this.answersPool[questionNum];
-    this.entriesNumber = 1;
-    if (p !== undefined) {
-      $('[data-id=' + p[0]+ ']').data('mark', 1).css('background-color', '#e0e0e0');
-    }
+    // let p = this.answersPool[questionNum];
+    // this.entriesNumber = 1;
+    // if (p !== undefined) {
+    //   $('[data-id=' + p[0] + ']').data('mark', 1).css('background-color', '#e0e0e0');
+    // }
   }
 
   renderQuestion(questionNumber) {
@@ -273,7 +286,6 @@ class Poll {
   verifyIfIdValid(val) {
     return true;
   }
-
 
 }
 

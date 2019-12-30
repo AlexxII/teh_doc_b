@@ -95,23 +95,19 @@ function confirmAnswer(keyCode) {
   } else {
     $input.data('mark', 1).css('background-color', userInterface.answeredColor);
     poll.incEntries();
-    console.log(type);
     if (type == 2) {
       let input = "<input class='form-control free-answer'>";
       let span = "<span class='free-answer-wrap'>" + input +
         "<label class='w3-label-under'>Введите ответ.</label></span>";
       $(span).appendTo($input);
     } else {
-      console.log('poll.entriesNumber' + ' - ' + poll.entriesNumber);
-      console.log('answersLimit' + ' - ' + answersLimit);
-
+      poll.saveToLocalDb(codesPool[keyCode]);
       if (poll.entriesNumber >= answersLimit) {
         // if (curQuestionNum =! limit) {
         // }
         // if (curQuestionNum + 1 == total) {
         //   respondentFinish();                                            // конец опросного листа
         // }
-        poll.saveToLocalDb(codesPool[keyCode]);
         setTimeout(() => poll.nextQuestion(), userInterface.stepDelayUsr);
       }
     }
@@ -129,12 +125,12 @@ function confirmAndNextQuestion() {
 }
 
 function moveToPreviousQuestion() {
-  if (poll.currentQuestion === 0) return;
+  if (poll.isFirstQuestion()) return;
   poll.previousQuestion();
 }
 
 function moveToNextQuestion() {
-  if (poll.currentQuestion === poll.totalNumberOfQuestions - 1) return;
+  if (poll.isLastQuestion()) return;
   poll.nextQuestion();
 }
 
