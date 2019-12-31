@@ -145,7 +145,7 @@ class Poll {
   }
 
   get cQuestion() {
-
+    
   }
 
   get id() {
