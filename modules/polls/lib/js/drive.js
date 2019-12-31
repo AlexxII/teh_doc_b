@@ -2,7 +2,7 @@ var stepDelayUsr = 200;
 var stepDelaySys = 0;
 
 const userInterface = {
-  stepDelayUsr :  200,                                                    // задержка при переходе на другой вопрос
+  stepDelayUsr: 200,                                                    // задержка при переходе на другой вопрос
   answeredColor: '#e0e0e0'                                             // цвет выделение при ответе
 };
 
@@ -79,7 +79,7 @@ function clickOnTheAnswer(event) {
 
 function confirmAnswer(keyCode) {
   // save
-  // next question if NO another IF
+  // next question if NO another xIF
   let codesPool = poll.keyCodesPool;
   let answersLimit = poll.curQuestionAnswersLimit;
   let id = codesPool[keyCode][0];
@@ -151,7 +151,8 @@ function goToQuestion(event) {
   let option = event.currentTarget.selectedOptions[0];
   let questionNum = $(option).data('key');
   if (questionNum === -1) {
-    questionNum = poll.totalNumberOfQuestions - 1;
+    poll.goToLastQuestion();
+    return;
   }
   poll.goToQuestion(questionNum);
 }

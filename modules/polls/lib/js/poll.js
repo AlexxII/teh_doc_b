@@ -104,8 +104,6 @@ class Poll {
       this.currentQuestion = 0;
       this._totalNumberOfQuestions = this._questions.length;
       this.outputPool = this.questions;
-      // this.outputPool = this.formingOutputPool();
-      // console.log(this.outputPool);
     }
   }
 
@@ -144,8 +142,12 @@ class Poll {
     this._outputPool = tempPoll;
   }
 
+  get outputPool() {
+    return this._outputPool;
+  }
+
   get cQuestion() {
-    
+
   }
 
   get id() {
@@ -177,6 +179,8 @@ class Poll {
   }
 
   get keyCodesPool() {
+
+
     return this._keyCodesPool;
   }
 
@@ -212,6 +216,10 @@ class Poll {
     this.restoreAnswers(this.currentQuestion);
   }
 
+  goToLastQuestion() {
+    this.goToQuestion(poll.totalNumberOfQuestions - 1);
+  }
+
   // main wrap for logic
   goToQuestion(number) {
     this.currentQuestion = number;
@@ -219,16 +227,15 @@ class Poll {
     this.restoreAnswers(this.currentQuestion);
   }
 
+
   saveToLocalDb(answer) {
     // let tempObject = this.answersPool[this.currentQuestion]
-    // console.log(tempObject);
     // if (tempObject !== underfind) {
     // }
     // if (this.answersPool[this.currentQuestion])
     // this.answersPool[this.currentQuestion] = answer;
     let currentQuestion = this.outputPool[this.currentQuestion];
     currentQuestion.answers[answer[0]] = answer;
-    console.log(this.outputPool);
   }
 
   deleteFromLocalDb() {
@@ -246,7 +253,6 @@ class Poll {
   }
 
   renderQuestion(questionNumber) {
-    // console.log(questionNumber);
     let questions = this.questions;
     let limit = questions[questionNumber].limit;
     if (limit > 1) {
@@ -289,6 +295,8 @@ class Poll {
 
 }
 
+
+//======================================================================***=============================================
 
 class PollQuestion {
   constructor(structure) {
