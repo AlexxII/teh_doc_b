@@ -37,6 +37,7 @@
     position: absolute;
     top: -1px;
     right: -20px;
+    contenteditable: true;
   }
   .answers-content {
     padding-top: 10px;
@@ -67,7 +68,8 @@
     /*border: 1px solid rgba(150, 150, 150, 0.7);*/
     border-bottom-color: rgba(125, 125, 125, 0.7);
   }
-  .list-group-item {
+  .answer-data {
+    position: relative;
     margin: 5px;
     display: block;
     padding: .75rem 1.25rem;
@@ -89,6 +91,28 @@
   .answer-service-btn:hover {
     fill: #999999;
   }
+  .dropdown-menu-anywhere {
+    position: fixed;
+    width: auto;
+    height: auto;
+    top: 0;
+    right: 5px;
+    background: #fff;
+    border: 0;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -moz-box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    opacity: 1;
+    outline: 1px solid transparent;
+    z-index: 2000;
+
+  }
+  .dropdown-menu-context {
+    padding: 8px 0;
+  }
+
 </style>
 
 <div class="construct-content">
@@ -117,12 +141,13 @@
                 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
               </svg>
             </span>
-            <span class="question-limit question-service-btn" title="Максимальное количество ответов">&infin;</span>
+            <span class="question-limit question-service-btn dropdown-anywhere" data-menu="source"
+                  title="Максимальное количество ответов">1</span>
           </div>
 
           <div class="answers-content">
 
-            <div class="list-group-item">
+            <div class="list-group-item answer-data">
               <div class="answer-about-area">
                 <span class="answer-number">1.</span>
                 <span class="answer-title">Ответ 1</span>
@@ -147,7 +172,7 @@
               </div>
             </div>
 
-            <div class="list-group-item">
+            <div class="list-group-item answer-data">
               <div class="answer-about-area">
                 <span class="answer-number">1.</span>
                 <span class="answer-title">Ответ 1</span>
@@ -171,7 +196,7 @@
                 </span>
               </div>
             </div>
-            <div class="list-group-item">
+            <div class="list-group-item answer-data">
               <div class="answer-about-area">
                 <span class="answer-number">1.</span>
                 <span class="answer-title">Ответ 1</span>
@@ -206,14 +231,55 @@
     <div class="grid" id="test"></div>
   </div>
 
+  <div id="source">
+    <span>11111111111111111111111</span>
+    <span>22222222222222222222222</span>
+  </div>
+
 </div>
 
 
 <script>
+
+  let dDeFlag = false;
+
   $(document).ready(function () {
     var testSortable = new Sortable(document.getElementById('test'), {
       animation: 150
     });
   });
+
+
+  function showDDE(target) {
+    let sourceID = $(target).data('menu');
+    let source = $('#' + sourceID);
+    let div = '<div class="dropdown-menu-anywhere">' +
+      '<div class="dropdown-menu-context">' +
+      source[0].outerHTML +
+      '</div>' +
+      '</div>';
+    $('body').append(div);
+    dDeFlag = true;
+  }
+
+  $(document).on('click', 'body', function (e) {
+    let ddEString = 'dropdown-anywhere';
+    if (e.target.classList.contains(ddEString)) {
+      console.log(1);
+      if (dDeFlag) {
+        console.log(2);
+        $('.dropdown-menu-anywhere').remove();
+        dDeFlag = false;
+      } else {
+        console.log(3);
+        showDDE(e.target);
+      }
+    } else {
+      console.log(4);
+      $('.dropdown-menu-anywhere').remove();
+      dDeFlag = false;
+    }
+  });
+
 
 </script>

@@ -72,7 +72,6 @@
       </ul>
     </div><!-- /.container-fluid -->
   </nav>
-
   <div id="ex-main-wrap" style="background-color: #fff; z-index: 200">
     <div id="main-content" class="container">
       <?= $content ?>
