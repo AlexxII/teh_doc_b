@@ -15,7 +15,8 @@ class PollAsset extends AssetBundle
   public $js = [
     'js/vars.js',
     'js/poll.js',
-    'js/drive.js'
+    'js/drive.js',
+    'js/construct.js'
   ];
 
   public $depends = [

@@ -179,8 +179,6 @@ class Poll {
   }
 
   get keyCodesPool() {
-
-
     return this._keyCodesPool;
   }
 

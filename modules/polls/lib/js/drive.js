@@ -12,12 +12,12 @@ $(document).on('click', '.poll-in', function (e) {
   e.preventDefault();
   let pollId = $(e.currentTarget).data('id');
   let url = '/polls/drive-in?id=';
-  loadExContentEx(url, () => loadPollConfig(pollId, driveIn));
+  loadExContentEx(url, () => loadPollData(pollId, driveIn));
   $('body').bind('keydown', whatWeDoNext);
 
 });
 
-function loadPollConfig(id, callback) {
+function loadPollData(id, callback) {
   let url = '/polls/drive-in/get-poll-info?id=' + id;
   $.ajax({
     url: url,
