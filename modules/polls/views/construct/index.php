@@ -240,11 +240,7 @@
   </div>
 
   <div class="hidden">
-    <div id="limit-input">
-      <div class="dde-menu-item" style="width: 40px;">
-        <input class="form-control">
-      </div>
-    </div>
+        <input id="limit-input" class="form-control" style="width: 160px">
 
     <div id="question-extension-menu">
       <div class="dde-menu-item">Добавить ответ</div>
