@@ -169,7 +169,7 @@
 
 <div class="construct-content">
   <div class="poll-construct-wrap">
-    <div class="poll-construct-header col-lg-12 col-md-12">
+    <div class="poll-construct-header">
       <button id="btn-switch-view" type="button" class="btn btn-default btn-circle btn-ml btn-active">
         <div class="poll-grid-view">
           <svg viewBox="0 0 24 24">
@@ -194,7 +194,7 @@
       </button>
     </div>
     <div id="poll-construct">
-      <div class="grid" id="grid-poll-order" style="clear: left"></div>
+
     </div>
   </div>
 
