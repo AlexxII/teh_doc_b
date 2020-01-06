@@ -112,6 +112,13 @@
   .dropdown-menu-context {
     padding: 8px 0;
   }
+  .dde-menu-item {
+    padding: 10px 15px;
+    cursor: pointer;
+  }
+  .dde-menu-item:hover {
+    background-color: #eee;
+  }
 
 </style>
 
@@ -135,14 +142,14 @@
                 17.59 13.41 12 19 6.41z"></path>
               </svg>
             </div>
-            <span class="question-options question-service-btn dropdown-anywhere" data-menu="source-ex">
+            <span class="question-options question-service-btn dropdown-anywhere" data-menu="question-extension-menu">
               <svg width="20" height="20" viewBox="0 0 24 24">
                 <path fill="none" d="M0 0h24v24H0V0z"></path>
                 <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9
                 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
               </svg>
             </span>
-            <span class="question-limit question-service-btn dropdown-anywhere" data-menu="source"
+            <span class="question-limit question-service-btn dropdown-anywhere" data-menu="limit-input"
                   title="Максимальное количество ответов">1</span>
           </div>
 
@@ -232,16 +239,18 @@
     <div class="grid" id="test"></div>
   </div>
 
-  <div id="source">
-    <p>11111111111111111111111</p>
-    <p>22222222222222222222222</p>
-  </div>
+  <div class="hidden">
+    <div id="limit-input">
+      <div class="dde-menu-item" style="width: 40px;">
+        <input class="form-control">
+      </div>
+    </div>
 
-  <div id="source-ex">
-    <p>33333333333333333333333</p>
-    <p>44444444444444444444444</p>
+    <div id="question-extension-menu">
+      <div class="dde-menu-item">Добавить ответ</div>
+      <div class="dde-menu-item">Удалить вопрос</div>
+    </div>
   </div>
-
 </div>
 
 
@@ -254,7 +263,6 @@
       animation: 150
     });
   });
-
 
   function showDDE(target) {
     let sourceID = $(target).data('menu');
