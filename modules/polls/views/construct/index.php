@@ -144,7 +144,6 @@
 </style>
 
 <div class="construct-content">
-
   <div class="poll-construct-wrap">
     <div class="poll-construct-header">
       <div class="col-md-4 col-md-offset-8">
@@ -197,7 +196,6 @@
       <div class="dde-menu-item">Задать логику</div>
     </div>
   </div>
-
 </div>
 
 
@@ -275,13 +273,11 @@
     dDeFlag = false;
   }
 
-
   $(document).on('click', 'body', function (e) {
     if (dDeFlag) {
       closeDDe();
     }
   });
-
 
   $(document).on('click', '#btn-switch-view', changeConstructView);
 
@@ -300,6 +296,5 @@
       closeDDe();
     }
   });
-
 
 </script>
