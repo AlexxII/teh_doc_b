@@ -123,18 +123,19 @@
         <div class="question-content">
           <h2 class="question-data">
             <span class="question-number">1.</span>
-            <span class="question-title">Новое не очень то и новье в чем-то самом новом Новое не очень то и новье в чем-то самом новом Новое не очень то и новье в чем-то самом новом Новое не очень то и новье в чем-то самом новом </span>
+            <span class="question-title">Новое не очень то и новье в чем-то самом новом Новое не очень то и новье в чем-то
+              самом новом Новое не очень то и новье в чем-то самом новом Новое не очень то и новье в чем-то самом новом </span>
           </h2>
 
           <div class="question-service-area">
-            <span class="question-delete question-service-btn">
+            <div class="question-delete question-service-btn">
               <svg width="20" height="20" viewBox="0 0 24 24">
                 <path fill="none" d="M0 0h24v24H0V0z"></path>
                 <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19
                 17.59 13.41 12 19 6.41z"></path>
               </svg>
-            </span>
-            <span class="question-options question-service-btn">
+            </div>
+            <span class="question-options question-service-btn dropdown-anywhere" data-menu="source-ex">
               <svg width="20" height="20" viewBox="0 0 24 24">
                 <path fill="none" d="M0 0h24v24H0V0z"></path>
                 <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9
@@ -232,8 +233,13 @@
   </div>
 
   <div id="source">
-    <span>11111111111111111111111</span>
-    <span>22222222222222222222222</span>
+    <p>11111111111111111111111</p>
+    <p>22222222222222222222222</p>
+  </div>
+
+  <div id="source-ex">
+    <p>33333333333333333333333</p>
+    <p>44444444444444444444444</p>
   </div>
 
 </div>
@@ -264,6 +270,7 @@
 
   $(document).on('click', 'body', function (e) {
     let ddEString = 'dropdown-anywhere';
+    console.log(e.target.classList);
     if (e.target.classList.contains(ddEString)) {
       console.log(1);
       if (dDeFlag) {
