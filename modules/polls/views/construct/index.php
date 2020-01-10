@@ -274,6 +274,8 @@
 
   $(document).on('click', 'body', function (e) {
     let ddEString = 'dropdown-anywhere';
+
+    console.log($(e.target).find('.dropdown-anywhere'));
     console.log(e.target.classList);
     if (e.target.classList.contains(ddEString)) {
       console.log(1);
