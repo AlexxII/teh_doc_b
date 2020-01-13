@@ -26,7 +26,7 @@ class ConstructController extends Controller
   public function actionIndex()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'Конструирование';
+    Yii::$app->view->params['title'] = 'Редактор анкет';
     return [
       'data' => [
         'success' => true,

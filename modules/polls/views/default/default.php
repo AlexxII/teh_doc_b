@@ -97,7 +97,7 @@ Select2Asset::register($this);
         <span class="question-title"></span>
       </h2>
       <div class="question-service-area">
-        <div class="question-delete question-service-btn">
+        <div class="question-delete question-service-btn" title="Скрыть для заполнения">
           <svg width="20" height="20" viewBox="0 0 24 24">
             <path fill="none" d="M0 0h24v24H0V0z"></path>
             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19
@@ -111,8 +111,7 @@ Select2Asset::register($this);
                 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
           </svg>
         </div>
-        <span class="question-limit question-service-btn dropdown-anywhere" data-menu="limit-input"
-              title="Максимальное количество ответов"> </span>
+        <span class="question-limit question-service-btn" title="Максимальное количество ответов"> </span>
       </div>
 
       <div class="answers-content">
@@ -131,6 +130,13 @@ Select2Asset::register($this);
           <path fill="none" d="M0 0h24v24H0V0z"></path>
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19
           17.59 13.41 12 19 6.41z"></path>
+        </svg>
+      </span>
+      <span class="answer-options answer-service-btn dropdown-anywhere" data-menu="answer-extension-menu">
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path fill="none" d="M0 0h24v24H0V0z"></path>
+          <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9
+          2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
         </svg>
       </span>
       <span class="answer-options answer-service-btn dropdown-anywhere" data-menu="answer-extension-menu">
