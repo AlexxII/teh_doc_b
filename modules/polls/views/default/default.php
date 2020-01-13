@@ -50,8 +50,8 @@ Select2Asset::register($this);
             3.06 25.398 13.464 47.736 29.07 64.26 c 3.365 3.366 6.731 6.732 10.403 9.486 c 4.591 3.672 9.486 6.732
             14.688 9.486 c 11.628 6.119 24.479 9.485 38.25 9.485 c 13.77 0 26.623 -3.366 38.25 -9.485 c 5.202 -2.754
             10.098 -5.814 14.688 -9.486 c 3.673 -2.754 7.038 -6.12 10.404 -9.486 c 15.3 -16.523 26.01 -38.556 28.764
-            -63.954 c 0.307 0 0.612 0 0.918 0 c 16.219 0 29.07 -14.994 29.07 -33.354 c 0 -11.322 -4.896 -21.114 -12.24
-            -27.234 H 160.343 L 160.343 182.376 Z"/>
+            -63.954 c 0.307 0 0.612 0 0.918 0 c 16.9219 0 29.07 -14.994 29.07 -33.354 c 0 -11.322 -4.896 -21.114 -12.24
+            -27.234H 160.343 L 160.343 182.376 Z"/>
             <path d="M 377.409 118.116 c -9.486 -31.518 -34.578 -63.648 -66.402 -80.172 v 71.91 v 9.792 c 0 0.612 0
             0.918 0 1.224 c -0.306 3.366 -0.918 6.426 -2.447 9.486 c -3.979 7.65 -11.935 13.158 -21.114 13.158 h -4.896
              h -33.66 c -8.568 0 -16.219 -4.59 -20.196 -11.322 c -1.836 -2.754 -2.754 -5.813 -3.366 -9.18 c -0.306
@@ -67,6 +67,7 @@ Select2Asset::register($this);
         </svg>
       </a>
     </div>
+
 
     <div class="container-fluid">
       <table id="poll-main-table" class="display no-wrap cell-border poll-table" style="width:100%">
@@ -97,7 +98,7 @@ Select2Asset::register($this);
         <span class="question-title"></span>
       </h2>
       <div class="question-service-area">
-        <div class="question-delete question-service-btn" title="Скрыть для заполнения">
+        <div class="question-hide question-service-btn" title="Скрыть для заполнения" data-id="">
           <svg width="20" height="20" viewBox="0 0 24 24">
             <path fill="none" d="M0 0h24v24H0V0z"></path>
             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19
@@ -124,8 +125,9 @@ Select2Asset::register($this);
       <span class="answer-number"></span>
       <span class="answer-title"></span>
     </div>
+
     <div class="answer-service-area">
-      <span class="answer-delete answer-service-btn">
+      <span class="answer-hide answer-service-btn">
         <svg width="20" height="20" viewBox="0 0 24 24">
           <path fill="none" d="M0 0h24v24H0V0z"></path>
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19

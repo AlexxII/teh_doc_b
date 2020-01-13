@@ -38,7 +38,8 @@ class ConstructController extends Controller
 
   }
 
-  public function actionGetPollInfo($id) {
+  public function actionGetPollInfo($id)
+  {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     $data = Polls::find()
       ->select(["id", "title", "code"])
@@ -56,5 +57,46 @@ class ConstructController extends Controller
     ];
 
   }
+
+
+  public function actionHideToFill()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (!empty($_POST)) {
+      $id = $_POST['id'];
+
+      $question = Questions::findModel($id);
+      $question->visible = 0;
+      if ($question->save()) {
+        return [
+          'data' => [
+            'success' => true,
+            'data' => $id,
+            'message' => 'Hidden successfully',
+          ],
+          'code' => 1,
+        ];
+      }
+      return [
+        'data' => [
+          'success' => false,
+          'data' => $question->errors,
+          'message' => 'Can`t save',
+        ],
+        'code' => 0,
+      ];
+    }
+    return [
+      'data' => [
+        'success' => false,
+        'data' => 'Poor',
+        'message' => '$_POST - empty',
+      ],
+      'code' => 0,
+    ];
+
+
+  }
+
 
 }
