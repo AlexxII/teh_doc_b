@@ -188,6 +188,7 @@ function constructGridView(config) {
 function hideQuestion() {
   let id = $(this).data('id');
   let item = $(this).closest('.question-wrap');
+  console.log(item);
   $.ajax({
     url: HIDE_QUESTION_URL,
     method: 'post',
@@ -196,7 +197,9 @@ function hideQuestion() {
     }
   }).done(function (response) {
     if (response.code) {
-      item.remove();
+      $(item).hide(200, () => {
+        $(item).remove()
+      });
     } else {
       console.log(response.data.message + '\n' + response.data.data);
     }

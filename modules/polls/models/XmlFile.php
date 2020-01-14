@@ -93,7 +93,15 @@ class XmlFile extends Model
             }
           }
         }
+
+        if ($reader->nodeType == XMLReader::ELEMENT) {
+          if ($reader->localName == "restrict") {
+
+          }
+        }
+
         $transaction->commit();
+
         $reader->close();
         $this->questionsCount = $questionsCount;
         $this->answersCount = $answersCount;
