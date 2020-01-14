@@ -54,6 +54,8 @@ class PollsController extends Controller
           $xmlM->poll_id = $model->id;                              // запись в БД
           $xmlM->title = $name;
           if ($xmlM->save()) {
+            return $xmlF->parseAndLoadToDb($model->id);
+            return $xmlF->parseAndLoadLogic($model->id);
             if ($xmlF->parseAndLoadToDb($model->id)) {              // XmlFile
               $transaction->commit();
               $resData = [
@@ -246,7 +248,7 @@ class PollsController extends Controller
         return [
           "data" => [
             "success" => true,
-            "data" => "Xml file deleted - " . $xmlRes ,
+            "data" => "Xml file deleted - " . $xmlRes,
             "message" => "Seems to be FINE",
           ],
           "code" => 1,

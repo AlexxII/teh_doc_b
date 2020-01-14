@@ -93,16 +93,10 @@ class XmlFile extends Model
             }
           }
         }
-
-        if ($reader->nodeType == XMLReader::ELEMENT) {
-          if ($reader->localName == "restrict") {
-
-          }
-        }
+        $reader->close();
 
         $transaction->commit();
 
-        $reader->close();
         $this->questionsCount = $questionsCount;
         $this->answersCount = $answersCount;
         return true;
@@ -110,7 +104,43 @@ class XmlFile extends Model
       $this->error = 'Could`t open xml file';
       return false;
     }
+    $this->error = 'Could`t open XMLReader';
     return false;
   }
+
+  public function parseAndLoadLogic($pollId, $fileName = null)
+  {
+    if ($reader = new XMLReader()) {
+      if ($fileName) {
+        $name = \Yii::$app->params["uploadXml"] . $fileName;
+      } else {
+        $name = $this->xmlName;
+      }
+      if ($reader->open($name)) {
+        while ($reader->read()) {
+          if ($reader->nodeType == XMLReader::ELEMENT) {
+            if ($reader->localName == "restrict") {
+              $code = $reader->getAttribute("otvet_cod");
+              $type = $reader->getAttribute("restrict_type");
+              if ($type === "5") {
+                $model = Answers::find()
+                  ->where(["=", 'code', $code])
+                  ->andWhere(["=", 'poll_id', $pollId])
+                  ->all();
+                $model->visible = 0;
+                $model->save();
+              }
+            }
+          }
+        }
+        $reader->close();
+      }
+      $this->error = 'Could`t open xml file';
+      return false;
+    }
+    $this->error = 'Could`t open XMLReader';
+    return false;
+  }
+
 
 }
