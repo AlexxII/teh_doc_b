@@ -123,12 +123,15 @@ class XmlFile extends Model
               $code = $reader->getAttribute("otvet_cod");
               $type = $reader->getAttribute("restrict_type");
               if ($type === "5") {
-                $model = Answers::find()
+//                $questionModel = Questions::find()
+//                  ->where
+
+                $answerModel = Answers::find()
                   ->where(["=", 'code', $code])
                   ->andWhere(["=", 'poll_id', $pollId])
                   ->all();
-                $model->visible = 0;
-                $model->save();
+                $answerModel[0]->unique = 1;
+                $answerModel[0]->save();
               }
             }
           }

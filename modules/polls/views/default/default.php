@@ -169,24 +169,6 @@ Select2Asset::register($this);
         NProgress.start();
         setTimeout(() => NProgress.done(), 1300);
 
-
-        //*********************************************
-        $('#test-xml').on('click', function () {
-            var url = 'polls/polls/test-xml-reader';
-            $.ajax({
-                type: 'GET',
-                url: url,
-                success: function (response) {
-                    console.log(response.data.data);
-                },
-                error: function (response) {
-                    console.log(response.data.data);
-                }
-            });
-
-        });
-        //********************************************
-
         initLeftMenu('/polls/menu/left-side');
         initAppConfig('/polls/menu/app-config');
 

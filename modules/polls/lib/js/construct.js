@@ -98,6 +98,7 @@ function loadPollConfig(id, callback) {
 }
 
 function startConstruct(config) {
+  console.log(config);
   constructListView(config);
   NProgress.done();
 }
@@ -141,6 +142,9 @@ function constructListView(config) {
       answerClone.querySelector('.answer-number').innerHTML = (index + 1) + '. ';
       answerClone.querySelector('.answer-title').innerHTML = answer.title;
       answerClone.querySelector('.answer-hide').dataset.id = answer.id;
+      if (answer.unique === '1') {
+        answerClone.classList.add('unique-answer');
+      }
       questionClone.querySelector('.answers-content').append(answerClone);
     });
     $('#poll-construct').append(questionClone);

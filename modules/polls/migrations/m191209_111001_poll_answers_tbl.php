@@ -22,6 +22,8 @@ class m191209_111001_poll_answers_tbl extends Migration
       'code' => $this->string(125),
       'order' => $this->integer(),                                       // порядок
       'input_type' => $this->integer(),                                  // тип ответа
+      'jump' => $this->bigInteger()->defaultValue(0),                    // переход
+      'unique' => $this->boolean()->defaultValue(0),                     // уникальный для вопроса
       'visible' => $this->boolean()->defaultValue(1),
       'isDeleted' => $this->boolean()->defaultValue(0)
     ], $tableOptions);

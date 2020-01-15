@@ -54,9 +54,8 @@ class PollsController extends Controller
           $xmlM->poll_id = $model->id;                              // запись в БД
           $xmlM->title = $name;
           if ($xmlM->save()) {
-            return $xmlF->parseAndLoadToDb($model->id);
-            return $xmlF->parseAndLoadLogic($model->id);
             if ($xmlF->parseAndLoadToDb($model->id)) {              // XmlFile
+              $xmlF->parseAndLoadLogic($model->id);
               $transaction->commit();
               $resData = [
                 "questions" => $xmlF->questionsCount,

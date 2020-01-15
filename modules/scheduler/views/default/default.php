@@ -30,6 +30,14 @@ BootstrapYearCalendarAsset::register($this);
   #add-vks {
     margin: 0 !important;
   }
+  .fc-day-number {
+    font-size: 17px;
+    text-decoration: none !important;
+    font-weight: 900;
+  }
+  .fc-week-number {
+    text-decoration: none !important;
+  }
 </style>
 
 <div class="main-wrap">
