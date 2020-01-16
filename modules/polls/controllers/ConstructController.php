@@ -94,9 +94,44 @@ class ConstructController extends Controller
       ],
       'code' => 0,
     ];
-
-
   }
 
+
+  public function actionUniqueAnswer()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (!empty($_POST)) {
+      $id = $_POST['id'];
+      $bool = $_POST['bool'];
+      $answer = Answers::findModel($id);
+      $answer->unique = $bool;
+      if ($answer->save()) {
+        return [
+          'data' => [
+            'success' => true,
+            'data' => $bool,
+            'message' => 'Unique successfully',
+          ],
+          'code' => 1,
+        ];
+      }
+      return [
+        'data' => [
+          'success' => false,
+          'data' => $answer->errors,
+          'message' => 'Can`t save unique parameter',
+        ],
+        'code' => 0,
+      ];
+    }
+    return [
+      'data' => [
+        'success' => false,
+        'data' => 'Poor',
+        'message' => '$_POST - empty',
+      ],
+      'code' => 0,
+    ];
+  }
 
 }

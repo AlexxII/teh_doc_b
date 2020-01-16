@@ -141,7 +141,7 @@ Select2Asset::register($this);
           2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
         </svg>
       </span>
-      <span class="answer-options answer-service-btn" data-menu="answer-extension-menu">
+      <span class="unique-btn answer-service-btn" data-unique="0" title="Уникальный для вопроса">
         <svg width="20" height="20" viewBox="0 0 560.317 560.316">
           <path d="M 207.523 560.316 c 0 0 194.42 -421.925 194.444 -421.986 l 10.79 -23.997 c -41.824 12.02 -135.271
           34.902 -135.57 35.833 C 286.96 122.816 329.017 0 330.829 0 c -39.976 0 -79.952 0 -119.927 0 l -12.167 57.938

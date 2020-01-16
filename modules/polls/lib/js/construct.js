@@ -1,6 +1,8 @@
 let constructPollInfo;
 
 const HIDE_QUESTION_URL = '/polls/construct/hide-to-fill';
+const UNIQUE_QUESTION_URL = '/polls/construct/unique-answer';
+
 
 $(document).on('click', '#construct-wrap', function (e) {
   e.preventDefault();
@@ -26,6 +28,9 @@ $(document).on('click', '#btn-switch-view', changeConstructView);
 $(document).on('click', '.question-hide', hideQuestion);
 
 $(document).on('click', '.answer-hide', hideAnswer);
+
+$(document).on('click', '.unique-btn', setAnswerUnique);
+
 
 // ===================================== DDE ======================================
 let dDeFlag = false;
@@ -104,19 +109,18 @@ function startConstruct(config) {
 }
 
 function changeConstructView(e) {
-  let btn = e.target;
-  let mode = $(btn).data('mode');
+  let mode = $(this).data('mode');
   if (mode) {
     constructGridView(constructPollInfo);
-    $(btn).data('mode', 0);
-    $(btn).attr('title', 'В виде списка');
+    $(this).data('mode', 0);
+    $(this).attr('title', 'В виде списка');
     $('.construct-range-btn').show();
     $('.poll-grid-view').hide();
     $('.poll-list-view').show();
   } else {
     constructListView(constructPollInfo);
-    $(btn).data('mode', 1);
-    $(btn).attr('title', 'В виде сетки');
+    $(this).data('mode', 1);
+    $(this).attr('title', 'В виде сетки');
     $('.construct-range-btn').hide();
     $('.poll-grid-view').show();
     $('.poll-list-view').hide();
@@ -142,8 +146,10 @@ function constructListView(config) {
       answerClone.querySelector('.answer-number').innerHTML = (index + 1) + '. ';
       answerClone.querySelector('.answer-title').innerHTML = answer.title;
       answerClone.querySelector('.answer-hide').dataset.id = answer.id;
+      answerClone.querySelector('.unique-btn').dataset.id = answer.id;
       if (answer.unique === '1') {
         answerClone.classList.add('unique-answer');
+        answerClone.querySelector('.unique-btn').dataset.unique = 1;
       }
       questionClone.querySelector('.answers-content').append(answerClone);
     });
@@ -192,7 +198,6 @@ function constructGridView(config) {
 function hideQuestion() {
   let id = $(this).data('id');
   let item = $(this).closest('.question-wrap');
-  console.log(item);
   $.ajax({
     url: HIDE_QUESTION_URL,
     method: 'post',
@@ -215,4 +220,48 @@ function hideQuestion() {
 function hideAnswer() {
   let id = $(this).data('id');
 
+}
+
+
+function setAnswerUnique() {
+  let id = $(this).data('id');
+  let btn = $(this);
+  let item = $(this).closest('.answer-data');
+  let bool = $(this).data('unique');
+  if (bool === 0) {
+    bool = 1;
+  } else {
+    bool = 0;
+  }
+  $.ajax({
+    url: UNIQUE_QUESTION_URL,
+    method: 'post',
+    data: {
+      id: id,
+      bool: bool
+    }
+  }).done(function (response) {
+    if (response.code) {
+      console.log(bool);
+      if (bool === 1) {
+        setUnique(item, btn);
+      } else {
+        unsetUnique(item, btn);
+      }
+    } else {
+      console.log(response.data.message + '\n' + response.data.data);
+    }
+  }).fail(function () {
+    console.log('Failed to hide question');
+  });
+}
+
+function setUnique(item, btn) {
+  $(item).addClass('unique-answer');
+  $(btn).data('unique', 1);
+}
+
+function unsetUnique(item, btn) {
+  $(item).removeClass('unique-answer');
+  $(btn).data('unique', 0);
 }

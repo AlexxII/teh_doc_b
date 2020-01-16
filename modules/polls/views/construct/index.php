@@ -197,10 +197,9 @@
         <label class="range-label">Масштаб:</label>
         <input type="range" id="myRange" step="1" min="0" max="100" value="0">
       </div>
-
       <div class="construct-control-btns">
         <button id="btn-switch-view" title="В виде сетки" type="button"
-                class="btn btn-default btn-circle btn-ml btn-active" data-mode="1">
+                class="btn btn-default btn-circle btn-ml btn-active" data-mode='1'>
           <div class="poll-grid-view">
             <svg viewBox="0 0 24 24">
               <path d="M 4 4 L 4 8 L 8 8 L 8 4 L 4 4 z M 10 4 L 10 8 L 14 8 L 14 4 L 10 4 z M 16 4 L 16 8 L 20 8 L 20 4 L 16 4
