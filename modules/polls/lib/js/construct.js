@@ -37,38 +37,32 @@ $(document).on('click', '.question-limit', setQuestionLimit);
 $(document).on('paste', '[contenteditable]', function (e) {
   e.preventDefault();
   return;
-}).on('keypress', '[contenteditable]', function (e) {
+}).on('keydown', '[contenteditable]', function (e) {
   e.preventDefault();
+  let ee = e;
   if (e.keyCode === 13) {
     this.blur();
     return;
   }
   let inpuInt;
   let currentInt = this.innerText;
+  let target = e.target;
   let keyCode = e.keyCode;
-  let sysKeys = [35, 36, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
-
-  // let regex = /[-\.;"^:'/@#№&?*()_+=a-zA-Zа-яА-Я ]/;
-  // let regex = /[32]|['48'-'57']/;
-  // console.log(regex.test(keyCode));
-
-  
-
-  if (regex.test(key)) return;
-  // console.log(e.originalEvent.key);
-  // console.log(this.innerText);
-  if (currentInt > 9) {
-    this.innerText = '99';
-    return;
+  let sysKeys = [8, 35, 36, 37, 39, 46];
+  let intKey = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
+  if (intKey.includes(keyCode)){
+    if (currentInt > 9) {
+      this.innerText = '99';
+    } else {
+      this.innerText = this.innerText + e.originalEvent.key;
+    }
+  } else if (sysKeys.includes(keyCode)) {
+    target.dispatchEvent(ee);
+    console.log(111111111111);
   } else {
-    this.innerText = this.innerText + e.originalEvent.key;
+    console.log('55555555555555');
+    // e.preventDefault();
   }
-  if (this.innerText > 99) {
-    this.innerText = '99';
-    e.preventDefault();
-    return;
-  }
-
 }).on('blur', '[contenteditable]', saveUserLimit);
 
 // только цифры
@@ -77,13 +71,14 @@ function  validateInt(e) {
   let theEvent = e || window.event;
   let key = theEvent.keyCode || theEvent.which;
   key = String.fromCharCode(key);
-  let regex = /[-\.;"^:'/@#№&?*()_+=a-zA-Zа-яА-Я ]/;
-  if (regex.test(key)) {
+  let regex = /[0-9]/;
+  if (!regex.test(key)) {
     theEvent.returnValue = false;
     if (theEvent.preventDefault) theEvent.preventDefault();
   }
 }
 */
+
 // ===================================== DDE ======================================
 let dDeFlag = false;
 

@@ -113,7 +113,7 @@ Select2Asset::register($this);
           </svg>
         </div>
       </div>
-      <div class="question-limit question-service-btn" title="Максимальное количество ответов"> </div>
+      <div class="question-limit question-service-btn" onkeypress="validateInt(event)" title="Максимальное количество ответов"> </div>
 
       <div class="answers-content">
       </div>
