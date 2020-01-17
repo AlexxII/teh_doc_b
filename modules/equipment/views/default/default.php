@@ -34,7 +34,7 @@ BootstrapPluginAsset::register($this);
   }
   ul.fancytree-container {
     width: 100%;
-    height: 500px;
+    height: 838px;
     overflow-y: auto;
     position: relative;
   }

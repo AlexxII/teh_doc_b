@@ -40,11 +40,17 @@
   }
 
   .question-limit {
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 900;
     position: absolute;
-    top: -1px;
-    right: -20px;
+    top: 0;
+    right: 0;
     contenteditable: true;
+    background-color: #d4d8d8;
+    border-radius: 0 2px 0 2px;
+    width: 28px;
+    height: 23px;
+    text-align: center;
   }
 
   .answers-content {
@@ -232,14 +238,14 @@
 
     <div id="question-extension-menu">
       <div class="dde-menu-item">Установить лимит</div>
-      <div class="dde-menu-item">Добавить ответ</div>
+<!--      <div class="dde-menu-item">Добавить ответ</div>-->
       <div class="dde-menu-item">Удалить вопрос</div>
     </div>
 
     <div id="answer-extension-menu">
       <div class="dde-menu-item">Удалить ответ</div>
-      <div class="dde-menu-item">Изменить тип</div>
-      <div class="dde-menu-item">Задать логику</div>
+<!--      <div class="dde-menu-item">Изменить тип</div>-->
+<!--      <div class="dde-menu-item">Задать логику</div>-->
     </div>
   </div>
 </div>

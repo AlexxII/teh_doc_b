@@ -45,6 +45,11 @@ class Questions extends \yii\db\ActiveRecord
     return $this->hasMany(Answers::class, ['question_id' => 'id'])->orderBy('order');
   }
 
+  public function getVisibleAnswers()
+  {
+    return $this->hasMany(Answers::class, ["question_id" => "id"])->where(["visible" => "1"])->orderBy("order");
+  }
+
 
   /*
     public function getAdminList()

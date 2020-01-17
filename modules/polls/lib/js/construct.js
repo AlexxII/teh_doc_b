@@ -1,6 +1,7 @@
 let constructPollInfo;
 
 const HIDE_QUESTION_URL = '/polls/construct/hide-to-fill';
+const HIDE_ANSWER_URL = '/polls/construct/hide-answer';
 const UNIQUE_QUESTION_URL = '/polls/construct/unique-answer';
 
 
@@ -31,7 +32,58 @@ $(document).on('click', '.answer-hide', hideAnswer);
 
 $(document).on('click', '.unique-btn', setAnswerUnique);
 
+$(document).on('click', '.question-limit', setQuestionLimit);
 
+$(document).on('paste', '[contenteditable]', function (e) {
+  e.preventDefault();
+  return;
+}).on('keypress', '[contenteditable]', function (e) {
+  e.preventDefault();
+  if (e.keyCode === 13) {
+    this.blur();
+    return;
+  }
+  let inpuInt;
+  let currentInt = this.innerText;
+  let keyCode = e.keyCode;
+  let sysKeys = [35, 36, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
+
+  // let regex = /[-\.;"^:'/@#№&?*()_+=a-zA-Zа-яА-Я ]/;
+  // let regex = /[32]|['48'-'57']/;
+  // console.log(regex.test(keyCode));
+
+  
+
+  if (regex.test(key)) return;
+  // console.log(e.originalEvent.key);
+  // console.log(this.innerText);
+  if (currentInt > 9) {
+    this.innerText = '99';
+    return;
+  } else {
+    this.innerText = this.innerText + e.originalEvent.key;
+  }
+  if (this.innerText > 99) {
+    this.innerText = '99';
+    e.preventDefault();
+    return;
+  }
+
+}).on('blur', '[contenteditable]', saveUserLimit);
+
+// только цифры
+/*
+function  validateInt(e) {
+  let theEvent = e || window.event;
+  let key = theEvent.keyCode || theEvent.which;
+  key = String.fromCharCode(key);
+  let regex = /[-\.;"^:'/@#№&?*()_+=a-zA-Zа-яА-Я ]/;
+  if (regex.test(key)) {
+    theEvent.returnValue = false;
+    if (theEvent.preventDefault) theEvent.preventDefault();
+  }
+}
+*/
 // ===================================== DDE ======================================
 let dDeFlag = false;
 
@@ -219,7 +271,25 @@ function hideQuestion() {
 
 function hideAnswer() {
   let id = $(this).data('id');
-
+  console.log(id);
+  let item = $(this).closest('.answer-data');
+  $.ajax({
+    url: HIDE_ANSWER_URL,
+    method: 'post',
+    data: {
+      id: id
+    }
+  }).done(function (response) {
+    if (response.code) {
+      $(item).hide(100, () => {
+        $(item).remove()
+      });
+    } else {
+      console.log(response.data.message + '\n' + response.data.data);
+    }
+  }).fail(function () {
+    console.log('Failed to hide question - URL failed');
+  });
 }
 
 
@@ -242,7 +312,6 @@ function setAnswerUnique() {
     }
   }).done(function (response) {
     if (response.code) {
-      console.log(bool);
       if (bool === 1) {
         setUnique(item, btn);
       } else {
@@ -264,4 +333,16 @@ function setUnique(item, btn) {
 function unsetUnique(item, btn) {
   $(item).removeClass('unique-answer');
   $(btn).data('unique', 0);
+}
+
+
+function setQuestionLimit() {
+  console.log(this);
+  this.contentEditable = true;
+  $(this).focus();
+
+}
+
+function saveUserLimit() {
+  console.log('333333333333333333333');
 }

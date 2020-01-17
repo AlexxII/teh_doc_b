@@ -112,8 +112,8 @@ Select2Asset::register($this);
                 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
           </svg>
         </div>
-        <span class="question-limit question-service-btn" title="Максимальное количество ответов"> </span>
       </div>
+      <div class="question-limit question-service-btn" title="Максимальное количество ответов"> </div>
 
       <div class="answers-content">
       </div>

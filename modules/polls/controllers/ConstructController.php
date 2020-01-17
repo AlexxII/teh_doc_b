@@ -64,7 +64,6 @@ class ConstructController extends Controller
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if (!empty($_POST)) {
       $id = $_POST['id'];
-
       $question = Questions::findModel($id);
       $question->visible = 0;
       if ($question->save()) {
@@ -96,6 +95,41 @@ class ConstructController extends Controller
     ];
   }
 
+  public function actionHideAnswer()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (!empty($_POST)) {
+      $id = $_POST['id'];
+      $answer = Answers::findModel($id);
+      $answer->visible = 0;
+      if ($answer->save()) {
+        return [
+          'data' => [
+            'success' => true,
+            'data' => $id,
+            'message' => 'Hidden successfully',
+          ],
+          'code' => 1,
+        ];
+      }
+      return [
+        'data' => [
+          'success' => false,
+          'data' => $answer->errors,
+          'message' => 'Can`t save',
+        ],
+        'code' => 0,
+      ];
+    }
+    return [
+      'data' => [
+        'success' => false,
+        'data' => 'Poor',
+        'message' => '$_POST - empty',
+      ],
+      'code' => 0,
+    ];
+  }
 
   public function actionUniqueAnswer()
   {

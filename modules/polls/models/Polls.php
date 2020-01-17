@@ -61,6 +61,11 @@ class Polls extends \yii\db\ActiveRecord
     return $this->hasMany(Questions::class, ['poll_id' => 'id'])->orderBy('order');
   }
 
+  public function getVisibleQuestions()
+  {
+    return $this->hasMany(Questions::class, ['poll_id' => 'id'])->where(['visible' => '1'])->orderBy('order');
+  }
+
 
   public static function findModel($id)
   {

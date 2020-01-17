@@ -100,7 +100,7 @@ class Poll {
       this.id = pollData.id;
       this._title = pollData.title;
       this._code = pollData.code;
-      this._questions = pollData.questions;
+      this._questions = pollData.visibleQuestions;
       this.currentQuestion = 0;
       this._totalNumberOfQuestions = this._questions.length;
       this.outputPool = this.questions;
@@ -233,7 +233,7 @@ class Poll {
     // if (this.answersPool[this.currentQuestion])
     // this.answersPool[this.currentQuestion] = answer;
     let currentQuestion = this.outputPool[this.currentQuestion];
-    currentQuestion.answers[answer[0]] = answer;
+    currentQuestion.visibleAnswers[answer[0]] = answer;
   }
 
   deleteFromLocalDb() {
@@ -252,35 +252,40 @@ class Poll {
 
   renderQuestion(questionNumber) {
     let questions = this.questions;
-    let limit = questions[questionNumber].limit;
-    if (limit > 1) {
-      $('.panel').removeClass('panel-primary').addClass('panel-danger');
-    } else {
-      $('.panel').removeClass('panel-danger').addClass('panel-primary');
-    }
-    $('.drive-content .panel-heading').html(questions[questionNumber].order + '. ' + questions[questionNumber].title);
-    $('.drive-content .panel-body').html('');
-    let answers = questions[questionNumber].answers;
-    let answersPool = {};
-    answers.forEach(function (el, index) {
-      let key;
-      let temp = keyCodesRev[codes[index]];
-      if (temp.length > 1) {
-        temp.forEach(function (val, i) {
-          answersPool[val] = [el.id, el.code, 0, el.input_type];
-          key = val;
-        });
+    let currentQuestion = questions[questionNumber];
+    if (currentQuestion.visible === '1') {
+      let limit = currentQuestion.limit;
+      if (limit > 1) {
+        $('.panel').removeClass('panel-primary').addClass('panel-danger');
       } else {
-        answersPool[temp] = [el.id, el.code, 0, el.input_type];
-        key = temp;
+        $('.panel').removeClass('panel-danger').addClass('panel-primary');
       }
-      let q = "<p data-id='" + el.id + "' data-mark='0' data-key='" + key + "' class='answer-p'><strong>" + codes[index] +
-        '. ' + "</strong>" + el.title + "</p>";
-      $('.drive-content .panel-body').append(q);
-    });
-    this.keyCodesPool = answersPool;                                // пул кодов клавиатуры, ассоциированных с параметрами ответов
-    this.curQuestionAnswersLimit = limit;
-    this.entriesNumber = 0;
+      $('.drive-content .panel-heading').html((questionNumber + 1) + '. ' + currentQuestion.title);
+      $('.drive-content .panel-body').html('');
+      let answers = currentQuestion.visibleAnswers;
+      let answersPool = {};
+      answers.forEach(function (el, index) {
+        if (el.visible) {
+          let key;
+          let temp = keyCodesRev[codes[index]];
+          if (temp.length > 1) {
+            temp.forEach(function (val, i) {
+              answersPool[val] = [el.id, el.code, 0, el.input_type];
+              key = val;
+            });
+          } else {
+            answersPool[temp] = [el.id, el.code, 0, el.input_type];
+            key = temp;
+          }
+          let q = "<p data-id='" + el.id + "' data-mark='0' data-key='" + key + "' class='answer-p'><strong>" + codes[index] +
+            '. ' + "</strong>" + el.title + "</p>";
+          $('.drive-content .panel-body').append(q);
+        }
+      });
+      this.keyCodesPool = answersPool;                                // пул кодов клавиатуры, ассоциированных с параметрами ответов
+      this.curQuestionAnswersLimit = limit;
+      this.entriesNumber = 0;
+    }
   }
 
   verifyPollConfigStructure(val) {
