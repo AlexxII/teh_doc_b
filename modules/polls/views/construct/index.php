@@ -15,7 +15,7 @@
   .question-service-area {
     position: absolute;
     top: 5px;
-    right: 30px;
+    right: 31px;
   }
 
   .question-data span {
@@ -37,6 +37,11 @@
   .question-service-btn:hover {
     fill: #999999;
     color: #999999;
+  }
+
+  .question-limit:hover {
+    fill: #000 !important;
+    color: #000 !important;
   }
 
   .question-limit {
@@ -79,6 +84,10 @@
     background-color: #eaf4ff;
     border-radius: 2px;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  .be-attention > h2 {
+    color: #edac16;
   }
 
   .grid-item:hover {
@@ -191,6 +200,7 @@
   .range-label {
     font-size: 12px;
   }
+
   .unique-answer {
     background-color: #d8f0fb;
   }
@@ -237,15 +247,14 @@
   <div class="hidden">
 
     <div id="question-extension-menu">
-      <div class="dde-menu-item">Установить лимит</div>
-<!--      <div class="dde-menu-item">Добавить ответ</div>-->
+      <!--      <div class="dde-menu-item">Добавить ответ</div>-->
       <div class="dde-menu-item">Удалить вопрос</div>
     </div>
 
     <div id="answer-extension-menu">
       <div class="dde-menu-item">Удалить ответ</div>
-<!--      <div class="dde-menu-item">Изменить тип</div>-->
-<!--      <div class="dde-menu-item">Задать логику</div>-->
+      <!--      <div class="dde-menu-item">Изменить тип</div>-->
+      <!--      <div class="dde-menu-item">Задать логику</div>-->
     </div>
   </div>
 </div>

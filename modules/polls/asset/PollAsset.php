@@ -16,6 +16,7 @@ class PollAsset extends AssetBundle
     'js/vars.js',
     'js/poll.js',
     'js/drive.js',
+    'js/jquery.maskedinput.js',
     'js/construct.js'
   ];
 

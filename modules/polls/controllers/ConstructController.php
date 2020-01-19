@@ -168,4 +168,42 @@ class ConstructController extends Controller
     ];
   }
 
+  public function actionSetQuestionLimit()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (!empty($_POST)) {
+      $id = $_POST['id'];
+      $limit = $_POST['limit'];
+      $question = Questions::findModel($id);
+      $question->limit = $limit;
+      if ($question->save()) {
+        return [
+          'data' => [
+            'success' => true,
+            'data' => $limit,
+            'message' => 'Limit set successfully',
+          ],
+          'code' => 1,
+        ];
+      }
+      return [
+        'data' => [
+          'success' => false,
+          'data' => $question->limit,                                                   // значение из БД
+          'message' => 'Can`t save limit parameter' + $question->errors,
+        ],
+        'code' => 0,
+      ];
+    }
+    return [
+      'data' => [
+        'success' => false,
+        'data' => 'Poor',
+        'message' => '$_POST - empty',
+      ],
+      'code' => 0,
+    ];
+
+  }
+
 }

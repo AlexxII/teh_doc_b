@@ -3,6 +3,7 @@ let constructPollInfo;
 const HIDE_QUESTION_URL = '/polls/construct/hide-to-fill';
 const HIDE_ANSWER_URL = '/polls/construct/hide-answer';
 const UNIQUE_QUESTION_URL = '/polls/construct/unique-answer';
+const LIMIT_QUESTION_URL = '/polls/construct/set-question-limit';
 
 
 $(document).on('click', '#construct-wrap', function (e) {
@@ -32,52 +33,23 @@ $(document).on('click', '.answer-hide', hideAnswer);
 
 $(document).on('click', '.unique-btn', setAnswerUnique);
 
-$(document).on('click', '.question-limit', setQuestionLimit);
+$.mask.definitions['H'] = '[1-9]';
+$.mask.definitions['h'] = '[0-9]';
 
-$(document).on('paste', '[contenteditable]', function (e) {
+$(document).on('paste', '.question-limit', function (e) {
   e.preventDefault();
   return;
-}).on('keydown', '[contenteditable]', function (e) {
-  e.preventDefault();
-  let ee = e;
+}).on('keydown', '.question-limit', function (e) {
   if (e.keyCode === 13) {
     this.blur();
     return;
   }
-  let inpuInt;
-  let currentInt = this.innerText;
-  let target = e.target;
-  let keyCode = e.keyCode;
-  let sysKeys = [8, 35, 36, 37, 39, 46];
-  let intKey = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
-  if (intKey.includes(keyCode)){
-    if (currentInt > 9) {
-      this.innerText = '99';
-    } else {
-      this.innerText = this.innerText + e.originalEvent.key;
-    }
-  } else if (sysKeys.includes(keyCode)) {
-    target.dispatchEvent(ee);
-    console.log(111111111111);
-  } else {
-    console.log('55555555555555');
-    // e.preventDefault();
-  }
-}).on('blur', '[contenteditable]', saveUserLimit);
-
-// только цифры
-/*
-function  validateInt(e) {
-  let theEvent = e || window.event;
-  let key = theEvent.keyCode || theEvent.which;
-  key = String.fromCharCode(key);
-  let regex = /[0-9]/;
-  if (!regex.test(key)) {
-    theEvent.returnValue = false;
-    if (theEvent.preventDefault) theEvent.preventDefault();
-  }
-}
-*/
+  $(this).mask('H?h', {
+    placeholder: ' '
+  });
+}).on('blur', '.question-limit', function () {
+  saveQuestionLimit(this);
+});
 
 // ===================================== DDE ======================================
 let dDeFlag = false;
@@ -185,8 +157,13 @@ function constructListView(config) {
     let questionClone = mainQuestionDiv.cloneNode(true);
     let answers = val.answers;
     questionClone.querySelector('.question-number').innerHTML = (index + 1) + '. ';
+    if (limit > 1 || limit === null) {
+      questionClone.querySelector('.question-header').classList.add('be-attention');
+    }
     questionClone.querySelector('.question-title').innerHTML = val.title;
-    questionClone.querySelector('.question-limit').innerHTML = limit;
+    questionClone.querySelector('.question-limit').value = limit;
+    questionClone.querySelector('.question-limit').dataset.id = val.id;
+    questionClone.querySelector('.question-limit').dataset.old = limit;
     questionClone.querySelector('.question-hide').dataset.id = val.id;
     answers.forEach(function (answer, index) {
       let answerClone = answerDiv.cloneNode(true);
@@ -209,6 +186,10 @@ function constructListView(config) {
       multiDrag: true,
       selectedClass: 'selected',
       animation: 150,
+      onEnd: function (evt) {
+        console.log(evt.oldIndex);
+        console.log(evt);
+      }
     });
   }
   // изменение порядка отображения вопросов внутри опроса
@@ -316,7 +297,7 @@ function setAnswerUnique() {
       console.log(response.data.message + '\n' + response.data.data);
     }
   }).fail(function () {
-    console.log('Failed to hide question');
+    console.log('Failed to hide question - see Network Monitor - "Ctrl+SHift+E "');
   });
 }
 
@@ -330,14 +311,34 @@ function unsetUnique(item, btn) {
   $(btn).data('unique', 0);
 }
 
-
-function setQuestionLimit() {
-  console.log(this);
-  this.contentEditable = true;
-  $(this).focus();
-
-}
-
-function saveUserLimit() {
-  console.log('333333333333333333333');
+function saveQuestionLimit(input) {
+  let $input = $(input);
+  let id = input.dataset.id;
+  let oldVal = +input.dataset.old;                                          // + - приведенеи к типу number
+  let limit = +input.value;
+  // console.log('oldVal - ' + oldVal + ' - ' + typeof oldVal);
+  // console.log('limit - ' + limit + ' - ' + typeof limit);
+  if (limit === oldVal) return;
+  $.ajax({
+    url: LIMIT_QUESTION_URL,
+    method: 'post',
+    data: {
+      id: id,
+      limit: limit
+    }
+  }).done(function (response) {
+    if (!response.code) {
+      input.value = oldVal;
+    } else {
+      input.dataset.old = limit;
+    }
+    if (+response.data.data === 1) {
+      input.closest('.question-header').classList.remove('be-attention');
+    } else {
+      input.closest('.question-header').classList.add('be-attention');
+    }
+  }).fail(function () {
+    input.dataset.old = limit;
+    console.log('Failed to hide question');
+  });
 }
