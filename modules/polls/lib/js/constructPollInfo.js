@@ -5,7 +5,7 @@ class constructPollInfo {
       this.id = pollData.id;
       this._title = pollData.title;
       this._code = pollData.code;
-      this.questions = pollData.visibleQuestions;
+      this.questions = pollData.questions;
     }
   }
 
@@ -15,34 +15,76 @@ class constructPollInfo {
     }
   }
 
-  set questions {
-
+  set questions(tempQuestions) {
+    let tempQuestionsArray = {};
+    tempQuestions.forEach(function (val, index) {
+      tempQuestionsArray[val.id] = new Question(val);
+    });
+    this._questions = tempQuestionsArray;
   }
 
-  set answers {
+  /*
+      set answers {
 
-  }
+      }
+    */
 
   verifyPollConfigStructure(val) {
     return val !== null;
   }
 
+  verifyIfIdValid(val) {
+    return true;
+  }
+
+}
+/*
+function Question(config) {
+  this.id = config.id;
+  this.title = config.title;
+  this.titleEx = config.title_ex;
+  this.newOrder = config.order;
+  this.oldOrder = config.order;
+  this.limit = config.limit;
+  this.answers = config.answers;
+
+  Object.defineProperty(this, 'answers', {
+    set: function(answersPool) {
+      let tempArray = {};
+      answersPool.forEach(function (val, index) {
+        console.log(val);
+        tempArray[val.id] = new Answer(val);
+      });
+      this._answers = tempArray;
+    }
+  });
+}
+*/
+
+class Question {
+  constructor(config) {
+    this.id = config.id;
+    this.title = config.title;
+    this.titleEx = config.title_ex;
+    this.newOrder = config.order;
+    this.oldOrder = config.order;
+    this.limit = config.limit;
+    this.answers = config.answers;
+  }
+
+  set answers(answersPool) {
+    let tempArray = {};
+    answersPool.forEach(function (val, index) {
+      tempArray[val.id] = new Answer(val);
+    });
+    this._answers = tempArray;
+  }
 }
 
-function Question(conf) {
-  this.id = conf.id;
-  this.title = conf.title;
-  this.titleEx = conf.title_ex;
-  this.newOrder = conf.order;
-  this.oldOrder = conf.order;
-  this.limit = conf.limit;
-  this.answers =
-}
-
-function Answer(conf) {
-  this.id = conf.id;
-  this.title = conf.title;
-  this.titleEx = conf.title_ex;
-  this.newOrder = conf.order;
-  this.oldOrder = conf.order;
+function Answer(config) {
+  this.id = config.id;
+  this.title = config.title;
+  this.titleEx = config.title_ex;
+  this.newOrder = config.order;
+  this.oldOrder = config.order;
 }

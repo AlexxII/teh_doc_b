@@ -1,5 +1,3 @@
-let constructPollInfo;
-
 const HIDE_QUESTION_URL = '/polls/construct/hide-to-fill';
 const HIDE_ANSWER_URL = '/polls/construct/hide-answer';
 const UNIQUE_QUESTION_URL = '/polls/construct/unique-answer';
@@ -108,7 +106,7 @@ function loadPollConfig(id, callback) {
     method: 'get'
   }).done(function (response) {
     if (response.code) {
-      constructPollInfo = response.data.data;
+      pollInfo = response.data.data;
       callback(response.data.data);
     } else {
       console.log(response.data.message);
@@ -118,8 +116,11 @@ function loadPollConfig(id, callback) {
   });
 }
 
+var pollConstruct;
+
 function startConstruct(config) {
-  console.log(config);
+  pollConstruct = new constructPollInfo(config);
+  console.log(pollConstruct);
   constructListView(config);
   NProgress.done();
 }
@@ -127,14 +128,14 @@ function startConstruct(config) {
 function changeConstructView(e) {
   let mode = $(this).data('mode');
   if (mode) {
-    constructGridView(constructPollInfo);
+    constructGridView(pollInfo);
     $(this).data('mode', 0);
     $(this).attr('title', 'В виде списка');
     $('.construct-range-btn').show();
     $('.poll-grid-view').hide();
     $('.poll-list-view').show();
   } else {
-    constructListView(constructPollInfo);
+    constructListView(pollInfo);
     $(this).data('mode', 1);
     $(this).attr('title', 'В виде сетки');
     $('.construct-range-btn').hide();
@@ -182,14 +183,13 @@ function constructListView(config) {
 
   // изменение порядка отображения ответов только внутри вопроса
   let poolOfDivs = $('.answers-content');
-  for (let i = 0; i < poolOfDivs.length; i++) {
+  let poolLength = poolOfDivs.length;
+  for (let i = 0; i < poolLength; i++) {
     new Sortable(poolOfDivs[i], {
       multiDrag: true,
       selectedClass: 'selected',
       animation: 150,
       onEnd: function (evt) {
-        console.log(evt.oldIndex);
-        // console.log(evt);
         let form = evt.from;
         let currentItem = evt.item;
         let items = form.children;
@@ -198,7 +198,6 @@ function constructListView(config) {
           child.querySelector('.answer-number').innerHTML = (i + 1);
           child.querySelector('.answer-old-order').innerHTML = oldOrder;
         }
-        // console.log(form.children);
       }
     });
   }

@@ -17,7 +17,8 @@ class PollAsset extends AssetBundle
     'js/poll.js',
     'js/drive.js',
     'js/jquery.maskedinput.js',
-    'js/construct.js'
+    'js/construct.js',
+    'js/constructPollInfo.js'
   ];
 
   public $depends = [
