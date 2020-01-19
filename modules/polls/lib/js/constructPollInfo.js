@@ -23,12 +23,6 @@ class constructPollInfo {
     this._questions = tempQuestionsArray;
   }
 
-  /*
-      set answers {
-
-      }
-    */
-
   verifyPollConfigStructure(val) {
     return val !== null;
   }
@@ -38,29 +32,6 @@ class constructPollInfo {
   }
 
 }
-/*
-function Question(config) {
-  this.id = config.id;
-  this.title = config.title;
-  this.titleEx = config.title_ex;
-  this.newOrder = config.order;
-  this.oldOrder = config.order;
-  this.limit = config.limit;
-  this.answers = config.answers;
-
-  Object.defineProperty(this, 'answers', {
-    set: function(answersPool) {
-      let tempArray = {};
-      answersPool.forEach(function (val, index) {
-        console.log(val);
-        tempArray[val.id] = new Answer(val);
-      });
-      this._answers = tempArray;
-    }
-  });
-}
-*/
-
 class Question {
   constructor(config) {
     this.id = config.id;
@@ -88,3 +59,28 @@ function Answer(config) {
   this.newOrder = config.order;
   this.oldOrder = config.order;
 }
+
+
+/*
+function Question(config) {
+  this.id = config.id;
+  this.title = config.title;
+  this.titleEx = config.title_ex;
+  this.newOrder = config.order;
+  this.oldOrder = config.order;
+  this.limit = config.limit;
+  this.answers = config.answers;
+
+  Object.defineProperty(this, 'answers', {
+    set: function(answersPool) {
+      let tempArray = {};
+      answersPool.forEach(function (val, index) {
+        console.log(val);
+        tempArray[val.id] = new Answer(val);
+      });
+      this._answers = tempArray;
+    }
+  });
+}
+*/
+
