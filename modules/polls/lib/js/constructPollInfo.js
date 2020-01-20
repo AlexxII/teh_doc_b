@@ -1,3 +1,4 @@
+
 class constructPollInfo {
   constructor(structure) {
     if (this.verifyPollConfigStructure(structure)) {
@@ -34,7 +35,6 @@ class constructPollInfo {
       tempArray[index] = this._questions[key];
       index++;
     }
-    // tempArray.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
     this.sortByOldOrder(tempArray);
     return tempArray;
   }
@@ -42,7 +42,6 @@ class constructPollInfo {
   question(id) {
     return this._questions[id];
   }
-
 
   verifyPollConfigStructure(val) {
     return val !== null;
@@ -84,7 +83,6 @@ class Question {
       tempArray[index] = this._answers[key];
       index++;
     }
-    // tempArray.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
     this.sortByOldOrder(tempArray);
     return tempArray;
   }

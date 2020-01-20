@@ -86,12 +86,6 @@ function Respondent() {
   this.isAdmin = false;
 }
 
-/*
-const poll = function (id) {
-
-};
-*/
-
 // опрос, который был выбран и остается в памяти пока на выберут другой опрос
 class Poll {
   constructor(structure) {
@@ -220,15 +214,11 @@ class Poll {
 
   // main wrap for logic
   goToQuestion(number) {
-
-
-    //Проверка на пропущенные вопрос !!!!!!!!!
-
-
     this.currentQuestion = number;
     this.renderQuestion(number);
     this.restoreAnswers(this.currentQuestion);
   }
+
 
   saveToLocalDb(answer) {
     // let tempObject = this.answersPool[this.currentQuestion]
@@ -264,31 +254,38 @@ class Poll {
       } else {
         $('.panel').removeClass('panel-danger').addClass('panel-primary');
       }
+
       $('.drive-content .panel-heading').html((questionNumber + 1) + '. ' + currentQuestion.title);
       $('.drive-content .panel-body').html('');
       let answers = currentQuestion.visibleAnswers;
       let answersPool = {};
+      let testPool = {};
       answers.forEach(function (el, index) {
         if (el.visible) {
           let key;
           let temp = keyCodesRev[codes[index]];
           if (temp.length > 1) {
-            temp.forEach(function (val, i) {
-              answersPool[val] = [el.id, el.code, 0, el.input_type, el.unique];
+            temp.forEach(function (val, i, ar) {
+              answersPool[val] = [el.id, el.code, 0, el.input_type];
               key = val;
+              testPool[val] = [el.id]
             });
           } else {
-            answersPool[temp] = [el.id, el.code, 0, el.input_type, el.unique];
+            answersPool[temp] = [el.id, el.code, 0, el.input_type];
             key = temp;
+            testPool[temp] = [el.id]
           }
-          let q = "<p data-id='" + el.id + "' data-mark='0' data-key='" + key + "' class='answer-p'><strong>" + codes[index] +
+          let q = "<p data-id='" + el.id + "' data-mark='0' id='" + el.id + "' class='answer-p'><strong>" + codes[index] +
             '. ' + "</strong>" + el.title + "</p>";
           $('.drive-content .panel-body').append(q);
         }
       });
+      // console.log(answersPool);
       this.keyCodesPool = answersPool;                                // пул кодов клавиатуры, ассоциированных с параметрами ответов
       this.curQuestionAnswersLimit = limit;
       this.entriesNumber = 0;
+      this.testA = testPool;
+      console.log(this.testA);
     }
   }
 

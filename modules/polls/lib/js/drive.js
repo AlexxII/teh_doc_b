@@ -11,25 +11,26 @@ $(document).on('click', '.poll-in', function (e) {
   let url = '/polls/drive-in?id=';
   loadExContentEx(url, () => loadPollData(pollId, driveIn));
   // Основной обработчик запросов
-  $('body').bind('keydown', whatWeDoNext);
+  // $('body').bind('keydown', whatWeDoNext);
+  $('body').bind('keydown', keycodeAbstractionLayer);
 });
 
 // снятие фокуса с inputa -> включает стандартную логику
 $(document).on('blur', '.free-answer', function () {
   $('body').bind('keydown', whatWeDoNext);
-});
+})
 // установка фокуса в input -> выключает стандартную логику
-$(document).on('focus', '.free-answer', function () {
+.on('focus', '.free-answer', function () {
   $('body').unbind();
 });
-$(document).on('click', '.answer-p', clickOnTheAnswer);
-$(document).on('keydown', '.previous-btn', moveToPreviousQuestion);
-$(document).on('keydown', '.next-btn', moveToNextQuestion);
-$(document).on('change', '.question-steps', goToQuestion);
-$(document).on('click', '.confirm-next-btn', confirmAndNextQuestion);
 
-$(document).on('click', '.mobile-previous-btn', moveToPreviousQuestion);
-$(document).on('click', '.mobile-next-btn', moveToNextQuestion);
+$(document).on('click', '.answer-p', clickOnTheAnswer)
+  .on('keydown', '.previous-btn', moveToPreviousQuestion)
+  .on('keydown', '.next-btn', moveToNextQuestion)
+  .on('change', '.question-steps', goToQuestion)
+  .on('click', '.confirm-next-btn', confirmAndNextQuestion)
+  .on('click', '.mobile-previous-btn', moveToPreviousQuestion)
+  .on('click', '.mobile-next-btn', moveToNextQuestion);
 
 function loadPollData(id, callback) {
   let url = '/polls/drive-in/get-poll-info?id=' + id;
@@ -53,6 +54,21 @@ function driveIn(config) {
   $('.total-questions').append(poll.totalNumberOfQuestions);
   poll.goToQuestion(0);
   NProgress.done();
+}
+
+function keycodeAbstractionLayer(event) {
+  let keyCode = event.originalEvent.keyCode;
+  if (poll.keyCodesPool[keyCode] !== undefined) {
+    let answerId = poll.testA[keyCode];
+    let element = document.getElementById(answerId);
+    console.log(element);
+    chooseAnAnswer(answerId);
+  }
+
+}
+
+function chooseAnAnswer(answerId) {
+  
 }
 
 function whatWeDoNext(event) {
@@ -105,7 +121,6 @@ function confirmAnswer(keyCode) {
       $(span).appendTo($input);
     } else {
       poll.saveToLocalDb(codesPool[keyCode]);
-      console.log(codesPool[keyCode][4] + ' - ' + typeof codesPool[keyCode][4]);
       if (poll.entriesNumber >= answersLimit || codesPool[keyCode][4] === '1') {
         if (poll.entriesNumber > 1) {
           beep();
