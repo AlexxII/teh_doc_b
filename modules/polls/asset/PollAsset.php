@@ -14,6 +14,7 @@ class PollAsset extends AssetBundle
 
   public $js = [
     'js/vars.js',
+    'js/pollclasses.js',
     'js/poll.js',
     'js/drive.js',
     'js/jquery.maskedinput.js',

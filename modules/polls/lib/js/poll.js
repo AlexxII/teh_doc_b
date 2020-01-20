@@ -80,12 +80,12 @@ function sendPollFormData(url, table, form, xmlData, yTest, nTest) {
     }
   });
 }
-
+/*
 function Respondent() {
   this.name = name;
   this.isAdmin = false;
 }
-
+*/
 // опрос, который был выбран и остается в памяти пока на выберут другой опрос
 class Poll {
   constructor(structure) {

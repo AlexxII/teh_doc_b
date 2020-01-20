@@ -7,8 +7,7 @@ class Worksheet {
       // totalNumOfQuestions
       // пулл вопросов
       // пулл респондентов (т.е. ответов !!!!)
-
-      this._questions = config.visibleQuestions;
+      this.poolOfQuestions = config;
     }
   }
 
@@ -46,6 +45,18 @@ class Worksheet {
     return this.currentQuestion === (this.totalNumberOfQuestions - 1);
   }
 
+  set poolOfQuestions(config) {
+    let questions = config.visibleQuestions;
+    let output = {};
+    let length = 0;
+    questions.forEach(function (val, index) {
+      output[index] = new Question(val);
+      length++;
+    });
+    this._poolOfQuestions = output;
+    this._totalNumOfQuestions = length;
+  }
+  
   nextQuestion() {
 
   }
@@ -78,8 +89,6 @@ class Worksheet {
   renderQuestion(questionNumber) {
 
   }
-
-
 }
 
 
@@ -92,6 +101,15 @@ class Question {
     this.limit = config.limit;
     this.answers = config.answers;                    // пул ответов (объектов)
   }
+}
+
+function Answer(config) {
+  this.id = config.id;
+  this.title = config.title;
+  this.titleEx = config.title_ex;
+  this.newOrder = +config.order;
+  this.oldOrder = +config.order;
+  this.unique = config.unique;
 }
 
 class Respondent {

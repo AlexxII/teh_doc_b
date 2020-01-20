@@ -56,7 +56,7 @@ function driveIn(config) {
     markColor: '#e0e0e0'
   };
   pollUser = new PollUser(settings);
-  poll = new Poll(config);
+  poll = new Worksheet(config);
   $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
   $('.total-questions').append(poll.totalNumberOfQuestions);
   poll.goToQuestion(0);
