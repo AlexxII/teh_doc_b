@@ -124,11 +124,13 @@ Select2Asset::register($this);
   <div id="answer-template" class="list-group-item answer-data">
     <div class="answer-about-area">
       <span class="answer-number"></span>
+      <span class="answer-number-dot">.</span>
       <span class="answer-title"></span>
+      <span class="answer-old-order"></span>
     </div>
 
     <div class="answer-service-area">
-      <span class="answer-hide answer-service-btn">
+      <span class="answer-hide answer-service-btn" title="Скрыть при заполнении">
         <svg width="20" height="20" viewBox="0 0 24 24">
           <path fill="none" d="M0 0h24v24H0V0z"></path>
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19

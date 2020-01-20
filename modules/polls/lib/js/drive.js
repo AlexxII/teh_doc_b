@@ -1,9 +1,6 @@
-var stepDelayUsr = 200;
-var stepDelaySys = 0;
-
 const userInterface = {
   stepDelayUsr: 200,                                                    // задержка при переходе на другой вопрос
-  answeredColor: '#e0e0e0'                                             // цвет выделение при ответе
+  answeredColor: '#e0e0e0'                                              // цвет выделение при ответе
 };
 
 // начало вколачивания опроса
@@ -14,7 +11,6 @@ $(document).on('click', '.poll-in', function (e) {
   let url = '/polls/drive-in?id=';
   loadExContentEx(url, () => loadPollData(pollId, driveIn));
   $('body').bind('keydown', whatWeDoNext);
-
 });
 
 function loadPollData(id, callback) {

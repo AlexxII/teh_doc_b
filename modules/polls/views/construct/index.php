@@ -204,6 +204,20 @@
   .unique-answer {
     background-color: #d8f0fb;
   }
+
+  .answer-about-area {
+    position: relative;
+  }
+
+  .answer-old-order {
+    position: absolute;
+    top: -9px;
+    right: -10px;
+    font-size: 13px;
+  }
+  .answer-number-dot {
+    margin-left: -5px;
+  }
 </style>
 
 <div class="construct-content">

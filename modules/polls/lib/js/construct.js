@@ -5,7 +5,6 @@ const HIDE_ANSWER_URL = '/polls/construct/hide-answer';
 const UNIQUE_QUESTION_URL = '/polls/construct/unique-answer';
 const LIMIT_QUESTION_URL = '/polls/construct/set-question-limit';
 
-
 $(document).on('click', '#construct-wrap', function (e) {
   e.preventDefault();
   NProgress.start();
@@ -100,9 +99,7 @@ function closeDDe() {
   dDeFlag = false;
 }
 
-
 // ================================================================================
-
 
 function loadPollConfig(id, callback) {
   let url = '/polls/construct/get-poll-info?id=' + id;
@@ -167,10 +164,12 @@ function constructListView(config) {
     questionClone.querySelector('.question-hide').dataset.id = val.id;
     answers.forEach(function (answer, index) {
       let answerClone = answerDiv.cloneNode(true);
-      answerClone.querySelector('.answer-number').innerHTML = (index + 1) + '. ';
+      let aId = answer.id;
+      answerClone.dataset.id = aId;
+      answerClone.querySelector('.answer-number').innerHTML = (index + 1);
       answerClone.querySelector('.answer-title').innerHTML = answer.title;
-      answerClone.querySelector('.answer-hide').dataset.id = answer.id;
-      answerClone.querySelector('.unique-btn').dataset.id = answer.id;
+      answerClone.querySelector('.answer-hide').dataset.id = aId;
+      answerClone.querySelector('.unique-btn').dataset.id = aId;
       if (answer.unique === '1') {
         answerClone.classList.add('unique-answer');
         answerClone.querySelector('.unique-btn').dataset.unique = 1;
@@ -179,6 +178,8 @@ function constructListView(config) {
     });
     $('#poll-construct').append(questionClone);
   });
+
+
   // изменение порядка отображения ответов только внутри вопроса
   let poolOfDivs = $('.answers-content');
   for (let i = 0; i < poolOfDivs.length; i++) {
@@ -188,7 +189,16 @@ function constructListView(config) {
       animation: 150,
       onEnd: function (evt) {
         console.log(evt.oldIndex);
-        console.log(evt);
+        // console.log(evt);
+        let form = evt.from;
+        let currentItem = evt.item;
+        let items = form.children;
+        for (let i = 0, child; child = items[i]; i++) {
+          let oldOrder = child.querySelector('.answer-number').innerHTML;
+          child.querySelector('.answer-number').innerHTML = (i + 1);
+          child.querySelector('.answer-old-order').innerHTML = oldOrder;
+        }
+        // console.log(form.children);
       }
     });
   }
@@ -268,7 +278,6 @@ function hideAnswer() {
   });
 }
 
-
 function setAnswerUnique() {
   let id = $(this).data('id');
   let btn = $(this);
@@ -316,8 +325,6 @@ function saveQuestionLimit(input) {
   let id = input.dataset.id;
   let oldVal = +input.dataset.old;                                          // + - приведенеи к типу number
   let limit = +input.value;
-  // console.log('oldVal - ' + oldVal + ' - ' + typeof oldVal);
-  // console.log('limit - ' + limit + ' - ' + typeof limit);
   if (limit === oldVal) return;
   $.ajax({
     url: LIMIT_QUESTION_URL,

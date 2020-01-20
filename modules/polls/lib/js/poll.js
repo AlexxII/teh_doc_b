@@ -298,20 +298,7 @@ class Poll {
 
 }
 
-
 //======================================================================***=============================================
-
-class PollQuestion {
-  constructor(structure) {
-
-  }
-
-  get id() {
-    return this._id;
-  }
-
-}
-
 
 class PollUser {
   constructor(id) {
