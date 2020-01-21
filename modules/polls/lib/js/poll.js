@@ -220,11 +220,15 @@ class Poll {
 
   // main wrap for logic
   goToQuestion(number) {
+
+
+    //Проверка на пропущенные вопрос !!!!!!!!!
+
+
     this.currentQuestion = number;
     this.renderQuestion(number);
     this.restoreAnswers(this.currentQuestion);
   }
-
 
   saveToLocalDb(answer) {
     // let tempObject = this.answersPool[this.currentQuestion]
@@ -233,7 +237,7 @@ class Poll {
     // if (this.answersPool[this.currentQuestion])
     // this.answersPool[this.currentQuestion] = answer;
     let currentQuestion = this.outputPool[this.currentQuestion];
-    currentQuestion.visibleAnswers[answer[0]] = answer;
+    // currentQuestion.visibleAnswers[answer[0]] = answer;
   }
 
   deleteFromLocalDb() {
@@ -270,11 +274,11 @@ class Poll {
           let temp = keyCodesRev[codes[index]];
           if (temp.length > 1) {
             temp.forEach(function (val, i) {
-              answersPool[val] = [el.id, el.code, 0, el.input_type];
+              answersPool[val] = [el.id, el.code, 0, el.input_type, el.unique];
               key = val;
             });
           } else {
-            answersPool[temp] = [el.id, el.code, 0, el.input_type];
+            answersPool[temp] = [el.id, el.code, 0, el.input_type, el.unique];
             key = temp;
           }
           let q = "<p data-id='" + el.id + "' data-mark='0' data-key='" + key + "' class='answer-p'><strong>" + codes[index] +

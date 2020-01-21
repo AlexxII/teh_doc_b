@@ -3,6 +3,8 @@ const HIDE_ANSWER_URL = '/polls/construct/hide-answer';
 const UNIQUE_QUESTION_URL = '/polls/construct/unique-answer';
 const LIMIT_QUESTION_URL = '/polls/construct/set-question-limit';
 
+var pollConstruct;                      // главная глобальная переменная
+
 $(document).on('click', '#construct-wrap', function (e) {
   e.preventDefault();
   NProgress.start();
@@ -106,8 +108,9 @@ function loadPollConfig(id, callback) {
     method: 'get'
   }).done(function (response) {
     if (response.code) {
-      pollInfo = response.data.data;
+      // pollInfo = response.data.data;
       callback(response.data.data);
+
     } else {
       console.log(response.data.message);
     }
@@ -116,26 +119,27 @@ function loadPollConfig(id, callback) {
   });
 }
 
-var pollConstruct;
 
 function startConstruct(config) {
+  console.log(config);
   pollConstruct = new constructPollInfo(config);
   console.log(pollConstruct);
-  constructListView(config);
+  $('#poll-title').append('<h4>' + pollConstruct.code + '</h4>');
+  constructListView(pollConstruct);
   NProgress.done();
 }
 
 function changeConstructView(e) {
   let mode = $(this).data('mode');
   if (mode) {
-    constructGridView(pollInfo);
+    constructGridView(pollConstruct);
     $(this).data('mode', 0);
     $(this).attr('title', 'В виде списка');
     $('.construct-range-btn').show();
     $('.poll-grid-view').hide();
     $('.poll-list-view').show();
   } else {
-    constructListView(pollInfo);
+    constructListView(pollConstruct);
     $(this).data('mode', 1);
     $(this).attr('title', 'В виде сетки');
     $('.construct-range-btn').hide();
@@ -145,29 +149,36 @@ function changeConstructView(e) {
 }
 
 function constructListView(config) {
-  let questions = config[0].questions;
+  let questions = config.questions;
   let mainQuestionDiv = document.getElementById('question-main-template');
   let answerDiv = document.getElementById('answer-template');
   $('#poll-construct').html('');
-  questions.forEach(function (val, index) {
-    let questionType = val.input_type;
-    let limit = val.limit;
+  let numOfQuestions = questions.length;
+  let questionCount = 1;
+  for (let questionId in questions) {
+    let question = questions[questionId];
+    let questionType = question.input_type;
+    let limit = question.limit;
     let questionClone = mainQuestionDiv.cloneNode(true);
-    let answers = val.answers;
-    questionClone.querySelector('.question-number').innerHTML = (index + 1) + '. ';
+    questionClone.dataset.id = question.id;
+    questionClone.querySelector('.question-number').innerHTML = question.oldOrder;
     if (limit > 1 || limit === null) {
       questionClone.querySelector('.question-header').classList.add('be-attention');
     }
-    questionClone.querySelector('.question-title').innerHTML = val.title;
+    questionClone.querySelector('.question-title').innerHTML = question.title;
     questionClone.querySelector('.question-limit').value = limit;
-    questionClone.querySelector('.question-limit').dataset.id = val.id;
+    questionClone.querySelector('.question-limit').dataset.id = question.id;
     questionClone.querySelector('.question-limit').dataset.old = limit;
-    questionClone.querySelector('.question-hide').dataset.id = val.id;
-    answers.forEach(function (answer, index) {
+    questionClone.querySelector('.question-hide').dataset.id = question.id;
+    let answers = question.answers;
+    let answersCount = 1;
+    for (let answerId in  answers) {
       let answerClone = answerDiv.cloneNode(true);
+      let answer = answers[answerId];
       let aId = answer.id;
       answerClone.dataset.id = aId;
-      answerClone.querySelector('.answer-number').innerHTML = (index + 1);
+      answerClone.dataset.old = answer.oldOrder;
+      answerClone.querySelector('.answer-number').innerHTML = answersCount;
       answerClone.querySelector('.answer-title').innerHTML = answer.title;
       answerClone.querySelector('.answer-hide').dataset.id = aId;
       answerClone.querySelector('.unique-btn').dataset.id = aId;
@@ -176,10 +187,11 @@ function constructListView(config) {
         answerClone.querySelector('.unique-btn').dataset.unique = 1;
       }
       questionClone.querySelector('.answers-content').append(answerClone);
-    });
+      answersCount++;
+    }
     $('#poll-construct').append(questionClone);
-  });
-
+    questionCount++;
+  }
 
   // изменение порядка отображения ответов только внутри вопроса
   let poolOfDivs = $('.answers-content');
@@ -190,11 +202,11 @@ function constructListView(config) {
       selectedClass: 'selected',
       animation: 150,
       onEnd: function (evt) {
-        let form = evt.from;
+        let from = evt.from;
         let currentItem = evt.item;
-        let items = form.children;
+        let items = from.children;
         for (let i = 0, child; child = items[i]; i++) {
-          let oldOrder = child.querySelector('.answer-number').innerHTML;
+          let oldOrder = child.dataset.old;
           child.querySelector('.answer-number').innerHTML = (i + 1);
           child.querySelector('.answer-old-order').innerHTML = oldOrder;
         }
@@ -203,27 +215,55 @@ function constructListView(config) {
   }
   // изменение порядка отображения вопросов внутри опроса
   let pollOrder = document.getElementById('poll-construct');
-  new Sortable(pollOrder, {
+  let sortable = new Sortable(pollOrder, {
     animation: 150,
+    onEnd: function (evt) {
+      let from = evt.from;
+      let currentItem = evt.item;
+      let items = from.children;
+      for (let i = 0, child; child = items[i]; i++) {
+        let oldOrder = child.dataset.old;
+        child.querySelector('.question-number').innerHTML = (i + 1);
+        // child.querySelector('.answer-old-order').innerHTML = oldOrder;
+      }
+    }
   });
 }
 
+//===================================
+/*
+let testArray = sortable.toArray();
+testArray.sort(function (a, b) {
+  if (pollConstruct.question(a).oldOrder > pollConstruct.question(b).oldOrder) return 1;
+  if (pollConstruct.question(a).oldOrder < pollConstruct.question(b).oldOrder) return -1;
+  return 0;
+});
+sortable.sort(testArray);
+*/
+//===================================
+
+
 function constructGridView(config) {
-  let questions = config[0].questions;
+  let questions = config.questions;
   let gridItem = document.getElementById('gridview-template');
   let mainDiv = '<div class="grid" id="grid-poll-order" style="clear: left"></div>';
   $('#poll-construct').html('').append(mainDiv);
-  // $('#poll-construct').append(mainDiv);
-  questions.forEach(function (val, index) {
-    if (val.visible) {
+  let questionCount = 1;
+  for (let questionId in questions) {
+    let question = questions[questionId];
+    if (question.visible) {
       let gridItemClone = gridItem.cloneNode(true);
-      gridItemClone.dataset.id = val.id;
-      gridItemClone.querySelector('.question-order').innerHTML = val.order;
-      gridItemClone.querySelector('.question-title').innerHTML = val.title;
+      gridItemClone.dataset.id = question.id;
+      console.log(question.limit + ' - ' + typeof question.limit);
+      if (question.limit !== '1') {
+        gridItemClone.classList.add('multiple-answers');
+      }
+      gridItemClone.querySelector('.question-order').innerHTML = question.oldOrder;
+      gridItemClone.querySelector('.question-title').innerHTML = question.title;
       $('#grid-poll-order').append(gridItemClone);
     }
-  });
-
+    questionCount++;
+  }
   let pollGridOrder = document.getElementById('grid-poll-order');
   new Sortable(pollGridOrder, {
     multiDrag: true,
@@ -256,7 +296,6 @@ function hideQuestion() {
 
 function hideAnswer() {
   let id = $(this).data('id');
-  console.log(id);
   let item = $(this).closest('.answer-data');
   $.ajax({
     url: HIDE_ANSWER_URL,

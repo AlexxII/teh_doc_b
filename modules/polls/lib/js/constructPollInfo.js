@@ -15,6 +15,10 @@ class constructPollInfo {
     }
   }
 
+  get code() {
+    return this._code;
+  }
+
   set questions(tempQuestions) {
     let tempQuestionsArray = {};
     tempQuestions.forEach(function (val, index) {
@@ -22,6 +26,23 @@ class constructPollInfo {
     });
     this._questions = tempQuestionsArray;
   }
+
+  get questions() {
+    let tempArray = [];
+    let index = 0;
+    for (let key in this._questions) {
+      tempArray[index] = this._questions[key];
+      index++;
+    }
+    // tempArray.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
+    this.sortByOldOrder(tempArray);
+    return tempArray;
+  }
+
+  question(id) {
+    return this._questions[id];
+  }
+
 
   verifyPollConfigStructure(val) {
     return val !== null;
@@ -31,15 +52,20 @@ class constructPollInfo {
     return true;
   }
 
+  sortByOldOrder(arr) {
+    arr.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
+  }
 }
+
 class Question {
   constructor(config) {
     this.id = config.id;
     this.title = config.title;
     this.titleEx = config.title_ex;
-    this.newOrder = config.order;
-    this.oldOrder = config.order;
+    this.newOrder = +config.order;                                          // приведение к int
+    this.oldOrder = +config.order;
     this.limit = config.limit;
+    this.visible = config.visible;
     this.answers = config.answers;
   }
 
@@ -50,14 +76,39 @@ class Question {
     });
     this._answers = tempArray;
   }
+
+  get answers() {
+    let tempArray = [];
+    let index = 0;
+    for (let key in this._answers) {
+      tempArray[index] = this._answers[key];
+      index++;
+    }
+    // tempArray.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
+    this.sortByOldOrder(tempArray);
+    return tempArray;
+  }
+
+  set visible(bool) {
+    this._visible = bool;
+  }
+
+  get visible() {
+    return this._visible;
+  }
+
+  sortByOldOrder(arr) {
+    arr.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
+  }
 }
 
 function Answer(config) {
   this.id = config.id;
   this.title = config.title;
   this.titleEx = config.title_ex;
-  this.newOrder = config.order;
-  this.oldOrder = config.order;
+  this.newOrder = +config.order;
+  this.oldOrder = +config.order;
+  this.unique = config.unique;
 }
 
 

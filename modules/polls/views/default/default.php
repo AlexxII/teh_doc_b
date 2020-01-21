@@ -96,6 +96,7 @@ Select2Asset::register($this);
       <div class="question-header">
         <h2 class="question-data">
           <span class="question-number"></span>
+          <span class="question-number-dot">.</span>
           <span class="question-title"></span>
         </h2>
         <div class="question-service-area">

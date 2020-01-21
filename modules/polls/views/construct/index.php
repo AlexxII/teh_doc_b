@@ -215,8 +215,16 @@
     right: -10px;
     font-size: 13px;
   }
+
   .answer-number-dot {
     margin-left: -5px;
+  }
+
+  .question-number-dot {
+    margin-left: -10px;
+  }
+  .multiple-answers {
+    background-color: #d5b11b;
   }
 </style>
 

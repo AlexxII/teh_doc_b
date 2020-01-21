@@ -10,8 +10,26 @@ $(document).on('click', '.poll-in', function (e) {
   let pollId = $(e.currentTarget).data('id');
   let url = '/polls/drive-in?id=';
   loadExContentEx(url, () => loadPollData(pollId, driveIn));
+  // Основной обработчик запросов
   $('body').bind('keydown', whatWeDoNext);
 });
+
+// снятие фокуса с inputa -> включает стандартную логику
+$(document).on('blur', '.free-answer', function () {
+  $('body').bind('keydown', whatWeDoNext);
+});
+// установка фокуса в input -> выключает стандартную логику
+$(document).on('focus', '.free-answer', function () {
+  $('body').unbind();
+});
+$(document).on('click', '.answer-p', clickOnTheAnswer);
+$(document).on('keydown', '.previous-btn', moveToPreviousQuestion);
+$(document).on('keydown', '.next-btn', moveToNextQuestion);
+$(document).on('change', '.question-steps', goToQuestion);
+$(document).on('click', '.confirm-next-btn', confirmAndNextQuestion);
+
+$(document).on('click', '.mobile-previous-btn', moveToPreviousQuestion);
+$(document).on('click', '.mobile-next-btn', moveToNextQuestion);
 
 function loadPollData(id, callback) {
   let url = '/polls/drive-in/get-poll-info?id=' + id;
@@ -36,17 +54,6 @@ function driveIn(config) {
   poll.goToQuestion(0);
   NProgress.done();
 }
-
-// снятие фокуса с inputa -> включает стандартную логику
-$(document).on('blur', '.free-answer', function () {
-  $('body').bind('keydown', whatWeDoNext);
-});
-// установка фокуса в input -> выключает стандартную логику
-$(document).on('focus', '.free-answer', function () {
-  $('body').unbind();
-});
-
-$(document).on('click', '.answer-p', clickOnTheAnswer);
 
 function whatWeDoNext(event) {
   let keyCode = event.originalEvent.keyCode;
@@ -98,7 +105,13 @@ function confirmAnswer(keyCode) {
       $(span).appendTo($input);
     } else {
       poll.saveToLocalDb(codesPool[keyCode]);
-      if (poll.entriesNumber >= answersLimit) {
+      console.log(codesPool[keyCode][4] + ' - ' + typeof codesPool[keyCode][4]);
+      if (poll.entriesNumber >= answersLimit || codesPool[keyCode][4] === '1') {
+        if (poll.entriesNumber > 1) {
+          beep();
+          setTimeout(() => $input.data('mark', 0).css('background-color', '#fff'), 100);
+          return;
+        }
         // if (curQuestionNum =! limit) {
         // }
         // if (curQuestionNum + 1 == total) {
@@ -130,16 +143,8 @@ function moveToNextQuestion() {
   poll.nextQuestion();
 }
 
-$(document).on('keydown', '.previous-btn', moveToPreviousQuestion);
-$(document).on('keydown', '.next-btn', moveToNextQuestion);
-$(document).on('change', '.question-steps', goToQuestion);
-$(document).on('click', '.confirm-next-btn', confirmAndNextQuestion);
-
-$(document).on('click', '.mobile-previous-btn', moveToPreviousQuestion);
-$(document).on('click', '.mobile-next-btn', moveToNextQuestion);
-
 function respondentFinish() {
-  var finishNotice = '<p>КОНЕЦ!!!</p>';
+  let finishNotice = '<p>КОНЕЦ!!!</p>';
   $('.drive-content .panel').append(finishNotice);
 }
 
