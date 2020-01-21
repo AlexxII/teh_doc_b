@@ -146,10 +146,16 @@ function whatWeDoNext(event) {
 }
 
 function clickOnTheAnswer(event) {
-  let $input = $(event.target);
-  let key = $input.data('key');
-  confirmAnswer(key);
+  let answerId = event.target.dataset.id;
+  confirmAnswerEx(answerId);
 }
+
+
+function confirmAnswerEx(id) {
+
+}
+
+
 
 function confirmAnswer(keyCode) {
   // save

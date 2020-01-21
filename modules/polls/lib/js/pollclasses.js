@@ -268,6 +268,8 @@ function renderAnswer(answer, index) {
   let strong = document.createElement('strong');
   answerTemplate.dataset.id = answer.id;
   answerTemplate.dataset.mark = 0;
+  // answerTemplate.dataset.key = keyCodesRev[index][0];
+
   answerTemplate.id = answer.id;
   answerTemplate.className = 'answer-p';
   strong.innerHTML = index + '. ';
