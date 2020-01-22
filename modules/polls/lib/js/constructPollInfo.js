@@ -11,7 +11,7 @@ class constructPollInfo {
   }
 
   set id(id) {
-    if (this.verifyIfIdValid(id)) {
+    if (this.verifyId(id)) {
       this._id = id;
     }
   }
@@ -47,7 +47,7 @@ class constructPollInfo {
     return val !== null;
   }
 
-  verifyIfIdValid(val) {
+  verifyId(val) {
     return true;
   }
 

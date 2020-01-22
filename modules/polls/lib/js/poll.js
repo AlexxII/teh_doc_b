@@ -302,9 +302,10 @@ class Poll {
 //======================================================================***=============================================
 
 class PollUser {
-  constructor(id) {
-    this.stepDelay = 200;
-    this._id = id;
+  constructor(settings) {
+    this._id = settings.id;
+    this.stepDelay = settings.stepDelay;                                       // задержка при переходе на другой вопрос
+    this.markColor = settings.markColor                                       // цвет выделение при ответе
   }
 
   get id() {

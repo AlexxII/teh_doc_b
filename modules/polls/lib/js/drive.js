@@ -20,9 +20,9 @@ $(document).on('blur', '.free-answer', function () {
   $('body').bind('keydown', whatWeDoNext);
 })
 // установка фокуса в input -> выключает стандартную логику
-.on('focus', '.free-answer', function () {
-  $('body').unbind();
-});
+  .on('focus', '.free-answer', function () {
+    $('body').unbind();
+  });
 
 $(document).on('click', '.answer-p', clickOnTheAnswer)
   .on('keydown', '.previous-btn', moveToPreviousQuestion)
@@ -39,7 +39,7 @@ function loadPollData(id, callback) {
     method: 'get'
   }).done(function (response) {
     if (response.code) {
-      callback(response.data.data);
+      callback(response.data.data[0]);
     } else {
       console.log(response.data.message);
     }
@@ -49,6 +49,13 @@ function loadPollData(id, callback) {
 }
 
 function driveIn(config) {
+  // шаблон - будет запрашиваться у БД
+  let settings = {
+    id: 123456789,
+    stepDelay: 200,
+    markColor: '#e0e0e0'
+  };
+  pollUser = new PollUser(settings);
   poll = new Poll(config);
   $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
   $('.total-questions').append(poll.totalNumberOfQuestions);
@@ -61,14 +68,32 @@ function keycodeAbstractionLayer(event) {
   if (poll.keyCodesPool[keyCode] !== undefined) {
     let answerId = poll.testA[keyCode];
     let element = document.getElementById(answerId);
-    console.log(element);
     chooseAnAnswer(answerId);
+  } else if (isInArray(keyCode, confirmBtns)) {                          // нажат 0 - как ДАЛЕЕ
+    confirmAndNextQuestion();
+  } else if (isInArray(keyCode, serviceBtns)) {
+    if (keyCode === 37) {
+      moveToPreviousQuestion();
+    } else if (keyCode === 39) {
+      moveToNextQuestion();
+    } else {
+      return;
+    }
+  } else {
+    beep();
   }
-
 }
 
 function chooseAnAnswer(answerId) {
-  
+
+}
+
+function markElement(element) {
+
+}
+
+function unmarkElement(element) {
+
 }
 
 function whatWeDoNext(event) {
