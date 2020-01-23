@@ -249,6 +249,7 @@ class Poll {
     let currentQuestion = questions[questionNumber];
     if (currentQuestion.visible === '1') {
       let limit = currentQuestion.limit;
+
       if (limit > 1) {
         $('.panel').removeClass('panel-primary').addClass('panel-danger');
       } else {

@@ -58,11 +58,40 @@ function driveIn(config) {
   pollUser = new PollUser(settings);
   poll = new Worksheet(config);
   $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
-  $('.total-questions').append(poll.totalNumberOfQuestions);
-  poll.goToQuestion(0);
+  poll.goToQuestionByNumber(0);
   NProgress.done();
 }
 
+function keycodeAbstractionLayer(event) {
+  let keyCode = event.originalEvent.keyCode;
+  if (keyCode === 37) {
+    moveToPreviousQuestion();
+  } else if (keyCode === 39) {
+    moveToNextQuestion();
+  } else {
+    return;
+  }
+/*
+  if (poll.keyCodesPool[keyCode] !== undefined) {
+    let answerId = poll.testA[keyCode];
+    let element = document.getElementById(answerId);
+    chooseAnAnswer(answerId);
+  } else if (isInArray(keyCode, confirmBtns)) {                          // нажат 0 - как ДАЛЕЕ
+    confirmAndNextQuestion();
+  } else if (isInArray(keyCode, serviceBtns)) {
+    if (keyCode === 37) {
+      moveToPreviousQuestion();
+    } else if (keyCode === 39) {
+      moveToNextQuestion();
+    } else {
+      return;
+    }
+  } else {
+    beep();
+  }
+  */
+}
+/*
 function keycodeAbstractionLayer(event) {
   let keyCode = event.originalEvent.keyCode;
   if (poll.keyCodesPool[keyCode] !== undefined) {
@@ -83,6 +112,7 @@ function keycodeAbstractionLayer(event) {
     beep();
   }
 }
+*/
 
 function chooseAnAnswer(answerId) {
 
