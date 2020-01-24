@@ -146,10 +146,9 @@ class Worksheet {
     // let numberOfAnswers = ;
 
     answers.forEach(function (answer, index) {
-      let answerWrap = renderAnswer(answer, index + 1);
+      let answerWrap = renderAnswer(answer, index);
       questionBody.appendChild(answerWrap);
     });
-
 
     // if (question.numberOfAnswers < 31) {
     //   answers.forEach(function (answer, index) {
@@ -262,17 +261,16 @@ function Answer(config) {
   this.unique = config.unique;
 }
 
-
 function renderAnswer(answer, index) {
   let answerTemplate = document.createElement('p');
   let strong = document.createElement('strong');
   answerTemplate.dataset.id = answer.id;
   answerTemplate.dataset.mark = 0;
   // answerTemplate.dataset.key = keyCodesRev[index][0];
-
-  answerTemplate.id = answer.id;
+    
+  answerTemplate.id = keyCodesRev[index + 1][0];
   answerTemplate.className = 'answer-p';
-  strong.innerHTML = index + '. ';
+  strong.innerHTML = codes[index] + '. ';
   answerTemplate.appendChild(strong);
   answerTemplate.append(answer.title);
   return answerTemplate;

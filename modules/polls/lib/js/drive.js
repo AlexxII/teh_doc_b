@@ -62,20 +62,17 @@ function driveIn(config) {
   NProgress.done();
 }
 
+function cast(keyCode) {
+  if (castCodes[keyCode] !== undefined) return castCodes[keyCode];
+  return keyCode;
+}
+
 function keycodeAbstractionLayer(event) {
   let keyCode = event.originalEvent.keyCode;
-  if (keyCode === 37) {
-    moveToPreviousQuestion();
-  } else if (keyCode === 39) {
-    moveToNextQuestion();
-  } else {
-    return;
-  }
-/*
-  if (poll.keyCodesPool[keyCode] !== undefined) {
-    let answerId = poll.testA[keyCode];
-    let element = document.getElementById(answerId);
-    chooseAnAnswer(answerId);
+  keyCode = cast(keyCode);                                               // приведение к одому коду
+  if (document.getElementById(keyCode)) {
+    let element = document.getElementById(keyCode);
+    chooseAnAnswer(element);
   } else if (isInArray(keyCode, confirmBtns)) {                          // нажат 0 - как ДАЛЕЕ
     confirmAndNextQuestion();
   } else if (isInArray(keyCode, serviceBtns)) {
@@ -89,8 +86,8 @@ function keycodeAbstractionLayer(event) {
   } else {
     beep();
   }
-  */
 }
+
 /*
 function keycodeAbstractionLayer(event) {
   let keyCode = event.originalEvent.keyCode;
@@ -114,8 +111,8 @@ function keycodeAbstractionLayer(event) {
 }
 */
 
-function chooseAnAnswer(answerId) {
-
+function chooseAnAnswer(element) {
+  console.log(element);
 }
 
 function markElement(element) {
@@ -154,7 +151,6 @@ function clickOnTheAnswer(event) {
 function confirmAnswerEx(id) {
 
 }
-
 
 
 function confirmAnswer(keyCode) {
