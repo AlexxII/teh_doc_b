@@ -57,6 +57,9 @@ function driveIn(config) {
   };
   pollUser = new PollUser(settings);
   poll = new Worksheet(config);
+
+  // console.log(poll);
+
   $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
   poll.goToQuestionByNumber(0);
   NProgress.done();
@@ -88,70 +91,56 @@ function keycodeAbstractionLayer(event) {
   }
 }
 
-/*
-function keycodeAbstractionLayer(event) {
-  let keyCode = event.originalEvent.keyCode;
-  if (poll.keyCodesPool[keyCode] !== undefined) {
-    let answerId = poll.testA[keyCode];
-    let element = document.getElementById(answerId);
-    chooseAnAnswer(answerId);
-  } else if (isInArray(keyCode, confirmBtns)) {                          // нажат 0 - как ДАЛЕЕ
-    confirmAndNextQuestion();
-  } else if (isInArray(keyCode, serviceBtns)) {
-    if (keyCode === 37) {
-      moveToPreviousQuestion();
-    } else if (keyCode === 39) {
-      moveToNextQuestion();
-    } else {
-      return;
-    }
-  } else {
-    beep();
-  }
-}
-*/
-
 function chooseAnAnswer(element) {
-  console.log(element);
+  let questionId = poll.getCurrentQuestion().id;
+  let answerId = element.dataset.id;
+  let result = poll.respondent.getResultsOfQuestion(questionId);
+  let limit = poll.getCurrentQuestion().limit;
+
+  if (result.answers[answerId] !== undefined) {
+    unmarkElement(element);
+    testDesave(result, answerId);
+  } else {
+    // result.incEntries;
+    result.entires += 1;
+    markElement(element);
+    testSave(result, answerId);
+    if (result.entires >= limit) {
+      setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
+    }
+  }
+  // console.log(result);
+}
+
+function testSave(result, id) {
+  result.answers[id] = 1;
+}
+
+function testDesave(result, id) {
+  // console.log(result.answers[id]);
+  delete result.answers[id];
 }
 
 function markElement(element) {
+  element.style.cssText = 'background-color: ' + pollUser.markColor;
+  element.dataset.mark = 1;
 
 }
 
 function unmarkElement(element) {
+  element.style.cssText = 'background-color: #fff';
+  element.dataset.mark = 0;
 
-}
-
-function whatWeDoNext(event) {
-  let keyCode = event.originalEvent.keyCode;
-  if (poll.keyCodesPool[keyCode] !== undefined) {
-    confirmAnswer(keyCode);
-  } else if (isInArray(keyCode, confirmBtns)) {                          // нажат 0 - как ДАЛЕЕ
-    confirmAndNextQuestion();
-  } else if (isInArray(keyCode, serviceBtns)) {
-    if (keyCode === 37) {
-      moveToPreviousQuestion();
-    } else if (keyCode === 39) {
-      moveToNextQuestion();
-    } else {
-      return;
-    }
-  } else {
-    beep();
-  }
 }
 
 function clickOnTheAnswer(event) {
-  let answerId = event.target.dataset.id;
-  confirmAnswerEx(answerId);
+  let element = event.target;
+  chooseAnAnswer(element);
 }
-
 
 function confirmAnswerEx(id) {
 
 }
-
 
 function confirmAnswer(keyCode) {
   // save
@@ -198,11 +187,15 @@ function confirmAnswer(keyCode) {
 function confirmAndNextQuestion() {
   // save
   // next if not empty or another IF
+  poll.nextQuestion(); /*
+
   if (poll.entriesNumber > 0) {
     poll.nextQuestion();
   } else {
     beep();
   }
+
+  */
 }
 
 function moveToPreviousQuestion() {

@@ -61,6 +61,10 @@
   .question-data {
     position: relative;
   }
+
+  .mark {
+    background-color: #fff;
+  }
 </style>
 <div class="drive-in-wrap">
   <div class="col-lg-8 col-ml-8 drive-in">
