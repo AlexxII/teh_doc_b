@@ -91,23 +91,22 @@ function keycodeAbstractionLayer(event) {
 
 function chooseAnAnswer(element) {
   let questionId = poll.getCurrentQuestion().id;
-  let answerId = element.dataset.id;
-  let result = poll.respondent.getResultsOfQuestion(questionId);
+  let question = poll.getCurrentQuestion();
+  let respondentResult = poll.respondent.getRespondentResultsOfQuestion(questionId);
+  let selectedAnswerId = element.dataset.id;
+  let selectedAnswerObject = question.getAnswer(selectedAnswerId);
   let limit = poll.getCurrentQuestion().limit;
-  if (result.answers[answerId] !== undefined) {
-    result.entires -= 1;
-    unmarkElement(element);
-    testDesave(result, answerId);
+
+  if (respondentResult.respondentAnswers[selectedAnswerId] !== undefined) {
+    selectedAnswerObject.unmark();
+    respondentResult.deleteData(selectedAnswerId);
   } else {
-    // result.incEntries;
-    result.entires += 1;
-    markElement(element);
-    testSave(result, answerId);
-    if (result.entires >= limit) {
+    selectedAnswerObject.mark();
+    respondentResult.saveData(selectedAnswerId);
+    if (respondentResult.entries >= limit) {
       setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
     }
   }
-  console.log(result);
 }
 
 function testSave(result, id) {

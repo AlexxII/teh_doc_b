@@ -5,6 +5,7 @@ class Question {
     this.titleEx = config.title_ex;
     this.order = +config.order;
     this.limit = config.limit;
+    this.required = 1;                                       // вопрос обязателен
     this.answers = config.visibleAnswers;                    // пул ответов (объектов)
     this.numberOfAnswers = config.visibleAnswers;
   }
@@ -32,7 +33,15 @@ class Question {
   }
 
   getAnswer(id) {
-    return this.answers[id];
+    let answers = this.answers;
+    let result;
+    for (let key in answers) {
+      if (answers[key].id === id) {
+        result = answers[key];
+        break;
+      }
+    }
+    return result;
   }
 
   sortByOrder(arr) {
@@ -60,21 +69,26 @@ function Answer(config) {
     strong.innerHTML = codes[index][0] + '. ';
     answerTemplate.appendChild(strong);
     answerTemplate.append(this.title);
-    return answerTemplate;
-  }
+    this.visualElement = answerTemplate;
+  };
+
+  this.restoreResult = function (result) {
+    let respondentAnswers = result.respondentAnswers;
+    if (respondentAnswers[this.id] !== undefined) {
+      this.mark();
+    }
+  };
+
+  this.mark = function () {
+    let element = this.visualElement;
+    element.style.cssText = 'background-color: ' + pollUser.markColor;
+    element.dataset.mark = 1;
+  };
+
+  this.unmark = function () {
+    let element = this.visualElement;
+    element.style.cssText = 'background-color: #fff';
+    element.dataset.mark = 0;
+  };
 
 }
-/*
-function renderAnswer(answer, index) {
-  let answerTemplate = document.createElement('p');
-  let strong = document.createElement('strong');
-  answerTemplate.dataset.id = answer.id;
-  answerTemplate.dataset.mark = 0;
-  answerTemplate.id = codes[index][1];
-  answerTemplate.className = 'answer-p';
-  strong.innerHTML = codes[index][0] + '. ';
-  answerTemplate.appendChild(strong);
-  answerTemplate.append(answer.title);
-  return answerTemplate;
-}
-*/

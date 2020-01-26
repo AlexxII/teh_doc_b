@@ -3,7 +3,7 @@ class Respondent {
     this._id = function () {
       return 1343462535
     };
-    this.startTime = new Date();
+    this.startTime = 0;
     this.endTime = 0;
     this.user = 'User';
     this.complete = 0;
@@ -13,7 +13,8 @@ class Respondent {
   set resultPool(questions) {
     let out = {};
     questions.forEach(function (question, index) {
-      out[question.id] = new result();
+      let required = question.required;
+      out[question.id] = new result(required);
     });
     this._resultPool = out;
   }
@@ -22,17 +23,36 @@ class Respondent {
     return this._resultPool;
   }
 
-  getResultsOfQuestion(id) {
+  getRespondentResultsOfQuestion(id) {
     return this.resultPool[id];
+  }
+
+  startCount() {
+    this.startTime = new Date();
   }
 
 }
 
-function result() {
+function result(required) {
   this.typeDuration = 0;
   this.errors = 0;
   this.repair = 0;
-  this.entires = 0;
-  this.answers = {}
+  this.entries = 0;
+  this.required = required;
+  this.respondentAnswers = {};
+
+  this.saveData = function (data) {
+    this.respondentAnswers[data.id] = 1;
+    this.entries += 1;
+  };
+
+  this.deleteData = function (data) {
+    delete this.respondentAnswers[data.id];
+    this.entries -= 1;
+  };
+
 }
 
+function f() {
+
+}

@@ -143,36 +143,27 @@ class Worksheet {
     let answers = question.answers;
     let answersCounter = 1;
     let maxCodesLength = codes.length;                                  // максимальное кол-во кодов !!
+    let result = this.respondent.getRespondentResultsOfQuestion(question.id);
     if (question.numberOfAnswers < maxCodesLength) {
+      /*
+            for (let key in answers) {
+              let answer = answers[key];
+              answer.renderAnswer();
+              answer.restoreResult(result);
+              questionBody.appendChild(answer.visualElement);
+            }
+      */
       answers.forEach(function (answer, index) {
-        let answerWrap = answer.renderAnswer(answer, index);
-        // restoreAnswer(answer, answerWrap);
-        questionBody.appendChild(answerWrap);
+        answer.renderAnswer();
+        answer.restoreResult(result);
+        questionBody.appendChild(answer.visualElement);
       });
     } else {
       console.log(questionBody);
     }
     mainContent.appendChild(template);
+    result.startCount;
     // this.restoreAnswers(question.id);
-  }
-
-  restoreAnswers(answer, element) {
-    console.log(answer);
-    console.log(element);
-    let results = this.respondent.getResultsOfQuestion(id);
-    console.log(results);
-    // if (results)
-    // for (let key in results) {
-    //
-    // }
-  }
-
-  markElement() {
-
-  }
-
-  unmarkElement() {
-
   }
 
   setThemeColor(template, limit) {
