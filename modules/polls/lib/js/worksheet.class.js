@@ -145,13 +145,34 @@ class Worksheet {
     let maxCodesLength = codes.length;                                  // максимальное кол-во кодов !!
     if (question.numberOfAnswers < maxCodesLength) {
       answers.forEach(function (answer, index) {
-        let answerWrap = renderAnswer(answer, index);
+        let answerWrap = answer.renderAnswer(answer, index);
+        // restoreAnswer(answer, answerWrap);
         questionBody.appendChild(answerWrap);
       });
     } else {
       console.log(questionBody);
     }
     mainContent.appendChild(template);
+    // this.restoreAnswers(question.id);
+  }
+
+  restoreAnswers(answer, element) {
+    console.log(answer);
+    console.log(element);
+    let results = this.respondent.getResultsOfQuestion(id);
+    console.log(results);
+    // if (results)
+    // for (let key in results) {
+    //
+    // }
+  }
+
+  markElement() {
+
+  }
+
+  unmarkElement() {
+
   }
 
   setThemeColor(template, limit) {

@@ -51,15 +51,13 @@ function loadPollData(id, callback) {
 function driveIn(config) {
   // шаблон - будет запрашиваться у БД
   let settings = {
-    id: 123456789,
+    id: 123456789,    // user id
     stepDelay: 200,
     markColor: '#e0e0e0'
   };
   pollUser = new PollUser(settings);
   poll = new Worksheet(config);
-
   // console.log(poll);
-
   $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
   poll.goToQuestionByNumber(0);
   NProgress.done();
@@ -96,8 +94,8 @@ function chooseAnAnswer(element) {
   let answerId = element.dataset.id;
   let result = poll.respondent.getResultsOfQuestion(questionId);
   let limit = poll.getCurrentQuestion().limit;
-
   if (result.answers[answerId] !== undefined) {
+    result.entires -= 1;
     unmarkElement(element);
     testDesave(result, answerId);
   } else {
@@ -109,7 +107,7 @@ function chooseAnAnswer(element) {
       setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
     }
   }
-  // console.log(result);
+  console.log(result);
 }
 
 function testSave(result, id) {
@@ -124,13 +122,11 @@ function testDesave(result, id) {
 function markElement(element) {
   element.style.cssText = 'background-color: ' + pollUser.markColor;
   element.dataset.mark = 1;
-
 }
 
 function unmarkElement(element) {
   element.style.cssText = 'background-color: #fff';
   element.dataset.mark = 0;
-
 }
 
 function clickOnTheAnswer(event) {

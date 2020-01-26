@@ -48,8 +48,23 @@ function Answer(config) {
   this.newOrder = +config.order;
   this.oldOrder = +config.order;
   this.unique = config.unique;
-}
 
+  this.renderAnswer = function () {
+    let answerTemplate = document.createElement('p');
+    let strong = document.createElement('strong');
+    let index = this.oldOrder;
+    answerTemplate.dataset.id = this.id;
+    answerTemplate.dataset.mark = 0;
+    answerTemplate.id = codes[index][1];
+    answerTemplate.className = 'answer-p';
+    strong.innerHTML = codes[index][0] + '. ';
+    answerTemplate.appendChild(strong);
+    answerTemplate.append(this.title);
+    return answerTemplate;
+  }
+
+}
+/*
 function renderAnswer(answer, index) {
   let answerTemplate = document.createElement('p');
   let strong = document.createElement('strong');
@@ -62,3 +77,4 @@ function renderAnswer(answer, index) {
   answerTemplate.append(answer.title);
   return answerTemplate;
 }
+*/
