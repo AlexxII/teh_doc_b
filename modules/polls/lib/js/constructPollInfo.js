@@ -23,7 +23,7 @@ class constructPollInfo {
   set questions(tempQuestions) {
     let tempQuestionsArray = {};
     tempQuestions.forEach(function (val, index) {
-      tempQuestionsArray[val.id] = new Question(val);
+      tempQuestionsArray[val.id] = new CQuestion(val);
     });
     this._questions = tempQuestionsArray;
   }
@@ -55,8 +55,7 @@ class constructPollInfo {
     arr.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
   }
 }
-/*
-class Question {
+class CQuestion {
   constructor(config) {
     this.id = config.id;
     this.title = config.title;
@@ -71,7 +70,7 @@ class Question {
   set answers(answersPool) {
     let tempArray = {};
     answersPool.forEach(function (val, index) {
-      tempArray[val.id] = new Answer(val);
+      tempArray[val.id] = new CAnswer(val);
     });
     this._answers = tempArray;
   }
@@ -100,8 +99,7 @@ class Question {
   }
 }
 
-/*
-function Answer(config) {
+function CAnswer(config) {
   this.id = config.id;
   this.title = config.title;
   this.titleEx = config.title_ex;

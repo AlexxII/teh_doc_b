@@ -3,6 +3,11 @@ const userInterface = {
   answeredColor: '#e0e0e0'                                              // цвет выделение при ответе
 };
 
+const TYPE_COMMON_ANSWER = 1;
+const TYPE_FREE_ANSWER = 2;
+const TYPE_DIFFICULT_ANSWER = 3;
+
+
 // начало вколачивания опроса
 $(document).on('click', '.poll-in', function (e) {
   NProgress.start();
@@ -12,17 +17,15 @@ $(document).on('click', '.poll-in', function (e) {
   loadExContentEx(url, () => loadPollData(pollId, driveIn));
   // Основной обработчик запросов
   // $('body').bind('keydown', whatWeDoNext);
-  $('body').bind('keydown', keycodeAbstractionLayer);
+  $('body').bind('keyup', keycodeAbstractionLayer);
 });
 
-// снятие фокуса с inputa -> включает стандартную логику
-$(document).on('blur', '.free-answer', function () {
-  $('body').bind('keydown', whatWeDoNext);
-})
-// установка фокуса в input -> выключает стандартную логику
-  .on('focus', '.free-answer', function () {
-    $('body').unbind();
-  });
+$(document).on('focus', '.free-answer', function () {
+  $('body').unbind();
+}).on('blur', '.free-answer', function (event) {
+  $('body').bind('keyup', keycodeAbstractionLayer);
+  saveFreeAnswer(this);
+});
 
 $(document).on('click', '.answer-p', clickOnTheAnswer)
   .on('keydown', '.previous-btn', moveToPreviousQuestion)
@@ -56,10 +59,12 @@ function driveIn(config) {
     markColor: '#e0e0e0'
   };
   pollUser = new PollUser(settings);
+  // console.log(config);
   poll = new Worksheet(config);
   // console.log(poll);
   $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
   poll.goToQuestionByNumber(0);
+  poll.respondent.startCount();
   NProgress.done();
 }
 
@@ -90,53 +95,167 @@ function keycodeAbstractionLayer(event) {
 }
 
 function chooseAnAnswer(element) {
-  let questionId = poll.getCurrentQuestion().id;
   let question = poll.getCurrentQuestion();
-  let respondentResult = poll.respondent.getRespondentResultsOfQuestion(questionId);
+  let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
+  let results = respondentResult.respondentAnswers;
   let selectedAnswerId = element.dataset.id;
   let selectedAnswerObject = question.getAnswer(selectedAnswerId);
-  let limit = poll.getCurrentQuestion().limit;
+  let data = {
+    id: selectedAnswerId,
+    extData: null
+  };
+
+  if (respondentResult.entries === +question.limit) {
+    if (results[selectedAnswerId] === undefined){
+      beep();
+      return;
+    }
+  }
+
+  if (+selectedAnswerObject.unique === 1) {
+    if (respondentResult.entries !== 0 && results[selectedAnswerId] === undefined) {
+      beep();
+      return;
+    }
+  }
+
+  if ()
+  /*
+  // проверка уникальности ответов !!!!!!
+  if (respondentResult.entries !== 0 && +selectedAnswerObject.unique === 1) {
+    beep();
+    return;
+  }
+*/
+  if (selectedAnswerObject.type === TYPE_FREE_ANSWER) {
+    if (selectedAnswerObject.input === undefined) {
+      selectedAnswerObject.mark();
+      selectedAnswerObject.insertInput();
+    } else if (selectedAnswerObject.input.dataset.show == 0) {
+      selectedAnswerObject.mark();
+      selectedAnswerObject.showInput();
+    } else {
+      selectedAnswerObject.hideInput();
+      selectedAnswerObject.unmark();
+      respondentResult.deleteData(data);
+    }
+    return;
+  }
 
   if (respondentResult.respondentAnswers[selectedAnswerId] !== undefined) {
     selectedAnswerObject.unmark();
-    respondentResult.deleteData(selectedAnswerId);
+    respondentResult.deleteData(data);
   } else {
     selectedAnswerObject.mark();
-    respondentResult.saveData(selectedAnswerId);
-    if (respondentResult.entries >= limit) {
+    respondentResult.saveData(data);
+    if (respondentResult.entries >= question.limit) {
       setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
     }
   }
 }
 
-function testSave(result, id) {
-  result.answers[id] = 1;
+function saveFreeAnswer(input) {
+  let question = poll.getCurrentQuestion();
+  let selectedAnswerId = input.dataset.id;
+  let selectedAnswerObject = question.getAnswer(selectedAnswerId);
+  let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
+  let data = {
+    id: 0,
+    extData: null
+  };
+  if (input.value) {
+    data.id = selectedAnswerId;
+    data.extData = input.value;
+    respondentResult.saveData(data);
+    if (respondentResult.entries >= question.limit) {
+      setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
+    }
+  } else {
+    selectedAnswerObject.hideInput();
+    selectedAnswerObject.unmark();
+    respondentResult.deleteData(data);
+  }
 }
 
-function testDesave(result, id) {
-  // console.log(result.answers[id]);
-  delete result.answers[id];
-}
-
-function markElement(element) {
-  element.style.cssText = 'background-color: ' + pollUser.markColor;
-  element.dataset.mark = 1;
-}
-
-function unmarkElement(element) {
-  element.style.cssText = 'background-color: #fff';
-  element.dataset.mark = 0;
+function nextRespondent() {
+  poll.respondent.stopCount();
 }
 
 function clickOnTheAnswer(event) {
   let element = event.target;
+  if (element.classList.contains('free-answer')) return;
   chooseAnAnswer(element);
 }
 
-function confirmAnswerEx(id) {
-
+function confirmAndNextQuestion() {
+  let question = poll.getCurrentQuestion();
+  let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
+  let limit = question.limit;
+  if (respondentResult.entries >= 1) {
+    if (poll.isLastQuestion()) return;
+    poll.nextQuestion();
+  } else {
+    beep();
+  }
 }
 
+function moveToPreviousQuestion() {
+  if (poll.isFirstQuestion()) return;
+  poll.previousQuestion();
+}
+
+function moveToNextQuestion() {
+  if (poll.isLastQuestion()) return;
+  poll.nextQuestion();
+}
+
+function respondentFinish() {
+  let finishNotice = '<p>КОНЕЦ!!!</p>';
+  $('.drive-content .panel').append(finishNotice);
+}
+
+function goToQuestion(event) {
+  let option = event.currentTarget.selectedOptions[0];
+  let questionNum = $(option).data('key');
+  if (questionNum === -1) {
+    poll.goToLastQuestion();
+    return;
+  }
+  poll.goToQuestionByNumber(questionNum);
+}
+
+// =================== вспомогательные функции =====================
+
+function isInArray(value, array) {
+  return array.indexOf(value) > -1;
+}
+
+function beep(config) {
+  let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  config = Object.assign({
+    volume: 25 / 100,
+    frequency: 3020,
+    duration: 150,
+    type: 3
+  }, config);
+
+  let oscillator = audioCtx.createOscillator();
+  let gainNode = audioCtx.createGain();
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  gainNode.gain.value = config.volume;
+  oscillator.frequency.value = config.frequency;
+  oscillator.type = config.type;
+  oscillator.start();
+  setTimeout(
+    function () {
+      oscillator.stop();
+    },
+    config.duration
+  );
+}
+
+/*
 function confirmAnswer(keyCode) {
   // save
   // next question if NO another xIF
@@ -178,73 +297,4 @@ function confirmAnswer(keyCode) {
     }
   }
 }
-
-function confirmAndNextQuestion() {
-  // save
-  // next if not empty or another IF
-  poll.nextQuestion(); /*
-
-  if (poll.entriesNumber > 0) {
-    poll.nextQuestion();
-  } else {
-    beep();
-  }
-
-  */
-}
-
-function moveToPreviousQuestion() {
-  if (poll.isFirstQuestion()) return;
-  poll.previousQuestion();
-}
-
-function moveToNextQuestion() {
-  if (poll.isLastQuestion()) return;
-  poll.nextQuestion();
-}
-
-function respondentFinish() {
-  let finishNotice = '<p>КОНЕЦ!!!</p>';
-  $('.drive-content .panel').append(finishNotice);
-}
-
-function goToQuestion(event) {
-  let option = event.currentTarget.selectedOptions[0];
-  let questionNum = $(option).data('key');
-  if (questionNum === -1) {
-    poll.goToLastQuestion();
-    return;
-  }
-  poll.goToQuestion(questionNum);
-}
-
-// =================== вспомогательные функции =====================
-
-function isInArray(value, array) {
-  return array.indexOf(value) > -1;
-}
-
-function beep(config) {
-  let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  config = Object.assign({
-    volume: 25 / 100,
-    frequency: 3020,
-    duration: 150,
-    type: 3
-  }, config);
-
-  let oscillator = audioCtx.createOscillator();
-  let gainNode = audioCtx.createGain();
-  oscillator.connect(gainNode);
-  gainNode.connect(audioCtx.destination);
-  gainNode.gain.value = config.volume;
-  oscillator.frequency.value = config.frequency;
-  oscillator.type = config.type;
-  oscillator.start();
-  setTimeout(
-    function () {
-      oscillator.stop();
-    },
-    config.duration
-  );
-}
+*/

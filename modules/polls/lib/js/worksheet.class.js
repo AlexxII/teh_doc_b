@@ -34,7 +34,7 @@ class Worksheet {
   }
 
   set currentQuestionNum(num) {
-    this._currentQuestionNum = 0;
+    this._currentQuestionNum = num;
   }
 
   get currentQuestionNum() {
@@ -94,15 +94,13 @@ class Worksheet {
   }
 
   incCurrentQuestionNum() {
-    this._currentQuestionNum += 1;
+    let current = this.currentQuestionNum;
+    this.currentQuestionNum = ++current;
   }
 
   decCurrentQuestionNum() {
-    this._currentQuestionNum -= 1;
-  }
-
-  getQuestionById(id) {
-
+    let current = this.currentQuestionNum;
+    this.currentQuestionNum = --current;
   }
 
   goToLastQuestion() {
@@ -110,12 +108,8 @@ class Worksheet {
   }
 
   goToQuestionByNumber(questionNumber) {
-    // let question = this.questions[questionNumber];
+    this.currentQuestionNum = questionNumber;
     this.renderQuestion(questionNumber);
-  }
-
-  goToQuestionById(id) {
-
   }
 
   verifyPollConfigStructure(val) {
@@ -198,7 +192,6 @@ class Worksheet {
     let countDiv = document.createElement('div');
     countDiv.className = 'total-questions';
     countDiv.innerText = 'Всего:';
-
     template.appendChild(header);
     template.appendChild(body);
     template.appendChild(footer);

@@ -57,6 +57,7 @@ function Answer(config) {
   this.newOrder = +config.order;
   this.oldOrder = +config.order;
   this.unique = config.unique;
+  this.type = +config.input_type;
 
   this.renderAnswer = function () {
     let answerTemplate = document.createElement('p');
@@ -75,6 +76,10 @@ function Answer(config) {
   this.restoreResult = function (result) {
     let respondentAnswers = result.respondentAnswers;
     if (respondentAnswers[this.id] !== undefined) {
+      if (this.type === TYPE_FREE_ANSWER) {
+        let savedData = respondentAnswers[this.id];
+        this.showInput();
+      }
       this.mark();
     }
   };
@@ -90,5 +95,33 @@ function Answer(config) {
     element.style.cssText = 'background-color: #fff';
     element.dataset.mark = 0;
   };
+  
+  this.insertInput = function () {
+    let input = document.createElement('input');
+    input.className = 'form-control free-answer';
+    input.dataset.id = this.id;
+    let span = document.createElement('span');
+    span.className = 'free-answer-wrap';
+    let label = document.createElement('label');
+    label.className = 'w3-label-under';
+    let text = 'Введите ответ.';
+    let textLabel = document.createTextNode(text);
+    label.appendChild(textLabel);
+    span.appendChild(input);
+    span.appendChild(label);
+    span.dataset.show = 1;
+    this.input = span;
+    this.visualElement.append(span);
+  };
+
+  this.showInput = function () {
+    this.input.dataset.show = 1;
+    this.visualElement.append(this.input);
+  };
+
+  this.hideInput = function () {
+    this.input.dataset.show = 0;
+    this.input.remove();
+  }
 
 }

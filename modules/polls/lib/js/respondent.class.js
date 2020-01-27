@@ -31,6 +31,14 @@ class Respondent {
     this.startTime = new Date();
   }
 
+  stopCount() {
+    this.endTime = new Date();
+  }
+
+  checkResults() {
+
+  }
+
 }
 
 function result(required) {
@@ -39,20 +47,38 @@ function result(required) {
   this.repair = 0;
   this.entries = 0;
   this.required = required;
+  this.unique = 0;                                            // в результате есть уникальный ответ
   this.respondentAnswers = {};
 
   this.saveData = function (data) {
-    this.respondentAnswers[data.id] = 1;
+    let aData = new answerData(data);
+    this.respondentAnswers[data.id] = aData;
     this.entries += 1;
   };
 
   this.deleteData = function (data) {
+    let answers = this.respondentAnswers[data.id];
     delete this.respondentAnswers[data.id];
     this.entries -= 1;
   };
 
+/*
+  this.getRespondentAnswers  = function (id) {
+    let rAnswers = this.respondentAnswers;
+    let result;
+    for (let key in rAnswers) {
+      if (rAnswers[key].id === id) {
+        result = rAnswers[key];
+        break;
+      }
+    }
+    return result;
+  }
+*/
+
 }
 
-function f() {
-
+function answerData(data) {
+  this.id = data.id;
+  this.extData = data.extData;
 }
