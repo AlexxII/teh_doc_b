@@ -105,13 +105,15 @@ function chooseAnAnswer(element) {
     extData: null
   };
 
+  //проверка превышения лимита
   if (respondentResult.entries === +question.limit) {
-    if (results[selectedAnswerId] === undefined){
+    if (results[selectedAnswerId] === undefined) {
       beep();
       return;
     }
   }
 
+  //проверка уникальности - не совсем корректно
   if (+selectedAnswerObject.unique === 1) {
     if (respondentResult.entries !== 0 && results[selectedAnswerId] === undefined) {
       beep();
@@ -119,7 +121,6 @@ function chooseAnAnswer(element) {
     }
   }
 
-  if ()
   /*
   // проверка уникальности ответов !!!!!!
   if (respondentResult.entries !== 0 && +selectedAnswerObject.unique === 1) {
