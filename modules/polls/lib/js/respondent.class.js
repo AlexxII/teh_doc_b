@@ -57,9 +57,12 @@ function result(required) {
   };
 
   this.deleteData = function (data) {
-    let answers = this.respondentAnswers[data.id];
-    delete this.respondentAnswers[data.id];
-    this.entries -= 1;
+    if (this.respondentAnswers[data.id] !== undefined) {
+      console.log(data.id);
+
+      delete this.respondentAnswers[data.id];
+      this.entries -= 1;
+    }
   };
 
 /*

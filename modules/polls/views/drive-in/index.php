@@ -114,7 +114,13 @@
       </select>
     </div>
     <div>
-      <select class="js-example-data-array" style="width: 100px"></select>
+      <select class="js-example-data-array-ex" style="width: 100px">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
     </div>
     <!--    <div class="alert alert-warning" style="margin-bottom: 10px">
           <a href="#" class="close" data-dismiss="alert">&times;</a>

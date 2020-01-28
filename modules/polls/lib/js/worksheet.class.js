@@ -136,7 +136,7 @@ class Worksheet {
     let questionBody = template.querySelector('#drive-body');
     let answers = question.answers;
     let answersCounter = 1;
-    let maxCodesLength = codes.length;                                  // максимальное кол-во кодов !!
+    let maxCodesLength = codes.length;                                          // максимальное кол-во кодов клавиатуры!!
     let result = this.respondent.getRespondentResultsOfQuestion(question.id);
     if (question.numberOfAnswers < maxCodesLength) {
       /*
@@ -153,11 +153,24 @@ class Worksheet {
         questionBody.appendChild(answer.visualElement);
       });
     } else {
-      console.log(questionBody);
+      let select = question.renderSelect();
+      questionBody.appendChild(select);
+      setTimeout(() => this.loadScript(), 100);                                //TODO  Очеень слабое место!!!!!
+      question.restoreSelectResult(result);
     }
     mainContent.appendChild(template);
     result.startCount;
-    // this.restoreAnswers(question.id);
+  }
+
+  loadScript() {
+    let select2Script = document.createElement('script');
+    let text = '$(".js-data-array").select2({' +
+      'placeholder: "Выберите ответ"' +
+      '});';
+    let sText = document.createTextNode(text);
+    select2Script.appendChild(sText);
+    document.body.appendChild(select2Script);
+    setTimeout(() => document.body.removeChild(select2Script), 300);
   }
 
   setThemeColor(template, limit) {

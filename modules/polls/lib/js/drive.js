@@ -35,6 +35,42 @@ $(document).on('click', '.answer-p', clickOnTheAnswer)
   .on('click', '.mobile-previous-btn', moveToPreviousQuestion)
   .on('click', '.mobile-next-btn', moveToNextQuestion);
 
+/*
+$('.js-data-array').on('select2:select', function (e) {
+  console.log(1111111111);
+  $('body').unbind();
+
+});
+*/
+
+$(document).on('select2:open', '.js-data-array', select2Start)
+  .on('change', '.js-data-array', function (e) {saveSelect2Changes(e)} )
+  .on('select2:close', '.js-data-array', closeSelect2);
+
+function select2Start() {
+  $('body').unbind();
+}
+
+function saveSelect2Changes(e) {
+  let sOption = e.target.selectedOptions;
+  let question = poll.getCurrentQuestion();
+  let selectedAnswerId = sOption[0].value;
+  let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
+  let data = {
+    id: selectedAnswerId,
+    extData: null
+  };
+  data.id = selectedAnswerId;
+  respondentResult.saveData(data);
+  if (respondentResult.entries >= question.limit) {
+    setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
+  }
+}
+
+function closeSelect2() {
+  $('body').bind('keyup', keycodeAbstractionLayer);
+}
+
 function loadPollData(id, callback) {
   let url = '/polls/drive-in/get-poll-info?id=' + id;
   $.ajax({
@@ -104,7 +140,6 @@ function chooseAnAnswer(element) {
     id: selectedAnswerId,
     extData: null
   };
-
   //проверка превышения лимита
   if (respondentResult.entries === +question.limit) {
     if (results[selectedAnswerId] === undefined) {
@@ -113,31 +148,33 @@ function chooseAnAnswer(element) {
     }
   }
 
-  //проверка уникальности - не совсем корректно
-  if (+selectedAnswerObject.unique === 1) {
-    if (respondentResult.entries !== 0 && results[selectedAnswerId] === undefined) {
+  /*
+    //проверка уникальности - не совсем корректно
+    if (+selectedAnswerObject.unique === 1) {
+      if (respondentResult.entries !== 0 && results[selectedAnswerId] === undefined) {
+        beep();
+        return;
+      }
+    }
+
+    /*
+    // проверка уникальности ответов !!!!!!
+    if (respondentResult.entries !== 0 && +selectedAnswerObject.unique === 1) {
       beep();
       return;
     }
-  }
-
-  /*
-  // проверка уникальности ответов !!!!!!
-  if (respondentResult.entries !== 0 && +selectedAnswerObject.unique === 1) {
-    beep();
-    return;
-  }
-*/
+  */
   if (selectedAnswerObject.type === TYPE_FREE_ANSWER) {
-    if (selectedAnswerObject.input === undefined) {
+    if (selectedAnswerObject.inputSpan === undefined) {
       selectedAnswerObject.mark();
       selectedAnswerObject.insertInput();
-    } else if (selectedAnswerObject.input.dataset.show == 0) {
+    } else if (selectedAnswerObject.inputSpan.dataset.show == 0) {
       selectedAnswerObject.mark();
       selectedAnswerObject.showInput();
     } else {
       selectedAnswerObject.hideInput();
       selectedAnswerObject.unmark();
+      console.log(data);
       respondentResult.deleteData(data);
     }
     return;
@@ -161,7 +198,7 @@ function saveFreeAnswer(input) {
   let selectedAnswerObject = question.getAnswer(selectedAnswerId);
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
   let data = {
-    id: 0,
+    id: selectedAnswerId,
     extData: null
   };
   if (input.value) {
@@ -191,7 +228,6 @@ function clickOnTheAnswer(event) {
 function confirmAndNextQuestion() {
   let question = poll.getCurrentQuestion();
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
-  let limit = question.limit;
   if (respondentResult.entries >= 1) {
     if (poll.isLastQuestion()) return;
     poll.nextQuestion();
@@ -255,6 +291,7 @@ function beep(config) {
     config.duration
   );
 }
+
 
 /*
 function confirmAnswer(keyCode) {

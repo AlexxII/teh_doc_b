@@ -32,6 +32,43 @@ class Question {
     return this._answers;
   }
 
+  renderSelect() {
+    let selectTemplate = document.createElement('p');
+    let select = document.createElement('select');
+    select.className = 'js-data-array js-state form-control';
+    let label = document.createElement('label');
+    let labelText = document.createTextNode('Выберите ответ:');
+    label.setAttribute('for', 'js-data-array');
+    label.appendChild(labelText);
+    selectTemplate.appendChild(label);
+    selectTemplate.appendChild(select);
+    let selectData = this.prepareData();
+    selectData.forEach(function (element, key) {
+      select[key + 1] = new Option (element.text, element.id);
+    });
+    return selectTemplate;
+  }
+
+  restoreSelectResult(result) {
+    let respondentAnswers = result.respondentAnswers;
+    console.log(respondentAnswers.id);
+    // if (respondentAnswers[this.id] !== undefined) {
+    // }
+  }
+
+  // фильтрация и расстановка последовательности отображения
+  prepareData() {
+    let answers = this.answers;
+    let result = [];
+    answers.forEach(function (answer, index) {
+      let option = {};
+      option.id = answer.id;
+      option.text = answer.title;
+      result[index] = option;
+    });
+    return result;
+  }
+
   getAnswer(id) {
     let answers = this.answers;
     let result;
@@ -79,6 +116,7 @@ function Answer(config) {
       if (this.type === TYPE_FREE_ANSWER) {
         let savedData = respondentAnswers[this.id];
         this.showInput();
+        this.input.value = savedData.extData;
       }
       this.mark();
     }
@@ -95,7 +133,7 @@ function Answer(config) {
     element.style.cssText = 'background-color: #fff';
     element.dataset.mark = 0;
   };
-  
+
   this.insertInput = function () {
     let input = document.createElement('input');
     input.className = 'form-control free-answer';
@@ -110,18 +148,20 @@ function Answer(config) {
     span.appendChild(input);
     span.appendChild(label);
     span.dataset.show = 1;
-    this.input = span;
+    this.inputSpan = span;
+    this.input = input;
     this.visualElement.append(span);
   };
 
   this.showInput = function () {
-    this.input.dataset.show = 1;
-    this.visualElement.append(this.input);
+    this.inputSpan.dataset.show = 1;
+    this.input.value = '';
+    this.visualElement.append(this.inputSpan);
   };
 
   this.hideInput = function () {
-    this.input.dataset.show = 0;
-    this.input.remove();
+    this.inputSpan.dataset.show = 0;
+    this.inputSpan.remove();
   }
 
 }
