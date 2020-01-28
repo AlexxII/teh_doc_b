@@ -228,6 +228,7 @@ function clickOnTheAnswer(event) {
 function confirmAndNextQuestion() {
   let question = poll.getCurrentQuestion();
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
+  console.log(respondentResult.respondentAnswers);
   if (respondentResult.entries >= 1) {
     if (poll.isLastQuestion()) return;
     poll.nextQuestion();

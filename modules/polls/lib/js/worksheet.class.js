@@ -156,7 +156,7 @@ class Worksheet {
       let select = question.renderSelect();
       questionBody.appendChild(select);
       setTimeout(() => this.loadScript(), 100);                                //TODO  Очеень слабое место!!!!!
-      question.restoreSelectResult(result);
+      question.restoreSelectResult(result, question.selectObj);
     }
     mainContent.appendChild(template);
     result.startCount;

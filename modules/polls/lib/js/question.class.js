@@ -46,14 +46,16 @@ class Question {
     selectData.forEach(function (element, key) {
       select[key + 1] = new Option (element.text, element.id);
     });
+    this.selectObj = select;
     return selectTemplate;
   }
 
-  restoreSelectResult(result) {
+  restoreSelectResult(result, select) {
     let respondentAnswers = result.respondentAnswers;
-    console.log(respondentAnswers.id);
-    // if (respondentAnswers[this.id] !== undefined) {
-    // }
+    for (let key in respondentAnswers) {
+      $(select).val(respondentAnswers[key].id);
+      // $(select).trigger('change');
+    }
   }
 
   // фильтрация и расстановка последовательности отображения
