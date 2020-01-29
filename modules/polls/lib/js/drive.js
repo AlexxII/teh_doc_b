@@ -132,6 +132,7 @@ function keycodeAbstractionLayer(event) {
   }
 }
 
+
 function chooseAnAnswer(element) {
   let question = poll.getCurrentQuestion();
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
@@ -147,8 +148,8 @@ function chooseAnAnswer(element) {
   if (respondentResult.hasSavedData()) {
     if (selectedAnswerObject.unique === 1 || respondentResult.hasUniqueAnswers()) {
       if (!respondentResult.alreadySaved(selectedAnswerObject.id)) {
-        beep();
-        console.log(11111111);
+        let audio = new Audio('lib/chord.mp3');
+        audio.play();
         return;
       }
     }
@@ -229,7 +230,6 @@ function clickOnTheAnswer(event) {
 function confirmAndNextQuestion() {
   let question = poll.getCurrentQuestion();
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
-  console.log(respondentResult.respondentAnswers);
   if (respondentResult.entries >= 1) {
     if (poll.isLastQuestion()) return;
     poll.nextQuestion();
@@ -292,4 +292,8 @@ function beep(config) {
     },
     config.duration
   );
+}
+
+function play_single_sound() {
+  document.getElementById('audiotag1').play();
 }

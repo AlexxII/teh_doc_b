@@ -15,7 +15,6 @@ SortableJSAsset::register($this);
 Select2Asset::register($this);
 
 ?>
-
 <div class="tool-task">
   <div class="" style="position: relative">
     <div class="container-fluid" style="position: relative">
