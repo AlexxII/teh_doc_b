@@ -148,14 +148,14 @@ class Worksheet {
             }
       */
       answers.forEach(function (answer, index) {
-        answer.renderAnswer();
+        answer.renderAnswer(index);
         answer.restoreResult(result);
         questionBody.appendChild(answer.visualElement);
       });
     } else {
       let select = question.renderSelect();
       questionBody.appendChild(select);
-      setTimeout(() => this.loadScript(), 100);                                //TODO  Очеень слабое место!!!!!
+      setTimeout(() => this.loadScript(), 100);                                //TODO  Ооооочень слабое место!!!!!
       question.restoreSelectResult(result, question.selectObj);
     }
     mainContent.appendChild(template);
@@ -165,7 +165,7 @@ class Worksheet {
   loadScript() {
     let select2Script = document.createElement('script');
     let text = '$(".js-data-array").select2({' +
-      'placeholder: "Выберите ответ"' +
+      'placeholder: "Выберите ответ",' +
       '});';
     let sText = document.createTextNode(text);
     select2Script.appendChild(sText);

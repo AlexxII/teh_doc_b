@@ -3,30 +3,21 @@ const userInterface = {
   answeredColor: '#e0e0e0'                                              // цвет выделение при ответе
 };
 
+// событие клавиатуры (keyup, keydown)
+const MAIN_INPUT_TYPE = 'keydown';
+// const MAIN_INPUT_TYPE = 'keyup';
+
 const TYPE_COMMON_ANSWER = 1;
 const TYPE_FREE_ANSWER = 2;
 const TYPE_DIFFICULT_ANSWER = 3;
 
-
 // начало вколачивания опроса
-$(document).on('click', '.poll-in', function (e) {
-  NProgress.start();
-  e.preventDefault();
-  let pollId = $(e.currentTarget).data('id');
-  let url = '/polls/drive-in?id=';
-  loadExContentEx(url, () => loadPollData(pollId, driveIn));
-  // Основной обработчик запросов
-  // $('body').bind('keydown', whatWeDoNext);
-  $('body').bind('keyup', keycodeAbstractionLayer);
-});
+$(document).on('click', '.poll-in', startDrive);
 
-$(document).on('focus', '.free-answer', function () {
-  $('body').unbind();
-}).on('blur', '.free-answer', function (event) {
-  $('body').bind('keyup', keycodeAbstractionLayer);
-  saveFreeAnswer(this);
-});
+// Основной обработчик запросов
+$(document).on(MAIN_INPUT_TYPE, 'body', keycodeAbstractionLayer);
 
+// основные обработчики событий
 $(document).on('click', '.answer-p', clickOnTheAnswer)
   .on('keydown', '.previous-btn', moveToPreviousQuestion)
   .on('keydown', '.next-btn', moveToNextQuestion)
@@ -35,40 +26,24 @@ $(document).on('click', '.answer-p', clickOnTheAnswer)
   .on('click', '.mobile-previous-btn', moveToPreviousQuestion)
   .on('click', '.mobile-next-btn', moveToNextQuestion);
 
-/*
-$('.js-data-array').on('select2:select', function (e) {
-  console.log(1111111111);
+// события поля со свободными ответами
+$(document).on('focus', '.free-answer', function () {
   $('body').unbind();
-
+}).on('blur', '.free-answer', function (event) {
+  $('body').bind(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
+  saveFreeAnswer(this);
 });
-*/
 
+// события select2
 $(document).on('select2:open', '.js-data-array', select2Start)
-  .on('change', '.js-data-array', function (e) {saveSelect2Changes(e)} )
-  .on('select2:close', '.js-data-array', closeSelect2);
+  .on('change', '.js-data-array', saveSelect2Changes)
+  .on('select2:close', '.js-data-array', select2Close);
 
-function select2Start() {
-  $('body').unbind();
-}
-
-function saveSelect2Changes(e) {
-  let sOption = e.target.selectedOptions;
-  let question = poll.getCurrentQuestion();
-  let selectedAnswerId = sOption[0].value;
-  let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
-  let data = {
-    id: selectedAnswerId,
-    extData: null
-  };
-  data.id = selectedAnswerId;
-  respondentResult.saveData(data);
-  if (respondentResult.entries >= question.limit) {
-    setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
-  }
-}
-
-function closeSelect2() {
-  $('body').bind('keyup', keycodeAbstractionLayer);
+function startDrive(e) {
+  NProgress.start();
+  let pollId = $(this).data('id');
+  let url = '/polls/drive-in?id=';
+  loadExContentEx(url, () => loadPollData(pollId, driveIn));
 }
 
 function loadPollData(id, callback) {
@@ -104,6 +79,28 @@ function driveIn(config) {
   NProgress.done();
 }
 
+function select2Start() {
+  $('body').unbind();
+}
+function select2Close() {
+  $('body').bind(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
+}
+
+function saveSelect2Changes(e) {
+  let sOption = e.target.selectedOptions;
+  let question = poll.getCurrentQuestion();
+  let selectedAnswerId = sOption[0].value;
+  let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
+  let data = {
+    id: selectedAnswerId,
+    extData: null
+  };
+  data.id = selectedAnswerId;
+  respondentResult.saveData(data);
+  stepLogic(respondentResult, question);
+}
+
+// приведение кодов дополнительной клавиатуры к кодам освновной
 function cast(keyCode) {
   if (castCodes[keyCode] !== undefined) return castCodes[keyCode];
   return keyCode;
@@ -156,13 +153,6 @@ function chooseAnAnswer(element) {
         return;
       }
     }
-
-    /*
-    // проверка уникальности ответов !!!!!!
-    if (respondentResult.entries !== 0 && +selectedAnswerObject.unique === 1) {
-      beep();
-      return;
-    }
   */
   if (selectedAnswerObject.type === TYPE_FREE_ANSWER) {
     if (selectedAnswerObject.inputSpan === undefined) {
@@ -186,9 +176,13 @@ function chooseAnAnswer(element) {
   } else {
     selectedAnswerObject.mark();
     respondentResult.saveData(data);
-    if (respondentResult.entries >= question.limit) {
-      setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
-    }
+    stepLogic(respondentResult, question);
+  }
+}
+
+function stepLogic(result, question) {
+  if (result.entries >= question.limit) {
+    setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
   }
 }
 
@@ -205,9 +199,7 @@ function saveFreeAnswer(input) {
     data.id = selectedAnswerId;
     data.extData = input.value;
     respondentResult.saveData(data);
-    if (respondentResult.entries >= question.limit) {
-      setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
-    }
+    stepLogic(respondentResult, question);
   } else {
     selectedAnswerObject.hideInput();
     selectedAnswerObject.unmark();
@@ -292,48 +284,3 @@ function beep(config) {
     config.duration
   );
 }
-
-
-/*
-function confirmAnswer(keyCode) {
-  // save
-  // next question if NO another xIF
-  let codesPool = poll.keyCodesPool;
-  let answersLimit = poll.curQuestionAnswersLimit;
-  let id = codesPool[keyCode][0];
-  let code = codesPool[keyCode][1];
-  let extendedAnswer = codesPool[keyCode][2];                                         // свободный ответ
-  let type = codesPool[keyCode][3];
-  let $input = $('[data-id=' + id + ']');
-  if ($input.data('mark')) {
-    $input.data('mark', 0).css('background-color', '#fff');
-    poll.decEntries();
-    poll.deleteFromLocalDb();
-    $input.find('.free-answer-wrap').remove();
-  } else {
-    $input.data('mark', 1).css('background-color', userInterface.answeredColor);
-    poll.incEntries();
-    if (type == 2) {
-      let input = "<input class='form-control free-answer'>";
-      let span = "<span class='free-answer-wrap'>" + input +
-        "<label class='w3-label-under'>Введите ответ.</label></span>";
-      $(span).appendTo($input);
-    } else {
-      poll.saveToLocalDb(codesPool[keyCode]);
-      if (poll.entriesNumber >= answersLimit || codesPool[keyCode][4] === '1') {
-        if (poll.entriesNumber > 1) {
-          beep();
-          setTimeout(() => $input.data('mark', 0).css('background-color', '#fff'), 100);
-          return;
-        }
-        // if (curQuestionNum =! limit) {
-        // }
-        // if (curQuestionNum + 1 == total) {
-        //   respondentFinish();                                            // конец опросного листа
-        // }
-        setTimeout(() => poll.nextQuestion(), userInterface.stepDelayUsr);
-      }
-    }
-  }
-}
-*/

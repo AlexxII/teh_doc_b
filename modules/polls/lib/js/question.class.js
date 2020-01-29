@@ -98,10 +98,9 @@ function Answer(config) {
   this.unique = config.unique;
   this.type = +config.input_type;
 
-  this.renderAnswer = function () {
+  this.renderAnswer = function (index) {
     let answerTemplate = document.createElement('p');
     let strong = document.createElement('strong');
-    let index = this.oldOrder;
     answerTemplate.dataset.id = this.id;
     answerTemplate.dataset.mark = 0;
     answerTemplate.id = codes[index][1];

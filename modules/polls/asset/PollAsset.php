@@ -14,6 +14,7 @@ class PollAsset extends AssetBundle
 
   public $js = [
     'js/vars.js',
+    'js/default.js',
     'js/worksheet.class.js',
     'js/respondent.class.js',
     'js/question.class.js',
