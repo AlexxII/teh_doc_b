@@ -105,9 +105,19 @@ function Answer(config) {
     answerTemplate.dataset.mark = 0;
     answerTemplate.id = codes[index][1];
     answerTemplate.className = 'answer-p';
-    strong.innerHTML = codes[index][0] + '. ';
+    let counterNode = document.createTextNode(codes[index][0] + '. ');
+    strong.appendChild(counterNode);
     answerTemplate.appendChild(strong);
-    answerTemplate.append(this.title);
+    let titleNode = document.createTextNode(this.title);
+    answerTemplate.append(titleNode);
+    if (this.unique == 1) {
+      let uniqueNode = document.createElement('span');
+      uniqueNode.className = 'drive-unique-answer';
+      let t = '!';
+      let svg = document.createTextNode(t);
+      uniqueNode.append(svg);
+      answerTemplate.append(uniqueNode);
+    }
     this.visualElement = answerTemplate;
   };
 
