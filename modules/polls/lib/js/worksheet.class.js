@@ -174,7 +174,7 @@ class Worksheet {
   }
 
   setThemeColor(template, limit) {
-    if (limit !== '1') {
+    if (limit !== 1) {
       template.classList.remove('panel-primary');
       template.classList.add('panel-danger');
     } else {

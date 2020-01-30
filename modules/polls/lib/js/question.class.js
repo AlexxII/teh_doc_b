@@ -4,7 +4,7 @@ class Question {
     this.title = config.title;
     this.titleEx = config.title_ex;
     this.order = +config.order;
-    this.limit = config.limit;
+    this.limit = +config.limit;
     this.required = 1;                                       // вопрос обязателен
     this.answers = config.visibleAnswers;                    // пул ответов (объектов)
     this.numberOfAnswers = config.visibleAnswers;
@@ -95,7 +95,7 @@ function Answer(config) {
   this.titleEx = config.title_ex;
   this.newOrder = +config.order;
   this.oldOrder = +config.order;
-  this.unique = config.unique;
+  this.unique = +config.unique;
   this.type = +config.input_type;
 
   this.renderAnswer = function (index) {

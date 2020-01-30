@@ -1,4 +1,3 @@
-
 class constructPollInfo {
   constructor(structure) {
     if (this.verifyPollConfigStructure(structure)) {

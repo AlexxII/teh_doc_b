@@ -1,11 +1,6 @@
-const userInterface = {
-  stepDelayUsr: 200,                                                    // задержка при переходе на другой вопрос
-  answeredColor: '#e0e0e0'                                              // цвет выделение при ответе
-};
-
 // событие клавиатуры (keyup, keydown)
-const MAIN_INPUT_TYPE = 'keydown';
-// const MAIN_INPUT_TYPE = 'keyup';
+// const MAIN_INPUT_TYPE = 'keydown';
+const MAIN_INPUT_TYPE = 'keyup';
 
 const TYPE_COMMON_ANSWER = 1;
 const TYPE_FREE_ANSWER = 2;
@@ -13,9 +8,6 @@ const TYPE_DIFFICULT_ANSWER = 3;
 
 // начало вколачивания опроса
 $(document).on('click', '.poll-in', startDrive);
-
-// Основной обработчик запросов
-$(document).on(MAIN_INPUT_TYPE, 'body', keycodeAbstractionLayer);
 
 // основные обработчики событий
 $(document).on('click', '.answer-p', clickOnTheAnswer)
@@ -28,15 +20,17 @@ $(document).on('click', '.answer-p', clickOnTheAnswer)
 
 // события поля со свободными ответами
 $(document).on('focus', '.free-answer', function () {
-  $('body').unbind();
+  let body = document.body;
+  body.removeEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
 }).on('blur', '.free-answer', function (event) {
-  $('body').bind(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
+  let body = document.body;
+  body.addEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
   saveFreeAnswer(this);
 });
 
 // события select2
 $(document).on('select2:open', '.js-data-array', select2Start)
-  .on('change', '.js-data-array', saveSelect2Changes)
+  .on('change', '.js-data-array', select2SaveChanges)
   .on('select2:close', '.js-data-array', select2Close);
 
 function startDrive(e) {
@@ -73,20 +67,31 @@ function driveIn(config) {
   // console.log(config);
   poll = new Worksheet(config);
   // console.log(poll);
+  initMainEventListener();
   $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
   poll.goToQuestionByNumber(0);
   poll.respondent.startCount();
   NProgress.done();
+
+}
+
+// Основной обработчик запросов
+function initMainEventListener() {
+  let body = document.body;
+  body.addEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
 }
 
 function select2Start() {
-  $('body').unbind();
-}
-function select2Close() {
-  $('body').bind(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
+  let body = document.body;
+  body.removeEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
 }
 
-function saveSelect2Changes(e) {
+function select2Close() {
+  let body = document.body;
+  body.addEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
+}
+
+function select2SaveChanges(e) {
   let sOption = e.target.selectedOptions;
   let question = poll.getCurrentQuestion();
   let selectedAnswerId = sOption[0].value;
@@ -107,7 +112,7 @@ function cast(keyCode) {
 }
 
 function keycodeAbstractionLayer(event) {
-  let keyCode = event.originalEvent.keyCode;
+  let keyCode = event.keyCode;
   keyCode = cast(keyCode);                                               // приведение к одому коду
   if (document.getElementById(keyCode)) {
     let element = document.getElementById(keyCode);
@@ -135,25 +140,28 @@ function chooseAnAnswer(element) {
   let selectedAnswerObject = question.getAnswer(selectedAnswerId);
   let data = {
     id: selectedAnswerId,
-    extData: null
+    extData: null,
+    unique: selectedAnswerObject.unique
   };
-  //проверка превышения лимита
-  if (respondentResult.entries === +question.limit) {
-    if (results[selectedAnswerId] === undefined) {
-      beep();
-      return;
-    }
-  }
 
-  /*
-    //проверка уникальности - не совсем корректно
-    if (+selectedAnswerObject.unique === 1) {
-      if (respondentResult.entries !== 0 && results[selectedAnswerId] === undefined) {
+  if (respondentResult.hasSavedData()) {
+    if (selectedAnswerObject.unique === 1 || respondentResult.hasUniqueAnswers()) {
+      if (!respondentResult.alreadySaved(selectedAnswerObject.id)) {
+        beep();
+        console.log(11111111);
+        return;
+      }
+    }
+
+    //проверка превышения лимита
+    if (respondentResult.entries === +question.limit) {
+      if (results[selectedAnswerId] === undefined) {
         beep();
         return;
       }
     }
-  */
+  }
+
   if (selectedAnswerObject.type === TYPE_FREE_ANSWER) {
     if (selectedAnswerObject.inputSpan === undefined) {
       selectedAnswerObject.mark();
@@ -164,7 +172,6 @@ function chooseAnAnswer(element) {
     } else {
       selectedAnswerObject.hideInput();
       selectedAnswerObject.unmark();
-      console.log(data);
       respondentResult.deleteData(data);
     }
     return;
@@ -193,11 +200,13 @@ function saveFreeAnswer(input) {
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
   let data = {
     id: selectedAnswerId,
-    extData: null
+    extData: null,
+    unique: 0
   };
   if (input.value) {
     data.id = selectedAnswerId;
     data.extData = input.value;
+    data.unique = selectedAnswerObject.unique;
     respondentResult.saveData(data);
     stepLogic(respondentResult, question);
   } else {

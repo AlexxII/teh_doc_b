@@ -47,7 +47,6 @@ function result(required) {
   this.repair = 0;
   this.entries = 0;
   this.required = required;
-  this.unique = 0;                                            // в результате есть уникальный ответ
   this.respondentAnswers = {};
 
   this.saveData = function (data) {
@@ -58,12 +57,32 @@ function result(required) {
 
   this.deleteData = function (data) {
     if (this.respondentAnswers[data.id] !== undefined) {
-      console.log(data.id);
-
       delete this.respondentAnswers[data.id];
       this.entries -= 1;
     }
   };
+
+  this.hasSavedData = function () {
+    return this.entries > 0;
+  };
+
+  this.alreadySaved = function (id) {
+    return this.respondentAnswers[id] !== undefined
+  };
+
+  this.hasUniqueAnswers = function () {
+    let out = false;
+    let results = this.respondentAnswers;
+    if (Object.entries(results).length !== 0 && results.constructor === Object) {
+      for (let key in results) {
+        if (results[key].unique) {
+          out = true;
+          break;
+        }
+      }
+    }
+    return out;
+  }
 
 /*
   this.getRespondentAnswers  = function (id) {
@@ -84,4 +103,5 @@ function result(required) {
 function answerData(data) {
   this.id = data.id;
   this.extData = data.extData;
+  this.unique = data.unique;
 }
