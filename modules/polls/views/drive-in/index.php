@@ -73,6 +73,9 @@
   .answer-p {
     position: relative;
   }
+  .navigation-select {
+    width: 35%;
+  }
 </style>
 <div class="drive-in-wrap">
   <div class="col-lg-8 col-ml-8 drive-in">
@@ -81,7 +84,6 @@
     <div id="drive-in" class="drive-content">
       <div class="mobile-previous-btn mobile-btn hidden-lg" data-key=1></div>
       <div class="mobile-next-btn mobile-btn hidden-lg" data-key=2></div>
-
 
       <!-- template
 
@@ -110,25 +112,8 @@
 
   </div>
   <div class="col-lg-4 col-ml-4">
-    <div>
-      <select class="question-steps">
-        <option disabled selected>Выберите</option>
-        <option data-key="0">Начало</option>
-        <option data-key="4">5</option>
-        <option data-key="11">12</option>
-        <option data-key="44">45</option>
-        <option data-key="109">110</option>
-        <option data-key="-1">Конец</option>
-      </select>
-    </div>
-    <div>
-      <select class="js-example-data-array-ex" style="width: 100px">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
+    <div id="drive-service-area">
+
     </div>
     <!--    <div class="alert alert-warning" style="margin-bottom: 10px">
           <a href="#" class="close" data-dismiss="alert">&times;</a>

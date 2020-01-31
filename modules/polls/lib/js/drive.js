@@ -13,7 +13,7 @@ $(document).on('click', '.poll-in', startDrive);
 $(document).on('click', '.answer-p', clickOnTheAnswer)
   .on('keydown', '.previous-btn', moveToPreviousQuestion)
   .on('keydown', '.next-btn', moveToNextQuestion)
-  .on('change', '.question-steps', goToQuestion)
+  .on('change', '.navigation-select', goToQuestion)
   .on('click', '.confirm-next-btn', confirmAndNextQuestion)
   .on('click', '.mobile-previous-btn', moveToPreviousQuestion)
   .on('click', '.mobile-next-btn', moveToNextQuestion);
@@ -146,6 +146,7 @@ function chooseAnAnswer(element) {
   };
 
   if (respondentResult.hasSavedData()) {
+    // проверка уникальности
     if (selectedAnswerObject.unique === 1 || respondentResult.hasUniqueAnswers()) {
       if (!respondentResult.alreadySaved(selectedAnswerObject.id)) {
         let audio = new Audio('lib/chord.mp3');

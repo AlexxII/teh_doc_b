@@ -12,6 +12,7 @@ class Worksheet {
       this.respondent = config;
       //rendering
       this.template = this.renderTemplate();
+      this.renderNavigationSelect();
     }
   }
 
@@ -155,7 +156,7 @@ class Worksheet {
     } else {
       let select = question.renderSelect();
       questionBody.appendChild(select);
-      setTimeout(() => this.loadScript(), 100);                                //TODO  Ооооочень слабое место!!!!!
+      setTimeout(() => this.loadScript(), 100);                                //TODO  Ооооочень слабое место с ожиданием!!!!!
       question.restoreSelectResult(result, question.selectObj);
     }
     mainContent.appendChild(template);
@@ -170,7 +171,7 @@ class Worksheet {
     let sText = document.createTextNode(text);
     select2Script.appendChild(sText);
     document.body.appendChild(select2Script);
-    setTimeout(() => document.body.removeChild(select2Script), 300);
+    setTimeout(() => document.body.removeChild(select2Script), 150);          //TODO слабое место с ожиданием
   }
 
   setThemeColor(template, limit) {
@@ -213,6 +214,28 @@ class Worksheet {
 
     countDiv.append(this.totalNumberOfQuestions);
     return template;
+  }
+
+  renderNavigationSelect() {
+    let serviceArea = document.getElementById('drive-service-area');
+    let selectTemplate = document.createElement('p');
+    let select = document.createElement('select');
+    select.className = 'navigation-select form-control';
+    let label = document.createElement('label');
+    let labelText = document.createTextNode('Перейти:');
+    label.setAttribute('for', 'navigation-select');
+    label.appendChild(labelText);
+    selectTemplate.appendChild(label);
+    selectTemplate.appendChild(select);
+    let selectData = this.questions;
+    selectData.forEach(function (element, key) {
+      select[key + 1] = new Option (key + 1, element.id);
+      select[key + 1].dataset.key = key;
+    });
+    select[0] = new Option ('Выберите', null);
+    select[0].disabled = true;
+    select.selectedIndex = 0;
+    serviceArea.appendChild(selectTemplate);
   }
 
 }
