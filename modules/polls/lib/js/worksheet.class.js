@@ -139,15 +139,10 @@ class Worksheet {
     let answersCounter = 1;
     let maxCodesLength = codes.length;                                          // максимальное кол-во кодов клавиатуры!!
     let result = this.respondent.getRespondentResultsOfQuestion(question.id);
+
+    console.log(result);
+
     if (question.numberOfAnswers < maxCodesLength) {
-      /*
-            for (let key in answers) {
-              let answer = answers[key];
-              answer.renderAnswer();
-              answer.restoreResult(result);
-              questionBody.appendChild(answer.visualElement);
-            }
-      */
       answers.forEach(function (answer, index) {
         answer.renderAnswer(index);
         answer.restoreResult(result);
@@ -174,6 +169,7 @@ class Worksheet {
     setTimeout(() => document.body.removeChild(select2Script), 150);          //TODO слабое место с ожиданием
   }
 
+  // цветовая схема
   setThemeColor(template, limit) {
     if (limit !== 1) {
       template.classList.remove('panel-primary');
@@ -184,6 +180,7 @@ class Worksheet {
     }
   }
 
+  // основной шаблон
   renderTemplate() {
     let template = document.createElement('div');
     template.className = 'panel question-data';
@@ -216,6 +213,7 @@ class Worksheet {
     return template;
   }
 
+  // навигационный select
   renderNavigationSelect() {
     let serviceArea = document.getElementById('drive-service-area');
     let selectTemplate = document.createElement('p');
