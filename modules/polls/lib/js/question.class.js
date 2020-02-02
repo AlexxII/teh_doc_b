@@ -1,10 +1,11 @@
 class Question {
-  constructor(config) {
+  constructor(config, number) {
     this.id = config.id;
     this.title = config.title;
     this.titleEx = config.title_ex;
     this.order = +config.order;
     this.limit = +config.limit;
+    this.number = number;
     this.required = 1;                                       // вопрос обязателен
     this.answers = config.visibleAnswers;                    // пул ответов (объектов)
     this.numberOfAnswers = config.visibleAnswers;

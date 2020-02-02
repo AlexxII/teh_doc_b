@@ -54,6 +54,7 @@ class constructPollInfo {
     arr.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
   }
 }
+
 class CQuestion {
   constructor(config) {
     this.id = config.id;

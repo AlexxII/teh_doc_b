@@ -119,11 +119,8 @@ function loadPollConfig(id, callback) {
   });
 }
 
-
 function startConstruct(config) {
-  console.log(config);
   pollConstruct = new constructPollInfo(config);
-  console.log(pollConstruct);
   $('#poll-title').append('<h4>' + pollConstruct.code + '</h4>');
   constructListView(pollConstruct);
   NProgress.done();
@@ -240,6 +237,7 @@ testArray.sort(function (a, b) {
 });
 sortable.sort(testArray);
 */
+
 //===================================
 
 

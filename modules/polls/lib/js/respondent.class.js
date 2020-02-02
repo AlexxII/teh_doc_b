@@ -1,13 +1,19 @@
 class Respondent {
-  constructor(questions) {
-    this._id = function () {
-      return 1343462535
-    };
+  constructor(questions, number) {
+    this._id = this.randomIntFromInterval(0, 18446744073709551616);
     this.startTime = 0;
     this.endTime = 0;
     this.user = 'User';
     this.complete = 0;
     this.resultPool = questions;
+  }
+
+  randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  get id() {
+    return this._id;
   }
 
   set resultPool(questions) {
@@ -36,9 +42,24 @@ class Respondent {
   }
 
   checkResults() {
-
+    let results = this.resultPool;
+    for (let key in results) {
+      if (results[key].entries === 0) {
+        return 0;
+      }
+    }
+    return 1;
   }
 
+  findUnansweredQuestion() {
+    let results = this.resultPool;
+    for (let key in results) {
+      if (results[key].entries === 0) {
+        return key;
+      }
+    }
+    return false;
+  }
 }
 
 function result(required) {
@@ -83,21 +104,6 @@ function result(required) {
     }
     return out;
   }
-
-/*
-  this.getRespondentAnswers  = function (id) {
-    let rAnswers = this.respondentAnswers;
-    let result;
-    for (let key in rAnswers) {
-      if (rAnswers[key].id === id) {
-        result = rAnswers[key];
-        break;
-      }
-    }
-    return result;
-  }
-*/
-
 }
 
 function answerData(data) {

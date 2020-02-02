@@ -131,6 +131,7 @@ function keycodeAbstractionLayer(event) {
   }
 }
 
+
 function chooseAnAnswer(element) {
   let question = poll.getCurrentQuestion();
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
@@ -142,6 +143,7 @@ function chooseAnAnswer(element) {
     extData: null,
     unique: selectedAnswerObject.unique
   };
+
   if (respondentResult.hasSavedData()) {
     // проверка уникальности
     if (selectedAnswerObject.unique === 1 || respondentResult.hasUniqueAnswers()) {
@@ -151,6 +153,7 @@ function chooseAnAnswer(element) {
         return;
       }
     }
+
     //проверка превышения лимита
     if (respondentResult.entries === +question.limit) {
       if (results[selectedAnswerId] === undefined) {
@@ -159,6 +162,7 @@ function chooseAnAnswer(element) {
       }
     }
   }
+
   if (selectedAnswerObject.type === TYPE_FREE_ANSWER) {
     if (selectedAnswerObject.inputSpan === undefined) {
       selectedAnswerObject.mark();
@@ -173,6 +177,7 @@ function chooseAnAnswer(element) {
     }
     return;
   }
+
   if (respondentResult.respondentAnswers[selectedAnswerId] !== undefined) {
     selectedAnswerObject.unmark();
     respondentResult.deleteData(data);
@@ -226,12 +231,55 @@ function confirmAndNextQuestion() {
   let question = poll.getCurrentQuestion();
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
   if (respondentResult.entries >= 1) {
-    if (poll.isLastQuestion()) return;
+    if (poll.isPollComplete()) {
+      showM();
+      return;
+    }
+    if (poll.isLastQuestion()) {
+      let qId = poll.unansweredQuestion();
+      let question = poll.getQuestionById(qId);
+      if (question) {
+        console.log(question.number);
+        poll.goToQuestionByNumber(question.number);
+      } else {
+        alert('Есть вероятность потери данных при вносе результатов. Обратитесь к разработчику');
+        return;
+      }
+    }
     poll.nextQuestion();
   } else {
     beep();
   }
 }
+
+function showM() {
+  document.body.removeEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
+  jc = $.confirm({
+    icon: 'fa fa-question',
+    title: 'Анкета завершена',
+    content: 'Прейти к следующей?',
+    type: 'red',
+    closeIcon: false,
+    autoClose: 'cancel|9000',
+    buttons: {
+      ok: {
+        btnClass: 'btn-danger',
+        action: function () {
+          jc.close();
+          poll.nextRespondent();
+          document.body.addEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
+        }
+      },
+      cancel: {
+        action: function () {
+          document.body.addEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
+          return;
+        }
+      }
+    }
+  });
+}
+
 
 function moveToPreviousQuestion() {
   if (poll.isFirstQuestion()) return;

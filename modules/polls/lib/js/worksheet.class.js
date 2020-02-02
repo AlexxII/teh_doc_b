@@ -1,6 +1,7 @@
 class Worksheet {
   constructor(config) {
     if (this.verifyPollConfigStructure(config)) {
+      this.currentConfig = config;
       this.pollId = config.id;
       this._code = config.code;
       this._title = config.title;
@@ -9,7 +10,7 @@ class Worksheet {
       this.currentQuestionNum = 0;
       this.questions = config;
       // пулл респондентов (т.е. ответов !!!!)
-      this.respondent = config;
+      this.respondent = this.questions;
       //rendering
       this.template = this.renderTemplate();
       this.renderNavigationSelect();
@@ -43,8 +44,8 @@ class Worksheet {
     return this._currentQuestionNum;
   }
 
-  set respondent(config) {
-    return this._respondent = new Respondent(this.questions);
+  set respondent(questions) {
+    return this._respondent = new Respondent(questions);
   }
 
   get respondent() {
@@ -63,7 +64,7 @@ class Worksheet {
     let questions = config.visibleQuestions;
     let output = [];
     questions.forEach(function (question, index) {
-      output[index] = new Question(question);
+      output[index] = new Question(question, index);
     });
     this.sortByOrder(output);
     this._questions = output;
@@ -79,6 +80,14 @@ class Worksheet {
 
   get totalNumberOfQuestions() {
     return this._totalNumberOfQuestions;
+  }
+
+  getQuestionById(id) {
+    let questions = this.questions;
+    for (let key in questions) {
+      if (questions[key].id === id) return questions[key];
+    }
+    return false;
   }
 
   nextQuestion() {
@@ -114,16 +123,20 @@ class Worksheet {
     this.renderQuestion(questionNumber);
   }
 
-  verifyPollConfigStructure(val) {
-    return val !== null;
+  isPollComplete() {
+    return this.respondent.checkResults();
   }
 
-  verifyId(val) {
-    return true;
+  unansweredQuestion() {
+    return this.respondent.findUnansweredQuestion();
   }
 
-  sortByOrder(arr) {
-    arr.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
+  nextRespondent() {
+    this.currentQuestionNum = 0;
+    this.respondent.stopCount();
+    console.log(this.respondent);
+    this.respondent = this.questions;
+    this.goToQuestionByNumber(0);
   }
 
   renderQuestion(questionNumber) {
@@ -238,7 +251,6 @@ class Worksheet {
   renderNavigator() {
     let svgNAv = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
-
     let textNode = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     textNode.setAttribute('x', 10);
     textNode.setAttribute('y', 10);
@@ -251,8 +263,8 @@ class Worksheet {
     let y = 15;
     let qCount = this.totalNumberOfQuestions;
     for (let i = 0; i < qCount; i++) {
-      let x = 15, j;
-      for (j = 0; j < 10; j++) {
+      let x = 15;
+      for (let j = 0; j < 15 && j < qCount; j++) {
         let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
         rect.setAttribute('x', x);
         rect.setAttribute('y', y);
@@ -266,12 +278,24 @@ class Worksheet {
         svgNAv.appendChild(rect);
         x += 22;
       }
-      qCount -= j;
+      qCount -= 15;
       y += 22;
     }
     svgNAv.setAttribute('width', '100%');
     svgNAv.setAttribute('height', y);
     document.getElementById('drive-service-area-ex').appendChild(svgNAv);
   };
+
+  verifyPollConfigStructure(val) {
+    return val !== null;
+  }
+
+  verifyId(val) {
+    return true;
+  }
+
+  sortByOrder(arr) {
+    arr.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
+  }
 
 }
