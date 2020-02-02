@@ -251,11 +251,11 @@ function confirmAndNextQuestion() {
     beep();
   }
 }
-
 function showM() {
   document.body.removeEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
   jc = $.confirm({
     icon: 'fa fa-question',
+    escapeKey: 'cancel',
     title: 'Анкета завершена',
     content: 'Прейти к следующей?',
     type: 'red',
@@ -279,7 +279,6 @@ function showM() {
     }
   });
 }
-
 
 function moveToPreviousQuestion() {
   if (poll.isFirstQuestion()) return;
