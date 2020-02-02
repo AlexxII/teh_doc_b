@@ -1,8 +1,9 @@
 class Checker {
   constructor(config) {
-    this.numberOfQuestions = config;
-
+    this.numberOfQuestions = 11;
+    this.renderNavigator();
   }
+
 
   set questions(config) {
     let questions = config.visibleQuestions;

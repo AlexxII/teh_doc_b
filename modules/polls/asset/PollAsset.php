@@ -18,6 +18,7 @@ class PollAsset extends AssetBundle
     'js/worksheet.class.js',
     'js/respondent.class.js',
     'js/question.class.js',
+//    'js/checker.class.js',
     'js/user.class.js',
     'js/poll.js',
     'js/drive.js',

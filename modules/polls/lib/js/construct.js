@@ -254,7 +254,7 @@ function constructGridView(config) {
     if (question.visible) {
       let gridItemClone = gridItem.cloneNode(true);
       gridItemClone.dataset.id = question.id;
-      console.log(question.limit + ' - ' + typeof question.limit);
+      // console.log(question.limit + ' - ' + typeof question.limit);
       if (question.limit !== '1') {
         gridItemClone.classList.add('multiple-answers');
       }

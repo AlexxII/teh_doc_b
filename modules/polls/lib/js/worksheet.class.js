@@ -13,6 +13,7 @@ class Worksheet {
       //rendering
       this.template = this.renderTemplate();
       this.renderNavigationSelect();
+      this.renderNavigator();
     }
   }
 
@@ -227,13 +228,53 @@ class Worksheet {
     selectTemplate.appendChild(select);
     let selectData = this.questions;
     selectData.forEach(function (element, key) {
-      select[key + 1] = new Option (key + 1, element.id);
+      select[key + 1] = new Option(key + 1, element.id);
       select[key + 1].dataset.key = key;
     });
-    select[0] = new Option ('Выберите', null);
+    select[0] = new Option('Выберите', null);
     select[0].disabled = true;
     select.selectedIndex = 0;
     serviceArea.appendChild(selectTemplate);
   }
+
+  // нивигационная мозайка
+  renderNavigator() {
+    let svgNAv = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+
+    let textNode = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    textNode.setAttribute('x', 10);
+    textNode.setAttribute('y', 10);
+    // textNode.setAttributeNS(null, 'font-size', '100');
+    let text = document.createTextNode('1');
+    textNode.appendChild(text);
+    textNode.classList.add('mono');
+    svgNAv.appendChild(textNode);
+
+    let y = 15;
+    let qCount = this.totalNumberOfQuestions;
+    for (let i = 0; i < qCount; i++) {
+      let x = 15;
+      for (let j = 0; j < 15 && j < qCount; j++) {
+        let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', x);
+        rect.setAttribute('y', y);
+        rect.setAttribute('width', 20);
+        rect.setAttribute('height', 20);
+        rect.setAttribute('fill', '#ebedf0');
+        rect.classList = 'question';
+        // let titleNode = document.createElement('title');
+        // titleNode.innerText = '22';
+        // rect.appendChild(titleNode);
+        svgNAv.appendChild(rect);
+        x += 22;
+      }
+      qCount -= 15;
+      y += 22;
+    }
+    svgNAv.setAttribute('width', '100%');
+    svgNAv.setAttribute('height', y);
+    document.getElementById('drive-service-area-ex').appendChild(svgNAv);
+  };
 
 }

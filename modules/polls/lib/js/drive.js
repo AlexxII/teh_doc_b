@@ -60,7 +60,7 @@ function driveIn(config) {
   // шаблон - будет запрашиваться у БД
   let settings = {
     id: 123456789,    // user id
-    stepDelay: 200,
+    stepDelay: 100,
     markColor: '#e0e0e0'
   };
   pollUser = new PollUser(settings);
@@ -72,7 +72,6 @@ function driveIn(config) {
   poll.goToQuestionByNumber(0);
   poll.respondent.startCount();
   NProgress.done();
-
 }
 
 // Основной обработчик запросов

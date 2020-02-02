@@ -65,16 +65,27 @@
   .mark {
     background-color: #fff;
   }
+
   .drive-unique-answer {
     position: absolute;
     top: 5px;
     left: -10px;
   }
+
   .answer-p {
     position: relative;
   }
+
   .navigation-select {
     width: 35%;
+  }
+
+  svg > .question {
+    cursor: pointer;
+  }
+  svg .mono {
+    fill: #aaa;
+    font-size: 14px;
   }
 </style>
 <div class="drive-in-wrap">
@@ -112,7 +123,12 @@
 
   </div>
   <div class="col-lg-4 col-ml-4">
-    <div id="drive-service-area">
+    <div id="drive-service-area" class="hidden-lg visible-xs visible-sm visible-md">
+
+    </div>
+    <div></div>
+<!--    <div id="drive-service-area-ex" class="hidden-xs visible-lg">-->
+    <div id="drive-service-area-ex">
 
     </div>
     <!--    <div class="alert alert-warning" style="margin-bottom: 10px">
