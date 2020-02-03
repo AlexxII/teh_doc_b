@@ -140,9 +140,6 @@ class Worksheet {
     let answersCounter = 1;
     let maxCodesLength = codes.length;                                          // максимальное кол-во кодов клавиатуры!!
     let result = this.respondent.getRespondentResultsOfQuestion(question.id);
-
-    console.log(result);
-
     if (question.numberOfAnswers < maxCodesLength) {
       answers.forEach(function (answer, index) {
         answer.renderAnswer(index);
