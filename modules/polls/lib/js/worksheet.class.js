@@ -254,8 +254,8 @@ class Worksheet {
     let y = 15;
     let qCount = this.totalNumberOfQuestions;
     for (let i = 0; i < qCount; i++) {
-      let x = 15;
-      for (let j = 0; j < 15 && j < qCount; j++) {
+      let x = 15, j;
+      for (j = 0; j < 10; j++) {
         let rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
         rect.setAttribute('x', x);
         rect.setAttribute('y', y);
@@ -269,7 +269,7 @@ class Worksheet {
         svgNAv.appendChild(rect);
         x += 22;
       }
-      qCount -= 15;
+      qCount -= j;
       y += 22;
     }
     svgNAv.setAttribute('width', '100%');

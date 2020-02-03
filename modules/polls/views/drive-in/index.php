@@ -123,12 +123,11 @@
 
   </div>
   <div class="col-lg-4 col-ml-4">
-    <div id="drive-service-area" class="hidden-lg visible-xs visible-sm visible-md">
+    <div id="drive-service-area" class="">
 
     </div>
-    <div></div>
-<!--    <div id="drive-service-area-ex" class="hidden-xs visible-lg">-->
-    <div id="drive-service-area-ex">
+    <div id="drive-service-area-ex" class="hidden">
+<!--    <div id="drive-service-area-ex">-->
 
     </div>
     <!--    <div class="alert alert-warning" style="margin-bottom: 10px">

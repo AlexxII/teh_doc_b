@@ -131,7 +131,6 @@ function keycodeAbstractionLayer(event) {
   }
 }
 
-
 function chooseAnAnswer(element) {
   let question = poll.getCurrentQuestion();
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
@@ -143,7 +142,6 @@ function chooseAnAnswer(element) {
     extData: null,
     unique: selectedAnswerObject.unique
   };
-
   if (respondentResult.hasSavedData()) {
     // проверка уникальности
     if (selectedAnswerObject.unique === 1 || respondentResult.hasUniqueAnswers()) {
@@ -153,7 +151,6 @@ function chooseAnAnswer(element) {
         return;
       }
     }
-
     //проверка превышения лимита
     if (respondentResult.entries === +question.limit) {
       if (results[selectedAnswerId] === undefined) {
@@ -162,7 +159,6 @@ function chooseAnAnswer(element) {
       }
     }
   }
-
   if (selectedAnswerObject.type === TYPE_FREE_ANSWER) {
     if (selectedAnswerObject.inputSpan === undefined) {
       selectedAnswerObject.mark();
@@ -177,7 +173,6 @@ function chooseAnAnswer(element) {
     }
     return;
   }
-
   if (respondentResult.respondentAnswers[selectedAnswerId] !== undefined) {
     selectedAnswerObject.unmark();
     respondentResult.deleteData(data);
