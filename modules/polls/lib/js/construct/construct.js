@@ -108,9 +108,7 @@ function loadPollConfig(id, callback) {
     method: 'get'
   }).done(function (response) {
     if (response.code) {
-      // pollInfo = response.data.data;
-      callback(response.data.data);
-
+      callback(response.data.data[0]);
     } else {
       console.log(response.data.message);
     }
@@ -120,9 +118,10 @@ function loadPollConfig(id, callback) {
 }
 
 function startConstruct(config) {
-  pollConstruct = new constructPollInfo(config);
-  $('#poll-title').append('<h4>' + pollConstruct.code + '</h4>');
-  constructListView(pollConstruct);
+  console.log(config);
+  pollCounstructor = new PollConstructor(config);
+  pollCounstructor.renderListView();
+  // pollCounstructor.renderGridView();
   NProgress.done();
 }
 
@@ -150,7 +149,6 @@ function constructListView(config) {
   let mainQuestionDiv = document.getElementById('question-main-template');
   let answerDiv = document.getElementById('answer-template');
   $('#poll-construct').html('');
-  let numOfQuestions = questions.length;
   let questionCount = 1;
   for (let questionId in questions) {
     let question = questions[questionId];
@@ -167,6 +165,7 @@ function constructListView(config) {
     questionClone.querySelector('.question-limit').dataset.id = question.id;
     questionClone.querySelector('.question-limit').dataset.old = limit;
     questionClone.querySelector('.question-hide').dataset.id = question.id;
+
     let answers = question.answers;
     let answersCount = 1;
     for (let answerId in  answers) {

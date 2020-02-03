@@ -90,6 +90,7 @@ Select2Asset::register($this);
 
 
 <div class="hidden">
+
   <div id="question-main-template" class="question-wrap">
     <div class="question-content">
       <div class="question-header">
