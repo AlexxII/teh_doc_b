@@ -51,7 +51,7 @@
   }
 
   .drive-content .panel-body {
-    padding: 15px;
+    padding: 15px 15px 15px 20px;
   }
 
   .drive-content {
@@ -68,10 +68,14 @@
 
   .drive-unique-answer {
     position: absolute;
-    top: 5px;
-    left: -10px;
+    top: 7px;
+    right: -10px;
   }
-
+  .drive-free-answer {
+    position: absolute;
+    top: 7px;
+    left: -15px;
+  }
   .answer-p {
     position: relative;
   }
