@@ -5,10 +5,10 @@ class PollConstructor {
       this._title = config.title;
       this._code = config.code;
       this.questions = config.questions;
+      this.renderPollHeader();
+      this.renderListTmpl();
+      this.renderGridTmpl();
     }
-    this.renderPollHeader();
-    this.renderListTmpl();
-    this.renderGridTmpl();
   }
 
   set questions(tempQuestions) {
@@ -32,6 +32,14 @@ class PollConstructor {
 
   get code() {
     return this._code;
+  }
+
+  findQuestionById(id) {
+    let questions = this.questions;
+    for (let key in questions) {
+      if (questions[key].id === id) return questions[key];
+    }
+    return false;
   }
 
   renderPollHeader() {
@@ -74,7 +82,9 @@ class PollConstructor {
     let questions = this.questions;
     for (let qId in questions) {
       let question = questions[qId];
-      gridDiv.appendChild(question.renderCQuestionGrid());
+      if (question.renderCQuestionGrid() !== null) {
+        gridDiv.appendChild(question.renderCQuestionGrid());
+      }
     }
     // изменение порядка
     new Sortable(gridDiv, {

@@ -1,8 +1,3 @@
-const HIDE_QUESTION_URL = '/polls/construct/hide-to-fill';
-const HIDE_ANSWER_URL = '/polls/construct/hide-answer';
-const UNIQUE_QUESTION_URL = '/polls/construct/unique-answer';
-const LIMIT_QUESTION_URL = '/polls/construct/set-question-limit';
-
 var pollConstruct;                      // главная глобальная переменная
 
 $(document).on('click', '#construct-wrap', function (e) {
@@ -24,13 +19,10 @@ $(document).on('input', '#myRange', function (e) {
   $('.grid-item').css("font-size", +fontSize + "px");
 });
 
-$(document).on('click', '#btn-switch-view', changeConstructView);
-
-$(document).on('click', '.question-hide', hideQuestion);
-
-$(document).on('click', '.answer-hide', hideAnswer);
-
-$(document).on('click', '.unique-btn', setAnswerUnique);
+$(document).on('click', '#btn-switch-view', changeConstructView)
+  .on('click', '.question-hide', hideQuestion)
+  .on('click', '.answer-hide', hideAnswer)
+  .on('click', '.unique-btn', setAnswerUnique);
 
 $.mask.definitions['H'] = '[1-9]';
 $.mask.definitions['h'] = '[0-9]';
@@ -150,6 +142,7 @@ function changeConstructView(e) {
     $('.poll-list-view').hide();
   }
 }
+
 /*
 function constructListView(config) {
   let questions = config.questions;
@@ -278,80 +271,30 @@ function constructGridView(config) {
 */
 
 function hideQuestion() {
-
-  let id = $(this).data('id');
-  let item = $(this).closest('.question-wrap');
-  $.ajax({
-    url: HIDE_QUESTION_URL,
-    method: 'post',
-    data: {
-      id: id
-    }
-  }).done(function (response) {
-    if (response.code) {
-      $(item).hide(200, () => {
-        $(item).remove()
-      });
-    } else {
-      console.log(response.data.message + '\n' + response.data.data);
-    }
-  }).fail(function () {
-    console.log('Failed to hide question');
-  });
+  let questionId = $(this).data('id');
+  let question = pollCounstructor.findQuestionById(questionId);
+  question.hideQuestionInListView();
 }
 
 function hideAnswer() {
-  let id = $(this).data('id');
-  let item = $(this).closest('.answer-data');
-  $.ajax({
-    url: HIDE_ANSWER_URL,
-    method: 'post',
-    data: {
-      id: id
-    }
-  }).done(function (response) {
-    if (response.code) {
-      $(item).hide(100, () => {
-        $(item).remove()
-      });
-    } else {
-      console.log(response.data.message + '\n' + response.data.data);
-    }
-  }).fail(function () {
-    console.log('Failed to hide question - URL failed');
-  });
+  let answerId = $(this).data('id');
+  let questionId = $(this).data('questionId');
+  let question = pollCounstructor.findQuestionById(questionId);
+  if (question) {
+    let answer = question.findAnswerById(answerId);
+    answer.hideAnswerInListView();
+  }
 }
 
 function setAnswerUnique() {
   let id = $(this).data('id');
-  let btn = $(this);
-  let item = $(this).closest('.answer-data');
-  let bool = $(this).data('unique');
-  if (bool === 0) {
-    bool = 1;
-  } else {
-    bool = 0;
+  let answerId = $(this).data('id');
+  let questionId = $(this).data('questionId');
+  let question = pollCounstructor.findQuestionById(questionId);
+  if (question) {
+    let answer = question.findAnswerById(answerId);
+    answer.changeUniqueForQuestion();
   }
-  $.ajax({
-    url: UNIQUE_QUESTION_URL,
-    method: 'post',
-    data: {
-      id: id,
-      bool: bool
-    }
-  }).done(function (response) {
-    if (response.code) {
-      if (bool === 1) {
-        setUnique(item, btn);
-      } else {
-        unsetUnique(item, btn);
-      }
-    } else {
-      console.log(response.data.message + '\n' + response.data.data);
-    }
-  }).fail(function () {
-    console.log('Failed to hide question - see Network Monitor - "Ctrl+SHift+E "');
-  });
 }
 
 function setUnique(item, btn) {
@@ -365,31 +308,8 @@ function unsetUnique(item, btn) {
 }
 
 function saveQuestionLimit(input) {
-  let $input = $(input);
-  let id = input.dataset.id;
-  let oldVal = +input.dataset.old;                                          // + - приведенеи к типу number
-  let limit = +input.value;
-  if (limit === oldVal) return;
-  $.ajax({
-    url: LIMIT_QUESTION_URL,
-    method: 'post',
-    data: {
-      id: id,
-      limit: limit
-    }
-  }).done(function (response) {
-    if (!response.code) {
-      input.value = oldVal;
-    } else {
-      input.dataset.old = limit;
-    }
-    if (+response.data.data === 1) {
-      input.closest('.question-header').classList.remove('be-attention');
-    } else {
-      input.closest('.question-header').classList.add('be-attention');
-    }
-  }).fail(function () {
-    input.dataset.old = limit;
-    console.log('Failed to hide question');
-  });
+  let value = input.value;
+  let questionId = input.dataset.id;
+  let question = pollCounstructor.findQuestionById(+questionId);
+  question.setQuestionLimit(value);
 }

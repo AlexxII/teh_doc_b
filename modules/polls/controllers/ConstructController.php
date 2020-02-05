@@ -62,6 +62,14 @@ class ConstructController extends Controller
   public function actionHideToFill()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    return [
+      'data' => [
+        'success' => true,
+        'data' => '2222222222',
+        'message' => 'Hidden successfully',
+      ],
+      'code' => 1,
+    ];
     if (!empty($_POST)) {
       $id = $_POST['id'];
       $question = Questions::findModel($id);
@@ -98,6 +106,14 @@ class ConstructController extends Controller
   public function actionHideAnswer()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    return [
+      'data' => [
+        'success' => true,
+        'data' => '22222222222',
+        'message' => 'Hidden successfully',
+      ],
+      'code' => 1,
+    ];
     if (!empty($_POST)) {
       $id = $_POST['id'];
       $answer = Answers::findModel($id);
