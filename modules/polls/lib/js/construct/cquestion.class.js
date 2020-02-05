@@ -8,6 +8,9 @@ class CQuestion {
     this.limit = config.limit;
     this.visible = config.visible;
     this.answers = config.answers;
+    this.renderQuestionListTmpl();
+    this.renderQuestionGridTmpl();
+
   }
 
   set answers(answers) {
@@ -15,7 +18,7 @@ class CQuestion {
     this.sortByOrder(answersPool);
     let tempOutput = [];
     answersPool.forEach(function (val, index) {
-      tempOutput[index] = new CAnswer(val);
+      tempOutput[index] = new CAnswer(val, index);
     });
     this._answers = tempOutput;
   }
@@ -32,7 +35,7 @@ class CQuestion {
     return this._answers;
   }
 
-  renderCQuestionList() {
+  renderQuestionListTmpl() {
     let mainQuestionDiv = document.getElementById('question-main-template');
     let questionClone = mainQuestionDiv.cloneNode(true);
     questionClone.dataset.id = this.id;
@@ -47,14 +50,30 @@ class CQuestion {
     questionClone.querySelector('.question-limit').dataset.old = this.limit;
     questionClone.querySelector('.question-hide').dataset.id = this.id;
     let answers = this.answers;
+    let answerContentNode = questionClone.querySelector('.answers-content');
     answers.forEach(function (answer, index) {
       let answerNode = answer.renderCAnswer(index + 1);
-      questionClone.querySelector('.answers-content').appendChild(answerNode);
+      answerContentNode.appendChild(answerNode);
     });
-    return questionClone;
+    new Sortable(answerContentNode, {
+      multiDrag: true,
+      selectedClass: 'selected',
+      animation: 150,
+      onEnd: function (evt) {
+        let from = evt.from;
+        let currentItem = evt.item;
+        let items = from.children;
+        for (let i = 0, child; child = items[i]; i++) {
+          let oldOrder = child.dataset.old;
+          child.querySelector('.answer-number').innerHTML = (i + 1);
+          child.querySelector('.answer-old-order').innerHTML = oldOrder;
+        }
+      }
+    });
+    this._questionListTmpl = questionClone;
   }
 
-  renderCQuestionGrid() {
+  renderQuestionGridTmpl() {
     let gridItem = document.getElementById('gridview-template');
     if (this.visible) {
       let gridItemClone = gridItem.cloneNode(true);
@@ -65,8 +84,24 @@ class CQuestion {
       }
       gridItemClone.querySelector('.question-order').innerHTML = this.oldOrder;
       gridItemClone.querySelector('.question-title').innerHTML = this.title;
-      return gridItemClone;
+      this._questionGridTmpl = gridItemClone;
     }
+  }
+
+  get questionListTmpl() {
+    return this._questionListTmpl;
+  }
+
+  get questionGridTmpl() {
+    return this._questionGridTmpl;
+  }
+
+  renderCQuestionList() {
+    return this.questionListTmpl;
+  }
+
+  renderCQuestionGrid() {
+    return this.questionGridTmpl;
   }
 
 /*

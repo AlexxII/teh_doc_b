@@ -7,6 +7,8 @@ class PollConstructor {
       this.questions = config.questions;
     }
     this.renderPollHeader();
+    this.renderListTmpl();
+    this.renderGridTmpl();
   }
 
   set questions(tempQuestions) {
@@ -40,24 +42,63 @@ class PollConstructor {
     titlePlacement.appendChild(hNode);
   }
 
-  renderListView() {
+  renderListTmpl() {
+    let listView = document.createElement('div');
+    listView.className = 'list';
     let questions = this.questions;
     for (let qId in questions) {
       let question = questions[qId];
-      $('#poll-construct').append(question.renderCQuestionList());
+      listView.append(question.renderCQuestionList());
     }
+    // изменение порядка
+    let sortable = new Sortable(listView, {
+      animation: 150,
+      onEnd: function (evt) {
+        let from = evt.from;
+        let currentItem = evt.item;
+        let items = from.children;
+        for (let i = 0, child; child = items[i]; i++) {
+          let oldOrder = child.dataset.old;
+          child.querySelector('.question-number').innerHTML = (i + 1);
+          // child.querySelector('.answer-old-order').innerHTML = oldOrder;
+        }
+      }
+    });
+    this._pollListView = listView;
   }
 
-  renderGridView() {
+  renderGridTmpl() {
     let gridDiv = document.createElement('div');
     gridDiv.id = 'grid-poll-order';
     gridDiv.className = 'grid';
-    $('#poll-construct').html('').append(gridDiv);
     let questions = this.questions;
     for (let qId in questions) {
       let question = questions[qId];
       gridDiv.appendChild(question.renderCQuestionGrid());
     }
+    // изменение порядка
+    new Sortable(gridDiv, {
+      multiDrag: true,
+      selectedClass: 'multi-selected',
+      animation: 150
+    });
+    this._pollGridView = gridDiv;
+  }
+
+  get pollListView() {
+    return this._pollListView;
+  }
+
+  get pollGridView() {
+    return this._pollGridView;
+  }
+
+  renderListView() {
+    return this.pollListView;
+  }
+
+  renderGridView() {
+    return this.pollGridView;
   }
 
   verifyPollConfigStructure(val) {

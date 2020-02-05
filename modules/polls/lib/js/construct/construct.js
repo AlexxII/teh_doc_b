@@ -120,22 +120,29 @@ function loadPollConfig(id, callback) {
 function startConstruct(config) {
   console.log(config);
   pollCounstructor = new PollConstructor(config);
-  pollCounstructor.renderListView();
-  // pollCounstructor.renderGridView();
+  renderListView();
   NProgress.done();
+}
+
+function renderListView() {
+  $('#poll-construct').html('').append(pollCounstructor.renderListView());
+}
+
+function renderGridView() {
+  $('#poll-construct').html('').append(pollCounstructor.renderGridView());
 }
 
 function changeConstructView(e) {
   let mode = $(this).data('mode');
   if (mode) {
-    constructGridView(pollConstruct);
+    renderGridView();
     $(this).data('mode', 0);
     $(this).attr('title', 'В виде списка');
     $('.construct-range-btn').show();
     $('.poll-grid-view').hide();
     $('.poll-list-view').show();
   } else {
-    constructListView(pollConstruct);
+    renderListView();
     $(this).data('mode', 1);
     $(this).attr('title', 'В виде сетки');
     $('.construct-range-btn').hide();
@@ -143,7 +150,7 @@ function changeConstructView(e) {
     $('.poll-list-view').hide();
   }
 }
-
+/*
 function constructListView(config) {
   let questions = config.questions;
   let mainQuestionDiv = document.getElementById('question-main-template');
@@ -225,7 +232,7 @@ function constructListView(config) {
     }
   });
 }
-
+*/
 //===================================
 /*
 let testArray = sortable.toArray();
@@ -239,7 +246,7 @@ sortable.sort(testArray);
 
 //===================================
 
-
+/*
 function constructGridView(config) {
   let questions = config.questions;
   let gridItem = document.getElementById('gridview-template');
@@ -268,8 +275,10 @@ function constructGridView(config) {
     animation: 150
   });
 }
+*/
 
 function hideQuestion() {
+
   let id = $(this).data('id');
   let item = $(this).closest('.question-wrap');
   $.ajax({

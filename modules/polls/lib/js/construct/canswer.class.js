@@ -1,5 +1,5 @@
-class CAnswer{
-  constructor(config) {
+class CAnswer {
+  constructor(config, index) {
     this.id = config.id;
     this.title = config.title;
     this.titleEx = config.title_ex;
@@ -7,9 +7,18 @@ class CAnswer{
     this.oldOrder = +config.order;
     this.unique = +config.unique;
     this.type = +config.input_type;
+    this.answerTmpl = index + 1;
   }
 
-  renderCAnswer(index) {
+  renderCAnswer() {
+    return this.answerTmpl;
+  }
+
+  get answerTmpl() {
+    return this._answerTmpl;
+  }
+
+  set answerTmpl(index) {
     let answerDiv = document.getElementById('answer-template');
     let answerClone = answerDiv.cloneNode(true);
     answerClone.removeAttribute('id');
@@ -24,8 +33,7 @@ class CAnswer{
       answerClone.classList.add('unique-answer');
       answerClone.querySelector('.unique-btn').dataset.unique = 1;
     }
-    return answerClone;
+    this._answerTmpl = answerClone;
   }
-
 
 }
