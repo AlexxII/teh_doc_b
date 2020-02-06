@@ -8,6 +8,7 @@ class PollConstructor {
       this.renderPollHeader();
       this.renderListTmpl();
       this.renderGridTmpl();
+      this.REODER_QUESTIONS_URL = '/polls/construct/reoder-questions';
     }
   }
 
@@ -49,7 +50,7 @@ class PollConstructor {
   }
 
   renderListTmpl() {
-    let pollObject = this;
+    let Obj = this;
     let listView = document.createElement('div');
     listView.className = 'list';
     let questions = this.questions;
@@ -57,29 +58,24 @@ class PollConstructor {
       let question = questions[qId];
       listView.append(question.renderCQuestionList());
     }
+    let oldOrder;
     // изменение порядка
     let sortable = new Sortable(listView, {
       animation: 150,
-      onEnd: function (evt) {
+      onStart: function (evt) {
+        Obj._oldOrder = sortable.toArray();
+      },
+      onUpdate: function (evt) {
+        NProgress.start();
+        let newOrder = sortable.toArray();
+        Obj.savePollReoder(newOrder, sortable);
         let items = evt.from.children;
-        let newOrderArray = [];
         for (let i = 0, child; child = items[i]; i++) {
-          child.querySelector('.question-number').innerHTML = (i + 1);
-          newOrderArray[i] = child.dataset.id;
+          child.querySelector('.question-order').innerHTML = (i + 1);
         }
-        pollObject._newQuestionsOrder = newOrderArray;
-        console.log(pollObject._newQuestionsOrder);
-      }
+      },
     });
-    this._pollListView = listView;
-  }
-
-  savePollreoder() {
-
-  }
-
-  reoderPoll() {
-
+    Obj._pollListView = listView;
   }
 
   renderGridTmpl() {
@@ -94,39 +90,76 @@ class PollConstructor {
       }
     }
     // изменение порядка
-    new Sortable(gridDiv, {
+    let oldOrder;
+    let Obj = this;
+    let sortable = new Sortable(gridDiv, {
       multiDrag: true,
       selectedClass: 'multi-selected',
       animation: 150,
       group: 'poll-grid-store',
       onStart: function (evt) {
-        let items = evt.target.childNodes;
-        let oldOrder = [];
-        items.forEach(function (item, index) {
-          oldOrder[index] = item.dataset.id;
-        });
+        Obj._oldOrder = sortable.toArray();
       },
-      store: {
-        get: function (sortable) {
-          let order = localStorage.getItem(sortable.options.group.name);
-          return order ? order.split('|') : [];
-        },
-        set: function (sortable) {
-          let order = sortable.toArray();
-          localStorage.setItem(sortable.options.group.name, order.join('|'));
-        }
-      },
-      onEnd: function (evt) {
-        let from = evt.from;
-        let items = from.children;
+      onUpdate: function (evt) {
+        NProgress.start();
+        let newOrder = sortable.toArray();
+        Obj.savePollReoder(newOrder, sortable);
+        let items = evt.from.children;
         for (let i = 0, child; child = items[i]; i++) {
           child.querySelector('.question-order').innerHTML = (i + 1);
         }
       }
     });
-    this._pollGridView = gridDiv;
+    Obj._pollGridView = gridDiv;
   }
 
+  savePollReoder(questionsArr, sortable) {
+    let url = this.REODER_QUESTIONS_URL;
+    let Obj = this;
+    let questions = this._questions;
+    $.ajax({
+      url: url,
+      method: 'post',
+      data: {
+        questions: questionsArr
+      }
+    }).done(function (response) {
+      if (!response.code) {
+        let oldOrder = Obj._oldOrder;
+        sortable.sort(oldOrder);                                                          // восстанавливаем порядок
+        Obj.pasteOldNum(sortable);
+        NProgress.done();
+        var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Изменить порядок не удалось';
+        initNoty(tText, 'warning');
+        console.log(response.data.message);
+        return;
+      }
+      NProgress.done();
+      let newOrder = sortable.toArray();
+      console.log(questions);
+      newOrder.forEach(function (val, index) {
+        questions[val].newOrder = index;
+      });
+      console.log(questions);
+      Obj.renderListTmpl();
+
+    }).fail(function () {
+      let oldOrder = Obj._oldOrder;
+      sortable.sort(oldOrder);                                                          // восстанавливаем порядок
+      Obj.pasteOldNum(sortable);
+      NProgress.done();
+      var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Изменить порядок не удалось';
+      initNoty(tText, 'warning');
+      console.log('Не удалось получить ответ сервера. Примените отладучную панель, оыснаска "Сеть"');
+    });
+  }
+
+  pasteOldNum(obj) {
+    let items = obj.el.children;
+    for (let i = 0, child; child = items[i]; i++) {
+      child.querySelector('.question-order').innerHTML = (i + 1);
+    }
+  }
 
   get pollListView() {
     return this._pollListView;
@@ -153,6 +186,6 @@ class PollConstructor {
   }
 
   sortByOldOrder(arr) {
-    arr.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
+    arr.sort((a, b) => a.newOrder > b.newOrder ? 1 : -1);
   }
 }

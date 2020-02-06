@@ -206,11 +206,24 @@ class ConstructController extends Controller
 
   }
 
-  public function actionQuestionReorder()
+  public function actionReoderQuestions()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if (!empty($_POST)) {
-      return true;
+      $arrayOfIds = $_POST['questions'];
+      foreach ($arrayOfIds as $key => $id) {
+        $question = Questions::findModel($id);
+        $question->order = $key + 1;
+        $question->save();
+      }
+      return [
+        'data' => [
+          'success' => true,
+          'data' => 'Good work',
+          'message' => 'Limit set successfully',
+        ],
+        'code' => 1,
+      ];
     }
   }
 

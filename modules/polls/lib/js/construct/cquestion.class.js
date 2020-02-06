@@ -105,7 +105,7 @@ class CQuestion {
     let questionClone = mainQuestionDiv.cloneNode(true);
     questionClone.dataset.id = this.id;
     questionClone.removeAttribute('id');
-    questionClone.querySelector('.question-number').innerHTML = this.oldOrder;
+    questionClone.querySelector('.question-order').innerHTML = this.newOrder;
     if (this.limit > 1 || this.limit === null) {
       questionClone.querySelector('.question-header').classList.add('be-attention');
     }
