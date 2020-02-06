@@ -35,10 +35,8 @@ class PollConstructor {
   }
 
   findQuestionById(id) {
-    let questions = this.questions;
-    for (let key in questions) {
-      if (questions[key].id === id) return questions[key];
-    }
+    let questions = this._questions;
+    if (questions[id] !== undefined) return questions[id];
     return false;
   }
 
@@ -51,6 +49,7 @@ class PollConstructor {
   }
 
   renderListTmpl() {
+    let pollObject = this;
     let listView = document.createElement('div');
     listView.className = 'list';
     let questions = this.questions;
@@ -62,17 +61,25 @@ class PollConstructor {
     let sortable = new Sortable(listView, {
       animation: 150,
       onEnd: function (evt) {
-        let from = evt.from;
-        let currentItem = evt.item;
-        let items = from.children;
+        let items = evt.from.children;
+        let newOrderArray = [];
         for (let i = 0, child; child = items[i]; i++) {
-          let oldOrder = child.dataset.old;
           child.querySelector('.question-number').innerHTML = (i + 1);
-          // child.querySelector('.answer-old-order').innerHTML = oldOrder;
+          newOrderArray[i] = child.dataset.id;
         }
+        pollObject._newQuestionsOrder = newOrderArray;
+        console.log(pollObject._newQuestionsOrder);
       }
     });
     this._pollListView = listView;
+  }
+
+  savePollreoder() {
+
+  }
+
+  reoderPoll() {
+
   }
 
   renderGridTmpl() {
@@ -90,10 +97,36 @@ class PollConstructor {
     new Sortable(gridDiv, {
       multiDrag: true,
       selectedClass: 'multi-selected',
-      animation: 150
+      animation: 150,
+      group: 'poll-grid-store',
+      onStart: function (evt) {
+        let items = evt.target.childNodes;
+        let oldOrder = [];
+        items.forEach(function (item, index) {
+          oldOrder[index] = item.dataset.id;
+        });
+      },
+      store: {
+        get: function (sortable) {
+          let order = localStorage.getItem(sortable.options.group.name);
+          return order ? order.split('|') : [];
+        },
+        set: function (sortable) {
+          let order = sortable.toArray();
+          localStorage.setItem(sortable.options.group.name, order.join('|'));
+        }
+      },
+      onEnd: function (evt) {
+        let from = evt.from;
+        let items = from.children;
+        for (let i = 0, child; child = items[i]; i++) {
+          child.querySelector('.question-order').innerHTML = (i + 1);
+        }
+      }
     });
     this._pollGridView = gridDiv;
   }
+
 
   get pollListView() {
     return this._pollListView;

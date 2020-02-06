@@ -15,14 +15,23 @@ class CQuestion {
   }
 
   set answers(answers) {
-    let answersPool = answers;
     let id = this.id;
-    this.sortByOrder(answersPool);
-    let tempOutput = [];
-    answersPool.forEach(function (val, index) {
-      tempOutput[index] = new CAnswer(val, index, id);
+    let tempAnswersArray = {};
+    answers.forEach(function (val, index) {
+      tempAnswersArray[val.id] = new CAnswer(val, index, id);
     });
-    this._answers = tempOutput;
+    this._answers = tempAnswersArray;
+  }
+
+  get answers() {
+    let tempArray = [];
+    let index = 0;
+    for (let key in this._answers) {
+      tempArray[index] = this._answers[key];
+      index++;
+    }
+    this.sortByOrder(tempArray);
+    return tempArray;
   }
 
   set numberOfAnswers(answers) {
@@ -31,10 +40,6 @@ class CQuestion {
 
   get numberOfAnswers() {
     return this._numberOfAnswers;
-  }
-
-  get answers() {
-    return this._answers;
   }
 
   hideQuestionInListView() {
@@ -62,8 +67,9 @@ class CQuestion {
 
   setQuestionLimit(value) {
     let oldVal = this.limit;                                          // + - приведение к типу number
-    let limit = +value;
-    if (limit === oldVal) return;
+    let Obj = this;
+    console.log(this.limit);
+    if (+value === oldVal) return;
     let url = this.LIMIT_QUESTION_URL;
     let qId = this.id;
     let tmpl = this.questionListTmpl;
@@ -74,16 +80,20 @@ class CQuestion {
       method: 'post',
       data: {
         id: qId,
-        limit: limit
+        limit: +value
       }
     }).done(function (response) {
       if (!response.code) {
         limitInput.value = oldVal;
         console.log(response.data.message);
-      } else {
-        titleNode.classList.add('be-attention');
+        return;
       }
-      
+      Obj.limit = +value;
+      if (Obj.limit > 1) {
+        titleNode.classList.add('be-attention');
+      } else {
+        titleNode.classList.remove('be-attention');
+      }
     }).fail(function () {
       limitInput.value = oldVal;
       console.log('Failed to hide question');
@@ -134,7 +144,7 @@ class CQuestion {
       let gridItemClone = gridItem.cloneNode(true);
       gridItemClone.removeAttribute('id');
       gridItemClone.dataset.id = this.id;
-      if (this.limit !== '1') {
+      if (this.limit !== 1) {
         gridItemClone.classList.add('multiple-answers');
       }
       gridItemClone.querySelector('.question-order').innerHTML = this.oldOrder;
@@ -147,9 +157,8 @@ class CQuestion {
 
   findAnswerById(id) {
     let answers = this.answers;
-    for (let key in answers) {
-      if(answers[key].id === id) return answers[key];
-    }
+    if (answers[id] !== undefined)
+      return answers[id];
     return false;
   }
 
@@ -247,7 +256,7 @@ class CQuestion {
   */
 
   sortByOrder(arr) {
-    arr.sort((a, b) => +a.order > +b.order ? 1 : -1);
+    arr.sort((a, b) => +a.oldOrder > +b.oldOrder ? 1 : -1);
   }
 
 }
