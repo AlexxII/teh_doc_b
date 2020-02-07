@@ -211,11 +211,23 @@ class ConstructController extends Controller
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if (!empty($_POST)) {
       $arrayOfIds = $_POST['questions'];
+      $transaction = Yii::$app->db->beginTransaction();
       foreach ($arrayOfIds as $key => $id) {
         $question = Questions::findModel($id);
         $question->order = $key + 1;
-        $question->save();
+        if (!$question->save()) {
+          $transaction->rollback();
+          return [
+            'data' => [
+              'success' => false,
+              'data' => $question->errors,
+              'message' => 'Не удалось сохранить очередность. Ошибка - ',
+            ],
+            'code' => 0,
+          ];
+        }
       }
+      $transaction->commit();
       return [
         'data' => [
           'success' => true,

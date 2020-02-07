@@ -68,7 +68,7 @@ class PollConstructor {
       onUpdate: function (evt) {
         NProgress.start();
         let newOrder = sortable.toArray();
-        Obj.savePollReoder(newOrder, sortable);
+        Obj.savePollReoder(newOrder, sortable, 0);
         let items = evt.from.children;
         for (let i = 0, child; child = items[i]; i++) {
           child.querySelector('.question-order').innerHTML = (i + 1);
@@ -103,7 +103,7 @@ class PollConstructor {
       onUpdate: function (evt) {
         NProgress.start();
         let newOrder = sortable.toArray();
-        Obj.savePollReoder(newOrder, sortable);
+        Obj.savePollReoder(newOrder, sortable, 1);
         let items = evt.from.children;
         for (let i = 0, child; child = items[i]; i++) {
           child.querySelector('.question-order').innerHTML = (i + 1);
@@ -113,7 +113,7 @@ class PollConstructor {
     Obj._pollGridView = gridDiv;
   }
 
-  savePollReoder(questionsArr, sortable) {
+  savePollReoder(questionsArr, sortable, list) {
     let url = this.REODER_QUESTIONS_URL;
     let Obj = this;
     let questions = this._questions;
@@ -131,18 +131,19 @@ class PollConstructor {
         NProgress.done();
         var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Изменить порядок не удалось';
         initNoty(tText, 'warning');
-        console.log(response.data.message);
+        console.log(response.data.message + ' ' + response.data.data);
         return;
       }
       NProgress.done();
       let newOrder = sortable.toArray();
-      console.log(questions);
       newOrder.forEach(function (val, index) {
         questions[val].newOrder = index;
       });
-      console.log(questions);
-      Obj.renderListTmpl();
-
+      if (list === 1) {
+        Obj.renderListTmpl();
+      } else {
+        Obj.renderGridTmpl();
+      }
     }).fail(function () {
       let oldOrder = Obj._oldOrder;
       sortable.sort(oldOrder);                                                          // восстанавливаем порядок

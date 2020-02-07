@@ -282,6 +282,7 @@ function hideAnswer() {
   let question = pollCounstructor.findQuestionById(questionId);
   if (question) {
     let answer = question.findAnswerById(answerId);
+    console.log(answer);
     answer.hideAnswerInListView();
   }
 }

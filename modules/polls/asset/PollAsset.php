@@ -29,6 +29,7 @@ class PollAsset extends AssetBundle
 
   public $css = [
     'css/poll_style.css',
+    'css/construct.css',
   ];
 
   public $depends = [

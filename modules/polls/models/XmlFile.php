@@ -94,9 +94,7 @@ class XmlFile extends Model
           }
         }
         $reader->close();
-
         $transaction->commit();
-
         $this->questionsCount = $questionsCount;
         $this->answersCount = $answersCount;
         return true;

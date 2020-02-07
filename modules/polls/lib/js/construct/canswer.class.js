@@ -8,6 +8,7 @@ class CAnswer {
     this.oldOrder = +config.order;
     this.unique = +config.unique;
     this.type = +config.input_type;
+    this.visible = +config.visible;
     this.answerTmpl = index + 1;
     this.HIDE_ANSWER_URL = '/polls/construct/hide-answer';
     this.UNIQUE_ANSWER_URL = '/polls/construct/unique-answer';
@@ -37,6 +38,10 @@ class CAnswer {
     if (this.unique === 1) {
       answerClone.classList.add('unique-answer');
       // answerClone.querySelector('.unique-btn');
+    }
+    if (this.visible === 0) {
+      answerClone.classList.add('hidden-answer');
+      answerClone.querySelector('.answer-hide').remove();
     }
     this._answerTmpl = answerClone;
   }

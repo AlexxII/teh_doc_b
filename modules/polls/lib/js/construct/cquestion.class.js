@@ -156,7 +156,8 @@ class CQuestion {
   }
 
   findAnswerById(id) {
-    let answers = this.answers;
+    let answers = this._answers;
+    console.log(answers);
     if (answers[id] !== undefined)
       return answers[id];
     return false;
