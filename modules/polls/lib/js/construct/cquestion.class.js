@@ -116,8 +116,15 @@ class CQuestion {
     questionClone.querySelector('.question-hide').dataset.id = this.id;
     let answers = this.answers;
     let answerContentNode = questionClone.querySelector('.answers-content');
+    let visCount = 1, skipCount = 1, answerNode;
     answers.forEach(function (answer, index) {
-      let answerNode = answer.renderCAnswer(index + 1);
+      if (answer.visible === 1) {
+        answerNode = answer.renderCAnswer(visCount);
+        visCount++;
+      } else {
+        answerNode = answer.renderCAnswer(skipCount);
+        skipCount++;
+      }
       answerContentNode.appendChild(answerNode);
     });
     new Sortable(answerContentNode, {

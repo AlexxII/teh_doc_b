@@ -58,7 +58,6 @@ class ConstructController extends Controller
 
   }
 
-
   public function actionHideToFill()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
