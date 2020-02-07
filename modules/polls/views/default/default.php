@@ -107,13 +107,19 @@ Select2Asset::register($this);
                 17.59 13.41 12 19 6.41z"></path>
             </svg>
           </div>
-          <div class="question-options question-service-btn dropdown-anywhere" data-menu="question-extension-menu">
+          <div class="question-options question-service-btn dropdown-toggle" id="question-menu" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="true">
             <svg width="20" height="20" viewBox="0 0 24 24">
               <path fill="none" d="M0 0h24v24H0V0z"></path>
-              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9
-                2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0
+              6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
             </svg>
           </div>
+          <ul class="dropdown-menu" aria-labelledby="question-menu">
+            <li class="question-trash"><a href="#">Скрытые ответы</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Удалить вопрос</a></li>
+          </ul>
         </div>
         <input class="question-limit question-service-btn" title="Максимальное количество ответов">
       </div>
@@ -132,6 +138,7 @@ Select2Asset::register($this);
       <span class="answer-old-order"></span>
     </div>
 
+
     <div class="answer-service-area">
       <span class="answer-hide answer-service-btn" title="Скрыть при заполнении">
         <svg width="20" height="20" viewBox="0 0 24 24">
@@ -140,13 +147,17 @@ Select2Asset::register($this);
           17.59 13.41 12 19 6.41z"></path>
         </svg>
       </span>
-      <span class="answer-options answer-service-btn dropdown-anywhere" data-menu="answer-extension-menu">
+      <span class="answer-options answer-service-btn dropdown-toggle" id="question-menu" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="true">
         <svg width="20" height="20" viewBox="0 0 24 24">
           <path fill="none" d="M0 0h24v24H0V0z"></path>
-          <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9
-          2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+          <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0
+              6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
         </svg>
       </span>
+      <ul class="dropdown-menu" aria-labelledby="question-menu">
+        <li><a href="#">Удалить ответ</a></li>
+      </ul>
       <span class="unique-btn answer-service-btn" data-unique="0" title="Уникальный для вопроса">
         <svg width="20" height="20" viewBox="0 0 560.317 560.316">
           <path d="M 207.523 560.316 c 0 0 194.42 -421.925 194.444 -421.986 l 10.79 -23.997 c -41.824 12.02 -135.271
@@ -170,6 +181,13 @@ Select2Asset::register($this);
     </div>
   </div>
 
+  <svg enable-background="new 0 0 1000 1000" viewBox="0 0 1000 1000" x="0px" y="0px">
+    <g><path d="M 609.5 637.3 c -116.8 -6.5 -228.4 11.9 -335.2 57.8 C 166.8 741.3 79.3 812.6 10 907.4 c 1.4 -8.3 2.7
+    -16.6 4.1 -24.9 c 1.5 -8.3 3 -16.6 4.8 -24.9 c 22.5 -101.8 58.7 -198.2 115.2 -286.3 c 57.9 -90.3 132.3 -162.7 230.2
+    -209 c 63.3 -30 130.1 -45.9 199.8 -50.3 c 14.8 -0.9 29.6 -1.4 44.9 -2.1 c 0 -71.9 0 -143.6 0 -215.2 c 0.9 -0.7 1.8
+    -1.4 2.7 -2.1 C 738 219.8 864.1 346.9 990 473.8 c -126.8 126.5 -253.4 253 -380.5 379.8 C 609.5 782 609.5 710.2 609.5
+    637.3 Z" /></g>
+  </svg>
 
 
   <div id="gridview-template" class="grid-item" data-id="">

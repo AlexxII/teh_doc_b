@@ -50,6 +50,10 @@ class CAnswer {
     this._answerTmpl = answerClone;
   }
 
+  saveSort(sortable) {
+    this.sortable = sortable;
+  }
+
   hideAnswerInListView() {
     let tmpl = this.answerTmpl;
     let url = this.HIDE_ANSWER_URL;
@@ -63,16 +67,16 @@ class CAnswer {
       }
     }).done(function (response) {
       if (response.code) {
-        console.log(testt);
-        let ar = testt.toArray();
-        console.log(ar);
-        ar.push(Obj.id);
-        console.log(ar);
-        testt.sort;
-        // Obj.hide;
-        // $(tmpl).hide(100, () => {
-        //   $(tmpl).remove()
-        // });
+        let sortable = Obj.sortable;
+        let sortDiv = sortable.el;
+        sortDiv.appendChild(Obj.answerTmpl.cloneNode(true));
+        let ar = sortable.toArray();
+        ar.push(Obj.id + '');
+        // console.log(Obj);
+        sortable.sort(ar);
+        $(tmpl).hide(100, () => {
+          $(tmpl).remove()
+        });
       } else {
         console.log(response.data.message + '\n' + response.data.data);
       }

@@ -198,6 +198,7 @@ class PollConstructor {
     }
   }
 
+
   get pollListView() {
     return this._pollListView;
   }

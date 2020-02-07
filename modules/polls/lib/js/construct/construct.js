@@ -1,7 +1,5 @@
 var pollConstruct;                      // главная глобальная переменная
 
-var testt, testtt;
-
 $(document).on('click', '#construct-wrap', function (e) {
   e.preventDefault();
   NProgress.start();
@@ -24,7 +22,8 @@ $(document).on('input', '#myRange', function (e) {
 $(document).on('click', '#btn-switch-view', changeConstructView)
   .on('click', '.question-hide', hideQuestion)
   .on('click', '.answer-hide', hideAnswer)
-  .on('click', '.unique-btn', setAnswerUnique);
+  .on('click', '.unique-btn', setAnswerUnique)
+  .on('click', '.question-trash', showQTrash);
 
 $.mask.definitions['H'] = '[1-9]';
 $.mask.definitions['h'] = '[0-9]';
@@ -43,57 +42,6 @@ $(document).on('paste', '.question-limit', function (e) {
 }).on('blur', '.question-limit', function () {
   saveQuestionLimit(this);
 });
-
-// ===================================== DDE ======================================
-let dDeFlag = false;
-
-$(document).on('click', 'body', function (e) {
-  if (dDeFlag) {
-    closeDDe();
-  }
-});
-
-$(document).on('click', '.dropdown-anywhere', function (e) {
-  e.preventDefault();
-  e.stopPropagation();
-  if (dDeFlag) {
-    closeDDe();
-  } else {
-    showDDE(this);
-  }
-});
-
-$(window).on('show.bs.dropdown', function (e) {
-  if (dDeFlag) {
-    closeDDe();
-  }
-});
-
-function showDDE(target) {
-  $('.dropdown.open .dropdown-toggle').dropdown('toggle');
-  let sourceID = $(target).data('menu');
-  let source = $('#' + sourceID);
-  var eOffset = $(target).offset();
-  let div = '<div class="dropdown-menu-anywhere">' +
-    '<div class="dropdown-menu-context">' +
-    source[0].outerHTML +
-    '</div>' +
-    '</div>';
-  $('body').append(div);
-  $('.dropdown-menu-anywhere').css({
-    'display': 'block',
-    'top': eOffset.top + $(target).outerHeight(),
-    'left': eOffset.left
-  });
-  dDeFlag = true;
-}
-
-function closeDDe() {
-  $('.dropdown-menu-anywhere').remove();
-  dDeFlag = false;
-}
-
-// ================================================================================
 
 function loadPollConfig(id, callback) {
   let url = '/polls/construct/get-poll-info?id=' + id;
@@ -304,4 +252,10 @@ function saveQuestionLimit(input) {
   let questionId = input.dataset.id;
   let question = pollCounstructor.findQuestionById(+questionId);
   question.setQuestionLimit(value);
+}
+
+function showQTrash() {
+  let questionId = $(this).data('id');
+  let question = pollCounstructor.findQuestionById(questionId);
+  question.showTrash();
 }

@@ -18,7 +18,7 @@ class CQuestion {
     let id = this.id;
     let tempAnswersArray = {};
     answers.forEach(function (val, index) {
-      tempAnswersArray[val.id] = new CAnswer(val, index, id);
+        tempAnswersArray[val.id] = new CAnswer(val, index, id);
     });
     this._answers = tempAnswersArray;
   }
@@ -114,6 +114,10 @@ class CQuestion {
     questionClone.querySelector('.question-limit').dataset.id = this.id;
     questionClone.querySelector('.question-limit').dataset.old = this.limit;
     questionClone.querySelector('.question-hide').dataset.id = this.id;
+    questionClone.querySelector('.question-trash').dataset.id = this.id;
+    let hCount = document.createTextNode(this._hCount);
+    questionClone.querySelector('.question-trash').appendChild(hCount);
+
     let answers = this.answers;
     let answerContentNode = questionClone.querySelector('.answers-content');
     let answerContentDelNode = questionClone.querySelector('.answers-content-ex');
@@ -129,34 +133,24 @@ class CQuestion {
       if (answers[key].visible === 0) {
         let hr = document.createElement('hr');
         answerContentNode.appendChild(hr);
-        break;
+        break
       }
     }
     answers.forEach(function (answer, index) {
       if (answer.visible === 0) {
-        answerNode = answer.renderCAnswer(skipCount);
-        skipCount++;
+        answerNode = answer.renderCAnswer(visCount);
+        visCount++;
         answerContentDelNode.appendChild(answerNode);
       }
     });
-    // testt = new Sortable(answerContentDelNode, {
-    //   animation: 150,
-    //   group: {
-    //     name: 'sh',
-    //     sort: false
-    //   },
-    //   put: false
-    // });
-    testtt = new Sortable(answerContentNode, {
+    this.sortable = new Sortable(answerContentNode, {
       multiDrag: true,
       selectedClass: 'selected',
       animation: 150,
-      group: 'sh',
       onEnd: function (evt) {
         let from = evt.from;
         let currentItem = evt.item;
         let items = from.children;
-        console.log(items);
         for (let i = 0, child; child = items[i]; i++) {
           let oldOrder = child.dataset.old;
           child.querySelector('.answer-number').innerHTML = (i + 1);
@@ -164,6 +158,16 @@ class CQuestion {
         }
       }
     });
+    this.hSortable = new Sortable(answerContentDelNode, {
+      multiDrag: true,
+      selectedClass: 'selected',
+      animation: 150,
+      sort: false
+    });
+    let tAnswers = this._answers;
+    for (let key in tAnswers) {
+      tAnswers[key].saveSort(this.hSortable);
+    }
     this._questionListTmpl = questionClone;
   }
 
@@ -206,6 +210,18 @@ class CQuestion {
 
   renderCQuestionGrid() {
     return this.questionGridTmpl;
+  }
+
+  showTrash() {
+    let hiddenAnswers = this._hiddenAnswers;
+    let content = document.createElement('div');
+    for (let key in hiddenAnswers) {
+      content.appendChild(hiddenAnswers[key]._answerTmpl);
+    }
+    $.dialog({
+      title: 'Скрытые ответы',
+      content: content,
+    });
   }
 
   /*

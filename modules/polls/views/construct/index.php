@@ -55,6 +55,7 @@
 
     <div id="question-extension-menu">
       <!--      <div class="dde-menu-item">Добавить ответ</div>-->
+      <div class="dde-menu-item question-trash">Удаленные ответы</div>
       <div class="dde-menu-item">Удалить вопрос</div>
     </div>
 
