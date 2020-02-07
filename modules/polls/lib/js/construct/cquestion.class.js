@@ -106,7 +106,7 @@ class CQuestion {
     questionClone.dataset.id = this.id;
     questionClone.removeAttribute('id');
     questionClone.querySelector('.question-order').innerHTML = this.newOrder;
-    if (this.limit > 1 || this.limit === null) {
+    if (this.limit > 1 || this.limit === 0) {
       questionClone.querySelector('.question-header').classList.add('be-attention');
     }
     questionClone.querySelector('.question-title').innerHTML = this.title;
@@ -116,25 +116,47 @@ class CQuestion {
     questionClone.querySelector('.question-hide').dataset.id = this.id;
     let answers = this.answers;
     let answerContentNode = questionClone.querySelector('.answers-content');
+    let answerContentDelNode = questionClone.querySelector('.answers-content-ex');
     let visCount = 1, skipCount = 1, answerNode;
     answers.forEach(function (answer, index) {
       if (answer.visible === 1) {
         answerNode = answer.renderCAnswer(visCount);
         visCount++;
-      } else {
+        answerContentNode.appendChild(answerNode);
+      }
+    });
+    for (let key in answers) {
+      if (answers[key].visible === 0) {
+        let hr = document.createElement('hr');
+        answerContentNode.appendChild(hr);
+        break;
+      }
+    }
+    answers.forEach(function (answer, index) {
+      if (answer.visible === 0) {
         answerNode = answer.renderCAnswer(skipCount);
         skipCount++;
+        answerContentDelNode.appendChild(answerNode);
       }
-      answerContentNode.appendChild(answerNode);
     });
-    new Sortable(answerContentNode, {
+    // testt = new Sortable(answerContentDelNode, {
+    //   animation: 150,
+    //   group: {
+    //     name: 'sh',
+    //     sort: false
+    //   },
+    //   put: false
+    // });
+    testtt = new Sortable(answerContentNode, {
       multiDrag: true,
       selectedClass: 'selected',
       animation: 150,
+      group: 'sh',
       onEnd: function (evt) {
         let from = evt.from;
         let currentItem = evt.item;
         let items = from.children;
+        console.log(items);
         for (let i = 0, child; child = items[i]; i++) {
           let oldOrder = child.dataset.old;
           child.querySelector('.answer-number').innerHTML = (i + 1);

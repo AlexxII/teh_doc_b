@@ -205,7 +205,7 @@ class ConstructController extends Controller
 
   }
 
-  public function actionReoderQuestions()
+  public function actionReorderQuestions()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if (!empty($_POST)) {

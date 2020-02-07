@@ -14,8 +14,10 @@ class CAnswer {
     this.UNIQUE_ANSWER_URL = '/polls/construct/unique-answer';
   }
 
-  renderCAnswer() {
-    return this.answerTmpl;
+  renderCAnswer(index) {
+    let answer = this.answerTmpl;
+    answer.querySelector('.answer-number').innerHTML = index;
+    return answer;
   }
 
   get answerTmpl() {
@@ -29,19 +31,21 @@ class CAnswer {
     let answerId = this.id;
     answerClone.dataset.id = answerId;
     answerClone.dataset.old = this.oldOrder;
-    answerClone.querySelector('.answer-number').innerHTML = index;
     answerClone.querySelector('.answer-title').innerHTML = this.title;
-    answerClone.querySelector('.answer-hide').dataset.id = answerId;
-    answerClone.querySelector('.answer-hide').dataset.questionId = this.parentQuestion;
-    answerClone.querySelector('.unique-btn').dataset.id = answerId;
-    answerClone.querySelector('.unique-btn').dataset.questionId = this.parentQuestion;
-    if (this.unique === 1) {
-      answerClone.classList.add('unique-answer');
-      // answerClone.querySelector('.unique-btn');
-    }
     if (this.visible === 0) {
       answerClone.classList.add('hidden-answer');
       answerClone.querySelector('.answer-hide').remove();
+      answerClone.querySelector('.answer-options').remove();
+      answerClone.querySelector('.unique-btn').remove();
+    } else {
+      answerClone.querySelector('.restore-btn').remove();
+      answerClone.querySelector('.answer-hide').dataset.id = answerId;
+      answerClone.querySelector('.answer-hide').dataset.questionId = this.parentQuestion;
+      answerClone.querySelector('.unique-btn').dataset.id = answerId;
+      answerClone.querySelector('.unique-btn').dataset.questionId = this.parentQuestion;
+    }
+    if (this.unique === 1) {
+      answerClone.classList.add('unique-answer');
     }
     this._answerTmpl = answerClone;
   }
@@ -49,6 +53,7 @@ class CAnswer {
   hideAnswerInListView() {
     let tmpl = this.answerTmpl;
     let url = this.HIDE_ANSWER_URL;
+    let Obj = this;
     let answerId = this.id;
     $.ajax({
       url: url,
@@ -58,9 +63,16 @@ class CAnswer {
       }
     }).done(function (response) {
       if (response.code) {
-        $(tmpl).hide(100, () => {
-          $(tmpl).remove()
-        });
+        console.log(testt);
+        let ar = testt.toArray();
+        console.log(ar);
+        ar.push(Obj.id);
+        console.log(ar);
+        testt.sort;
+        // Obj.hide;
+        // $(tmpl).hide(100, () => {
+        //   $(tmpl).remove()
+        // });
       } else {
         console.log(response.data.message + '\n' + response.data.data);
       }

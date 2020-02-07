@@ -201,7 +201,7 @@
 }
 
 .unique-answer {
-  background-color: #d8f0fb;
+  background-color: #d8f0fb !important;
 }
 
 .answer-about-area {

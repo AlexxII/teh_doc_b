@@ -1,5 +1,7 @@
 var pollConstruct;                      // главная глобальная переменная
 
+var testt, testtt;
+
 $(document).on('click', '#construct-wrap', function (e) {
   e.preventDefault();
   NProgress.start();
@@ -282,7 +284,6 @@ function hideAnswer() {
   let question = pollCounstructor.findQuestionById(questionId);
   if (question) {
     let answer = question.findAnswerById(answerId);
-    console.log(answer);
     answer.hideAnswerInListView();
   }
 }
@@ -296,16 +297,6 @@ function setAnswerUnique() {
     let answer = question.findAnswerById(answerId);
     answer.changeUniqueForQuestion();
   }
-}
-
-function setUnique(item, btn) {
-  $(item).addClass('unique-answer');
-  $(btn).data('unique', 1);
-}
-
-function unsetUnique(item, btn) {
-  $(item).removeClass('unique-answer');
-  $(btn).data('unique', 0);
 }
 
 function saveQuestionLimit(input) {
