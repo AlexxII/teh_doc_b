@@ -80,4 +80,3 @@ function sendPollFormData(url, table, form, xmlData, yTest, nTest) {
     }
   });
 }
-

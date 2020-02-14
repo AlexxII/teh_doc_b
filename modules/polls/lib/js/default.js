@@ -111,6 +111,7 @@ $(document).ready(function (e) {
   pollTable.on('select', function (e, dt, type, indexes) {
     if (type === 'row') {
       $('#delete-wrap').show();
+      $('#batch-input').show();
       $('#construct-wrap').show();
     }
   });
@@ -118,6 +119,7 @@ $(document).ready(function (e) {
     if (type === 'row') {
       if (pollTable.rows({selected: true}).count() > 0) return;
       $('#delete-wrap').hide();
+      $('#batch-input').hide();
       $('#construct-wrap').hide();
     }
   });
@@ -127,12 +129,14 @@ $(document).ready(function (e) {
   pollTable.on('length.dt', function (e, settings, len) {
     pollTable.rows().deselect();
     $('#delete-wrap').hide();
+    $('#batch-input').hide();
     $('#construct-wrap').hide();
   });
 
   pollTable.on('draw.dt', function (e, settings, len) {
     pollTable.rows().deselect();
     $('#delete-wrap').hide();
+    $('#batch-input').hide();
     $('#construct-wrap').hide();
     NProgress.done();
   });
@@ -281,4 +285,34 @@ function deleteProcess(url, table, csrf) {
     var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Удалить опрос не удалось';
     initNoty(tText, 'warning');
   });
+}
+
+$(document).on('click', '#batch-input', function (e) {
+  e.preventDefault();
+  NProgress.start();
+  let data = pollTable.rows({selected: true}).data();
+  let pollId = data[0].id;
+  let url = '/polls/batch-input';
+  loadExContentEx(url, () => loadPollConfigB(pollId, startBatchInput));
+});
+
+function loadPollConfigB(id, callback) {
+  let url = '/polls/batch-input/get-poll-info?id=' + id;
+  $.ajax({
+    url: url,
+    method: 'get'
+  }).done(function (response) {
+    if (response.code) {
+      callback(response.data.data[0]);
+    } else {
+      console.log(response.data.message);
+    }
+  }).fail(function () {
+    console.log('Failed to load poll config');
+  });
+}
+
+function startBatchInput(config) {
+  batch = new Batch(config);
+  NProgress.done();
 }

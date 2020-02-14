@@ -3,11 +3,11 @@
 ?>
 
 <div class="settings-menu">
-  <a class="menu-link jclick" href="" data-wsize="large" data-url="" data-title="Места размещения">Тест</a>
+  <a class="menu-link jclick" href="" data-wsize="large" data-url="">Тест</a>
 </div>
 <hr>
 <div class="settings-menu">
-  <a class="menu-link jclick" href="" data-wsize="large" data-url="" data-title="Интерфейс">Тест</a>
+  <a class="menu-link jclick" href="" data-wsize="large" data-url="">Тест</a>
 </div>
 <?php if(\Yii::$app->user->identity->isAdmin) : ?>
 <hr>

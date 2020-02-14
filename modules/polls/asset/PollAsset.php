@@ -24,12 +24,18 @@ class PollAsset extends AssetBundle
     'js/construct/pollconstructor.class.js',
     'js/construct/cquestion.class.js',
     'js/construct/canswer.class.js',
-    'js/construct/construct.js'
+    'js/construct/construct.js',
+
+    'js/batch/batch.class.js',
+    'js/batch/banswer.class.js',
+    'js/batch/bquestion.class.js',
+    'js/batch/batch.js'
   ];
 
   public $css = [
     'css/poll_style.css',
     'css/construct.css',
+    'css/batch.css',
   ];
 
   public $depends = [

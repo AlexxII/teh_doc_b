@@ -14,10 +14,6 @@ $poll_code_hint = "Укажите код данного опроса";
 $poll_election_hint = "Является ли данный опрос - выборным";
 
 ?>
-<style>
-</style>
-
-
 <div class="form-create-poll">
   <div class="col-lg-12 col-md-12" style="border-radius:2px;padding-top:10px">
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => '']]); ?>

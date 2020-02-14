@@ -1,0 +1,8 @@
+#add-batch {
+  cursor: pointer;
+}
+#add-batch-wrap {
+  position: absolute;
+  top: 10px;
+  left: -60px;
+}

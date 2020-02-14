@@ -1,40 +1,27 @@
 <div id="left-menu">
   <div class="menu-list">
-    <div class="menu-list-about ex-click" data-url="/equipment/task" data-back-url="/equipment">
+<!--    ex-click-->
+    <div class="menu-list-about" data-url="" data-back-url="/equipment">
       <div>
-        <svg width="50" height="50" viewBox="0 0 24 24" focusable="false">
-          <path d="M11.9 3.75c-4.55 0-8.23 3.7-8.23 8.25H.92l3.57 3.57.04.13 3.7-3.7H5.5c0-3.54 2.87-6.42 6.42-6.42
-          3.54 0 6.4 2.88 6.4 6.42s-2.86 6.42-6.4 6.42c-1.78 0-3.38-.73-4.54-1.9l-1.3 1.3c1.5 1.5 3.55 2.43 5.83 2.43
-          4.58 0 8.28-3.7 8.28-8.25 0-4.56-3.7-8.25-8.26-8.25zM11 8.33v4.6l3.92 2.3.66-1.1-3.2-1.9v-3.9H11z">
-          </path>
+        <svg width="50" height="50"  viewBox="0 0 48 48" enable-background="new 0 0 48 48">
+          <path fill="#455A64" d="M36,4H26c0,1.1-0.9,2-2,2s-2-0.9-2-2H12C9.8,4,8,5.8,8,8v32c0,2.2,1.8,4,4,4h24c2.2,0,4-1.8,4-4V8 C40,5.8,38.2,4,36,4z"/>
+          <path fill="#fff" d="M36,41H12c-0.6,0-1-0.4-1-1V8c0-0.6,0.4-1,1-1h24c0.6,0,1,0.4,1,1v32C37,40.6,36.6,41,36,41z"/>
+          <g fill="#90A4AE">
+            <path d="M26,4c0,1.1-0.9,2-2,2s-2-0.9-2-2h-7v4c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V4H26z"/>
+            <path d="M24,0c-2.2,0-4,1.8-4,4s1.8,4,4,4s4-1.8,4-4S26.2,0,24,0z M24,6c-1.1,0-2-0.9-2-2s0.9-2,2-2s2,0.9,2,2 S25.1,6,24,6z"/>
+          </g>
+          <g fill="#CFD8DC">
+            <rect x="21" y="20" width="12" height="2"/>
+            <rect x="15" y="19" width="4" height="4"/>
+          </g>
+          <g fill="#03A9F4">
+            <rect x="21" y="29" width="12" height="2"/>
+            <rect x="15" y="28" width="4" height="4"/>
+          </g>
         </svg>
       </div>
       <div class="menu-point-footer">
-        <h5>Задание на обновление</h5>
-      </div>
-    </div>
-    <div class="menu-list-about ex-click" data-url="/equipment/show/categories" data-back-url="/equipment">
-      <div>
-        <svg width="50" height="50" viewBox="0 0 25 25">
-          <path d="M18 21H4V7H2v14c0 1.1.9 2 2 2h14v-2zm3-4V3c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2
-          2h11c1.1 0 2-.9 2-2zm-2 0H8V3h11v14z"></path>
-        </svg>
-      </div>
-      <div class="menu-point-footer">
-        <h5>Классификация по категориям</h5>
-      </div>
-    </div>
-    <div class="menu-list-about ex-click" data-url="/equipment/show/placement" data-back-url="/equipment">
-      <div>
-        <svg width="50" height="50" viewBox="0 0 25 25">
-          <path fill="none" d="M0 0h24v24H0V0z"></path>
-          <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4
-          12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0
-          4h-2v2h2v-2z"></path>
-        </svg>
-      </div>
-      <div class="menu-point-footer">
-        <h5>Классификация по местоположению</h5>
+        <h5>Пакетный ввод</h5>
       </div>
     </div>
   </div>
