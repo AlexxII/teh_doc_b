@@ -8,6 +8,7 @@ class Batch {
       this.codesTable = this.questions;
       this.renderPollHeader();
       this.renderTemplate();
+      this.respondentsPool = [];
     }
   }
 
@@ -81,7 +82,6 @@ class Batch {
 
   parseOprFile(file) {
     let Obj = this;
-    Obj.test = [];
     let re = /\s*,\s*999\s*/;
     let ar = file.split(re);
     ar.forEach(function (val, index) {
@@ -93,7 +93,7 @@ class Batch {
         }
       }
     });
-    console.log(Obj.test);
+    console.log(Obj.respondentsPool);
   }
 
   verifyLine(line) {
@@ -112,9 +112,9 @@ class Batch {
       let match = answerCode.match(reg);
       let code = match[1];                                                // код
       let ex = match[2];                                                  // расширенный ответ
-      tempAr.push(codesTable[code].code);
+      tempAr.push(codesTable[code].code + ' ' + ex);
     });
-    Obj.test[lIndex] = tempAr;
+    Obj.respondentsPool[lIndex] = tempAr;
   }
 
   sortByOrder(arr) {
@@ -124,5 +124,5 @@ class Batch {
   verifyPollConfigStructure(val) {
     return val !== null;
   }
-
+// Сохранять результаты перед корректировкой !!!!! и результаты после корректировки
 }
