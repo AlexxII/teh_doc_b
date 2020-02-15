@@ -210,8 +210,8 @@
 
 .answer-old-order {
   position: absolute;
-  top: -9px;
-  right: -10px;
+  top: -12px;
+  left: -14px;
   font-size: 13px;
 }
 
@@ -243,4 +243,10 @@
 }
 .dropdown-menu > li > a {
   padding: 5px 20px !important;
+}
+.answer-code {
+  position: absolute;
+  top: -10px;
+  right: -13px;
+  font-size: 12px;
 }

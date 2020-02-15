@@ -6,6 +6,7 @@ class CAnswer {
     this.titleEx = config.title_ex;
     this.newOrder = +config.order;
     this.oldOrder = +config.order;
+    this.code = config.code ;
     this.unique = +config.unique;
     this.type = +config.input_type;
     this.visible = +config.visible;
@@ -32,6 +33,9 @@ class CAnswer {
     answerClone.dataset.id = answerId;
     answerClone.dataset.old = this.oldOrder;
     answerClone.querySelector('.answer-title').innerHTML = this.title;
+    let code = this.code.padStart(3, '0');
+    answerClone.querySelector('.answer-code').innerHTML = code;
+
     if (this.visible === 0) {
       answerClone.classList.add('hidden-answer');
       answerClone.querySelector('.answer-hide').remove();

@@ -7,6 +7,7 @@ $(document).on('click', '#construct-wrap', function (e) {
   let pollId = data[0].id;
   let url = '/polls/construct?id=';
   loadExContentEx(url, () => loadPollConfig(pollId, startConstruct));
+  pollTable.rows().deselect();
 });
 
 $(document).on('input', '#myRange', function (e) {
@@ -258,4 +259,10 @@ function showQTrash() {
   let questionId = $(this).data('id');
   let question = pollCounstructor.findQuestionById(questionId);
   question.showTrash();
+}
+
+// отключение сортировки
+function switchOrder() {
+  let sortable = pollCounstructor.sortable;
+  sortable.option('sort', false);
 }

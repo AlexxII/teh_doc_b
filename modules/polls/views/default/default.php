@@ -160,10 +160,9 @@ Select2Asset::register($this);
       <span class="answer-number"></span>
       <span class="answer-number-dot">.</span>
       <span class="answer-title"></span>
+      <span class="answer-code"></span>
       <span class="answer-old-order"></span>
     </div>
-
-
     <div class="answer-service-area">
       <span class="answer-hide answer-service-btn" title="Скрыть при заполнении">
         <svg width="20" height="20" viewBox="0 0 24 24">
@@ -216,11 +215,33 @@ Select2Asset::register($this);
     </g>
   </svg>
 
-
   <div id="gridview-template" class="grid-item" data-id="">
     <div class="grid-content">
       <span class="question-order"></span><span class="dot">.</span>
       <span class="question-title"></span>
+    </div>
+  </div>
+
+  <div id="question-batch-template" class="question-wrap">
+    <div class="question-content">
+      <div class="question-header">
+        <h2 class="question-data">
+          <span class="question-order"></span>
+          <span class="question-number-dot">.</span>
+          <span class="question-title"></span>
+        </h2>
+        <span class="question-limit question-service-btn" title="Максимальное количество ответов">
+      </div>
+      <div class="answers-content">
+      </div>
+    </div>
+  </div>
+
+  <div id="answer-batch-template" class="list-group-item answer-data">
+    <div class="answer-about-area">
+      <span class="answer-number"></span>
+      <span class="answer-number-dot">.</span>
+      <span class="answer-title"></span>
     </div>
   </div>
 

@@ -11,5 +11,17 @@ $(document).on('change', '#batchupload', function (e) {
     batch.parseOprFile(oprData);
   };
   reader.readAsText(selectedFile);
+  // renderListBatchView();
 });
 
+
+
+function renderListBatchView() {
+  $.alert({
+    title: 'Опрос ROS20-03',
+    content: batch.renderList(),
+    columnClass: 'col-md-12',
+    animateFromElement: false
+  });
+  // $('.poll-batch-wrap').html('').append(batch.renderList());
+}

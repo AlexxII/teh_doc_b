@@ -294,6 +294,7 @@ $(document).on('click', '#batch-input', function (e) {
   let pollId = data[0].id;
   let url = '/polls/batch-input';
   loadExContentEx(url, () => loadPollConfigB(pollId, startBatchInput));
+  pollTable.rows().deselect();
 });
 
 function loadPollConfigB(id, callback) {
@@ -313,6 +314,7 @@ function loadPollConfigB(id, callback) {
 }
 
 function startBatchInput(config) {
+  console.log(config);
   batch = new Batch(config);
   NProgress.done();
 }

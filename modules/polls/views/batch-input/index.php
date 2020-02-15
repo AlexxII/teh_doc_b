@@ -6,4 +6,10 @@
     </div>
   </form>
 </div>
+<div class="poll-batch-result">
+
+</div>
+<div class="poll-batch-wrap">
+
+</div>
 
