@@ -81,36 +81,40 @@ class Batch {
 
   parseOprFile(file) {
     let Obj = this;
+    Obj.test = [];
     let re = /\s*,\s*999\s*/;
     let ar = file.split(re);
     ar.forEach(function (val, index) {
-      if (Obj.verifyLine(val)) {
-        Obj.parseLine(val);
-      } else {
-        console.log('В анкете №' + index + ' вероятно есть ошибки. Проверте!');
+      if (val !== '') {
+        if (Obj.verifyLine(val)) {
+          Obj.parseLine(val, index);
+        } else {
+          console.log('В анкете №' + index + ' вероятно есть ошибки. Проверте!');
+        }
       }
-    })
+    });
+    console.log(Obj.test);
   }
 
   verifyLine(line) {
     return true;
   }
 
-  parseLine(line) {
+  parseLine(line, lIndex) {
+    let Obj = this;
+    let tempAr = [];
     let re = /\s*,\s*/;
     let answersCodes = line.split(re);
     let answersCount = answersCodes.length;
     let codesTable = this.codesTable;
-    console.log(answersCodes);
-    let reg = '/([0-9]{3})(\\D*)/';
+    let reg = /([0-9]{3})(\D*)/;
     answersCodes.forEach(function (answerCode, index) {
-      let code = answerCode.replace(reg, '$1');
-      let ex = answerCode.replace(reg, '$2');
-      console.log(code);
-      console.log(ex);
-      // console.log(codesTable[code].code);
+      let match = answerCode.match(reg);
+      let code = match[1];                                                // код
+      let ex = match[2];                                                  // расширенный ответ
+      tempAr.push(codesTable[code].code);
     });
-    console.log('----------------');
+    Obj.test[lIndex] = tempAr;
   }
 
   sortByOrder(arr) {
