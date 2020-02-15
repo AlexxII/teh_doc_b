@@ -64,7 +64,17 @@ class Batch {
     return this._template;
   }
 
-  renderList() {
+  renderList(key) {
+    let results = this.respondentsPool[key];
+    results.forEach(function (result, index) {
+      let mark = document.createElement('div');
+      mark.className = 'marked';
+      let answer = result.obj;
+      let tmpl = answer.answerTmpl;
+      tmpl.appendChild(mark);
+      // tmpl.className += ' te';
+      // tmpl.classList.add('te');
+    });
     return this.pollListView;
   }
 
@@ -80,7 +90,7 @@ class Batch {
     Obj._template = listView;
   }
 
-  parseOprFile(file) {
+  parseOprFile(file, callback) {
     let Obj = this;
     let re = /\s*,\s*999\s*/;
     let ar = file.split(re);
@@ -93,7 +103,7 @@ class Batch {
         }
       }
     });
-    console.log(Obj.respondentsPool);
+    callback();
   }
 
   verifyLine(line) {
@@ -111,12 +121,17 @@ class Batch {
     answersCodes.forEach(function (answerCode, index) {
       if (answerCode) {
         let match = answerCode.match(reg);
-        let code = match[1];                                                // код
-        let ex = match[2];                                                  // расширенный ответ
-        let sheet = {};
-        sheet.id = codesTable[code].id;
-        sheet.exText = ex;
-        tempAr.push(sheet);
+        if (match !== null) {
+          let code = match[1];                                                // код
+          let ex = match[2];                                                  // расширенный ответ
+          let sheet = {};
+          sheet.id = codesTable[code].id;
+          sheet.exText = ex;
+          sheet.obj = codesTable[code];
+          tempAr.push(sheet);
+        } else {
+          console.log('Вероятно ошибка в анкете №'+ lIndex + '. В районе кода по счету ' + index + ', текст ответа: ' + answerCode);
+        }
       }
     });
     Obj.respondentsPool[lIndex] = tempAr;

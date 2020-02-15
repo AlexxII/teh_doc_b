@@ -35,6 +35,8 @@ class BAnswer {
     answerClone.removeAttribute('id');
     answerClone.dataset.id = this.id;
     answerClone.querySelector('.answer-title').innerHTML = this.title;
+    let code = this.code.padStart(3, '0');
+    answerClone.querySelector('.answer-code').innerHTML = code;
     if (this.unique === 1) {
       answerClone.classList.add('unique-answer');
     }

@@ -242,6 +242,7 @@ Select2Asset::register($this);
       <span class="answer-number"></span>
       <span class="answer-number-dot">.</span>
       <span class="answer-title"></span>
+      <span class="answer-code"></span>
     </div>
   </div>
 

@@ -8,20 +8,37 @@ $(document).on('change', '#batchupload', function (e) {
 
   reader.onload = function (e) {
     oprData = e.target.result;
-    batch.parseOprFile(oprData);
+    batch.parseOprFile(oprData, renderResult);
   };
   reader.readAsText(selectedFile);
   // renderListBatchView();
 });
 
+function renderResult() {
+  let reposnondetsAnswers = batch.respondentsPool;
+  $('.poll-batch-wrap').html('');
+  let mainDiv = document.createElement('div');
+  mainDiv.className = 'grid';
+  for (let key in reposnondetsAnswers) {
+    let obj = reposnondetsAnswers[key];
+    let divNode = document.createElement('div');
+    divNode.className = 'sheet';
+    divNode.id = key;
+    mainDiv.append(divNode);
+  }
+  $('.poll-batch-wrap').append(mainDiv);
+}
 
-
-function renderListBatchView() {
+function renderListBatchView(key) {
   $.alert({
     title: 'Опрос ROS20-03',
-    content: batch.renderList(),
+    content: batch.renderList(key),
     columnClass: 'col-md-12',
     animateFromElement: false
   });
-  // $('.poll-batch-wrap').html('').append(batch.renderList());
 }
+
+$(document).on('click', '.sheet', function (e) {
+  let key = this.id;
+  renderListBatchView(key);
+});
