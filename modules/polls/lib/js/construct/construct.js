@@ -25,9 +25,8 @@ $(document).on('click', '#btn-switch-view', changeConstructView)
   .on('click', '.answer-hide', hideAnswer)
   .on('click', '.unique-btn', setAnswerUnique)
   .on('click', '.question-trash', showQTrash)
-  .on('click', '.logic', setLogic);
-
-$(document).on('change', 'input:checkbox', chechboxLogic);
+  .on('click', '.logic', setLogic)
+  .on('click', '.q-title', checkboxLogicEx);
 
 $.mask.definitions['H'] = '[1-9]';
 $.mask.definitions['h'] = '[0-9]';
@@ -64,7 +63,6 @@ function loadPollConfig(id, callback) {
 }
 
 function startConstruct(config) {
-  console.log(config);
   pollCounstructor = new PollConstructor(config);
   renderListView();
   NProgress.done();
@@ -139,25 +137,41 @@ function showQTrash() {
 
 function setLogic() {
   let answerId = this.dataset.id;
-  let a = document.createElement('div');
-  a.className = 'qqqqqqqq';
-  a.appendChild(pollCounstructor.renderLogicMenu());
   $.alert({
-    title: pollCounstructor.code,
-    content: a,
+    title: pollCounstructor.code + ' ' + 'исключить ответы',
+    content: pollCounstructor.renderLogicMenu(),
     columnClass: 'col-md-12',
-    animateFromElement: false
+    animateFromElement: false,
+    buttons: {
+      ok: {
+        text: 'Сохранить',
+        btnClass: 'btn-success',
+        action:function() {
+          let menu = document.getElementById('logic-menu-content');
+          let inputs = menu.getElementsByTagName('input');
+          let result = [];
+          for (let key in inputs) {
+            if (inputs[key].checked) {
+              result.push(inputs[key].dataset.id);
+              inputs[key].checked = false;
+            }
+          }
+          console.log(result);
+        }
+      },
+      cancel: {
+        text: 'Отмена'
+      }
+    }
   });
-
-  // pollCounstructor.renderLogicMenu();
-  // console.log();
-
 }
 
-function chechboxLogic() {
-  console.log(this.parentNode.parentNode.children[1].childNodes);
-  // let state = this.checked ? true : false;
-  // $(this).next('ul').find('input:checkbox').prop('checked', state);
+function checkboxLogicEx() {
+  let li = this.parentNode;
+  let inputs = li.getElementsByTagName('input');
+  for (let key in inputs) {
+    inputs[key].checked = !inputs[key].checked;
+  }
 }
 
 // отключение сортировки

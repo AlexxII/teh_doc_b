@@ -217,6 +217,7 @@ class PollConstructor {
 
   renderLogicMenu() {
     let menuDiv = document.createElement('div');
+    menuDiv.id = 'logic-menu-content';
     let questions = this.questions;
     for (let qId in questions) {
       let question = questions[qId];

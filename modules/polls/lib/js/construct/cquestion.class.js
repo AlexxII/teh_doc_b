@@ -178,6 +178,8 @@ class CQuestion {
     questionClone.dataset.id = this.id;
     questionClone.removeAttribute('id');
     questionClone.querySelector('.q-title').innerHTML = this.title;
+    questionClone.querySelector('.q-order').innerHTML = this.newOrder + '.';
+
     let answers = this.answers;
     let qNode = questionClone.querySelector('.question-content-ex');
     answers.forEach(function (answer, index) {
@@ -186,7 +188,6 @@ class CQuestion {
         qNode.appendChild(answerNode);
       }
     });
-    // questionClone.appendChild(qNode);
     this._questionTmplEx = questionClone;
   }
 
