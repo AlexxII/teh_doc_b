@@ -94,6 +94,42 @@ class ConstructController extends Controller
     ];
   }
 
+  public function actionRestoreQuestion()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (!empty($_POST)) {
+      $id = $_POST['id'];
+      $question = Questions::findModel($id);
+      $question->visible = 1;
+      if ($question->save()) {
+        return [
+          'data' => [
+            'success' => true,
+            'data' => $id,
+            'message' => 'Hidden successfully',
+          ],
+          'code' => 1,
+        ];
+      }
+      return [
+        'data' => [
+          'success' => false,
+          'data' => $question->errors,
+          'message' => 'Can`t save',
+        ],
+        'code' => 0,
+      ];
+    }
+    return [
+      'data' => [
+        'success' => false,
+        'data' => 'Poor',
+        'message' => '$_POST - empty',
+      ],
+      'code' => 0,
+    ];
+  }
+
   public function actionHideAnswer()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

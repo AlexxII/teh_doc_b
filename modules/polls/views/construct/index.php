@@ -2,10 +2,18 @@
   <div class="poll-construct-wrap">
     <div class="poll-construct-header">
       <div class="service-info">
-
+        <span id="poll-info">
+          <svg viewBox="0 0 512 512" x="0px" y="0px" width="30px" height="28px">
+            <path d="M 256 0 C 114.844 0 0 114.844 0 256 s 114.844 256 256 256 s 256 -114.844 256 -256 S 397.156 0 256
+            0 Z M 298.667 416 c 0 5.896 -4.771 10.667 -10.667 10.667 h -64 c -5.896 0 -10.667 -4.771 -10.667 -10.667 V
+            256 h -10.667 c -5.896 0 -10.667 -4.771 -10.667 -10.667 v -42.667 c 0 -5.896 4.771 -10.667 10.667 -10.667
+            H 288 c 5.896 0 10.667 4.771 10.667 10.667 V 416 Z M 256 170.667 c -23.531 0 -42.667 -19.135 -42.667 -42.667
+            S 232.469 85.333 256 85.333 s 42.667 19.135 42.667 42.667 S 279.531 170.667 256 170.667 Z"/>
+          </svg>
+        </span>
       </div>
       <div class="undo-changes" style="display: none">
-        <a id="del-wrap" class="fab-button btn-sml" title="Отменить изменение очередности" >
+        <a id="del-wrap" class="fab-button btn-sml" title="Отменить изменение очередности">
           <svg viewBox="0 0 1280 1090" width="20px" height="20px">
             <g fill="#fff" stroke="none" transform="translate(0 1090) scale(0.1 -0.1)">
               <path d="M 3476 10880 c -33 -12 -78 -34 -100 -50 c -62 -43 -3290 -3279 -3320 -3328 c -79 -127 -69 -296 23

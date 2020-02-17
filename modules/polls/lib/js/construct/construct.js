@@ -22,12 +22,14 @@ $(document).on('input', '#myRange', function (e) {
 
 $(document).on('click', '#btn-switch-view', changeConstructView)
   .on('click', '.question-hide', hideQuestion)
+  .on('click', '.restore-question', restoreQuestion)
   .on('click', '.answer-hide', hideAnswer)
   .on('click', '.restore-btn', restoreAnswer)
   .on('click', '.unique-btn', setAnswerUnique)
   .on('click', '.question-trash', showQTrash)
   .on('click', '.logic', setLogic)
-  .on('click', '.q-title', checkboxLogicEx);
+  .on('click', '.q-title', checkboxLogicEx)
+  .on('click', '#poll-info', showPollInfo);
 
 $.mask.definitions['H'] = '[1-9]';
 $.mask.definitions['h'] = '[0-9]';
@@ -98,8 +100,12 @@ function changeConstructView(e) {
 
 function hideQuestion() {
   let questionId = $(this).data('id');
-  let question = pollCounstructor.findQuestionById(questionId);
-  question.hideQuestionInListView();
+  pollCounstructor.hideQuestionInListView(questionId);
+}
+
+function restoreQuestion() {
+  let questionId = $(this).data('id');
+  pollCounstructor.restoreQuestionInListView(questionId);
 }
 
 function hideAnswer() {
@@ -114,7 +120,6 @@ function hideAnswer() {
 function restoreAnswer() {
   let answerId = $(this).data('id');
   let questionId = $(this).data('questionId');
-  console.log(answerId + ' - ' + questionId);
   let question = pollCounstructor.findQuestionById(questionId);
   if (question) {
     question.restoreAnswer(answerId);
@@ -209,4 +214,23 @@ function checkboxLogicEx() {
 function switchOrder() {
   let sortable = pollCounstructor.sortable;
   sortable.option('sort', false);
+}
+
+function showPollInfo() {
+  let infoNode = document.createElement('div');
+  let titleNode = document.createElement('div');
+  titleNode.innerText = 'Наименование: ' + pollCounstructor.title;
+  let qNum = document.createElement('div');
+  qNum.innerText = 'Количество вопросов: ' + pollCounstructor.numberOfQuestions;
+  let aNUm = document.createElement('div');
+  aNUm.innerText = 'Количество ответов: ' + pollCounstructor.numberOfAnswers;
+  infoNode.appendChild(titleNode);
+  infoNode.appendChild(qNum);
+  infoNode.appendChild(aNUm);
+  $.alert({
+    title: 'Инфо ' + pollCounstructor.code,
+    content: infoNode,
+    columnClass: 'medium',
+    animateFromElement: false
+  });
 }

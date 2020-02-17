@@ -37,6 +37,14 @@ class PollConstructor {
     this._numberOfQuestions = questions.length
   }
 
+  set title(title) {
+    this._title = title;
+  }
+
+  get title() {
+    return this._title;
+  }
+
   get numberOfQuestions() {
     return this._numberOfQuestions;
   }
@@ -69,23 +77,46 @@ class PollConstructor {
       numberOfAnswers += questions[key].numberOfAnswers;
     }
     // serviceNode.appendChild();
-    let nQ = this.numberOfQuestions;
-    console.log('Число вопросов: ' + nQ);
-    console.log('Число ответов: ' + numberOfAnswers);
+    this.numberOfAnswers = numberOfAnswers;
   }
 
   renderListTmpl() {
     let Obj = this;
     let listView = document.createElement('div');
     listView.className = 'list';
+    let vListView = document.createElement('div');
+    vListView.className = 'visible-list';
+    let hListView = document.createElement('div');
+    hListView.className = 'hide-list';
+    listView.appendChild(vListView);
+    listView.appendChild(hListView);
     let questions = this.questions;
+    let visCount = 1, skipCount = 1, questionNode;
     for (let qId in questions) {
       let question = questions[qId];
-      listView.append(question.renderCQuestionList());
+      if (question.visible === 1) {
+        questionNode = question.renderCQuestionList(visCount);
+        visCount++;
+        vListView.append(questionNode);
+      }
     }
+    for (let key in questions) {
+      if (questions[key].visible === 0) {
+        let hr = document.createElement('hr');
+        hListView.appendChild(hr);
+        break;
+      }
+    }
+    questions.forEach(function (question, index) {
+      if (question.visible === 0) {
+        questionNode = question.renderCQuestionList(skipCount);
+        skipCount++;
+        hListView.appendChild(questionNode);
+      }
+    });
     let oldOrder;
     // изменение порядка
-    this.sortable = new Sortable(listView, {
+    this.sortable = new Sortable(vListView, {
       animation: 150,
       onStart: function (evt) {
         Obj._oldOrder = Obj.sortable.toArray();
@@ -99,6 +130,11 @@ class PollConstructor {
           child.querySelector('.question-order').innerHTML = (i + 1);
         }
       },
+    });
+    this.hSortable = new Sortable(hListView, {
+      selectedClass: 'selected',
+      animation: 150,
+      sort: false
     });
     Obj._pollListView = listView;
   }
@@ -147,26 +183,28 @@ class PollConstructor {
     gridDiv.id = 'grid-poll-order';
     gridDiv.className = 'grid';
     let questions = this.questions;
+    let visQuestions = 1;
     for (let qId in questions) {
       let question = questions[qId];
-      if (question.renderCQuestionGrid() !== null) {
-        gridDiv.appendChild(question.renderCQuestionGrid());
+      if (question.renderCQuestionGrid()) {
+        gridDiv.appendChild(question.renderCQuestionGrid(visQuestions));
+        visQuestions++;
       }
     }
     // изменение порядка
     let oldOrder;
     let Obj = this;
-    let sortable = new Sortable(gridDiv, {
+    this.sortableGrid = new Sortable(gridDiv, {
       multiDrag: true,
       selectedClass: 'multi-selected',
       animation: 150,
       group: 'poll-grid-store',
       onStart: function (evt) {
-        Obj._oldOrder = sortable.toArray();
+        Obj._oldOrder = Obj.sortableGrid.toArray();
       },
       onUpdate: function (evt) {
         NProgress.start();
-        let newOrder = sortable.toArray();
+        let newOrder = Obj.sortableGrid.toArray();
         Obj.saveGridReorder(newOrder);
         let items = evt.from.children;
         for (let i = 0, child; child = items[i]; i++) {
@@ -181,7 +219,7 @@ class PollConstructor {
     let url = this.REORDER_QUESTIONS_URL;
     let Obj = this;
     let questions = this._questions;
-    let sortable = this.sortable;
+    let sortable = this.sortableGrid;
     $.ajax({
       url: url,
       method: 'post',
@@ -221,6 +259,77 @@ class PollConstructor {
     for (let i = 0, child; child = items[i]; i++) {
       child.querySelector('.question-order').innerHTML = (i + 1);
     }
+  }
+
+  hideQuestionInListView(id) {
+    let Obj = this;
+    let question = this.findQuestionById(id);
+    let hSortDiv = Obj.hSortable.el;
+    let sortDiv = Obj.sortable.el;
+    if (question) {
+      question.hideQuestion(function () {
+        if (hSortDiv.getElementsByTagName('hr').length === 0) {
+          let hr = document.createElement('hr');
+          hSortDiv.appendChild(hr);
+        }
+        let tmpl = question.questionListTmpl;
+
+        tmpl.querySelector('.question-hide').style.display = 'none';
+        tmpl.querySelector('.restore-question').style.display = 'inline';
+        hSortDiv.appendChild(tmpl);
+      });
+    }
+    setTimeout(() => Obj.reindex(), 300);
+  }
+
+  restoreQuestionInListView(id) {
+    let Obj = this;
+    let question = this.findQuestionById(id);
+    let hSortDiv = Obj.hSortable.el;
+    let sortDiv = Obj.sortable.el;
+    if (question) {
+      question.restoreQuestion(function () {
+        if (hSortDiv.getElementsByTagName('hr').length === 0) {
+          let hr = document.createElement('hr');
+          hSortDiv.appendChild(hr);
+        }
+        let tmpl = question.questionListTmpl;
+        tmpl.querySelector('.restore-question').style.display = 'none';
+        tmpl.querySelector('.question-hide').style.display = 'inline';
+        sortDiv.appendChild(tmpl);
+      });
+    }
+    setTimeout(() => Obj.resort(), 300);
+  }
+
+  reindex() {
+    let sortDiv = this.sortable.el;
+    let questionArray = sortDiv.getElementsByClassName('question-order');
+    Array.prototype.map.call(questionArray, function (span, index) {
+      span.textContent = ++index + '';
+    });
+    let hSortDiv = this.hSortable.el;
+    let questionArrayEx = hSortDiv.getElementsByClassName('question-order');
+    if (questionArrayEx.length !== 0) {
+      Array.prototype.map.call(questionArrayEx, function (span, index) {
+        span.textContent = ++index + '';
+      });
+    } else {
+      let hr = hSortDiv.getElementsByTagName('hr')[0];
+      hr.remove();
+    }
+  }
+
+  resort() {
+    let questions = this.questions;
+    let ar = [];
+    this.sortByOldOrder(questions);
+    questions.forEach(function (question, index) {
+      ar[index] = question.id;
+    });
+    let sortable = this.sortable;
+    sortable.sort(ar);
+    this.reindex();
   }
 
   get pollListView() {
@@ -263,4 +372,5 @@ class PollConstructor {
   sortByOldOrder(arr) {
     arr.sort((a, b) => a.newOrder > b.newOrder ? 1 : -1);
   }
+
 }

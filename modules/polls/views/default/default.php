@@ -132,6 +132,19 @@ Select2Asset::register($this);
                 17.59 13.41 12 19 6.41z"></path>
             </svg>
           </div>
+          <div class="restore-question answer-service-btn" title="Восстановить вопрос">
+            <svg viewBox="0 0 1280 1090" width="20" height="20">
+              <g fill="#000" stroke="none" transform="translate(0 1090) scale(0.1 -0.1)">
+                <path d="M 3476 10880 c -33 -12 -78 -34 -100 -50 c -62 -43 -3290 -3279 -3320 -3328 c -79 -127 -69 -296 23
+          -418 c 65 -86 3170 -3805 3220 -3857 c 149 -155 399 -149 542 12 c 27 30 59 80 72 111 l 22 55 l 3 1076 l 3
+          1077 l 22 6 c 58 14 390 57 547 70 c 999 85 2000 -65 2938 -440 c 1300 -519 2464 -1483 3422 -2834 c 426 -601
+          805 -1264 1184 -2070 c 71 -149 119 -206 215 -253 c 59 -28 75 -32 156 -32 c 80 0 97 3 155 31 c 117 56 201
+          171 216 294 c 10 85 -74 673 -162 1145 c -453 2411 -1401 4256 -2814 5471 c -1061 912 -2367 1466 -3850 1633
+          c -312 36 -429 43 -812 48 c -449 7 -755 -8 -1140 -53 l -58 -7 l -2 1029 l -3 1029 l -33 67 c -60 123 -172
+          195 -317 204 c -54 4 -83 0 -129 -16 Z"/>
+              </g>
+            </svg>
+          </div>
           <div class="question-options question-service-btn dropdown-toggle" id="question-menu" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="true">
             <svg width="20" height="20" viewBox="0 0 24 24">
@@ -141,8 +154,6 @@ Select2Asset::register($this);
             </svg>
           </div>
           <ul class="dropdown-menu" aria-labelledby="question-menu">
-            <li class="question-trash"><a href="#">Скрытые ответы</a></li>
-            <li role="separator" class="divider"></li>
             <li><a href="#">Удалить вопрос</a></li>
           </ul>
         </div>

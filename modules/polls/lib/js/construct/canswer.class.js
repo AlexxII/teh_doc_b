@@ -7,6 +7,7 @@ class CAnswer {
     this.newOrder = +config.order;
     this.oldOrder = +config.order;
     this.code = config.code ;
+    this.dCode = +config.code ;                                                    // цифровой код ответа
     this.unique = +config.unique;
     this.jump = +config.jump;
     this.type = +config.input_type;
@@ -45,13 +46,13 @@ class CAnswer {
 
     if (this.visible === 0) {
       answerClone.classList.add('hidden-answer');
-      answerClone.querySelector('.answer-hide').remove();
-      answerClone.querySelector('.answer-options').remove();
-      answerClone.querySelector('.unique-btn').remove();
+      answerClone.querySelector('.answer-hide').style.display = 'none';
+      answerClone.querySelector('.answer-options').style.display = 'none';
+      answerClone.querySelector('.unique-btn').style.display = 'none';
       answerClone.querySelector('.restore-btn').dataset.id = answerId;
       answerClone.querySelector('.restore-btn').dataset.questionId = this.parentQuestion;
     } else {
-      answerClone.querySelector('.restore-btn').remove();
+      answerClone.querySelector('.restore-btn').style.display = 'none';
       answerClone.querySelector('.answer-hide').dataset.id = answerId;
       answerClone.querySelector('.answer-hide').dataset.questionId = this.parentQuestion;
       answerClone.querySelector('.unique-btn').dataset.id = answerId;
@@ -83,10 +84,6 @@ class CAnswer {
     //   answerClone.classList.add('unique-answer');
     // }
     this._answerTmplEx = answerClone;
-  }
-
-  saveSort(sortable) {
-    this.sortable = sortable;
   }
 
   hideAnswerInListView(callback) {

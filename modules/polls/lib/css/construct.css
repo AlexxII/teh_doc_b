@@ -239,7 +239,7 @@
   padding: 6px 0 0 6px;
 }
 .hidden-answer {
-  background-color: #dadada !important;
+  background-color: #dadada4f !important;
 }
 .dropdown-menu > li > a {
   padding: 5px 20px !important;
@@ -274,4 +274,10 @@ ul {
 .a-code {
   padding-left: 5px;
   font-size: 10px;
+}
+.service-info {
+  padding-top: 10px;
+}
+#poll-info {
+  cursor: pointer;
 }
