@@ -178,15 +178,20 @@ function chooseAnAnswer(element) {
     } else {
       selectedAnswerObject.hideInput();
       selectedAnswerObject.unmark();
-      respondentResult.deleteData(data);
+      respondentResult.deleteData(selectedAnswerId);
     }
     return;
   }
 
   if (respondentResult.respondentAnswers[selectedAnswerId] !== undefined) {
+    // let logic = poll.respondent.logic;
+    // delete logic[selectedAnswerId];
+    poll.respondent.removeFromLogic(selectedAnswerId);
     selectedAnswerObject.unmark();
-    respondentResult.deleteData(data);
+    respondentResult.deleteData(selectedAnswerId);
   } else {
+    let logicTmpl = poll.logic;
+    poll.respondent.setLogic(logicTmpl[selectedAnswerId], selectedAnswerId);
     selectedAnswerObject.mark();
     respondentResult.saveData(data);
     stepLogic(respondentResult, question);
@@ -213,7 +218,7 @@ function saveFreeAnswer(input) {
   } else {
     selectedAnswerObject.hideInput();
     selectedAnswerObject.unmark();
-    respondentResult.deleteData(data);
+    respondentResult.deleteData(selectedAnswerId);
   }
 }
 

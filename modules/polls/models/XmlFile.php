@@ -129,7 +129,6 @@ class XmlFile extends Model
                 $answerModel[0]->save();
               } else if ($type === "3") {
                 $restrictCode = $reader->getAttribute("restrict_cod");                   // TODO есть вероятность атаки
-
                 $answer = Answers::find()
                   ->where(["=", 'code', $code])
                   ->andWhere(["=", 'poll_id', $pollId])
@@ -138,7 +137,6 @@ class XmlFile extends Model
                   ->where(["=", 'code', $restrictCode])
                   ->andWhere(["=", 'poll_id', $pollId])
                   ->all();
-
                 $answerId = $answer[0]->id;
                 $restrictId = $restrict[0]->id;
                 $logic = new PollLogic();
