@@ -52,14 +52,6 @@ class Worksheet {
     return this._respondent;
   }
 
-  isFirstQuestion() {
-    return this.currentQuestionNum === 0;
-  }
-
-  isLastQuestion() {
-    return this.currentQuestionNum === (this.totalNumberOfQuestions - 1);
-  }
-
   set questions(config) {
     let questions = config.visibleQuestions;
     let output = [];
@@ -80,6 +72,14 @@ class Worksheet {
 
   get totalNumberOfQuestions() {
     return this._totalNumberOfQuestions;
+  }
+
+  isFirstQuestion() {
+    return this.currentQuestionNum === 0;
+  }
+
+  isLastQuestion() {
+    return this.currentQuestionNum === (this.totalNumberOfQuestions - 1);
   }
 
   getQuestionById(id) {
@@ -155,6 +155,7 @@ class Worksheet {
     let result = this.respondent.getRespondentResultsOfQuestion(question.id);
     if (question.numberOfAnswers < maxCodesLength) {
       answers.forEach(function (answer, index) {
+        if ()
         answer.renderAnswer(index);
         answer.restoreResult(result);
         questionBody.appendChild(answer.visualElement);

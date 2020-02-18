@@ -72,7 +72,7 @@ class Answer {
     if (this.type === TYPE_FREE_ANSWER) {
       answerTemplate.appendChild(this.renderFreeSymbl());
     }
-    if (this.unique === 1) {
+    if (this.unique === 1 || this.type === 3) {
       answerTemplate.appendChild(this.renderUniqueSymbl());
     }
     this.visualElement = answerTemplate;
