@@ -118,8 +118,8 @@ class XmlFile extends Model
         while ($reader->read()) {
           if ($reader->nodeType == XMLReader::ELEMENT) {
             if ($reader->localName == "restrict") {
-              $code = $reader->getAttribute("otvet_cod");
-              $type = $reader->getAttribute("restrict_type");
+              $code = $reader->getAttribute("otvet_cod");                                 // TODO есть вероятность атаки
+              $type = $reader->getAttribute("restrict_type");                             // TODO есть вероятность атаки
               if ($type === "5") {
                 $answerModel = Answers::find()
                   ->where(["=", 'code', $code])
@@ -128,27 +128,38 @@ class XmlFile extends Model
                 $answerModel[0]->unique = 1;
                 $answerModel[0]->save();
               } else if ($type === "3") {
-                $restrictCode = $reader->getAttribute("restrict_code");
-                $answerModel = Answers::find()
+                $restrictCode = $reader->getAttribute("restrict_cod");                   // TODO есть вероятность атаки
+
+                $answer = Answers::find()
                   ->where(["=", 'code', $code])
                   ->andWhere(["=", 'poll_id', $pollId])
                   ->all();
-                $answerModel[0]->jump = 1;
-//                $restrictModel = Answers::find()
-//                  ->where(["=", 'code', $code])
-//                  ->andWhere(["=", 'poll_id', $pollId])
-//                  ->all();
-//                $restrictModel
+                $restrict = Answers::find()
+                  ->where(["=", 'code', $restrictCode])
+                  ->andWhere(["=", 'poll_id', $pollId])
+                  ->all();
 
-
-                $answerModel[0]->save();
-
-
+                $answerId = $answer[0]->id;
+                $restrictId = $restrict[0]->id;
+                $logic = new PollLogic();
+                $logic->poll_id = $pollId;
+                $logic->answer_id = $answerId;
+                $logic->restrict_id = $restrictId;
+                $logic->restrict_type = $type;
+                if (!$logic->save()) {
+                  $this->error = $logic->errors;
+                  return false;
+                }
+                if (!$answer[0]->save()) {
+                  $this->error = $answer[0]->errors;
+                  return false;
+                }
               }
             }
           }
         }
         $reader->close();
+        return true;
       }
       $this->error = 'Could`t open xml file';
       return false;

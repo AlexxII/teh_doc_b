@@ -8,6 +8,22 @@ class Answer {
     this.oldOrder = +config.order;
     this.unique = +config.unique;
     this.type = +config.input_type;
+    this.logic = config.logic;
+  }
+
+  set logic(logics) {
+    if (logics.length !== 0) {
+      let temp = [];
+      logics.forEach(function (val, index) {
+        temp[index] = val.restrict_id;
+      });
+      this._logic = temp;
+    }
+    this._logic = null;
+  }
+
+  get logic() {
+    return this._logic;
   }
 
   renderUniqueSymbl() {

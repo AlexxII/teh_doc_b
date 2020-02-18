@@ -43,13 +43,10 @@ class Answers extends \yii\db\ActiveRecord
     return $this->hasOne(Questions::class, ['id' => 'question_id'])->orderBy('order');
   }
 
-
-  /*
-    public function getAdminList()
-    {
-      return ArrayHelper::map(ToAdmins::find()->where(['admin' => 1])->orderBy('lft')->asArray()->all(), 'id', 'name');
-    }
-  */
+  public function getLogic()
+  {
+    return $this->hasMany(PollLogic::class, ['answer_id' => 'id']);
+  }
 
   public static function findModel($id)
   {

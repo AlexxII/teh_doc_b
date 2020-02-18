@@ -66,6 +66,7 @@ function loadPollConfig(id, callback) {
 }
 
 function startConstruct(config) {
+  console.log(config);
   pollCounstructor = new PollConstructor(config);
   renderListView();
   NProgress.done();

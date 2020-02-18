@@ -55,20 +55,32 @@ class PollsController extends Controller
           $xmlM->title = $name;
           if ($xmlM->save()) {
             if ($xmlF->parseAndLoadToDb($model->id)) {              // XmlFile
-              $xmlF->parseAndLoadLogic($model->id);
-              $transaction->commit();
-              $resData = [
-                "questions" => $xmlF->questionsCount,
-                "answers" => $xmlF->answersCount
-              ];
-              $result = [
-                "data" => [
-                  "success" => true,
-                  "data" => $resData,
-                  "message" => "Seems to be FINE",
-                ],
-                "code" => 1
-              ];
+//              return $xmlF->parseAndLoadLogic($model->id);
+              if ($xmlF->parseAndLoadLogic($model->id)){
+                $transaction->commit();
+                $resData = [
+                  "questions" => $xmlF->questionsCount,
+                  "answers" => $xmlF->answersCount
+                ];
+                $result = [
+                  "data" => [
+                    "success" => true,
+                    "data" => $resData,
+                    "message" => "Seems to be FINE",
+                  ],
+                  "code" => 1
+                ];
+              } else {
+                $transaction->rollback();
+                $result = [
+                  "data" => [
+                    "success" => false,
+                    "data" => $xmlF->error,
+                    "message" => "Could`t save OR parse logic in config xml file",
+                  ],
+                  "code" => 0
+                ];
+              }
             } else {
               $transaction->rollback();
               $result = [

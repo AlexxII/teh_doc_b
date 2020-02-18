@@ -131,6 +131,11 @@ function keycodeAbstractionLayer(event) {
   }
 }
 
+function stepLogic(result, question) {
+  if (result.entries >= question.limit) {
+    setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
+  }
+}
 
 function chooseAnAnswer(element) {
   let question = poll.getCurrentQuestion();
@@ -188,11 +193,6 @@ function chooseAnAnswer(element) {
   }
 }
 
-function stepLogic(result, question) {
-  if (result.entries >= question.limit) {
-    setTimeout(() => confirmAndNextQuestion(), pollUser.stepDelay);
-  }
-}
 
 function saveFreeAnswer(input) {
   let question = poll.getCurrentQuestion();
@@ -239,7 +239,6 @@ function confirmAndNextQuestion() {
       let qId = poll.unansweredQuestion();
       let question = poll.getQuestionById(qId);
       if (question) {
-        console.log(question.number);
         poll.goToQuestionByNumber(question.number);
       } else {
         alert('Есть вероятность потери данных при вносе результатов. Обратитесь к разработчику');
@@ -251,6 +250,7 @@ function confirmAndNextQuestion() {
     beep();
   }
 }
+
 function showM() {
   document.body.removeEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
   jc = $.confirm({
