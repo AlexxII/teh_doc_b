@@ -155,7 +155,6 @@ class Worksheet {
     let result = this.respondent.getRespondentResultsOfQuestion(question.id);
     if (question.numberOfAnswers < maxCodesLength) {
       answers.forEach(function (answer, index) {
-        if ()
         answer.renderAnswer(index);
         answer.restoreResult(result);
         questionBody.appendChild(answer.visualElement);
