@@ -15,6 +15,7 @@ class Worksheet {
       this.template = this.renderTemplate();
       this.renderNavigationSelect();
       this.renderNavigator();
+      this.logic = config.logic;
     }
   }
 
@@ -72,6 +73,14 @@ class Worksheet {
 
   get totalNumberOfQuestions() {
     return this._totalNumberOfQuestions;
+  }
+
+  set logic(config) {
+    
+  }
+
+  get logic() {
+    return this._logic;
   }
 
   isFirstQuestion() {
@@ -155,6 +164,7 @@ class Worksheet {
     let result = this.respondent.getRespondentResultsOfQuestion(question.id);
     if (question.numberOfAnswers < maxCodesLength) {
       answers.forEach(function (answer, index) {
+
         answer.renderAnswer(index);
         answer.restoreResult(result);
         questionBody.appendChild(answer.visualElement);
