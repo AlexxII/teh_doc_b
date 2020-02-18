@@ -33,6 +33,7 @@ class PollAsset extends AssetBundle
   ];
 
   public $css = [
+    'css/drivein.css',
     'css/poll_style.css',
     'css/construct.css',
     'css/batch.css',
