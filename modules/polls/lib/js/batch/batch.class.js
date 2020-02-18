@@ -109,10 +109,15 @@ class Batch {
     let codesTable = this.codesTable;
     let reg = /([0-9]{3})(\D*)/;
     answersCodes.forEach(function (answerCode, index) {
-      let match = answerCode.match(reg);
-      let code = match[1];                                                // код
-      let ex = match[2];                                                  // расширенный ответ
-      tempAr.push(codesTable[code].code + ' ' + ex);
+      if (answerCode) {
+        let match = answerCode.match(reg);
+        let code = match[1];                                                // код
+        let ex = match[2];                                                  // расширенный ответ
+        let sheet = {};
+        sheet.id = codesTable[code].id;
+        sheet.exText = ex;
+        tempAr.push(sheet);
+      }
     });
     Obj.respondentsPool[lIndex] = tempAr;
   }
