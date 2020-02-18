@@ -17,10 +17,6 @@ class BAnswer {
     return answer;
   }
 
-  get answerTmpl() {
-    return this._answerTmpl;
-  }
-
   set code(code) {
     this._code = code.padStart(3, '0');
   }
@@ -35,12 +31,19 @@ class BAnswer {
     answerClone.removeAttribute('id');
     answerClone.dataset.id = this.id;
     answerClone.querySelector('.answer-title').innerHTML = this.title;
-    let code = this.code.padStart(3, '0');
-    answerClone.querySelector('.answer-code').innerHTML = code;
+    answerClone.querySelector('.answer-code').innerHTML = this.code;
     if (this.unique === 1) {
       answerClone.classList.add('unique-answer');
     }
     this._answerTmpl = answerClone;
+  }
+
+  get answerTmpl() {
+    let answer = this._answerTmpl;
+    if (answer.querySelector('.marked') !== null) {
+      answer.querySelector('.marked').remove();
+    }
+    return this._answerTmpl;
   }
 
 }

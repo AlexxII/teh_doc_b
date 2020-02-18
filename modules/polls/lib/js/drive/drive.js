@@ -64,7 +64,7 @@ function driveIn(config) {
     markColor: '#e0e0e0'
   };
   pollUser = new PollUser(settings);
-  // console.log(config);
+  console.log(config);
   poll = new Worksheet(config);
   // console.log(poll);
   initMainEventListener();

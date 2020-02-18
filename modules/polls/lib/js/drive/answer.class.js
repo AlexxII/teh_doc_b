@@ -8,7 +8,7 @@ class Answer {
     this.oldOrder = +config.order;
     this.unique = +config.unique;
     this.type = +config.input_type;
-    this.logic = config.logic;
+    // this.logic = config.logic;
   }
 
   set logic(logics) {
