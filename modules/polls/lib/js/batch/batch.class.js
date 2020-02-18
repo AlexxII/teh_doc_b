@@ -66,16 +66,26 @@ class Batch {
 
   renderList(key) {
     let results = this.respondentsPool[key];
+    let marksArray = [];
     results.forEach(function (result, index) {
       let mark = document.createElement('div');
       mark.className = 'marked';
       let answer = result.obj;
       let tmpl = answer.answerTmpl;
       tmpl.appendChild(mark);
+      marksArray[index] = mark;
       // tmpl.className += ' te';
       // tmpl.classList.add('te');
     });
+    this.m = marksArray;
     return this.pollListView;
+  }
+
+  clear() {
+    let ar = this.m;
+    ar.forEach(function (val, index) {
+      val.remove();
+    })
   }
 
   renderTemplate() {

@@ -76,7 +76,15 @@ class Worksheet {
   }
 
   set logic(config) {
-    
+    if (config.length !== 0) {
+      let temp = [];
+      config.forEach(function (l, index) {
+        temp[index] = l.restrict_id;
+      });
+      this._logic = temp;
+      console.log(this._logic);
+    }
+    this._logic = null;
   }
 
   get logic() {

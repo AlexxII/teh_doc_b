@@ -24,15 +24,15 @@ class DriveInController extends Controller
   const ANSWERS_TABLE = 'poll_answers_tbl';
   const RESPONDENTS_TABLE = 'poll_respondents_tbl';
 
-/*  public function actionIndex()
-  {
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    $pollTable = self::POLLS_TABLE;
-    $sql = "SELECT {$pollTable}.id, {$pollTable}.start_date, {$pollTable}.end_date, {$pollTable}.title, 
-        {$pollTable}.code, {$pollTable}.sample, YEAR({$pollTable}.start_date) as year FROM {$pollTable}";
-    $data["data"] = Polls::findBySql($sql)->asArray()->all();
-    return $data;
-  }*/
+  /*  public function actionIndex()
+    {
+      Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+      $pollTable = self::POLLS_TABLE;
+      $sql = "SELECT {$pollTable}.id, {$pollTable}.start_date, {$pollTable}.end_date, {$pollTable}.title,
+          {$pollTable}.code, {$pollTable}.sample, YEAR({$pollTable}.start_date) as year FROM {$pollTable}";
+      $data["data"] = Polls::findBySql($sql)->asArray()->all();
+      return $data;
+    }*/
 
 
   public function actionIndex()
@@ -50,7 +50,8 @@ class DriveInController extends Controller
 
   }
 
-  public function actionGetPollInfo($id) {
+  public function actionGetPollInfo($id)
+  {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     $data = Polls::find()
       ->select(["id", "title", "code"])
@@ -73,5 +74,4 @@ class DriveInController extends Controller
     ];
 
   }
-
 }

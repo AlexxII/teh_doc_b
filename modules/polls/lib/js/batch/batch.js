@@ -34,7 +34,16 @@ function renderListBatchView(key) {
     title: 'Опрос ROS20-03',
     content: batch.renderList(key),
     columnClass: 'col-md-12',
-    animateFromElement: false
+    animateFromElement: false,
+    buttons: {
+      ok: {
+        text: 'OK',
+        btnClass: 'btn-info',
+        action: function () {
+          batch.clear();
+        }
+      }
+    }
   });
 }
 
