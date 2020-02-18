@@ -6,6 +6,7 @@ class Respondent {
     this.user = 'User';
     this.complete = 0;
     this.resultPool = questions;
+    this._logic = {};
   }
 
   randomIntFromInterval(min, max) {
@@ -27,6 +28,31 @@ class Respondent {
 
   get resultPool() {
     return this._resultPool;
+  }
+
+  setLogic(logic, id) {
+    if (logic !== undefined) {
+      this._logic[id] = logic;
+    }
+  }
+
+  removeFromLogic(id) {
+    let logic = this._logic;
+    delete logic[id];
+    console.log(this.logic);
+  }
+
+  get logic() {
+    let logic = this._logic;
+    if (Object.keys(logic).length !== 0) {
+      let temp = [];
+      for (let key in logic) {
+        temp += logic[key];
+      }
+      return temp;
+    } else {
+      return false;
+    }
   }
 
   getRespondentResultsOfQuestion(id) {
@@ -76,9 +102,9 @@ function result(required) {
     this.entries += 1;
   };
 
-  this.deleteData = function (data) {
-    if (this.respondentAnswers[data.id] !== undefined) {
-      delete this.respondentAnswers[data.id];
+  this.deleteData = function (id) {
+    if (this.respondentAnswers[id] !== undefined) {
+      delete this.respondentAnswers[id];
       this.entries -= 1;
     }
   };

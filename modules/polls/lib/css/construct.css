@@ -233,51 +233,63 @@
   top: 8px;
   left: 0;
 }
+
 .btn-sml {
   width: 34px;
   height: 34px;
   padding: 6px 0 0 6px;
 }
+
 .hidden-answer {
   background-color: #dadada4f !important;
 }
+
 .dropdown-menu > li > a {
   padding: 5px 20px !important;
 }
+
 .answer-code {
   position: absolute;
   top: -10px;
   right: -13px;
   font-size: 12px;
 }
+
 .jump-icon {
   position: absolute;
   top: 10px;
   right: 20px;
 }
+
 li {
   list-style-type: none;
 }
+
 ul {
   margin-left: 5px;
   padding-left: 5px;
 }
+
 .a-title {
   padding-left: 5px;
   font-size: 12px;
 }
+
 .q-title {
   padding-left: 0;
   font-size: 16px;
   cursor: pointer;
 }
+
 .a-code {
   padding-left: 5px;
   font-size: 10px;
 }
+
 .service-info {
   padding-top: 10px;
 }
+
 #poll-info {
   cursor: pointer;
 }

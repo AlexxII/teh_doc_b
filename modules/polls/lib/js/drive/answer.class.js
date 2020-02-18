@@ -4,13 +4,26 @@ class Answer {
     this.id = config.id;
     this.title = config.title;
     this.titleEx = config.title_ex;
+    this.logic = config.logic;
     this.newOrder = +config.order;
     this.oldOrder = +config.order;
     this.unique = +config.unique;
     this.type = +config.input_type;
-    // this.logic = config.logic;
   }
 
+  set logic(logic) {
+    if (logic.length !== 0) {
+      this._logic = 1;
+      return;
+    }
+    this._logic = 0;
+  }
+
+  get logic() {
+    return this._logic;
+  }
+
+/*
   set logic(logics) {
     if (logics.length !== 0) {
       let temp = [];
@@ -25,6 +38,7 @@ class Answer {
   get logic() {
     return this._logic;
   }
+*/
 
   renderUniqueSymbl() {
     let uniqueNode = document.createElement('span');
@@ -40,6 +54,25 @@ class Answer {
     uniqueSvg.appendChild(path);
     uniqueNode.appendChild(uniqueSvg);
     return uniqueNode;
+  };
+
+  renderBranchSymbl() {
+    let branchNode = document.createElement('span');
+    branchNode.className = 'drive-branch-answer';
+    let branchSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    branchSvg.setAttribute('width', 25);
+    branchSvg.setAttribute('height', 25);
+    branchSvg.setAttribute('viewBox', '0 0 1356 640');
+    let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttributeNS(null, 'd', '' +
+      'M512 192c-71 0-128 57-128 128 0 47 26 88 64 110v18c0 64-64 128-128 128-53 0-95 11-128 29v-303c38-22 64-63 ' +
+      '64-110 0-71-57-128-128-128s-128 57-128 128c0 47 26 88 64 110v419c-38 22-64 63-64 110 0 71 57 128 128 128s128-57 ' +
+      '128-128c0-34-13-64-34-87 19-23 49-41 98-41 128 0 256-128 256-256v-18c38-22 64-63 64-110 0-71-57-128-128-128z ' +
+      'm-384-64c35 0 64 29 64 64s-29 64-64 64-64-29-64-64 29-64 64-64z m0 768c-35 0-64-29-64-64s29-64 64-64 64 29 64' +
+      ' 64-29 64-64 64z m384-512c-35 0-64-29-64-64s29-64 64-64 64 29 64 64-29 64-64 64z');
+    branchSvg.appendChild(path);
+    branchNode.appendChild(branchSvg);
+    return branchNode;
   };
 
   renderFreeSymbl() {
@@ -104,6 +137,9 @@ class Answer {
         answerTemplate.querySelector('.drive-unique-answer').remove();
       }
       answerTemplate.appendChild(this.renderDifficultSymbol());
+    }
+    if (this.logic === 1) {
+      answerTemplate.appendChild(this.renderBranchSymbl());
     }
     this.visualElement = answerTemplate;
   };

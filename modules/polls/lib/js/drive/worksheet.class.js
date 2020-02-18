@@ -77,12 +77,20 @@ class Worksheet {
 
   set logic(config) {
     if (config.length !== 0) {
-      let temp = [];
-      config.forEach(function (l, index) {
-        temp[index] = l.restrict_id;
+      let temp = {};
+      config.forEach(function (answer, index) {
+        if (answer.logic.length !== 0) {
+          let pool = [];
+          let logics = answer.logic;
+          logics.forEach(function (l, index) {
+            pool[index] = l.restrict_id;
+          });
+          temp[answer.id] = pool;
+        }
       });
       this._logic = temp;
-      console.log(this._logic);
+      // console.log(this._logic);
+      return;
     }
     this._logic = null;
   }
@@ -108,6 +116,7 @@ class Worksheet {
   }
 
   nextQuestion() {
+    this.direction = 1;
     this.incCurrentQuestionNum();
     this.goToQuestionByNumber(this.currentQuestionNum);
   }
@@ -117,6 +126,7 @@ class Worksheet {
   }
 
   previousQuestion() {
+    this.direction = -1;
     this.decCurrentQuestionNum();
     this.goToQuestionByNumber(this.currentQuestionNum);
   }
@@ -151,7 +161,6 @@ class Worksheet {
   nextRespondent() {
     this.currentQuestionNum = 0;
     this.respondent.stopCount();
-    console.log(this.respondent);
     this.respondent = this.questions;
     this.goToQuestionByNumber(0);
   }
@@ -161,6 +170,7 @@ class Worksheet {
   renderQuestion(questionNumber) {
     let mainContent = document.getElementById('drive-in');
     mainContent.innerHTML = '';
+    let Obj = this;
     let template = this.template.cloneNode(true);
     let question = this.questions[questionNumber];
     let limit = question.limit;
@@ -172,13 +182,25 @@ class Worksheet {
     let answersCounter = 1;
     let maxCodesLength = codes.length;                                          // максимальное кол-во кодов клавиатуры!!
     let result = this.respondent.getRespondentResultsOfQuestion(question.id);
+    let logic = this.respondent.logic;
+    console.log(this.respondent);
     if (question.numberOfAnswers < maxCodesLength) {
-      answers.forEach(function (answer, index) {
-
+      let count = 0, index = 0;
+      for (let key in answers) {
+        let answer = answers[key];
+        if (logic && logic.includes(answer.id)) {
+          count++;
+          if (count === question.numberOfAnswers) {
+            Obj.skipQuestion();
+            return;
+          }
+          continue;
+        }
         answer.renderAnswer(index);
         answer.restoreResult(result);
         questionBody.appendChild(answer.visualElement);
-      });
+        index++;
+      }
     } else {
       let select = question.renderSelect();
       questionBody.appendChild(select);
@@ -187,6 +209,15 @@ class Worksheet {
     }
     mainContent.appendChild(template);
     result.startCount;
+  }
+
+  skipQuestion() {
+
+    if (this.direction === 1) {
+      this.nextQuestion();
+    } else {
+      this.previousQuestion();
+    }
   }
 
   loadScript() {
