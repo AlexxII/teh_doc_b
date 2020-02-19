@@ -24,7 +24,8 @@ $(document).on('click', '#btn-switch-view', changeConstructView)
   .on('click', '.question-hide', hideQuestion)
   .on('click', '.answer-hide', hideAnswer)
   .on('click', '.unique-btn', setAnswerUnique)
-  .on('click', '.question-trash', showQTrash);
+  .on('click', '.question-trash', showQTrash)
+  .on('click', '.logic', setLogic);
 
 $.mask.definitions['H'] = '[1-9]';
 $.mask.definitions['h'] = '[0-9]';
@@ -132,6 +133,13 @@ function showQTrash() {
   let questionId = $(this).data('id');
   let question = pollCounstructor.findQuestionById(questionId);
   question.showTrash();
+}
+
+function setLogic() {
+  let answerId = this.dataset.id;
+
+  console.log();
+
 }
 
 // отключение сортировки

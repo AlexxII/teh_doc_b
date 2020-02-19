@@ -179,8 +179,10 @@ Select2Asset::register($this);
               6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
         </svg>
       </span>
-      <ul class="dropdown-menu" aria-labelledby="question-menu">
-        <li><a href="#">Удалить ответ</a></li>
+      <ul class="dropdown-menu answer-menu" aria-labelledby="question-menu">
+        <li><a class="logic" href="#">Логика</a></li>
+        <li role="separator" class="divider"></li>
+        <li><a class="delete-answer" href="#">Удалить ответ</a></li>
       </ul>
       <span class="unique-btn answer-service-btn" data-unique="0" title="Уникальный для вопроса">
         <svg width="20" height="20" viewBox="0 0 560.317 560.316">

@@ -12,6 +12,7 @@ class CAnswer {
     this.type = +config.input_type;
     this.visible = +config.visible;
     this.answerTmpl = index + 1;
+    this.answerTmplEx = index + 1;
     this.HIDE_ANSWER_URL = '/polls/construct/hide-answer';
     this.UNIQUE_ANSWER_URL = '/polls/construct/unique-answer';
   }
@@ -24,6 +25,10 @@ class CAnswer {
 
   get answerTmpl() {
     return this._answerTmpl;
+  }
+
+  get answerTmplEx() {
+    return this._answerTmplEx;
   }
 
   set answerTmpl(index) {
@@ -48,6 +53,8 @@ class CAnswer {
       answerClone.querySelector('.answer-hide').dataset.questionId = this.parentQuestion;
       answerClone.querySelector('.unique-btn').dataset.id = answerId;
       answerClone.querySelector('.unique-btn').dataset.questionId = this.parentQuestion;
+      answerClone.querySelector('.answer-menu .logic').dataset.id = answerId;
+      answerClone.querySelector('.answer-menu .delete-answer').dataset.id = answerId;
     }
     if (this.unique === 1) {
       answerClone.classList.add('unique-answer');
@@ -55,18 +62,24 @@ class CAnswer {
     if (this.jump === 1) {
       let jmpNode = document.createElement('div');
       jmpNode.className = 'jump-icon';
-    <svg viewBox="0 0 60.576 60.576">
-        <g>
-        <g>
-        <polygon style="fill: #010002;" points="27.268,57.541 27.268,35.98 24.232,35.98 24.232,60.576 59.643,60.576 59.643,57.541" />
-        <path style="fill: #010002;" d="M 29.29 32.465 c 1.687 2.389 3.799 4.471 6.001 6.387 c 1.553 1.353 3.562 1.039 4.734 -0.612 c 2.19 -3.093 4.136 -6.271 5.42 -9.854 c 1.312 -3.668 -4.516 -5.234 -5.815 -1.603 c -0.678 1.895 -1.646 3.658 -2.724 5.352 c -1.48 -1.486 -2.816 -3.102 -3.82 -4.976 c -0.107 -0.196 -0.227 -0.364 -0.352 -0.52 c -0.064 -0.463 -0.188 -0.926 -0.385 -1.376 c -1.015 -2.332 -1.896 -4.29 -2.748 -6.187 c -1.27 -2.825 -2.469 -5.491 -3.965 -9.081 c -0.028 -0.066 -0.062 -0.127 -0.092 -0.191 c 0.838 -0.905 1.813 -1.654 3.017 -2.042 c 2.698 -0.869 5.792 -0.393 8.556 -0.202 c 3.903 0.27 4.327 -5.785 0.423 -6.055 c -3.557 -0.247 -7.308 -0.619 -10.758 0.49 c -2.723 0.876 -4.814 2.627 -6.546 4.753 c -0.518 0.049 -1.039 0.175 -1.546 0.387 c -2.468 1.028 -3.744 3.704 -3.095 6.221 c -1.713 3.61 -8.093 4.005 -11.725 4.036 c -3.914 0.031 -3.917 6.101 0 6.07 c 4.613 -0.038 10.502 -1.002 14.324 -3.879 c 0.583 1.317 1.145 2.569 1.719 3.849 c 0.771 1.717 1.572 3.498 2.472 5.56 c -5.824 2.58 -12.039 5.549 -17.56 7.826 c -3.541 1.461 -1.991 7.298 1.602 5.814 c 7.051 -2.908 15.236 -6.953 22.286 -9.861 C 28.925 32.686 29.115 32.58 29.29 32.465 Z" />
-        <circle style="fill: #010002;" cx="10.438" cy="5.398" r="5.398" />
-        </g>
-        </g>
-        </svg>
-      answerClone.appendChild(jmpNode);
+      // jmpNode.appendChild(this._jumper);
+      // answer.appendChild(jmpNode);
     }
     this._answerTmpl = answerClone;
+  }
+
+  set answerTmplEx(index) {
+    let answerDiv = document.getElementById('answer-batch-template');
+    let answerClone = answerDiv.cloneNode(true);
+    answerClone.removeAttribute('id');
+    answerClone.dataset.id = this.id;
+    answerClone.querySelector('.answer-title').innerHTML = this.title;
+    let code = this.code.padStart(3, '0');
+    answerClone.querySelector('.answer-code').innerHTML = code;
+    if (this.unique === 1) {
+      answerClone.classList.add('unique-answer');
+    }
+    this._answerTmplEx = answerClone;
   }
 
   saveSort(sortable) {
@@ -142,5 +155,51 @@ class CAnswer {
       console.log('Failed to hide question - see Network Monitor - "Ctrl+SHift+E "');
     });
   }
+
+
+
+/*
+  renderJumper() {
+    let hideSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    hideSvg.setAttribute('width', 20);
+    hideSvg.setAttribute('height', 20);
+    hideSvg.setAttribute('viewBox', '0 0 60.576 60.576');
+    let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttributeNS(null, 'd', 'M 29.29 32.465 c 1.687 2.389 3.799 4.471 6.001 6.387 c 1.553 1.353 3.562 1.039 4.734 -0.612 c 2.19 ' +
+    '-3.093 4.136 -6.271 5.42 -9.854 c 1.312 -3.668 -4.516 -5.234 -5.815 -1.603 c -0.678 1.895 -1.646 3.658 -2.724 ' +
+    '5.352 c -1.48 -1.486 -2.816 -3.102 -3.82 -4.976 c -0.107 -0.196 -0.227 -0.364 -0.352 -0.52 c -0.064 -0.463 ' +
+    '-0.188 -0.926 -0.385 -1.376 c -1.015 -2.332 -1.896 -4.29 -2.748 -6.187 c -1.27 -2.825 -2.469 -5.491 -3.965 ' +
+    '-9.081 c -0.028 -0.066 -0.062 -0.127 -0.092 -0.191 c 0.838 -0.905 1.813 -1.654 3.017 -2.042 c 2.698 -0.869 ' +
+    '5.792 -0.393 8.556 -0.202 c 3.903 0.27 4.327 -5.785 0.423 -6.055 c -3.557 -0.247 -7.308 -0.619 -10.758 0.49 ' +
+    'c -2.723 0.876 -4.814 2.627 -6.546 4.753 c -0.518 0.049 -1.039 0.175 -1.546 0.387 c -2.468 1.028 -3.744 3.704' +
+    ' -3.095 6.221 c -1.713 3.61 -8.093 4.005 -11.725 4.036 c -3.914 0.031 -3.917 6.101 0 6.07 c 4.613 -0.038 10.502 ' +
+    '-1.002 14.324 -3.879 c 0.583 1.317 1.145 2.569 1.719 3.849 c 0.771 1.717 1.572 3.498 2.472 5.56 c -5.824 2.58 ' +
+    '-12.039 5.549 -17.56 7.826 c -3.541 1.461 -1.991 7.298 1.602 5.814 c 7.051 -2.908 15.236 -6.953 22.286 -9.861 ' +
+    'C 28.925 32.686 29.115 32.58 29.29 32.465 Z');
+    // hideSvg.appendChild(path1);
+    let polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    polygon.setAttribute('points', '27.268,57.541 27.268,35.98 24.232,35.98 24.232,60.576 59.643,60.576 59.643,57.541');
+    let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute(null, 'cx', 10.438);
+    circle.setAttribute(null, 'cy', 5.398);
+    circle.setAttribute(null, 'r', 5.398);
+    hideSvg.appendChild(polygon);
+    hideSvg.appendChild(path);
+    hideSvg.appendChild(circle);
+    this._jumper = hideSvg;
+  }
+*/
+/*
+  '<svg viewBox="0 0 60.576 60.576">' +
+  '<g>'+
+  '<g>'+
+  '<polygon points="27.268,57.541 27.268,35.98 24.232,35.98 24.232,60.576 59.643,60.576 59.643,57.541" />'+
+
+  '<circle cx="10.438" cy="5.398" r="5.398" />'+
+  '</g>'+
+  '</g>'+
+  '</svg>';
+*/
+
 
 }
