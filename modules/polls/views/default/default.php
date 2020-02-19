@@ -248,4 +248,22 @@ Select2Asset::register($this);
     </div>
   </div>
 
+  <ul id="question-tmpl-ex">
+    <li>
+      <label><input type="checkbox">
+        <span class="q-title"> Вопрос</span>
+      </label>
+      <ul class="question-content-ex">
+      </ul>
+    </li>
+  </ul>
+
+  <li id="answer-li-tmpl" class="answer-tmpl-ex">
+    <label><input type="checkbox">
+      <span class="a-code"></span>
+      <span class="a-title"></span>
+    </label>
+  </li>
+
 </div>
+

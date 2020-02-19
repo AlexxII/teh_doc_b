@@ -215,6 +215,18 @@ class PollConstructor {
     return this.pollGridView;
   }
 
+  renderLogicMenu() {
+    let menuDiv = document.createElement('div');
+    let questions = this.questions;
+    for (let qId in questions) {
+      let question = questions[qId];
+      if (question.questionTmplEx !== null) {
+        menuDiv.appendChild(question.questionTmplEx);
+      }
+    }
+    return menuDiv;
+  }
+
   verifyPollConfigStructure(val) {
     return val !== null;
   }

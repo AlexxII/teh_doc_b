@@ -10,6 +10,7 @@ class CQuestion {
     this.answers = config.answers;
     this.renderQuestionListTmpl();
     this.renderQuestionGridTmpl();
+    this.renderQuestionTmplEx();
     this.HIDE_QUESTION_URL = '/polls/construct/hide-to-fill';
     this.LIMIT_QUESTION_URL = '/polls/construct/set-question-limit';
   }
@@ -171,6 +172,28 @@ class CQuestion {
     this._questionListTmpl = questionClone;
   }
 
+  renderQuestionTmplEx() {
+    let mainQuestionDiv = document.getElementById('question-tmpl-ex');
+    let questionClone = mainQuestionDiv.cloneNode(true);
+    questionClone.dataset.id = this.id;
+    questionClone.removeAttribute('id');
+    questionClone.querySelector('.q-title').innerHTML = this.title;
+    let answers = this.answers;
+    let qNode = questionClone.querySelector('.question-content-ex');
+    answers.forEach(function (answer, index) {
+      if (answer.visible === 1) {
+        let answerNode = answer.answerTmplEx;
+        qNode.appendChild(answerNode);
+      }
+    });
+    questionClone.appendChild(qNode);
+    this._questionTmplEx = questionClone;
+  }
+
+  get QuestionTmplEx() {
+    return this._questionTmplEx;
+  }
+
   renderQuestionGridTmpl() {
     let gridItem = document.getElementById('gridview-template');
     if (this.visible) {
@@ -202,6 +225,10 @@ class CQuestion {
 
   get questionGridTmpl() {
     return this._questionGridTmpl;
+  }
+
+  get questionTmplEx() {
+    return this._questionTmplEx;
   }
 
   renderCQuestionList() {

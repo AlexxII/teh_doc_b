@@ -27,6 +27,8 @@ $(document).on('click', '#btn-switch-view', changeConstructView)
   .on('click', '.question-trash', showQTrash)
   .on('click', '.logic', setLogic);
 
+$(document).on('change', 'input:checkbox', chechboxLogic);
+
 $.mask.definitions['H'] = '[1-9]';
 $.mask.definitions['h'] = '[0-9]';
 
@@ -137,9 +139,26 @@ function showQTrash() {
 
 function setLogic() {
   let answerId = this.dataset.id;
+  let a = document.createElement('div');
+  a.className = 'qqqqqqqq';
+  a.appendChild(pollCounstructor.renderLogicMenu());
+  $.alert({
+    title: pollCounstructor.code,
+    content: a,
+    columnClass: 'col-md-12',
+    animateFromElement: false
+  });
 
-  console.log();
+  // pollCounstructor.renderLogicMenu();
+  // console.log();
 
+}
+
+function chechboxLogic() {
+  let state = this.checked ? true : false;
+  console.log(state);
+  console.log($(this).next('ul'));
+  $(this).next('ul').find('input:checkbox').prop('checked', state);
 }
 
 // отключение сортировки
