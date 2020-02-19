@@ -8,6 +8,7 @@ class CAnswer {
     this.oldOrder = +config.order;
     this.code = config.code ;
     this.unique = +config.unique;
+    this.jump = +config.jump;
     this.type = +config.input_type;
     this.visible = +config.visible;
     this.answerTmpl = index + 1;
@@ -50,6 +51,11 @@ class CAnswer {
     }
     if (this.unique === 1) {
       answerClone.classList.add('unique-answer');
+    }
+    if (this.jump === 1) {
+      let jmpNode = document.createElement('div');
+      jmpNode.className = 'jump-icon';
+      answerClone.appendChild(jmpNode);
     }
     this._answerTmpl = answerClone;
   }
