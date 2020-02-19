@@ -155,10 +155,9 @@ function setLogic() {
 }
 
 function chechboxLogic() {
-  let state = this.checked ? true : false;
-  console.log(state);
-  console.log($(this).next('ul'));
-  $(this).next('ul').find('input:checkbox').prop('checked', state);
+  console.log(this.parentNode.parentNode.children[1].childNodes);
+  // let state = this.checked ? true : false;
+  // $(this).next('ul').find('input:checkbox').prop('checked', state);
 }
 
 // отключение сортировки

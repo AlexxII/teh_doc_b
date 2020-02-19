@@ -186,7 +186,7 @@ class CQuestion {
         qNode.appendChild(answerNode);
       }
     });
-    questionClone.appendChild(qNode);
+    // questionClone.appendChild(qNode);
     this._questionTmplEx = questionClone;
   }
 
