@@ -146,24 +146,39 @@ function setLogic() {
       ok: {
         text: 'Сохранить',
         btnClass: 'btn-success',
-        action:function() {
+        action: function () {
           let menu = document.getElementById('logic-menu-content');
-          let inputs = menu.getElementsByTagName('input');
-          let result = [];
-          for (let key in inputs) {
-            if (inputs[key].checked) {
-              result.push(inputs[key].dataset.id);
-              inputs[key].checked = false;
-            }
-          }
-          console.log(result);
+          saveCheckboxesResults(menu);
         }
       },
       cancel: {
-        text: 'Отмена'
+        text: 'Отмена',
+        action: function () {
+          let menu = document.getElementById('logic-menu-content');
+          clearCheckboxes(menu);
+        }
       }
     }
   });
+}
+
+function saveCheckboxesResults(menu) {
+  let inputs = menu.getElementsByTagName('input');
+  let result = [];
+  for (let key in inputs) {
+    if (inputs[key].checked) {
+      result.push(inputs[key].dataset.id);
+      inputs[key].checked = false;                                          // снимаем checkbox
+    }
+  }
+  console.log(result);
+}
+
+function clearCheckboxes(menu) {
+  let inputs = menu.getElementsByTagName('input');
+  for (let key in inputs) {
+    inputs[key].checked = false;
+  }
 }
 
 function checkboxLogicEx() {
