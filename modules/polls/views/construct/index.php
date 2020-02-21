@@ -1,6 +1,9 @@
 <div class="construct-content">
   <div class="poll-construct-wrap">
     <div class="poll-construct-header">
+      <div class="service-info">
+
+      </div>
       <div class="undo-changes" style="display: none">
         <a id="del-wrap" class="fab-button btn-sml" title="Отменить изменение очередности" >
           <svg viewBox="0 0 1280 1090" width="20px" height="20px">

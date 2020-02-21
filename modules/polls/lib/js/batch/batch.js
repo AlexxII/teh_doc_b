@@ -18,7 +18,7 @@ function renderResult() {
   let reposnondetsAnswers = batch.respondentsPool;
   $('.poll-batch-wrap').html('');
   let mainDiv = document.createElement('div');
-  mainDiv.className = 'grid';
+  mainDiv.className = 'batch-grid';
   for (let key in reposnondetsAnswers) {
     let obj = reposnondetsAnswers[key];
     let divNode = document.createElement('div');

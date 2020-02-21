@@ -23,6 +23,7 @@ $(document).on('input', '#myRange', function (e) {
 $(document).on('click', '#btn-switch-view', changeConstructView)
   .on('click', '.question-hide', hideQuestion)
   .on('click', '.answer-hide', hideAnswer)
+  .on('click', '.restore-btn', restoreAnswer)
   .on('click', '.unique-btn', setAnswerUnique)
   .on('click', '.question-trash', showQTrash)
   .on('click', '.logic', setLogic)
@@ -106,8 +107,17 @@ function hideAnswer() {
   let questionId = $(this).data('questionId');
   let question = pollCounstructor.findQuestionById(questionId);
   if (question) {
-    let answer = question.findAnswerById(answerId);
-    answer.hideAnswerInListView();
+    question.hideAnswer(answerId);
+  }
+}
+
+function restoreAnswer() {
+  let answerId = $(this).data('id');
+  let questionId = $(this).data('questionId');
+  console.log(answerId + ' - ' + questionId);
+  let question = pollCounstructor.findQuestionById(questionId);
+  if (question) {
+    question.restoreAnswer(answerId);
   }
 }
 
@@ -171,13 +181,19 @@ function saveCheckboxesResults(menu) {
       inputs[key].checked = false;                                          // снимаем checkbox
     }
   }
-  console.log(result);
 }
 
 function clearCheckboxes(menu) {
   let inputs = menu.getElementsByTagName('input');
   for (let key in inputs) {
     inputs[key].checked = false;
+  }
+}
+
+function checkInAllCheckboxes() {
+  let inputs = menu.getElementsByTagName('input');
+  for (let key in inputs) {
+    inputs[key].checked = true;
   }
 }
 

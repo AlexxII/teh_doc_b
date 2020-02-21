@@ -8,9 +8,11 @@ class CQuestion {
     this.limit = +config.limit;
     this.visible = +config.visible;
     this.answers = config.answers;
+    this.numberOfAnswers = config.answers;
     this.renderQuestionListTmpl();
     this.renderQuestionGridTmpl();
     this.renderQuestionTmplEx();
+
     this.HIDE_QUESTION_URL = '/polls/construct/hide-to-fill';
     this.LIMIT_QUESTION_URL = '/polls/construct/set-question-limit';
   }
@@ -19,7 +21,7 @@ class CQuestion {
     let id = this.id;
     let tempAnswersArray = {};
     answers.forEach(function (val, index) {
-        tempAnswersArray[val.id] = new CAnswer(val, index, id);
+      tempAnswersArray[val.id] = new CAnswer(val, index, id);
     });
     this._answers = tempAnswersArray;
   }
@@ -69,7 +71,6 @@ class CQuestion {
   setQuestionLimit(value) {
     let oldVal = this.limit;                                          // + - приведение к типу number
     let Obj = this;
-    console.log(this.limit);
     if (+value === oldVal) return;
     let url = this.LIMIT_QUESTION_URL;
     let qId = this.id;
@@ -133,7 +134,7 @@ class CQuestion {
     for (let key in answers) {
       if (answers[key].visible === 0) {
         let hr = document.createElement('hr');
-        answerContentNode.appendChild(hr);
+        answerContentDelNode.appendChild(hr);
         break
       }
     }
@@ -160,7 +161,6 @@ class CQuestion {
       }
     });
     this.hSortable = new Sortable(answerContentDelNode, {
-      multiDrag: true,
       selectedClass: 'selected',
       animation: 150,
       sort: false
@@ -170,6 +170,48 @@ class CQuestion {
       tAnswers[key].saveSort(this.hSortable);
     }
     this._questionListTmpl = questionClone;
+  }
+
+  hideAnswer(id) {
+    let Obj = this;
+    let answer = this.findAnswerById(id);
+    if (answer) {
+      answer.hideAnswerInListView(function () {
+        let hSortable = Obj.hSortable;
+        let hSortDiv = hSortable.el;
+        if (hSortDiv.getElementsByTagName('hr').length === 0) {
+          let hr = document.createElement('hr');
+          hSortDiv.appendChild(hr);
+        }
+        let tmpl = answer.answerTmpl;
+        hSortDiv.appendChild(answer.answerTmpl.cloneNode(true));
+        let ar = hSortable.toArray();
+        ar.push(answer.id + '');
+        hSortable.sort(ar);
+        $(tmpl).hide(100, () => {
+          $(tmpl).remove();
+        });
+      });
+    }
+  }
+
+  restoreAnswer(id) {
+    let Obj = this;
+    let answer = this.findAnswerById(id);
+    if (answer) {
+      answer.restoreAnswerInListView(function () {
+        let sortable = Obj.sortable;
+        let sortDiv = sortable.el;
+        let tmpl = answer.answerTmpl;
+        sortDiv.appendChild(answer.answerTmpl.cloneNode(true));
+        let ar = sortable.toArray();
+        ar.push(answer.id + '');
+        sortable.sort(ar);
+        $(tmpl).hide(100, () => {
+          $(tmpl).remove();
+        });
+      });
+    }
   }
 
   renderQuestionTmplEx() {
@@ -214,7 +256,6 @@ class CQuestion {
 
   findAnswerById(id) {
     let answers = this._answers;
-    console.log(answers);
     if (answers[id] !== undefined)
       return answers[id];
     return false;

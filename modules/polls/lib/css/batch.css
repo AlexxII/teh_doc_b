@@ -14,7 +14,7 @@
   cursor: pointer;
 }
 
-.grid {
+.batch-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(25px, 1fr));
 }

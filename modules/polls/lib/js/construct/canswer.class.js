@@ -14,6 +14,7 @@ class CAnswer {
     this.answerTmpl = index + 1;
     this.answerTmplEx = index + 1;
     this.HIDE_ANSWER_URL = '/polls/construct/hide-answer';
+    this.RESTORE_ANSWER_URL = '/polls/construct/restore-answer';
     this.UNIQUE_ANSWER_URL = '/polls/construct/unique-answer';
   }
 
@@ -47,6 +48,8 @@ class CAnswer {
       answerClone.querySelector('.answer-hide').remove();
       answerClone.querySelector('.answer-options').remove();
       answerClone.querySelector('.unique-btn').remove();
+      answerClone.querySelector('.restore-btn').dataset.id = answerId;
+      answerClone.querySelector('.restore-btn').dataset.questionId = this.parentQuestion;
     } else {
       answerClone.querySelector('.restore-btn').remove();
       answerClone.querySelector('.answer-hide').dataset.id = answerId;
@@ -86,10 +89,8 @@ class CAnswer {
     this.sortable = sortable;
   }
 
-  hideAnswerInListView() {
-    let tmpl = this.answerTmpl;
+  hideAnswerInListView(callback) {
     let url = this.HIDE_ANSWER_URL;
-    let Obj = this;
     let answerId = this.id;
     $.ajax({
       url: url,
@@ -99,16 +100,27 @@ class CAnswer {
       }
     }).done(function (response) {
       if (response.code) {
-        let sortable = Obj.sortable;
-        let sortDiv = sortable.el;
-        sortDiv.appendChild(Obj.answerTmpl.cloneNode(true));
-        let ar = sortable.toArray();
-        ar.push(Obj.id + '');
-        // console.log(Obj);
-        sortable.sort(ar);
-        $(tmpl).hide(100, () => {
-          $(tmpl).remove()
-        });
+        callback();
+      } else {
+        console.log(response.data.message + '\n' + response.data.data);
+      }
+    }).fail(function () {
+      console.log('Failed to hide question - URL failed');
+    });
+  }
+
+  restoreAnswerInListView(callback) {
+    let url = this.RESTORE_ANSWER_URL;
+    let answerId = this.id;
+    $.ajax({
+      url: url,
+      method: 'post',
+      data: {
+        id: answerId
+      }
+    }).done(function (response) {
+      if (response.code) {
+        callback();
       } else {
         console.log(response.data.message + '\n' + response.data.data);
       }

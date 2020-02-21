@@ -26,6 +26,13 @@ $poll_election_hint = "Является ли данный опрос - выбо�
           ]) ?>
         </div>
       </div>
+      <div class="row" style="padding-bottom: 10px">
+        <div class="form-group col-md-12 col-lg-12">
+          <?= $form->field($xml, 'xmlFile')->fileInput([
+            'id' => 'xmlupload'
+          ]) ?>
+        </div>
+      </div>
     <?php else: ?>
     <div class="row" style="padding-bottom:10px; top: -20px">
       <span class="text-muted" style="font-size: 10px">

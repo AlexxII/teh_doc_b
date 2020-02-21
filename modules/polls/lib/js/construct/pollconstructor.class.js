@@ -5,9 +5,11 @@ class PollConstructor {
       this._title = config.title;
       this._code = config.code;
       this.questions = config.questions;
+      this.numberOfQuestions = config.questions;
       this.renderPollHeader();
       this.renderListTmpl();
       this.renderGridTmpl();
+      this.renderPollInfo();
       this.REORDER_QUESTIONS_URL = '/polls/construct/reorder-questions';
     }
   }
@@ -31,6 +33,14 @@ class PollConstructor {
     return tempArray;
   }
 
+  set numberOfQuestions(questions) {
+    this._numberOfQuestions = questions.length
+  }
+
+  get numberOfQuestions() {
+    return this._numberOfQuestions;
+  }
+
   get code() {
     return this._code;
   }
@@ -47,6 +57,21 @@ class PollConstructor {
     let title = document.createTextNode(this.code);
     hNode.appendChild(title);
     titlePlacement.appendChild(hNode);
+  }
+
+  renderPollInfo() {
+    let hNode = document.createElement('span');
+    let numOfAnswers = this.numOfAnswers;
+    let numOfQuestions = document.createTextNode(this.code);
+    let questions = this._questions;
+    let numberOfAnswers = 0;
+    for (let key in questions) {
+      numberOfAnswers += questions[key].numberOfAnswers;
+    }
+    // serviceNode.appendChild();
+    let nQ = this.numberOfQuestions;
+    console.log('Число вопросов: ' + nQ);
+    console.log('Число ответов: ' + numberOfAnswers);
   }
 
   renderListTmpl() {
@@ -197,7 +222,6 @@ class PollConstructor {
       child.querySelector('.question-order').innerHTML = (i + 1);
     }
   }
-
 
   get pollListView() {
     return this._pollListView;
