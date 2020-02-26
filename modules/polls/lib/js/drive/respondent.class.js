@@ -109,6 +109,10 @@ function result(required) {
     }
   };
 
+  this.deleteAllData = function () {
+    this.respondentAnswers = {};
+  };
+
   this.hasSavedData = function () {
     return this.entries > 0;
   };

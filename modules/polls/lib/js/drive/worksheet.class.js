@@ -165,11 +165,7 @@ class Worksheet {
     this.goToQuestionByNumber(0);
   }
 
-
-
   renderQuestion(questionNumber) {
-    let mainContent = document.getElementById('drive-in');
-    mainContent.innerHTML = '';
     let Obj = this;
     let template = this.template.cloneNode(true);
     let question = this.questions[questionNumber];
@@ -183,7 +179,6 @@ class Worksheet {
     let maxCodesLength = codes.length;                                          // максимальное кол-во кодов клавиатуры!!
     let result = this.respondent.getRespondentResultsOfQuestion(question.id);
     let logic = this.respondent.logic;
-    console.log(this.respondent);
     if (question.numberOfAnswers < maxCodesLength) {
       let count = 0, index = 0;
       for (let key in answers) {
@@ -191,7 +186,8 @@ class Worksheet {
         if (logic && logic.includes(answer.id)) {
           count++;
           if (count === question.numberOfAnswers) {
-            Obj.skipQuestion();
+            let qNum = this.currentQuestionNum;
+            Obj.skipQuestion(result, qNum);
             return;
           }
           continue;
@@ -207,12 +203,18 @@ class Worksheet {
       setTimeout(() => this.loadScript(), 100);                                //TODO  Ооооочень слабое место с ожиданием!!!!!
       question.restoreSelectResult(result, question.selectObj);
     }
+    let mainContent = document.getElementById('drive-in');
+    mainContent.innerHTML = '';
     mainContent.appendChild(template);
     result.startCount;
   }
 
-  skipQuestion() {
-
+  skipQuestion(result, num) {
+    result.deleteAllData();
+    if (this.currentQuestionNum + 1 >= this.totalNumberOfQuestions) {
+      showM();
+      return;
+    }
     if (this.direction === 1) {
       this.nextQuestion();
     } else {

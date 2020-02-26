@@ -139,9 +139,11 @@ function stepLogic(result, question) {
 
 function chooseAnAnswer(element) {
   let question = poll.getCurrentQuestion();
+  console.log(question);
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
   let results = respondentResult.respondentAnswers;
   let selectedAnswerId = element.dataset.id;
+  console.log(selectedAnswerId);
   let selectedAnswerObject = question.getAnswer(selectedAnswerId);
   let data = {
     id: selectedAnswerId,
