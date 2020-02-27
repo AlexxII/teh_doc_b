@@ -269,7 +269,7 @@ Select2Asset::register($this);
   </ul>
 
   <li id="answer-li-tmpl" class="answer-tmpl-ex">
-    <label><input type="checkbox">
+    <label><input class="check-logic" type="checkbox">
       <span class="a-code"></span>
       <span class="a-title"></span>
     </label>

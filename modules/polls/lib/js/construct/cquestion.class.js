@@ -11,7 +11,7 @@ class CQuestion {
     this.numberOfAnswers = config.answers;
     this.renderQuestionListTmpl();
     this.renderQuestionGridTmpl();
-    this.renderQuestionTmplEx();
+    // this.renderQuestionTmplEx();
 
     this.HIDE_QUESTION_URL = '/polls/construct/hide-to-fill';
     this.RESTORE_ANSWER_URL = '/polls/construct/restore-question';
@@ -25,6 +25,10 @@ class CQuestion {
       tempAnswersArray[val.id] = new CAnswer(val, index, id);
     });
     this._answers = tempAnswersArray;
+  }
+
+  get answersEx() {
+    return this._answers;
   }
 
   get answers() {
@@ -285,11 +289,13 @@ class CQuestion {
         qNode.appendChild(answerNode);
       }
     });
-    this._questionTmplEx = questionClone;
+    this.qq = questionClone;
+    return questionClone;
   }
 
-  get QuestionTmplEx() {
-    return this._questionTmplEx;
+  get questionTmplEx() {
+    // return this._questionTmplEx;
+    return this.renderQuestionTmplEx();
   }
 
   renderQuestionGridTmpl() {
@@ -325,7 +331,7 @@ class CQuestion {
   }
 
   get questionTmplEx() {
-    return this._questionTmplEx;
+    return this.renderQuestionTmplEx();
   }
 
   renderCQuestionList(index) {

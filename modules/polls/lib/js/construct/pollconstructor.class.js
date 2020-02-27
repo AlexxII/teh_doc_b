@@ -11,6 +11,7 @@ class PollConstructor {
       this.renderGridTmpl();
       this.renderPollInfo();
       this.REORDER_QUESTIONS_URL = '/polls/construct/reorder-questions';
+      this.SAVE_LOGIC_URL = '/polls/construct/save-poll-logic';
     }
   }
 
@@ -174,7 +175,7 @@ class PollConstructor {
       NProgress.done();
       var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Изменить порядок не удалось';
       initNoty(tText, 'warning');
-      console.log('Не удалось получить ответ сервера. Примените отладучную панель, оыснаска "Сеть"');
+      console.log('Не удалось получить ответ сервера. Примените отладочную панель, оснаска "Сеть"');
     });
   }
 
@@ -250,7 +251,7 @@ class PollConstructor {
       NProgress.done();
       var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Изменить порядок не удалось';
       initNoty(tText, 'warning');
-      console.log('Не удалось получить ответ сервера. Примените отладучную панель, оыснаска "Сеть"');
+      console.log('Не удалось получить ответ сервера. Примените отладочную панель, оснаска "Сеть"');
     });
   }
 
@@ -348,17 +349,55 @@ class PollConstructor {
     return this.pollGridView;
   }
 
-  renderLogicMenu() {
+  renderLogicMenu(id) {
     let menuDiv = document.createElement('div');
     menuDiv.id = 'logic-menu-content';
     let questions = this.questions;
     for (let qId in questions) {
       let question = questions[qId];
-      if (question.questionTmplEx !== null) {
+      // if (question.questionTmplEx !== null) {
         menuDiv.appendChild(question.questionTmplEx);
-      }
+        // console.log(question.answersEx[id]);
+        if (question.answersEx[id] !== undefined) {
+          console.log(question.answersEx[id].aa.classList.add('selected-answer'));
+          console.log(question.qq.classList.add('chooooo'));
+          question
+        }
+        // if (question.answers[id])
+      // let checkbox = document.getElementById(id);
+      //.style.display = 'none';
+      //   console.log(checkbox);
+      // }
     }
     return menuDiv;
+  }
+
+  saveLogic(result, id) {
+    let Obj = this;
+    if (result.length !== 0){
+      let url = this.SAVE_LOGIC_URL;
+      $.ajax({
+        url: url,
+        method: 'post',
+        data: {
+          restrict: result,
+          pollId : Obj.id,
+          answer: id
+        }
+      }).done(function (response) {
+        if (!response.code) {
+          var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Сохранить логику не удалось';
+          initNoty(tText, 'warning');
+          console.log(response.data.message + ' ' + response.data.data);
+          return;
+        }
+
+      }).fail(function () {
+        var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Сохранить логику не удалось';
+        initNoty(tText, 'warning');
+        console.log('Не удалось получить ответ сервера. Примените отладочную панель, оснаска "Сеть"');
+      });
+    }
   }
 
   verifyPollConfigStructure(val) {

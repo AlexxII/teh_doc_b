@@ -155,7 +155,7 @@ function setLogic() {
   let answerId = this.dataset.id;
   $.alert({
     title: pollCounstructor.code + ' ' + 'исключить ответы',
-    content: pollCounstructor.renderLogicMenu(),
+    content: pollCounstructor.renderLogicMenu(answerId),
     columnClass: 'col-md-12',
     animateFromElement: false,
     buttons: {
@@ -164,7 +164,8 @@ function setLogic() {
         btnClass: 'btn-success',
         action: function () {
           let menu = document.getElementById('logic-menu-content');
-          saveCheckboxesResults(menu);
+          let result = saveCheckboxesResults(menu);
+          pollCounstructor.saveLogic(result, answerId);
         }
       },
       cancel: {
@@ -181,13 +182,17 @@ function setLogic() {
 function saveCheckboxesResults(menu) {
   let inputs = menu.getElementsByTagName('input');
   let result = [];
-  for (let key in inputs) {
-    if (inputs[key].checked) {
-      result.push(inputs[key].dataset.id);
-      inputs[key].checked = false;                                          // снимаем checkbox
+
+  Array.prototype.map.call(inputs, function (val) {
+    if (val.checked) {
+      result.push(val.dataset.id);
+      val.checked = false;                                          // снимаем checkbox
     }
-  }
+  });
+  console.log(result);
+  return result;
 }
+
 
 function clearCheckboxes(menu) {
   let inputs = menu.getElementsByTagName('input');

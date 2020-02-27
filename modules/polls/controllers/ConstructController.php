@@ -3,6 +3,7 @@
 namespace app\modules\polls\controllers;
 
 use app\modules\polls\models\Answers;
+use app\modules\polls\models\PollLogic;
 use app\modules\polls\models\Questions;
 use app\modules\polls\models\Xml;
 use Yii;
@@ -308,6 +309,52 @@ class ConstructController extends Controller
         'code' => 1,
       ];
     }
+  }
+
+  public function actionSavePollLogic()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (!empty($_POST)) {
+      $transaction = Yii::$app->db->beginTransaction();
+      $restrictArray = $_POST["restrict"];
+      $answerId = $_POST["answer"];
+      $pollId = $_POST["pollId"];
+      foreach ($restrictArray as $restrict) {
+        $model = new PollLogic();
+        $model->poll_id = $pollId;
+        $model->answer_id = $answerId;
+        $model->restrict_id = $restrict;
+        $model->restrict_type = 3;
+        if (!$model->save()) {
+          $transaction->rollback();
+          return [
+            'data' => [
+              'success' => false,
+              'data' => $model->errors,
+              'message' => 'Can`t save poll logic',
+            ],
+            'code' => 0,
+          ];
+        }
+      }
+      $transaction->commit();
+      return [
+        'data' => [
+          'success' => true,
+          'data' => true,
+          'message' => 'Logic successfully',
+        ],
+        'code' => 1,
+      ];
+    }
+    return [
+      'data' => [
+        'success' => false,
+        'data' => 'Poor',
+        'message' => '$_POST - empty',
+      ],
+      'code' => 0,
+    ];
   }
 
 }

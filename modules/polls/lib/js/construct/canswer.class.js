@@ -1,20 +1,20 @@
 class CAnswer {
   constructor(config, index, qId) {
     this.parentQuestion = +qId;
-    this.id = +config.id;
+    this.id = config.id;
     this.logic = config.logic;
     this.title = config.title;
     this.titleEx = config.title_ex;
     this.newOrder = +config.order;
     this.oldOrder = +config.order;
-    this.code = config.code ;
-    this.dCode = +config.code ;                                                    // цифровой код ответа
+    this.code = config.code;
+    this.dCode = +config.code;                                                    // цифровой код ответа
     this.unique = +config.unique;
     // this.jump = +config.jump;
     this.type = +config.input_type;
     this.visible = +config.visible;
     this.answerTmpl = index + 1;
-    this.answerTmplEx = index + 1;
+    // this.answerTmplEx = index + 1;
     this.HIDE_ANSWER_URL = '/polls/construct/hide-answer';
     this.RESTORE_ANSWER_URL = '/polls/construct/restore-answer';
     this.UNIQUE_ANSWER_URL = '/polls/construct/unique-answer';
@@ -31,7 +31,7 @@ class CAnswer {
   }
 
   get answerTmplEx() {
-    return this._answerTmplEx;
+    return this.renderAnswerTmplEx();
   }
 
   set answerTmpl(index) {
@@ -73,24 +73,26 @@ class CAnswer {
     this._answerTmpl = answerClone;
   }
 
-  set answerTmplEx(index) {
+  renderAnswerTmplEx() {
     let answerDiv = document.getElementById('answer-li-tmpl');
     let answerClone = answerDiv.cloneNode(true);
-    answerClone.removeAttribute('id');
-    answerDiv.querySelector('input').dataset.id = this.id;
+    // answerClone.removeAttribute('id');
+    // answerClone.querySelector('.check-logic').id = this.id;
+    answerClone.id = this.id;
+    answerClone.querySelector('.check-logic').dataset.id = this.id;
     answerClone.querySelector('.a-title').innerHTML = this.title;
     let code = this.code.padStart(3, '0');
     answerClone.querySelector('.a-code').innerHTML = code;
     // if (this.unique === 1) {
     //   answerClone.classList.add('unique-answer');
     // }
-    this._answerTmplEx = answerClone;
+    this.temp = answerClone;
+    return answerClone;
   }
 
   set logic(logic) {
     if (logic.length !== 0) {
       this._logic = 1;
-      console.log(this._logic);
       return;
     }
     this._logic = 0;
@@ -199,7 +201,6 @@ class CAnswer {
   };
 
 
-
   /*
     renderJumper() {
       let hideSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -231,17 +232,17 @@ class CAnswer {
       this._jumper = hideSvg;
     }
   */
-/*
-  '<svg viewBox="0 0 60.576 60.576">' +
-  '<g>'+
-  '<g>'+
-  '<polygon points="27.268,57.541 27.268,35.98 24.232,35.98 24.232,60.576 59.643,60.576 59.643,57.541" />'+
+  /*
+    '<svg viewBox="0 0 60.576 60.576">' +
+    '<g>'+
+    '<g>'+
+    '<polygon points="27.268,57.541 27.268,35.98 24.232,35.98 24.232,60.576 59.643,60.576 59.643,57.541" />'+
 
-  '<circle cx="10.438" cy="5.398" r="5.398" />'+
-  '</g>'+
-  '</g>'+
-  '</svg>';
-*/
+    '<circle cx="10.438" cy="5.398" r="5.398" />'+
+    '</g>'+
+    '</g>'+
+    '</svg>';
+  */
 
 
 }
