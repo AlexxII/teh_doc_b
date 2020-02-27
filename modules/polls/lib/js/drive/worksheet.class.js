@@ -190,6 +190,9 @@ class Worksheet {
             Obj.skipQuestion(result, qNum);
             return;
           }
+          answer.skip(index);
+          questionBody.appendChild(answer.visualElement);
+          index++;
           continue;
         }
         answer.renderAnswer(index);
@@ -247,7 +250,7 @@ class Worksheet {
   // основной шаблон
   renderTemplate() {
     let template = document.createElement('div');
-    template.className = 'panel question-data';
+    template.className = 'panel drive-question-data ';
 
     let header = document.createElement('div');
     header.className = 'panel-heading';

@@ -359,9 +359,9 @@ class PollConstructor {
         menuDiv.appendChild(question.questionTmplEx);
         // console.log(question.answersEx[id]);
         if (question.answersEx[id] !== undefined) {
-          console.log(question.answersEx[id].aa.classList.add('selected-answer'));
-          console.log(question.qq.classList.add('chooooo'));
-          question
+          question.answersEx[id].tempTmpl.classList.add('selected-answer');
+          question.tempTmpl.classList.add('selected-question');
+          // question
         }
         // if (question.answers[id])
       // let checkbox = document.getElementById(id);
@@ -391,7 +391,8 @@ class PollConstructor {
           console.log(response.data.message + ' ' + response.data.data);
           return;
         }
-
+        var tText = '<span style="font-weight: 600">Успеч!</span><br>Логика сохранена';
+        initNoty(tText, 'success');
       }).fail(function () {
         var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Сохранить логику не удалось';
         initNoty(tText, 'warning');

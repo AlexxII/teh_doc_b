@@ -289,7 +289,7 @@ class CQuestion {
         qNode.appendChild(answerNode);
       }
     });
-    this.qq = questionClone;
+    this.tempTmpl = questionClone;
     return questionClone;
   }
 

@@ -50,14 +50,14 @@
 }
 
 .drive-content .panel-body {
-  padding: 15px 15px 15px 20px;
+  padding: 15px 35px 15px 20px;
 }
 
 .drive-content {
   position: relative;
 }
 
-.question-data {
+.drive-question-data {
   position: relative;
 }
 
@@ -67,8 +67,8 @@
 
 .drive-unique-answer {
   position: absolute;
-  top: 7px;
-  right: -10px;
+  top: 8px;
+  right: -35px;
 }
 
 .drive-free-answer {
@@ -80,13 +80,13 @@
 .drive-difficult-answer {
   position: absolute;
   top: 7px;
-  right: -10px;
+  right: -17px;
 }
 
 .drive-branch-answer {
   position: absolute;
-  top: 0;
-  right: -10px;
+  top: -1px;
+  right: -7px;
 }
 
 .answer-p {
@@ -104,4 +104,9 @@ svg > .question {
 svg .mono {
   fill: #aaa;
   font-size: 14px;
+}
+
+.skipped {
+  opacity: .4;
+  cursor: default !important;
 }

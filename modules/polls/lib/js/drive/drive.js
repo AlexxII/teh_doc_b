@@ -138,12 +138,15 @@ function stepLogic(result, question) {
 }
 
 function chooseAnAnswer(element) {
+  // если ответ запрещен для выбора по логике
+  if (element.dataset.skip == 1) {
+    beep();
+    return;
+  }
   let question = poll.getCurrentQuestion();
-  console.log(question);
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
   let results = respondentResult.respondentAnswers;
   let selectedAnswerId = element.dataset.id;
-  console.log(selectedAnswerId);
   let selectedAnswerObject = question.getAnswer(selectedAnswerId);
   let data = {
     id: selectedAnswerId,

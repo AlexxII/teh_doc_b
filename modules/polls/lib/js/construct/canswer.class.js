@@ -86,7 +86,7 @@ class CAnswer {
     // if (this.unique === 1) {
     //   answerClone.classList.add('unique-answer');
     // }
-    this.temp = answerClone;
+    this.tempTmpl = answerClone;
     return answerClone;
   }
 

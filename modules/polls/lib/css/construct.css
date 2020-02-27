@@ -295,9 +295,11 @@ ul {
 }
 
 .selected-answer {
-  /*background-color: #e9e9e9;*/
+  background-color: #e9e9e9;
   /*font-weight: 600;*/
 }
-.chooooo {
+
+.selected-question {
   background-color: #f9f9f9;
+  opacity: .7;
 }

@@ -129,19 +129,19 @@ class Answer {
     if (this.type === TYPE_FREE_ANSWER) {
       answerTemplate.appendChild(this.renderFreeSymbl());
     }
+    // уникальный ответ
     if (this.unique === 1) {
       answerTemplate.appendChild(this.renderUniqueSymbl());
     }
+    //
     if (this.type === 3) {
-      if (answerTemplate.querySelector('.drive-unique-answer')) {
-        answerTemplate.querySelector('.drive-unique-answer').remove();
-      }
       answerTemplate.appendChild(this.renderDifficultSymbol());
     }
     if (this.logic === 1) {
       answerTemplate.appendChild(this.renderBranchSymbl());
     }
     this.visualElement = answerTemplate;
+    return answerTemplate;
   };
 
   restoreResult(result) {
@@ -167,6 +167,12 @@ class Answer {
     element.style.cssText = 'background-color: #fff';
     element.dataset.mark = 0;
   };
+
+  skip(index) {
+    let element = this.renderAnswer(index);
+    element.dataset.skip = 1;
+    element.classList.add('skipped')
+  }
 
   insertInput() {
     let input = document.createElement('input');
