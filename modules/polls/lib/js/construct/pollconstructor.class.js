@@ -350,28 +350,66 @@ class PollConstructor {
   }
 
   renderLogicMenu(id) {
+    let Obj = this;
     let menuDiv = document.createElement('div');
     menuDiv.id = 'logic-menu-content';
     let questions = this.questions;
     for (let qId in questions) {
       let question = questions[qId];
-      // if (question.questionTmplEx !== null) {
-        menuDiv.appendChild(question.questionTmplEx);
-        // console.log(question.answersEx[id]);
-        if (question.answersEx[id] !== undefined) {
-          question.answersEx[id].tempTmpl.classList.add('selected-answer');
-          question.tempTmpl.classList.add('selected-question');
-          // question
-        }
-      // question.tempTmpl.scrollIntoView();
-        // if (question.answers[id])
-      // let checkbox = document.getElementById(id);
-      //.style.display = 'none';
-      //   console.log(checkbox);
-      // }
+      menuDiv.appendChild(question.questionTmplEx);
+      if (question.answersEx[id] !== undefined) {
+        Obj.buffer = question.answersEx[id];
+        question.answersEx[id].tempTmpl.classList.add('selected-answer');
+        question.tempTmpl.classList.add('selected-question');
+        console.log(question.answersEx[id]);
+      }
     }
     return menuDiv;
   }
+
+  showLogicMenu(answerId) {
+    let Obj = this;
+    $.alert({
+      title: Obj.code + ' ' + 'исключить ответы',
+      content: Obj.renderLogicMenu(answerId),
+      columnClass: 'col-md-12',
+      animateFromElement: false,
+      buttons: {
+        ok: {
+          text: 'Сохранить',
+          btnClass: 'btn-success',
+          action: function () {
+            Obj.confirmLogic(answerId);
+          }
+        },
+        cancel: {
+          text: 'Отмена',
+          action: function () {
+            Obj.abortLogic();
+          }
+        }
+      }
+    });
+  };
+
+  confirmLogic(answerId ) {
+    let menu = document.getElementById('logic-menu-content');
+    let inputs = menu.getElementsByTagName('input');
+    let result = [];
+    Array.prototype.map.call(inputs, function (val) {
+      if (val.checked) {
+        result.push(val.dataset.id);
+        val.checked = false;                                          // снимаем checkbox
+      }
+    });
+    this.saveLogic(result, answerId);
+  }
+
+  abortLogic() {
+    // let menu = document.getElementById('logic-menu-content');
+    // this.clearCheckboxes(menu);
+  }
+
 
   saveLogic(result, id) {
     let Obj = this;
@@ -392,6 +430,11 @@ class PollConstructor {
           console.log(response.data.message + ' ' + response.data.data);
           return;
         }
+        let answerObj = Obj.buffer;
+        answerObj.logicArray = result;
+
+        answerObj.answerTmpl.appendChild(answerObj.renderBranchSymbl());
+
         var tText = '<span style="font-weight: 600">Успех!</span><br>Логика сохранена';
         initNoty(tText, 'success');
       }).fail(function () {
@@ -399,6 +442,13 @@ class PollConstructor {
         initNoty(tText, 'warning');
         console.log('Не удалось получить ответ сервера. Примените отладочную панель, оснаска "Сеть"');
       });
+    }
+  }
+
+  clearCheckboxes(menu) {
+    let inputs = menu.getElementsByTagName('input');
+    for (let key in inputs) {
+      inputs[key].checked = false;
     }
   }
 

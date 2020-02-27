@@ -330,10 +330,6 @@ class CQuestion {
     return this._questionGridTmpl;
   }
 
-  get questionTmplEx() {
-    return this.renderQuestionTmplEx();
-  }
-
   renderCQuestionList(index) {
     let question = this.questionListTmpl;
     question.querySelector('.question-order').innerHTML = index;

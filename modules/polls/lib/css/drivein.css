@@ -110,3 +110,7 @@ svg .mono {
   opacity: .4;
   cursor: default !important;
 }
+.drive-answer-code {
+  font-size: 12px;
+  padding-right: 5px;
+}

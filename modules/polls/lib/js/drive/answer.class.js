@@ -3,6 +3,7 @@ class Answer {
   {
     this.id = config.id;
     this.title = config.title;
+    this.code = config.code;
     this.titleEx = config.title_ex;
     this.logic = config.logic;
     this.newOrder = +config.order;
@@ -23,22 +24,111 @@ class Answer {
     return this._logic;
   }
 
-/*
-  set logic(logics) {
-    if (logics.length !== 0) {
-      let temp = [];
-      logics.forEach(function (val, index) {
-        temp[index] = val.restrict_id;
-      });
-      this._logic = temp;
+  renderAnswer(index) {
+    let answerTemplate = document.createElement('p');
+    let strong = document.createElement('strong');
+    answerTemplate.dataset.id = this.id;
+    answerTemplate.dataset.mark = 0;
+    answerTemplate.id = codes[index][1];
+    answerTemplate.className = 'answer-p';
+    let counterNode = document.createTextNode(codes[index][0] + '. ');
+    strong.appendChild(counterNode);
+    answerTemplate.appendChild(strong);
+
+
+    // вкючить отображение кода или нет
+    let test = 1;
+    if (test === 1) {
+      let codeNode = document.createElement('span');
+      codeNode.className = 'drive-answer-code';
+      codeNode.innerText = this.code.padStart(3, '0');
+      answerTemplate.append(codeNode);
     }
-    this._logic = null;
+
+    let titleNode = document.createElement('span');
+    titleNode.className = 'drive-answer-title';
+    titleNode.innerText = this.title;
+    // let titleNode = document.createTextNode(this.title);
+    answerTemplate.append(titleNode);
+    // свободный ответ
+    if (this.type === TYPE_FREE_ANSWER) {
+      answerTemplate.appendChild(this.renderFreeSymbl());
+    }
+    // уникальный ответ
+    if (this.unique === 1) {
+      answerTemplate.appendChild(this.renderUniqueSymbl());
+    }
+    // затрудняюсь ответить
+    if (this.type === 3) {
+      answerTemplate.appendChild(this.renderDifficultSymbol());
+    }
+    // ветвление
+    if (this.logic === 1) {
+      answerTemplate.appendChild(this.renderBranchSymbl());
+    }
+    this.visualElement = answerTemplate;
+    return answerTemplate;
+  };
+
+  restoreResult(result) {
+    let respondentAnswers = result.respondentAnswers;
+    if (respondentAnswers[this.id] !== undefined) {
+      if (this.type === TYPE_FREE_ANSWER) {
+        let savedData = respondentAnswers[this.id];
+        this.showInput();
+        this.input.value = savedData.extData;
+      }
+      this.mark();
+    }
+  };
+
+  mark() {
+    let element = this.visualElement;
+    element.style.cssText = 'background-color: ' + pollUser.markColor;
+    element.dataset.mark = 1;
+  };
+
+  unmark() {
+    let element = this.visualElement;
+    element.style.cssText = 'background-color: #fff';
+    element.dataset.mark = 0;
+  };
+
+  skip(index) {
+    let element = this.renderAnswer(index);
+    element.dataset.skip = 1;
+    element.classList.add('skipped')
   }
 
-  get logic() {
-    return this._logic;
+  insertInput() {
+    let input = document.createElement('input');
+    input.className = 'form-control free-answer';
+    input.dataset.id = this.id;
+    let span = document.createElement('span');
+    span.className = 'free-answer-wrap';
+    let label = document.createElement('label');
+    label.className = 'w3-label-under';
+    let text = 'Введите ответ.';
+    let textLabel = document.createTextNode(text);
+    label.appendChild(textLabel);
+    span.appendChild(input);
+    span.appendChild(label);
+    span.dataset.show = 1;
+    this.inputSpan = span;
+    this.input = input;
+    this.visualElement.append(span);
+  };
+
+  showInput() {
+    this.inputSpan.dataset.show = 1;
+    this.input.value = '';
+    this.visualElement.append(this.inputSpan);
+  };
+
+  hideInput() {
+    this.inputSpan.dataset.show = 0;
+    this.inputSpan.remove();
   }
-*/
 
   renderUniqueSymbl() {
     let uniqueNode = document.createElement('span');
@@ -112,96 +202,6 @@ class Answer {
     difficultSvg.appendChild(pathEx);
     difficultNode.appendChild(difficultSvg);
     return difficultNode;
-  }
-
-  renderAnswer(index) {
-    let answerTemplate = document.createElement('p');
-    let strong = document.createElement('strong');
-    answerTemplate.dataset.id = this.id;
-    answerTemplate.dataset.mark = 0;
-    answerTemplate.id = codes[index][1];
-    answerTemplate.className = 'answer-p';
-    let counterNode = document.createTextNode(codes[index][0] + '. ');
-    strong.appendChild(counterNode);
-    answerTemplate.appendChild(strong);
-    let titleNode = document.createTextNode(this.title);
-    answerTemplate.append(titleNode);
-    if (this.type === TYPE_FREE_ANSWER) {
-      answerTemplate.appendChild(this.renderFreeSymbl());
-    }
-    // уникальный ответ
-    if (this.unique === 1) {
-      answerTemplate.appendChild(this.renderUniqueSymbl());
-    }
-    //
-    if (this.type === 3) {
-      answerTemplate.appendChild(this.renderDifficultSymbol());
-    }
-    if (this.logic === 1) {
-      answerTemplate.appendChild(this.renderBranchSymbl());
-    }
-    this.visualElement = answerTemplate;
-    return answerTemplate;
-  };
-
-  restoreResult(result) {
-    let respondentAnswers = result.respondentAnswers;
-    if (respondentAnswers[this.id] !== undefined) {
-      if (this.type === TYPE_FREE_ANSWER) {
-        let savedData = respondentAnswers[this.id];
-        this.showInput();
-        this.input.value = savedData.extData;
-      }
-      this.mark();
-    }
-  };
-
-  mark() {
-    let element = this.visualElement;
-    element.style.cssText = 'background-color: ' + pollUser.markColor;
-    element.dataset.mark = 1;
-  };
-
-  unmark() {
-    let element = this.visualElement;
-    element.style.cssText = 'background-color: #fff';
-    element.dataset.mark = 0;
-  };
-
-  skip(index) {
-    let element = this.renderAnswer(index);
-    element.dataset.skip = 1;
-    element.classList.add('skipped')
-  }
-
-  insertInput() {
-    let input = document.createElement('input');
-    input.className = 'form-control free-answer';
-    input.dataset.id = this.id;
-    let span = document.createElement('span');
-    span.className = 'free-answer-wrap';
-    let label = document.createElement('label');
-    label.className = 'w3-label-under';
-    let text = 'Введите ответ.';
-    let textLabel = document.createTextNode(text);
-    label.appendChild(textLabel);
-    span.appendChild(input);
-    span.appendChild(label);
-    span.dataset.show = 1;
-    this.inputSpan = span;
-    this.input = input;
-    this.visualElement.append(span);
-  };
-
-  showInput() {
-    this.inputSpan.dataset.show = 1;
-    this.input.value = '';
-    this.visualElement.append(this.inputSpan);
-  };
-
-  hideInput() {
-    this.inputSpan.dataset.show = 0;
-    this.inputSpan.remove();
   }
 
 }

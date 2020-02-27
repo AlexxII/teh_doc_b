@@ -153,53 +153,11 @@ function showQTrash() {
 
 function setLogic() {
   let answerId = this.dataset.id;
-  $.alert({
-    title: pollCounstructor.code + ' ' + 'исключить ответы',
-    content: pollCounstructor.renderLogicMenu(answerId),
-    columnClass: 'col-md-12',
-    animateFromElement: false,
-    buttons: {
-      ok: {
-        text: 'Сохранить',
-        btnClass: 'btn-success',
-        action: function () {
-          let menu = document.getElementById('logic-menu-content');
-          let result = saveCheckboxesResults(menu);
-          pollCounstructor.saveLogic(result, answerId);
-        }
-      },
-      cancel: {
-        text: 'Отмена',
-        action: function () {
-          let menu = document.getElementById('logic-menu-content');
-          clearCheckboxes(menu);
-        }
-      }
-    }
-  });
-}
-
-function saveCheckboxesResults(menu) {
-  let inputs = menu.getElementsByTagName('input');
-  let result = [];
-
-  Array.prototype.map.call(inputs, function (val) {
-    if (val.checked) {
-      result.push(val.dataset.id);
-      val.checked = false;                                          // снимаем checkbox
-    }
-  });
-  console.log(result);
-  return result;
+  pollCounstructor.showLogicMenu(answerId);
 }
 
 
-function clearCheckboxes(menu) {
-  let inputs = menu.getElementsByTagName('input');
-  for (let key in inputs) {
-    inputs[key].checked = false;
-  }
-}
+
 
 function checkInAllCheckboxes() {
   let inputs = menu.getElementsByTagName('input');

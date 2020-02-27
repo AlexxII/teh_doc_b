@@ -2,7 +2,7 @@ class CAnswer {
   constructor(config, index, qId) {
     this.parentQuestion = +qId;
     this.id = config.id;
-    this.logic = config.logic;
+    this.logicArray = config.logic;
     this.title = config.title;
     this.titleEx = config.title_ex;
     this.newOrder = +config.order;
@@ -32,6 +32,26 @@ class CAnswer {
 
   get answerTmplEx() {
     return this.renderAnswerTmplEx();
+  }
+
+  set logicArray(logic) {
+    if (logic.length !== 0) {
+      let temp = [];
+      logic.forEach(function (val, index) {
+        temp[index] = val.restrict_id;
+      });
+      this._logicArray = temp;
+      return;
+    }
+    this._logicArray = [];
+  }
+
+  get LogicArray() {
+    return this._logicArray;
+  }
+
+  get logic() {
+    return this._logicArray.length !== 0 ? 1 : 0;
   }
 
   set answerTmpl(index) {
@@ -65,10 +85,7 @@ class CAnswer {
       answerClone.classList.add('unique-answer');
     }
     if (this.logic === 1) {
-      let jmpNode = document.createElement('div');
-      jmpNode.className = 'jump-icon';
-      jmpNode.appendChild(this.renderBranchSymbl());
-      answerClone.appendChild(jmpNode);
+      answerClone.appendChild(this.renderBranchSymbl());
     }
     this._answerTmpl = answerClone;
   }
@@ -88,18 +105,6 @@ class CAnswer {
     // }
     this.tempTmpl = answerClone;
     return answerClone;
-  }
-
-  set logic(logic) {
-    if (logic.length !== 0) {
-      this._logic = 1;
-      return;
-    }
-    this._logic = 0;
-  }
-
-  get logic() {
-    return this._logic;
   }
 
   hideAnswerInListView(callback) {
@@ -182,6 +187,8 @@ class CAnswer {
   }
 
   renderBranchSymbl() {
+    let jmpNode = document.createElement('div');
+    jmpNode.className = 'jump-icon';
     let branchNode = document.createElement('span');
     branchNode.className = '';
     let branchSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -197,52 +204,8 @@ class CAnswer {
       ' 64-29 64-64 64z m384-512c-35 0-64-29-64-64s29-64 64-64 64 29 64 64-29 64-64 64z');
     branchSvg.appendChild(path);
     branchNode.appendChild(branchSvg);
-    return branchNode;
+    jmpNode.appendChild(branchNode);
+    return jmpNode;
   };
-
-
-  /*
-    renderJumper() {
-      let hideSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      hideSvg.setAttribute('width', 20);
-      hideSvg.setAttribute('height', 20);
-      hideSvg.setAttribute('viewBox', '0 0 60.576 60.576');
-      let path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttributeNS(null, 'd', 'M 29.29 32.465 c 1.687 2.389 3.799 4.471 6.001 6.387 c 1.553 1.353 3.562 1.039 4.734 -0.612 c 2.19 ' +
-      '-3.093 4.136 -6.271 5.42 -9.854 c 1.312 -3.668 -4.516 -5.234 -5.815 -1.603 c -0.678 1.895 -1.646 3.658 -2.724 ' +
-      '5.352 c -1.48 -1.486 -2.816 -3.102 -3.82 -4.976 c -0.107 -0.196 -0.227 -0.364 -0.352 -0.52 c -0.064 -0.463 ' +
-      '-0.188 -0.926 -0.385 -1.376 c -1.015 -2.332 -1.896 -4.29 -2.748 -6.187 c -1.27 -2.825 -2.469 -5.491 -3.965 ' +
-      '-9.081 c -0.028 -0.066 -0.062 -0.127 -0.092 -0.191 c 0.838 -0.905 1.813 -1.654 3.017 -2.042 c 2.698 -0.869 ' +
-      '5.792 -0.393 8.556 -0.202 c 3.903 0.27 4.327 -5.785 0.423 -6.055 c -3.557 -0.247 -7.308 -0.619 -10.758 0.49 ' +
-      'c -2.723 0.876 -4.814 2.627 -6.546 4.753 c -0.518 0.049 -1.039 0.175 -1.546 0.387 c -2.468 1.028 -3.744 3.704' +
-      ' -3.095 6.221 c -1.713 3.61 -8.093 4.005 -11.725 4.036 c -3.914 0.031 -3.917 6.101 0 6.07 c 4.613 -0.038 10.502 ' +
-      '-1.002 14.324 -3.879 c 0.583 1.317 1.145 2.569 1.719 3.849 c 0.771 1.717 1.572 3.498 2.472 5.56 c -5.824 2.58 ' +
-      '-12.039 5.549 -17.56 7.826 c -3.541 1.461 -1.991 7.298 1.602 5.814 c 7.051 -2.908 15.236 -6.953 22.286 -9.861 ' +
-      'C 28.925 32.686 29.115 32.58 29.29 32.465 Z');
-      // hideSvg.appendChild(path1);
-      let polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-      polygon.setAttribute('points', '27.268,57.541 27.268,35.98 24.232,35.98 24.232,60.576 59.643,60.576 59.643,57.541');
-      let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      circle.setAttribute(null, 'cx', 10.438);
-      circle.setAttribute(null, 'cy', 5.398);
-      circle.setAttribute(null, 'r', 5.398);
-      hideSvg.appendChild(polygon);
-      hideSvg.appendChild(path);
-      hideSvg.appendChild(circle);
-      this._jumper = hideSvg;
-    }
-  */
-  /*
-    '<svg viewBox="0 0 60.576 60.576">' +
-    '<g>'+
-    '<g>'+
-    '<polygon points="27.268,57.541 27.268,35.98 24.232,35.98 24.232,60.576 59.643,60.576 59.643,57.541" />'+
-
-    '<circle cx="10.438" cy="5.398" r="5.398" />'+
-    '</g>'+
-    '</g>'+
-    '</svg>';
-  */
-
 
 }
