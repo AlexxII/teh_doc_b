@@ -11,7 +11,8 @@ class PollConstructor {
       this.renderGridTmpl();
       this.renderPollInfo();
       this.REORDER_QUESTIONS_URL = '/polls/construct/reorder-questions';
-      this.SAVE_LOGIC_URL = '/polls/construct/save-poll-logic';
+      this.ADD_LOGIC_URL = '/polls/construct/add-poll-logic';
+      this.SUB_LOGIC_URL = '/polls/construct/sub-poll-logic';
     }
   }
 
@@ -349,29 +350,39 @@ class PollConstructor {
     return this.pollGridView;
   }
 
-  renderLogicMenu(id) {
+  renderLogicMenu(questionObj, answerObj) {
     let Obj = this;
     let menuDiv = document.createElement('div');
     menuDiv.id = 'logic-menu-content';
     let questions = this.questions;
+    let logic = answerObj.logicArray;
     for (let qId in questions) {
       let question = questions[qId];
       menuDiv.appendChild(question.questionTmplEx);
-      if (question.answersEx[id] !== undefined) {
-        Obj.buffer = question.answersEx[id];
-        question.answersEx[id].tempTmpl.classList.add('selected-answer');
-        question.tempTmpl.classList.add('selected-question');
-        console.log(question.answersEx[id]);
-      }
+      let answers = question.answers;
+      answers.forEach(function (answer, index) {
+        if (logic && logic.includes(answer.id)) {
+          answer.tempTmpl.getElementsByTagName('input')[0].checked = true;
+        }
+      });
     }
+    questionObj.tempTmpl.classList.add('selected-question');
+    questionObj.tempTmpl.querySelector('.q-title').classList.remove('check-all');
+    let answers = questionObj.answers;
+    answers.forEach(function (answer, index) {
+      answer.tempTmpl.getElementsByTagName('input')[0].disabled = true;
+    });
+    answerObj.tempTmpl.classList.add('selected-answer');
     return menuDiv;
   }
 
-  showLogicMenu(answerId) {
+  showLogicMenu(questionId, answerId) {
     let Obj = this;
+    let questionObj = Obj._questions[questionId];
+    let answerObj = questionObj._answers[answerId];
     $.alert({
       title: Obj.code + ' ' + 'исключить ответы',
-      content: Obj.renderLogicMenu(answerId),
+      content: Obj.renderLogicMenu(questionObj, answerObj),
       columnClass: 'col-md-12',
       animateFromElement: false,
       buttons: {
@@ -379,20 +390,19 @@ class PollConstructor {
           text: 'Сохранить',
           btnClass: 'btn-success',
           action: function () {
-            Obj.confirmLogic(answerId);
+            Obj.confirmLogic(questionObj, answerObj);
           }
         },
         cancel: {
           text: 'Отмена',
           action: function () {
-            Obj.abortLogic();
           }
         }
       }
     });
   };
 
-  confirmLogic(answerId ) {
+  confirmLogic(questionObj, answerObj) {
     let menu = document.getElementById('logic-menu-content');
     let inputs = menu.getElementsByTagName('input');
     let result = [];
@@ -402,43 +412,80 @@ class PollConstructor {
         val.checked = false;                                          // снимаем checkbox
       }
     });
-    this.saveLogic(result, answerId);
+    let oldLogic = answerObj._logicArray;
+    let newLogic = result;
+
+    let subbing = oldLogic.filter(x => !newLogic.includes(x));    // удаление
+    let adding = newLogic.filter(x => !oldLogic.includes(x));    //  прибавление
+
+    if (adding) {
+      this.addLogic(adding, result, questionObj, answerObj);
+    }
+    if (subbing) {
+      this.subLogic(subbing, result, questionObj, answerObj);
+    }
   }
 
-  abortLogic() {
-    // let menu = document.getElementById('logic-menu-content');
-    // this.clearCheckboxes(menu);
-  }
-
-
-  saveLogic(result, id) {
+  addLogic(adding, result, questionObj, answerObj) {
     let Obj = this;
-    if (result.length !== 0){
-      let url = this.SAVE_LOGIC_URL;
+    if (adding.length !== 0) {
+      let url = this.ADD_LOGIC_URL;
       $.ajax({
         url: url,
         method: 'post',
         data: {
-          restrict: result,
-          pollId : Obj.id,
-          answer: id
+          restrict: adding,
+          pollId: Obj.id,
+          answer: answerObj.id
         }
       }).done(function (response) {
         if (!response.code) {
-          var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Сохранить логику не удалось';
+          var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Изменить логику не удалось';
           initNoty(tText, 'warning');
           console.log(response.data.message + ' ' + response.data.data);
           return;
         }
-        let answerObj = Obj.buffer;
-        answerObj.logicArray = result;
+        answerObj._logicArray = result;
+        answerObj.answerTmpl.append(answerObj.renderBranchSymbl());
 
-        answerObj.answerTmpl.appendChild(answerObj.renderBranchSymbl());
-
-        var tText = '<span style="font-weight: 600">Успех!</span><br>Логика сохранена';
+        var tText = '<span style="font-weight: 600">Успех!</span><br>Логика изменена';
         initNoty(tText, 'success');
       }).fail(function () {
-        var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Сохранить логику не удалось';
+        var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Изменить логику не удалось';
+        initNoty(tText, 'warning');
+        console.log('Не удалось получить ответ сервера. Примените отладочную панель, оснаска "Сеть"');
+      });
+    }
+  }
+
+  subLogic(subbing, result, questionObj, answerObj) {
+    let Obj = this;
+    if (subbing.length !== 0) {
+      let url = this.SUB_LOGIC_URL;
+      $.ajax({
+        url: url,
+        method: 'post',
+        data: {
+          restrict: subbing,
+          answer: answerObj.id
+        }
+      }).done(function (response) {
+        if (!response.code) {
+          var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Изменить логику не удалось';
+          initNoty(tText, 'warning');
+          console.log(response.data.message + ' ' + response.data.data);
+          return;
+        }
+        answerObj._logicArray = result;
+        if (result.length > 0) {
+          answerObj.answerTmpl.append(answerObj.renderBranchSymbl());
+        } else {
+          answerObj.answerTmpl.querySelector('.jump-icon').remove();
+        }
+        var tText = '<span style="font-weight: 600">Успех!</span><br>Логика изменена';
+        initNoty(tText, 'success');
+      }).fail(function () {
+        var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Изменить логику не удалось';
         initNoty(tText, 'warning');
         console.log('Не удалось получить ответ сервера. Примените отладочную панель, оснаска "Сеть"');
       });

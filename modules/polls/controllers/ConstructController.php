@@ -311,7 +311,7 @@ class ConstructController extends Controller
     }
   }
 
-  public function actionSavePollLogic()
+  public function actionAddPollLogic()
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if (!empty($_POST)) {
@@ -343,6 +343,50 @@ class ConstructController extends Controller
           'success' => true,
           'data' => true,
           'message' => 'Logic successfully',
+        ],
+        'code' => 1,
+      ];
+    }
+    return [
+      'data' => [
+        'success' => false,
+        'data' => 'Poor',
+        'message' => '$_POST - empty',
+      ],
+      'code' => 0,
+    ];
+  }
+
+  public function actionSubPollLogic()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (!empty($_POST)) {
+      $transaction = Yii::$app->db->beginTransaction();
+      $restrictArray = $_POST["restrict"];
+      $answerId = $_POST["answer"];
+      foreach ($restrictArray as $restrict) {
+        $model = PollLogic::find()
+          ->where(["=", 'restrict_id', $restrict])
+          ->andWhere(["=", 'answer_id', $answerId])
+          ->all();
+        if (!$model[0]->delete()) {
+          $transaction->rollback();
+          return [
+            'data' => [
+              'success' => false,
+              'data' => $model->errors,
+              'message' => 'Не получается удалить логику. Смотрите ошибки!',
+            ],
+            'code' => 0,
+          ];
+        }
+      }
+      $transaction->commit();
+      return [
+        'data' => [
+          'success' => true,
+          'data' => true,
+          'message' => 'Логика удалена успешно',
         ],
         'code' => 1,
       ];

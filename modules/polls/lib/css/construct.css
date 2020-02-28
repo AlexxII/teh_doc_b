@@ -303,3 +303,6 @@ ul {
   background-color: #f9f9f9;
   opacity: .7;
 }
+.checked-answer {
+  background-color: #0b58a2;
+}

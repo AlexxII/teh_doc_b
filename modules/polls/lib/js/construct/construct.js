@@ -28,7 +28,7 @@ $(document).on('click', '#btn-switch-view', changeConstructView)
   .on('click', '.unique-btn', setAnswerUnique)
   .on('click', '.question-trash', showQTrash)
   .on('click', '.logic', setLogic)
-  .on('click', '.q-title', checkboxLogicEx)
+  .on('click', '.check-all', checkboxLogicEx)
   .on('click', '#poll-info', showPollInfo);
 
 $.mask.definitions['H'] = '[1-9]';
@@ -66,7 +66,7 @@ function loadPollConfig(id, callback) {
 }
 
 function startConstruct(config) {
-  console.log(config);
+  // console.log(config);
   pollCounstructor = new PollConstructor(config);
   renderListView();
   NProgress.done();
@@ -152,12 +152,10 @@ function showQTrash() {
 }
 
 function setLogic() {
+  let questionId = this.dataset.question;
   let answerId = this.dataset.id;
-  pollCounstructor.showLogicMenu(answerId);
+  pollCounstructor.showLogicMenu(questionId, answerId);
 }
-
-
-
 
 function checkInAllCheckboxes() {
   let inputs = menu.getElementsByTagName('input');
