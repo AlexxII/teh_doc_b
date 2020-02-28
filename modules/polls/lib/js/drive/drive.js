@@ -232,7 +232,7 @@ function nextRespondent() {
 }
 
 function clickOnTheAnswer(event) {
-  let element = event.target;
+  let element = event.currentTarget;
   if (element.classList.contains('free-answer')) return;
   chooseAnAnswer(element);
 }
