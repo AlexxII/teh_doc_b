@@ -1,6 +1,7 @@
 // событие клавиатуры (keyup, keydown)
 // const MAIN_INPUT_TYPE = 'keydown';
 const MAIN_INPUT_TYPE = 'keyup';
+const MAIN_CLICK_TYPE = 'click';
 
 const TYPE_COMMON_ANSWER = 1;
 const TYPE_FREE_ANSWER = 2;
@@ -25,6 +26,7 @@ $(document).on('focus', '.free-answer', function () {
 }).on('blur', '.free-answer', function (event) {
   let body = document.body;
   body.addEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
+  $(document).on('click', '.answer-p', clickOnTheAnswer);
   saveFreeAnswer(this);
 });
 
@@ -181,6 +183,8 @@ function chooseAnAnswer(element) {
   }
 
   if (selectedAnswerObject.type === TYPE_FREE_ANSWER) {
+    // отключить событие
+    $(document).off('click', '.answer-p', clickOnTheAnswer);
     if (selectedAnswerObject.inputSpan === undefined) {
       selectedAnswerObject.mark();
       selectedAnswerObject.insertInput();
