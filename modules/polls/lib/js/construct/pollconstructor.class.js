@@ -363,6 +363,7 @@ class PollConstructor {
           question.tempTmpl.classList.add('selected-question');
           // question
         }
+      // question.tempTmpl.scrollIntoView();
         // if (question.answers[id])
       // let checkbox = document.getElementById(id);
       //.style.display = 'none';
@@ -391,7 +392,7 @@ class PollConstructor {
           console.log(response.data.message + ' ' + response.data.data);
           return;
         }
-        var tText = '<span style="font-weight: 600">Успеч!</span><br>Логика сохранена';
+        var tText = '<span style="font-weight: 600">Успех!</span><br>Логика сохранена';
         initNoty(tText, 'success');
       }).fail(function () {
         var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Сохранить логику не удалось';
