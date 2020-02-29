@@ -1,6 +1,6 @@
 class Respondent {
   constructor(questions, number) {
-    this._id = this.randomIntFromInterval(0, 18446744073709551616);
+    this._id = this.randomIntFromInterval(0, 98446744073709551);
     this.startTime = 0;
     this.endTime = 0;
     this.user = 'User';
@@ -20,6 +20,7 @@ class Respondent {
   set resultPool(questions) {
     let out = {};
     questions.forEach(function (question, index) {
+      console.log(index + ' - ' + question.id + ' - ' + question.title);
       out[question.id] = new result(index);
     });
     this._resultPool = out;
@@ -27,6 +28,17 @@ class Respondent {
 
   get resultPool() {
     return this._resultPool;
+  }
+
+  get results() {
+    let tempArray = [];
+    let index = 0;
+    for (let key in this._resultPool) {
+      tempArray[index] = this._resultPool[key];
+      index++;
+    }
+    this.sortByOrder(tempArray);
+    return tempArray;
   }
 
   setLogic(logic, id) {
@@ -97,14 +109,20 @@ class Respondent {
   }
 
   getResultToDb() {
-    let results = this.resultPool;
+    let results = this.results;
     let data = [];
-    for (let key in results) {
-      if (Object.entries(results).length !== 0 && results.constructor === Object) {
+    results.forEach(function (result, index) {
+      data.push(result.getResult());
+    });
+    return data;
+  }
 
-      }
-    }
+  sortByOrder(arr) {
+    arr.sort((a, b) => a.order > b.order ? 1 : -1);
+  }
 
+  isEmpty(obj) {
+    return !obj || Object.keys(obj).length === 0;
   }
 
 }
@@ -164,14 +182,14 @@ function result(index) {
     let data = [];
     if (Object.entries(results).length !== 0 && results.constructor === Object) {
       for (let key in results) {
-        if (results[key].extData !== null) {
-          data.push(results[key].code + ' ' + results[key].extData);
-        } else {
-          data.push(results[key].code);
-        }
+        let answer = {};
+        let result = results[key];
+        answer.id = result.id;
+        answer.code = result.code;
+        answer.exData = result.extData;
+        data.push(answer);
       }
     }
-    this.order(data);
     return data;
   };
 

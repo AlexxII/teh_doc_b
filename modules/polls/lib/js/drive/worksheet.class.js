@@ -7,7 +7,7 @@ class Worksheet {
       this._title = config.title;
       this.townId = townId;
       this.townTitle = townTitle;
-        this.logic = config.logic;
+      this.logic = config.logic;
       // пулл вопросов
       this.totalNumberOfQuestions = config;
       this.currentQuestionNum = 0;

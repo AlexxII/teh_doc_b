@@ -243,6 +243,9 @@ function chooseAnAnswer(element) {
   if (respondentResult.respondentAnswers[selectedAnswerId] !== undefined) {
     // let logic = poll.respondent.logic;
     // delete logic[selectedAnswerId];
+
+    // очень прлохой момент!!
+
     poll.respondent.removeFromLogic(selectedAnswerId);
     selectedAnswerObject.unmark();
     respondentResult.deleteData(selectedAnswerId);
@@ -254,7 +257,6 @@ function chooseAnAnswer(element) {
     stepLogic(respondentResult, question);
   }
 }
-
 
 function saveFreeAnswer(input) {
   let question = poll.getCurrentQuestion();
@@ -303,6 +305,7 @@ function confirmAndNextQuestion() {
       let qId = poll.unansweredQuestion();
       let question = poll.getQuestionById(qId);
       if (question) {
+        console.log(question.number);
         poll.goToQuestionByNumber(question.number);
       } else {
         alert('Есть вероятность потери данных при вносе результатов. Обратитесь к разработчику');
@@ -347,7 +350,7 @@ function showM() {
 
 function saveDataToDb() {
   console.log(poll.respondent.resultPool);
-  console.log(poll.respondent.getCodesResults());
+  // console.log(poll.respondent.getCodesResults());
   console.log(poll.respondent.getResultToDb());
 
   let result = {};
@@ -373,7 +376,6 @@ function saveDataToDb() {
       console.log(response.data.message + ' ' + response.data.data);
       return;
     }
-
 
     var tText = '<span style="font-weight: 600">Успех!</span><br>Результат сохранен';
     initNoty(tText, 'success');
