@@ -31,6 +31,14 @@ class Answer {
     return this._code;
   }
 
+  set unique(bool) {
+    this._unique = bool;
+  }
+
+  get unique() {
+    return this.type === 3 || this._unique === 1
+  }
+
   renderAnswer(index) {
     let answerTemplate = document.createElement('div');
     let answerOrederNode = document.createElement('span');
@@ -61,7 +69,7 @@ class Answer {
       answerTemplate.appendChild(this.renderFreeSymbl());
     }
     // уникальный ответ
-    if (this.unique === 1) {
+    if (this.unique) {
       answerTemplate.appendChild(this.renderUniqueSymbl());
     }
     // затрудняюсь ответить

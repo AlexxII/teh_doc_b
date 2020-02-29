@@ -208,7 +208,8 @@ function chooseAnAnswer(element) {
 
   if (respondentResult.hasSavedData()) {
     // проверка уникальности
-    if (selectedAnswerObject.unique === 1 || respondentResult.hasUniqueAnswers()) {
+    console.log(selectedAnswerObject.unique);
+    if (selectedAnswerObject.unique || respondentResult.hasUniqueAnswers()) {
       if (!respondentResult.alreadySaved(selectedAnswerObject.id)) {
         let audio = new Audio('lib/chord.mp3');
         audio.play();
@@ -353,6 +354,10 @@ function showM() {
 }
 
 function saveDataToDb() {
+  // console.log(poll.respondent.resultPool);
+  // console.log(poll.respondent.getCodesResults());
+  // console.log(poll.respondent.getResultToDb());
+
   let result = {};
   result.pollId = poll.pollId;
   result.respId = poll.respondent.id;
