@@ -110,6 +110,7 @@ $(document).ready(function (e) {
 
   pollTable.on('select', function (e, dt, type, indexes) {
     if (type === 'row') {
+      $('#poll-result').show();
       $('#delete-wrap').show();
       $('#batch-input').show();
       $('#construct-wrap').show();
@@ -118,6 +119,7 @@ $(document).ready(function (e) {
   pollTable.on('deselect', function (e, dt, type, indexes) {
     if (type === 'row') {
       if (pollTable.rows({selected: true}).count() > 0) return;
+      $('#poll-result').hide();
       $('#delete-wrap').hide();
       $('#batch-input').hide();
       $('#construct-wrap').hide();
@@ -128,6 +130,7 @@ $(document).ready(function (e) {
 
   pollTable.on('length.dt', function (e, settings, len) {
     pollTable.rows().deselect();
+    $('#poll-result').hide();
     $('#delete-wrap').hide();
     $('#batch-input').hide();
     $('#construct-wrap').hide();
@@ -135,6 +138,7 @@ $(document).ready(function (e) {
 
   pollTable.on('draw.dt', function (e, settings, len) {
     pollTable.rows().deselect();
+    $('#poll-result').hide();
     $('#delete-wrap').hide();
     $('#batch-input').hide();
     $('#construct-wrap').hide();

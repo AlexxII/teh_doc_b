@@ -38,7 +38,7 @@ Select2Asset::register($this);
 
     <div id="construct-wrap" style="position: absolute; top: 70px; right:-60px;display: none;fill: white">
       <a id="del-wrap" class="fab-button" title="Редактор анкет"
-         style="cursor: pointer; background-color: green;padding-left: 10px;padding-top: 7px ">
+         style="cursor: pointer; background-color: gold;padding-left: 10px;padding-top: 7px ">
         <svg viewBox="0 0 535.806 535.807" width="35" height="35">
           <g>
             <path d="M 440.956 373.932 c -11.934 -13.158 -26.315 -19.584 -44.676 -19.584 h -38.686 l -25.398 -24.479 c
@@ -67,7 +67,22 @@ Select2Asset::register($this);
       </a>
     </div>
 
-    <div id="batch-input" style="position: absolute; top: 130px; right:-60px;display: none;fill: white">
+    <div id="poll-result" style="position: absolute; top: 130px; right:-60px;display: none;fill: white">
+      <a id="batch-input-a" class="fab-button" title="Результаты опроса"
+         style="cursor: pointer; background-color: green;padding-left: 8px;padding-top: 7px ">
+        <svg viewBox="0 0 512.008 512.008" width="38" height="38">
+          <path d="M 480.032 459.646 v -267.94 h -90.004 v 267.917 l -30.003 -0.008 V 251.71 h -90.004 v 207.882 l
+          -30.004 -0.008 V 311.713 h -90.004 v 147.848 l -30.003 -0.008 v -87.836 H 30.006 v 87.813 l -29.998 -0.008
+          l -0.008 30 l 512 0.132 l 0.008 -30 L 480.032 459.646 Z M 420.028 221.706 h 30.004 v 237.933 l -30.004
+          -0.008 V 221.706 Z M 300.021 281.71 h 30.004 v 177.898 l -30.004 -0.008 V 281.71 Z M 180.013 341.713 h
+          30.004 v 117.863 l -30.004 -0.008 V 341.713 Z M 60.006 401.717 H 90.01 v 57.828 l -30.004 -0.008 V 401.717 Z" />
+          <polygon points="79.614,279.007 413.235,83.531 407.206,106.358 436.211,114.019 455.364,41.506 382.851,22.353
+          375.189,51.358 398.359,57.478 64.448,253.123" />
+        </svg>
+      </a>
+    </div>
+
+    <div id="batch-input" style="position: absolute; top: 190px; right:-60px;display: none;fill: white">
       <a id="batch-input-a" class="fab-button" title="Пакетная загрузка данных"
          style="cursor: pointer; background-color: darkblue;padding-left: 10px;padding-top: 7px ">
         <svg viewBox="0 0 493.845 493.845" width="38" height="38">
