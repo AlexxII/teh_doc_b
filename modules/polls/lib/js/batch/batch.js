@@ -14,6 +14,11 @@ $(document).on('change', '#batchupload', function (e) {
   // renderListBatchView();
 });
 
+function startBatchIn(config) {
+  batch = new Batch(config);
+  NProgress.done();
+}
+
 function renderResult() {
   let reposnondetsAnswers = batch.respondentsPool;
   $('.poll-batch-wrap').html('');

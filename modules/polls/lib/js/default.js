@@ -145,36 +145,6 @@ $(document).ready(function (e) {
     NProgress.done();
   });
 
-  $('#delete-wrap').click(function (event) {
-    event.preventDefault();
-    var csrf = $('meta[name=csrf-token]').attr("content");
-    var url = "/polls/polls/delete";
-    if ($(this).attr('disabled')) {
-      return;
-    }
-    jc = $.confirm({
-      icon: 'fa fa-question',
-      title: 'Вы уверены?',
-      content: 'Вы действительно хотите удалить выделенное?',
-      type: 'red',
-      closeIcon: false,
-      autoClose: 'cancel|9000',
-      buttons: {
-        ok: {
-          btnClass: 'btn-danger',
-          action: function () {
-            jc.close();
-            deleteProcess(url, pollTable, csrf);
-          }
-        },
-        cancel: {
-          action: function () {
-            return;
-          }
-        }
-      }
-    });
-  });
 
   pollTable.on('click', '#edit', function (e) {
     e.preventDefault();
@@ -231,7 +201,7 @@ $(document).ready(function (e) {
     e.preventDefault();
     var data = pollTable.row($(this).parents('tr')).data();
     var url = "/polls/polls/view-poll?id=" + data['id'];
-    c = $.confirm({
+    let c = $.confirm({
       content: function () {
         var self = this;
         return $.ajax({
@@ -255,6 +225,107 @@ $(document).ready(function (e) {
     });
   });
 });
+
+
+$(document).on('click', '#delete-wrap', function (e) {
+  e.preventDefault();
+  var csrf = $('meta[name=csrf-token]').attr("content");
+  var url = "/polls/polls/delete";
+  if ($(this).attr('disabled')) {
+    return;
+  }
+  let jc = $.confirm({
+    icon: 'fa fa-question',
+    title: 'Вы уверены?',
+    content: 'Вы действительно хотите удалить выделенное?',
+    type: 'red',
+    closeIcon: false,
+    autoClose: 'cancel|9000',
+    buttons: {
+      ok: {
+        btnClass: 'btn-danger',
+        action: function () {
+          jc.close();
+          deleteProcess(url, pollTable, csrf);
+        }
+      },
+      cancel: {
+        action: function () {
+          return;
+        }
+      }
+    }
+  });
+});
+
+// начало вколачивания опроса
+$(document).on('click', '.poll-in', startDrive);
+
+$(document).on('click', '#construct-wrap', function (e) {
+  e.preventDefault();
+  NProgress.start();
+  let data = pollTable.rows({selected: true}).data();
+  let pollId = data[0].id;
+  let url = '/polls/construct';
+  let dataUrl = '/polls/construct/get-poll-info?id=' + pollId;
+  loadExContentEx(url, () => loadPollConfig(pollId, initConstructModule, dataUrl));
+  pollTable.rows().deselect();
+});
+
+$(document).on('click', '#poll-result', function (e) {
+  e.preventDefault();
+  NProgress.start();
+  let data = pollTable.rows({selected: true}).data();
+  let pollId = data[0].id;
+  let url = '/polls/analytic';
+  let dataUrl = '/polls/analytic/get-poll-data?id=' + pollId;
+  loadExContentEx(url, () => loadPollConfig(pollId, initAnalyticModule, dataUrl));
+  pollTable.rows().deselect();
+});
+
+$(document).on('click', '#batch-input', function (e) {
+  e.preventDefault();
+  NProgress.start();
+  let data = pollTable.rows({selected: true}).data();
+  let pollId = data[0].id;
+  let url = '/polls/batch-input';
+  let dataUrl = '/polls/batch-input/get-poll-info?id=' + pollId;
+  loadExContentEx(url, () => loadPollConfig(pollId, initBatchModule, dataUrl));
+  pollTable.rows().deselect();
+});
+
+function loadPollConfig(id, callback, dataUrl) {
+  $.ajax({
+    url: dataUrl,
+    method: 'get'
+  }).done(function (response) {
+    if (response.code) {
+      callback(response.data.data[0]);
+    } else {
+      console.log(response.data.message);
+    }
+  }).fail(function () {
+    console.log('Failed to load poll config');
+  });
+}
+
+function initBatchModule(config) {
+  // let script = document.createElement('script');
+  // script.src = "/poll/lib/js/batch.js";
+  // document.body.append(script);
+  // script.onload = function() {
+  //   batch = new Batch(config);
+  // };
+  startBatchIn(config);
+}
+
+function initAnalyticModule(config) {
+  startAnalytic(config);
+}
+
+function initConstructModule(config) {
+  startConstruct(config);
+}
 
 function deleteProcess(url, table, csrf) {
   var data = table.rows({selected: true}).data();
@@ -291,50 +362,83 @@ function deleteProcess(url, table, csrf) {
   });
 }
 
-$(document).on('click', '#batch-input', function (e) {
+$(document).on('click', '#add-poll', function (e) {
   e.preventDefault();
-  NProgress.start();
-  let data = pollTable.rows({selected: true}).data();
-  let pollId = data[0].id;
-  let url = '/polls/batch-input';
-  let dataUrl = '/polls/batch-input/get-poll-info?id=' + pollId;
-  loadExContentEx(url, () => loadPollConfig(pollId, initBatchModule, dataUrl));
-  pollTable.rows().deselect();
-});
-
-$(document).on('click', '#poll-result', function (e) {
-  e.preventDefault();
-  NProgress.start();
-  let data = pollTable.rows({selected: true}).data();
-  let pollId = data[0].id;
-  let url = '/polls/analytic';
-  let dataUrl = '/polls/analytic/get-poll-data?id=' + pollId;
-  loadExContentEx(url, () => loadPollConfig(pollId, initAnalyticModule, dataUrl));
-  pollTable.rows().deselect();
-});
-
-function loadPollConfig(id, callback, url) {
-  $.ajax({
-    url: url,
-    method: 'get'
-  }).done(function (response) {
-    if (response.code) {
-      callback(response.data.data[0]);
-    } else {
-      console.log(response.data.message);
+  var url = '/polls/polls/add-new-poll';
+  let jc = $.confirm({
+    content: function () {
+      var self = this;
+      return $.ajax({
+        url: url,
+        method: 'get'
+      }).fail(function () {
+        self.setContentAppend('<div>Что-то пошло не так!</div>');
+      });
+    },
+    contentLoaded: function (data, status, xhr) {
+      this.setContentAppend('<div>' + data + '</div>');
+    },
+    type: 'blue',
+    columnClass: 'large',
+    title: 'Добавить опрос',
+    buttons: {
+      ok: {
+        btnClass: 'btn-blue',
+        text: 'Добавить',
+        action: function () {
+          var $form = $('#w0'),
+            data = $form.data('yiiActiveForm');
+          $.each(data.attributes, function () {
+            this.status = 3;
+          });
+          $form.yiiActiveForm('validate');
+          if ($('#w0').find('.has-error').length) {
+            return false;
+          } else {
+            var startDate = $('.start-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+            $('.start-date').val(startDate);
+            var endDate = $('.end-date').data('datepicker').getFormattedDate('yyyy-mm-dd');
+            $('.end-date').val(endDate);
+            var pattern = /(\d{4})\-(\d{2})\-(\d{2})/;
+            var year = startDate.replace(pattern, '$1');
+            var yText = '<span style="font-weight: 600">Успех!</span><br>Новый опрос добавлен';
+            var nText = '<span style="font-weight: 600">Что-то пошло не так</span><br>Добавить опрос не удалось';
+            sendPollFormData(url, pollTable, $form, xmlData, yText, nText);
+          }
+        }
+      },
+      cancel: {
+        text: 'НАЗАД'
+      }
     }
-  }).fail(function () {
-    console.log('Failed to load poll config');
   });
-}
+});
 
-function initBatchModule(config) {
-  console.log(config);
-  batch = new Batch(config);
-  NProgress.done();
-}
-
-function initAnalyticModule(config) {
-  console.log(config);
-  NProgress.done();
+function sendPollFormData(url, table, form, xmlData, yTest, nTest) {
+  var $input = $("#xmlupload");
+  var formData = new FormData(form[0]);
+  let jc = $.confirm({
+    icon: 'fa fa-cog fa-spin',
+    title: 'Подождите!',
+    content: 'Ваш запрос выполняется!',
+    buttons: false,
+    closeIcon: false,
+    confirmButtonClass: 'hide'
+  });
+  $.ajax({
+    type: 'POST',
+    url: url,
+    contentType: false,
+    processData: false,
+    dataType: 'json',
+    data: formData,
+    success: function (response) {
+      jc.close();
+      initNoty(yTest, 'success');
+      table.ajax.reload();
+    },
+    error: function (response) {
+      initNoty(nTest, 'error');
+    }
+  });
 }

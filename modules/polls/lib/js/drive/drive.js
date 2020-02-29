@@ -9,9 +9,6 @@ const TYPE_DIFFICULT_ANSWER = 3;
 
 const RESULTS_SAVE_URL = 'polls/drive-in/save-result';
 
-// начало вколачивания опроса
-$(document).on('click', '.poll-in', startDrive);
-
 // основные обработчики событий
 $(document).on('click', '.answer-p', clickOnTheAnswer)
   .on('keydown', '.previous-btn', moveToPreviousQuestion)

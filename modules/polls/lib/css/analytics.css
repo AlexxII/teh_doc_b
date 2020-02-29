@@ -1,0 +1,33 @@
+#analytic-leftside {
+  width: 256px;
+  height: 100%;
+  padding: 0 10px 0 10px;
+}
+
+#analytic-rightside {
+  height: 100%;
+  width: 100%
+}
+
+#analytic-leftside h4 {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+#analytic-leftside h4 a {
+  text-decoration: none;
+}
+
+.panel-body p {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.panel-body a {
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+#analytic-result {
+  resize: vertical;
+}

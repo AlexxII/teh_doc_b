@@ -66,6 +66,10 @@ class Polls extends \yii\db\ActiveRecord
     return $this->hasMany(Questions::class, ['poll_id' => 'id'])->where(['visible' => '1'])->orderBy('order');
   }
 
+  public function getResults()
+  {
+    return $this->hasMany(Result::class, ['poll_id' => 'id'])->orderBy('order');
+  }
 
   public static function findModel($id)
   {
@@ -74,7 +78,6 @@ class Polls extends \yii\db\ActiveRecord
     }
     throw new NotFoundHttpException("Запрошенная страница не существует.");
   }
-
 
   public static function log($sessionId, $status, $text)
   {

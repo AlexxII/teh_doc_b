@@ -1,15 +1,5 @@
 var pollConstruct;                      // главная глобальная переменная
 
-$(document).on('click', '#construct-wrap', function (e) {
-  e.preventDefault();
-  NProgress.start();
-  let data = pollTable.rows({selected: true}).data();
-  let pollId = data[0].id;
-  let url = '/polls/construct?id=';
-  loadExContentEx(url, () => loadPollConfig(pollId, startConstruct));
-  pollTable.rows().deselect();
-});
-
 $(document).on('input', '#myRange', function (e) {
   let sysSize = 190;
   let sysFontSize = 10;
@@ -33,7 +23,6 @@ $(document).on('click', '#btn-switch-view', changeConstructView)
 
 $.mask.definitions['H'] = '[1-9]';
 $.mask.definitions['h'] = '[0-9]';
-
 $(document).on('paste', '.question-limit', function (e) {
   e.preventDefault();
   return;
@@ -49,24 +38,7 @@ $(document).on('paste', '.question-limit', function (e) {
   saveQuestionLimit(this);
 });
 
-function loadPollConfig(id, callback) {
-  let url = '/polls/construct/get-poll-info?id=' + id;
-  $.ajax({
-    url: url,
-    method: 'get'
-  }).done(function (response) {
-    if (response.code) {
-      callback(response.data.data[0]);
-    } else {
-      console.log(response.data.message);
-    }
-  }).fail(function () {
-    console.log('Failed to load poll config');
-  });
-}
-
 function startConstruct(config) {
-  // console.log(config);
   pollCounstructor = new PollConstructor(config);
   renderListView();
   NProgress.done();

@@ -10,17 +10,16 @@ class PollAsset extends AssetBundle
 
   public $js = [
     'js/vars.js',
-    'js/default.js',
+
+    'js/drive/user.class.js',
+    'js/drive/drive.js',
     'js/drive/worksheet.class.js',
     'js/drive/respondent.class.js',
     'js/drive/answer.class.js',
     'js/drive/question.class.js',
-//    'js/checker.class.js',
-    'js/drive/user.class.js',
-    'js/poll.js',
-    'js/drive/drive.js',
+    'js/default.js',
+
     'js/jquery.maskedinput.js',
-//    'js/construct/constructPollInfo.js',
     'js/construct/pollconstructor.class.js',
     'js/construct/cquestion.class.js',
     'js/construct/canswer.class.js',
@@ -40,7 +39,7 @@ class PollAsset extends AssetBundle
     'css/poll_style.css',
     'css/construct.css',
     'css/batch.css',
-    'css/results.css'
+    'css/analytics.css'
   ];
 
   public $depends = [
