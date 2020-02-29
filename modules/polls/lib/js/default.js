@@ -297,12 +297,23 @@ $(document).on('click', '#batch-input', function (e) {
   let data = pollTable.rows({selected: true}).data();
   let pollId = data[0].id;
   let url = '/polls/batch-input';
-  loadExContentEx(url, () => loadPollConfigB(pollId, startBatchInput));
+  let dataUrl = '/polls/batch-input/get-poll-info?id=' + pollId;
+  loadExContentEx(url, () => loadPollConfig(pollId, initBatchModule, dataUrl));
   pollTable.rows().deselect();
 });
 
-function loadPollConfigB(id, callback) {
-  let url = '/polls/batch-input/get-poll-info?id=' + id;
+$(document).on('click', '#poll-result', function (e) {
+  e.preventDefault();
+  NProgress.start();
+  let data = pollTable.rows({selected: true}).data();
+  let pollId = data[0].id;
+  let url = '/polls/analytic';
+  let dataUrl = '/polls/analytic/get-poll-data?id=' + pollId;
+  loadExContentEx(url, () => loadPollConfig(pollId, initAnalyticModule, dataUrl));
+  pollTable.rows().deselect();
+});
+
+function loadPollConfig(id, callback, url) {
   $.ajax({
     url: url,
     method: 'get'
@@ -317,8 +328,13 @@ function loadPollConfigB(id, callback) {
   });
 }
 
-function startBatchInput(config) {
+function initBatchModule(config) {
   console.log(config);
   batch = new Batch(config);
+  NProgress.done();
+}
+
+function initAnalyticModule(config) {
+  console.log(config);
   NProgress.done();
 }

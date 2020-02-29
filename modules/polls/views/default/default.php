@@ -68,7 +68,7 @@ Select2Asset::register($this);
     </div>
 
     <div id="poll-result" style="position: absolute; top: 130px; right:-60px;display: none;fill: white">
-      <a id="batch-input-a" class="fab-button" title="Результаты опроса"
+      <a id="poll-result-a" class="fab-button" title="Результаты опроса"
          style="cursor: pointer; background-color: green;padding-left: 8px;padding-top: 7px ">
         <svg viewBox="0 0 512.008 512.008" width="38" height="38">
           <path d="M 480.032 459.646 v -267.94 h -90.004 v 267.917 l -30.003 -0.008 V 251.71 h -90.004 v 207.882 l
