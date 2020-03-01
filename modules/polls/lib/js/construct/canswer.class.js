@@ -79,6 +79,7 @@ class CAnswer {
       answerClone.querySelector('.unique-btn').dataset.id = answerId;
       answerClone.querySelector('.unique-btn').dataset.questionId = this.parentQuestion;
       answerClone.querySelector('.answer-menu .logic').dataset.id = answerId;
+      answerClone.querySelector('.answer-menu .logic').dataset.question = this.parentQuestion;
       answerClone.querySelector('.answer-menu .delete-answer').dataset.id = answerId;
     }
     if (this.unique === 1) {

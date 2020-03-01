@@ -349,7 +349,7 @@ class PollConstructor {
     return this.pollGridView;
   }
 
-  renderLogicMenu(id) {
+  renderLogicMenu(questionObj, answerObj) {
     let Obj = this;
     let menuDiv = document.createElement('div');
     menuDiv.id = 'logic-menu-content';
@@ -357,21 +357,29 @@ class PollConstructor {
     for (let qId in questions) {
       let question = questions[qId];
       menuDiv.appendChild(question.questionTmplEx);
-      if (question.answersEx[id] !== undefined) {
-        Obj.buffer = question.answersEx[id];
-        question.answersEx[id].tempTmpl.classList.add('selected-answer');
-        question.tempTmpl.classList.add('selected-question');
-        console.log(question.answersEx[id]);
-      }
     }
+    questionObj.tempTmpl.classList.add('selected-answer');
+    answerObj.tempTmpl.classList.add('selected-question');
+    Obj.buffer = answerObj;
+    // if (question.answersEx[id] !== undefined) {
+    //   Obj.buffer = question.answersEx[id];
+    //   question.answersEx[id].tempTmpl.classList.add('selected-answer');
+    //   question.tempTmpl.classList.add('selected-question');
+    //
+    //   console.log(question.answersEx[id]);
+    // }
+
+
     return menuDiv;
   }
 
-  showLogicMenu(answerId) {
+  showLogicMenu(answerId, questionId) {
     let Obj = this;
+    let questionObj = Obj._questions[questionId];
+    let answerObj = questionObj[answerId];
     $.alert({
       title: Obj.code + ' ' + 'исключить ответы',
-      content: Obj.renderLogicMenu(answerId),
+      content: Obj.renderLogicMenu(questionObj, answerObj),
       columnClass: 'col-md-12',
       animateFromElement: false,
       buttons: {
@@ -379,7 +387,7 @@ class PollConstructor {
           text: 'Сохранить',
           btnClass: 'btn-success',
           action: function () {
-            Obj.confirmLogic(answerId);
+            Obj.confirmLogic(answerObj);
           }
         },
         cancel: {
@@ -392,7 +400,7 @@ class PollConstructor {
     });
   };
 
-  confirmLogic(answerId ) {
+  confirmLogic(answerObj) {
     let menu = document.getElementById('logic-menu-content');
     let inputs = menu.getElementsByTagName('input');
     let result = [];
@@ -402,14 +410,13 @@ class PollConstructor {
         val.checked = false;                                          // снимаем checkbox
       }
     });
-    this.saveLogic(result, answerId);
+    this.saveLogic(result, answerObj.id);
   }
 
   abortLogic() {
     // let menu = document.getElementById('logic-menu-content');
     // this.clearCheckboxes(menu);
   }
-
 
   saveLogic(result, id) {
     let Obj = this;
@@ -430,9 +437,9 @@ class PollConstructor {
           console.log(response.data.message + ' ' + response.data.data);
           return;
         }
+
         let answerObj = Obj.buffer;
         answerObj.logicArray = result;
-
         answerObj.answerTmpl.appendChild(answerObj.renderBranchSymbl());
 
         var tText = '<span style="font-weight: 600">Успех!</span><br>Логика сохранена';

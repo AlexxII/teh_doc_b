@@ -153,11 +153,10 @@ function showQTrash() {
 
 function setLogic() {
   let answerId = this.dataset.id;
-  pollCounstructor.showLogicMenu(answerId);
+  let questionId = this.dataset.question;
+  console.log(questionId);
+  pollCounstructor.showLogicMenu(answerId, questionId);
 }
-
-
-
 
 function checkInAllCheckboxes() {
   let inputs = menu.getElementsByTagName('input');
