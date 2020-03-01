@@ -8,11 +8,13 @@ use yii\web\Controller;
 class MurmController extends Controller
 {
 
-/*  public function actionIndex()
-  {
-//    \Yii::$app->view->title = 'Карты';
-    return $this->render('index');
-  }*/
+  public $layout = '@app/views/layouts/test.php';
+
+  /*  public function actionIndex()
+    {
+  //    \Yii::$app->view->title = 'Карты';
+      return $this->render('index');
+    }*/
 
   public function actionIndex()
   {

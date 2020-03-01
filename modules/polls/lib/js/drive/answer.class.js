@@ -24,6 +24,14 @@ class Answer {
     return this._logic;
   }
 
+  set code(code) {
+    this._code = code.padStart(3, '0');
+  }
+
+  get code() {
+    return this._code;
+  }
+
   renderAnswer(index) {
     let answerTemplate = document.createElement('div');
     let answerOrederNode = document.createElement('span');
@@ -40,7 +48,7 @@ class Answer {
     if (pollUser.code === 1) {
       let codeNode = document.createElement('span');
       codeNode.className = 'drive-answer-code titleNode';
-      codeNode.innerText = this.code.padStart(3, '0');
+      codeNode.innerText = this.code;
       answerTemplate.append(codeNode);
     }
 

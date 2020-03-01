@@ -96,11 +96,16 @@ function select2SaveChanges(e) {
   let question = poll.getCurrentQuestion();
   let selectedAnswerId = sOption[0].value;
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
+  let selectedAnswerObject = question.getAnswer(selectedAnswerId);
   let data = {
-    id: selectedAnswerId,
-    extData: null
+    id: 0,
+    code: null,
+    extData: null,
+    unique: 0,
   };
   data.id = selectedAnswerId;
+  data.unique = selectedAnswerObject.unique;
+  data.code = selectedAnswerObject.code;
   respondentResult.saveData(data);
   stepLogic(respondentResult, question);
 }
@@ -151,6 +156,7 @@ function chooseAnAnswer(element) {
   let selectedAnswerObject = question.getAnswer(selectedAnswerId);
   let data = {
     id: selectedAnswerId,
+    code: selectedAnswerObject.code,
     extData: null,
     unique: selectedAnswerObject.unique
   };
@@ -212,6 +218,7 @@ function saveFreeAnswer(input) {
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
   let data = {
     id: selectedAnswerId,
+    code: null,
     extData: null,
     unique: 0
   };
@@ -219,6 +226,7 @@ function saveFreeAnswer(input) {
     data.id = selectedAnswerId;
     data.extData = input.value;
     data.unique = selectedAnswerObject.unique;
+    data.code = selectedAnswerObject.code;
     respondentResult.saveData(data);
     stepLogic(respondentResult, question);
   } else {
@@ -243,6 +251,8 @@ function confirmAndNextQuestion() {
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
   if (respondentResult.entries >= 1) {
     if (poll.isPollComplete()) {
+      console.log(poll.respondent.resultPool);
+      console.log(poll.respondent.getResults());
       showM();
       return;
     }

@@ -20,8 +20,7 @@ class Respondent {
   set resultPool(questions) {
     let out = {};
     questions.forEach(function (question, index) {
-      let required = question.required;
-      out[question.id] = new result(required);
+      out[question.id] = new result();
     });
     this._resultPool = out;
   }
@@ -69,7 +68,7 @@ class Respondent {
   checkResults() {
     let results = this.resultPool;
     for (let key in results) {
-      if (results[key].entries === 0) {
+      if (results[key].entries === 0 && results[key].skip !== 1) {
         return 0;
       }
     }
@@ -79,20 +78,31 @@ class Respondent {
   findUnansweredQuestion() {
     let results = this.resultPool;
     for (let key in results) {
-      if (results[key].entries === 0) {
+      if (results[key].entries === 0 && results[key].skip !== 1) {
         return key;
       }
     }
     return false;
   }
+
+  getResults() {
+    let results = this.resultPool;
+    let data = [];
+    for (let key in results) {
+      if (Object.entries(results).length !== 0 && results.constructor === Object) {
+        data.push(results[key].getResult());
+      }
+    }
+    return data;
+  }
 }
 
-function result(required) {
+function result() {
   this.typeDuration = 0;
   this.errors = 0;
   this.repair = 0;
   this.entries = 0;
-  this.required = required;
+  this.skip = 0;
   this.respondentAnswers = {};
 
   this.saveData = function (data) {
@@ -110,6 +120,8 @@ function result(required) {
 
   this.deleteAllData = function () {
     this.respondentAnswers = {};
+    this.entries = 0;
+    this.skip = 1;
   };
 
   this.hasSavedData = function () {
@@ -132,11 +144,27 @@ function result(required) {
       }
     }
     return out;
+  };
+
+  this.getResult = function () {
+    let results = this.respondentAnswers;
+    let data = [];
+    if (Object.entries(results).length !== 0 && results.constructor === Object) {
+      for (let key in results) {
+        if (results[key].extData !== null) {
+          data.push(results[key].code + ' ' + results[key].extData);
+        } else {
+          data.push(results[key].code);
+        }
+      }
+    }
+    return data;
   }
 }
 
 function answerData(data) {
   this.id = data.id;
+  this.code = data.code;
   this.extData = data.extData;
   this.unique = data.unique;
 }
