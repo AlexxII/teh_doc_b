@@ -61,7 +61,8 @@ function driveIn(config) {
   let settings = {
     id: 123456789,    // user id
     stepDelay: 100,
-    markColor: '#e0e0e0'
+    markColor: '#e0e0e0',
+    code: 1
   };
   pollUser = new PollUser(settings);
   console.log(config);
@@ -232,7 +233,7 @@ function nextRespondent() {
 }
 
 function clickOnTheAnswer(event) {
-  let element = event.target;
+  let element = event.currentTarget;
   if (element.classList.contains('free-answer')) return;
   chooseAnAnswer(element);
 }

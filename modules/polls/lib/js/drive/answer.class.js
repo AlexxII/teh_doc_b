@@ -25,28 +25,27 @@ class Answer {
   }
 
   renderAnswer(index) {
-    let answerTemplate = document.createElement('p');
-    let strong = document.createElement('strong');
+    let answerTemplate = document.createElement('div');
+    let answerOrederNode = document.createElement('span');
+    answerOrederNode.className = 'drive-answer-order';
     answerTemplate.dataset.id = this.id;
     answerTemplate.dataset.mark = 0;
     answerTemplate.id = codes[index][1];
     answerTemplate.className = 'answer-p';
     let counterNode = document.createTextNode(codes[index][0] + '. ');
-    strong.appendChild(counterNode);
-    answerTemplate.appendChild(strong);
-
+    answerOrederNode.appendChild(counterNode);
+    answerTemplate.appendChild(answerOrederNode);
 
     // вкючить отображение кода или нет
-    let test = 1;
-    if (test === 1) {
+    if (pollUser.code === 1) {
       let codeNode = document.createElement('span');
-      codeNode.className = 'drive-answer-code';
+      codeNode.className = 'drive-answer-code titleNode';
       codeNode.innerText = this.code.padStart(3, '0');
       answerTemplate.append(codeNode);
     }
 
     let titleNode = document.createElement('span');
-    titleNode.className = 'drive-answer-title';
+    titleNode.className = 'drive-answer-title titleNode';
     titleNode.innerText = this.title;
     // let titleNode = document.createTextNode(this.title);
     answerTemplate.append(titleNode);

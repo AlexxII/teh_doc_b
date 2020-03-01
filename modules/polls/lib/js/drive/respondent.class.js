@@ -39,7 +39,6 @@ class Respondent {
   removeFromLogic(id) {
     let logic = this._logic;
     delete logic[id];
-    console.log(this.logic);
   }
 
   get logic() {

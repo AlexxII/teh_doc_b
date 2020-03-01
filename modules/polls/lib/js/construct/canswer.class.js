@@ -46,7 +46,7 @@ class CAnswer {
     this._logicArray = [];
   }
 
-  get LogicArray() {
+  get logicArray() {
     return this._logicArray;
   }
 

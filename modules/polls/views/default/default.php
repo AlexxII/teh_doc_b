@@ -262,7 +262,7 @@ Select2Asset::register($this);
   <ul id="question-tmpl-ex">
     <li>
       <span class="q-order"></span>
-      <span class="q-title"> Вопрос</span>
+      <span class="q-title check-all"> Вопрос</span>
       <ul class="question-content-ex">
       </ul>
     </li>
