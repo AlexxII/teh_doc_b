@@ -20,7 +20,7 @@ class Respondent {
   set resultPool(questions) {
     let out = {};
     questions.forEach(function (question, index) {
-      out[question.id] = new result();
+      out[question.id] = new result(index);
     });
     this._resultPool = out;
   }
@@ -97,17 +97,25 @@ class Respondent {
   }
 
   getResultToDb() {
+    let results = this.resultPool;
+    let data = [];
+    for (let key in results) {
+      if (Object.entries(results).length !== 0 && results.constructor === Object) {
+
+      }
+    }
 
   }
 
 }
 
-function result() {
+function result(index) {
   this.typeDuration = 0;
   this.errors = 0;
   this.repair = 0;
   this.entries = 0;
   this.skip = 0;
+  this.order = index;
   this.respondentAnswers = {};
 
   this.saveData = function (data) {
@@ -163,8 +171,10 @@ function result() {
         }
       }
     }
+    this.order(data);
     return data;
-  }
+  };
+
 }
 
 function answerData(data) {

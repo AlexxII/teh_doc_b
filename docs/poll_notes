@@ -1,0 +1,11 @@
+result save
+
+townId :
+respId :
+pollId :
+data: [
+	anserId :
+	code :
+	exData :
+	order :
+]

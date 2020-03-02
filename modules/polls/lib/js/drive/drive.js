@@ -7,6 +7,8 @@ const TYPE_COMMON_ANSWER = 1;
 const TYPE_FREE_ANSWER = 2;
 const TYPE_DIFFICULT_ANSWER = 3;
 
+const RESULTS_SAVE_URL = 'polls/drive-in/save-result';
+
 // начало вколачивания опроса
 $(document).on('click', '.poll-in', startDrive);
 
@@ -346,8 +348,40 @@ function showM() {
 function saveDataToDb() {
   console.log(poll.respondent.resultPool);
   console.log(poll.respondent.getCodesResults());
-  console.log(poll.respondent.getResultToDb())
+  console.log(poll.respondent.getResultToDb());
 
+  let result = {};
+  result.pollId = poll.pollId;
+  result.respId = poll.respondent.id;
+
+  let data = poll.respondent.getCodesResults();
+
+  let url = RESULTS_SAVE_URL;
+  $.ajax({
+    url: url,
+    method: 'post',
+    data: {
+      pollId: poll.pollId,
+      respId: poll.respondent.id,
+      townId: poll.townId,
+      data: data
+    }
+  }).done(function (response) {
+    if (!response.code) {
+      var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Сохранить результат удалось';
+      initNoty(tText, 'warning');
+      console.log(response.data.message + ' ' + response.data.data);
+      return;
+    }
+
+
+    var tText = '<span style="font-weight: 600">Успех!</span><br>Результат сохранен';
+    initNoty(tText, 'success');
+  }).fail(function () {
+    var tText = '<span style="font-weight: 600">Что-то пошло не так!</span><br>Сохранить результат удалось';
+    initNoty(tText, 'warning');
+    console.log('Не удалось получить ответ сервера. Примените отладочную панель, оснаска "Сеть"');
+  });
 
 
 }
