@@ -1,10 +1,13 @@
 class Worksheet {
-  constructor(config) {
+  constructor(config, townId, townTitle) {
     if (this.verifyPollConfigStructure(config)) {
       this.currentConfig = config;
       this.pollId = config.id;
       this._code = config.code;
       this._title = config.title;
+      this.townId = townId;
+      this.townTitle = townTitle;
+        this.logic = config.logic;
       // пулл вопросов
       this.totalNumberOfQuestions = config;
       this.currentQuestionNum = 0;
@@ -15,7 +18,6 @@ class Worksheet {
       this.template = this.renderTemplate();
       this.renderNavigationSelect();
       this.renderNavigator();
-      this.logic = config.logic;
     }
   }
 

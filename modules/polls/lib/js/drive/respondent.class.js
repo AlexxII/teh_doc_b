@@ -85,7 +85,7 @@ class Respondent {
     return false;
   }
 
-  getResults() {
+  getCodesResults() {
     let results = this.resultPool;
     let data = [];
     for (let key in results) {
@@ -95,6 +95,11 @@ class Respondent {
     }
     return data;
   }
+
+  getResultToDb() {
+
+  }
+
 }
 
 function result() {

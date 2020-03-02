@@ -12,6 +12,8 @@
         </li>
         <li id="poll-title" style="padding: 5px 0 0 15px;font-weight: bold; float: left">
         </li>
+        <li id="poll-town" style="padding: 5px 0 0 15px;font-weight: bold; float: left">
+        </li>
       </ul>
       <ul class="navig navigation-nav navigation-right">
         <li id=ex-right-custom-data-ex">
@@ -90,6 +92,7 @@
     });
 
   });
+
   function goBack(data = null) {
     $('#ex-wrap').detach();
     var url = $(this).data('backUrl');

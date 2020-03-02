@@ -20,9 +20,12 @@ class m191209_111238_poll_respondents_tbl extends Migration
       'respondent_id' => $this->bigInteger()->notNull(),
       'poll_id' => $this->bigInteger()->notNull(),
       'answer_id' => $this->bigInteger()->notNull(),
+      'answer_code' => $this->string(125),
       'user_id' => $this->bigInteger()->notNull(),
       'input_time' => $this->timestamp(),                                 // время занесения результата
-      'ex_answer' => $this->bigInteger(),
+      'ex_answer' => $this->text(),
+      'order' => $this->integer(),
+      'town_id' => $this->bigInteger()->notNull(),
       'isDeleted' => $this->boolean()->defaultValue(0)
     ], $tableOptions);
 

@@ -5,6 +5,7 @@ namespace app\modules\polls\controllers;
 use app\modules\polls\models\Answers;
 use app\modules\polls\models\PollLogic;
 use app\modules\polls\models\Questions;
+use app\modules\polls\models\Result;
 use app\modules\polls\models\Xml;
 use Yii;
 use yii\web\Controller;
@@ -53,6 +54,7 @@ class DriveInController extends Controller
   public function actionGetPollInfo($id)
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $userId = Yii::$app->user->identity->id;
     $data = Polls::find()
       ->select(["id", "title", "code"])
       ->where(["id" => $id])
@@ -65,6 +67,7 @@ class DriveInController extends Controller
       ->asArray()
       ->all();
     $data[0]["logic"] = $logic;
+    $data[0]["user"] = $userId;
     return [
       'data' => [
         'success' => true,
@@ -73,6 +76,36 @@ class DriveInController extends Controller
       ],
       'code' => 1,
     ];
-
   }
+
+  public function actionTownForm()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    return $this->renderAjax('town_form');
+  }
+
+  public function actionSaveResult()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    if (!empty($_POST)) {
+      $respId = $_POST["respId"];
+      $pollId = $_POST["pollId"];
+      $town = $_POST["townId"];
+      $data = $_POST["data"];
+      $userId = Yii::$app->user->identity->id;
+      $time = new \DateTime();
+      foreach ($data as $result) {
+        $model = new Result();
+        $model->town_id = $town;
+        $model->respondent_id = $respId;
+        $model->poll_id = $pollId;
+        $model->answer_id = $result["answerId"];
+        $model->user_id = $userId;
+        $model->input_time = $time;
+        $model->ex_answer = $result['exData'];
+        $model->town_id = $town;
+      }
+    }
+  }
+
 }

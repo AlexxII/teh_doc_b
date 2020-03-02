@@ -35,9 +35,12 @@ $(document).on('select2:open', '.js-data-array', select2Start)
   .on('change', '.js-data-array', select2SaveChanges)
   .on('select2:close', '.js-data-array', select2Close);
 
-function startDrive(e) {
-  NProgress.start();
-  let pollId = $(this).data('id');
+function startDrive() {
+  showTownIn(this, letsDrive);
+}
+
+function letsDrive(p) {
+  let pollId = $(p).data('id');
   let url = '/polls/drive-in?id=';
   loadExContentEx(url, () => loadPollData(pollId, driveIn));
 }
@@ -59,22 +62,58 @@ function loadPollData(id, callback) {
 }
 
 function driveIn(config) {
-  // шаблон - будет запрашиваться у БД
+  NProgress.start();
   let settings = {
-    id: 123456789,    // user id
+    id: 123456789,                                                                // user id
     stepDelay: 100,
     markColor: '#e0e0e0',
     code: 1
   };
   pollUser = new PollUser(settings);
-  console.log(config);
-  poll = new Worksheet(config);
-  // console.log(poll);
+// console.log(config);
+// console.log(poll);
+  poll = new Worksheet(config, driveTownId, driveTownTitle);
   initMainEventListener();
   $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
+  $('#poll-town').append('<h4>' + driveTownTitle + '</h4>');                          // наименование опроса
   poll.goToQuestionByNumber(0);
   poll.respondent.startCount();
   NProgress.done();
+}
+
+function showTownIn(p, callback) {
+  let jc = $.confirm({
+    // title: false,
+    escapeKey: 'cancel',
+    title: 'Город',
+    // url: '/poll/drive',
+    content: 'url:polls/drive-in/town-form',
+    type: 'red',
+    closeIcon: false,
+    onContentReady: function () {
+      let self = this;
+      this.buttons.ok.disable();
+      this.$content.find('.drive-town-select').change(function () {
+        driveTownId = self.$content.find('select :selected').val();
+        driveTownTitle = self.$content.find('select :selected').text();
+        self.buttons.ok.enable();
+      })
+    },
+    buttons: {
+      ok: {
+        btnClass: 'btn-success',
+        action: function () {
+          callback(p);
+          jc.close();
+        }
+      },
+      cancel: {
+        action: function () {
+
+        }
+      }
+    }
+  });
 }
 
 // Основной обработчик запросов
@@ -255,8 +294,6 @@ function confirmAndNextQuestion() {
   let respondentResult = poll.respondent.getRespondentResultsOfQuestion(question.id);
   if (respondentResult.entries >= 1) {
     if (poll.isPollComplete()) {
-      console.log(poll.respondent.resultPool);
-      console.log(poll.respondent.getResults());
       showM();
       return;
     }
@@ -278,7 +315,7 @@ function confirmAndNextQuestion() {
 
 function showM() {
   document.body.removeEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
-  jc = $.confirm({
+  let jc = $.confirm({
     icon: 'fa fa-question',
     escapeKey: 'cancel',
     title: 'Анкета завершена',
@@ -291,6 +328,7 @@ function showM() {
         btnClass: 'btn-danger',
         action: function () {
           jc.close();
+          saveDataToDb();
           poll.nextRespondent();
           document.body.addEventListener(MAIN_INPUT_TYPE, keycodeAbstractionLayer);
         }
@@ -303,6 +341,15 @@ function showM() {
       }
     }
   });
+}
+
+function saveDataToDb() {
+  console.log(poll.respondent.resultPool);
+  console.log(poll.respondent.getCodesResults());
+  console.log(poll.respondent.getResultToDb())
+
+
+
 }
 
 function moveToPreviousQuestion() {
