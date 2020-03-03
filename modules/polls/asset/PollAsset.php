@@ -31,7 +31,7 @@ class PollAsset extends AssetBundle
     'js/batch/bquestion.class.js',
     'js/batch/batch.js',
 
-    'js/results/results.js'
+    'js/analytic/analytic.js'
 
   ];
 

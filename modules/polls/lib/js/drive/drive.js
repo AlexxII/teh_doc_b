@@ -353,10 +353,6 @@ function showM() {
 }
 
 function saveDataToDb() {
-  // console.log(poll.respondent.resultPool);
-  // console.log(poll.respondent.getCodesResults());
-  // console.log(poll.respondent.getResultToDb());
-
   let result = {};
   result.pollId = poll.pollId;
   result.respId = poll.respondent.id;
