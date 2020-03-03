@@ -93,18 +93,41 @@ class DriveInController extends Controller
       $town = $_POST["townId"];
       $data = $_POST["data"];
       $userId = Yii::$app->user->identity->id;
-      $time = new \DateTime();
-      foreach ($data as $result) {
+      $time = date('Y-m-d H:i:s');
+      $transaction = Yii::$app->db->beginTransaction();
+      $dataSize = count($data);
+      for ($i = 0; $i < $dataSize; $i++){
         $model = new Result();
         $model->town_id = $town;
         $model->respondent_id = $respId;
         $model->poll_id = $pollId;
-        $model->answer_id = $result["answerId"];
         $model->user_id = $userId;
         $model->input_time = $time;
-        $model->ex_answer = $result['exData'];
-        $model->town_id = $town;
+        $model->answer_id = $data[$i]["id"];
+        $model->ex_answer = $data[$i]["exData"];
+        $model->answer_code = $data[$i]["code"];
+        $model->order = $i;
+        if (!$model->save()) {
+          $transaction->rollback();
+          return [
+            'data' => [
+              'success' => false,
+              'data' => $model->errors,
+              'message' => 'Не удалось сохранить результат опроса',
+            ],
+            'code' => 0,
+          ];
+        }
       }
+      $transaction->commit();
+      return [
+        'data' => [
+          'success' => true,
+          'data' => true,
+          'message' => 'Результат сохранен',
+        ],
+        'code' => 1,
+      ];
     }
   }
 

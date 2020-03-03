@@ -6,8 +6,7 @@ class Answer {
     this.code = config.code;
     this.titleEx = config.title_ex;
     this.logic = config.logic;
-    this.newOrder = +config.order;
-    this.oldOrder = +config.order;
+    this.order = +config.order;
     this.unique = +config.unique;
     this.type = +config.input_type;
   }

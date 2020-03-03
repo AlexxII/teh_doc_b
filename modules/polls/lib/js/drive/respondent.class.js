@@ -20,7 +20,6 @@ class Respondent {
   set resultPool(questions) {
     let out = {};
     questions.forEach(function (question, index) {
-      console.log(index + ' - ' + question.id + ' - ' + question.title);
       out[question.id] = new result(index);
     });
     this._resultPool = out;
@@ -98,21 +97,29 @@ class Respondent {
   }
 
   getCodesResults() {
-    let results = this.resultPool;
+    let results = this.results;
     let data = [];
-    for (let key in results) {
-      if (Object.entries(results).length !== 0 && results.constructor === Object) {
-        data.push(results[key].getResult());
-      }
-    }
+    let count = 0;
+    results.forEach(function (result, index) {
+      let temp = result.getCodes();
+      temp.forEach(function (val, index) {
+        data[count] = val.code;
+        count++;
+      });
+    });
     return data;
   }
 
   getResultToDb() {
     let results = this.results;
     let data = [];
+    let count = 0;
     results.forEach(function (result, index) {
-      data.push(result.getResult());
+      let temp = result.getResult();
+      temp.forEach(function (val, index) {
+        data[count] = val;
+        count++;
+      });
     });
     return data;
   }
@@ -177,6 +184,22 @@ function result(index) {
     return out;
   };
 
+  this.getCodes = function () {
+    let results = this.respondentAnswers;
+    let data = [];
+    if (Object.entries(results).length !== 0 && results.constructor === Object) {
+      for (let key in results) {
+        let temp = {};
+        let result = results[key];
+        temp.code = result.code;
+        temp.order = result.order;
+        data.push(temp);
+      }
+    }
+    this.sortByOrder(data);
+    return data;
+  };
+
   this.getResult = function () {
     let results = this.respondentAnswers;
     let data = [];
@@ -186,12 +209,18 @@ function result(index) {
         let result = results[key];
         answer.id = result.id;
         answer.code = result.code;
+        answer.order = result.order;
         answer.exData = result.extData;
         data.push(answer);
       }
     }
+    this.sortByOrder(data);
     return data;
   };
+
+  this.sortByOrder = function (arr) {
+    arr.sort((a, b) => a.order > b.order ? 1 : -1);
+  }
 
 }
 
@@ -200,4 +229,5 @@ function answerData(data) {
   this.code = data.code;
   this.extData = data.extData;
   this.unique = data.unique;
+  this.order = data.order;
 }

@@ -22,7 +22,7 @@ class m191209_111238_poll_respondents_tbl extends Migration
       'answer_id' => $this->bigInteger()->notNull(),
       'answer_code' => $this->string(125),
       'user_id' => $this->bigInteger()->notNull(),
-      'input_time' => $this->timestamp(),                                 // время занесения результата
+      'input_time' => $this->timestamp(),                                         // время занесения результата
       'ex_answer' => $this->text(),
       'order' => $this->integer(),
       'town_id' => $this->bigInteger()->notNull(),

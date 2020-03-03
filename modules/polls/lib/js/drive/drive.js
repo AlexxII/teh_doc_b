@@ -111,7 +111,6 @@ function showTownIn(p, callback) {
       },
       cancel: {
         action: function () {
-
         }
       }
     }
@@ -145,10 +144,12 @@ function select2SaveChanges(e) {
     code: null,
     extData: null,
     unique: 0,
+    order: null
   };
   data.id = selectedAnswerId;
   data.unique = selectedAnswerObject.unique;
   data.code = selectedAnswerObject.code;
+  data.order = selectedAnswerObject.order;
   respondentResult.saveData(data);
   stepLogic(respondentResult, question);
 }
@@ -201,7 +202,8 @@ function chooseAnAnswer(element) {
     id: selectedAnswerId,
     code: selectedAnswerObject.code,
     extData: null,
-    unique: selectedAnswerObject.unique
+    unique: selectedAnswerObject.unique,
+    order: selectedAnswerObject.order
   };
 
   if (respondentResult.hasSavedData()) {
@@ -267,13 +269,15 @@ function saveFreeAnswer(input) {
     id: selectedAnswerId,
     code: null,
     extData: null,
-    unique: 0
+    unique: 0,
+    order: null
   };
   if (input.value) {
     data.id = selectedAnswerId;
     data.extData = input.value;
     data.unique = selectedAnswerObject.unique;
     data.code = selectedAnswerObject.code;
+    data.order = selectedAnswerObject.order;
     respondentResult.saveData(data);
     stepLogic(respondentResult, question);
   } else {
@@ -349,15 +353,16 @@ function showM() {
 }
 
 function saveDataToDb() {
-  console.log(poll.respondent.resultPool);
+  // console.log(poll.respondent.resultPool);
   // console.log(poll.respondent.getCodesResults());
-  console.log(poll.respondent.getResultToDb());
+  // console.log(poll.respondent.getResultToDb());
 
   let result = {};
   result.pollId = poll.pollId;
   result.respId = poll.respondent.id;
-
-  let data = poll.respondent.getCodesResults();
+  let data = poll.respondent.getResultToDb();
+  console.log(poll.respondent.getResultToDb());
+  console.log(poll.respondent.getCodesResults());
 
   let url = RESULTS_SAVE_URL;
   $.ajax({
