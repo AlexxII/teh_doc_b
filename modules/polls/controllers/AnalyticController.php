@@ -57,4 +57,17 @@ class AnalyticController extends Controller
     ];
   }
 
+  public function actionMapsMe()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->renderAjax('map'),
+        'message' => 'Page load',
+      ],
+      'code' => 1,
+    ];
+  }
+
 }

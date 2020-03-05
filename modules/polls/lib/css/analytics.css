@@ -31,3 +31,8 @@
 #analytic-result {
   resize: vertical;
 }
+
+#maps-me {
+  cursor: pointer;
+  text-decoration: none;
+}

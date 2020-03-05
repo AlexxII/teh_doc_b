@@ -43,7 +43,8 @@
         "bower-asset/pdfmake": "^0.1.60",
         "bower-asset/fullcalendar": "4.2.0",
         "bower-asset/leaflet": "^1.6",
-        "bower-asset/sortablejs": "^1.10"
+        "bower-asset/sortablejs": "^1.10",
+        "bower-asset/leaflet.markercluster": "^1.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

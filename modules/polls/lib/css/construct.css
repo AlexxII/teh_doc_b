@@ -306,3 +306,10 @@ ul {
 .checked-answer {
   background-color: #0b58a2;
 }
+
+.original-question-order {
+  position: absolute;
+  top: 0;
+  left:0;
+  font-size: 12px;
+}

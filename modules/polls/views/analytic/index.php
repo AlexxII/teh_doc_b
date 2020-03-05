@@ -1,6 +1,19 @@
+<?php
+
+use app\modules\maps\asset\LeafletAsset;
+
+LeafletAsset::register($this);
+
+?>
+
 <style>
   #main-content {
     width: 100% !important;
+  }
+
+  #map {
+    width: 100%;
+    height: 550px;
   }
 </style>
 
@@ -19,6 +32,7 @@
           <div id="collapseOne" class="panel-collapse collapse in">
             <!-- Содержимое 1 панели -->
             <div class="panel-body">
+              <p><a class="ext" id="analytic-parcha">Анализ ПАРЧИ</a></p>
               <p><a class="ext" id="analytic-array-codes">Массив кодов</a></p>
               <p><a class="ext" id="analytic-charts">Графики</a></p>
             </div>
@@ -34,15 +48,18 @@
           </div>
           <div id="collapseTwo" class="panel-collapse collapse">
             <div class="panel-body">
-              <p><a class="ext" data-url="/control/analytic/calendars-for-subscribe">Данные по городам</a></p>
-              <p><a class="ext" data-url="/control/analytic/calendars-for-subscribe">Статистика по операторам</a></p>
+              <p><a class="ext">Данные по городам</a></p>
+              <p><a class="ext">Статистика по операторам</a></p>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div id="analytic-rightside">
-      <textarea id="analytic-result" rows="30" cols="150"></textarea>
+      <div id="analytic-header">
+      </div>
+      <div id="analytic-result">
+      </div>
     </div>
   </div>
 

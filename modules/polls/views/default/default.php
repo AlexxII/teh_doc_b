@@ -6,7 +6,11 @@ use app\assets\NotyAsset;
 use app\assets\SortableJSAsset;
 use app\assets\NprogressAsset;
 use app\assets\Select2Asset;
+use app\modules\maps\asset\LeafletAsset;
+use app\modules\maps\asset\LeafletClusterAsset;
 
+LeafletAsset::register($this);
+LeafletClusterAsset::register($this);
 NprogressAsset::register($this);
 PollAsset::register($this);
 TableBaseAsset::register($this);                // регистрация ресурсов таблиц datatables
@@ -133,6 +137,7 @@ Select2Asset::register($this);
 
   <div id="question-main-template" class="question-wrap">
     <div class="question-content">
+      <span class="original-question-order" title="Очередность по ИС 'Барометр'"></span>
       <div class="question-header">
         <h2 class="question-data">
           <span class="question-order"></span>

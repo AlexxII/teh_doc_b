@@ -47,7 +47,7 @@ $(document).ready(function (e) {
       $('td:nth-child(6)', nRow).html(editBtn + infoBtn);
     },
     orderFixed: [[1, 'desc']],
-    order: [[1, 'desc']],
+    order: [[2, 'desc']],
     rowGroup: {
       dataSrc: 'year'
     },

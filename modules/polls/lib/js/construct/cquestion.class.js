@@ -132,6 +132,8 @@ class CQuestion {
     if (this.limit > 1 || this.limit === 0) {
       questionClone.querySelector('.question-header').classList.add('be-attention');
     }
+
+    questionClone.querySelector('.original-question-order').innerHTML = this.newOrder;
     questionClone.querySelector('.question-title').innerHTML = this.title;
     questionClone.querySelector('.question-limit').value = this.limit;
     questionClone.querySelector('.question-limit').dataset.id = this.id;
@@ -145,6 +147,7 @@ class CQuestion {
       questionClone.querySelector('.question-hide').style.display = 'inline';
       questionClone.querySelector('.restore-question').style.display = 'none';
     }
+
     let answers = this.answers;
     let answerContentNode = questionClone.querySelector('.answers-content');
     let answerContentDelNode = questionClone.querySelector('.answers-content-ex');
