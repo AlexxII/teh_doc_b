@@ -11,6 +11,7 @@ class PollAsset extends AssetBundle
   public $js = [
     'js/vars.js',
 
+
     'js/drive/user.class.js',
     'js/drive/drive.js',
     'js/drive/worksheet.class.js',

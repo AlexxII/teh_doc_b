@@ -61,7 +61,9 @@ class Worksheet {
     questions.forEach(function (question, index) {
       output[index] = new Question(question, index);
     });
+    console.log(output);
     this.sortByOrder(output);
+    // console.log(output);
     this._questions = output;
   }
 
@@ -307,6 +309,7 @@ class Worksheet {
 
   // нивигационная мозайка
   renderNavigator() {
+    let serviceArea = document.getElementById('drive-service-area');
     let svgNAv = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
     let textNode = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -341,7 +344,7 @@ class Worksheet {
     }
     svgNAv.setAttribute('width', '100%');
     svgNAv.setAttribute('height', y);
-    document.getElementById('drive-service-area-ex').appendChild(svgNAv);
+    serviceArea.appendChild(svgNAv);
   };
 
   verifyPollConfigStructure(val) {
