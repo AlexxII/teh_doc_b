@@ -358,11 +358,15 @@ class CQuestion {
   }
 
   sortByOrder(arr) {
-    arr.sort((a, b) => +a.oldOrder > +b.oldOrder ? 1 : -1);
+    arr.sort(function (a, b) {
+      return +a.oldOrder < +b.oldOrder;
+    });
   }
 
   sortByCode(arr) {
-    arr.sort((a, b) => +a.dCode > +b.dCode ? 1 : -1);
+    arr.sort(function (a, b) {
+      return +a.dCode < +b.dCode;
+    });
   }
 
 }

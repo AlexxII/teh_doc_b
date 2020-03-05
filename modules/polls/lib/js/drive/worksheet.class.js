@@ -16,8 +16,8 @@ class Worksheet {
       this.respondent = this.questions;
       //rendering
       this.template = this.renderTemplate();
-      this.renderNavigationSelect();
-      this.renderNavigator();
+      // this.renderNavigationSelect();
+      // this.renderNavigator();
     }
   }
 
@@ -61,9 +61,7 @@ class Worksheet {
     questions.forEach(function (question, index) {
       output[index] = new Question(question, index);
     });
-    console.log(output);
     this.sortByOrder(output);
-    // console.log(output);
     this._questions = output;
   }
 
@@ -356,7 +354,9 @@ class Worksheet {
   }
 
   sortByOrder(arr) {
-    arr.sort((a, b) => a.oldOrder > b.oldOrder ? 1 : -1);
+    arr.sort(function (a, b) {
+      return a.oldOrder < b.oldOrder;
+    });
   }
 
 }

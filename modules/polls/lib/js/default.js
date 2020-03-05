@@ -71,7 +71,9 @@ $(document).ready(function (e) {
         'targets': 2,
         'render': function (data, type, row) {
           return '<span class="poll-in" data-id="' + row['id'] + '"><strong>' + row['code'] + '</strong></span>';
-        }
+        },
+        'width': '70px',
+
       }, {
         'targets': 3,
         'render': function (data, type, row) {

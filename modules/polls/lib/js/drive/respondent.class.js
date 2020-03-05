@@ -219,7 +219,9 @@ function result(index) {
   };
 
   this.sortByOrder = function (arr) {
-    arr.sort((a, b) => a.order > b.order ? 1 : -1);
+    arr.sort(function (a, b) {
+      return a.order < b.order;
+    });
   }
 
 }
