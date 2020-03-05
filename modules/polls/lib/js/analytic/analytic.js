@@ -31,6 +31,7 @@ function showArrayOfCodes() {
   let mainDataNode = document.getElementById('analytic-result');
   for (let key in arrayOfRespondents) {
     let result = arrayOfRespondents[key];
+    result += ',999';
     result += '\r\n';
     let textNode = document.createTextNode(result);
     mainDataNode.appendChild(textNode);

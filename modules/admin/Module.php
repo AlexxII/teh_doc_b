@@ -8,7 +8,7 @@ class Module extends \yii\base\Module
 {
 
   public $defaultRoute = 'admin';
-  public $layout = '@app/views/layouts/main_ex.php';
+  public $layout = '@app/views/layouts/main.php';
 
   public function behaviors()
   {

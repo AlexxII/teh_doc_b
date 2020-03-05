@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\controllers;
 
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -30,7 +31,17 @@ class AdminController extends Controller
 
   public function actionIndex()
   {
-    return $this->render('index');
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    Yii::$app->view->params['title'] = 'Администрирование';
+    Yii::$app->view->params['bUrl'] = "admin";
+    return [
+      'data' => [
+        'success' => true,
+        'data' => $this->render('index'),
+        'message' => 'Page load.',
+      ],
+      'code' => 1,
+    ];
   }
 
 }

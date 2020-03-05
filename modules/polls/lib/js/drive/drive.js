@@ -69,8 +69,6 @@ function driveIn(config) {
     code: 1
   };
   pollUser = new PollUser(settings);
-// console.log(config);
-// console.log(poll);
   poll = new Worksheet(config, driveTownId, driveTownTitle);
   initMainEventListener();
   $('#poll-title').append('<h4>' + poll.code + '</h4>');                          // наименование опроса
