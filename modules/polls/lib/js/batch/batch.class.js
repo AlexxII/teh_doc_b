@@ -148,9 +148,7 @@ class Batch {
   }
 
   sortByOrder(arr) {
-    arr.sort(function (a, b) {
-      return a.order < b.order;
-    });
+    arr.sort((a, b) => a.order > b.order ? 1 : -1);
   }
 
   verifyPollConfigStructure(val) {

@@ -506,9 +506,7 @@ class PollConstructor {
   }
 
   sortByOldOrder(arr) {
-    arr.sort(function (a, b) {
-      return a.newOrder < b.newOrder;
-    });
+    arr.sort((a, b) => a.newOrder > b.newOrder ? 1 : -1);
   }
 
 }
