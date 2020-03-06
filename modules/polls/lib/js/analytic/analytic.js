@@ -31,16 +31,14 @@ $(document).on('click', '#analytic-array-codes', showArrayOfCodes)
 function showArrayOfCodes() {
   let headerNode = document.getElementById('analytic-header');
   let resultNode = document.getElementById('analytic-result');
-  let textAreaNode = document.getElementById('analytic-result-text');
-  if (textAreaNode === null) {
-    let textAreaNode = document.createElement('textarea');
-    textAreaNode.id = 'analytic-result-text';
-    textAreaNode.cols = '150';
-    textAreaNode.rows = '30';
-    resultNode.innerHTML = '';
-    resultNode.append(textAreaNode);
-  }
+  let textAreaNode = document.createElement('textarea');
+  textAreaNode.id = 'analytic-result-text';
+  textAreaNode.cols = '150';
+  textAreaNode.rows = '30';
+  resultNode.append(textAreaNode);
+  resultNode.innerHTML = '';
   headerNode.innerHTML = '';
+  resultNode.append(textAreaNode);
   for (let key in arrayOfRespondents) {
     let result = arrayOfRespondents[key];
     result += ',999';
@@ -52,6 +50,7 @@ function showArrayOfCodes() {
 
 function showParchaResults() {
   let headerNode = document.getElementById('analytic-header');
+  let resultNode = document.getElementById('analytic-result');
   let formNode = document.createElement('form');
   let divForm = document.createElement('div');
   divForm.className = 'form-group';
@@ -66,11 +65,10 @@ function showParchaResults() {
   inputNode.type = 'file';
   divForm.appendChild(inputNode);
   headerNode.innerHTML = '';
+  resultNode.innerHTML = '';
   headerNode.append(formNode);
   inputNode.addEventListener('change', loadAndParseXmlFile, false);
-
 }
-
 
 function loadAndParseXmlFile() {
   let xmlFile = this.files[0];
@@ -96,15 +94,12 @@ function loadAndParseXmlFile() {
     }
     sheeets = temp;
     sheeetObjs = tempEx;
-
-
     let headerNode = document.getElementById('analytic-header');
     let mapBtn = document.createElement('a');
     mapBtn.id = 'maps-me';
     mapBtn.innerText = 'На карте';
-    headerNode.appendChild(mapBtn);
+    headerNode.append(mapBtn);
     mapBtn.addEventListener('click', mapsMe, false);
-
   };
   reader.readAsText(xmlFile);
 }
@@ -122,7 +117,7 @@ function pollSheet(data) {
 
 
 function mapsMe(e) {
-  let selectedMarkers;
+  let selectedMarkers, childCount;
   let jc = $.confirm({
     title: ' ',
     columnClass: 'xlarge',
@@ -131,7 +126,7 @@ function mapsMe(e) {
       let self = this;
       this.buttons.ok.disable();
       let map = L.map('map').setView([68.959, 33.061], 6);
-      L.tileLayer('http://192.168.56.20/osm_tiles/{z}/{x}/{y}.png', {
+      L.tileLayer('http://182.11.57.17/osm_tiles/{z}/{x}/{y}.png', {
         attribution: '&copy; ' + 'СпецСвязь ФСО России',
         maxZoom: 18
       }).addTo(map);
@@ -144,8 +139,14 @@ function mapsMe(e) {
 
       m.on('clusterclick', function (a) {
         // let latLngBounds = a.layer.getBounds();
-        let childCount = a.layer.getChildCount();
-        selectedMarkers = a.layer.getAllChildMarkers();
+        if (a.originalEvent.ctrlKey) {
+          childCount += a.layer.getChildCount();
+          selectedMarkers = selectedMarkers.concat(a.layer.getAllChildMarkers());
+        } else {
+          childCount = a.layer.getChildCount();
+          selectedMarkers = a.layer.getAllChildMarkers();
+        }
+        console.log(selectedMarkers);
         self.$title[0].textContent = 'Выбрано: ' + childCount + ' объектов';
         self.buttons.ok.enable();
       });
@@ -161,10 +162,10 @@ function mapsMe(e) {
           '<strong>Дата: </strong>' + sheet.date + '<br>' +
           '<strong> Координаты: </strong>' + sheet.endLt + ' с.ш. | ' + sheet.endLn + ' в.д.' + '<br>'
         );
-        m.addLayer(marker);
-        // marker.addTo(map);
+        // m.addLayer(marker);
+        marker.addTo(map);
       });
-      map.addLayer(m);
+      // map.addLayer(m);
     },
     buttons: {
       ok: {
@@ -187,7 +188,7 @@ function mapsMe(e) {
 function parseSelectedMarkers(markers) {
   let detailData = {};
   markers.forEach(function (marker, index) {
-    let needQuestions = [23,24,25,26,27,28];
+    let needQuestions = [23, 24, 25, 26, 27, 28];
     let id = marker.options.id;
     let sheet = sheeetObjs[id];
     let questions = sheet.children;
@@ -236,9 +237,7 @@ function renderResults(data) {
     divNode.appendChild(spanNode);
     divNode.appendChild(brNode);
   }
-
 }
-
 
 function showCharts() {
 
