@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\polls\controllers;
+namespace app\modules\polls\controllers\control;
 
 use app\modules\admin\models\User;
 use app\modules\polls\models\Result;
@@ -9,7 +9,7 @@ use yii\web\Controller;
 use app\modules\polls\models\Polls;
 
 
-class AnalyticController extends Controller
+class ParchaController extends Controller
 {
 
   public $layout = 'ex_layout.php';
@@ -18,7 +18,7 @@ class AnalyticController extends Controller
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     Yii::$app->view->params['bUrl'] = 'polls';
-    Yii::$app->view->params['title'] = 'Статистика';
+    Yii::$app->view->params['title'] = 'Опрос';
     return [
       'data' => [
         'success' => true,

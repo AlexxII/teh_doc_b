@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\polls\controllers;
+namespace app\modules\polls\controllers\control;
 
 use app\modules\polls\models\Answers;
 use app\modules\polls\models\PollLogic;

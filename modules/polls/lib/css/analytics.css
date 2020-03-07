@@ -1,20 +1,20 @@
-#analytic-leftside {
+#control-leftside {
   width: 256px;
   height: 100%;
   padding: 0 10px 0 10px;
 }
 
-#analytic-rightside {
+#control-rightside {
   height: 100%;
   width: 100%
 }
 
-#analytic-leftside h4 {
+#control-leftside h4 {
   font-size: 13px;
   font-weight: 600;
 }
 
-#analytic-leftside h4 a {
+#control-leftside h4 a {
   text-decoration: none;
 }
 
@@ -28,7 +28,7 @@
   cursor: pointer;
 }
 
-#analytic-result {
+#control-result-text {
   resize: vertical;
 }
 

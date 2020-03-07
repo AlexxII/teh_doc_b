@@ -11,7 +11,6 @@ class PollAsset extends AssetBundle
   public $js = [
     'js/vars.js',
 
-
     'js/drive/user.class.js',
     'js/drive/drive.js',
     'js/drive/worksheet.class.js',
@@ -21,17 +20,18 @@ class PollAsset extends AssetBundle
     'js/default.js',
 
     'js/jquery.maskedinput.js',
-    'js/construct/pollconstructor.class.js',
-    'js/construct/cquestion.class.js',
-    'js/construct/canswer.class.js',
-    'js/construct/construct.js',
 
-    'js/batch/batch.class.js',
-    'js/batch/banswer.class.js',
-    'js/batch/bquestion.class.js',
-    'js/batch/batch.js',
+    'js/control/control.js',
+    'js/control/info/info.js',
+    'js/control/construct/pollconstructor.class.js',
+    'js/control/construct/cquestion.class.js',
+    'js/control/construct/canswer.class.js',
+    'js/control/construct/construct.js',
 
-    'js/analytic/analytic.js'
+    'js/control/batch/batch.class.js',
+    'js/control/batch/banswer.class.js',
+    'js/control/batch/bquestion.class.js',
+    'js/control/batch/batch.js'
 
   ];
 

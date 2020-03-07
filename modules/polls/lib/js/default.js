@@ -112,7 +112,7 @@ $(document).ready(function (e) {
 
   pollTable.on('select', function (e, dt, type, indexes) {
     if (type === 'row') {
-      $('#poll-result').show();
+      $('#poll-control').show();
       $('#delete-wrap').show();
       $('#batch-input').show();
       $('#construct-wrap').show();
@@ -121,7 +121,7 @@ $(document).ready(function (e) {
   pollTable.on('deselect', function (e, dt, type, indexes) {
     if (type === 'row') {
       if (pollTable.rows({selected: true}).count() > 0) return;
-      $('#poll-result').hide();
+      $('#poll-control').hide();
       $('#delete-wrap').hide();
       $('#batch-input').hide();
       $('#construct-wrap').hide();
@@ -132,7 +132,7 @@ $(document).ready(function (e) {
 
   pollTable.on('length.dt', function (e, settings, len) {
     pollTable.rows().deselect();
-    $('#poll-result').hide();
+    $('#poll-control').hide();
     $('#delete-wrap').hide();
     $('#batch-input').hide();
     $('#construct-wrap').hide();
@@ -140,7 +140,7 @@ $(document).ready(function (e) {
 
   pollTable.on('draw.dt', function (e, settings, len) {
     pollTable.rows().deselect();
-    $('#poll-result').hide();
+    $('#poll-control').hide();
     $('#delete-wrap').hide();
     $('#batch-input').hide();
     $('#construct-wrap').hide();
@@ -263,6 +263,7 @@ $(document).on('click', '#delete-wrap', function (e) {
 // начало вколачивания опроса
 $(document).on('click', '.poll-in', startDrive);
 
+/*
 $(document).on('click', '#construct-wrap', function (e) {
   e.preventDefault();
   NProgress.start();
@@ -274,17 +275,16 @@ $(document).on('click', '#construct-wrap', function (e) {
   pollTable.rows().deselect();
 });
 
-$(document).on('click', '#poll-result', function (e) {
+*/
+$(document).on('click', '#poll-control', function (e) {
   e.preventDefault();
   NProgress.start();
   let data = pollTable.rows({selected: true}).data();
   let pollId = data[0].id;
-  let url = '/polls/analytic';
-  let dataUrl = '/polls/analytic/get-poll-data?id=' + pollId;
-  loadExContentEx(url, () => loadPollConfig(pollId, initAnalyticModule, dataUrl));
   pollTable.rows().deselect();
+  initControlModule(pollId);
 });
-
+/*
 $(document).on('click', '#batch-input', function (e) {
   e.preventDefault();
   NProgress.start();
@@ -296,21 +296,7 @@ $(document).on('click', '#batch-input', function (e) {
   pollTable.rows().deselect();
 });
 
-function loadPollConfig(id, callback, dataUrl) {
-  $.ajax({
-    url: dataUrl,
-    method: 'get'
-  }).done(function (response) {
-    if (response.code) {
-      callback(response.data.data[0]);
-    } else {
-      console.log(response.data.message);
-    }
-  }).fail(function () {
-    console.log('Failed to load poll config');
-  });
-}
-
+*/
 function initBatchModule(config) {
   // let script = document.createElement('script');
   // script.src = "/poll/lib/js/batch.js";
@@ -320,11 +306,11 @@ function initBatchModule(config) {
   // };
   startBatchIn(config);
 }
-
+/*
 function initAnalyticModule(config) {
   startAnalytic(config);
 }
-
+*/
 function initConstructModule(config) {
   startConstruct(config);
 }
