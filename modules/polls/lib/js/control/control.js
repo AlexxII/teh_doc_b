@@ -27,10 +27,11 @@ $(document).on('click', '.control-poll-info', initInfoModule)
   .on('click', '.control-statistic', initStatisticModule)
   .on('click', '.control-poll-tests', intiTestsModule);
 
+var pollConfigFile;
 
-function initInfoModule() {
+function initInfoModule(config) {
+  pollConfigFile = config;
   NProgress.done();
-  
 }
 
 
@@ -43,8 +44,10 @@ function initParchaModule() {
 
 }
 
-function initConstructModule() {
-
+function initConstructModule(e) {
+  console.log(e);
+  let view = e.target.id;
+  startConstruct(pollConfigFile, view);
 }
 
 function initBatchInModule() {

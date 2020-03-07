@@ -35,7 +35,7 @@ class ControlController extends Controller
     $data = Polls::find()
       ->select(["id", "title", "code"])
       ->where(["id" => $id])
-      ->with(['questions.answers'])
+      ->with(['questions.answers.logic'])
       ->with(['results'])
       ->asArray()
       ->all();

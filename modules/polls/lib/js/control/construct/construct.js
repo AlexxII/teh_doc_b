@@ -38,18 +38,22 @@ $(document).on('paste', '.question-limit', function (e) {
   saveQuestionLimit(this);
 });
 
-function startConstruct(config) {
+function startConstruct(config, view) {
   pollCounstructor = new PollConstructor(config);
-  renderListView();
+  if (view === 'list-view') {
+    renderListView();
+  } else {
+    renderGridView();
+  }
   NProgress.done();
 }
 
 function renderListView() {
-  $('#poll-construct').html('').append(pollCounstructor.renderListView());
+  $('#control-result').html('').append(pollCounstructor.renderListView());
 }
 
 function renderGridView() {
-  $('#poll-construct').html('').append(pollCounstructor.renderGridView());
+  $('#control-result').html('').append(pollCounstructor.renderGridView());
 }
 
 function changeConstructView(e) {
