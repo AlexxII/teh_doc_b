@@ -24,21 +24,6 @@ class ConstructController extends Controller
   const ANSWERS_TABLE = 'poll_answers_tbl';
   const RESPONDENTS_TABLE = 'poll_respondents_tbl';
 
-  public function actionIndex()
-  {
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    Yii::$app->view->params['title'] = 'Редактор анкет';
-    return [
-      'data' => [
-        'success' => true,
-        'data' => $this->render('index'),
-        'message' => 'Rendering',
-      ],
-      'code' => 1,
-    ];
-
-  }
-
   public function actionGetPollInfo($id)
   {
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

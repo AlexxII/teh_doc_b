@@ -1,0 +1,26 @@
+.parcha-upload {
+  position: relative;
+  margin: 10px 25px 10px 25px;
+}
+
+.parcha-btns {
+  position: absolute;
+  bottom: -20px;
+  right: -10px;
+}
+
+.parcha-btns a {
+  cursor: pointer;
+  text-decoration: none !important;
+  padding: 0 10px 0 0;
+}
+
+#parcha-show-map {
+}
+
+#parcha-unload-data {
+}
+
+#parcha-wrap {
+  margin: 10px 25px 10px 25px;
+}

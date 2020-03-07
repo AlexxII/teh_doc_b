@@ -1,6 +1,59 @@
-function showParchaResults() {
-  let headerNode = document.getElementById('analytic-header');
-  let resultNode = document.getElementById('analytic-result');
+function startParchaAnalyze() {
+  renderXmlUpload();
+  renderParchaTbl();
+}
+
+function renderXmlUpload() {
+  $('#control-header').html('').append(xmlUploadTmpl());
+}
+
+var dataSet = [
+  ["Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800"],
+  ["Garrett Winters", "Accountant", "Tokyo", "8422", "2011/07/25", "$170,750"],
+];
+
+var dataSetEx = [];
+
+
+function renderTbl() {
+  let wrapDiv = document.createElement('div');
+  wrapDiv.id = 'parcha-wrap';
+  let tableNode = document.createElement('table');
+  tableNode.id = 'parcha-table';
+  tableNode.className = 'display';
+  tableNode.width = '100%';
+  wrapDiv.appendChild(tableNode);
+  return wrapDiv;
+}
+
+
+function renderParchaTbl() {
+  $('#control-result').html('').append(renderTbl());
+
+  $('#parcha-table').DataTable({
+    data: dataSetEx,
+    searching: false,
+    columns: [
+      {title: "Name"},
+      {title: "Position"},
+      {title: "Office"},
+      {title: "Extn."},
+      {title: "Start date"},
+      {title: "Salary"}
+    ],
+    select: {
+      style: 'single',
+      selector: 'td:last-child',
+    },
+    language: {
+      url: '/lib/ru.json'
+    }
+  });
+}
+
+function xmlUploadTmpl() {
+  let wrapDiv = document.createElement('div');
+  wrapDiv.className = 'parcha-upload';
   let formNode = document.createElement('form');
   let divForm = document.createElement('div');
   divForm.className = 'form-group';
@@ -14,11 +67,64 @@ function showParchaResults() {
   inputNode.id = 'parcha-upload';
   inputNode.type = 'file';
   divForm.appendChild(inputNode);
-  headerNode.innerHTML = '';
-  resultNode.innerHTML = '';
-  headerNode.append(formNode);
   inputNode.addEventListener('change', loadAndParseXmlFile, false);
+
+  let mapBtn = document.createElement('a');
+  mapBtn.innerText = 'Открыть карту';
+  mapBtn.id = 'parcha-show-map';
+  mapBtn.addEventListener('click', mapsMe, false);
+
+  let unloadNode = document.createElement('a');
+  unloadNode.innerText = 'Выгрузить данные';
+  unloadNode.id = 'parcha-unload-data';
+  unloadNode.addEventListener('click', unloadData, false);
+
+  let btnsWrap = document.createElement('div');
+  btnsWrap.className = 'parcha-btns';
+
+
+  btnsWrap.appendChild(mapBtn);
+  btnsWrap.appendChild(unloadNode);
+
+
+  let hrNode = document.createElement('hr');
+  wrapDiv.appendChild(formNode);
+  wrapDiv.appendChild(hrNode);
+  wrapDiv.appendChild(btnsWrap);
+
+  return wrapDiv;
 }
+
+function unloadData() {
+
+}
+
+function renderSelectBlock() {
+  let selectBlock = document.createElement('div');
+  selectBlock.className = 'parcha-select-block';
+
+
+
+  let operatorSelect = document.createElement('select');
+  operatorSelect.className = 'parcha-operators';
+
+  let townSelect = document.createElement('select');
+  townSelect.className = 'parcha-town';
+
+  let sexSelect = document.createElement('select');
+  sexSelect.className = 'parcha-sex';
+
+  let ageSelect = document.createElement('select');
+  ageSelect.className = 'parcha-age';
+
+  let statusSelect = document.createElement('select');
+  statusSelect.className = 'parcha-operators';
+
+
+
+
+}
+
 
 function loadAndParseXmlFile() {
   let xmlFile = this.files[0];
@@ -96,7 +202,7 @@ function parseSelectedMarkers(markers) {
 
 }
 
-function mapsMe(e) {
+function mapsMe() {
   let selectedMarkers, childCount;
   let jc = $.confirm({
     title: ' ',
@@ -105,7 +211,7 @@ function mapsMe(e) {
     onContentReady: function () {
       let self = this;
       this.buttons.ok.disable();
-      let map = L.map('map').setView([68.959, 33.061], 6);
+      let map = L.map('map').setView([67.959, 33.061], 7);
       L.tileLayer('http://192.168.56.20/osm_tiles/{z}/{x}/{y}.png', {
         attribution: '&copy; ' + 'СпецСвязь ФСО России',
         maxZoom: 18

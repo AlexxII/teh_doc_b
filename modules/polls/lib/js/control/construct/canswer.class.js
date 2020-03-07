@@ -15,9 +15,9 @@ class CAnswer {
     this.visible = +config.visible;
     this.answerTmpl = index + 1;
     // this.answerTmplEx = index + 1;
-    this.HIDE_ANSWER_URL = '/polls/construct/hide-answer';
-    this.RESTORE_ANSWER_URL = '/polls/construct/restore-answer';
-    this.UNIQUE_ANSWER_URL = '/polls/construct/unique-answer';
+    this.HIDE_ANSWER_URL = '/polls/control/construct/hide-answer';
+    this.RESTORE_ANSWER_URL = '/polls/control/construct/restore-answer';
+    this.UNIQUE_ANSWER_URL = '/polls/control/construct/unique-answer';
   }
 
   renderCAnswer(index) {

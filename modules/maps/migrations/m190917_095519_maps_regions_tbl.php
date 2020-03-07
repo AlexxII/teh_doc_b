@@ -3,16 +3,10 @@
 use yii\db\Migration;
 use app\base\MHelper;
 
-/**
- * Class m190917_095519_maps_regions_tbl
- */
 class m190917_095519_maps_regions_tbl extends Migration
 {
   const TABLE_NAME = '{{%maps_regions_tbl}}';
 
-  /**
-   * {@inheritdoc}
-   */
   public function safeUp()
   {
     $tableOptions = null;
@@ -62,9 +56,6 @@ class m190917_095519_maps_regions_tbl extends Migration
     \Yii::$app->db->createCommand($sql)->execute();
   }
 
-  /**
-   * {@inheritdoc}
-   */
   public function safeDown()
   {
     echo "m190917_095519_maps_regions_tbl cannot be reverted.\n";
@@ -72,18 +63,4 @@ class m190917_095519_maps_regions_tbl extends Migration
     return false;
   }
 
-  /*
-  // Use up()/down() to run migration code without a transaction.
-  public function up()
-  {
-
-  }
-
-  public function down()
-  {
-      echo "m190917_095519_maps_regions_tbl cannot be reverted.\n";
-
-      return false;
-  }
-  */
 }

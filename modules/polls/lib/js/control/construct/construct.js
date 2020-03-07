@@ -1,25 +1,20 @@
-var pollConstruct;                      // главная глобальная переменная
+function startConstruct(view) {
+  if (view === 'list-view') {
+    renderListView();
+  } else {
+    renderGridView();
+  }
+  NProgress.done();
+}
 
-$(document).on('input', '#myRange', function (e) {
-  let sysSize = 190;
-  let sysFontSize = 10;
-  let val = $(this).val();
-  let minSize = (sysSize + parseInt(val, 10));
-  let fontSize = sysFontSize + (val / 10);
-  $('.grid').css("grid-template-columns", "repeat(auto-fill, minmax(" + minSize + "px, 1fr))");
-  $('.grid-item').css("font-size", +fontSize + "px");
-});
-
-$(document).on('click', '#btn-switch-view', changeConstructView)
-  .on('click', '.question-hide', hideQuestion)
+$(document).on('click', '.question-hide', hideQuestion)
   .on('click', '.restore-question', restoreQuestion)
   .on('click', '.answer-hide', hideAnswer)
   .on('click', '.restore-btn', restoreAnswer)
   .on('click', '.unique-btn', setAnswerUnique)
   .on('click', '.question-trash', showQTrash)
   .on('click', '.logic', setLogic)
-  .on('click', '.check-all', checkboxLogicEx)
-  .on('click', '#poll-info', showPollInfo);
+  .on('click', '.check-all', checkboxLogicEx);
 
 $.mask.definitions['H'] = '[1-9]';
 $.mask.definitions['h'] = '[0-9]';
@@ -38,15 +33,6 @@ $(document).on('paste', '.question-limit', function (e) {
   saveQuestionLimit(this);
 });
 
-function startConstruct(config, view) {
-  pollCounstructor = new PollConstructor(config);
-  if (view === 'list-view') {
-    renderListView();
-  } else {
-    renderGridView();
-  }
-  NProgress.done();
-}
 
 function renderListView() {
   $('#control-result').html('').append(pollCounstructor.renderListView());
@@ -54,25 +40,6 @@ function renderListView() {
 
 function renderGridView() {
   $('#control-result').html('').append(pollCounstructor.renderGridView());
-}
-
-function changeConstructView(e) {
-  let mode = $(this).data('mode');
-  if (mode) {
-    renderGridView();
-    $(this).data('mode', 0);
-    $(this).attr('title', 'В виде списка');
-    $('.construct-range-btn').show();
-    $('.poll-grid-view').hide();
-    $('.poll-list-view').show();
-  } else {
-    renderListView();
-    $(this).data('mode', 1);
-    $(this).attr('title', 'В виде сетки');
-    $('.construct-range-btn').hide();
-    $('.poll-grid-view').show();
-    $('.poll-list-view').hide();
-  }
 }
 
 function hideQuestion() {
@@ -152,26 +119,4 @@ function checkboxLogicEx() {
 function switchOrder() {
   let sortable = pollCounstructor.sortable;
   sortable.option('sort', false);
-}
-
-function showPollInfo() {
-  let infoNode = document.createElement('div');
-  let idNode = document.createElement('div');
-  idNode.innerText = 'ID: ' + pollCounstructor.id;
-  let titleNode = document.createElement('div');
-  titleNode.innerText = 'Наименование: ' + pollCounstructor.title;
-  let qNum = document.createElement('div');
-  qNum.innerText = 'Количество вопросов: ' + pollCounstructor.numberOfQuestions;
-  let aNUm = document.createElement('div');
-  aNUm.innerText = 'Количество ответов: ' + pollCounstructor.numberOfAnswers;
-  infoNode.appendChild(idNode);
-  infoNode.appendChild(titleNode);
-  infoNode.appendChild(qNum);
-  infoNode.appendChild(aNUm);
-  $.alert({
-    title: 'Инфо ' + pollCounstructor.code,
-    content: infoNode,
-    columnClass: 'medium',
-    animateFromElement: false
-  });
 }

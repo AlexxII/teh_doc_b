@@ -13,9 +13,9 @@ class CQuestion {
     this.renderQuestionGridTmpl();
     // this.renderQuestionTmplEx();
 
-    this.HIDE_QUESTION_URL = '/polls/construct/hide-to-fill';
-    this.RESTORE_ANSWER_URL = '/polls/construct/restore-question';
-    this.LIMIT_QUESTION_URL = '/polls/construct/set-question-limit';
+    this.HIDE_QUESTION_URL = '/polls/control/construct/hide-to-fill';
+    this.RESTORE_ANSWER_URL = '/polls/control/construct/restore-question';
+    this.LIMIT_QUESTION_URL = '/polls/control/construct/set-question-limit';
   }
 
   set answers(answers) {
@@ -186,6 +186,9 @@ class CQuestion {
           child.querySelector('.answer-number').innerHTML = (i + 1);
           child.querySelector('.answer-old-order').innerHTML = oldOrder;
         }
+        var tText = '<span style="font-weight: 600">Порядок не изменен!</span><br>Эта опция приостановлена';
+        initNoty(tText, 'warning');
+        return;
       }
     });
     this.hSortable = new Sortable(answerContentDelNode, {

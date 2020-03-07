@@ -46,9 +46,7 @@ LeafletAsset::register($this);
           <div id="collapseOne" class="panel-collapse collapse">
             <!-- Содержимое 1 панели -->
             <div class="panel-body">
-              <p><a class="ext control-poll-results" id="">Данные по городам</a></p>
-              <p><a class="ext control-poll-results" id="">Данные по операторам</a></p>
-              <p><a class="ext control-poll-results" id="array-codes">Массив кодов</a></p>
+              <p><a class="ext control-poll-results" id="array-codes">Данные</a></p>
               <p><a class="ext control-poll-results" id="control-charts">Линейное распределение</a></p>
             </div>
           </div>

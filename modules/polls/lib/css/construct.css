@@ -313,3 +313,9 @@ ul {
   left:0;
   font-size: 12px;
 }
+#grid-poll-order {
+  margin: 0 15px 10px 15px;
+}
+.construct-list {
+  margin: 0 85px 10px 15px;
+}

@@ -1,5 +1,3 @@
-var batch;
-
 $(document).on('change', '#batchupload', function (e) {
   e.preventDefault();
   var selectedFile = document.getElementById('batchupload').files[0];
@@ -8,19 +6,14 @@ $(document).on('change', '#batchupload', function (e) {
 
   reader.onload = function (e) {
     oprData = e.target.result;
-    batch.parseOprFile(oprData, renderResult);
+    pollBatchIn.parseOprFile(oprData, renderResult);
   };
   reader.readAsText(selectedFile);
   // renderListBatchView();
 });
 
-function startBatchIn(config) {
-  batch = new Batch(config);
-  NProgress.done();
-}
-
 function renderResult() {
-  let reposnondetsAnswers = batch.respondentsPool;
+  let reposnondetsAnswers = pollBatchIn.respondentsPool;
   $('.poll-batch-wrap').html('');
   let mainDiv = document.createElement('div');
   mainDiv.className = 'batch-grid';
@@ -37,7 +30,7 @@ function renderResult() {
 function renderListBatchView(key) {
   $.alert({
     title: 'Опрос ROS20-03',
-    content: batch.renderList(key),
+    content: pollBatchIn.renderList(key),
     columnClass: 'col-md-12',
     animateFromElement: false,
     buttons: {
@@ -45,7 +38,7 @@ function renderListBatchView(key) {
         text: 'OK',
         btnClass: 'btn-info',
         action: function () {
-          batch.clear();
+          pollBatchIn.clear();
         }
       }
     }

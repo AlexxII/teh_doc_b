@@ -1,7 +1,7 @@
 function initControlModule(pollId) {
   let url = '/polls/control/control';
   let dataUrl = '/polls/control/control/get-poll-data?id=' + pollId;
-  loadExContentEx(url, () => loadPollConfig(pollId, initInfoModule, dataUrl));
+  loadExContentEx(url, () => loadPollConfig(pollId, mainInit, dataUrl));
 }
 
 function loadPollConfig(id, callback, dataUrl) {
@@ -27,27 +27,38 @@ $(document).on('click', '.control-poll-info', initInfoModule)
   .on('click', '.control-statistic', initStatisticModule)
   .on('click', '.control-poll-tests', intiTestsModule);
 
-var pollConfigFile;
+var pollCounstructor, pollBatchIn;
 
-function initInfoModule(config) {
-  pollConfigFile = config;
+function mainInit(config) {
+  pollCounstructor = new PollConstructor(config);
+  pollBatchIn = new Batch(config);
+  renderPollTitle(config.code);
   NProgress.done();
 }
 
+function renderPollTitle(code) {
+  let titlePlacement = document.getElementById('poll-title');
+  let hNode = document.createElement('h4');
+  let title = document.createTextNode(code);
+  hNode.appendChild(title);
+  titlePlacement.appendChild(hNode);
+}
 
+function initInfoModule(config) {
+
+}
 
 function initResultModule() {
-  
+
 }
 
 function initParchaModule() {
-
+  startParchaAnalyze();
 }
 
 function initConstructModule(e) {
-  console.log(e);
   let view = e.target.id;
-  startConstruct(pollConfigFile, view);
+  startConstruct(view);
 }
 
 function initBatchInModule() {
@@ -55,10 +66,9 @@ function initBatchInModule() {
 }
 
 function initStatisticModule() {
-    
+
 }
 
 function intiTestsModule() {
-  
-}
 
+}

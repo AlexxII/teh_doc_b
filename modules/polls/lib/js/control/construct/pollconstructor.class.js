@@ -6,13 +6,12 @@ class PollConstructor {
       this._code = config.code;
       this.questions = config.questions;
       this.numberOfQuestions = config.questions;
-      this.renderPollHeader();
       this.renderListTmpl();
       this.renderGridTmpl();
       this.renderPollInfo();
-      this.REORDER_QUESTIONS_URL = '/polls/construct/reorder-questions';
-      this.ADD_LOGIC_URL = '/polls/construct/add-poll-logic';
-      this.SUB_LOGIC_URL = '/polls/construct/sub-poll-logic';
+      this.REORDER_QUESTIONS_URL = '/polls/control/construct/reorder-questions';
+      this.ADD_LOGIC_URL = '/polls/control/construct/add-poll-logic';
+      this.SUB_LOGIC_URL = '/polls/control/construct/sub-poll-logic';
     }
   }
 
@@ -61,14 +60,6 @@ class PollConstructor {
     return false;
   }
 
-  renderPollHeader() {
-    let titlePlacement = document.getElementById('poll-title');
-    let hNode = document.createElement('h4');
-    let title = document.createTextNode(this.code);
-    hNode.appendChild(title);
-    titlePlacement.appendChild(hNode);
-  }
-
   renderPollInfo() {
     let hNode = document.createElement('span');
     let numOfAnswers = this.numOfAnswers;
@@ -85,7 +76,7 @@ class PollConstructor {
   renderListTmpl() {
     let Obj = this;
     let listView = document.createElement('div');
-    listView.className = 'list';
+    listView.className = 'construct-list';
     let vListView = document.createElement('div');
     vListView.className = 'visible-list';
     let hListView = document.createElement('div');

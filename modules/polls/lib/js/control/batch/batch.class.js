@@ -6,7 +6,6 @@ class Batch {
       this._code = config.code;
       this.questions = config.questions;
       this.codesTable = this.questions;
-      this.renderPollHeader();
       this.renderTemplate();
       this.respondentsPool = [];
     }
@@ -14,14 +13,6 @@ class Batch {
 
   get code() {
     return this._code;
-  }
-
-  renderPollHeader() {
-    let titlePlacement = document.getElementById('poll-title');
-    let hNode = document.createElement('h4');
-    let title = document.createTextNode(this.code);
-    hNode.appendChild(title);
-    titlePlacement.appendChild(hNode);
   }
 
   set questions(tempQuestions) {
@@ -52,7 +43,6 @@ class Batch {
         output[answer.code] = answer;
       });
     });
-    console.log(output);
     this._codesTable = output;
   }
 
