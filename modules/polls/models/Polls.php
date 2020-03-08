@@ -2,6 +2,7 @@
 
 namespace app\modules\polls\models;
 
+use app\modules\admin\models\User;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 

@@ -2,6 +2,7 @@
 
 namespace app\modules\polls\models;
 
+use app\modules\admin\models\User;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
@@ -26,6 +27,11 @@ class Result extends \yii\db\ActiveRecord
     return [
       [["id", "respondent_id", "poll_id", "answer_id", "user_id", "input_time", "ex_answer", "town_id", "isDeleted"], "safe"]
     ];
+  }
+
+  public function getOperators()
+  {
+    return $this->hasOne(User::class, ['id' => 'user_id']);
   }
 
   public static function findModel($id)

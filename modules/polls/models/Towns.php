@@ -1,13 +1,12 @@
 <?php
 
-namespace app\modules\maps\models;
+namespace app\modules\polls\models;
 
 use Yii;
-use creocoder\nestedsets\NestedSetsBehavior;
 use yii\web\NotFoundHttpException;
-
 use app\base\MHelper;
-use app\base\NestedSetsTreeBehavior;
+use app\modules\polls\models\NestedSetsTreeBehavior;
+use creocoder\nestedsets\NestedSetsBehavior;
 
 
 class Towns extends \yii\db\ActiveRecord
@@ -48,7 +47,7 @@ class Towns extends \yii\db\ActiveRecord
 
   public static function find()
   {
-    return new RegionsQuery(get_called_class());
+    return new TownsQuery(get_called_class());
   }
 
   public static function findModel($id)

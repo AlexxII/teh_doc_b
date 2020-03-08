@@ -1,11 +1,11 @@
 <?php
 
-namespace app\modules\maps\models;
+namespace app\modules\polls\models;
 
 use yii\db\ActiveQuery;
 use creocoder\nestedsets\NestedSetsQueryBehavior;
 
-class RegionsQuery extends ActiveQuery
+class TownsQuery extends ActiveQuery
 {
   public function behaviors() {
     return [

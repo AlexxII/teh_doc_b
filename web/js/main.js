@@ -65,7 +65,6 @@ function initRightCustomData(url) {
   });
 }
 
-
 function clickMenu() {
   if ($(window).width() >= 900) {
     if ($('#left-side').css('left') == '0px') {
@@ -75,7 +74,6 @@ function clickMenu() {
     }
   }
 }
-
 
 /*
 function clickMenu() {
@@ -106,7 +104,6 @@ function closeSlider() {
   $('#add-session-wrap').show();
 }
 
-
 // Attach function to event
 /*
 $( controller.events ).on( 'opening', function ( event, id ) {
@@ -126,17 +123,14 @@ function openMenu() {
   $('#app-wrap').bind('click', closeSmallMenu).addClass('pointer');
 }
 
-
 // $(document).on('click', '#app-wrap', function (e) {
 //   closeSmallMenu();
 // });
-
 
 function closeSmallMenu(e) {
   $('#app-wrap').off('click', closeSmallMenu).removeClass('pointer');
   controller.toggle('main-menu');
 }
-
 
 $(window).resize(function () {
     closeSlider();

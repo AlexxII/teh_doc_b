@@ -4,8 +4,7 @@ namespace app\modules\polls\controllers\settings;
 
 use Yii;
 use yii\web\Controller;
-
-use app\modules\maps\models\Regions;
+use app\modules\polls\models\Towns;
 
 class TownsController extends Controller
 {
@@ -16,23 +15,23 @@ class TownsController extends Controller
     return $this->renderAjax('index');
   }
 
-  public function actionRegions()
+  public function actionTowns()
   {
-    $id = Regions::find()->select('id')->where(['=', 'lvl', 0])->all();
+    $id = Towns::find()->select('id')->where(['=', 'lvl', 0])->all();
     if (!$id) {
       $data = array();
       $data = [['title' => 'База данных пуста', 'key' => -999]];
       return json_encode($data);
     }
-    $roots = Regions::findModel($id)->tree();
+    $roots = Towns::findModel($id)->tree();
     return json_encode($roots);
   }
 
-  public function actionRegionsCreate($parentId, $title)
+  public function actionTownCreate($parentId, $title)
   {
     $data = [];
-    $parentEmpl = Regions::findModel($parentId);
-    $newEmpl = new Regions();
+    $parentEmpl = Towns::findModel($parentId);
+    $newEmpl = new Towns();
     $newEmpl->name = $title;
     $newEmpl->parent_id = $parentEmpl->id;
     $newEmpl->appendTo($parentEmpl);
@@ -44,7 +43,7 @@ class TownsController extends Controller
 
   public function actionUpdate($id, $title)
   {
-    $empl = Regions::findModel($id);
+    $empl = Towns::findModel($id);
     $empl->name = $title;
     if ($empl->save()) {
       $data['acceptedTitle'] = $title;
@@ -55,8 +54,8 @@ class TownsController extends Controller
 
   public function actionMove($item, $action, $second, $parentId)
   {
-    $item_model = Regions::findModel($item);
-    $second_model = Regions::findModel($second);
+    $item_model = Towns::findModel($item);
+    $second_model = Towns::findModel($second);
     switch ($action) {
       case 'after':
         $item_model->insertAfter($second_model);
@@ -68,7 +67,7 @@ class TownsController extends Controller
         $item_model->appendTo($second_model);
         break;
     }
-    $parent = Regions::findModel($parentId);
+    $parent = Towns::findModel($parentId);
     $item_model->parent_id = $parent->id;
     if ($item_model->save()) {
       return true;
@@ -81,7 +80,7 @@ class TownsController extends Controller
     if (!empty($_POST)) {
       // TODO: удаление или невидимый !!!!!!!
       $id = $_POST['id'];
-      $empl = Regions::findModel($id);
+      $empl = Towns::findModel($id);
       if ($empl->delete()) {
         return true;
       }
@@ -94,7 +93,7 @@ class TownsController extends Controller
   {
     if (!empty($_POST)) {
       $id = $_POST['id'];
-      $root = Regions::findModel($id);
+      $root = Towns::findModel($id);
       if ($root->deleteWithChildren()) {
         return true;
       }
@@ -109,7 +108,7 @@ class TownsController extends Controller
     Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
     if ($_POST) {
       $id = $_POST['id'];
-      $model = Regions::findModel($id);
+      $model = Towns::findModel($id);
       if ($model) {
         $input = $_POST['input'];
         $model->$input = $_POST['val'];
@@ -150,21 +149,4 @@ class TownsController extends Controller
       'code' => 0,
     ];
   }
-
-  public function actionDetails($id)
-  {
-    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-    $model = Regions::findModel($id);
-    $result = [];
-    $result['number'] = $model->region_number;
-    $result['city'] = $model->region_center;
-    $result['area'] = $model->region_area;
-    $result['area-place'] = $model->region_area_place;
-    $result['population'] = $model->region_population;
-    $result['population-place'] = $model->region_population_place;
-    $result['temp'] = $model->region_temp;
-    return $result;
-  }
-
-
 }

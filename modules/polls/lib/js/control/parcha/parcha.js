@@ -1,10 +1,38 @@
 function startParchaAnalyze() {
-  renderXmlUpload();
-  renderParchaTbl();
+  renderHeader();
+  renderParchaTbl()
 }
 
-function renderXmlUpload() {
-  $('#control-header').html('').append(xmlUploadTmpl());
+function renderHeader() {
+  let headerNode = document.getElementById('control-header');
+  headerNode.innerHTML = '';
+
+  let wrapDiv = document.createElement('div');
+  wrapDiv.className = 'parcha-upload';
+
+  let mapBtn = document.createElement('a');
+  mapBtn.innerText = 'Открыть карту';
+  mapBtn.id = 'parcha-show-map';
+  mapBtn.addEventListener('click', mapsMe, false);
+
+  let unloadNode = document.createElement('a');
+  unloadNode.innerText = 'Выгрузить данные';
+  unloadNode.id = 'parcha-unload-data';
+  unloadNode.addEventListener('click', unloadData, false);
+
+  let btnsWrap = document.createElement('div');
+  btnsWrap.className = 'parcha-btns';
+
+  btnsWrap.appendChild(mapBtn);
+  btnsWrap.appendChild(unloadNode);
+
+  let hrNode = document.createElement('hr');
+  wrapDiv.appendChild(xmlUploadTmpl());
+  wrapDiv.appendChild(blockOfSelectsTmpl());
+  wrapDiv.appendChild(hrNode);
+  wrapDiv.appendChild(btnsWrap);
+  headerNode.appendChild(wrapDiv);
+
 }
 
 var dataSet = [
@@ -25,7 +53,6 @@ function renderTbl() {
   wrapDiv.appendChild(tableNode);
   return wrapDiv;
 }
-
 
 function renderParchaTbl() {
   $('#control-result').html('').append(renderTbl());
@@ -52,8 +79,6 @@ function renderParchaTbl() {
 }
 
 function xmlUploadTmpl() {
-  let wrapDiv = document.createElement('div');
-  wrapDiv.className = 'parcha-upload';
   let formNode = document.createElement('form');
   let divForm = document.createElement('div');
   divForm.className = 'form-group';
@@ -68,60 +93,59 @@ function xmlUploadTmpl() {
   inputNode.type = 'file';
   divForm.appendChild(inputNode);
   inputNode.addEventListener('change', loadAndParseXmlFile, false);
-
-  let mapBtn = document.createElement('a');
-  mapBtn.innerText = 'Открыть карту';
-  mapBtn.id = 'parcha-show-map';
-  mapBtn.addEventListener('click', mapsMe, false);
-
-  let unloadNode = document.createElement('a');
-  unloadNode.innerText = 'Выгрузить данные';
-  unloadNode.id = 'parcha-unload-data';
-  unloadNode.addEventListener('click', unloadData, false);
-
-  let btnsWrap = document.createElement('div');
-  btnsWrap.className = 'parcha-btns';
-
-
-  btnsWrap.appendChild(mapBtn);
-  btnsWrap.appendChild(unloadNode);
-
-
-  let hrNode = document.createElement('hr');
-  wrapDiv.appendChild(formNode);
-  wrapDiv.appendChild(hrNode);
-  wrapDiv.appendChild(btnsWrap);
-
-  return wrapDiv;
+  return divForm;
 }
 
 function unloadData() {
 
 }
 
-function renderSelectBlock() {
+function blockOfSelectsTmpl() {
   let selectBlock = document.createElement('div');
   selectBlock.className = 'parcha-select-block';
 
-
-
   let operatorSelect = document.createElement('select');
+  let operatorLabel = document.createElement('label');
+  operatorLabel.innerText = 'Операторы';
   operatorSelect.className = 'parcha-operators';
+  operatorSelect.classList = 'form-control';
+  operatorLabel.appendChild(operatorSelect);
 
   let townSelect = document.createElement('select');
+  let townLabel = document.createElement('label');
+  townLabel.innerText = 'ТНП';
   townSelect.className = 'parcha-town';
+  townSelect.classList = 'form-control';
+  townLabel.appendChild(townLabel);
 
   let sexSelect = document.createElement('select');
+  let sexLabel = document.createElement('label');
+  sexLabel.innerText = 'Пол';
   sexSelect.className = 'parcha-sex';
+  sexSelect.classList = 'form-control';
+  sexLabel.appendChild(sexLabel);
 
   let ageSelect = document.createElement('select');
+  let ageLabel = document.createElement('label');
+  ageLabel.innerText = 'Возраст';
   ageSelect.className = 'parcha-age';
+  ageSelect.classList = 'form-control';
+  ageLabel.appendChild(sexLabel);
 
   let statusSelect = document.createElement('select');
+  let statusLabel = document.createElement('label');
+  statusLabel.innerText = 'Возраст';
   statusSelect.className = 'parcha-operators';
+  statusSelect.classList = 'form-control';
+  statusLabel.appendChild(sexLabel);
 
+  selectBlock.appendChild(operatorLabel);
+  selectBlock.appendChild(townSelect);
+  selectBlock.appendChild(sexSelect);
+  selectBlock.appendChild(ageSelect);
+  selectBlock.appendChild(statusSelect);
 
-
+  return selectBlock;
 
 }
 

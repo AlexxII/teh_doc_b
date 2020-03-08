@@ -10,6 +10,7 @@ class PollAsset extends AssetBundle
 
   public $js = [
     'js/vars.js',
+    'js/settings/towns.js',
 
     'js/drive/user.class.js',
     'js/drive/drive.js',
@@ -43,7 +44,8 @@ class PollAsset extends AssetBundle
     'css/construct.css',
     'css/batch.css',
     'css/analytics.css',
-    'css/parcha.css'
+    'css/parcha.css',
+    'css/towns.css'
   ];
 
   public $depends = [

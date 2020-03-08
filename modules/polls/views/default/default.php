@@ -8,7 +8,10 @@ use app\assets\NprogressAsset;
 use app\assets\Select2Asset;
 use app\modules\maps\asset\LeafletAsset;
 use app\modules\maps\asset\LeafletClusterAsset;
+use app\assets\FancytreeAsset;
 
+
+FancytreeAsset::register($this);
 LeafletAsset::register($this);
 LeafletClusterAsset::register($this);
 NprogressAsset::register($this);

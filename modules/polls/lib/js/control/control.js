@@ -27,9 +27,11 @@ $(document).on('click', '.control-poll-info', initInfoModule)
   .on('click', '.control-statistic', initStatisticModule)
   .on('click', '.control-poll-tests', intiTestsModule);
 
-var pollCounstructor, pollBatchIn;
+var pollCounstructor, pollBatchIn, mainPollConfig;
 
 function mainInit(config) {
+  mainPollConfig = config;
+  console.log(mainPollConfig);
   pollCounstructor = new PollConstructor(config);
   pollBatchIn = new Batch(config);
   renderPollTitle(config.code);
