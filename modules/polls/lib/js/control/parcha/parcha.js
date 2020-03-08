@@ -68,7 +68,6 @@ function renderParchaTbl() {
       {title: 'Пол'},
       {title: 'Возраст'},
       {title: 'Статус'},
-      {},
       {}
     ],
     columnDefs: [
@@ -78,17 +77,18 @@ function renderParchaTbl() {
         'data': null,
         'width': '70px',
         'defaultContent': 'Просмотр/Карта'
-      }, {
-        'targets': -1,                    // последний столбец
-        'orderable': false,
-        'className': 'select-checkbox',
-        'defaultContent': ''
-      }
+      },
+      // {
+      //   'targets': -1,                    // последний столбец
+      //   'orderable': false,
+      //   'className': 'select-checkbox',
+      //   'defaultContent': ''
+      // }
     ],
-    select: {
-      style: 'multi',
-      selector: 'td:last-child',
-    },
+    // select: {
+    //   style: 'multi',
+    //   selector: 'td:last-child',
+    // },
     language: {
       url: '/lib/ru.json'
     }
