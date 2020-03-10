@@ -78,13 +78,32 @@ function driveIn(config) {
   NProgress.done();
 }
 
+function renderTownsSelect() {
+  let towns = pollTowns;
+  let wrapDiv = document.createElement('div');
+  let divNode = document.createElement('div');
+  let label = document.createElement('label');
+  label.className = 'control-label';
+  label.innerText = 'Укажите город:';
+  let townSelect = document.createElement('select');
+  townSelect.className = 'form-control drive-town-select';
+  let length = towns.length;
+  for (let i = 0; i < length; i++) {
+    let town = towns[i];
+    let option = document.createElement('option');
+    option.text = town.name;
+    option.value = town.id;
+    townSelect.add(option, i);
+  }
+  wrapDiv.appendChild(townSelect);
+  return wrapDiv.outerHTML;
+}
+
 function showTownIn(p, callback) {
   let jc = $.confirm({
-    // title: false,
     escapeKey: 'cancel',
     title: 'Город',
-    // url: '/poll/drive',
-    content: 'url:polls/drive-in/town-form',
+    content: renderTownsSelect(),
     type: 'red',
     closeIcon: false,
     onContentReady: function () {

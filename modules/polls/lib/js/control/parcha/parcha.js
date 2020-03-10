@@ -36,8 +36,8 @@ function renderHeader() {
 }
 
 var dataSet = [
-  ["Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800"],
-  ["Garrett Winters", "Accountant", "Tokyo", "8422", "2011/07/25", "$170,750"],
+  ['parcha51-3', '10.03.2020', '554 - город с численностью до 50 тыс.чел. пгт', '501 - Женский', '507 - 50-59 лет', 'Принято'],
+  ['parcha51-4', '09.03.2020', '554 - город с численностью до 50 тыс.чел. пгт', '502 - Мужской', '506 - 30-49 лет', 'Принято']
 ];
 
 var dataSetEx = [];
@@ -58,18 +58,35 @@ function renderParchaTbl() {
   $('#control-result').html('').append(renderTbl());
 
   $('#parcha-table').DataTable({
-    data: dataSetEx,
+    data: dataSet,
+    responsive: true,
     searching: false,
     columns: [
-      {title: "Name"},
-      {title: "Position"},
-      {title: "Office"},
-      {title: "Extn."},
-      {title: "Start date"},
-      {title: "Salary"}
+      {title: 'Планшет'},
+      {title: 'Дата'},
+      {title: 'Тип населенного пункта'},
+      {title: 'Пол'},
+      {title: 'Возраст'},
+      {title: 'Статус'},
+      {},
+      {}
+    ],
+    columnDefs: [
+      {
+        'targets': -2,                    // предпоследний столбец
+        'orderable': false,
+        'data': null,
+        'width': '70px',
+        'defaultContent': 'Просмотр/Карта'
+      }, {
+        'targets': -1,                    // последний столбец
+        'orderable': false,
+        'className': 'select-checkbox',
+        'defaultContent': ''
+      }
     ],
     select: {
-      style: 'single',
+      style: 'multi',
       selector: 'td:last-child',
     },
     language: {
@@ -106,49 +123,58 @@ function blockOfSelectsTmpl() {
 
   let operatorSelect = document.createElement('select');
   let operatorLabel = document.createElement('label');
-  operatorLabel.innerText = 'Операторы';
-  operatorSelect.className = 'parcha-operators';
+  operatorLabel.innerText = 'Планшеты:';
+  operatorLabel.className = 'parcha-select-labels';
+  operatorSelect.id = 'parcha-operators';
   operatorSelect.classList = 'form-control';
+  operatorSelect.disabled = true;
   operatorLabel.appendChild(operatorSelect);
 
   let townSelect = document.createElement('select');
   let townLabel = document.createElement('label');
-  townLabel.innerText = 'ТНП';
-  townSelect.className = 'parcha-town';
+  townLabel.className = 'parcha-select-labels';
+  townLabel.innerText = 'ТНП:';
+  townSelect.id = 'parcha-town';
   townSelect.classList = 'form-control';
-  townLabel.appendChild(townLabel);
+  townSelect.disabled = true;
+  townLabel.appendChild(townSelect);
 
   let sexSelect = document.createElement('select');
   let sexLabel = document.createElement('label');
-  sexLabel.innerText = 'Пол';
-  sexSelect.className = 'parcha-sex';
+  sexLabel.className = 'parcha-select-labels';
+  sexLabel.innerText = 'Пол:';
+  sexSelect.id = 'parcha-sex';
   sexSelect.classList = 'form-control';
-  sexLabel.appendChild(sexLabel);
+  sexSelect.disabled = true;
+  sexLabel.appendChild(sexSelect);
 
   let ageSelect = document.createElement('select');
   let ageLabel = document.createElement('label');
-  ageLabel.innerText = 'Возраст';
-  ageSelect.className = 'parcha-age';
+  ageLabel.className = 'parcha-select-labels';
+  ageLabel.innerText = 'Возраст:';
+  ageSelect.id = 'parcha-age';
   ageSelect.classList = 'form-control';
-  ageLabel.appendChild(sexLabel);
+  ageSelect.disabled = true;
+  ageLabel.appendChild(ageSelect);
 
   let statusSelect = document.createElement('select');
   let statusLabel = document.createElement('label');
-  statusLabel.innerText = 'Возраст';
-  statusSelect.className = 'parcha-operators';
+  statusLabel.className = 'parcha-select-labels';
+  statusLabel.innerText = 'Статус:';
+  statusSelect.id = 'parcha-status';
   statusSelect.classList = 'form-control';
-  statusLabel.appendChild(sexLabel);
+  statusSelect.disabled = true;
+  statusLabel.appendChild(statusSelect);
 
   selectBlock.appendChild(operatorLabel);
-  selectBlock.appendChild(townSelect);
-  selectBlock.appendChild(sexSelect);
-  selectBlock.appendChild(ageSelect);
-  selectBlock.appendChild(statusSelect);
+  selectBlock.appendChild(townLabel);
+  selectBlock.appendChild(sexLabel);
+  selectBlock.appendChild(ageLabel);
+  selectBlock.appendChild(statusLabel);
 
   return selectBlock;
 
 }
-
 
 function loadAndParseXmlFile() {
   let xmlFile = this.files[0];
@@ -236,7 +262,7 @@ function mapsMe() {
       let self = this;
       this.buttons.ok.disable();
       let map = L.map('map').setView([67.959, 33.061], 7);
-      L.tileLayer('http://192.168.56.20/osm_tiles/{z}/{x}/{y}.png', {
+      L.tileLayer('http://182.11.57.17/osm_tiles/{z}/{x}/{y}.png', {
         attribution: '&copy; ' + 'СпецСвязь ФСО России',
         maxZoom: 18
       }).addTo(map);

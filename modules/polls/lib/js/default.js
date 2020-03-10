@@ -1,4 +1,4 @@
-var pollTable;
+var pollTable, pollTowns;
 
 $(document).ready(function (e) {
 
@@ -8,6 +8,7 @@ $(document).ready(function (e) {
 
   initLeftMenu('/polls/menu/left-side');
   initAppConfig('/polls/menu/app-config');
+  loadTowns();                                                            // загрузка городов
 
   controlCallback = function () {
     return;
@@ -297,6 +298,23 @@ $(document).on('click', '#batch-input', function (e) {
 });
 
 */
+
+function loadTowns() {
+  let url = 'polls/polls/towns';
+  $.ajax({
+    url: url,
+    method: 'get'
+  }).done(function (response) {
+    if (response.code) {
+      pollTowns = response.data.data.towns;
+    } else {
+      console.log(response.data.message);
+    }
+  }).fail(function () {
+    console.log('Failed to load poll config');
+  });
+}
+
 function initBatchModule(config) {
   // let script = document.createElement('script');
   // script.src = "/poll/lib/js/batch.js";

@@ -4,6 +4,7 @@ namespace app\modules\polls\controllers;
 
 use app\modules\polls\models\Answers;
 use app\modules\polls\models\Questions;
+use app\modules\polls\models\Towns;
 use app\modules\polls\models\Xml;
 use Yii;
 use yii\web\Controller;
@@ -29,6 +30,20 @@ class PollsController extends Controller
         {$pollTable}.code, {$pollTable}.sample, YEAR({$pollTable}.start_date) as year FROM {$pollTable}";
     $data["data"] = Polls::findBySql($sql)->asArray()->all();
     return $data;
+  }
+
+  public function actionTowns()
+  {
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $data["towns"] = Towns::find()->select('id, name')->where(['selected' => 1])->orderBy('lft')->asArray()->all();
+    return $result = [
+      "data" => [
+        "success" => true,
+        "data" => $data,
+        "message" => "Towns loaded",
+      ],
+      "code" => 1
+    ];
   }
 
   public function actionAddNewPoll()
